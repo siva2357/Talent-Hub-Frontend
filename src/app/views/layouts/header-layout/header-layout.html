@@ -1,0 +1,133 @@
+@if (!isMobile) {
+<nav class="navbar navbar-expand-lg bg-white fixed-top shadow" style="height: 60px;">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+
+    <!-- LEFT SIDE -->
+    <div class="d-flex align-items-center gap-4">
+
+      <!-- Logo -->
+      <a class="navbar-brand d-flex align-items-center">
+        <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
+             alt="Talent Hub Logo" style="height: 50px;">
+      </a>
+
+      <!-- Links -->
+      <ul class="navbar-nav d-none d-lg-flex align-items-center gap-2" style="font-size: 14px;">
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/home" routerLinkActive="active-link">Home</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/talent-marketplace" routerLinkActive="active-link">Talent</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/find-work" routerLinkActive="active-link">Find work</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/recruitment-process" routerLinkActive="active-link">Recruitment</a>
+        </li>
+
+        <!-- DROPDOWN -->
+        <li class="nav-item dropdown" data-bs-hover="true">
+          <a class="nav-link dropdown-toggle" id="productsDropdown" data-bs-toggle="dropdown">
+            Our Products
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" routerLink="/interview-process">Interview Platform</a></li>
+            <li><a class="dropdown-item" routerLink="/resume-builder">Resume Builder</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/about" routerLinkActive="active-link">About</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/blog" routerLinkActive="active-link">Blog</a>
+        </li>
+
+      </ul>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="d-none d-lg-flex align-items-center gap-3">
+      <a class="btn btn-outline-primary btn-sm px-3 me-3" href="/login" target="_blank">Log in</a>
+      <a class="btn btn-primary btn-sm px-3 me-3" href="/sign-up" target="_blank">Sign up</a>
+    </div>
+
+  </div>
+</nav>
+}
+
+
+
+
+
+
+
+@if (isMobile) {
+
+<!-- MOBILE TOP BAR -->
+<nav class="navbar bg-white fixed-top shadow px-3 py-2" style="height: 60px;">
+  <div class="container-fluid d-flex align-items-center">
+
+    <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand">
+      <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1751885456/Flux_Dev_A_modern_creative_logo.png"
+           alt="Talent Hub Logo" style="height: 60px; transform: scale(1.2);">
+    </a>
+
+  </div>
+</nav>
+
+<!-- SIDEBAR -->
+<div class="offcanvas offcanvas-start w-100" tabindex="-1" id="mobileSidebar">
+
+  <div class="offcanvas-header">
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+
+  <div class="offcanvas-body">
+    <ul class="navbar-nav mt-3">
+
+      <li><a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/home">Home</a></li>
+      <li><a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/talent-marketplace">Talent</a></li>
+      <li><a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/find-work-skills">Find work</a></li>
+      <li><a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/how-to-hire">Recruitment</a></li>
+
+      <!-- DROPDOWN -->
+      <li class="nav-item mt-2">
+        <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#productsCollapse">
+          Our Products
+          <span style="font-size: 18px; margin-left: 5px;">▾</span>
+        </a>
+      </li>
+
+      <div class="collapse ms-3" id="productsCollapse">
+        <li><a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/interview">Interview Platform</a></li>
+        <li><a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/resume-builder">Resume Builder</a></li>
+      </div>
+
+      <li><a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/about-us">About</a></li>
+      <li><a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/blog-page">Blog</a></li>
+
+      <hr>
+
+      <div class="d-flex gap-3">
+        <a class="btn btn-outline-primary w-100" href="/login">Login</a>
+        <a class="btn btn-outline-secondary w-100" href="/sign-up">Sign Up</a>
+      </div>
+
+    </ul>
+  </div>
+
+</div>
+
+}
+
