@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './register-recruiter-page.html',
   styleUrl: './register-recruiter-page.css',
+  standalone:true
 })
 export class RegisterRecruiterPage {
 

@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './singup-page.html',
   styleUrl: './singup-page.css',
+  standalone:true
 })
 export class SingupPage {
 
