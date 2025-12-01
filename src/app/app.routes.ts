@@ -19,29 +19,33 @@ import { ResetPasswordPage } from './views/account/reset-password-page/reset-pas
 import { ErrorPage } from './views/extra-pages/error-page/error-page';
 import { ComingSoonPage } from './views/extra-pages/coming-soon-page/coming-soon-page';
 import { MaintenancePage } from './views/extra-pages/maintenance-page/maintenance-page';
+import { UnauthorizedPage } from './views/extra-pages/unauthorized-page/unauthorized-page';
 
 export const routes: Routes = [
-  { path: 'home', component: LandingPage, title: 'Landing page' },
-  { path: 'talent-marketplace', component: TalentMarketplacePage, title: 'Skills page' },
-  { path: 'find-work', component: FindWorkPage, title: 'Skills page' },
-  { path: 'recruitment-process', component: RecruitmentPage, title: 'Hire page' },
-  { path: 'interview-process', component: InterviewPage, title: 'Hire page' },
-  { path: 'resume-builder', component: ResumeBuilderPage, title: 'Hire page' },
-  { path: 'about', component: AboutPage, title: 'Hire page' },
-  { path: 'blog', component: BlogPage, title: 'Hire page' },
+  { path: 'home', component: LandingPage, title: 'Landing' },
+  { path: 'talent-marketplace', component: TalentMarketplacePage, title: 'Talent marketplace' },
+  { path: 'find-work', component: FindWorkPage, title: 'Find work' },
+  { path: 'recruitment-process', component: RecruitmentPage, title: 'Recruitment' },
+  { path: 'interview-process', component: InterviewPage, title: 'Interview process' },
+  { path: 'resume-builder', component: ResumeBuilderPage, title: 'Resume builder' },
+  { path: 'about', component: AboutPage, title: 'About' },
+  { path: 'blog', component: BlogPage, title: 'Blog' },
 
-  { path: 'sign-up', component: SingupPage, title: 'Skills page' },
-  { path: 'login', component: LoginPage, title: 'Skills page' },
-  { path: 'sign-up/recruiter', component: RegisterRecruiterPage, title: 'Skills page' },
-  { path: 'sign-up/seeker', component: RegisterSeekerPage, title: 'Skills page' },
-  { path: 'sign-up/otp-verification', component: OtpVerificationPage, title: 'Skills page' },
-  { path: 'confirmation-page', component: ConfirmationPage },
-  { path: 'forgot-password', component: ForgotPasswordPage },
-  { path: 'reset-otp-verification', component: ResetOtpVerificationPage },
-  { path: 'reset-password', component: ResetPasswordPage },
 
-  { path: 'coming-soon', component: ComingSoonPage },
-  { path: 'maintenance', component: MaintenancePage },
-  { path: 'error', component: ErrorPage },
+  { path: 'sign-up', component: SingupPage, title: 'Singup' },
+  { path: 'sign-up/recruiter', component: RegisterRecruiterPage, title: 'Register recruiter'},
+  { path: 'sign-up/seeker', component: RegisterSeekerPage, title: 'Register seeker'},
+  { path: 'sign-up/otp-verification', component: OtpVerificationPage, title: 'OTP Verification'},
+  { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation'  },
+  { path: 'login', component: LoginPage, title: 'Login'},
+  { path: 'forgot-password', component: ForgotPasswordPage, title: 'OTP Verification'},
+  { path: 'reset-otp-verification', component: ResetOtpVerificationPage, title: 'OTP Verification'},
+  { path: 'reset-password', component: ResetPasswordPage, title: 'Reset password'  },
+
+  { path: 'coming-soon', component: ComingSoonPage, title: 'Coming soon'  },
+  { path: 'maintenance', component: MaintenancePage, title: 'Maintenance'  },
+  { path: 'error', component: ErrorPage, title: 'Error'  },
+  { path: 'access-denied', component: UnauthorizedPage, title: 'Access denied'  },
+
   { path: '**', redirectTo: 'home' },
 ];
