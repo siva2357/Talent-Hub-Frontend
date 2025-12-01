@@ -1,22 +1,18 @@
-:host {
-  display: block;
-  z-index: 1055;
-}
-
-/* Navbar stays above everything */
-.navbar,
-.offcanvas {
-  z-index: 1055;
-}
-
-/* Hover cards (if used elsewhere) */
 .hover-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   background-color: #d5dde6;
 }
+:host {
+  display: block;
+  z-index: 1055;
+}
 
-/* Header navigation links */
+.navbar {
+  z-index: 1055;
+}
+
+
 .header-nav a {
   text-decoration: none;
   color: black;
@@ -24,27 +20,32 @@
 }
 
 .header-nav a:hover {
-  color: #007bff;
+  color: #007bff; /* hover blue */
 }
 
-/* Dropdown show on hover (desktop only) */
+
+
+
+/* Enable dropdown on hover (desktop only) */
 @media (min-width: 992px) {
   .nav-item.dropdown:hover .dropdown-menu {
     display: block;
+    margin-top: 0;
   }
 
+  /* Optional: highlight toggle text on hover */
   .nav-item.dropdown:hover .nav-link.dropdown-toggle {
     color: #007bff;
   }
 }
 
-/* Dropdown item hover */
+/* Style of dropdown items */
 .dropdown-menu .dropdown-item:hover {
   background-color: #f1f5f9;
   color: #007bff;
 }
 
-/* Smooth dropdown animation */
+/* Smooth dropdown transition */
 .dropdown-menu {
   transition: all 0.15s ease-in-out;
 }
