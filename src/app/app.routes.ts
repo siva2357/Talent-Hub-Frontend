@@ -16,6 +16,9 @@ import { ConfirmationPage } from './views/account/confirmation-page/confirmation
 import { ForgotPasswordPage } from './views/account/forgot-password-page/forgot-password-page';
 import { ResetOtpVerificationPage } from './views/account/reset-otp-verification-page/reset-otp-verification-page';
 import { ResetPasswordPage } from './views/account/reset-password-page/reset-password-page';
+import { ErrorPage } from './views/extra-pages/error-page/error-page';
+import { ComingSoonPage } from './views/extra-pages/coming-soon-page/coming-soon-page';
+import { MaintenancePage } from './views/extra-pages/maintenance-page/maintenance-page';
 
 export const routes: Routes = [
   { path: 'home', component: LandingPage, title: 'Landing page' },
@@ -37,5 +40,8 @@ export const routes: Routes = [
   { path: 'reset-otp-verification', component: ResetOtpVerificationPage },
   { path: 'reset-password', component: ResetPasswordPage },
 
+  { path: 'coming-soon', component: ComingSoonPage },
+  { path: 'maintenance', component: MaintenancePage },
+  { path: 'error', component: ErrorPage },
   { path: '**', redirectTo: 'home' },
 ];
