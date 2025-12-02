@@ -22,6 +22,7 @@ import { MaintenancePage } from './views/extra-pages/maintenance-page/maintenanc
 import { UnauthorizedPage } from './views/extra-pages/unauthorized-page/unauthorized-page';
 import { RECRUITER_ROUTES } from './views/users/recruiter/recruiter.routes';
 import { SEEKER_ROUTES } from './views/users/seeker/seeker.routes';
+import { ADMIN_ROUTES } from './views/users/admin/admin.routes';
 
 export const routes: Routes = [
   { path: 'home', component: LandingPage, title: 'Landing' },
@@ -53,8 +54,8 @@ export const routes: Routes = [
   { path: 'access-denied', component: UnauthorizedPage, title: 'Access denied' },
 
   //User routes
+  { path: 'admin', loadChildren: () => ADMIN_ROUTES },
   { path: 'recruiter', loadChildren: () => RECRUITER_ROUTES },
   { path: 'seeker', loadChildren: () => SEEKER_ROUTES },
-
   { path: '**', redirectTo: 'home' },
 ];

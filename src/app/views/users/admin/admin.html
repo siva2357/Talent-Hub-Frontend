@@ -1,3 +1,5 @@
+
+
 <header class="app-header shadow-lg">
 
   <!-- TOP NAV CONTAINER -->
@@ -11,27 +13,16 @@
           alt="logo"
           style="height: 48px; width: auto;">
 
-      <!-- Navigation Links -->
-      <nav class="d-flex align-items-center" style="gap: 20px;">
-        <a routerLink="jobposts" routerLinkActive="active-link" class="nav-link-custom">Job Profiles</a>
-        <a routerLink="saved-jobs" routerLinkActive="active-link" class="nav-link-custom">Saved Jobposts</a>
-        <a routerLink="applied-jobs" routerLinkActive="active-link" class="nav-link-custom">Applied Jobposts</a>
-        <a routerLink="scheduled-meetings" routerLinkActive="active-link" class="nav-link-custom">Interviews</a>
-        <a routerLink="my-portfolio" routerLinkActive="active-link" class="nav-link-custom">My Portfolio</a>
-        <a routerLink="my-job-offers" routerLinkActive="active-link" class="nav-link-custom">Job Offers</a>
-      </nav>
+   <button class="hamburger-btn" (click)="toggleSidebar()">
+      <i class="bi bi-list fs-3"></i>
+    </button>
+
+
 
     </div>
 
     <!-- RIGHT SECTION -->
     <div class="d-flex align-items-center" style="gap: 22px; margin-right: 25px; ">
-
-      <!-- Chat Icon -->
-      <a routerLink="chat-page"
-        class="header-icon">
-        <i class="bi bi-chat-square-text" style="font-size: 1.3rem;"></i>
-      </a>
-
 
       <!-- Bell Dropdown -->
       <div class="dropdown dropdown-center mx-2">
@@ -74,12 +65,46 @@
 
 </header>
 
-<div class="container mt-5">
-<router-outlet></router-outlet>
+
+<!-- BODY: Sidebar + Content -->
+<div class="admin-container"  [class.sidebar-open]="sidebarOpen">
+
+<aside class="sidebar "
+       [ngClass]="{'open': sidebarOpen}"
+       style="font-family: 'Poppins', sans-serif;">
+
+  <ul class="nav-list" style="margin-top: 80px;">
+
+    @for (menu of menuItems; track menu) {
+      <li style="margin-left: 10px; margin-right: 10px; margin-top: 15px;">
+
+        <a [routerLink]="menu.link"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }"  (click)="closeSidebarOnMobile()">
+
+          <i [class]="menu.icon" style="font-size: 1.5rem;"></i>
+
+          <span class="links_name poppins-medium"
+                style="margin-left: 15px;">
+            {{ menu.label }}
+          </span>
+
+        </a>
+
+
+
+      </li>
+    }
+
+  </ul>
+
+</aside>
+
+
+
+  <!-- MAIN CONTENT -->
+  <main class="admin-main">
+    <router-outlet></router-outlet>
+  </main>
 
 </div>
-
-
-
-
-
