@@ -25,6 +25,8 @@ import { SEEKER_ROUTES } from './views/users/seeker/seeker.routes';
 import { ADMIN_ROUTES } from './views/users/admin/admin.routes';
 
 export const routes: Routes = [
+
+  //public
   { path: 'home', component: LandingPage, title: 'Landing' },
   { path: 'talent-marketplace', component: TalentMarketplacePage, title: 'Talent marketplace' },
   { path: 'find-work', component: FindWorkPage, title: 'Find work' },
@@ -34,6 +36,7 @@ export const routes: Routes = [
   { path: 'about', component: AboutPage, title: 'About' },
   { path: 'blog', component: BlogPage, title: 'Blog' },
 
+  //auth pages
   { path: 'sign-up', component: SingupPage, title: 'Singup' },
   { path: 'sign-up/recruiter', component: RegisterRecruiterPage, title: 'Register recruiter' },
   { path: 'sign-up/seeker', component: RegisterSeekerPage, title: 'Register seeker' },
@@ -41,13 +44,10 @@ export const routes: Routes = [
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
   { path: 'login', component: LoginPage, title: 'Login' },
   { path: 'forgot-password', component: ForgotPasswordPage, title: 'OTP Verification' },
-  {
-    path: 'reset-otp-verification',
-    component: ResetOtpVerificationPage,
-    title: 'OTP Verification',
-  },
+  { path: 'reset-otp-verification', component: ResetOtpVerificationPage,title: 'OTP Verification'},
   { path: 'reset-password', component: ResetPasswordPage, title: 'Reset password' },
 
+  //extra pages
   { path: 'coming-soon', component: ComingSoonPage, title: 'Coming soon' },
   { path: 'maintenance', component: MaintenancePage, title: 'Maintenance' },
   { path: 'error', component: ErrorPage, title: 'Error' },

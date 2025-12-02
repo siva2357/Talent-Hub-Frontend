@@ -4,15 +4,24 @@
   <div class="d-flex align-items-center justify-content-between px-3" style="height: 70px; gap: 20px;">
 
     <!-- LEFT SECTION: Logo + Navigation -->
-    <div class="d-flex align-items-center" style="gap: 25px;">
+    <div class="d-flex align-items-center" style="gap: 20px;">
 
-      <!-- Logo -->
-      <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
-          alt="logo"
-          style="height: 48px; width: auto;">
+                <!-- Mobile / Tablet toggle (visible below lg) -->
+      <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNav"
+              aria-controls="offcanvasNav" aria-label="Open navigation">
+        <i class="bi bi-list" style="font-size:1.25rem;"></i>
+      </button>
+
+<!-- Logo (visible only on large screens) -->
+<img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
+     alt="logo"
+
+     style="height: 48px; width: auto;">
+
 
       <!-- Navigation Links -->
-      <nav class="d-flex align-items-center" style="gap: 20px;">
+      <!-- Desktop nav (visible lg and up) -->
+      <nav class="d-none d-lg-flex align-items-center" style="gap:20px;">
         <a routerLink="my-jobs" routerLinkActive="active-link" class="nav-link-custom">My Jobposts</a>
         <a routerLink="job-applications" routerLinkActive="active-link" class="nav-link-custom">Proposals</a>
         <a routerLink="scheduled-meetings" routerLinkActive="active-link" class="nav-link-custom">Interviews</a>
@@ -20,6 +29,8 @@
         <a routerLink="saved-talents" routerLinkActive="active-link" class="nav-link-custom">Saved Talents</a>
         <a routerLink="hired-talents" routerLinkActive="active-link" class="nav-link-custom">Hired Talents</a>
       </nav>
+
+
 
     </div>
 
@@ -73,10 +84,41 @@
 
 </header>
 
-<div class="container mt-5">
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNav" aria-labelledby="offcanvasNavLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasNavLabel">
+      <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
+           alt="logo" style="height:34px; width:auto;">
+    </h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+
+  <div class="offcanvas-body">
+    <nav class="d-flex flex-column" style="gap:8px;">
+      <a routerLink="my-jobs" routerLinkActive="active-link" class="nav-link-custom" data-bs-dismiss="offcanvas">My Jobposts</a>
+      <a routerLink="job-applications" routerLinkActive="active-link" class="nav-link-custom" data-bs-dismiss="offcanvas">Proposals</a>
+      <a routerLink="scheduled-meetings" routerLinkActive="active-link" class="nav-link-custom" data-bs-dismiss="offcanvas">Interviews</a>
+      <a routerLink="talents" routerLinkActive="active-link" class="nav-link-custom" data-bs-dismiss="offcanvas">Talents</a>
+      <a routerLink="saved-talents" routerLinkActive="active-link" class="nav-link-custom" data-bs-dismiss="offcanvas">Saved Talents</a>
+      <a routerLink="hired-talents" routerLinkActive="active-link" class="nav-link-custom" data-bs-dismiss="offcanvas">Hired Talents</a>
+    </nav>
+
+
+
+    <hr>
+
+    <!-- small quick actions -->
+    <div class="d-flex flex-column" style="gap:8px;">
+      <a class="btn btn-outline-primary btn-sm w-100 mb-1" routerLink="post-job" data-bs-dismiss="offcanvas">+ Add Jobpost</a>
+      <a class="btn btn-outline-secondary btn-sm w-100" routerLink="profile" data-bs-dismiss="offcanvas">Profile</a>
+    </div>
+  </div>
+</div>
+
+
 <router-outlet></router-outlet>
 
-</div>
 
 
 

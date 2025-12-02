@@ -1,0 +1,39 @@
+  /* Prevent card squeezing on small screens */
+  .job-card {
+    min-height: 200px;
+  }
+
+  /* Logo box stays responsive */
+  .logo-box {
+    width: 75px;
+    height: 65px;
+  }
+
+  /* Ensure text wraps cleanly */
+  .job-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  /* Space out buttons on small screens */
+  @media (max-width: 576px) {
+    .action-buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+    .action-buttons button {
+      width: 100%;
+    }
+  }
+
+
+
+    .button-row {
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+
+  .button-row button {
+    flex-shrink: 0;
+  }
