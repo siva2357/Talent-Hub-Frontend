@@ -1,0 +1,78 @@
+<!-- TOP NAV CONTAINER -->
+<div class="d-flex align-items-center justify-content-between px-3 py-2 shadow-lg" style="gap: 20px; ">
+
+  <!-- LEFT SECTION: Logo + Navigation -->
+  <div class="d-flex align-items-center" style="gap: 25px;">
+
+    <!-- Logo -->
+    <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
+         alt="logo"
+         style="height: 50px; width: auto;">
+
+    <!-- Navigation Links -->
+    <nav class="d-flex align-items-center" style="gap: 20px;">
+      <a routerLink="my-jobs" routerLinkActive="active-link" class="nav-link-custom text-dark">Jobs</a>
+      <a routerLink="job-applications" routerLinkActive="active-link" class="nav-link-custom text-dark">Proposals</a>
+      <a routerLink="scheduled-meetings" routerLinkActive="active-link" class="nav-link-custom text-dark">Scheduled Meetings</a>
+      <a routerLink="talents" routerLinkActive="active-link" class="nav-link-custom text-dark">Talents</a>
+      <a routerLink="saved-talents" routerLinkActive="active-link" class="nav-link-custom text-dark">Saved Talents</a>
+      <a routerLink="hired-talents" routerLinkActive="active-link" class="nav-link-custom text-dark">Hired Talents</a>
+    </nav>
+
+  </div>
+
+
+  <!-- RIGHT SECTION: Chat + Bell + Profile -->
+  <div class="d-flex align-items-center" >
+
+    <!-- Chat Icon -->
+    <a routerLink="chat-page"
+       class="d-inline-grid rounded-circle text-decoration-none align-items-center justify-content-center  mx-3 border border-2 border-dark "
+       style="width:45px; height:45px;; color:#000;">
+      <i class="bi bi-chat-square-text " style="font-size: 1.5rem;"></i>
+    </a>
+
+    <!-- Bell Dropdown -->
+    <div class="dropdown dropdown-center  mx-3 ">
+      <a class="d-inline-grid rounded-circle align-items-center justify-content-center border border-2 border-dark  "
+         data-bs-toggle="dropdown"
+         style="width:45px; height:45px; color:#000;">
+        <i class="bi bi-bell"style="font-size: 1.5rem;"></i>
+      </a>
+
+      <ul class="dropdown-menu text-small shadow" style="width: 250px;">
+        <li><a class="dropdown-item" href="#">New project...</a></li>
+        <li><a class="dropdown-item" href="#">Settings</a></li>
+        <li><a class="dropdown-item" href="#">Profile</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="#">Sign out</a></li>
+      </ul>
+    </div>
+
+    <!-- Profile Dropdown -->
+    <div class="dropdown mx-3">
+      <a class="d-inline-grid rounded-circle align-items-center justify-content-center border border-2 border-dark "
+         data-bs-toggle="dropdown"
+         style="width:50px; height:50px; color:#000;">
+        <img src="https://github.com/mdo.png"
+             alt="profile"
+             width="40" height="40"
+             class="rounded-circle">
+      </a>
+
+      <ul class="dropdown-menu text-small shadow" style="width: 200px;">
+        <li><a class="dropdown-item" routerLink="profile">Profile</a></li>
+        <li><a class="dropdown-item" routerLink="account-settings">Settings</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="login">Log out</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="container mt-5">
+<router-outlet></router-outlet>
+
+</div>

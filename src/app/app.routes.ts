@@ -20,6 +20,7 @@ import { ErrorPage } from './views/extra-pages/error-page/error-page';
 import { ComingSoonPage } from './views/extra-pages/coming-soon-page/coming-soon-page';
 import { MaintenancePage } from './views/extra-pages/maintenance-page/maintenance-page';
 import { UnauthorizedPage } from './views/extra-pages/unauthorized-page/unauthorized-page';
+import { RECRUITER_ROUTES } from './views/users/recruiter/recruiter.routes';
 
 export const routes: Routes = [
   { path: 'home', component: LandingPage, title: 'Landing' },
@@ -31,21 +32,27 @@ export const routes: Routes = [
   { path: 'about', component: AboutPage, title: 'About' },
   { path: 'blog', component: BlogPage, title: 'Blog' },
 
-
   { path: 'sign-up', component: SingupPage, title: 'Singup' },
-  { path: 'sign-up/recruiter', component: RegisterRecruiterPage, title: 'Register recruiter'},
-  { path: 'sign-up/seeker', component: RegisterSeekerPage, title: 'Register seeker'},
-  { path: 'sign-up/otp-verification', component: OtpVerificationPage, title: 'OTP Verification'},
-  { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation'  },
-  { path: 'login', component: LoginPage, title: 'Login'},
-  { path: 'forgot-password', component: ForgotPasswordPage, title: 'OTP Verification'},
-  { path: 'reset-otp-verification', component: ResetOtpVerificationPage, title: 'OTP Verification'},
-  { path: 'reset-password', component: ResetPasswordPage, title: 'Reset password'  },
+  { path: 'sign-up/recruiter', component: RegisterRecruiterPage, title: 'Register recruiter' },
+  { path: 'sign-up/seeker', component: RegisterSeekerPage, title: 'Register seeker' },
+  { path: 'sign-up/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
+  { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
+  { path: 'login', component: LoginPage, title: 'Login' },
+  { path: 'forgot-password', component: ForgotPasswordPage, title: 'OTP Verification' },
+  {
+    path: 'reset-otp-verification',
+    component: ResetOtpVerificationPage,
+    title: 'OTP Verification',
+  },
+  { path: 'reset-password', component: ResetPasswordPage, title: 'Reset password' },
 
-  { path: 'coming-soon', component: ComingSoonPage, title: 'Coming soon'  },
-  { path: 'maintenance', component: MaintenancePage, title: 'Maintenance'  },
-  { path: 'error', component: ErrorPage, title: 'Error'  },
-  { path: 'access-denied', component: UnauthorizedPage, title: 'Access denied'  },
+  { path: 'coming-soon', component: ComingSoonPage, title: 'Coming soon' },
+  { path: 'maintenance', component: MaintenancePage, title: 'Maintenance' },
+  { path: 'error', component: ErrorPage, title: 'Error' },
+  { path: 'access-denied', component: UnauthorizedPage, title: 'Access denied' },
+
+  //User routes
+  { path: 'recruiter', loadChildren: () => RECRUITER_ROUTES },
 
   { path: '**', redirectTo: 'home' },
 ];
