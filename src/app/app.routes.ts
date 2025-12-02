@@ -21,6 +21,7 @@ import { ComingSoonPage } from './views/extra-pages/coming-soon-page/coming-soon
 import { MaintenancePage } from './views/extra-pages/maintenance-page/maintenance-page';
 import { UnauthorizedPage } from './views/extra-pages/unauthorized-page/unauthorized-page';
 import { RECRUITER_ROUTES } from './views/users/recruiter/recruiter.routes';
+import { SEEKER_ROUTES } from './views/users/seeker/seeker.routes';
 
 export const routes: Routes = [
   { path: 'home', component: LandingPage, title: 'Landing' },
@@ -53,6 +54,7 @@ export const routes: Routes = [
 
   //User routes
   { path: 'recruiter', loadChildren: () => RECRUITER_ROUTES },
+  { path: 'seeker', loadChildren: () => SEEKER_ROUTES },
 
   { path: '**', redirectTo: 'home' },
 ];
