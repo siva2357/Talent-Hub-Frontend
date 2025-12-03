@@ -9,6 +9,7 @@ import { ScheduledMeetings } from './scheduled-meetings/scheduled-meetings';
 import { ChatPage } from './chat-page/chat-page';
 import { UserAccountSettings } from './user-account-settings/user-account-settings';
 import { UserProfile } from './user-profile/user-profile';
+import { RecruiterProfileForm } from './recruiter-profile-form/recruiter-profile-form';
 
 export const RECRUITER_ROUTES: Routes = [
   {
@@ -25,6 +26,7 @@ export const RECRUITER_ROUTES: Routes = [
     ],
   },
   { path: 'chat-page', component: ChatPage },
+    { path: 'profile-form', component: RecruiterProfileForm },
   { path: 'profile', component: UserProfile },
   { path: 'account-settings', component: UserAccountSettings },
 ];
