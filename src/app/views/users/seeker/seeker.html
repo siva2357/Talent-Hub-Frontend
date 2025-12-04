@@ -1,18 +1,27 @@
-<header class="app-header shadow-lg">
+<header class="app-header shadow-lg ">
 
   <!-- TOP NAV CONTAINER -->
   <div class="d-flex align-items-center justify-content-between px-3" style="height: 70px; gap: 20px;">
 
     <!-- LEFT SECTION: Logo + Navigation -->
-    <div class="d-flex align-items-center" style="gap: 25px;">
+    <div class="d-flex align-items-center" style="gap: 10px;">
 
-      <!-- Logo -->
-      <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
-          alt="logo"
-          style="height: 48px; width: auto;">
+      <!-- Mobile / Tablet toggle (visible below lg) -->
+      <!-- Mobile / Tablet Toggle (visible below lg) -->
+      <button class="nav-toggle-btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNav"
+        aria-controls="offcanvasNav" aria-label="Open navigation">
+        <i class="bi bi-list"></i>
+      </button>
+
+
+      <!-- Logo (visible only on large screens) -->
+      <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png" alt="logo"
+        style="height: 48px; width: auto; margin-right: 10px;">
+
 
       <!-- Navigation Links -->
-      <nav class="d-flex align-items-center" style="gap: 20px;">
+      <!-- Desktop nav (visible lg and up) -->
+      <nav class="d-none d-lg-flex align-items-center" style="gap:20px;">
         <a routerLink="jobposts" routerLinkActive="active-link" class="nav-link-custom">Job Profiles</a>
         <a routerLink="saved-jobs" routerLinkActive="active-link" class="nav-link-custom">Saved Jobposts</a>
         <a routerLink="applied-jobs" routerLinkActive="active-link" class="nav-link-custom">Applied Jobposts</a>
@@ -21,52 +30,105 @@
         <a routerLink="my-job-offers" routerLinkActive="active-link" class="nav-link-custom">Job Offers</a>
       </nav>
 
+
+
     </div>
 
     <!-- RIGHT SECTION -->
-    <div class="d-flex align-items-center" style="gap: 22px; margin-right: 25px; ">
+    <div class="d-flex align-items-center" style="gap: 10px; ">
 
       <!-- Chat Icon -->
-      <a routerLink="chat-page"
-        class="header-icon">
-        <i class="bi bi-chat-square-text" style="font-size: 1.3rem;"></i>
-      </a>
+<!-- Chat Icon with Count Badge -->
+<a routerLink="chat-page" class="header-icon position-relative">
+  <i class="bi bi-chat-square-text" style="font-size: 1.2rem;"></i>
+
+  <!-- STATIC BADGE -->
+  <span class="chat-badge">3</span>
+</a>
 
 
       <!-- Bell Dropdown -->
-      <div class="dropdown dropdown-center mx-2">
-        <a class="header-icon" data-bs-toggle="dropdown">
-          <i class="bi bi-bell" style="font-size: 1.3rem;"></i>
-        </a>
 
-        <ul class="dropdown-menu text-small shadow" style="width: 250px;">
-          <li><a class="dropdown-item" href="#">New project...</a></li>
-          <li><a class="dropdown-item" href="#">Settings</a></li>
-          <li><a class="dropdown-item" href="#">Profile</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Sign out</a></li>
-        </ul>
+
+
+
+<div class="dropdown notif-dropdown mx-2">
+  <a class="header-icon position-relative" data-bs-toggle="dropdown">
+    <i class="bi bi-bell fs-5"></i>
+
+    @if (unreadCount > 0 && showCount) {
+      <span class="notif-badge">{{ unreadCount }}</span>
+    }
+  </a>
+<div class="dropdown-menu dropdown-menu-end shadow notif-menu"
+     data-bs-auto-close="outside"
+     (click)="$event.stopPropagation()" >
+
+
+    <div class="notif-header d-flex justify-content-between align-items-center px-3 py-2">
+      <strong>Notifications</strong>
+
+      <div class="actions">
+        <button class="btn btn-sm btn-light me-2" (click)="markAllRead()">Mark all read</button>
+        <button class="btn btn-sm btn-danger" (click)="clearAll()">Clear all</button>
       </div>
+    </div>
+
+    <hr class="my-1">
+
+    <div class="notif-list">
+
+      @if (notifications.length === 0) {
+        <p class="text-center text-muted py-3">No notifications</p>
+
+      } @else {
+
+        @for (n of visibleNotifications; track n) {
+          <div class="notif-item" [class.unread]="!n.read">
+      @if (!n.read) {
+    <i class="bi bi-dot notif-dot"></i>
+  }
+
+            <div>
+              <p class="mb-0 notif-text">{{ n.message }}</p>
+              <small class="notif-time">{{ n.time }}</small>
+            </div>
+          </div>
+        }
+
+        <button class="btn btn-link small w-100 text-center mt-2"
+                (click)="toggleView()">
+          {{ viewMore ? "View less" : "View more" }}
+        </button>
+
+      }
+    </div>
+  </div>
+</div>
+
+
+
+
+
 
       <!-- Profile Dropdown -->
-<!-- Profile Dropdown -->
-<div class="dropdown ">
+      <!-- Profile Dropdown -->
+      <div class="dropdown ">
 
-  <a class="header-icon" data-bs-toggle="dropdown">
-    <img src="https://github.com/mdo.png"
-          alt="profile"
-          width="38" height="38"
-          class="rounded-circle">
-  </a>
+        <a class="header-icon" data-bs-toggle="dropdown">
+          <img src="https://github.com/mdo.png" alt="profile" width="35" height="35" class="rounded-circle">
+        </a>
 
-  <ul class="dropdown-menu dropdown-menu-end profile-menu" style="width: 200px;">
-    <li><a class="dropdown-item" routerLink="profile">Profile</a></li>
-    <li><a class="dropdown-item" routerLink="account-settings">Settings</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" routerLink="/login">Log out</a></li>
-  </ul>
+        <ul class="dropdown-menu dropdown-menu-end profile-menu" style="width: 200px;">
+          <li><a class="dropdown-item" routerLink="profile">Profile</a></li>
+          <li><a class="dropdown-item" routerLink="account-settings">Settings</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" routerLink="/login">Log out</a></li>
+        </ul>
 
-</div>
+      </div>
 
     </div>
 
@@ -74,12 +136,35 @@
 
 </header>
 
-<div class="container mt-5">
-<router-outlet></router-outlet>
 
+<div class="offcanvas offcanvas-start w-100" tabindex="-1" id="offcanvasNav" aria-labelledby="offcanvasNavLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasNavLabel">
+      <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png" alt="logo"
+        style="height:34px; width:auto;">
+    </h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+
+  <div class="offcanvas-body">
+    <nav class="d-flex flex-column" style="gap:8px;">
+        <a routerLink="jobposts"  data-bs-dismiss="offcanvas" routerLinkActive="active-link" class="nav-link-custom">Job Profiles</a>
+        <a routerLink="saved-jobs"  data-bs-dismiss="offcanvas" routerLinkActive="active-link" class="nav-link-custom">Saved Jobposts</a>
+        <a routerLink="applied-jobs"  data-bs-dismiss="offcanvas" routerLinkActive="active-link" class="nav-link-custom">Applied Jobposts</a>
+        <a routerLink="scheduled-meetings"  data-bs-dismiss="offcanvas" routerLinkActive="active-link" class="nav-link-custom">Interviews</a>
+        <a routerLink="my-portfolio"   data-bs-dismiss="offcanvas" routerLinkActive="active-link" class="nav-link-custom">My Portfolio</a>
+        <a routerLink="my-job-offers"  data-bs-dismiss="offcanvas" routerLinkActive="active-link" class="nav-link-custom">Job Offers</a>
+
+
+    </nav>
+
+
+  </div>
 </div>
 
+<div class="mt-5">
+  <router-outlet></router-outlet>
 
-
+</div>
 
 

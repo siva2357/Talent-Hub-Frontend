@@ -1,1 +1,180 @@
-<p>scheduled-meetings works!</p>
+<div class="container" style="padding-top: 80px;">
+
+
+
+  <div class="row align-items-center mb-3">
+<div class="col-12">
+  <h4 class="fw-semibold text-center mb-1">Your Scheduled Interviews</h4>
+<p class="text-muted text-center mb-4" style="font-size:14px;">
+  All your upcoming interview meetings will appear here.
+</p>
+</div>
+
+
+  </div>
+
+
+
+<!-- FILTERS (Centered inside container) -->
+<div class="row justify-content-center mt-3 mb-4">
+
+  <div class="col-12 col-md-10 col-lg-8">
+
+    <div class="row g-3 align-items-center w-100 mx-auto">
+
+      <!-- Interview Status -->
+      <div class="col-12 col-sm-4">
+        <select class="form-select" style="font-size:14px;">
+          <option selected>Interview Status</option>
+          <option>Completed</option>
+          <option>Not Started</option>
+          <option>Pending</option>
+          <option>Not Completed</option>
+        </select>
+      </div>
+
+      <!-- Month -->
+      <div class="col-12 col-sm-4">
+        <input type="month" class="form-select " style="font-size:14px;">
+      </div>
+
+      <!-- Search -->
+      <div class="col-6 col-sm-2 d-flex justify-content-center">
+        <button class="btn btn-primary btn-sm rounded-0 w-100">
+          Search
+        </button>
+      </div>
+
+      <!-- Clear -->
+      <div class="col-6 col-sm-2 d-flex justify-content-center">
+        <button class="btn btn-outline-secondary btn-sm rounded-0 w-100">
+          Clear
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+  <!-- Centered Card Wrapper -->
+<div class="row justify-content-center mt-4 mb-4">
+
+  @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
+
+  <div class="col-12 col-md-10 col-lg-9 mb-3">
+
+    <div class="card shadow-sm border border-dark rounded-0 p-3">
+
+      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center">
+
+        <!-- Logo + Company -->
+        <div class="d-flex align-items-center gap-2">
+
+          <!-- Logo Circle -->
+          <div style="
+              width:55px;
+              height:55px;
+              border-radius:50%;
+              overflow:hidden;
+              background:white;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+          ">
+            <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png"
+                 style="width:75%; height:75%; object-fit:contain;">
+          </div>
+
+          <div style="line-height:1.2;">
+            <h6 class="mb-1 fw-semibold" style="font-size:14px;">
+              CosmoSys Technologies
+            </h6>
+            <span class="text-muted" style="font-size:12px;">
+              Angular Developer — JOB001
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Status Badge (right top, no wrapping) -->
+        <span class="badge rounded-0 px-2 py-1 text-nowrap"
+              style="background:#e2f2ff; color:#0056b3; font-size:12px;">
+          Scheduled
+        </span>
+
+      </div>
+
+      <hr class="my-2">
+
+      <!-- Instructions -->
+      <div style="font-size:14px; line-height:1.45;">
+
+        <p class="mb-1">
+          Your interview has been scheduled. Please join using the link below:
+        </p>
+
+        <a href="https://dynamic-meeting-link.com/join" target="_blank"
+           class="text-primary text-decoration-underline"
+           style="font-size:14px;">
+          dynamic-meeting-link.com/join
+        </a>
+
+        <div class="mt-2">
+
+          <p class="mb-1"><strong>Date:</strong> Dec 12, 2025</p>
+
+          <p class="mb-1 d-flex align-items-center gap-1">
+            <strong>Timings:</strong>
+            <i class="bi bi-clock" style="font-size:14px;"></i>
+            3:00 PM – 3:30 PM (30 mins)
+          </p>
+
+          <p class="mb-1"><strong>Meeting ID:</strong> 837 2549 1290</p>
+          <p class="mb-1"><strong>Password:</strong> 4X8H2Q</p>
+          <p class="mb-0"><strong>Room:</strong> Assessment Room</p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  }
+
+</div>
+
+
+
+  <div class="position-relative text-center my-4" style=" border-radius: 6px; overflow:hidden;">
+
+    <!-- Background Image -->
+    <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1716276008/No_data-amico_zhoryt.svg" alt="empty-state"
+      style=" object-fit:cover; opacity: 0.3; height: 600px; width: auto;">
+
+    <!-- Overlay Content -->
+    <div class="position-absolute top-50 start-50 translate-middle px-3" style="width:100%; ">
+
+      <div class="text-center mt-4 mb-5">
+
+        <p style="font-size:24px; font-weight:600;">
+          You haven’t scheduled any meetings for today.
+        </p>
+
+        <p class="text-muted" style="font-size:16px;">
+          All your scheduled meetings will appear here.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>

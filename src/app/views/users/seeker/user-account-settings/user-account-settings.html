@@ -1,1 +1,79 @@
-<p>user-account-settings works!</p>
+<div class="container py-4">
+  <div class="mobile-back p-3 d-flex align-items-center"
+       routerLink="/seeker">
+    <i class="bi bi-arrow-left me-2 fs-5"></i> Back
+  </div>
+  <h4 class="fw-bold mb-4">Account Settings</h4>
+
+  <!-- Tabs -->
+<!-- Tabs -->
+<ul class="nav nav-tabs modern-tabs mb-3" id="settingsTabs">
+
+  <!-- BASIC DETAILS -->
+  <li class="nav-item">
+    <a class="nav-link active" data-bs-toggle="tab" href="#basicTab">
+      <i class="bi bi-person-lines-fill me-2"></i> Basic Details
+    </a>
+  </li>
+
+  <!-- PROFILE -->
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#profileTab">
+      <i class="bi bi-person-circle me-2"></i> Profile
+    </a>
+  </li>
+
+  <!-- PROFESSIONAL -->
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#professionalTab">
+      <i class="bi bi-briefcase me-2"></i> Professional Details
+    </a>
+  </li>
+
+  <!-- CHANGE PASSWORD -->
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#manageTab">
+      <i class="bi bi-shield-lock me-2"></i> Change Password
+    </a>
+  </li>
+
+  <!-- MANAGE ACCOUNT -->
+  <li class="nav-item">
+    <a class="nav-link " data-bs-toggle="tab" href="#deleteTab">
+      <i class="bi bi-gear-wide-connected me-2"></i> Manage Account
+    </a>
+  </li>
+
+</ul>
+
+
+  <!-- Content -->
+  <div class="tab-content">
+
+    <!-- BASIC DETAILS TAB -->
+    <div class="tab-pane fade show active" id="basicTab">
+      <app-update-basic-details></app-update-basic-details>
+    </div>
+
+    <!-- PROFILE TAB -->
+    <div class="tab-pane fade" id="profileTab">
+      <app-update-profile-details></app-update-profile-details>
+    </div>
+
+    <!-- PROFESSIONAL DETAILS -->
+    <div class="tab-pane fade" id="professionalTab">
+      <app-update-professional-details></app-update-professional-details>
+    </div>
+
+    <!-- MANAGE ACCOUNT (Change password, email updates etc) -->
+    <div class="tab-pane fade" id="manageTab">
+      <app-update-change-password></app-update-change-password>
+    </div>
+
+    <!-- DELETE ACCOUNT -->
+    <div class="tab-pane fade" id="deleteTab">
+      <app-manage-account></app-manage-account>
+    </div>
+
+  </div>
+</div>

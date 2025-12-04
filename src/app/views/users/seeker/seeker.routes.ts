@@ -2,13 +2,13 @@ import { Routes } from '@angular/router';
 import { Jobposts } from './jobposts/jobposts';
 import { ScheduledMeetings } from './scheduled-meetings/scheduled-meetings';
 import { ChatPage } from './chat-page/chat-page';
-import { UserAccountSettings } from './user-account-settings/user-account-settings';
 import { UserProfile } from './user-profile/user-profile';
 import { Seeker } from './seeker';
 import { AppliedJobs } from './applied-jobs/applied-jobs';
 import { SavedJobs } from './saved-jobs/saved-jobs';
 import { Portfolio } from './portfolio/portfolio';
 import { JobOffers } from './job-offers/job-offers';
+import { UserAccountSettings } from './user-account-settings/user-account-settings';
 
 export const SEEKER_ROUTES: Routes = [
   {

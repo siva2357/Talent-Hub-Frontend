@@ -1,14 +1,60 @@
+<div class="container" style="padding-top: 80px;">
 
-<div class="container" style="padding-top:80px;">
+  <!-- Welcome Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="welcome-box text-center p-4 rounded-4 border">
+        <h5 class="mb-2">👋 Welcome, Recruiter!</h5>
+        <p class="text-muted small mb-0">
+          You're in the right place to find the right people for your team.
+          <br>
+          Post your job openings, review skilled professionals, and match with top talent.
+        </p>
+      </div>
+    </div>
+  </div>
 
+  <!-- Steps Section -->
+  <div class="row mb-5 g-3">
+    <div class="col-md-4">
+      <div class="step-card border rounded-3 p-3 h-100">
+        <h6 class="fw-semibold mb-2">Step 1</h6>
+        <p class="fw-semibold mb-1">Create & Manage Job Posts</p>
+        <p class="small text-muted mb-0">
+          Draft job posts, update, edit, close or delete to keep listings relevant.
+        </p>
+      </div>
+    </div>
 
-  <!-- Header -->
-<div class="text-center mb-4">
-  <h4 class="fw-semibold mb-1">Job Listings</h4>
-  <p class="text-muted" style="font-size:14px;">
-    A simple space for recruiters to post jobs, manage openings, and help job seekers find matching opportunities easily.
-  </p>
-</div>
+    <div class="col-md-4">
+      <div class="step-card border rounded-3 p-3 h-100">
+        <h6 class="fw-semibold mb-2">Step 2</h6>
+        <p class="fw-semibold mb-1">Evaluate Applicants</p>
+        <p class="small text-muted mb-0">
+          Browse applicants, check experience and skills. Select candidates that best fit.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="step-card border rounded-3 p-3 h-100">
+        <h6 class="fw-semibold mb-2">Step 3</h6>
+        <p class="fw-semibold mb-1">Track & Finalize Jobs</p>
+        <p class="small text-muted mb-0">
+          Manage job statuses, accept or reject applicants and finalize hiring easily.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Job Listings Header -->
+  <div class="text-center mb-4">
+    <h4 class="fw-semibold">Job Listings</h4>
+    <p class="text-muted small">
+      A simple space to post jobs, manage openings, and help job seekers find matching opportunities.
+    </p>
+  </div>
+
 
   <!-- Add button -->
   <div class="row my-3">
@@ -19,7 +65,7 @@
     </div>
   </div>
 
-  <!-- Filters -->
+    <!-- Filters -->
   <div class="row g-3 align-items-end">
     <div class="col-md-4">
       <input type="text" class="form-control" placeholder="Search Job Title" style="font-size:14px;">
@@ -78,234 +124,49 @@
 
 </div>
 
+  <!-- Job Cards Grid -->
+  <div class="row g-4 mb-5 mt-5">
+
+    @for (i of [1,2,3,4,5,6,7,8]; track i) {
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+        <div class="job-card border rounded-3 p-3 d-flex gap-3">
+
+          <img
+            src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png"
+            class="company-logo"
+          >
+
+          <div class="flex-grow-1">
+<div class="d-flex justify-content-between align-items-center mb-1 flex-nowrap overflow-hidden">
+  <span class="text-muted small text-truncate me-2" style="font-size: 12px;">
+    Hyderabad • Full-time • Remote
+  </span>
+
+  <span class="text-muted small flex-shrink-0" style="font-size: 12px;">
+    <i class="bi bi-clock"></i> 14h ago
+  </span>
+</div>
 
 
-  <div class="row g-4 mt-3 mb-5">
+            <h6 class="fw-semibold mb-1">Angular Developer</h6>
 
-    <div class="col-12 col-md-12 col-lg-4">
-      <div class="card shadow-sm border border-dark rounded-0 p-3 h-100">
-        <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:13px;">
-
-          <!-- LEFT SIDE: LOGO + BADGE -->
-          <div class="d-flex align-items-center" style="gap:10px;">
-
-            <!-- LOGO -->
-            <div style="width:65px; height:55px; flex-shrink:0;">
-              <div class="border border-1 border-dark d-flex align-items-center justify-content-center w-100 h-100"
-                style="border-radius:6px; overflow:hidden;">
-                <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png" alt="logo"
-                  style="max-width:100%; max-height:100%; object-fit:contain;">
-              </div>
-            </div>
-
-            <!-- BADGE -->
-        <span class="badge rounded-0 px-2 py-2 bg-success rounded-3" style=" font-size:11x;">
-              Open
-            </span>
-            <span class="badge rounded-0 px-2 py-2 bg-warning rounded-3" style=" font-size:11px;"> Pending
-            </span>
-             <span class="badge rounded-0 px-2 py-2 bg-danger rounded-3" style=" font-size:11px;">Closed
-            </span>
-          </div>
-
-          <!-- RIGHT SIDE: TIME -->
-          <div class="d-flex align-items-center text-muted" style="gap:4px; white-space:nowrap;">
-            <i class="bi bi-clock"></i> 2 days ago
-          </div>
-
-        </div>
-
-
-
-
-
-
-        <!-- Content -->
-        <div class="row">
-
-          <div class="col-12">
-            <h6 class="mb-1">Angular Developer</h6>
-          </div>
-
-          <div class="col-12">
-            <p class="mb-2" style="font-size:14px;">
-              Angular Developer skilled in building dynamic, responsive web applications using modern frontend
-              technologies.
+            <p class="small text-muted mb-3">
+              Angular Developer skilled in building responsive, modern web applications.
+              Focused on performance and clean UI design.
             </p>
-          </div>
 
-          <div class="col-12">
-            <div class="d-flex flex-wrap align-items-center" style="gap:10px; font-size:14px;">
-              <span class="text-muted">• Hyderabad</span>
-              <span class="text-muted">• Full Time</span>
-              <span class="text-muted">• Remote</span>
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline-primary">View</button>
+              <button class="btn btn-sm btn-outline-danger">Close</button>
+              <button class="btn btn-sm btn-outline-warning">Reopen</button>
+              <button class="btn btn-sm btn-outline-danger border-danger text-danger">Delete</button>
             </div>
+
           </div>
 
         </div>
-
-
-
-
-        <div class="d-flex gap-3 mt-3 button-row">
-          <button class="btn btn-outline-primary btn-sm px-3">View</button>
-          <button class="btn btn-outline-danger btn-sm px-3">Close</button>
-          <button class="btn btn-outline-warning btn-sm px-3">Reopen</button>
-          <button class="btn btn-outline-danger btn-sm px-3">Delete</button>
-        </div>
-
       </div>
-    </div>
-
-    <div class="col-12 col-md-12 col-lg-4">
-      <div class="card shadow-sm border border-dark rounded-0 p-3 h-100">
-        <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:13px;">
-
-          <!-- LEFT SIDE: LOGO + BADGE -->
-          <div class="d-flex align-items-center" style="gap:10px;">
-
-            <!-- LOGO -->
-            <div style="width:65px; height:55px; flex-shrink:0;">
-              <div class="border border-1 border-dark d-flex align-items-center justify-content-center w-100 h-100"
-                style="border-radius:6px; overflow:hidden;">
-                <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png" alt="logo"
-                  style="max-width:100%; max-height:100%; object-fit:contain;">
-              </div>
-            </div>
-
-            <!-- BADGE -->
-           <span class="badge rounded-0 px-2 py-2 bg-success rounded-3" style=" font-size:11px;">
-              Open
-            </span>
-            <span class="badge rounded-0 px-2 py-2 bg-warning rounded-3" style=" font-size:11px;"> Pending
-            </span>
-             <span class="badge rounded-0 px-2 py-2 bg-danger rounded-3" style=" font-size:11px;">Closed
-            </span>
-          </div>
-
-          <!-- RIGHT SIDE: TIME -->
-          <div class="d-flex align-items-center text-muted" style="gap:4px; white-space:nowrap;">
-            <i class="bi bi-clock"></i> 2 days ago
-          </div>
-
-        </div>
-
-
-
-
-
-
-        <!-- Content -->
-        <div class="row">
-
-          <div class="col-12">
-            <h6 class="mb-1">Angular Developer</h6>
-          </div>
-
-          <div class="col-12">
-            <p class="mb-2" style="font-size:14px;">
-              Angular Developer skilled in building dynamic, responsive web applications using modern frontend
-              technologies.
-            </p>
-          </div>
-
-          <div class="col-12">
-            <div class="d-flex flex-wrap align-items-center" style="gap:10px; font-size:14px;">
-              <span class="text-muted">• Hyderabad</span>
-              <span class="text-muted">• Full Time</span>
-              <span class="text-muted">• Remote</span>
-            </div>
-          </div>
-
-        </div>
-
-
-
-
-        <div class="d-flex gap-3 mt-3 button-row">
-          <button class="btn btn-outline-primary btn-sm px-3">View</button>
-          <button class="btn btn-outline-danger btn-sm px-3">Close</button>
-          <button class="btn btn-outline-warning btn-sm px-3">Reopen</button>
-          <button class="btn btn-outline-danger btn-sm px-3">Delete</button>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="col-12 col-md-12 col-lg-4">
-      <div class="card shadow-sm border border-dark rounded-0 p-3 h-100">
-        <div class="d-flex justify-content-between align-items-center mb-2" style="font-size:13px;">
-
-          <!-- LEFT SIDE: LOGO + BADGE -->
-          <div class="d-flex align-items-center" style="gap:10px;">
-
-            <!-- LOGO -->
-            <div style="width:65px; height:55px; flex-shrink:0;">
-              <div class="border border-1 border-dark d-flex align-items-center justify-content-center w-100 h-100"
-                style="border-radius:6px; overflow:hidden;">
-                <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png" alt="logo"
-                  style="max-width:100%; max-height:100%; object-fit:contain;">
-              </div>
-            </div>
-
-            <!-- BADGE -->
-            <span class="badge rounded-0 px-2 py-2 bg-success rounded-3" style=" font-size:11px;">
-              Open
-            </span>
-            <span class="badge rounded-0 px-2 py-2 bg-warning rounded-3" style=" font-size:11px;"> Pending
-            </span>
-             <span class="badge rounded-0 px-2 py-2 bg-danger rounded-3" style=" font-size:11px;">Closed
-            </span>
-          </div>
-
-          <!-- RIGHT SIDE: TIME -->
-          <div class="d-flex align-items-center text-muted" style="gap:4px; white-space:nowrap;">
-            <i class="bi bi-clock"></i> 2 days ago
-          </div>
-
-        </div>
-
-
-
-
-
-
-        <!-- Content -->
-        <div class="row">
-
-          <div class="col-12">
-            <h6 class="mb-1">Angular Developer</h6>
-          </div>
-
-          <div class="col-12">
-            <p class="mb-2" style="font-size:14px;">
-              Angular Developer skilled in building dynamic, responsive web applications using modern frontend
-              technologies.
-            </p>
-          </div>
-
-          <div class="col-12">
-            <div class="d-flex flex-wrap align-items-center" style="gap:10px; font-size:14px;">
-              <span class="text-muted">• Hyderabad</span>
-              <span class="text-muted">• Full Time</span>
-              <span class="text-muted">• Remote</span>
-            </div>
-          </div>
-
-        </div>
-
-
-
-
-        <div class="d-flex gap-3 mt-3 button-row">
-          <button class="btn btn-outline-primary btn-sm px-3">View</button>
-          <button class="btn btn-outline-danger btn-sm px-3">Close</button>
-          <button class="btn btn-outline-warning btn-sm px-3">Reopen</button>
-          <button class="btn btn-outline-danger btn-sm px-3">Delete</button>
-        </div>
-
-      </div>
-    </div>
+    }
 
   </div>
 
@@ -334,7 +195,5 @@
   </div>
 
 </div>
-
-
 
 </div>
