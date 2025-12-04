@@ -1,1 +1,119 @@
-<p>jobposts works!</p>
+<div class="container mt-5" style="padding-top: 60px;">
+
+
+  <!-- Job Listings Header -->
+  <div class="text-center mb-4">
+    <h4 class="fw-semibold">Job Listings</h4>
+    <p class="text-muted small">
+      A simple space to post jobs, manage openings, and help job seekers find matching opportunities.
+    </p>
+  </div>
+
+
+
+    <!-- Filters -->
+  <div class="row g-3 align-items-end">
+    <div class="col-md-4">
+      <input type="text" class="form-control" placeholder="Search Job Title" style="font-size:14px;">
+    </div>
+
+    <div class="col-md-3">
+      <select class="form-select" style="font-size:14px;">
+        <option selected>Job Type</option>
+        <option>Full-Time</option>
+        <option>Part-Time</option>
+        <option>Contract</option>
+        <option>Internship</option>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <select class="form-select" style="font-size:14px;">
+        <option selected>Job Category</option>
+        <option>Design</option>
+        <option>Development</option>
+        <option>Marketing</option>
+        <option>Finance</option>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <select class="form-select" style="font-size:14px;">
+        <option selected>Job Status</option>
+        <option>Open</option>
+        <option>Closed</option>
+        <option>Paused</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Active filters row -->
+<div class="row align-items-center my-3">
+
+  <!-- FILTERS (show on top for small screens) -->
+  <div class="col-12 col-md d-flex flex-wrap gap-2 align-items-center mb-2 mb-md-0">
+    <span class="badge p-2 d-flex align-items-center justify-content-center"
+          style="font-size:13px; border:1px solid #6c757d; color:#6c757d; cursor:pointer;">
+      Job Type: Full-Time &nbsp; ×
+    </span>
+
+    <span class="badge p-2 d-flex align-items-center justify-content-center"
+          style="font-size:13px; border:1px solid #6c757d; color:#6c757d; cursor:pointer;">
+      Status: Open &nbsp; ×
+    </span>
+  </div>
+
+  <!-- COUNT (moves below filters on small screens) -->
+  <div class="col-12 col-md-auto text-md-end">
+    <p class="mb-0 text-muted" style="font-size:14px;">Showing 0 of 100</p>
+  </div>
+
+</div>
+
+  <!-- Job Cards Grid -->
+<div class="row g-4 mb-5 mt-5">
+
+  @for (job of jobPosts; track job.id) {
+
+  <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+
+    <div class="job-card border rounded-3 p-3 d-flex gap-3">
+
+      <img [src]="job.logo" class="company-logo">
+
+      <div class="flex-grow-1">
+
+        <h5 class="fw-semibold mb-1">{{ job.company }}</h5>
+        <p class="mb-2 small">{{ job.jobTitle }} - {{ job.id }}</p>
+
+        <div class="d-flex justify-content-between align-items-center mb-2 flex-nowrap">
+          <span class="text-muted small text-truncate">
+            {{ job.location }} • {{ job.jobType }} • {{ job.workMode }}
+          </span>
+
+          <span class="text-muted small">
+            <i class="bi bi-clock"></i> {{ job.posted }}
+          </span>
+        </div>
+
+        <p class="small text-muted mb-3">
+          {{ job.description }}
+        </p>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-outline-info">View</button>
+          <button class="btn btn-sm btn-outline-success">Approve</button>
+          <button class="btn btn-sm btn-outline-danger">Reject</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  }
+
+</div>
+
+
+</div>

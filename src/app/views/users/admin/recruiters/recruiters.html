@@ -1,1 +1,177 @@
-<p>recruiters works!</p>
+<div class="container mt-5 mb-5" style="padding-top: 60px;">
+
+  <h5 class="fw-semibold mb-1">Clients Management</h5>
+  <p class="text-muted mb-3">View, filter, and manage registered clients</p>
+
+<!-- TABLE – SHOW ONLY ON LG+ -->
+<div class="table-responsive d-none d-lg-block">
+
+  <table class="table table-bordered align-middle table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>S.No</th>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Verification</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Last Login</th>
+        <th>Last Logout</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for(client of clients; track client.id) {
+        <tr>
+          <td>{{ client.id }}</td>
+          <td>{{ client.fullname }}</td>
+          <td>{{ client.email }}</td>
+          <td><span class="badge bg-success">{{ client.verification }}</span></td>
+          <td>{{ client.role }}</td>
+          <td>
+            <span class="badge"
+                  [class.bg-success]="client.status === 'Active'"
+                  [class.bg-secondary]="client.status === 'Inactive'">
+              {{ client.status }}
+            </span>
+          </td>
+          <td>{{ client.lastLogin }}</td>
+          <td>{{ client.lastLogout }}</td>
+<td>
+  <div class="d-flex gap-2">
+
+    <button class="btn btn-outline-primary btn-sm">
+      <i class="bi bi-eye"></i> View
+    </button>
+
+    <button class="btn btn-outline-secondary btn-sm"
+            data-bs-toggle="modal"         (click)="openLogsModal(client)"
+            data-bs-target="#logsModal">
+      <i class="bi bi-clock-history"></i> Logs
+    </button>
+
+  </div>
+</td>
+
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <!-- Pagination shown ONLY on large screens -->
+  <div class="d-flex justify-content-between align-items-center mt-3 d-none d-lg-flex">
+
+    <div>
+      <label class="me-2">Show</label>
+      <select class="form-select d-inline-block" style="width: 70px;">
+        <option>5</option>
+        <option>10</option>
+        <option>20</option>
+      </select>
+    </div>
+
+    <nav>
+      <ul class="pagination mb-0">
+        <li class="page-item disabled"><button class="page-link">&laquo;</button></li>
+        <li class="page-item active"><button class="page-link">1</button></li>
+        <li class="page-item disabled"><button class="page-link">&raquo;</button></li>
+      </ul>
+    </nav>
+
+    <span class="text-muted">Page 1 of 1</span>
+
+  </div>
+
+</div>
+
+
+<div class="d-lg-none">
+
+  @for(client of clients; track client.id) {
+    <div class="card mb-3 shadow-sm p-3">
+
+      <h6 class="fw-semibold mb-1">{{ client.fullname }}</h6>
+      <p class="text-muted mb-2">{{ client.email }}</p>
+
+      <div class="d-flex justify-content-between">
+        <span class="badge bg-success">{{ client.verification }}</span>
+
+        <span class="badge"
+              [class.bg-success]="client.status === 'Active'"
+              [class.bg-secondary]="client.status === 'Inactive'">
+          {{ client.status }}
+        </span>
+      </div>
+
+      <p class="mt-2 mb-1"><strong>Role:</strong> {{ client.role }}</p>
+      <p class="mb-1"><strong>Last Login:</strong> {{ client.lastLogin }}</p>
+      <p class="mb-2"><strong>Last Logout:</strong> {{ client.lastLogout }}</p>
+
+<div class="d-flex gap-2 mt-2">
+
+  <button class="btn btn-outline-primary btn-sm w-50">
+    <i class="bi bi-eye"></i> View
+  </button>
+
+  <button class="btn btn-outline-secondary btn-sm w-50"
+          data-bs-toggle="modal"         (click)="openLogsModal(client)"
+          data-bs-target="#logsModal">
+    <i class="bi bi-clock-history"></i> Logs
+  </button>
+
+</div>
+
+
+    </div>
+  }
+
+</div>
+
+
+
+
+<!-- LOGS MODAL -->
+<!-- LOGS MODAL -->
+<div class="modal fade" id="logsModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Logs – {{ selectedClient?.fullname }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        @if(selectedClient) {
+
+          @for(log of selectedClient.logs; track log.login) {
+
+            <div class="p-2 border rounded mb-2">
+              <p class="mb-1"><strong>Login:</strong> {{ log.login }}</p>
+              <p class="mb-1"><strong>Logout:</strong> {{ log.logout }}</p>
+            </div>
+
+          }
+
+        }
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+</div>
