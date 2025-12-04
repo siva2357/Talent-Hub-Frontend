@@ -34,91 +34,82 @@
     <!-- RIGHT SECTION -->
     <div class="d-flex align-items-center" style="gap: 10px; ">
 
-      <!-- Chat Icon -->
-<!-- Chat Icon with Count Badge -->
-<a routerLink="chat-page" class="header-icon position-relative">
-  <i class="bi bi-chat-square-text" style="font-size: 1.2rem;"></i>
+      <a routerLink="chat-page" class="header-icon position-relative">
+        <i class="bi bi-chat-square-text" style="font-size: 1.2rem;"></i>
 
-  <!-- STATIC BADGE -->
-  <span class="chat-badge">3</span>
-</a>
+        <!-- STATIC BADGE -->
+        <span class="chat-badge">3</span>
+      </a>
 
 
-      <!-- Bell Dropdown -->
+      <div class="dropdown notif-dropdown mx-2">
+        <a class="header-icon position-relative" data-bs-toggle="dropdown">
+          <i class="bi bi-bell fs-5"></i>
+
+          @if (unreadCount > 0 && showCount) {
+          <span class="notif-badge">{{ unreadCount }}</span>
+          }
+        </a>
+        <div class="dropdown-menu dropdown-menu-center shadow notif-menu" data-bs-auto-close="outside"
+          (click)="$event.stopPropagation()">
 
 
+          <div class="notif-header d-flex justify-content-between align-items-center px-3 py-2">
+            <strong>Notifications</strong>
 
-
-<div class="dropdown notif-dropdown mx-2">
-  <a class="header-icon position-relative" data-bs-toggle="dropdown">
-    <i class="bi bi-bell fs-5"></i>
-
-    @if (unreadCount > 0 && showCount) {
-      <span class="notif-badge">{{ unreadCount }}</span>
-    }
-  </a>
-<div class="dropdown-menu dropdown-menu-end shadow notif-menu"
-     data-bs-auto-close="outside"
-     (click)="$event.stopPropagation()" >
-
-
-    <div class="notif-header d-flex justify-content-between align-items-center px-3 py-2">
-      <strong>Notifications</strong>
-
-      <div class="actions">
-        <button class="btn btn-sm btn-light me-2" (click)="markAllRead()">Mark all read</button>
-        <button class="btn btn-sm btn-danger" (click)="clearAll()">Clear all</button>
-      </div>
-    </div>
-
-    <hr class="my-1">
-
-    <div class="notif-list">
-
-      @if (notifications.length === 0) {
-        <p class="text-center text-muted py-3">No notifications</p>
-
-      } @else {
-
-        @for (n of visibleNotifications; track n) {
-          <div class="notif-item" [class.unread]="!n.read">
-      @if (!n.read) {
-    <i class="bi bi-dot notif-dot"></i>
-  }
-
-            <div>
-              <p class="mb-0 notif-text">{{ n.message }}</p>
-              <small class="notif-time">{{ n.time }}</small>
+            <div class="actions">
+              <button class="btn btn-sm btn-light me-2" (click)="markAllRead()">Mark all read</button>
+              <button class="btn btn-sm btn-danger" (click)="clearAll()">Clear all</button>
             </div>
           </div>
-        }
 
-        <button class="btn btn-link small w-100 text-center mt-2"
-                (click)="toggleView()">
-          {{ viewMore ? "View less" : "View more" }}
-        </button>
+          <hr class="my-1">
 
-      }
-    </div>
-  </div>
-</div>
+          <div class="notif-list">
+
+            @if (notifications.length === 0) {
+            <p class="text-center text-muted py-3">No notifications</p>
+
+            } @else {
+
+            @for (n of visibleNotifications; track n) {
+            <div class="notif-item" [class.unread]="!n.read">
+              @if (!n.read) {
+              <i class="bi bi-dot notif-dot"></i>
+              }
+
+              <div>
+                <p class="mb-0 notif-text">{{ n.message }}</p>
+                <small class="notif-time">{{ n.time }}</small>
+              </div>
+            </div>
+            }
+
+            <button class="btn btn-link small w-100 text-center mt-2" (click)="toggleView()">
+              {{ viewMore ? "View less" : "View more" }}
+            </button>
+
+            }
+          </div>
+        </div>
+      </div>
 
 
 
-
-
-
-      <!-- Profile Dropdown -->
-      <!-- Profile Dropdown -->
       <div class="dropdown ">
 
         <a class="header-icon" data-bs-toggle="dropdown">
           <img src="https://github.com/mdo.png" alt="profile" width="35" height="35" class="rounded-circle">
         </a>
 
-        <ul class="dropdown-menu dropdown-menu-end profile-menu" style="width: 200px;">
-              <li class="dropdown-item">Fullname<br><small>User role</small></li>
-            <li><hr></li>
+        <ul class="dropdown-menu dropdown-menu-start profile-menu" style="width: 200px;">
+          <li class="dropdown-item" style="line-height: 1.2;">
+            Fullname<br>
+            <small>User role</small>
+          </li>
+          <li>
+            <hr>
+          </li>
           <li><a class="dropdown-item" routerLink="profile">Profile</a></li>
           <li><a class="dropdown-item" routerLink="account-settings">Settings</a></li>
           <li>
@@ -128,6 +119,8 @@
         </ul>
 
       </div>
+
+      <li style="margin-right: 20px; margin-left: 10px; list-style: none;">Siva Prasad Kurra<br><small>Recruiter</small></li>
 
     </div>
 
