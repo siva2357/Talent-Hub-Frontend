@@ -1,70 +1,20 @@
 .signup-container {
   text-align: center;
+  padding: 20px;
 }
 
+/* Logo */
 .logo {
   height: 70px;
 }
 
-.role-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  width: 320px;
-  margin-top: 15px;
+@media (max-width: 480px) {
+  .logo {
+    height: 55px; /* smaller for mobiles */
+  }
 }
 
-.role-box {
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 14px 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  background: #fff;
-}
-
-.role-box:hover {
-  border-color: #0d6efd;
-  background: #eef5ff;
-}
-
-.role-box.active {
-  border-color: #0d6efd;
-  background: #e7f1ff;
-}
-
-.circle {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 2px solid #aaa;
-  margin-bottom: 6px;
-  transition: all 0.2s;
-}
-
-.circle.active {
-  border-color: #0d6efd;
-  background: #0d6efd;
-}
-
-.role-title {
-  font-weight: 600;
-  font-size: 16px;
-}
-
-.role-desc {
-  margin: 0;
-  text-align: left;
-}
-
-.btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-/* Horizontal layout with proper gap */
+/* Role boxes container */
 .role-row {
   display: flex;
   justify-content: center;
@@ -72,20 +22,73 @@
   gap: 18px;
   width: 100%;
   max-width: 600px;
-  margin: 0 auto;
 }
 
-/* Each box takes equal width */
-.role-row .role-box {
-  flex: 1;
-  max-width: 260px;
+/* Role box */
+.role-box {
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  background: #fff;
 }
 
-/* Responsive: stack vertically on small screens */
-@media (max-width: 600px) {
+.role-box:hover {
+  border-color: #0d6efd;
+  background: #f4f8ff;
+}
+
+.role-box.active {
+  border-color: #0d6efd;
+  background: #e7f1ff;
+}
+
+/* Circle */
+.circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #aaa;
+  margin-bottom: 8px;
+  transition: 0.25s;
+}
+
+.circle.active {
+  border-color: #0d6efd;
+  background: #0d6efd;
+}
+
+/* Text */
+.role-title {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+.role-desc {
+  margin: 0;
+  text-align: left;
+}
+
+/* Responsive stacking */
+@media (max-width: 768px) {
   .role-row {
     flex-direction: column;
-    max-width: 320px;
+    max-width: 330px;
     gap: 14px;
+    margin-top: 20px;
+  }
+
+  .role-box {
+    width: 100%;
+    padding: 14px 16px;
+  }
+
+  .role-title {
+    font-size: 15px;
   }
 }

@@ -1,71 +1,86 @@
+/* Wrapper */
 .login-wrapper {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #f8f9fa;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
 }
 
-.login-card {
-  width: 400px;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.08);
-  background: #fff;
-  border: 1px solid #e5e5e5;
-}
-
+/* Logo */
 .logo-img {
-  height: 70px;
+  height: 60px;
 }
 
+@media (max-width: 480px) {
+  .logo-img {
+    height: 50px;
+  }
+}
+
+/* Form container */
+.form-area {
+  width: 100%;
+  max-width: 320px;
+}
+
+/* Inputs */
 .form-control {
-  height: 45px;
+  height: 42px;
   border-radius: 8px;
   font-size: 14px;
 }
 
+/* Primary button */
 .btn-primary {
-  height: 45px;
+  height: 42px;
   border-radius: 8px;
   font-weight: 600;
+  font-size: 15px;
 }
 
+/* Google button */
 .google-btn {
   border: 1px solid #ddd;
   background: #fff;
   border-radius: 8px;
   font-weight: 500;
+  font-size: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
-  transition: all 0.2s ease-in-out;
-  height: 45px;
+  transition: 0.2s ease-in-out;
+  height: 42px;
+    max-width: 320px;
 }
 
 .google-btn:hover {
   background: #f7f7f7;
   border-color: #ccc;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
 }
 
 .google-icon {
   height: 18px;
 }
 
-.small-text {
-  font-size: 14px;
-}
-
+/* Forgot password link */
 .forgot-link {
   font-size: 13px;
   color: #0d6efd;
   text-decoration: none;
-  font-weight: 500;
 }
 
 .forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* Signup link */
+.login-link {
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.login-link:hover {
   text-decoration: underline;
 }

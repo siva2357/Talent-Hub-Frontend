@@ -25,6 +25,7 @@ import { SEEKER_ROUTES } from './views/users/seeker/seeker.routes';
 import { ADMIN_ROUTES } from './views/users/admin/admin.routes';
 import { SeekerProfileForm } from './views/account/seeker-profile-form/seeker-profile-form';
 import { RecruiterProfileForm } from './views/account/recruiter-profile-form/recruiter-profile-form';
+import { AccountRegisteredPage } from './views/account/account-registered-page/account-registered-page';
 
 export const routes: Routes = [
 
@@ -44,6 +45,7 @@ export const routes: Routes = [
   { path: 'sign-up/recruiter-profile-form', component: RecruiterProfileForm },
   { path: 'sign-up/seeker', component: RegisterSeekerPage, title: 'Register seeker' },
   { path: 'sign-up/seeker-profile-form', component: SeekerProfileForm },
+  { path: 'account-registered', component: AccountRegisteredPage, title: 'Confirmation' },
   { path: 'sign-up/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
   { path: 'login', component: LoginPage, title: 'Login' },

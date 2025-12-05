@@ -1,72 +1,59 @@
-<div class="login-wrapper">
+<div class="login-wrapper d-flex flex-column justify-content-center align-items-center vh-100 bg-light">
 
-  <div class="card login-card border-2 border-dark">
+  <!-- Logo -->
+  <img
+    src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
+    alt="Talent Hub"
+    class="logo-img mb-3"
+  />
 
-    <!-- Logo -->
-    <div class="text-center mb-3">
-      <img
-        src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
-        alt="Talent Hub"
-        class="logo-img">
+  <h4 class="fw-bold text-center mb-1">Welcome Back</h4>
+  <p class="text-center text-muted small mb-4">Log in to your Talent Hub account</p>
+
+  <!-- LOGIN FORM -->
+  <form [formGroup]="form" (ngSubmit)="login()" class="form-area">
+
+    <input
+      type="email"
+      formControlName="email"
+      class="form-control mb-3"
+      placeholder="Email"
+    />
+
+    <input
+      type="password"
+      formControlName="password"
+      class="form-control mb-2"
+      placeholder="Password"
+    />
+
+    <div class="text-end mb-3">
+      <a routerLink="/forgot-password" class="forgot-link">Forgot password?</a>
     </div>
 
-    <!-- Title -->
-    <h4 class="text-center fw-bold mb-1">Welcome Back</h4>
-    <p class="text-center text-muted small mb-4">
-      Login to your Talent Hub account
-    </p>
-
-    <!-- LOGIN FORM -->
-    <form [formGroup]="form" (ngSubmit)="login()">
-
-      <div class="mb-3">
-        <input
-          type="email"
-          formControlName="email"
-          class="form-control"
-          placeholder="Email">
-      </div>
-
-      <div class="mb-3">
-        <input
-          type="password"
-          formControlName="password"
-          class="form-control"
-          placeholder="Password">
-      </div>
-
-<div class="text-end mt-2 mb-2">
-  <a routerLink="/forgot-password" class="forgot-link">
-    Forgot password?
-  </a>
-</div>
-
-
-      <button class="btn btn-primary w-100 mt-1" type="submit">
-        Login
-      </button>
-
-
-    </form>
-
-    <!-- Divider -->
-    <div class="text-center my-3 text-muted small">OR</div>
-
-    <!-- Google login -->
-    <button (click)="loginWithGoogle()" class="google-btn w-100 mb-2">
-      <img
-        src="https://developers.google.com/identity/images/g-logo.png"
-        alt="Google Logo"
-        class="google-icon">
-      Sign in with Google
+    <button class="btn btn-primary w-100 fw-semibold py-2" type="submit">
+      Login
     </button>
 
-    <!-- Signup link -->
-    <p class="text-center text-muted mt-3 small-text" >
-      Don't have an account?
-      <a routerLink="/sign-up" class="fw-semibold" style="cursor: pointer; text-decoration: none;">Sign up</a>
-    </p>
+  </form>
 
-  </div>
+  <!-- Divider -->
+  <div class="text-center my-3 text-muted small">OR</div>
+
+  <!-- Google login -->
+  <button (click)="loginWithGoogle()" class="google-btn w-100 mb-2">
+    <img
+      src="https://developers.google.com/identity/images/g-logo.png"
+      alt="Google Logo"
+      class="google-icon"
+    />
+    Sign in with Google
+  </button>
+
+  <!-- Signup link -->
+  <p class="text-center text-muted mt-3 small">
+    Don’t have an account?
+    <a routerLink="/sign-up" class="fw-semibold login-link">Sign up</a>
+  </p>
 
 </div>
