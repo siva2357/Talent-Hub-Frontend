@@ -12,7 +12,6 @@ import { UserProfile } from './user-profile/user-profile';
 import { ApplicantsListPage } from './applicants-list-page/applicants-list-page';
 import { JobDetailsPage } from './job-details-page/job-details-page';
 import { TalentProfilePage } from './talent-profile-page/talent-profile-page';
-import { UserProfileForm } from './user-profile-form/user-profile-form';
 
 export const RECRUITER_ROUTES: Routes = [
   {
@@ -32,7 +31,6 @@ export const RECRUITER_ROUTES: Routes = [
     ],
   },
   { path: 'chat-page', component: ChatPage },
-  { path: 'profile-form', component: UserProfileForm },
   { path: 'profile', component: UserProfile },
   { path: 'account-settings', component: UserAccountSettings },
 ];

@@ -12,7 +12,6 @@ import { UserAccountSettings } from './user-account-settings/user-account-settin
 import { ProjectForm } from './project-form/project-form';
 import { EditProjectForm } from './edit-project-form/edit-project-form';
 import { JobDetailsPage } from './job-details-page/job-details-page';
-import { UserProfileForm } from './user-profile-form/user-profile-form';
 import { ProjectDetailsPage } from './project-details-page/project-details-page';
 import { CompanyDetailsPage } from './company-details-page/company-details-page';
 
@@ -35,7 +34,6 @@ export const SEEKER_ROUTES: Routes = [
       { path: '', redirectTo: 'jobposts', pathMatch: 'full' }
     ],
   },
-  { path: 'profile-form', component: UserProfileForm },
   { path: 'chat-page', component: ChatPage },
   { path: 'profile', component: UserProfile },
   { path: 'account-settings', component: UserAccountSettings },

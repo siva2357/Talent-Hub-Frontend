@@ -23,6 +23,8 @@ import { UnauthorizedPage } from './views/extra-pages/unauthorized-page/unauthor
 import { RECRUITER_ROUTES } from './views/users/recruiter/recruiter.routes';
 import { SEEKER_ROUTES } from './views/users/seeker/seeker.routes';
 import { ADMIN_ROUTES } from './views/users/admin/admin.routes';
+import { SeekerProfileForm } from './views/account/seeker-profile-form/seeker-profile-form';
+import { RecruiterProfileForm } from './views/account/recruiter-profile-form/recruiter-profile-form';
 
 export const routes: Routes = [
 
@@ -39,7 +41,9 @@ export const routes: Routes = [
   //auth pages
   { path: 'sign-up', component: SingupPage, title: 'Singup' },
   { path: 'sign-up/recruiter', component: RegisterRecruiterPage, title: 'Register recruiter' },
+  { path: 'sign-up/recruiter-profile-form', component: RecruiterProfileForm },
   { path: 'sign-up/seeker', component: RegisterSeekerPage, title: 'Register seeker' },
+  { path: 'sign-up/seeker-profile-form', component: SeekerProfileForm },
   { path: 'sign-up/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
   { path: 'login', component: LoginPage, title: 'Login' },
