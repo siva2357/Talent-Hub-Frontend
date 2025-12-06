@@ -84,7 +84,8 @@ export class LoginPage implements OnInit {
           return;
         }
 
-        this.auth.saveToken(res.token);
+      // EXISTING USER → save auth data properly
+      this.auth.saveAuthData(res.token, res.user);
         this.router.navigate(['/' + res.user.role]);
       }
     });

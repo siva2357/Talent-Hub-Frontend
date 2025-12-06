@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth-service';
 
 
 interface Notification {
@@ -17,6 +18,11 @@ interface Notification {
     standalone: true,
 })
 export class Seeker {
+
+      constructor(private auth: AuthService, private router: Router) {}
+
+
+
   notifications: Notification[] = [
     { message: "New applicant submitted resume", time: "2m ago", read: false },
     { message: "Job post approved", time: "1h ago", read: false },
@@ -49,4 +55,12 @@ export class Seeker {
     this.notifications = [];
     this.showCount = false;
   }
+
+
+ logout() {
+    this.auth.logout();       // Clears localStorage
+    this.router.navigate(['/login']);  // Redirect to login page
+  }
+
+
 }

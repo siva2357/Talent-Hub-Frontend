@@ -83,7 +83,7 @@ export class RegisterRecruiterPage implements OnInit {
 
     this.auth.googleSignup(idToken, 'recruiter').subscribe({
       next: (res: any) => {
-        this.auth.saveToken(res.token);
+       this.auth.saveAuthData(res.token, res.user);
 
         if (res.newUser) {
           this.router.navigate(['/sign-up/recruiter-profile-form']);

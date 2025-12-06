@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { RouterOutlet, RouterModule } from '@angular/router';
+import { RouterOutlet, RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth-service';
 
 interface Notification {
   message: string;
@@ -15,6 +16,11 @@ interface Notification {
   styleUrl: './recruiter.css'
 })
 export class Recruiter {
+
+    constructor(private auth: AuthService, private router: Router) {}
+
+
+
   notifications: Notification[] = [
     { message: "New applicant submitted resume", time: "2m ago", read: false },
     { message: "Job post approved", time: "1h ago", read: false },
@@ -47,4 +53,10 @@ export class Recruiter {
     this.notifications = [];
     this.showCount = false;
   }
+
+ logout() {
+    this.auth.logout();       // Clears localStorage
+    this.router.navigate(['/login']);  // Redirect to login page
+  }
+
 }

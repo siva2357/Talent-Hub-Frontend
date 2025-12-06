@@ -7,41 +7,44 @@ import { environment } from '../../../environments/environment';
 })
 export class AuthService {
 
-  private api = environment.apiGatewayUrl; // http://localhost:5000
+  private api = environment.apiGatewayUrl;
 
   constructor(private http: HttpClient) {}
 
-  // ------------------------------------------------
-  // ⭐ GOOGLE SIGNUP (needs idToken + role)
-  // ------------------------------------------------
   googleSignup(idToken: string, role: string) {
-    return this.http.post(`${this.api}/auth/google/signup`, {
-      idToken,
-      role
-    });
+    return this.http.post(`${this.api}/auth/google/signup`, { idToken, role });
   }
 
-  // ------------------------------------------------
-  // ⭐ GOOGLE LOGIN (only idToken)
-  // ------------------------------------------------
   googleLogin(idToken: string) {
-    return this.http.post(`${this.api}/auth/google/login`, {
-      idToken
-    });
+    return this.http.post(`${this.api}/auth/google/login`, { idToken });
   }
 
   // ------------------------------------------------
-  // Save JWT token
+  // ⭐ Save token + user into localStorage
   // ------------------------------------------------
-  saveToken(token: string) {
+  saveAuthData(token: string, user: any) {
+    // clean old data
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('authUser');
+
+    // save new data
     localStorage.setItem('authToken', token);
+    localStorage.setItem('authUser', JSON.stringify(user));
   }
 
   // ------------------------------------------------
-  // Get JWT token
+  // Get token
   // ------------------------------------------------
   getToken(): string | null {
     return localStorage.getItem('authToken');
+  }
+
+  // ------------------------------------------------
+  // Get user object
+  // ------------------------------------------------
+  getUser() {
+    const data = localStorage.getItem('authUser');
+    return data ? JSON.parse(data) : null;
   }
 
   // ------------------------------------------------
@@ -49,5 +52,6 @@ export class AuthService {
   // ------------------------------------------------
   logout() {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('authUser');
   }
 }

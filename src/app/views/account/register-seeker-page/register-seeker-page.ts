@@ -74,7 +74,7 @@ export class RegisterSeekerPage implements OnInit {
 
     this.auth.googleSignup(idToken, this.selectedRole!).subscribe({
       next: (res: any) => {
-        this.auth.saveToken(res.token);
+      this.auth.saveAuthData(res.token, res.user);
 
         if (res.newUser) {
           this.router.navigate(['/sign-up/seeker-profile-form']);
