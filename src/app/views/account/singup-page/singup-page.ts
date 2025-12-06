@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './singup-page.html',
-  styleUrls: ['./singup-page.css']
+  styleUrls: ['./singup-page.css'],
 })
 export class SingupPage {
 
@@ -18,14 +18,14 @@ export class SingupPage {
   selectRole(role: 'recruiter' | 'seeker') {
     this.selectedRole = role;
   }
+continue() {
+  if (!this.selectedRole) return;
 
-  continue() {
-    if (!this.selectedRole) return;
+  this.router.navigate(
+    [`/sign-up/${this.selectedRole}`],
+    { queryParams: { role: this.selectedRole } }
+  );
+}
 
-    if (this.selectedRole === 'recruiter') {
-      this.router.navigate(['/sign-up/recruiter']);
-    } else {
-      this.router.navigate(['/sign-up/seeker']);
-    }
-  }
+
 }
