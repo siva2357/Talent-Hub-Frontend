@@ -35,7 +35,27 @@ export class LoginPage implements OnInit {
     });
   }
 
-  ngOnInit() {
+
+  loadGoogleScript(): Promise<void> {
+  return new Promise((resolve) => {
+    if (typeof google !== 'undefined') {
+      resolve();
+      return;
+    }
+
+    const check = setInterval(() => {
+      if (typeof google !== 'undefined') {
+        clearInterval(check);
+        resolve();
+      }
+    }, 50);
+  });
+}
+
+
+  async ngOnInit() {
+        await this.loadGoogleScript();
+
     google.accounts.id.initialize({
       client_id: environment.googleClientId,
       callback: (response: any) => this.handleGoogleLogin(response)

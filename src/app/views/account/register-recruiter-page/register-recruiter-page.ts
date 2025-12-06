@@ -38,10 +38,32 @@ export class RegisterRecruiterPage implements OnInit {
     });
   }
 
+
+
+  loadGoogleScript(): Promise<void> {
+  return new Promise((resolve) => {
+    if (typeof google !== 'undefined') {
+      resolve();
+      return;
+    }
+
+    const check = setInterval(() => {
+      if (typeof google !== 'undefined') {
+        clearInterval(check);
+        resolve();
+      }
+    }, 50);
+  });
+}
+
+
   // -----------------------------------------
   // INITIALIZE GOOGLE IDENTITY SERVICES (GIS)
   // -----------------------------------------
-  ngOnInit() {
+  async ngOnInit() {
+
+        await this.loadGoogleScript();
+
     google.accounts.id.initialize({
       client_id: environment.googleClientId,
       callback: (resp: any) => this.handleGoogleCredential(resp)
