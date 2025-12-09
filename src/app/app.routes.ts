@@ -26,6 +26,8 @@ import { ADMIN_ROUTES } from './views/users/admin/admin.routes';
 import { SeekerProfileForm } from './views/account/seeker-profile-form/seeker-profile-form';
 import { RecruiterProfileForm } from './views/account/recruiter-profile-form/recruiter-profile-form';
 import { AccountRegisteredPage } from './views/account/account-registered-page/account-registered-page';
+import { InterviewLoginPage } from './views/interview-platform/interview-login-page/interview-login-page';
+import { INTERVIEW_PLATFORM_ROUTES } from './views/interview-platform/interview-main-page/interview-main.routes';
 
 export const routes: Routes = [
 
@@ -34,7 +36,7 @@ export const routes: Routes = [
   { path: 'talent-marketplace', component: TalentMarketplacePage, title: 'Talent marketplace' },
   { path: 'find-work', component: FindWorkPage, title: 'Find work' },
   { path: 'recruitment-process', component: RecruitmentPage, title: 'Recruitment' },
-  { path: 'interview-process', component: InterviewPage, title: 'Interview process' },
+
   { path: 'resume-builder', component: ResumeBuilderPage, title: 'Resume builder' },
   { path: 'about', component: AboutPage, title: 'About' },
   { path: 'blog', component: BlogPage, title: 'Blog' },
@@ -58,6 +60,26 @@ export const routes: Routes = [
   { path: 'maintenance', component: MaintenancePage, title: 'Maintenance' },
   { path: 'error', component: ErrorPage, title: 'Error' },
   { path: 'access-denied', component: UnauthorizedPage, title: 'Access denied' },
+
+
+
+  {
+  path: 'interview',
+  component: InterviewPage,
+  title: 'Interview Login'
+},
+{
+  path: 'interview-platform/login',
+  component: InterviewLoginPage,
+  title: 'Interview Login'
+},
+
+{
+  path: 'interview-platform',
+  loadChildren: () => INTERVIEW_PLATFORM_ROUTES
+},
+
+
 
   //User routes
   { path: 'admin', loadChildren: () => ADMIN_ROUTES },
