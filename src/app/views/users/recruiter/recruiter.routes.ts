@@ -2,8 +2,7 @@ import { Routes } from '@angular/router';
 import { Recruiter } from './recruiter';
 import { Jobposts } from './jobposts/jobposts';
 import { Talents } from './talents/talents';
-import { SavedTalents } from './saved-talents/saved-talents';
-import { HiredTalents } from './hired-talents/hired-talents';
+
 import { JobApplications } from './job-applications/job-applications';
 import { ScheduledMeetings } from './scheduled-meetings/scheduled-meetings';
 import { ChatPage } from './chat-page/chat-page';
@@ -27,8 +26,7 @@ export const RECRUITER_ROUTES: Routes = [
       { path: 'scheduled-meetings', component: ScheduledMeetings },
       { path: 'talents', component: Talents },
       { path: 'talents/:id/profile', component: TalentProfilePage },
-      { path: 'saved-talents', component: SavedTalents },
-      { path: 'hired-talents', component: HiredTalents },
+
       { path: 'analytics-performance', component:  AnalyticsPerformancePage  },
       { path: 'interview/meet-session/:id', component: InterviewMeetingPage},
       { path: '', redirectTo: 'my-jobs', pathMatch: 'full' }
