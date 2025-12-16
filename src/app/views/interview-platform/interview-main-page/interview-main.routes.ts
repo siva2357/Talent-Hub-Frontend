@@ -10,6 +10,8 @@ import { ScheduledInterviewsPage } from './scheduled-interviews-page/scheduled-i
 import { UpcomingInterviewsPage } from './upcoming-interviews-page/upcoming-interviews-page';
 import { InterviewLandingPage } from './interview-landing-page/interview-landing-page';
 import { PracticeTopicPage } from './practice-topic-page/practice-topic-page';
+import { MockInterviewSessionPage } from './mock-interview-session-page/mock-interview-session-page';
+import { LiveInterviewSessionPage } from './live-interview-session-page/live-interview-session-page';
 
 export const INTERVIEW_PLATFORM_ROUTES: Routes = [
 
@@ -22,6 +24,7 @@ export const INTERVIEW_PLATFORM_ROUTES: Routes = [
       { path: 'main', component: InterviewLandingPage },
       { path: 'analytics-performance', component: InterviewAnalyticsPerformancePage },
       { path: 'ai-mock', component: AiMockInterviewPage },
+      { path: 'ai-mock/live-session', component: MockInterviewSessionPage },
       { path: 'assessments', component: AssessmentsRoomPage },
       { path: 'practice-room', component: PracticeRoomPage },
       { path: 'practice-room/:topicName', component: PracticeTopicPage },
@@ -29,6 +32,8 @@ export const INTERVIEW_PLATFORM_ROUTES: Routes = [
       /** INTERVIEW FLOWS */
       { path: 'scheduled-interviews', component: ScheduledInterviewsPage },
       { path: 'upcoming-interviews', component: UpcomingInterviewsPage },
+      { path: 'interviews/live-session', component: LiveInterviewSessionPage },
+
 
       { path: '', redirectTo: 'main', pathMatch: 'full' }
     ],
