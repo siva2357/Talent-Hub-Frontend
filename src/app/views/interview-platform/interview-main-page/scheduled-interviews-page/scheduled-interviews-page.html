@@ -1,8 +1,135 @@
-<div class="container mt-5 pt-5">
+<div class="container mt-5 pt-5 mb-5">
+
+  <!-- BACK -->
   <button
-    class="btn btn-outline-primary d-flex align-items-center gap-2"
+    class="btn btn-outline-primary d-flex align-items-center gap-2 mb-4"
     routerLink="/interview-platform">
     <i class="bi bi-arrow-left"></i>
-    Back to Interview Hub
+    Back
   </button>
+
+  <h4 class="fw-bold mb-4">My Interviews</h4>
+
+  <!-- TABS -->
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <a class="nav-link active" data-bs-toggle="tab" href="#upcoming">
+        Upcoming
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#pending">
+        Pending
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#completed">
+        Completed
+      </a>
+    </li>
+  </ul>
+
+  <!-- TAB CONTENT -->
+  <div class="tab-content">
+
+    <!-- UPCOMING -->
+    <div class="tab-pane fade show active" id="upcoming">
+      <div class="interview-card">
+        <div class="d-flex gap-3">
+
+          <img
+            src="https://via.placeholder.com/60"
+            class="company-logo"
+            alt="Company">
+
+          <div class="flex-grow-1">
+            <h6 class="fw-bold mb-1">Frontend Developer</h6>
+            <p class="text-muted mb-1">TechNova Pvt Ltd</p>
+            <p class="small text-muted mb-2">
+              Interview for Angular frontend role.
+            </p>
+
+            <div class="d-flex flex-wrap gap-3 small">
+              <span><i class="bi bi-calendar-event"></i> 20 Dec 2025</span>
+              <span><i class="bi bi-clock"></i> 11:00 AM – 12:00 PM</span>
+              <span class="badge bg-secondary">Scheduled</span>
+            </div>
+          </div>
+
+          <div class="text-end">
+     <a
+  class="btn btn-primary btn-sm"
+  routerLink="/interview-platform/interviews/live-session">
+  Join Meeting
+</a>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- PENDING -->
+    <div class="tab-pane fade" id="pending">
+      <div class="interview-card">
+        <div class="d-flex gap-3">
+
+          <img
+            src="https://via.placeholder.com/60"
+            class="company-logo"
+            alt="Company">
+
+          <div class="flex-grow-1">
+            <h6 class="fw-bold mb-1">Backend Developer</h6>
+            <p class="text-muted mb-1">CloudCore Systems</p>
+            <p class="small text-muted mb-2">
+              Interview request sent, waiting for schedule.
+            </p>
+
+            <span class="badge bg-warning text-dark">Pending</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPLETED -->
+    <div class="tab-pane fade" id="completed">
+      <div class="interview-card">
+        <div class="d-flex gap-3">
+
+          <img
+            src="https://via.placeholder.com/60"
+            class="company-logo"
+            alt="Company">
+
+          <div class="flex-grow-1">
+            <h6 class="fw-bold mb-1">Full Stack Developer</h6>
+            <p class="text-muted mb-1">Innova Labs</p>
+            <p class="small text-muted mb-2">
+              Interview completed successfully.
+            </p>
+
+            <div class="d-flex gap-3 small">
+              <span><i class="bi bi-calendar-check"></i> 10 Dec 2025</span>
+              <span class="badge bg-success">Completed</span>
+            </div>
+          </div>
+
+          <div class="text-end">
+            <button class="btn btn-outline-primary btn-sm">
+              View Report
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
 </div>

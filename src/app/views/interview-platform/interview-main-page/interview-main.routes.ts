@@ -12,6 +12,9 @@ import { InterviewLandingPage } from './interview-landing-page/interview-landing
 import { PracticeTopicPage } from './practice-topic-page/practice-topic-page';
 import { MockInterviewSessionPage } from './mock-interview-session-page/mock-interview-session-page';
 import { LiveInterviewSessionPage } from './live-interview-session-page/live-interview-session-page';
+import { LiveAssessmentPage } from './live-assessment-page/live-assessment-page';
+import { MyJobposts } from './my-jobposts/my-jobposts';
+import { JobpostsApplicants } from './jobposts-applicants/jobposts-applicants';
 
 export const INTERVIEW_PLATFORM_ROUTES: Routes = [
 
@@ -26,11 +29,14 @@ export const INTERVIEW_PLATFORM_ROUTES: Routes = [
       { path: 'ai-mock', component: AiMockInterviewPage },
       { path: 'ai-mock/live-session', component: MockInterviewSessionPage },
       { path: 'assessments', component: AssessmentsRoomPage },
+      { path: 'assessments/live-test', component: LiveAssessmentPage },
       { path: 'practice-room', component: PracticeRoomPage },
       { path: 'practice-room/:topicName', component: PracticeTopicPage },
 
       /** INTERVIEW FLOWS */
       { path: 'scheduled-interviews', component: ScheduledInterviewsPage },
+      { path: 'job-posts', component: MyJobposts },
+       { path: 'job-posts/applicants', component: JobpostsApplicants },
       { path: 'upcoming-interviews', component: UpcomingInterviewsPage },
       { path: 'interviews/live-session', component: LiveInterviewSessionPage },
 
