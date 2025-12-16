@@ -1,0 +1,54 @@
+<div class="container mt-5 pt-5" style="max-width:900px;">
+
+  <h4 class="fw-semibold mb-1">Join Interview</h4>
+  <p class="text-muted mb-4">Check your audio and video before joining</p>
+
+  <div class="row g-4">
+
+    <!-- VIDEO PREVIEW -->
+    <div class="col-md-7">
+      <div class="border rounded p-2 bg-dark text-center">
+        <video #video autoplay muted playsinline
+               style="width:100%; height:360px; object-fit:cover;">
+        </video>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="col-md-5">
+
+      <!-- Full Name -->
+      <label class="form-label">Full Name</label>
+      <input
+        type="text"
+        class="form-control mb-3"
+        [(ngModel)]="fullName"
+        placeholder="Enter your full name">
+
+      <!-- Toggles -->
+      <div class="d-flex gap-2 mb-3">
+
+        <button class="btn btn-outline-secondary"
+                (click)="toggleMic()">
+          🎤 {{ micOn ? 'Mic On' : 'Mic Off' }}
+        </button>
+
+        <button class="btn btn-outline-secondary"
+                (click)="toggleCamera()">
+          🎥 {{ cameraOn ? 'Camera On' : 'Camera Off' }}
+        </button>
+
+      </div>
+
+      <!-- JOIN -->
+      <button
+        class="btn btn-primary w-100"
+        [disabled]="!fullName"
+        (click)="joinMeeting()">
+        Join Interview
+      </button>
+
+    </div>
+
+  </div>
+</div>

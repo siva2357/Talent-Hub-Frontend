@@ -1,8 +1,9 @@
+import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
-
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-scheduled-meetings',
-  imports: [],
+  imports: [RouterModule ],
   templateUrl: './scheduled-meetings.html',
   styleUrl: './scheduled-meetings.css',
 })

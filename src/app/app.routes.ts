@@ -26,8 +26,6 @@ import { ADMIN_ROUTES } from './views/users/admin/admin.routes';
 import { SeekerProfileForm } from './views/account/seeker-profile-form/seeker-profile-form';
 import { RecruiterProfileForm } from './views/account/recruiter-profile-form/recruiter-profile-form';
 import { AccountRegisteredPage } from './views/account/account-registered-page/account-registered-page';
-import { InterviewLoginPage } from './views/interview-platform/interview-login-page/interview-login-page';
-import { INTERVIEW_PLATFORM_ROUTES } from './views/interview-platform/interview-main-page/interview-main.routes';
 
 export const routes: Routes = [
 
@@ -64,20 +62,12 @@ export const routes: Routes = [
 
 
   {
-  path: 'interview',
+  path: 'interview-preparation',
   component: InterviewPage,
   title: 'Interview Login'
 },
-{
-  path: 'interview-platform/login',
-  component: InterviewLoginPage,
-  title: 'Interview Login'
-},
 
-{
-  path: 'interview-platform',
-  loadChildren: () => INTERVIEW_PLATFORM_ROUTES
-},
+
 
 
 

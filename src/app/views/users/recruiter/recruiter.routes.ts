@@ -12,6 +12,8 @@ import { UserProfile } from './user-profile/user-profile';
 import { ApplicantsListPage } from './applicants-list-page/applicants-list-page';
 import { JobDetailsPage } from './job-details-page/job-details-page';
 import { TalentProfilePage } from './talent-profile-page/talent-profile-page';
+import { AnalyticsPerformancePage } from './analytics-performance-page/analytics-performance-page';
+import { InterviewMeetingPage } from '../../shared/interview-meeting-page/interview-meeting-page';
 
 export const RECRUITER_ROUTES: Routes = [
   {
@@ -27,6 +29,8 @@ export const RECRUITER_ROUTES: Routes = [
       { path: 'talents/:id/profile', component: TalentProfilePage },
       { path: 'saved-talents', component: SavedTalents },
       { path: 'hired-talents', component: HiredTalents },
+      { path: 'analytics-performance', component:  AnalyticsPerformancePage  },
+      { path: 'interview/meet-session/:id', component: InterviewMeetingPage},
       { path: '', redirectTo: 'my-jobs', pathMatch: 'full' }
     ],
   },

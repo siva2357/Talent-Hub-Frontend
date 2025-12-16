@@ -8,8 +8,8 @@
 
   <!-- Centered Card Wrapper -->
   <div class="row justify-content-center mt-5 mb-5">
-
-  <div class="col-12 col-md-10 col-lg-10">
+  @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
+  <div class="col-12 col-md-10 col-lg-10 mb-3">
 
     <div class="card shadow-sm border border-dark rounded-0 p-3">
 
@@ -71,15 +71,18 @@
 
       <!-- Action Button -->
       <div class="d-flex justify-content-end">
-        <button class="btn btn-outline-primary px-3 btn-sm rounded-0" style="font-size: 14px;">
-          Start Meeting
-        </button>
+<a
+  [routerLink]="['/recruiter/interview/meet-session',i]"
+  class="text-primary text-decoration-underline"
+  style="font-size:14px;">
+  Join Interview
+</a>
       </div>
 
     </div>
 
   </div>
-
+  }
 </div>
 
 
