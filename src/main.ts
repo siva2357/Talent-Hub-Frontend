@@ -1,6 +1,12 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
 import { App } from './app/app';
+import { appConfig } from './app/app.config';
+import { provideMonacoEditor } from 'ngx-monaco-editor-v2';
 
-bootstrapApplication(App, appConfig)
-  .catch((err) => console.error(err));
+bootstrapApplication(App, {
+  ...appConfig,
+  providers: [
+    ...(appConfig.providers ?? []),
+    provideMonacoEditor()
+  ]
+}).catch(err => console.error(err));

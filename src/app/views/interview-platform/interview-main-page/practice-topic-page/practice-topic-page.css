@@ -1,0 +1,57 @@
+/* PAGE LAYOUT */
+.editor-page {
+  height: calc(100vh - 90px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* BACK BUTTON */
+.editor-page > button {
+  align-self: flex-start;
+}
+
+/* HEADER */
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+/* ACTIONS */
+.editor-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* EDITOR CONTAINER */
+.editor-container {
+  flex: 1;
+  min-height: 0; /* IMPORTANT for Monaco */
+  border-left: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+}
+
+/* OUTPUT */
+.output-panel {
+  padding: 10px 14px;
+  border-top: 1px solid #e5e7eb;
+  background: #0f172a;
+  color: #22c55e;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.output-panel h6 {
+  margin-bottom: 6px;
+  color: #e5e7eb;
+}
+
+.output-panel pre {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  white-space: pre-wrap;
+}
