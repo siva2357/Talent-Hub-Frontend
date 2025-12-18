@@ -5,7 +5,6 @@ import { ChatPage } from './chat-page/chat-page';
 import { UserProfile } from './user-profile/user-profile';
 import { Seeker } from './seeker';
 import { Portfolio } from './portfolio/portfolio';
-import { JobOffers } from './job-offers/job-offers';
 import { UserAccountSettings } from './user-account-settings/user-account-settings';
 import { ProjectForm } from './project-form/project-form';
 import { EditProjectForm } from './edit-project-form/edit-project-form';
@@ -22,6 +21,8 @@ import { LiveAssessmentPage } from './live-assessment-page/live-assessment-page'
 import { AssessmentsRoomPage } from './assessments-room-page/assessments-room-page';
 import { InterviewMeetingPage } from '../../shared/interview-meeting-page/interview-meeting-page';
 import { InterviewSessionPage } from './interview-session-page/interview-session-page';
+import { ResumeAnalyzer } from './resume-analyzer/resume-analyzer';
+import { ResumeAnalyzerReport } from './resume-analyzer-report/resume-analyzer-report';
 
 export const SEEKER_ROUTES: Routes = [
   {
@@ -42,8 +43,9 @@ export const SEEKER_ROUTES: Routes = [
       { path: 'post-project', component: ProjectForm },
       { path: 'project/:id/edit-project', component: EditProjectForm },
       { path: 'project/:id/project-details', component:ProjectDetailsPage },
-      { path: 'my-job-offers', component: JobOffers },
       { path: 'analytics-performance', component:  AnalyticsPerformancePage  },
+      { path: 'analytics-performance/resume-analyzer', component:  ResumeAnalyzer  },
+      { path: 'analytics-performance/resume-analyzer-report', component: ResumeAnalyzerReport  },
       { path: 'interview-prep', component:  InterviewPrepPage  },
       { path: 'ai-mock', component: AiMockInterviewPage },
       { path: 'ai-mock/live-session', component: MockInterviewSessionPage },
