@@ -20,9 +20,11 @@ import { PracticeRoomPage } from './practice-room-page/practice-room-page';
 import { LiveAssessmentPage } from './live-assessment-page/live-assessment-page';
 import { AssessmentsRoomPage } from './assessments-room-page/assessments-room-page';
 import { InterviewMeetingPage } from '../../shared/interview-meeting-page/interview-meeting-page';
-import { InterviewSessionPage } from './interview-session-page/interview-session-page';
+import { InterviewSessionPage } from '../../shared/interview-session-page/interview-session-page';
 import { ResumeAnalyzer } from './resume-analyzer/resume-analyzer';
 import { ResumeAnalyzerReport } from './resume-analyzer-report/resume-analyzer-report';
+import { ResumeBuilder } from './resume-builder/resume-builder';
+import { ResumeMaking } from './resume-making/resume-making';
 
 export const SEEKER_ROUTES: Routes = [
   {
@@ -36,14 +38,14 @@ export const SEEKER_ROUTES: Routes = [
       { path: 'assessments', component: AssessmentsRoomPage },
       { path: 'assessments/live-test', component: LiveAssessmentPage },
       { path: 'scheduled-meetings', component: ScheduledMeetings },
-      { path: 'interview/live-session/:id', component: InterviewSessionPage},
-      { path: 'interview/meet-session/:id', component: InterviewMeetingPage},
 
       { path: 'my-portfolio', component: Portfolio },
       { path: 'post-project', component: ProjectForm },
       { path: 'project/:id/edit-project', component: EditProjectForm },
       { path: 'project/:id/project-details', component:ProjectDetailsPage },
       { path: 'analytics-performance', component:  AnalyticsPerformancePage  },
+      { path: 'resume-builder', component:  ResumeBuilder  },
+      { path: 'resume-making', component:  ResumeMaking  },
       { path: 'analytics-performance/resume-analyzer', component:  ResumeAnalyzer  },
       { path: 'analytics-performance/resume-analyzer-report', component: ResumeAnalyzerReport  },
       { path: 'interview-prep', component:  InterviewPrepPage  },
@@ -51,7 +53,6 @@ export const SEEKER_ROUTES: Routes = [
       { path: 'ai-mock/live-session', component: MockInterviewSessionPage },
       { path: 'practice-room', component: PracticeRoomPage },
       { path: 'practice-room/:topicName', component: PracticeTopicPage },
-
       { path: '', redirectTo: 'jobposts', pathMatch: 'full' }
     ],
   },

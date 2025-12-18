@@ -26,6 +26,8 @@ import { ADMIN_ROUTES } from './views/users/admin/admin.routes';
 import { SeekerProfileForm } from './views/account/seeker-profile-form/seeker-profile-form';
 import { RecruiterProfileForm } from './views/account/recruiter-profile-form/recruiter-profile-form';
 import { AccountRegisteredPage } from './views/account/account-registered-page/account-registered-page';
+import { InterviewMeetingPage } from './views/shared/interview-meeting-page/interview-meeting-page';
+import { InterviewSessionPage } from './views/shared/interview-session-page/interview-session-page';
 
 export const routes: Routes = [
 
@@ -68,7 +70,9 @@ export const routes: Routes = [
 },
 
 
+  { path: 'interview/live-session/:id', component: InterviewSessionPage},
 
+  { path: 'interview/meet-session/:id', component: InterviewMeetingPage},
 
 
   //User routes

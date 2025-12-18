@@ -53,7 +53,7 @@ export class InterviewSessionPage {
 
 joinMeeting() {
   this.router.navigate(
-    ['/seeker/interview/meet-session', this.interviewId],
+    ['/interview/meet-session', this.interviewId],
     {
       state: {
         fullName: this.fullName,
@@ -61,6 +61,7 @@ joinMeeting() {
         cameraOn: this.cameraOn
       }
     }
+
   );
 }
 
