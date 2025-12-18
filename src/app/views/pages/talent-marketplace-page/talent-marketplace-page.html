@@ -1,8 +1,174 @@
-
-
-
 <app-header-layout></app-header-layout>
-<div class="container p-5 mt-5 mb-5">
-<p>talent-marketplace-page works!</p>
+
+<div class="container mt-5 pt-5 mb-5">
+
+  <!-- ================= HEADER ================= -->
+  <section class="text-center mb-5">
+    <h2 class="fw-bold">Explore Top Talent</h2>
+    <p class="text-muted mt-2">
+      Discover skilled candidates across technology, design, and business roles —
+      carefully matched to recruiter expectations and job requirements.
+    </p>
+  </section>
+
+  <!-- ================= HOW RECRUITERS HIRE ================= -->
+
+  <section class="row text-center g-4 mb-5">
+    <div class="col-md-4">
+      <div class="info-card p-4 h-100">
+        <i class="bi bi-ui-checks-grid"></i>
+        <h6 class="fw-semibold mt-3">Skill-Based Matching</h6>
+        <p class="text-muted small mb-0">
+          Candidates are matched based on skills, experience, and role fit —
+          not just keywords.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="info-card p-4 h-100">
+        <i class="bi bi-robot"></i>
+        <h6 class="fw-semibold mt-3">AI Interview Insights</h6>
+        <p class="text-muted small mb-0">
+          Recruiters see interview readiness, confidence scores,
+          and communication insights.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="info-card p-4 h-100">
+        <i class="bi bi-clipboard-data"></i>
+        <h6 class="fw-semibold mt-3">Expectation Alignment</h6>
+        <p class="text-muted small mb-0">
+          Profiles reflect salary expectations, role preferences,
+          and availability upfront.
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ================= AI HIRING EXPLANATION ================= -->
+<section class="py-5 bg-light mb-5">
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">How AI Helps Recruiters Hire the Right Talent</h2>
+      <p class="text-muted">
+        Talent Hub uses AI to reduce hiring mistakes, save time, and improve
+        candidate–role alignment.
+      </p>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- FIND BEST MATCH -->
+      <div class="col-md-6 col-lg-4">
+        <div class="ai-card h-100 p-4">
+          <h6 class="fw-semibold">Find the Best Match</h6>
+          <p class="text-muted small mb-0">
+            AI evaluates skills, experience, role preferences, and interview
+            performance to surface candidates who best match the job —
+            not just those with keyword-heavy resumes.
+          </p>
+        </div>
+      </div>
+
+      <!-- REDUCE HIRING MISMATCH -->
+      <div class="col-md-6 col-lg-4">
+        <div class="ai-card h-100 p-4">
+          <h6 class="fw-semibold">Reduce Hiring Mismatch</h6>
+          <p class="text-muted small mb-0">
+            By analyzing role expectations, salary range, and candidate goals,
+            AI helps avoid mismatches that lead to early drop-offs or resignations.
+          </p>
+        </div>
+      </div>
+
+      <!-- INTERVIEW READINESS -->
+      <div class="col-md-6 col-lg-4">
+        <div class="ai-card h-100 p-4">
+          <h6 class="fw-semibold">Interview Readiness Insights</h6>
+          <p class="text-muted small mb-0">
+            Recruiters see AI-generated insights on communication clarity,
+            confidence level, and problem-solving ability before scheduling interviews.
+          </p>
+        </div>
+      </div>
+
+      <!-- SAVE TIME -->
+      <div class="col-md-6 col-lg-4">
+        <div class="ai-card h-100 p-4">
+          <h6 class="fw-semibold">Save Screening Time</h6>
+          <p class="text-muted small mb-0">
+            AI filters large applicant pools automatically, allowing recruiters
+            to focus only on qualified, job-ready candidates.
+          </p>
+        </div>
+      </div>
+
+      <!-- REDUCE BIAS -->
+      <div class="col-md-6 col-lg-4">
+        <div class="ai-card h-100 p-4">
+          <h6 class="fw-semibold">Reduce Bias</h6>
+          <p class="text-muted small mb-0">
+            Talent Hub AI focuses on skills and performance rather than background,
+            helping recruiters make fair, data-driven decisions.
+          </p>
+        </div>
+      </div>
+
+      <!-- BETTER HIRING DECISIONS -->
+      <div class="col-md-6 col-lg-4">
+        <div class="ai-card h-100 p-4">
+          <h6 class="fw-semibold">Better Hiring Decisions</h6>
+          <p class="text-muted small mb-0">
+            AI does not replace recruiters — it supports them with insights,
+            so final decisions are faster, smarter, and more confident.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+  <!-- ================= TALENT GRID ================= -->
+  <section>
+    <div class="row g-4">
+
+      @for (i of [1,2,3,4,5,6]; track i) {
+        <div class="col-md-4">
+          <div class="talent-card h-100 shadow-sm">
+
+            <div class="card-body text-center">
+              <div class="avatar mx-auto mb-3"></div>
+
+              <h6 class="fw-semibold mb-1">Candidate Name</h6>
+              <p class="text-muted small mb-2">Frontend Developer</p>
+
+              <div class="tags mb-3">
+                <span class="badge bg-light text-dark">Angular</span>
+                <span class="badge bg-light text-dark">React</span>
+                <span class="badge bg-light text-dark">UI/UX</span>
+              </div>
+
+              <button class="btn btn-outline-primary btn-sm w-100">
+                View Profile
+              </button>
+            </div>
+
+          </div>
+        </div>
+      }
+
+    </div>
+  </section>
+
 </div>
+
 <app-footer-layout></app-footer-layout>
