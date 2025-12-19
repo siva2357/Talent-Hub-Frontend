@@ -27,6 +27,8 @@ sidebarOpen = false; // start collapsed (icon-only mode)
     { label: 'Job Posts', icon: 'bi-briefcase', link: 'jobposts' },
     { label: 'Applicants', icon: 'bi-person-lines-fill', link: 'job-applicants' },
     { label: 'Interviews', icon: 'bi bi-laptop', link: 'interviews' },
+    { label: 'Support requests', icon: 'bi bi-gear', link: 'support-requests' },
+
   ];
 
 toggleSidebar() {

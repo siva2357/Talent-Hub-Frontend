@@ -10,6 +10,7 @@ import { RecruiterProfilePage } from './recruiter-profile-page/recruiter-profile
 import { SeekerProfilePage } from './seeker-profile-page/seeker-profile-page';
 import { JobDetailsPage } from './job-details-page/job-details-page';
 import { JobApplicantsList } from './job-applicants-list/job-applicants-list';
+import { SupportRequests } from './support-requests/support-requests';
 
 export const ADMIN_ROUTES: Routes = [
   {
@@ -26,6 +27,7 @@ export const ADMIN_ROUTES: Routes = [
       { path: 'job-applicants', component: JobApplicants},
       { path: 'job-applicants/:id/list', component: JobApplicantsList},
       { path: 'interviews', component: Interviews },
+      { path: 'support-requests', component: SupportRequests },
 
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ],
