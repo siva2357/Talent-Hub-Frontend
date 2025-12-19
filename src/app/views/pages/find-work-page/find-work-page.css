@@ -1,11 +1,107 @@
+/* ================= BASE ================= */
+section {
+  overflow-x: hidden;
+}
+
+/* ================= HEADINGS ================= */
+h2 {
+  font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+  line-height: 1.3;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+p {
+  line-height: 1.6;
+}
+
+/* ================= INFO CARD ================= */
+.info-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 1.5rem;
+  height: 100%;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .06);
+}
+
+.info-card h6 {
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+}
+
+.info-card p {
+  font-size: 0.95rem;
+}
+
+/* ================= SEARCH ================= */
+.form-control,
+.form-select {
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+/* ================= JOB CARD ================= */
 .job-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 14px;
+  padding: 1.5rem;
   transition: transform .2s ease, box-shadow .2s ease;
 }
 
 .job-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(0,0,0,.06);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
+}
+
+.job-card h6 {
+  font-size: 1.05rem;
+}
+
+.job-card p {
+  font-size: 0.9rem;
+}
+
+/* ================= LIST ================= */
+ol {
+  padding-left: 1.2rem;
+}
+
+ol li {
+  margin-bottom: 0.5rem;
+}
+
+/* ================= MOBILE OPTIMIZATION ================= */
+@media (max-width: 768px) {
+
+  section.container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .info-card,
+  .job-card {
+    padding: 1.25rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* ================= TOUCH DEVICES ================= */
+@media (hover: none) {
+  .info-card:hover,
+  .job-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
 }

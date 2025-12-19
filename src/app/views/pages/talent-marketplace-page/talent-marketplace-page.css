@@ -1,99 +1,76 @@
-/* ================= BASE ================= */
-body {
-  font-size: 16px;
-  line-height: 1.6;
-}
-
-/* ================= SECTION HEADERS ================= */
+/* ================= SECTION TYPOGRAPHY ================= */
 section h2 {
-  font-size: 2.2rem;
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
   line-height: 1.3;
   margin-bottom: 0.5rem;
 }
 
 section p.text-muted {
-  font-size: 1.05rem;
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
 }
 
-/* ================= INFO GRID ================= */
-.info-card {
-  background: #ffffff;
-  border-radius: 16px;
-
-  /* Grid look */
-  border: 1px solid #e5e7eb;
-
-  padding: 32px !important;
-  height: 100%;
-
-  transition: transform .25s ease,
-              box-shadow .25s ease,
-              border-color .25s ease;
-}
-
-/* Hover – subtle & professional */
-.info-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0,0,0,.06);
-  border-color: #2563eb;
-}
-
-/* Icon container */
-.info-card i {
-  font-size: 30px;
-  color: #2563eb;
-
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #eef2ff;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Title */
-.info-card h6 {
-  font-size: 1.2rem;
-  margin-top: 16px;
-}
-
-/* Text */
-.info-card p {
-  font-size: 1rem;
-  line-height: 1.6;
-}
-
-
-/* ================= AI HIRING GRID ================= */
+/* ================= INFO & AI CARDS ================= */
+.info-card,
 .ai-card {
   background: #ffffff;
   border-radius: 16px;
-  cursor: pointer;
-
-  /* Grid definition */
   border: 1px solid #e5e7eb;
-
-  padding: 32px !important;
+  padding: 1.5rem;
   height: 100%;
-
-  transition: transform .25s ease,
-              box-shadow .25s ease,
-              border-color .25s ease;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
 
-/* Hover – subtle & professional */
+.info-card:hover,
 .ai-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 28px rgba(0,0,0,.06);
   border-color: #2563eb;
-   cursor: pointer;
 }
 
-/* Title */
+/* ================= INFO CARD LAYOUT ================= */
+.info-card {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Icon */
+.info-icon {
+  font-size: 1.6rem;
+  color: #2563eb;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #eef2ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Text */
+.info-content {
+  flex: 1;
+}
+
+/* Mobile + Tablet */
+@media (max-width: 991px) {
+  .info-card {
+    flex-direction: row;
+    text-align: left;
+  }
+}
+
+/* Large screens */
+@media (min-width: 992px) {
+  .info-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* ================= AI CARD ================= */
 .ai-card h6 {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   margin-bottom: 10px;
 }
 
@@ -107,90 +84,81 @@ section p.text-muted {
   margin-top: 8px;
 }
 
-
-/* Description */
 .ai-card p {
-  font-size: 1rem;
+  font-size: 0.95rem;
   line-height: 1.6;
 }
 
-/* ================= TALENT CARDS ================= */
+/* ================= TALENT CARD ================= */
 .talent-card {
-  border-radius: 16px;
   background: #ffffff;
-
-  /* ✅ card definition */
+  border-radius: 16px;
   border: 1px solid #e5e7eb;
-
+  height: 100%;
   transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
 
-/* Hover effect – premium but subtle */
 .talent-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 16px 40px rgba(0,0,0,.08);
   border-color: #2563eb;
 }
 
-/* Card body spacing */
 .talent-card .card-body {
-  padding: 28px;
+  padding: 1.5rem;
+  text-align: center;
 }
 
-/* ================= TEXT ================= */
-.talent-card h6 {
-  font-size: 1.15rem;
-}
-
-.talent-card p {
-  font-size: 1rem;
-}
-
-/* ================= AVATAR ================= */
+/* Avatar */
 .avatar {
-  width: 88px;
-  height: 88px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background: #e5e7eb;
-  border: 2px solid #ffffff;
+  margin: auto;
   box-shadow: 0 4px 12px rgba(0,0,0,.08);
 }
 
-/* ================= SKILL TAGS ================= */
+/* Tags */
 .tags {
   border-top: 1px dashed #e5e7eb;
-  padding-top: 12px;
+  padding-top: 0.75rem;
 }
 
 .tags .badge {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   padding: 6px 10px;
   margin: 2px;
   font-weight: 500;
 }
 
-/* ================= BUTTON ================= */
+/* Button */
 .btn-sm {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   padding: 8px 12px;
   border-radius: 10px;
 }
 
 /* ================= MOBILE TUNING ================= */
 @media (max-width: 768px) {
-  section h2 {
-    font-size: 1.7rem;
+  .info-card,
+  .ai-card,
+  .talent-card .card-body {
+    padding: 1.25rem;
   }
 
-  .info-card h6,
-  .ai-card h6,
-  .talent-card h6 {
-    font-size: 1.1rem;
+  .avatar {
+    width: 72px;
+    height: 72px;
   }
+}
 
-  .info-card p,
-  .ai-card p,
-  .talent-card p {
-    font-size: 0.95rem;
+/* ================= TOUCH DEVICES ================= */
+@media (hover: none) {
+  .info-card:hover,
+  .ai-card:hover,
+  .talent-card:hover {
+    transform: none;
+    box-shadow: none;
   }
 }

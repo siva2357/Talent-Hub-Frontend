@@ -1,41 +1,60 @@
-.hover-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  background-color: #d5dde6;
-}
 :host {
   display: block;
   z-index: 1055;
 }
 
-.navbar {
-  z-index: 1055;
+.header-navbar {
+  height: 60px;
 }
 
+.navbar-brand img {
+  display: block;
+}
 
+/* ===== DESKTOP LINKS ===== */
 .header-nav a {
+  margin: 0 14px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #111;
   text-decoration: none;
-  color: black;
-  transition: color 0.2s ease-in-out;
+  position: relative;
 }
 
-.header-nav a:hover {
-  color: #007bff; /* hover blue */
+.header-nav a.active-link {
+  font-weight: 600;
 }
 
-
-
-
-/* Enable dropdown on hover (desktop only) */
-@media (min-width: 992px) {
-  .nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    margin-top: 0;
-  }
-
-  /* Optional: highlight toggle text on hover */
-  .nav-item.dropdown:hover .nav-link.dropdown-toggle {
-    color: #007bff;
-  }
+.header-nav a.active-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 2px;
+  background: #111;
 }
 
+/* ===== MOBILE LINKS ===== */
+.header-nav-mobile a {
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 14px;
+  color: #111;
+  text-decoration: none;
+  position: relative;
+}
+
+.header-nav-mobile a.active-link {
+  font-weight: 600;
+}
+
+.header-nav-mobile a.active-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: #111;
+}

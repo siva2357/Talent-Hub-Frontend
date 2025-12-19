@@ -1,36 +1,50 @@
-/* Page layout */
+/* ===============================
+   PAGE LAYOUT
+================================ */
 .resume-landing {
   padding-top: 70px;
   padding-bottom: 70px;
 }
 
-/* HERO */
+/* ===============================
+   HERO SECTION
+================================ */
 .hero-section {
   max-width: 750px;
   margin: 0 auto;
   padding: 40px 20px;
+  text-align: center;
 }
 
 .hero-title {
   font-size: 46px;
+  line-height: 1.2;
 }
 
 .hero-subtitle {
   font-size: 18px;
   margin-top: 10px;
+  color: #6b7280;
+}
+
+.hero-buttons {
+  margin-top: 24px;
 }
 
 .hero-buttons .btn {
   min-width: 170px;
 }
 
-/* OVERVIEW BOXES */
+/* ===============================
+   OVERVIEW SECTION
+================================ */
 .overview-box {
   background: #fafbfd;
   padding: 22px;
   border-radius: 12px;
   border: 1px solid #e3e8ef;
   transition: 0.25s ease;
+  height: 100%;
 }
 
 .overview-box:hover {
@@ -39,13 +53,16 @@
   transform: translateY(-4px);
 }
 
-/* Features */
+/* ===============================
+   FEATURES SECTION
+================================ */
 .feature-block {
   padding: 25px;
   background: #ffffff;
   border-radius: 12px;
-  border: 1px solid #eee;
+  border: 1px solid #eeeeee;
   transition: 0.25s ease;
+  height: 100%;
 }
 
 .feature-block:hover {
@@ -56,34 +73,144 @@
 
 .feature-list {
   padding-left: 18px;
+  margin-top: 10px;
 }
 
 .feature-list li {
   font-size: 15px;
-  color: #555;
+  color: #555555;
   margin-bottom: 6px;
 }
 
-/* Sample Section */
+/* ===============================
+   SAMPLE RESUME SECTION
+================================ */
 .sample-section {
-  margin-top: 60px;
+  margin-top: 70px;
 }
 
 .sample-grid {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
 }
 
+/* ===============================
+   A4 RESUME PREVIEW (FINAL)
+================================ */
 .preview-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px;              /* MORE SPACE AROUND PAPER */
   background: #f3f6fb;
-  border-radius: 10px;
-  padding: 10px;
-  transition: 0.25s;
-  cursor: pointer;
+  border-radius: 12px;
+  transition: 0.25s ease;
 }
 
 .preview-box:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* A4 Paper */
+.a4-preview {
+  width: 100%;
+  max-width: 210px;           /* A4 width */
+  aspect-ratio: 210 / 297;    /* A4 portrait */
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 14px;              /* INNER PAPER MARGIN */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* SVG inside paper */
+.resume-svg {
+  width: 100%;
+  height: auto;
+}
+
+/* ===============================
+   RESPONSIVE FIXES
+================================ */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .feature-block {
+    padding: 20px;
+  }
+
+  .hero-title {
+    font-size: 38px;
+  }
+
+  .a4-preview {
+    max-width: 190px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 32px;
+  }
+
+  .hero-subtitle {
+    font-size: 15px;
+  }
+
+  .hero-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .hero-buttons .btn {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .overview-box {
+    padding: 18px;
+  }
+
+  .a4-preview {
+    max-width: 170px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 576px) {
+  .resume-landing {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .preview-box {
+    padding: 14px;
+  }
+
+  .a4-preview {
+    max-width: 150px;
+    padding: 12px;
+  }
+
+  .sample-section h3 {
+    font-size: 20px;
+  }
+
+  .sample-section p {
+    font-size: 14px;
+  }
+}
+
+/* Disable hover effects on touch devices */
+@media (hover: none) {
+  .overview-box:hover,
+  .feature-block:hover,
+  .preview-box:hover {
+    transform: none;
+    box-shadow: none;
+  }
 }

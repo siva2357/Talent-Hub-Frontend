@@ -1,188 +1,88 @@
+<!-- ================= DESKTOP / TABLET ================= -->
 @if (!isMobile) {
-  <nav class="navbar navbar-expand-lg bg-white fixed-top shadow" style="height: 60px;">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
+<nav class="navbar navbar-expand-xl fixed-top bg-white shadow-sm header-navbar">
+  <div class="container-fluid">
 
-      <!-- LEFT SIDE: Brand + Explore -->
-      <div class="d-flex align-items-center gap-4 ">
+    <!-- LEFT -->
+    <div class="d-flex align-items-center gap-4">
 
-        <!-- Brand -->
-        <a class="navbar-brand d-flex align-items-center" href="/home" style="cursor: pointer;">
-          <img
-            src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
-            alt="Talent Hub Logo" class="img-fluid" style="height: 50px; margin-right: 10px;">
-        </a>
-
-
-        <div class="header-nav d-none d-lg-flex align-items-center gap-3">
-
-          <ul class="navbar-nav mb-0 d-flex align-items-center" style="font-size: 14px; margin-left: -30px;">
-
-            <div class="position-relative">
-              <li class="text-dark mx-3" style="cursor: pointer;"><a routerLink="/home"
-                  routerLinkActive="active-link">Home</a></li>
-            </div>
-
-            <div class="position-relative">
-              <li class="text-dark mx-3" style="cursor: pointer;"><a routerLink="/talent-marketplace"
-                  routerLinkActive="active-link">Talent </a></li>
-            </div>
-
-
-
-
-            <div class="position-relative">
-              <li class="text-dark mx-3" style="cursor: pointer;"><a routerLink="/find-work"
-                  routerLinkActive="active-link">Find work</a></li>
-            </div>
-
-                        <div class="position-relative">
-              <li class="text-dark mx-3" style="cursor: pointer;"><a routerLink="/recruitment-process"
-                  routerLinkActive="active-link">Recruitment</a></li>
-            </div>
-
-            <div class="position-relative">
-              <li class="text-dark mx-3" style="cursor: pointer;"><a routerLink="/interview-preparation"
-                  routerLinkActive="active-link">Interview Preparation</a></li>
-            </div>
-
-            <div class="position-relative">
-              <li class="text-dark mx-3" style="cursor: pointer;"><a routerLink="/resume-builder"
-                  routerLinkActive="active-link">Resume Builder</a></li>
-            </div>
-
-
-
-
-
-            <div class="position-relative">
-              <li class="text-dark mx-3" style="cursor: pointer;"><a routerLink="/about"
-                  routerLinkActive="active-link">About</a></li>
-            </div>
-
-
-            <div class="position-relative">
-              <li class="text-dark mx-3" style="cursor: pointer;"><a routerLink="/blog"
-                  routerLinkActive="active-link">Blog</a></li>
-            </div>
-
-
-          </ul>
-
-        </div>
-
-
-      </div>
-
-      <!-- RIGHT SIDE: Login/Signup -->
-      <div class="d-none d-lg-flex align-items-center gap-4">
-        <ul class="navbar-nav mb-0 d-flex align-items-center" style="font-size: 14px;">
-          <li class="nav-item me-4">
-            <a class="btn btn-outline-primary btn-sm px-3 mx-1" href="/login" target="_blank">
-              Log in
-            </a>
-          </li>
-
-          <li class="nav-item me-4">
-            <a class="btn btn-primary btn-sm px-3 mx-1" href="/sign-up" target="_blank">
-              Sign up
-            </a>
-          </li>
-        </ul>
-      </div>
-
-    </div>
-  </nav>
-}
-
-
-
-
-
-
-
-@if (isMobile) {
-
-  <nav class="navbar bg-white fixed-top shadow px-3 py-2" style="height: 60px;">
-    <div class="container-fluid d-flex justify-content-start align-items-center" style="height: 100%;">
-
-      <!-- Hamburger Button -->
-      <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar"
-        style="font-size: 1rem;">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <!-- Brand Logo -->
-      <a class="navbar-brand d-flex align-items-center" style="height: 100%;">
+      <a class="navbar-brand" routerLink="/home">
         <img
           src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
-          alt="Talent Hub Logo" style="height:45px;  transform-origin: center;">
+          height="48"
+          alt="Talent Hub"
+        />
       </a>
 
+      <ul class="navbar-nav header-nav d-none d-xl-flex">
+        <li class="nav-item"><a routerLink="/home" routerLinkActive="active-link">Home</a></li>
+        <li class="nav-item"><a routerLink="/talent-marketplace" routerLinkActive="active-link">Talent</a></li>
+        <li class="nav-item"><a routerLink="/find-work" routerLinkActive="active-link">Find work</a></li>
+        <li class="nav-item"><a routerLink="/recruitment-process" routerLinkActive="active-link">Recruitment</a></li>
+        <li class="nav-item"><a routerLink="/interview-preparation" routerLinkActive="active-link">Interview Prep</a></li>
+        <li class="nav-item"><a routerLink="/resume-builder" routerLinkActive="active-link">Resume Builder</a></li>
+        <li class="nav-item"><a routerLink="/about" routerLinkActive="active-link">About</a></li>
+        <li class="nav-item"><a routerLink="/blog" routerLinkActive="active-link">Blog</a></li>
+      </ul>
     </div>
-  </nav>
 
-  <!-- Offcanvas Sidebar -->
-  <div class="offcanvas offcanvas-start  w-100" tabindex="-1" id="mobileSidebar">
-    <div class="offcanvas-header">
-      <button type="button" class="btn-close btn-close" data-bs-dismiss="offcanvas"></button>
+    <!-- RIGHT -->
+    <div class="d-none d-xl-flex align-items-center gap-3">
+      <button class="btn btn-outline-dark btn-sm" (click)="goToLogin()">Login</button>
+      <button class="btn btn-dark btn-sm" (click)="goToSignup()">Sign up</button>
     </div>
-    <div class="offcanvas-body">
-      <div class="header-nav">
-        <ul class="navbar-nav mt-3">
-          <li class="nav-item mb-2">
-            <a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/home" routerLinkActive="active-link">Home</a>
-          </li>
-          <li class="nav-item mb-2">
-            <a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/talent-marketplace"
-              routerLinkActive="active-link">Talent </a>
-          </li>
 
+  </div>
+</nav>
+}
 
-          <li class="nav-item mb-2">
-            <a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/find-work"
-              routerLinkActive="active-link">Find work</a>
-          </li>
-                    <li class="nav-item mb-2">
-            <a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/recruitment-process"
-              routerLinkActive="active-link">Recruitment</a>
-          </li>
+<!-- ================= MOBILE / TABLET ================= -->
+@if (isMobile) {
+<nav class="navbar fixed-top bg-white shadow-sm header-navbar">
+  <div class="container-fluid">
 
-                           <li class="nav-item mb-2">
-            <a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/interview-preparation"
-              routerLinkActive="active-link">Interview Preparation</a>
-          </li>
+    <button
+      class="navbar-toggler"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#mobileMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-          <li class="nav-item mb-2">
-            <a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/resume-builder"
-              routerLinkActive="active-link">Resume builder</a>
-          </li>
+    <a class="navbar-brand" routerLink="/home">
+      <img
+        src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
+        height="42"
+      />
+    </a>
 
+  </div>
+</nav>
 
-
-          <li class="nav-item mb-2">
-            <a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/about"
-              routerLinkActive="active-link">About</a>
-          </li>
-
-          <li class="nav-item mb-2">
-            <a class="nav-link" data-bs-dismiss="offcanvas" routerLink="/blog"
-              routerLinkActive="active-link">Blog</a>
-          </li>
-
-
-          <hr />
-          <li class="nav-item d-flex justify-content-between gap-3">
-            <a class="btn btn-outline-primary w-100" href="/login" target="_blank">
-              Login
-            </a>
-            <a class="btn btn-outline-secondary w-100" href="/sign-up" target="_blank">
-              Sign Up
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
+<div class="offcanvas offcanvas-start" id="mobileMenu">
+  <div class="offcanvas-header">
+    <button class="btn-close" data-bs-dismiss="offcanvas"></button>
   </div>
 
+  <div class="offcanvas-body">
+    <ul class="navbar-nav header-nav-mobile">
+      <li><a routerLink="/home" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Home</a></li>
+      <li><a routerLink="/talent-marketplace" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Talent</a></li>
+      <li><a routerLink="/find-work" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Find work</a></li>
+      <li><a routerLink="/recruitment-process" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Recruitment</a></li>
+      <li><a routerLink="/interview-preparation" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Interview Prep</a></li>
+      <li><a routerLink="/resume-builder" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Resume Builder</a></li>
+      <li><a routerLink="/about" routerLinkActive="active-link" data-bs-dismiss="offcanvas">About</a></li>
+      <li><a routerLink="/blog" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Blog</a></li>
+    </ul>
+
+    <hr />
+
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-dark w-50" (click)="goToLogin()">Login</button>
+      <button class="btn btn-dark w-50" (click)="goToSignup()">Sign up</button>
+    </div>
+  </div>
+</div>
 }
+
 
