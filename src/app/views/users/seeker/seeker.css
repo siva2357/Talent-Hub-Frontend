@@ -1,35 +1,57 @@
+/* =========================
+   LAYOUT
+========================= */
 
-
-.profile-menu {
-  margin-top: 16px !important; /* dropdown spacing below profile icon */
+.app-body {
+  padding-top: 40px; /* fixed header offset */
 }
 
+/* =========================
+   HEADER
+========================= */
 
+.app-header {
+  width: 100%;
+  height: 70px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
 
+/* Reduce side padding on tablet & below */
+@media (max-width: 991.98px) {
+  .app-header .px-3 {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
 
-/* Base nav-link style */
+/* =========================
+   NAV LINKS
+========================= */
+
 .nav-link-custom {
   color: #444444f8;
   text-decoration: none;
   font-weight: 500;
-  padding-bottom: 6px; /* space for bottom border */
+  padding-bottom: 6px;
   position: relative;
+  display: inline-block;      /* underline only under text */
+  width: fit-content;
   transition: color 0.2s ease;
 }
 
-/* Hover */
 .nav-link-custom:hover {
-  color: #000 /* blue hover */
+  color: #000;
 }
 
-/* ACTIVE LINK STYLE */
+/* Active link */
 .active-link {
-  color: #000 !important;       /* bold black text */
+  color: #000 !important;
   font-weight: 700 !important;
-  font-style: bold;
-
-  /* gradient underline */
-  position: relative;
 }
 
 .active-link::after {
@@ -39,32 +61,19 @@
   left: 0;
   width: 100%;
   height: 3px;
-
-  /* blue gradient underline */
   background: linear-gradient(90deg, #007bff, #66b2ff);
   border-radius: 2px;
 }
 
-
-
-
-
-
-
-
-
-
-.app-header {
-  width: 100%;
-  background: #ffffff;
-  border-bottom: 1px solid #e5e5e5;
-  position: fixed; /* THIS MAKES IT STICK */
-  top: 0;
-  left: 0;
-  z-index: 1000;
+/* Prevent full-width stretch inside offcanvas */
+.offcanvas-body .nav-link-custom {
+  align-self: flex-start;
 }
 
-/* Right-side header icons */
+/* =========================
+   HEADER ICONS
+========================= */
+
 .header-icon {
   width: 40px;
   height: 40px;
@@ -72,21 +81,28 @@
   place-items: center;
   border-radius: 50%;
   border: 2px solid #000;
-  text-decoration: none;
   color: #000;
+  text-decoration: none;
   cursor: pointer;
-  transition: background .2s ease, transform .1s ease;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
-
-
-
-
-  @media (max-width: 991.98px) {
-    .app-header .px-3 { padding-left: 12px !important; padding-right: 12px !important; }
+/* Mobile icon size */
+@media (max-width: 576px) {
+  .header-icon {
+    width: 36px;
+    height: 36px;
   }
 
-  /* Mobile Navigation Toggle Button */
+  .user-label {
+    display: none;
+  }
+}
+
+/* =========================
+   MOBILE NAV TOGGLE
+========================= */
+
 .nav-toggle-btn {
   border: none;
   background: #ffffff;
@@ -95,7 +111,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   transition: all 0.2s ease-in-out;
 }
@@ -113,16 +128,12 @@
   transform: scale(0.95);
 }
 
+/* =========================
+   BADGES (CHAT / NOTIF)
+========================= */
 
-
-
-
-
-
-
-
-/* BADGE */
-.notif-badge {
+.notif-badge,
+.chat-badge {
   position: absolute;
   top: -6px;
   right: -4px;
@@ -134,43 +145,41 @@
   font-weight: 700;
 }
 
-/* MENU */
+/* =========================
+   NOTIFICATION DROPDOWN
+========================= */
+
 .notif-menu {
   width: 320px;
   border-radius: 14px;
-  overflow: hidden;
-  margin-top: 55px !important; /* small gap under icon */
-    transform: translateX(20%) !important;
+  margin-top: 12px;
 }
 
-/* HEADER */
 .notif-header {
   background: #f8f9fa;
   font-size: 14px;
 }
 
-/* NOTIFICATION ITEM */
 .notif-item {
   padding: 12px 16px;
   border-bottom: 1px solid #f1f1f1;
-  cursor: pointer;
   display: flex;
   gap: 10px;
-
+  cursor: pointer;
 }
 
-
-/* UNREAD DOT */
 .notif-dot {
   font-size: 1.4rem;
   color: #0d6efd;
-  margin-right: 4px;
 }
 
-/* TEXT */
 .notif-text {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
+}
+
+.unread .notif-text {
+  font-weight: 600;
 }
 
 .notif-time {
@@ -178,18 +187,15 @@
   color: #6c757d;
 }
 
-.unread .notif-text {
-  font-weight: 600;
+/* Prevent dropdown close on click */
+.notif-dropdown [data-bs-toggle="dropdown"] {
+  cursor: pointer;
 }
 
-.notif-text {
-  font-weight: 400;
-  transition: none; /* remove hover/transition */
-}
+/* =========================
+   VIEW MORE BUTTON
+========================= */
 
-
-
-/* VIEW MORE BUTTON */
 .btn-link {
   color: #0d6efd !important;
   font-weight: 500;
@@ -201,24 +207,10 @@
   text-decoration: underline;
 }
 
-/* Prevent dropdown from closing on click */
-.notif-dropdown [data-bs-toggle="dropdown"] {
-  cursor: pointer;
+/* =========================
+   PROFILE DROPDOWN
+========================= */
 
-}
-
-
-
-
-
-.chat-badge {
-  position: absolute;
-  top: -6px;
-  right: -4px;
-  background: #dc3545;
-  color: #fff;
-  padding: 2px 6px;
-  font-size: 11px;
-  border-radius: 50%;
-  font-weight: 700;
+.profile-menu {
+  margin-top: 16px !important;
 }
