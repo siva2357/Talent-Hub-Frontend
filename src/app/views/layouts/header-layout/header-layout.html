@@ -1,0 +1,88 @@
+<!-- ================= DESKTOP / TABLET ================= -->
+@if (!isMobile) {
+<nav class="navbar navbar-expand-xl fixed-top bg-white shadow-sm header-navbar">
+  <div class="container-fluid">
+
+    <!-- LEFT -->
+    <div class="d-flex align-items-center gap-4">
+
+      <a class="navbar-brand" routerLink="/home">
+        <img
+          src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
+          height="48"
+          alt="Talent Hub"
+        />
+      </a>
+
+      <ul class="navbar-nav header-nav d-none d-xl-flex">
+        <li class="nav-item"><a routerLink="/home" routerLinkActive="active-link">Home</a></li>
+        <li class="nav-item"><a routerLink="/talent-marketplace" routerLinkActive="active-link">Talent</a></li>
+        <li class="nav-item"><a routerLink="/find-work" routerLinkActive="active-link">Find work</a></li>
+        <li class="nav-item"><a routerLink="/recruitment-process" routerLinkActive="active-link">Recruitment</a></li>
+        <li class="nav-item"><a routerLink="/interview-preparation" routerLinkActive="active-link">Interview Prep</a></li>
+        <li class="nav-item"><a routerLink="/resume-builder" routerLinkActive="active-link">Resume Builder</a></li>
+        <li class="nav-item"><a routerLink="/about" routerLinkActive="active-link">About</a></li>
+        <li class="nav-item"><a routerLink="/blog" routerLinkActive="active-link">Blog</a></li>
+      </ul>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="d-none d-xl-flex align-items-center gap-3">
+      <button class="btn btn-outline-dark btn-sm" (click)="goToLogin()">Login</button>
+      <button class="btn btn-dark btn-sm" (click)="goToSignup()">Sign up</button>
+    </div>
+
+  </div>
+</nav>
+}
+
+<!-- ================= MOBILE / TABLET ================= -->
+@if (isMobile) {
+<nav class="navbar fixed-top bg-white shadow-sm header-navbar">
+  <div class="container-fluid">
+
+    <button
+      class="navbar-toggler"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#mobileMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand" routerLink="/home">
+      <img
+        src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
+        height="42"
+      />
+    </a>
+
+  </div>
+</nav>
+
+<div class="offcanvas offcanvas-start" id="mobileMenu">
+  <div class="offcanvas-header">
+    <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+
+  <div class="offcanvas-body">
+    <ul class="navbar-nav header-nav-mobile">
+      <li><a routerLink="/home" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Home</a></li>
+      <li><a routerLink="/talent-marketplace" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Talent</a></li>
+      <li><a routerLink="/find-work" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Find work</a></li>
+      <li><a routerLink="/recruitment-process" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Recruitment</a></li>
+      <li><a routerLink="/interview-preparation" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Interview Prep</a></li>
+      <li><a routerLink="/resume-builder" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Resume Builder</a></li>
+      <li><a routerLink="/about" routerLinkActive="active-link" data-bs-dismiss="offcanvas">About</a></li>
+      <li><a routerLink="/blog" routerLinkActive="active-link" data-bs-dismiss="offcanvas">Blog</a></li>
+    </ul>
+
+    <hr />
+
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-dark w-50" (click)="goToLogin()">Login</button>
+      <button class="btn btn-dark w-50" (click)="goToSignup()">Sign up</button>
+    </div>
+  </div>
+</div>
+}
+
+

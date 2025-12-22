@@ -1,0 +1,123 @@
+<div class="container" style="padding-top: 80px;">
+
+  <!-- Page Header -->
+  <h4 class="fw-semibold text-center mb-1">Scheduled Meetings</h4>
+  <p class="text-muted text-center mb-4" style="font-size:14px;">
+    Interviews scheduled with candidates for your job posts.
+  </p>
+
+  <!-- Centered Card Wrapper -->
+  <div class="row justify-content-center mt-5 mb-5">
+  @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
+  <div class="col-12 col-md-10 col-lg-10 mb-3">
+
+    <div class="card shadow-sm border border-dark rounded-0 p-3">
+
+      <!-- Top Row -->
+      <div class="d-flex justify-content-between align-items-center flex-wrap ">
+
+        <!-- Candidate Info -->
+        <div class="d-flex align-items-center" style="gap:12px;">
+          <img src="https://ui-avatars.com/api/?name=Sam+Wilson&background=0D8ABC&color=fff"
+               class="rounded-circle"
+               style="width:50px; height:50px; object-fit:cover;">
+
+          <div>
+            <h6 class="mb-0" style="font-size:15px; font-weight:600;">Sam Wilson</h6>
+            <span class="text-muted" style="font-size:13px;">Frontend Developer</span>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <span class="badge px-2 py-1 rounded-0"
+              style="background:#e2f2ff; color:#0056b3; font-size:13px; border:1px solid #bcdcff;">
+          Scheduled
+        </span>
+      </div>
+
+      <hr >
+
+      <!-- Job Info -->
+      <div class="mb-2">
+
+        <p class="mb-1" style="font-size:14px; display:flex; align-items:center; gap:6px;">
+          <i class="bi bi-briefcase" style="font-size:16px;"></i>
+          <strong>Angular Developer</strong>
+        </p>
+
+        <p class="mb-1 text-muted" style="font-size:14px; display:flex; align-items:center; gap:6px;">
+          <i class="bi bi-hash" style="font-size:16px;"></i>
+          Job ID: <strong>0001</strong>
+        </p>
+
+      </div>
+
+      <!-- Time Info -->
+      <div class="mb-2">
+
+        <p class="mb-1 text-muted" style="font-size:14px; display:flex; align-items:center; gap:6px;">
+          <i class="bi bi-calendar-check" style="font-size:16px;"></i>
+          <strong>Dec 12, 2025</strong>
+        </p>
+
+        <p class="mb-0 text-muted" style="font-size:14px; display:flex; align-items:center; gap:6px;">
+          <i class="bi bi-clock" style="font-size:16px;"></i>
+          3:00 PM – 3:30 PM (30 mins)
+        </p>
+
+      </div>
+
+      <hr >
+
+      <!-- Action Button -->
+      <div class="d-flex justify-content-end">
+<a
+  [href]="'/interview/meet-session/' + i"
+  target="_blank"
+  rel="noopener"
+  class="text-primary text-decoration-underline"
+  style="font-size:14px;">
+  Join Interview
+</a>
+
+      </div>
+
+    </div>
+
+  </div>
+  }
+</div>
+
+
+
+
+
+<div class="position-relative text-center my-4"
+     style=" border-radius: 6px; overflow:hidden;">
+
+  <!-- Background Image -->
+  <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1716276008/No_data-amico_zhoryt.svg"
+       alt="empty-state"
+       style=" object-fit:cover; opacity: 0.3; height: 600px; width: auto;">
+
+  <!-- Overlay Content -->
+  <div class="position-absolute top-50 start-50 translate-middle px-3" style="width:100%; ">
+
+<div class="text-center mt-4 mb-5">
+
+  <p  style="font-size:24px; font-weight:600;">
+    You haven’t scheduled any meetings for today.
+  </p>
+
+  <p class="text-muted" style="font-size:16px;">
+    All your scheduled meetings will appear here.
+  </p>
+
+</div>
+
+  </div>
+
+</div>
+
+
+</div>

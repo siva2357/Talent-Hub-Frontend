@@ -1,0 +1,47 @@
+<div class="container-fluid mt-5 pt-5 mb-5 editor-page">
+
+  <!-- BACK BUTTON -->
+  <button
+    class="btn btn-outline-primary d-flex align-items-center gap-2 mb-3"
+    routerLink="/seeker/practice-room">
+    <i class="bi bi-arrow-left"></i>
+    Go Back
+  </button>
+
+  <!-- HEADER -->
+  <div class="editor-header">
+    <h5 class="fw-bold m-0">Practice Editor</h5>
+
+    <div class="editor-actions">
+<select
+  class="form-select form-select-sm"
+  #langSelect
+  (change)="changeLanguage(langSelect.value)">
+  <option value="javascript">JavaScript</option>
+  <option value="python">Python</option>
+  <option value="java">Java</option>
+</select>
+
+
+      <button class="btn btn-success btn-sm" (click)="runCode()">
+        Run
+      </button>
+    </div>
+  </div>
+
+  <!-- EDITOR -->
+<div class="editor-container">
+  <ngx-monaco-editor
+    [options]="editorOptions"
+    [(ngModel)]="code">
+  </ngx-monaco-editor>
+</div>
+
+
+  <!-- OUTPUT -->
+<div class="output-panel">
+  <h6 class="fw-bold">Output</h6>
+  <pre>{{ output || 'Run code to see output...' }}</pre>
+</div>
+
+</div>

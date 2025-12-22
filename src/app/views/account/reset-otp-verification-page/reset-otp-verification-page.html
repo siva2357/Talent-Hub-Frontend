@@ -1,0 +1,46 @@
+<div class="otp-wrapper d-flex flex-column justify-content-center align-items-center vh-100">
+
+  <!-- Logo -->
+  <img
+    src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
+    class="logo mb-3"
+    alt="Logo"
+  />
+
+  <h4 class="fw-bold mb-2 text-center">Verify Your Email</h4>
+
+  <p class="text-muted small text-center mb-4 text-box">
+   A verification code has been sent to
+  <strong>{{ maskedEmail }}</strong>.
+  Please enter the 6-digit code below.
+
+  </p>
+
+  <!-- OTP INPUT -->
+  <div class="otp-box d-flex gap-2 mb-4">
+    <input
+      *ngFor="let input of otpInputs; let i = index"
+      id="otp-{{ i }}"
+      type="text"
+      maxlength="1"
+      class="otp-input"
+      (input)="onInput($event, i)"
+      (keydown)="onKeyDown($event, i)"
+      [(ngModel)]="otp[i]"
+    />
+  </div>
+
+  <button
+    class="btn btn-primary w-50 py-2 fw-semibold"
+    [disabled]="otp.join('').length < 6"
+    (click)="verify()"
+  >
+    Verify
+  </button>
+
+  <p class="small text-muted mt-3">
+    Didn’t receive the code?
+    <a (click)="resendOtp()" class="fw-semibold resend-link">Resend</a>
+  </p>
+
+</div>

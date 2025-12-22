@@ -1,0 +1,61 @@
+<div class="signup-wrapper d-flex flex-column justify-content-center align-items-center vh-100 bg-light">
+
+  <!-- Logo -->
+  <img
+    src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
+    alt="Talent Hub"
+    class="logo-img mb-3"
+  />
+
+  <!-- Title -->
+  <h4 class="fw-bold text-center mb-1">Create Job Seeker Account</h4>
+  <p class="text-muted small text-center mb-3">
+    Join Talent Hub as a Job Seeker
+  </p>
+
+  <!-- SIGNUP FORM -->
+  <form [formGroup]="form" (ngSubmit)="signup()" class="form-area">
+
+    <input
+      type="text"
+      formControlName="fullName"
+      class="form-control mb-3"
+      placeholder="Full Name"
+    />
+
+    <input
+      type="email"
+      formControlName="email"
+      class="form-control mb-3"
+      placeholder="Email"
+    />
+
+    <input
+      type="password"
+      formControlName="password"
+      class="form-control mb-3"
+      placeholder="Password"
+    />
+
+    <button class="btn btn-primary w-100 py-2 fw-semibold" type="submit">
+      Create Account
+    </button>
+  </form>
+
+  <!-- Divider -->
+  <div class="text-center text-muted small my-2">OR</div>
+
+
+
+  <div id="googleBtn" class="mt-3"></div>
+
+
+
+
+  <!-- Login Link -->
+  <p class="text-center text-muted mt-3 small">
+    Already have an account?
+    <a routerLink="/login" class="fw-semibold login-link">Log in</a>
+  </p>
+
+</div>

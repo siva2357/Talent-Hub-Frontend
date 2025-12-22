@@ -1,0 +1,56 @@
+<div class="container-fluid editor-page">
+
+  <!-- TOP BAR -->
+  <div class="editor-topbar mt-5">
+
+    <button
+      class="btn btn-outline-primary btn-sm d-flex align-items-center gap-2"
+      routerLink="/seeker/assessments">
+      <i class="bi bi-arrow-left"></i>
+      Go Back
+    </button>
+
+    <h5 class="fw-bold m-0">Practice Editor</h5>
+
+<div class="editor-actions">
+
+  <!-- LEFT: Language Select -->
+  <select
+    class="form-select form-select-sm lang-select"
+    #langSelect
+    (change)="changeLanguage(langSelect.value)">
+    <option value="javascript">JavaScript</option>
+    <option value="python">Python</option>
+    <option value="java">Java</option>
+  </select>
+
+  <!-- RIGHT: Buttons -->
+  <div class="action-buttons">
+    <button class="btn btn-success btn-sm" (click)="runCode()">
+      Run
+    </button>
+
+    <button class="btn btn-primary btn-sm" (click)="submitTest()">
+      Submit Test
+    </button>
+  </div>
+
+</div>
+
+  </div>
+
+  <!-- EDITOR -->
+  <div class="editor-container">
+    <ngx-monaco-editor
+      [options]="editorOptions"
+      [(ngModel)]="code">
+    </ngx-monaco-editor>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="output-panel">
+    <h6 class="fw-bold mb-2">Output</h6>
+    <pre>{{ output || 'Run code to see output...' }}</pre>
+  </div>
+
+</div>

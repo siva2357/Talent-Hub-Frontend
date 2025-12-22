@@ -1,0 +1,249 @@
+/* ROOT */
+.meet-container {
+  height: 100vh;
+  width: 100%;
+  background: #0f172a;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* HEADER */
+.meet-header {
+  height: 64px;
+  padding: 0 24px;
+  background: #020617;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  border-bottom: 1px solid #1e293b;
+}
+
+/* HEADER AREAS */
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-center {
+  text-align: center;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+.header-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  height: 36px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.meet-stage {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+
+.video-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: flex 0.3s ease;
+}
+
+
+/* MAIN VIDEO */
+.main-video {
+  width: 100%;
+  height: 100%;
+  max-width: 1200px;
+  max-height: 100%;
+  background: #111827;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  position: relative;
+}
+
+
+.main-video .label {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  font-size: 12px;
+  background: rgba(0,0,0,0.6);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+/* SELF VIDEO */
+.self-video {
+  position: absolute;
+  bottom: 50px;
+  right: 24px;
+  width: 200px;
+  height: 140px;
+  background: #020617;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #1e293b;
+}
+
+.self-video .label {
+  font-size: 12px;
+  margin-top: 6px;
+  opacity: 0.8;
+}
+
+/* CONTROLS */
+/* BOTTOM CONTROLS – FIXED & CENTERED */
+.meet-controls {
+  height: 80px;
+  background: #020617;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  border-top: 1px solid #1e293b;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.25);
+
+}
+
+/* BUTTONS */
+.meet-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: #1e293b;
+  color: #fff;
+  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.meet-btn:hover {
+  background: #334155;
+}
+
+.meet-btn.end {
+  background: #dc2626;
+}
+
+.meet-btn.end:hover {
+  background: #b91c1c;
+}
+
+/* HIDDEN CHECKBOX */
+.chat-toggle {
+  display: none;
+}
+
+/* CHAT SIDEBAR */
+.chat-sidebar {
+  flex-basis: 0;              /* CLOSED */
+  max-width: 320px;
+  overflow: hidden;
+
+  background: #020617;
+  border-left: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+
+  transition: flex-basis 0.3s ease;
+}
+
+
+
+.chat-toggle:checked ~ .meet-stage .chat-sidebar {
+  transform: translateX(0);
+}
+.chat-toggle:checked ~ .meet-stage .chat-sidebar {
+  flex-basis: 320px;          /* OPEN STATE */
+}
+
+
+
+/* CHAT HEADER */
+.chat-header {
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1e293b;
+  font-weight: 600;
+}
+
+.chat-close {
+  cursor: pointer;
+}
+
+/* CHAT BODY */
+.chat-body {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+/* MESSAGES */
+.chat-msg {
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  max-width: 80%;
+}
+
+.chat-msg.other {
+  background: #1e293b;
+}
+
+.chat-msg.me {
+  background: #2563eb;
+  margin-left: auto;
+}
+
+/* CHAT INPUT */
+.chat-input {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid #1e293b;
+}
+
+.chat-input input {
+  flex: 1;
+  background: #020617;
+  border: 1px solid #1e293b;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+.chat-input button {
+  background: #2563eb;
+  border: none;
+  color: #fff;
+  padding: 0 12px;
+  border-radius: 6px;
+}

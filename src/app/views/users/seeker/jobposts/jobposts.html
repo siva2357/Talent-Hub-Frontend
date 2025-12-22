@@ -1,0 +1,353 @@
+
+<div class="container" style="padding-top:60px;">
+
+
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="welcome-box p-4 rounded-3 border">
+        <h5 class="mb-2">👋 Welcome, Seeker!</h5>
+        <p class="mb-0 text-muted small">You're in the right place to kickstart your career. Discover the latest job opportunities tailored for you. Use the filters below to refine your search, bookmark jobs you like, and apply with ease.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row mb-4">
+    <div class="col-12">
+      <h5 class="mb-3">How this platform works</h5>
+    </div>
+
+    <div class="col-sm-6 col-md-3 mb-3">
+      <div class="feature-card border h-100 d-flex p-3 rounded-3 align-items-start">
+        <i class="bi bi-search feature-icon"></i>
+        <div>
+          <h6 class="mb-1">Find Jobs</h6>
+          <p class="mb-0 small text-muted">Browse thousands of job listings tailored to your skills and location.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-3 mb-3">
+      <div class="feature-card border h-100 d-flex p-3 rounded-3 align-items-start">
+        <i class="bi bi-send feature-icon"></i>
+        <div>
+          <h6 class="mb-1">Apply Easily</h6>
+          <p class="mb-0 small text-muted">Submit applications with just a few clicks and track your progress.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-3 mb-3">
+      <div class="feature-card border h-100 d-flex p-3 rounded-3 align-items-start">
+        <i class="bi bi-calendar-check feature-icon"></i>
+        <div>
+          <h6 class="mb-1">Attend Interviews</h6>
+          <p class="mb-0 small text-muted">Get interview invites, prepare, and meet your potential employers.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-md-3 mb-3">
+      <div class="feature-card border h-100 d-flex p-3 rounded-3 align-items-start">
+        <i class="bi bi-file-earmark-text feature-icon"></i>
+        <div>
+          <h6 class="mb-1">Receive Offers</h6>
+          <p class="mb-0 small text-muted">Accept offers from employers and start your new career journey.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row align-items-center mb-3">
+    <div class="col-12 col-md-6">
+      <h4 class="mb-0">Jobs Matching Your Skills</h4>
+      <p class="text-muted small mb-0">Curated opportunities that align perfectly with your skill set.</p>
+    </div>
+
+  </div>
+
+  <div class="row g-3 align-items-end">
+    <div class="col-md-4">
+      <input type="text" class="form-control" placeholder="Search Job Title" style="font-size:14px;">
+    </div>
+
+    <div class="col-md-2">
+      <select class="form-select" style="font-size:14px;">
+        <option selected>Job Type</option>
+        <option>Full-Time</option>
+        <option>Part-Time</option>
+        <option>Contract</option>
+        <option>Internship</option>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <select class="form-select" style="font-size:14px;">
+        <option selected>Job Category</option>
+        <option>Design</option>
+        <option>Development</option>
+        <option>Marketing</option>
+        <option>Finance</option>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+          <select class="form-select" style="font-size:14px;">
+      <option>Salary Range</option>
+      <option>₹10k – ₹20k</option>
+      <option>₹20k – ₹40k</option>
+      <option>₹40k – ₹60k</option>
+      <option>₹60k – ₹80k</option>
+      <option>₹80k – ₹1L+</option>
+    </select>
+    </div>
+
+
+  </div>
+
+<div class="row align-items-center my-3">
+
+  <!-- FILTERS (show on top for small screens) -->
+  <div class="col-12 col-md d-flex flex-wrap gap-2 align-items-center mb-2 mb-md-0">
+    <span class="badge p-2 d-flex align-items-center justify-content-center"
+          style="font-size:13px; border:1px solid #6c757d; color:#6c757d; cursor:pointer;">
+      Job Type: Full-Time &nbsp; ×
+    </span>
+
+    <span class="badge p-2 d-flex align-items-center justify-content-center"
+          style="font-size:13px; border:1px solid #6c757d; color:#6c757d; cursor:pointer;">
+      Status: Open &nbsp; ×
+    </span>
+  </div>
+
+  <!-- COUNT (moves below filters on small screens) -->
+  <div class="col-12 col-md-auto text-md-end">
+    <p class="mb-0 text-muted" style="font-size:14px;">Showing 0 of 100</p>
+  </div>
+
+</div>
+
+<div class="row job-cards mt-5 mb-5">
+
+  @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
+
+    <div class="col-12 col-sm-6 col-lg-4 mb-4">
+      <div class="card h-100 border shadow-none job-card p-2 border border-black border-1 rounded-0">
+        <div class="card-body d-flex flex-column">
+
+          <!-- Top Row: Company Logo + Bookmark -->
+          <div class="d-flex justify-content-between mb-3">
+
+            <img
+              src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png"
+              alt="company-logo"
+              class="company-logo"
+              style="height: 32px; width: auto;"
+            >
+
+            <button class="btn btn-light   bookmark-btn">
+              <i class="bi bi-bookmark fs-5"></i>
+            </button>
+          </div>
+
+          <h6 class="card-title">Angular Developer</h6>
+
+          <div class="job-meta small text-muted mb-2">
+            Hyderabad • Full-time • Remote • 2 days ago
+          </div>
+
+       <p class="card-text text-muted  mb-3" style="font-size: 14px;">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Suspendisse varius enim in eros elementum tristique.
+          </p>
+
+         <div class="text-center">
+            <button class="btn btn-outline-secondary btn-sm rounded-0 px-5 py-2 mt-3 mb-3">View Details</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  }
+
+</div>
+
+
+<div class="row job-cards mt-5 mb-5">
+
+  @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
+
+    <div class="col-12 col-sm-6 col-lg-4 mb-4">
+      <div class="card h-100 border shadow-none job-card p-2 border border-black border-1 rounded-0">
+        <div class="card-body d-flex flex-column">
+
+          <!-- Top Row: Company Logo + Bookmark -->
+          <div class="d-flex justify-content-between mb-3">
+
+            <img
+              src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png"
+              alt="company-logo"
+              class="company-logo"
+              style="height: 32px; width: auto;"
+            >
+
+            <button class="btn btn-light   bookmark-btn">
+              <i class="bi  bi-bookmark-fill text-primary fs-5"></i>
+            </button>
+          </div>
+
+          <h6 class="card-title">Angular Developer</h6>
+
+          <div class="job-meta small text-muted mb-2">
+            Hyderabad • Full-time • Remote • 2 days ago
+          </div>
+
+          <p class="card-text text-muted  mb-3" style="font-size: 14px;">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Suspendisse varius enim in eros elementum tristique.
+          </p>
+
+          <div class="text-center">
+            <button class="btn btn-outline-secondary btn-sm rounded-0 px-5 py-2 mt-3 mb-3">View Details</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  }
+
+</div>
+
+
+
+
+<div class="row job-cards mt-5 mb-5">
+
+  @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
+
+<div class="col-12 col-sm-6 col-lg-4 mb-4">
+  <div class="card h-100 border shadow-none job-card p-2 border border-black border-1 rounded-0">
+    <div class="card-body d-flex flex-column">
+
+      <!-- Logo + Single Badge (Right aligned) -->
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <img
+          src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png"
+          class="company-logo"
+          style="height: 32px; width: auto;"
+        >
+        <span class="badge bg-secondary status-badge">Pending</span>
+
+      </div>
+
+      <h6 class="card-title">Angular Developer</h6>
+
+      <div class="job-meta small text-muted mb-2">
+        Hyderabad • Full-time • Remote • 2 days ago
+      </div>
+
+      <p class="text-muted mb-3" style="font-size: 14px;">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </p>
+
+      <p class="card-text text-muted mb-3" style="font-size: 14px;">
+        Applied On : 04-12-2025
+      </p>
+
+      <div class="text-center">
+        <button class="btn btn-outline-secondary btn-sm rounded-0 px-5 py-2 mt-3 mb-3">
+          View Details
+        </button>
+
+      </div>
+
+
+
+
+
+    </div>
+  </div>
+</div>
+
+
+  }
+
+</div>
+
+<div class="row job-cards mt-5 mb-5">
+
+  @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
+
+<div class="col-12 col-sm-6 col-lg-4 mb-4">
+  <div class="card h-100 border shadow-none job-card p-2 border border-black border-1 rounded-0">
+    <div class="card-body d-flex flex-column">
+
+      <!-- Top Row: Company Logo + Bookmark -->
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <img
+          src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png"
+          class="company-logo"
+          style="height: 32px; width: auto;"
+        >
+        <span class="badge bg-secondary status-badge">Pending</span>
+
+      </div>
+
+      <!-- Title -->
+      <h6 class="card-title">Angular Developer</h6>
+
+      <!-- Meta -->
+      <div class="job-meta small text-muted mb-2">
+        Hyderabad • Full-time • Remote • 2 days ago
+      </div>
+
+      <!-- Description -->
+      <p class="card-text text-muted small mb-3">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Suspendisse varius enim in eros elementum tristique.
+      </p>
+
+      <!-- Actions -->
+      <div class="mt-auto text-center">
+
+        <!-- Accept + Reject -->
+        <div class="d-flex r gap-2 mb-3">
+          <button class="btn btn-outline-success btn-sm rounded-0 px-4">
+            Accept
+          </button>
+          <button class="btn btn-outline-danger btn-sm rounded-0 px-4">
+            Reject
+          </button>
+        </div>
+
+          <div class="col">
+        <button class="btn btn-outline-primary btn-sm rounded-0 py-1 mb-3" style="font-size: 14px;">
+          View Offer Letter
+        </button>
+          </div>
+
+        <!-- View Offer Letter -->
+
+        <div class="col">
+                  <button class="btn btn-outline-secondary btn-sm rounded-0  py-1" style="font-size: 14px;">
+          Upload Signed Offer Letter
+        </button>
+        </div>
+        <!-- Upload Signed Offer Letter -->
+
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+  }
+
+</div>
+
+
+</div>

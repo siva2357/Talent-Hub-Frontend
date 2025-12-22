@@ -1,0 +1,142 @@
+
+<div class="container mt-5" style="padding-top:60px;">
+
+
+  <!-- Header -->
+<div class=" mb-4">
+  <h4 class="fw-semibold mb-1">Proposals for Your Job Post</h4>
+  <p class="text-muted" style="font-size:14px;">
+This page shows all the freelancers who have applied to your job. You can review their proposals, compare skills and experience, and decide whether to shortlist, reject, or hire a freelancer for your project.
+  </p>
+</div>
+
+  <!-- Filters -->
+  <div class="row g-3 align-items-end">
+
+    <div class="col-md-6">
+      <input type="text" class="form-control" placeholder="Search Job Title" style="font-size:14px;">
+    </div>
+
+    <div class="col-md-3">
+      <select class="form-select" style="font-size:14px;">
+        <option selected>Job Type</option>
+        <option>Full-Time</option>
+        <option>Part-Time</option>
+        <option>Contract</option>
+        <option>Internship</option>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <select class="form-select" style="font-size:14px;">
+        <option selected>Job Category</option>
+        <option>Design</option>
+        <option>Development</option>
+        <option>Marketing</option>
+        <option>Finance</option>
+      </select>
+    </div>
+
+
+  </div>
+
+  <!-- Active filters row -->
+<div class="row align-items-center my-3">
+
+  <!-- FILTERS (show on top for small screens) -->
+  <div class="col-12 col-md d-flex flex-wrap gap-2 align-items-center mb-2 mb-md-0">
+    <span class="badge p-2 d-flex align-items-center justify-content-center"
+          style="font-size:13px; border:1px solid #6c757d; color:#6c757d; cursor:pointer;">
+      Job Type: Full-Time &nbsp; ×
+    </span>
+
+    <span class="badge p-2 d-flex align-items-center justify-content-center"
+          style="font-size:13px; border:1px solid #6c757d; color:#6c757d; cursor:pointer;">
+      Job Category: It Development &nbsp; ×
+    </span>
+  </div>
+
+  <!-- COUNT (moves below filters on small screens) -->
+  <div class="col-12 col-md-auto text-md-end">
+    <p class="mb-0 text-muted" style="font-size:14px;">Showing 0 of 100</p>
+  </div>
+
+</div>
+
+
+<div class="row justify-content-center mt-4 mb-4">
+
+@for(job of jobList; track job.jobId) {
+
+  <div class="col-12 col-md-10 col-lg-9 mb-4 mt-3">
+  <div class="card shadow-sm border border-dark rounded-0 p-3 h-100">
+
+    <div class="d-flex gap-3 flex-wrap">
+
+      <!-- LOGO -->
+      <div class="d-flex align-items-start">
+        <img [src]="job.logo"
+             alt="logo"
+             style="width: 55px; height: 55px; object-fit: contain;">
+      </div>
+
+      <!-- DETAILS + BUTTON -->
+      <div class="d-flex flex-grow-1 justify-content-between align-items-center flex-wrap">
+
+        <!-- JOB DETAILS -->
+        <div style="flex: 1 1 auto; min-width: 250px;">
+
+          <h5 class="mb-1 fw-semibold">{{ job.company }}</h5>
+
+          <p class="mb-1 text-muted" style="font-size: 14px;">
+            {{ job.jobTitle }} – {{ job.jobId }}
+          </p>
+
+          <p class="mb-2" style="font-size:14px;">
+            {{ job.description }}
+          </p>
+
+          <div class="d-flex flex-wrap align-items-center" style="gap:10px; font-size:14px;">
+            <span class="text-muted">
+              <i class="bi bi-geo-alt"></i> {{ job.location }}
+            </span>
+
+            <span class="text-muted">
+              <i class="bi bi-clock"></i> {{ job.jobType }}
+            </span>
+
+            <span class="text-muted">
+              <i class="bi bi-buildings"></i> {{ job.mode }}
+            </span>
+
+            <span class="text-muted">
+              <i class="bi bi-people-fill"></i> Applicants – {{ job.applicants }}
+            </span>
+          </div>
+
+        </div>
+
+        <!-- BUTTON -->
+        <div class="d-flex align-items-center mt-3 mt-lg-0">
+          <button class="btn btn-outline-info btn-sm px-3">
+            View Applicants
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+}
+
+
+</div>
+
+
+
+
+
+</div>

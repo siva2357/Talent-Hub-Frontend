@@ -1,0 +1,91 @@
+<div class="container mt-5 pt-5" style="max-width: 720px;">
+
+  <!-- BACK -->
+  <button
+    class="btn btn-outline-primary d-flex align-items-center gap-2 mb-4"
+    routerLink="/seeker/interview-prep">
+    <i class="bi bi-arrow-left"></i>
+    Back
+  </button>
+
+  <!-- CARD -->
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body p-4">
+
+      <h4 class="fw-bold mb-2">AI Mock Interview</h4>
+      <p class="text-muted mb-4">
+        Configure your mock interview and start a real-time AI session.
+      </p>
+
+      <form [formGroup]="mockForm">
+
+        <!-- INTERVIEW TOPIC -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Interview Topic</label>
+          <select class="form-select" formControlName="topic">
+            <option value="" disabled>Select topic</option>
+            <option value="frontend">Frontend Developer</option>
+            <option value="backend">Backend Developer</option>
+            <option value="fullstack">Full Stack Developer</option>
+            <option value="hr">HR Interview</option>
+            <option value="system-design">System Design</option>
+          </select>
+        </div>
+
+        <!-- LEVEL -->
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Interview Level</label>
+          <div class="d-flex gap-3">
+
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                value="basic"
+                formControlName="level"
+                id="basic">
+              <label class="form-check-label" for="basic">
+                Basic
+              </label>
+            </div>
+
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                value="intermediate"
+                formControlName="level"
+                id="intermediate">
+              <label class="form-check-label" for="intermediate">
+                Intermediate
+              </label>
+            </div>
+
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                value="advanced"
+                formControlName="level"
+                id="advanced">
+              <label class="form-check-label" for="advanced">
+                Advanced
+              </label>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- START BUTTON -->
+        <button
+          class="btn btn-primary w-100 py-2 fw-semibold"
+          [disabled]="mockForm.invalid"
+          (click)="startMockSession()">
+          Start Mock Session
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+</div>
