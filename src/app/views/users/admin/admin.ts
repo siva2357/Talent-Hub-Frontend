@@ -22,6 +22,7 @@ sidebarOpen = false; // start collapsed (icon-only mode)
 
   menuItems = [
     { label: 'Dashboard', icon: ' bi-grid', link: 'dashboard' },
+    { label: 'Companies', icon: ' bi-buildings', link: 'companies' },
     { label: 'Recruiters', icon: 'bi-person-badge', link: 'recruiters-list' },
     { label: 'Seekers', icon: 'bi-people', link: 'seekers-list' },
     { label: 'Job Posts', icon: 'bi-briefcase', link: 'jobposts' },
