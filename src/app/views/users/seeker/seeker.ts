@@ -58,7 +58,6 @@ export class Seeker {
 
 
  logout() {
-    this.auth.logout();       // Clears localStorage
     this.router.navigate(['/login']);  // Redirect to login page
   }
 
