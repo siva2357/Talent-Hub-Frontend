@@ -22,8 +22,7 @@ continue() {
   if (!this.selectedRole) return;
 
   this.router.navigate(
-    [`/sign-up/${this.selectedRole}`],
-    { queryParams: { role: this.selectedRole } }
+    [`/sign-up/${this.selectedRole}`]
   );
 }
 

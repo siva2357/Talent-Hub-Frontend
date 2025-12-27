@@ -28,6 +28,8 @@ import { RecruiterProfileForm } from './views/account/recruiter-profile-form/rec
 import { AccountRegisteredPage } from './views/account/account-registered-page/account-registered-page';
 import { InterviewMeetingPage } from './views/shared/interview-meeting-page/interview-meeting-page';
 import { InterviewSessionPage } from './views/shared/interview-session-page/interview-session-page';
+import { RoleGuard } from './core/guards/role.guard';
+import { AuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
 
@@ -76,8 +78,8 @@ export const routes: Routes = [
 
 
   //User routes
-  { path: 'admin', loadChildren: () => ADMIN_ROUTES },
-  { path: 'recruiter', loadChildren: () => RECRUITER_ROUTES },
-  { path: 'seeker', loadChildren: () => SEEKER_ROUTES },
+  { path: 'admin', loadChildren: () => ADMIN_ROUTES, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'admin' }},
+  { path: 'recruiter', loadChildren: () => RECRUITER_ROUTES,canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'recruiter' } },
+  { path: 'seeker', loadChildren: () => SEEKER_ROUTES ,canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'jobSeeker' }},
   { path: '**', redirectTo: 'home' },
 ];
