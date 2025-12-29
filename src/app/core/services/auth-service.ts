@@ -96,31 +96,22 @@ decodeJwt(token: string): any {
   return JSON.parse(atob(base64));
 }
 
-logout() {
+// auth-service.ts
+logout(): Observable<any> {
   const token = localStorage.getItem('JWT_Token');
-  const role = localStorage.getItem('userRole');
-
-  if (!token) {
-    console.error("No token found. User may already be logged out.");
-    return;
-  }
 
   const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`,
+    Authorization: token ? `Bearer ${token}` : '',
     'Content-Type': 'application/json'
   });
 
-  this.http.post(`${this.baseUrl}/auth/logout/user`, {}, { headers, withCredentials: true }).subscribe(
-    (response: any) => {
-      console.log(response.message);
-      localStorage.clear(); // Clear everything
-      this.userRole = null;
-    },
-    (error) => {
-      console.error('Logout failed', error);
-    }
+  return this.http.post(
+    `${this.baseUrl}/auth/logout/user`,
+    {},
+    { headers, withCredentials: true }
   );
 }
+
 
 private setUserData(user: LoginResponse) {
   if (user && user.token) {
@@ -141,15 +132,19 @@ private handleError(error: any): Observable<never> {
 }
 
 
-sendVerificationCode(email: string): Observable<any> {
-  return this.http.post(`${this.baseUrl}/auth/send-verification-code`, { email })
-    .pipe(catchError(error => this.handleError(error)));
-}
 
 
-verifyOtp(providedCode: string, email: string): Observable<any> {
-  return this.http.post(`${this.baseUrl}/auth/verify-verification-code`, { email, providedCode }).pipe( catchError((error) => {  throw error;  }));
+verifyOtp(
+  providedCode: string,
+  email: string,
+  role: string
+): Observable<any> {
+  return this.http.post(
+    `${this.baseUrl}/auth/verify-verification-code`,
+    { email, providedCode, role }
+  );
 }
+
 
 
  resendOtp(email: string): Observable<any> {

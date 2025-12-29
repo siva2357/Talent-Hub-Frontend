@@ -11,6 +11,6 @@ export interface LoginResponse {
   verified:boolean;
   success:boolean;
   fullName:string;
-  profileComplete:boolean;
+  profileCompleted:boolean;
 }
 

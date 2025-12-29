@@ -1,16 +1,6 @@
 import { Component } from '@angular/core';
-
-interface Client {
-  id: number;
-  fullname: string;
-  email: string;
-  verification: string;
-  role: string;
-  status: string;
-  lastLogin: string;
-  lastLogout: string;
-  logs: { login: string; logout: string }[];
-}
+import { AdminService } from '../../../../core/services/admin-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-recruiters',
@@ -19,177 +9,121 @@ interface Client {
   styleUrl: './recruiters.css',
 })
 export class Recruiters {
+  recruiters: any[] = [];
+  filteredRecruiter: any[] = [];
+  paginatedRecruiters: any[] = [];
+  errorMessage: string | null = null;
+  loading = false;
+  adminId!: string;
+selectedRecruiter: any | null = null;
+openLogsModal(recruiter: any) {
+  this.selectedRecruiter = recruiter;
+}
 
-    selectedClient: Client | null = null;
+  currentPage = 1;
+  itemsPerPage = 5;
+  totalPages = 1;
+  totalEntries = 0;
+  pageNumbers: number[] = [];
 
-  openLogsModal(client: Client) {
-    this.selectedClient = client;
+
+  constructor(private router: Router, private adminService: AdminService) {}
+  ngOnInit() {
+    this.adminId = localStorage.getItem('userId') || '';
+    if (this.adminId) {
+      this.fetchRecruiters();
+    } else {
+      this.errorMessage = 'Admin ID is missing. Please log in again.';
+    }
   }
 
-
-clients: Client[] = [
-
-  {
-    id: 1,
-    fullname: "Siva Prasad Kurra",
-    email: "user1@gmail.com",
-    verification: "Verified",
-    role: "Client",
-    status: "Active",
-    lastLogin: "10-11-2025, 12:00 PM",
-    lastLogout: "10-11-2025, 17:00 PM",
-    logs: [
-      { login: "10-11-2025, 12:00 PM", logout: "10-11-2025, 17:00 PM" },
-      { login: "09-11-2025, 11:00 AM", logout: "09-11-2025, 04:00 PM" },
-      { login: "08-11-2025, 10:15 AM", logout: "08-11-2025, 01:30 PM" }
-    ]
-  },
-
-  {
-    id: 2,
-    fullname: "John Doe",
-    email: "user2@gmail.com",
-    verification: "Verified",
-    role: "Client",
-    status: "Inactive",
-    lastLogin: "11-11-2025, 10:00 AM",
-    lastLogout: "-",
-    logs: [
-      { login: "11-11-2025, 10:00 AM", logout: "-" },
-      { login: "10-11-2025, 09:45 AM", logout: "10-11-2025, 12:10 PM" },
-      { login: "09-11-2025, 08:20 AM", logout: "09-11-2025, 11:00 AM" }
-    ]
-  },
-
-  {
-    id: 3,
-    fullname: "Mary Smith",
-    email: "user3@gmail.com",
-    verification: "Verified",
-    role: "Client",
-    status: "Active",
-    lastLogin: "09-11-2025, 02:00 PM",
-    lastLogout: "09-11-2025, 16:00 PM",
-    logs: [
-      { login: "09-11-2025, 02:00 PM", logout: "09-11-2025, 16:00 PM" },
-      { login: "08-11-2025, 11:30 AM", logout: "08-11-2025, 03:00 PM" },
-      { login: "07-11-2025, 10:45 AM", logout: "07-11-2025, 01:00 PM" }
-    ]
-  },
-
-  {
-    id: 4,
-    fullname: "Adam James",
-    email: "user4@gmail.com",
-    verification: "Verified",
-    role: "Client",
-    status: "Inactive",
-    lastLogin: "08-11-2025, 01:00 PM",
-    lastLogout: "-",
-    logs: [
-      { login: "08-11-2025, 01:00 PM", logout: "-" },
-      { login: "07-11-2025, 09:00 AM", logout: "07-11-2025, 11:30 AM" },
-      { login: "06-11-2025, 10:10 AM", logout: "06-11-2025, 12:20 PM" }
-    ]
-  },
-
-  {
-    id: 5,
-    fullname: "Lisa Wayne",
-    email: "user5@gmail.com",
-    verification: "Verified",
-    role: "Client",
-    status: "Active",
-    lastLogin: "12-11-2025, 11:00 AM",
-    lastLogout: "12-11-2025, 13:00 PM",
-    logs: [
-      { login: "12-11-2025, 11:00 AM", logout: "12-11-2025, 13:00 PM" },
-      { login: "11-11-2025, 02:10 PM", logout: "11-11-2025, 05:00 PM" },
-      { login: "10-11-2025, 12:30 PM", logout: "10-11-2025, 03:40 PM" }
-    ]
-  },
-
-  {
-    id: 6,
-    fullname: "Ravi Kumar",
-    email: "user6@gmail.com",
-    verification: "Verified",
-    role: "Client",
-    status: "Active",
-    lastLogin: "10-11-2025, 09:30 AM",
-    lastLogout: "10-11-2025, 12:00 PM",
-    logs: [
-      { login: "10-11-2025, 09:30 AM", logout: "10-11-2025, 12:00 PM" },
-      { login: "09-11-2025, 01:20 PM", logout: "09-11-2025, 03:45 PM" },
-      { login: "08-11-2025, 10:00 AM", logout: "08-11-2025, 12:30 PM" }
-    ]
-  },
-
-  {
-    id: 7,
-    fullname: "Priya Sharma",
-    email: "user7@gmail.com",
-    verification: "Verified",
-    role: "Client",
-    status: "Inactive",
-    lastLogin: "11-11-2025, 03:15 PM",
-    lastLogout: "-",
-    logs: [
-      { login: "11-11-2025, 03:15 PM", logout: "-" },
-      { login: "10-11-2025, 02:30 PM", logout: "10-11-2025, 05:00 PM" },
-      { login: "09-11-2025, 12:00 PM", logout: "09-11-2025, 02:00 PM" }
-    ]
-  },
-
-  {
-    id: 8,
-    fullname: "David Miller",
-    email: "user8@gmail.com",
-    verification: "Verified",
-    role: "Client",
-    status: "Active",
-    lastLogin: "09-11-2025, 10:00 AM",
-    lastLogout: "09-11-2025, 11:00 AM",
-    logs: [
-      { login: "09-11-2025, 10:00 AM", logout: "09-11-2025, 11:00 AM" },
-      { login: "08-11-2025, 09:45 AM", logout: "08-11-2025, 12:10 PM" },
-      { login: "07-11-2025, 08:30 AM", logout: "07-11-2025, 10:45 AM" }
-    ]
-  },
-
-  {
-    id: 9,
-    fullname: "Sneha Reddy",
-    email: "user9@gmail.com",
-    verification: "Verified",
-    role: "Client",
-    status: "Active",
-    lastLogin: "08-11-2025, 04:30 PM",
-    lastLogout: "08-11-2025, 07:00 PM",
-    logs: [
-      { login: "08-11-2025, 04:30 PM", logout: "08-11-2025, 07:00 PM" },
-      { login: "07-11-2025, 03:20 PM", logout: "07-11-2025, 05:10 PM" },
-      { login: "06-11-2025, 01:15 PM", logout: "06-11-2025, 03:00 PM" }
-    ]
-  },
-
-  {
-    id: 10,
-    fullname: "Michael Ray",
-    email: "user10@gmail.com",
-    verification: "Verified",
-    role: "Client",
-    status: "Inactive",
-    lastLogin: "07-11-2025, 09:00 AM",
-    lastLogout: "-",
-    logs: [
-      { login: "07-11-2025, 09:00 AM", logout: "-" },
-      { login: "06-11-2025, 10:00 AM", logout: "06-11-2025, 11:45 AM" },
-      { login: "05-11-2025, 12:30 PM", logout: "05-11-2025, 02:00 PM" }
-    ]
+  fetchRecruiters(): void {
+    this.loading = true;
+    this.adminService.getAllRecruiters().subscribe({
+      next: (res) => {
+        this.recruiters = res.recruiters || [];
+        this.filteredRecruiter = [...this.recruiters]; // ✅ Initialize filtering
+        this.updatePagination();
+        this.loading = false;
+      },
+      error: () => {
+        this.errorMessage = 'Failed to load clients.';
+        this.loading = false;
+      }
+    });
   }
 
-];
+  viewRecruiterProfile(id: string): void {
+    this.router.navigate([`admin/recruiters-list/${id}/profile`]);
+  }
 
+  approveRecruiter(userId: string) {
+  this.loading = true;
+
+  this.adminService.approveUser({
+    userId,
+    role: 'recruiter'
+  }).subscribe({
+    next: () => {
+      this.fetchRecruiters(); // refresh list
+      this.loading = false;
+    },
+    error: () => {
+      this.errorMessage = 'Failed to approve recruiter';
+      this.loading = false;
+    }
+  });
+}
+
+rejectRecruiter(userId: string) {
+  if (!confirm('Are you sure you want to permanently block this recruiter?')) {
+    return;
+  }
+
+  this.loading = true;
+
+  this.adminService.rejectUser({
+    userId,
+    role: 'recruiter'
+  }).subscribe({
+    next: () => {
+      this.fetchRecruiters(); // refresh list
+      this.loading = false;
+    },
+    error: () => {
+      this.errorMessage = 'Failed to reject recruiter';
+      this.loading = false;
+    }
+  });
+}
+
+
+  /** Pagination */
+  updatePagination(): void {
+    this.totalEntries = this.filteredRecruiter.length;
+    this.totalPages = Math.max(Math.ceil(this.totalEntries / this.itemsPerPage), 1);
+    this.currentPage = Math.min(this.currentPage, this.totalPages);
+    this.paginateClients();
+  }
+
+  paginateClients(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    this.paginatedRecruiters = this.filteredRecruiter.slice(startIndex, startIndex + this.itemsPerPage);
+    this.pageNumbers = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  onPageChange(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.paginateClients();
+  }
+
+  getStartIndex(): number {
+    return this.totalEntries ? (this.currentPage - 1) * this.itemsPerPage + 1 : 0;
+  }
+
+  getEndIndex(): number {
+    return Math.min(this.currentPage * this.itemsPerPage, this.totalEntries);
+  }
 
 }
