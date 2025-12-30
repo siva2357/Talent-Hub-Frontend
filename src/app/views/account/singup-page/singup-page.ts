@@ -11,11 +11,11 @@ import { CommonModule } from '@angular/common';
 })
 export class SingupPage {
 
-  selectedRole: 'recruiter' | 'seeker' | null = null;
+  selectedRole: 'recruiter' | 'jobSeeker' | null = null;
 
   constructor(private router: Router) {}
 
-  selectRole(role: 'recruiter' | 'seeker') {
+  selectRole(role: 'recruiter' | 'jobSeeker') {
     this.selectedRole = role;
   }
 continue() {

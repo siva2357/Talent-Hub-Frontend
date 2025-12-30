@@ -1,1 +1,140 @@
-<p>update-basic-details works!</p>
+@if (!isLoading) {
+  <div class="container" style="font-family: 'Poppins', sans-serif;">
+    <form [formGroup]="basicDetailsForm" (ngSubmit)="updateProfile()">
+
+      <!-- ================= BASIC DETAILS ================= -->
+      <div class="mb-4">
+
+        <!-- Row 1: First Name & Last Name (READONLY) -->
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="form-label fs-7">
+              First Name <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="firstName"
+              class="form-control form-control-sm"
+            />
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="form-label fs-7">
+              Last Name <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="lastName"
+              class="form-control form-control-sm"
+            />
+          </div>
+        </div>
+
+        <!-- Row 2: Email (READONLY) & Gender -->
+        <div class="row g-3 mt-2">
+          <div class="col-12 col-md-6">
+            <label class="form-label fs-7">
+              Email <span class="text-danger">*</span>
+            </label>
+            <input
+              type="email"
+              formControlName="email"
+              class="form-control form-control-sm"
+            />
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="form-label fs-7">
+              Gender <span class="text-danger">*</span>
+            </label>
+            <select
+              formControlName="gender"
+              class="form-select form-select-sm"
+              [class.is-invalid]="basicDetailsForm.get('gender')?.invalid && basicDetailsForm.get('gender')?.touched"
+            >
+              <option value="">Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+
+            @if (basicDetailsForm.get('gender')?.invalid && basicDetailsForm.get('gender')?.touched) {
+              <small class="text-danger fs-7">Gender is required</small>
+            }
+          </div>
+        </div>
+
+        <!-- Row 3: Mobile -->
+        <div class="row g-3 mt-2">
+          <div class="col-12 col-md-6">
+            <label class="form-label fs-7">
+              Mobile Number <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="mobile"
+              placeholder="Enter mobile number"
+              class="form-control form-control-sm"
+              [class.is-invalid]="basicDetailsForm.get('mobile')?.invalid && basicDetailsForm.get('mobile')?.touched"
+            />
+
+            @if (basicDetailsForm.get('mobile')?.invalid && basicDetailsForm.get('mobile')?.touched) {
+              <small class="text-danger fs-7">
+                Enter a valid 10-digit mobile number
+              </small>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= BIO ================= -->
+      <div class="mb-4">
+        <label class="form-label fs-7">
+          Bio Description <span class="text-danger">*</span>
+        </label>
+
+        <textarea
+          rows="4"
+          formControlName="bioDescription"
+          class="form-control form-control-sm"
+          placeholder="Write a short bio"
+          [class.is-invalid]="basicDetailsForm.get('bioDescription')?.invalid && basicDetailsForm.get('bioDescription')?.touched"
+        ></textarea>
+
+        @if (basicDetailsForm.get('bioDescription')?.invalid && basicDetailsForm.get('bioDescription')?.touched) {
+          <small class="text-danger fs-7">Bio description is required</small>
+        }
+      </div>
+
+      <!-- ================= ACTIONS ================= -->
+      <div class="d-flex justify-content-between mt-4 mb-5 gap-2">
+        <button
+          type="button"
+          class="btn btn-outline-danger btn-sm px-4"
+          (click)="discard()"
+        >
+          Discard
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-outline-primary btn-sm px-4"
+          [disabled]="basicDetailsForm.invalid || !basicDetailsForm.dirty || isUpdating"
+        >
+          @if (isUpdating) { Updating... } @else { Update }
+        </button>
+      </div>
+
+    </form>
+  </div>
+}
+
+<!-- ================= LOADING ================= -->
+@if (isLoading) {
+  <div class="container-fluid">
+    <div class="text-center py-5">
+      <div class="spinner-border" role="status"></div>
+      <p class="mt-3 fs-6">Loading profile details...</p>
+    </div>
+  </div>
+}

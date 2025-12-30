@@ -9,7 +9,7 @@
       <h5 class="section-title">Profile Photo</h5>
 
       <app-file-preview [fileUrl]="profilePhotoUrl"></app-file-preview>
-      <app-file-upload [bucketKey]="BucketKey.RECRUITER_DATA" [section]="UploadSection.PROFILE_PHOTO" accept="image/*" class="mt-5" (uploaded)="onPhotoUploaded($event)"></app-file-upload>
+      <app-file-upload [bucketKey]="BucketKey.RECRUITER_DATA"   [preLoginUserId]="userId" [section]="UploadSection.PROFILE_PHOTO" accept="image/*" class="mt-5" (uploaded)="onPhotoUploaded($event)"></app-file-upload>
 
       @if (
       profileForm.get('profilePhoto')?.touched &&

@@ -1,196 +1,135 @@
 import { Component } from '@angular/core';
-
-interface Seeker {
-  id: number;
-  fullname: string;
-  email: string;
-  verification: string;
-  role: string;
-  status: string;
-  lastLogin: string;
-  lastLogout: string;
-  logs: { login: string; logout: string }[];
-}
+import { AdminService } from '../../../../core/services/admin-service';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-seekers',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './seekers.html',
   styleUrl: './seekers.css',
-   standalone: true,
 })
 export class Seekers {
 
-    selectedSeeker: Seeker | null = null;
+  jobSeekers: any[] = [];
+  filteredJobSeekers: any[] = [];
+  paginatedJobSeekers: any[] = [];
 
-  openLogsModal(seeker: Seeker) {
-    this.selectedSeeker = seeker;
+  selectedJobSeeker: any | null = null;
+
+  errorMessage: string | null = null;
+  loading = false;
+
+  currentPage = 1;
+  itemsPerPage = 5;
+  totalPages = 1;
+  totalEntries = 0;
+  pageNumbers: number[] = [];
+
+  constructor(
+    private router: Router,
+    private adminService: AdminService
+  ) {}
+
+  ngOnInit(): void {
+    this.fetchJobSeekers();
   }
 
+  /* ================= FETCH ================= */
+  fetchJobSeekers(): void {
+    this.loading = true;
 
-seekers: Seeker[] = [
-
-  {
-    id: 1,
-    fullname: "Siva Prasad Kurra",
-    email: "user1@gmail.com",
-    verification: "Verified",
-    role: "seeker",
-    status: "Active",
-    lastLogin: "10-11-2025, 12:00 PM",
-    lastLogout: "10-11-2025, 17:00 PM",
-    logs: [
-      { login: "10-11-2025, 12:00 PM", logout: "10-11-2025, 17:00 PM" },
-      { login: "09-11-2025, 11:00 AM", logout: "09-11-2025, 04:00 PM" },
-      { login: "08-11-2025, 10:15 AM", logout: "08-11-2025, 01:30 PM" }
-    ]
-  },
-
-  {
-    id: 2,
-    fullname: "John Doe",
-    email: "user2@gmail.com",
-    verification: "Verified",
-    role: "seeker",
-    status: "Inactive",
-    lastLogin: "11-11-2025, 10:00 AM",
-    lastLogout: "-",
-    logs: [
-      { login: "11-11-2025, 10:00 AM", logout: "-" },
-      { login: "10-11-2025, 09:45 AM", logout: "10-11-2025, 12:10 PM" },
-      { login: "09-11-2025, 08:20 AM", logout: "09-11-2025, 11:00 AM" }
-    ]
-  },
-
-  {
-    id: 3,
-    fullname: "Mary Smith",
-    email: "user3@gmail.com",
-    verification: "Verified",
-    role: "seeker",
-    status: "Active",
-    lastLogin: "09-11-2025, 02:00 PM",
-    lastLogout: "09-11-2025, 16:00 PM",
-    logs: [
-      { login: "09-11-2025, 02:00 PM", logout: "09-11-2025, 16:00 PM" },
-      { login: "08-11-2025, 11:30 AM", logout: "08-11-2025, 03:00 PM" },
-      { login: "07-11-2025, 10:45 AM", logout: "07-11-2025, 01:00 PM" }
-    ]
-  },
-
-  {
-    id: 4,
-    fullname: "Adam James",
-    email: "user4@gmail.com",
-    verification: "Verified",
-    role: "seeker",
-    status: "Inactive",
-    lastLogin: "08-11-2025, 01:00 PM",
-    lastLogout: "-",
-    logs: [
-      { login: "08-11-2025, 01:00 PM", logout: "-" },
-      { login: "07-11-2025, 09:00 AM", logout: "07-11-2025, 11:30 AM" },
-      { login: "06-11-2025, 10:10 AM", logout: "06-11-2025, 12:20 PM" }
-    ]
-  },
-
-  {
-    id: 5,
-    fullname: "Lisa Wayne",
-    email: "user5@gmail.com",
-    verification: "Verified",
-    role: "seeker",
-    status: "Active",
-    lastLogin: "12-11-2025, 11:00 AM",
-    lastLogout: "12-11-2025, 13:00 PM",
-    logs: [
-      { login: "12-11-2025, 11:00 AM", logout: "12-11-2025, 13:00 PM" },
-      { login: "11-11-2025, 02:10 PM", logout: "11-11-2025, 05:00 PM" },
-      { login: "10-11-2025, 12:30 PM", logout: "10-11-2025, 03:40 PM" }
-    ]
-  },
-
-  {
-    id: 6,
-    fullname: "Ravi Kumar",
-    email: "user6@gmail.com",
-    verification: "Verified",
-    role: "seeker",
-    status: "Active",
-    lastLogin: "10-11-2025, 09:30 AM",
-    lastLogout: "10-11-2025, 12:00 PM",
-    logs: [
-      { login: "10-11-2025, 09:30 AM", logout: "10-11-2025, 12:00 PM" },
-      { login: "09-11-2025, 01:20 PM", logout: "09-11-2025, 03:45 PM" },
-      { login: "08-11-2025, 10:00 AM", logout: "08-11-2025, 12:30 PM" }
-    ]
-  },
-
-  {
-    id: 7,
-    fullname: "Priya Sharma",
-    email: "user7@gmail.com",
-    verification: "Verified",
-    role: "seeker",
-    status: "Inactive",
-    lastLogin: "11-11-2025, 03:15 PM",
-    lastLogout: "-",
-    logs: [
-      { login: "11-11-2025, 03:15 PM", logout: "-" },
-      { login: "10-11-2025, 02:30 PM", logout: "10-11-2025, 05:00 PM" },
-      { login: "09-11-2025, 12:00 PM", logout: "09-11-2025, 02:00 PM" }
-    ]
-  },
-
-  {
-    id: 8,
-    fullname: "David Miller",
-    email: "user8@gmail.com",
-    verification: "Verified",
-    role: "seeker",
-    status: "Active",
-    lastLogin: "09-11-2025, 10:00 AM",
-    lastLogout: "09-11-2025, 11:00 AM",
-    logs: [
-      { login: "09-11-2025, 10:00 AM", logout: "09-11-2025, 11:00 AM" },
-      { login: "08-11-2025, 09:45 AM", logout: "08-11-2025, 12:10 PM" },
-      { login: "07-11-2025, 08:30 AM", logout: "07-11-2025, 10:45 AM" }
-    ]
-  },
-
-  {
-    id: 9,
-    fullname: "Sneha Reddy",
-    email: "user9@gmail.com",
-    verification: "Verified",
-    role: "seeker",
-    status: "Active",
-    lastLogin: "08-11-2025, 04:30 PM",
-    lastLogout: "08-11-2025, 07:00 PM",
-    logs: [
-      { login: "08-11-2025, 04:30 PM", logout: "08-11-2025, 07:00 PM" },
-      { login: "07-11-2025, 03:20 PM", logout: "07-11-2025, 05:10 PM" },
-      { login: "06-11-2025, 01:15 PM", logout: "06-11-2025, 03:00 PM" }
-    ]
-  },
-
-  {
-    id: 10,
-    fullname: "Michael Ray",
-    email: "user10@gmail.com",
-    verification: "Verified",
-    role: "seeker",
-    status: "Inactive",
-    lastLogin: "07-11-2025, 09:00 AM",
-    lastLogout: "-",
-    logs: [
-      { login: "07-11-2025, 09:00 AM", logout: "-" },
-      { login: "06-11-2025, 10:00 AM", logout: "06-11-2025, 11:45 AM" },
-      { login: "05-11-2025, 12:30 PM", logout: "05-11-2025, 02:00 PM" }
-    ]
+    this.adminService.getAllJobSeekers().subscribe({
+      next: (res) => {
+        this.jobSeekers = res.jobSeekers || [];
+        this.filteredJobSeekers = [...this.jobSeekers];
+        this.updatePagination();
+        this.loading = false;
+      },
+      error: () => {
+        this.errorMessage = 'Failed to load job seekers';
+        this.loading = false;
+      }
+    });
   }
 
-];
+  /* ================= ACTIONS ================= */
+  viewJobSeekerProfile(id: string): void {
+    this.router.navigate([`admin/seekers-list/${id}/profile`]);
+  }
 
+  approveJobSeeker(userId: string): void {
+    this.loading = true;
 
+    this.adminService.approveUser({
+      userId,
+      role: 'jobSeeker'
+    }).subscribe({
+      next: () => {
+        this.fetchJobSeekers();
+        this.loading = false;
+      },
+      error: () => {
+        this.errorMessage = 'Failed to approve job seeker';
+        this.loading = false;
+      }
+    });
+  }
+
+  rejectJobSeeker(userId: string): void {
+    if (!confirm('Are you sure you want to permanently block this job seeker?')) {
+      return;
+    }
+
+    this.loading = true;
+
+    this.adminService.rejectUser({
+      userId,
+      role: 'jobSeeker'
+    }).subscribe({
+      next: () => {
+        this.fetchJobSeekers();
+        this.loading = false;
+      },
+      error: () => {
+        this.errorMessage = 'Failed to reject job seeker';
+        this.loading = false;
+      }
+    });
+  }
+
+  openLogsModal(jobSeeker: any): void {
+    this.selectedJobSeeker = jobSeeker;
+  }
+
+  /* ================= PAGINATION ================= */
+  updatePagination(): void {
+    this.totalEntries = this.filteredJobSeekers.length;
+    this.totalPages = Math.max(Math.ceil(this.totalEntries / this.itemsPerPage), 1);
+    this.currentPage = Math.min(this.currentPage, this.totalPages);
+    this.paginate();
+  }
+
+  paginate(): void {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    this.paginatedJobSeekers =
+      this.filteredJobSeekers.slice(start, start + this.itemsPerPage);
+
+    this.pageNumbers = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  onPageChange(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.paginate();
+  }
+
+  getStartIndex(): number {
+    return this.totalEntries ? (this.currentPage - 1) * this.itemsPerPage + 1 : 0;
+  }
+
+  getEndIndex(): number {
+    return Math.min(this.currentPage * this.itemsPerPage, this.totalEntries);
+  }
 }

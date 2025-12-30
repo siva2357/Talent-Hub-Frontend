@@ -160,14 +160,20 @@
   </div>
 
 <div class="col-md-6">
-  <label class="text-muted">Languages</label>
+  <h6 class="text-muted mb-3">Languages</h6>
 
-  @if (recruiterProfile.languages.length) {
-    <p class="fw-semibold">
-      {{ recruiterLanguages }}
-    </p>
+  @if (recruiterProfile.languages.length > 0) {
+    <div class="d-flex flex-wrap gap-2">
+
+      @for (lang of recruiterProfile.languages; track lang._id) {
+        <span class="badge bg-light text-dark border px-3 py-2">
+          {{ lang.language }} <span class="text-muted">({{ lang.level }})</span>
+        </span>
+      }
+
+    </div>
   } @else {
-    <p class="fw-semibold text-muted">—</p>
+    <p class="text-muted small">No languages added</p>
   }
 </div>
 

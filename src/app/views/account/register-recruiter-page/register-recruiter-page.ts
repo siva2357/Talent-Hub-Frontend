@@ -1,17 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-  FormsModule
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
 import { AuthService } from '../../../core/services/auth-service';
 import { RecruiterSignupPayload } from '../../../core/models/auth.dto';
-import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-register-recruiter-page',

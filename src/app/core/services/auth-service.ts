@@ -44,7 +44,11 @@ registerRecruiter(
 
 registerJobSeeker(
   data: JobSeekerSignupPayload
-): Observable<{ success: boolean; message?: string }> {
+): Observable<{ success: boolean; message?: string ;  result?: {
+    userId: string;
+    fullName: string;
+    email: string;
+  };}> {
   return this.http
     .post<{ success: boolean; message?: string }>(
       `${this.baseUrl}/auth/jobSeeker/signup`,

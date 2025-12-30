@@ -4,7 +4,6 @@ import { FileUploadService } from '../../../core/services/file-upload-service';
 import { BucketKey } from '../../../core/enums/bucket-key.constant';
 import { UploadSection } from '../../../core/enums/upload-section.constant';
 
-
 @Component({
   selector: 'app-file-upload',
   templateUrl: './file-upload.html',
@@ -17,6 +16,9 @@ export class FileUpload {
   @Input() section!: UploadSection;
   @Input() accept = '*/*';
 
+  // ✅ parent decides pre-login or not
+  @Input() preLoginUserId?: string;
+
   @Output() uploaded = new EventEmitter<string>();
 
   uploading = false;
@@ -28,18 +30,11 @@ export class FileUpload {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
 
-    let userId: string | undefined;
-
-    const stored = localStorage.getItem('recruiterRegistration');
-    if (stored) {
-      userId = JSON.parse(stored).userId;
-    }
-
     this.uploading = true;
     this.progress = 0;
 
     this.uploadService
-      .uploadFile(file, this.bucketKey, this.section, userId)
+      .uploadFile(file, this.bucketKey, this.section, this.preLoginUserId)
       .subscribe({
         next: (event) => {
 
@@ -47,14 +42,9 @@ export class FileUpload {
             this.progress = Math.round((event.loaded / event.total) * 100);
           }
 
-          if (
-            event.type === HttpEventType.Response &&
-            event.body
-          ) {
+          if (event.type === HttpEventType.Response && event.body) {
             this.uploaded.emit(event.body.url);
             this.uploading = false;
-            console.log('Upload userId:', userId);
-
           }
         },
         error: () => {

@@ -5,78 +5,49 @@
 ========================= */
 export interface JobSeekerProfile {
   _id?: string;
-
-  userId: string; // JobSeeker _id
-
-  /* PROFILE PHOTO */
-  profilePhoto?: string;
-
-  /* BASIC DETAILS */
+  userId: string;
+  profilePhoto: string;
   firstName: string;
   lastName: string;
   email: string;
   mobile: string;
   gender: 'Male' | 'Female' | 'Other';
-
-  /* EXPERIENCE */
   experiences: Experience[];
-
-  /* CERTIFICATIONS */
   certifications: Certification[];
-
-  /* LANGUAGES */
   languages: Language[];
-
-  /* SKILLS */
   skills: string[];
-
-  /* SOCIAL PROFILES */
   socialProfiles: SocialProfile[];
-
-  createdAt?: string;
-  updatedAt?: string;
+  bioDescription: string;
+  createdAt: string;
+  updatedAt: string;
 }
-
-/* =========================
-   LANGUAGE
-========================= */
 export interface Language {
+  _id:string;
   language: string;
   level: string;
 }
 
-/* =========================
-   COMPANY ID PROOF
-========================= */
 export interface CompanyIdProof {
   documentName: string;
   documentUrl: string;
 }
 
-
-/* =========================
-   EXPERIENCE
-========================= */
 export interface Experience {
+  _id?:string;
   jobTitle: string;
   company: string;
   duration: string;
   description?: string;
 }
 
-/* =========================
-   CERTIFICATION
-========================= */
 export interface Certification {
+  _id?:string;
   name: string;
   issuedBy: string;
   issuedDate: string;
   certificateUrl?: string;
 }
 
-/* =========================
-   SOCIAL PROFILE
-========================= */
 export interface SocialProfile {
   platform:
     | 'LinkedIn'

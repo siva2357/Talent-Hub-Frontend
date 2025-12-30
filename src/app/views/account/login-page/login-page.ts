@@ -62,7 +62,7 @@ onSubmit() {
           this.router.navigate(response.profileCompleted ? ['recruiter'] : ['sign-up/recruiter-profile-form']);
           break;
         case 'jobSeeker':
-          this.router.navigate(response.profileCompleted ? ['jobSeeker'] : ['sign-up/seeker-profile-form']);
+          this.router.navigate(response.profileCompleted ? ['jobSeeker'] : ['sign-up/jobSeeker-profile-form']);
           break;
         case 'admin':
           this.router.navigate(['admin']);

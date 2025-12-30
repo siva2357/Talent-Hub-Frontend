@@ -1,1 +1,240 @@
-<p>update-professional-details works!</p>
+@if (!isLoading) {
+<div class="container my-4">
+
+<form [formGroup]="professionalForm" (ngSubmit)="updateProfessionalDetails()">
+
+<!-- ================= LANGUAGES ================= -->
+<div class="card mb-4">
+  <div class="card-header fw-semibold">Languages</div>
+  <div class="card-body">
+
+    <div formArrayName="languages">
+      @for (l of languages.controls; let i = $index; track i) {
+        <div [formGroupName]="i" class="row g-2 align-items-center mb-2">
+
+          <div class="col-md-5">
+            <select class="form-select form-select-sm" formControlName="language">
+              <option value="">Language</option>
+              @for (x of languagesList; track x) {
+                <option [value]="x">{{ x }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-5">
+            <select class="form-select form-select-sm" formControlName="level">
+              <option value="">Level</option>
+              @for (p of proficiencyList; track p) {
+                <option [value]="p">{{ p }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-2 text-end">
+            @if (languages.length > 1) {
+              <button type="button" class="btn btn-outline-danger btn-sm"
+                (click)="removeLanguage(i)">
+                ✕
+              </button>
+            }
+          </div>
+
+        </div>
+      }
+    </div>
+
+    <button type="button" class="btn btn-sm btn-outline-primary mt-2"
+      (click)="addLanguage()">+ Add Language</button>
+
+  </div>
+</div>
+
+<!-- ================= SKILLS ================= -->
+<div class="card mb-4">
+  <div class="card-header fw-semibold">Skills</div>
+  <div class="card-body">
+
+    <div formArrayName="skills">
+      @for (s of skills.controls; let i = $index; track i) {
+        <div [formGroupName]="i" class="row g-2 align-items-center mb-2">
+
+          <div class="col-md-10">
+            <input class="form-control form-control-sm"
+              formControlName="name"
+              placeholder="Skill" />
+          </div>
+
+          <div class="col-md-2 text-end">
+            @if (skills.length > 1) {
+              <button type="button" class="btn btn-outline-danger btn-sm"
+                (click)="removeSkill(i)">
+                ✕
+              </button>
+            }
+          </div>
+
+        </div>
+      }
+    </div>
+
+    <button type="button" class="btn btn-sm btn-outline-primary mt-2"
+      (click)="addSkill()">+ Add Skill</button>
+
+  </div>
+</div>
+
+<!-- ================= EXPERIENCE ================= -->
+<div class="card mb-4">
+  <div class="card-header fw-semibold">Experience</div>
+  <div class="card-body">
+
+    <div formArrayName="experiences">
+      @for (e of experiences.controls; let i = $index; track i) {
+        <div [formGroupName]="i" class="border rounded p-3 mb-3">
+
+          <div class="row g-2 mb-2">
+            <div class="col-md-6">
+              <input class="form-control form-control-sm"
+                formControlName="jobTitle"
+                placeholder="Job Title" />
+            </div>
+
+            <div class="col-md-6">
+              <input class="form-control form-control-sm"
+                formControlName="company"
+                placeholder="Company" />
+            </div>
+          </div>
+
+          <input class="form-control form-control-sm mb-2"
+            formControlName="duration"
+            placeholder="Duration (e.g. 2022–2024)" />
+
+          <textarea class="form-control form-control-sm mb-2"
+            formControlName="description"
+            placeholder="Description"></textarea>
+
+          @if (experiences.length > 1) {
+            <div class="text-end">
+              <button type="button" class="btn btn-outline-danger btn-sm"
+                (click)="removeExperience(i)">
+                Remove
+              </button>
+            </div>
+          }
+
+        </div>
+      }
+    </div>
+
+    <button type="button" class="btn btn-sm btn-outline-primary"
+      (click)="addExperience()">+ Add Experience</button>
+
+  </div>
+</div>
+
+<!-- ================= CERTIFICATIONS ================= -->
+<div class="card mb-4">
+  <div class="card-header fw-semibold">Certifications</div>
+  <div class="card-body">
+
+    <div formArrayName="certifications">
+      @for (c of certifications.controls; let i = $index; track i) {
+        <div [formGroupName]="i" class="border rounded p-3 mb-3">
+
+          <input class="form-control form-control-sm mb-2"
+            formControlName="name"
+            placeholder="Certification Name" />
+
+          <input class="form-control form-control-sm mb-2"
+            formControlName="issuedBy"
+            placeholder="Issued By" />
+
+          <input type="date"
+            class="form-control form-control-sm mb-2"
+            formControlName="issuedDate" />
+
+          <input class="form-control form-control-sm mb-2"
+            formControlName="certificateUrl"
+            placeholder="Certificate URL" />
+
+          @if (certifications.length > 1) {
+            <div class="text-end">
+              <button type="button" class="btn btn-outline-danger btn-sm"
+                (click)="removeCertification(i)">
+                Remove
+              </button>
+            </div>
+          }
+
+        </div>
+      }
+    </div>
+
+    <button type="button" class="btn btn-sm btn-outline-primary"
+      (click)="addCertification()">+ Add Certification</button>
+
+  </div>
+</div>
+
+<!-- ================= SOCIAL PROFILES ================= -->
+<div class="card mb-4">
+  <div class="card-header fw-semibold">Social Profiles</div>
+  <div class="card-body">
+
+    <div formArrayName="socialProfiles">
+      @for (sp of socialProfiles.controls; let i = $index; track i) {
+        <div [formGroupName]="i" class="row g-2 align-items-center mb-2">
+
+          <div class="col-md-4">
+            <select class="form-select form-select-sm" formControlName="platform">
+              <option value="">Platform</option>
+              @for (p of platforms; track p) {
+                <option [value]="p">{{ p }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <input class="form-control form-control-sm"
+              formControlName="link"
+              placeholder="Profile URL" />
+          </div>
+
+          <div class="col-md-2 text-end">
+            @if (socialProfiles.length > 1) {
+              <button type="button" class="btn btn-outline-danger btn-sm"
+                (click)="removeSocialProfile(i)">
+                ✕
+              </button>
+            }
+          </div>
+
+        </div>
+      }
+    </div>
+
+    <button type="button" class="btn btn-sm btn-outline-primary mt-2"
+      (click)="addSocialProfile()">+ Add Social Profile</button>
+
+  </div>
+</div>
+
+<!-- ================= ACTION ================= -->
+<div class="text-end">
+  <button class="btn btn-success px-4"
+    type="submit"
+    [disabled]="isUpdating">
+    Update Profile
+  </button>
+</div>
+
+</form>
+</div>
+}
+
+@if (isLoading) {
+<div class="text-center py-5">
+  <div class="spinner-border"></div>
+</div>
+}
