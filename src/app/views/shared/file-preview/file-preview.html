@@ -1,0 +1,38 @@
+<div class="file-preview-wrapper">
+
+  <!-- DEFAULT PLACEHOLDER (NO FILE) -->
+  @if (!fileUrl) {
+    <div class="file-placeholder">
+      <i class="bi bi-camera"></i>
+      <p>Upload Image</p>
+    </div>
+  }
+
+  <!-- IMAGE PREVIEW -->
+  @if (fileUrl && fileType === 'image') {
+    <img
+      [src]="fileUrl"
+      class="file-preview-image"
+      alt="Uploaded image preview"
+    />
+  }
+
+  <!-- PDF PREVIEW -->
+  @if (fileUrl && fileType === 'pdf') {
+    <iframe
+      [src]="fileUrl"
+      class="file-preview-pdf">
+    </iframe>
+  }
+
+  <!-- OTHER FILE -->
+  @if (fileUrl && fileType === 'unknown') {
+    <a
+      [href]="fileUrl"
+      target="_blank"
+      class="btn btn-outline-primary btn-sm">
+      View File
+    </a>
+  }
+
+</div>

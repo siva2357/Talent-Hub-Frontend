@@ -11,19 +11,18 @@ import { CommonModule } from '@angular/common';
 })
 export class SingupPage {
 
-  selectedRole: 'recruiter' | 'seeker' | null = null;
+  selectedRole: 'recruiter' | 'jobSeeker' | null = null;
 
   constructor(private router: Router) {}
 
-  selectRole(role: 'recruiter' | 'seeker') {
+  selectRole(role: 'recruiter' | 'jobSeeker') {
     this.selectedRole = role;
   }
 continue() {
   if (!this.selectedRole) return;
 
   this.router.navigate(
-    [`/sign-up/${this.selectedRole}`],
-    { queryParams: { role: this.selectedRole } }
+    [`/sign-up/${this.selectedRole}`]
   );
 }
 

@@ -28,6 +28,8 @@ import { RecruiterProfileForm } from './views/account/recruiter-profile-form/rec
 import { AccountRegisteredPage } from './views/account/account-registered-page/account-registered-page';
 import { InterviewMeetingPage } from './views/shared/interview-meeting-page/interview-meeting-page';
 import { InterviewSessionPage } from './views/shared/interview-session-page/interview-session-page';
+import { RoleGuard } from './core/guards/role.guard';
+import { AuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
 
@@ -45,8 +47,8 @@ export const routes: Routes = [
   { path: 'sign-up', component: SingupPage, title: 'Singup' },
   { path: 'sign-up/recruiter', component: RegisterRecruiterPage, title: 'Register recruiter' },
   { path: 'sign-up/recruiter-profile-form', component: RecruiterProfileForm },
-  { path: 'sign-up/seeker', component: RegisterSeekerPage, title: 'Register seeker' },
-  { path: 'sign-up/seeker-profile-form', component: SeekerProfileForm },
+  { path: 'sign-up/jobSeeker', component: RegisterSeekerPage, title: 'Register seeker' },
+  { path: 'sign-up/jobSeeker-profile-form', component: SeekerProfileForm },
   { path: 'account-registered', component: AccountRegisteredPage, title: 'Confirmation' },
   { path: 'sign-up/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
@@ -76,8 +78,8 @@ export const routes: Routes = [
 
 
   //User routes
-  { path: 'admin', loadChildren: () => ADMIN_ROUTES },
-  { path: 'recruiter', loadChildren: () => RECRUITER_ROUTES },
-  { path: 'seeker', loadChildren: () => SEEKER_ROUTES },
+  { path: 'admin', loadChildren: () => ADMIN_ROUTES, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'admin' }},
+  { path: 'recruiter', loadChildren: () => RECRUITER_ROUTES,canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'recruiter' } },
+  { path: 'jobSeeker', loadChildren: () => SEEKER_ROUTES ,canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'jobSeeker' }},
   { path: '**', redirectTo: 'home' },
 ];

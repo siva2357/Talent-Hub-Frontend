@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../../core/services/auth-service';
+import { PasswordService } from '../../../core/services/password-service';
 @Component({
   selector: 'app-reset-otp-verification-page',
   standalone: true,
@@ -11,36 +13,90 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class ResetOtpVerificationPage {
 
-    constructor( private router:Router){
 
-  }
+  email!: string;
+  role!: string;
 
-  otp = Array(6).fill('');
+  maskedEmail = '';
   otpInputs = Array(6).fill(0);
-  maskedEmail = 'abc****@gmail.com';
+  otp: string[] = ['', '', '', '', '', ''];
 
-  onInput(event: any, index: number) {
-    const value = event.target.value;
+  loading = false;
+  errorMessage = '';
 
-    if (value.length === 1 && index < 5) {
-      const next = document.getElementById('otp-' + (index + 1));
-      next?.focus();
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private resetPasswordService: PasswordService,
+  ) {}
+
+
+    ngOnInit(): void {
+    this.route.queryParamMap.subscribe(params => {
+      const email = params.get('email');
+      const role = params.get('role');
+
+      this.email = email!;
+      this.role = role!;
+      this.maskEmail();
+    });
+  }
+
+
+  /* ================= MASK EMAIL ================= */
+  maskEmail(): void {
+    const [name, domain] = this.email.split('@');
+    const visible = name.slice(0, 3);
+    const masked = '*'.repeat(Math.max(name.length - 3, 0));
+    this.maskedEmail = `${visible}${masked}@${domain}`;
+  }
+
+  /* ================= OTP INPUT HANDLING ================= */
+  onInput(event: any, index: number): void {
+    if (event.target.value && index < 5) {
+      document
+        .querySelectorAll<HTMLInputElement>('.otp-input')
+        [index + 1]?.focus();
     }
   }
 
-  onKeyDown(event: KeyboardEvent, index: number) {
-    if (event.key === 'Backspace' && index > 0 && !this.otp[index]) {
-      const prev = document.getElementById('otp-' + (index - 1));
-      prev?.focus();
+
+  onKeyDown(event: KeyboardEvent, index: number): void {
+    if (event.key === 'Backspace' && !this.otp[index] && index > 0) {
+      document
+        .querySelectorAll<HTMLInputElement>('.otp-input')
+        [index - 1]?.focus();
     }
   }
 
-  verify() {
-    const code = this.otp.join('');
-    console.log('Verify OTP:', code);
-    // After success navigate:
-    this.router.navigate(['/reset-password']);
+    /* ================= VERIFY OTP ================= */
+  verify(): void {
+    const providedCode = this.otp.join('');
+
+    if (providedCode.length !== 6) return;
+
+    this.loading = true;
+    this.errorMessage = '';
+
+this.resetPasswordService.verifyForgotPasswordCode(
+  providedCode,
+  this.email,
+).subscribe({
+  next: () => {
+    this.loading = false;
+    this.router.navigate(['/reset-password'], {
+            queryParams: { email: this.email }
+          });
+  },
+  error: () => {
+    this.loading = false;
+    this.errorMessage = 'Invalid or expired OTP';
   }
+});
+
+  }
+
 
   resendOtp() {
     console.log('Resend OTP clicked');

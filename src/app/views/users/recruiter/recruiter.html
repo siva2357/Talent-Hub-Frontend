@@ -94,19 +94,19 @@
       <div class="dropdown ">
 
         <a class="header-icon" data-bs-toggle="dropdown">
-          <img src="https://github.com/mdo.png" alt="profile" width="35" height="35" class="rounded-circle">
+          <img [src]="profileImage" alt="profile" width="35" height="35" class="rounded-circle">
         </a>
 
         <ul class="dropdown-menu dropdown-menu-start profile-menu" style="width: 200px;">
           <li class="dropdown-item" style="line-height: 1.2;">
-            Fullname<br>
-            <small>User role</small>
+            {{fullName}}<br>
+            <small>{{userRole}}</small>
           </li>
           <li>
             <hr>
           </li>
-          <li><a class="dropdown-item" routerLink="profile">Profile</a></li>
-          <li><a class="dropdown-item" routerLink="account-settings">Settings</a></li>
+          <li><a class="dropdown-item" (click)="goToProfilePage()">Profile</a></li>
+          <li><a class="dropdown-item" (click)="goToAccountSettingsPage()">Settings</a></li>
           <li>
             <hr class="dropdown-divider">
           </li>
@@ -115,10 +115,6 @@
 
       </div>
 
-<div class="user-label" style="margin-right: 20px; margin-left: 10px; line-height: 1.1;">
-  Siva Prasad Kurra<br>
-  <small style="font-size: 12px; opacity: 0.8;">Recruiter</small>
-</div>
 
     </div>
 

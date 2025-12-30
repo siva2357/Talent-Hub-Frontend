@@ -1,177 +1,149 @@
 <div class="container mt-5 mb-5" style="padding-top: 60px;">
 
-  <h5 class="fw-semibold mb-1">Seekers Management</h5>
-  <p class="text-muted mb-3">View, filter, and manage registered seekers</p>
 
-<!-- TABLE – SHOW ONLY ON LG+ -->
+  <h5 class="fw-semibold mb-1">Job Seeker Management</h5>
+  <p class="text-muted mb-3">
+    Review job seeker profiles, approve or permanently block accounts
+  </p>
+
+
+  <!-- ================= DESKTOP TABLE ================= -->
 <div class="table-responsive d-none d-lg-block">
-
   <table class="table table-bordered align-middle table-hover">
     <thead class="table-light">
       <tr>
-        <th>S.No</th>
+        <th>#</th>
         <th>Full Name</th>
         <th>Email</th>
-        <th>Verification</th>
-        <th>Role</th>
+        <th>Profile</th>
         <th>Status</th>
-        <th>Last Login</th>
-        <th>Last Logout</th>
+        <th>Logs</th>
         <th>Actions</th>
       </tr>
     </thead>
 
     <tbody>
-      @for(seeker of seekers; track seeker.id) {
-        <tr>
-          <td>{{ seeker.id }}</td>
-          <td>{{ seeker.fullname }}</td>
-          <td>{{ seeker.email }}</td>
-          <td><span class="badge bg-success">{{ seeker.verification }}</span></td>
-          <td>{{ seeker.role }}</td>
+      @for (seeker of paginatedJobSeekers; track seeker._id; let i = $index) {
+        <tr class="text-center">
+          <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+
+          <td class="fw-semibold">
+            {{ seeker.registrationDetails.fullName }}
+          </td>
+
+          <td>{{ seeker.registrationDetails.email }}</td>
+
           <td>
-            <span class="badge"
-                  [class.bg-success]="seeker.status === 'Active'"
-                  [class.bg-secondary]="seeker.status === 'Inactive'">
+            @if (seeker.registrationDetails.adminApproved) {
+              <span class="badge bg-success">Approved Profile</span>
+            } @else {
+              <span class="badge bg-warning">Pending Review</span>
+            }
+          </td>
+
+          <td>
+            <span class="badge bg-secondary text-capitalize">
               {{ seeker.status }}
             </span>
           </td>
-          <td>{{ seeker.lastLogin }}</td>
-          <td>{{ seeker.lastLogout }}</td>
-<td>
-  <div class="d-flex gap-2">
 
-    <button class="btn btn-outline-primary btn-sm">
-      <i class="bi bi-eye"></i> View
-    </button>
+          <td>
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#logsModal"
+              (click)="openLogsModal(seeker)">
+              Logs
+            </button>
+          </td>
 
-    <button class="btn btn-outline-secondary btn-sm"
-            data-bs-toggle="modal"         (click)="openLogsModal(seeker)"
-            data-bs-target="#logsModal">
-      <i class="bi bi-clock-history"></i> Logs
-    </button>
+          <td>
+            <div class="d-flex justify-content-center gap-2 flex-wrap">
+              <button
+                class="btn btn-outline-info btn-sm"
+                (click)="viewJobSeekerProfile(seeker._id)">
+                View
+              </button>
 
-  </div>
-</td>
+              <button
+                class="btn btn-success btn-sm"
+                (click)="approveJobSeeker(seeker._id)"
+                [disabled]="loading">
+                Approve
+              </button>
 
+              <button
+                class="btn btn-danger btn-sm"
+                (click)="rejectJobSeeker(seeker._id)"
+                [disabled]="loading">
+                Reject
+              </button>
+            </div>
+          </td>
+        </tr>
+      }
+
+      @if (!loading && paginatedJobSeekers.length === 0) {
+        <tr>
+          <td colspan="7" class="text-center text-muted py-4">
+            No job seekers pending approval
+          </td>
         </tr>
       }
     </tbody>
   </table>
-
-  <!-- Pagination shown ONLY on large screens -->
-  <div class="d-flex justify-content-between align-items-center mt-3 d-none d-lg-flex">
-
-    <div>
-      <label class="me-2">Show</label>
-      <select class="form-select d-inline-block" style="width: 70px;">
-        <option>5</option>
-        <option>10</option>
-        <option>20</option>
-      </select>
-    </div>
-
-    <nav>
-      <ul class="pagination mb-0">
-        <li class="page-item disabled"><button class="page-link">&laquo;</button></li>
-        <li class="page-item active"><button class="page-link">1</button></li>
-        <li class="page-item disabled"><button class="page-link">&raquo;</button></li>
-      </ul>
-    </nav>
-
-    <span class="text-muted">Page 1 of 1</span>
-
-  </div>
-
 </div>
 
 
+  <!-- ================= MOBILE VIEW ================= -->
 <div class="d-lg-none">
-
-  @for(seeker of seekers; track seeker.id) {
+  @for (seeker of paginatedJobSeekers; track seeker._id) {
     <div class="card mb-3 shadow-sm p-3">
 
-      <h6 class="fw-semibold mb-1">{{ seeker.fullname }}</h6>
-      <p class="text-muted mb-2">{{ seeker.email }}</p>
+      <h6 class="fw-semibold mb-1">
+        {{ seeker.registrationDetails.fullName }}
+      </h6>
 
-      <div class="d-flex justify-content-between">
-        <span class="badge bg-success">{{ seeker.verification }}</span>
+      <p class="text-muted mb-2">
+        {{ seeker.registrationDetails.email }}
+      </p>
 
-        <span class="badge"
-              [class.bg-success]="seeker.status === 'Active'"
-              [class.bg-secondary]="seeker.status === 'Inactive'">
+      <div class="d-flex justify-content-between mb-2">
+        @if (seeker.registrationDetails.adminApproved) {
+          <span class="badge bg-success">Approved</span>
+        } @else {
+          <span class="badge bg-warning">Pending</span>
+        }
+
+        <span class="badge bg-secondary">
           {{ seeker.status }}
         </span>
       </div>
 
-      <p class="mt-2 mb-1"><strong>Role:</strong> {{ seeker.role }}</p>
-      <p class="mb-1"><strong>Last Login:</strong> {{ seeker.lastLogin }}</p>
-      <p class="mb-2"><strong>Last Logout:</strong> {{ seeker.lastLogout }}</p>
+      <button
+        class="btn btn-outline-info btn-sm w-100 mb-2"
+        (click)="viewJobSeekerProfile(seeker._id)">
+        View Profile
+      </button>
 
-<div class="d-flex gap-2 mt-2">
+      <div class="d-flex gap-2">
+        <button
+          class="btn btn-success btn-sm w-50"
+          (click)="approveJobSeeker(seeker._id)"
+          [disabled]="loading">
+          Approve
+        </button>
 
-  <button class="btn btn-outline-primary btn-sm w-50">
-    <i class="bi bi-eye"></i> View
-  </button>
-
-  <button class="btn btn-outline-secondary btn-sm w-50"
-          data-bs-toggle="modal"         (click)="openLogsModal(seeker)"
-          data-bs-target="#logsModal">
-    <i class="bi bi-clock-history"></i> Logs
-  </button>
-
-</div>
-
-
-    </div>
-  }
-
-</div>
-
-
-
-
-<!-- LOGS MODAL -->
-<!-- LOGS MODAL -->
-<div class="modal fade" id="logsModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5 class="modal-title">
-          Logs – {{ selectedSeeker?.fullname }}
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-
-        @if(selectedSeeker) {
-
-          @for(log of selectedSeeker.logs; track log.login) {
-
-            <div class="p-2 border rounded mb-2">
-              <p class="mb-1"><strong>Login:</strong> {{ log.login }}</p>
-              <p class="mb-1"><strong>Logout:</strong> {{ log.logout }}</p>
-            </div>
-
-          }
-
-        }
-
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
+        <button
+          class="btn btn-danger btn-sm w-50"
+          (click)="rejectJobSeeker(seeker._id)"
+          [disabled]="loading">
+          Reject
         </button>
       </div>
-
     </div>
-  </div>
+  }
 </div>
-
-
 
 
 </div>

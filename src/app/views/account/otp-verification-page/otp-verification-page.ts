@@ -1,62 +1,99 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router,RouterModule } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../core/services/auth-service';
 
 @Component({
   selector: 'app-otp-verification-page',
   standalone: true,
-  imports: [CommonModule, FormsModule,RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './otp-verification-page.html',
   styleUrls: ['./otp-verification-page.css']
 })
 export class OtpVerificationPage {
 
-  email = "abc12345@gmail.com";       // Example email
-  maskedEmail = "";                   // Masked version
-  otpInputs = Array(6).fill(0);       // 6 inputs
-  otp: string[] = ["", "", "", "", "", ""];
+  email!: string;
+  role!: string;
 
-  constructor(private router: Router) {}
+  maskedEmail = '';
+  otpInputs = Array(6).fill(0);
+  otp: string[] = ['', '', '', '', '', ''];
 
-  ngOnInit() {
-    this.maskEmail();
+  loading = false;
+  errorMessage = '';
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe(params => {
+      const email = params.get('email');
+      const role = params.get('role');
+
+      if (!email || !role) {
+        this.router.navigate(['/login']);
+        return;
+      }
+
+      this.email = email;
+      this.role = role;
+      this.maskEmail();
+    });
   }
 
-  maskEmail() {
-    const [name, domain] = this.email.split("@");
-    const masked = name.substring(0, 3) + "*".repeat(name.length - 3);
-    this.maskedEmail = `${masked}@${domain}`;
+  /* ================= MASK EMAIL ================= */
+  maskEmail(): void {
+    const [name, domain] = this.email.split('@');
+    const visible = name.slice(0, 3);
+    const masked = '*'.repeat(Math.max(name.length - 3, 0));
+    this.maskedEmail = `${visible}${masked}@${domain}`;
   }
 
-  // Auto move to next box
-  onInput(event: any, index: number) {
-    const value = event.target.value;
-
-    if (value && index < 5) {
-      const next = document.querySelectorAll<HTMLInputElement>('.otp-input')[index + 1];
-      next.focus();
+  /* ================= OTP INPUT HANDLING ================= */
+  onInput(event: any, index: number): void {
+    if (event.target.value && index < 5) {
+      document
+        .querySelectorAll<HTMLInputElement>('.otp-input')
+        [index + 1]?.focus();
     }
   }
 
-  // Go back on Backspace
-  onKeyDown(event: any, index: number) {
-    if (event.key === "Backspace" && !this.otp[index] && index > 0) {
-      const prev = document.querySelectorAll<HTMLInputElement>('.otp-input')[index - 1];
-      prev.focus();
+  onKeyDown(event: KeyboardEvent, index: number): void {
+    if (event.key === 'Backspace' && !this.otp[index] && index > 0) {
+      document
+        .querySelectorAll<HTMLInputElement>('.otp-input')
+        [index - 1]?.focus();
     }
   }
 
-  verify() {
-    const enteredOtp = this.otp.join("");
-    console.log("Entered OTP: ", enteredOtp);
+  /* ================= VERIFY OTP ================= */
+  verify(): void {
+    const providedCode = this.otp.join('');
 
-    // TODO: Call backend to verify OTP
-    this.router.navigate(['/confirmation-page']);
+    if (providedCode.length !== 6) return;
+
+    this.loading = true;
+    this.errorMessage = '';
+
+this.authService.verifyOtp(
+  providedCode,
+  this.email,
+  this.role
+).subscribe({
+  next: () => {
+    this.loading = false;
+    this.router.navigate(['/login']);
+  },
+  error: () => {
+    this.loading = false;
+    this.errorMessage = 'Invalid or expired OTP';
+  }
+});
+
   }
 
-  resendOtp() {
-    console.log("Resend OTP clicked");
-    // TODO: call API to resend OTP
-  }
 }

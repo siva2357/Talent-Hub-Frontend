@@ -1,14 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth-service';
-
-
-interface Notification {
-  message: string;
-  time: string;
-  read: boolean;
-}
-
+import { AppNotification } from '../../../core/models/notification.model';
+import { JobSeekerProfile } from '../../../core/models/jobseeker-profile.model';
+import { SeekerProfileService } from '../../../core/services/seeker-profile-service';
+import { NotificationService } from '../../../core/services/notification-service';
 
 @Component({
   selector: 'app-seeker',
@@ -19,17 +15,46 @@ interface Notification {
 })
 export class Seeker {
 
-      constructor(private auth: AuthService, private router: Router) {}
+  public userProfile!: JobSeekerProfile;
 
+  constructor(private authService: AuthService, private router: Router, private profileService:SeekerProfileService ,private notificationService: NotificationService) {}
 
+  public userName!:string;
+  public fullName! :string;
+  public profileImage! :string;
+  public userId!: string;
+  public errorMessage: string | null = null;
+  public loading: boolean = true;
+  public userRole!: string;
+  public showAll = false;
+  public notifications: AppNotification[] = [];
 
-  notifications: Notification[] = [
-    { message: "New applicant submitted resume", time: "2m ago", read: false },
-    { message: "Job post approved", time: "1h ago", read: false },
-    { message: "Candidate accepted offer", time: "3h ago", read: false },
-    { message: "New message from John", time: "5h ago", read: true },
-    { message: "Job post closed automatically", time: "Yesterday", read: true },
-  ];
+ngOnInit(): void {
+  this.userId = localStorage.getItem('userId') || this.authService.getUserId() || '';
+  const role = localStorage.getItem('userRole') || this.authService.getRole() || '';
+  this.userRole = role;
+
+  if (this.userId) {
+      this.loadNotifications(); // ✅ Add this call
+       this.getJobSeekerDetails();
+  } else {
+    this.errorMessage = 'User ID or Role is not available.';
+  }
+
+}
+
+loadNotifications(): void {
+  if (!this.userId || !this.userRole) return;
+  const apiRole = this.userRole.charAt(0).toUpperCase() + this.userRole.slice(1); // 'client' → 'Client'
+  this.notificationService.getUserNotifications(apiRole, this.userId).subscribe({
+    next: (notifs) => {
+      this.notifications = notifs;
+    },
+    error: (err) => {
+      console.error('Error loading notifications:', err);
+    }
+  });
+}
 
   showCount = true;
   viewMore = false;
@@ -37,7 +62,6 @@ export class Seeker {
   get unreadCount() {
     return this.notifications.filter(n => !n.read).length;
   }
-
   get visibleNotifications() {
     return this.viewMore ? this.notifications : this.notifications.slice(0, 3);
   }
@@ -57,10 +81,80 @@ export class Seeker {
   }
 
 
- logout() {
-    this.auth.logout();       // Clears localStorage
-    this.router.navigate(['/login']);  // Redirect to login page
+getJobSeekerDetails() {
+  this.profileService.getJobSeekerProfile().subscribe(
+    (res: any) => {
+      this.userProfile = res.data; // ✅ FIX
+      this.fullName = `${this.userProfile.firstName} ${this.userProfile.lastName}`;
+      this.profileImage = this.userProfile.profilePhoto; // ✅ now works
+      this.loading = false;
+    },
+    (error) => {
+      this.handleError(error);
+    }
+  );
+}
+
+
+handleError(error: any) {
+    console.error('Error fetching user details:', error);
+    if (error.status === 401) {
+      this.errorMessage = 'Unauthorized access. Please log in again.';
+    } else {
+      this.errorMessage = 'An error occurred while fetching user details.';
+    }
+    this.loading = false;
+}
+
+
+goToProfilePage(): void {
+  const userId = this.authService.getUserId() || localStorage.getItem('userId') || '';
+  const userRole = this.authService.getRole() || localStorage.getItem('userRole') || '';
+  if (!userId || !userRole) {
+    console.error('User ID or role is missing');
+    return;
   }
+  const rolePath = userRole;  // Ensures route path is consistent
+  this.router.navigate([`/${rolePath}/profile`]);
+}
+
+
+
+
+
+  goToAccountSettingsPage(): void {
+    const userId = localStorage.getItem('userId') || this.authService.getUserId() || '';
+    const userRole = localStorage.getItem('userRole') || this.authService.getRole() || '';
+    if (!userId || !userRole) {
+      console.error('User ID or role is missing');
+      return;
+    }
+    const rolePath = userRole; // Ensure lowercase for consistency
+    this.router.navigate([`/${rolePath}/account-settings`]);
+  }
+
+
+logout(): void {
+  this.authService.logout().subscribe({
+    next: () => {
+      // ✅ Clear frontend state
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // ✅ Redirect
+      this.router.navigate(['/login']);
+    },
+    error: (err) => {
+      console.error('Logout failed', err);
+
+      // 🔐 Fail-safe logout
+      localStorage.clear();
+      sessionStorage.clear();
+      this.router.navigate(['/login']);
+    }
+  });
+}
+
 
 
 }

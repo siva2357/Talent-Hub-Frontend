@@ -24,11 +24,12 @@ export class HeaderLayout implements OnInit {
     this.isMobile = window.innerWidth < 1200; // XL breakpoint
   }
 
-  goToLogin() {
-    this.router.navigate(['/login']);
-  }
+goToLogin() {
+  window.open('/login', '_blank');
+}
 
-  goToSignup() {
-    this.router.navigate(['/sign-up']);
-  }
+goToSignup() {
+  window.open('/sign-up', '_blank');
+}
+
 }

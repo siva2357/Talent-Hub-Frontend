@@ -1,93 +1,87 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { JobSeekerSignupPayload } from '../../../core/models/auth.dto';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth-service';
-import { environment } from '../../../../environments/environment';
-declare const google: any;
+import { Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-register-seeker-page',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule,FormsModule],
   templateUrl: './register-seeker-page.html',
   styleUrl: './register-seeker-page.css'
 })
-export class RegisterSeekerPage implements OnInit {
+export class RegisterSeekerPage  implements OnInit {
 
-  form: FormGroup;
-  selectedRole: 'recruiter' | 'seeker' | null = null;
+  registrationForm!: FormGroup;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
-    private auth: AuthService
-  ) {
-    this.selectedRole = this.route.snapshot.queryParamMap.get('role') as any;
+    private authService: AuthService,
 
-    if (!this.selectedRole) {
-      this.router.navigate(['/sign-up']);
-    }
+  ) {}
 
-    this.form = this.fb.group({
+  ngOnInit(): void {
+    this.registrationForm = this.fb.group({
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
+  get f() {
+    return this.registrationForm.controls;
+  }
 
-  loadGoogleScript(): Promise<void> {
-  return new Promise((resolve) => {
-    if (typeof google !== 'undefined') {
-      resolve();
-      return;
+submit(): void {
+  if (this.registrationForm.invalid) {
+    this.registrationForm.markAllAsTouched();
+    return;
+  }
+
+  const payload: JobSeekerSignupPayload = {
+    registrationDetails: {
+      fullName: this.f['fullName'].value,
+      email: this.f['email'].value,
+      password: this.f['password'].value
+    },
+    role: 'jobSeeker'
+  };
+
+  this.isLoading = true;
+
+  this.authService.registerJobSeeker(payload).subscribe({
+    next: (res) => {
+      this.isLoading = false;
+
+      // ✅ STORE TEMP DATA FOR PROFILE FORM
+      localStorage.setItem(
+        'jobSeekerRegistration',
+        JSON.stringify({
+          userId: res.result?.userId,
+          fullName: res.result?.fullName,
+          email: res.result?.email
+        })
+      );
+
+      this.router.navigate(['sign-up/seeker-profile-form']);
+    },
+    error: () => {
+      this.isLoading = false;
     }
-
-    const check = setInterval(() => {
-      if (typeof google !== 'undefined') {
-        clearInterval(check);
-        resolve();
-      }
-    }, 50);
   });
 }
 
-
-  async ngOnInit() {
-
-        await this.loadGoogleScript();
-    google.accounts.id.initialize({
-      client_id: environment.googleClientId,
-      callback: (response: any) => this.handleGoogleResponse(response)
-    });
-
-    google.accounts.id.renderButton(
-      document.getElementById('googleBtn'),
-      { theme: 'outline', size: 'large', width: 320 }
-    );
+  login(): void {
+    this.router.navigate(['login']);
   }
 
-  handleGoogleResponse(response: any) {
-    const idToken = response.credential;
-
-    this.auth.googleSignup(idToken, this.selectedRole!).subscribe({
-      next: (res: any) => {
-      this.auth.saveAuthData(res.token, res.user);
-
-        if (res.newUser) {
-          this.router.navigate(['/sign-up/seeker-profile-form']);
-          return;
-        }
-
-        this.router.navigate(['/seeker']);
-      }
-    });
-  }
-
-  signup() {
-    if (this.form.invalid) return;
-    console.log('Manual signup:', this.form.value);
+  forgotPassword(): void {
+    this.router.navigate(['forgot-password']);
   }
 }

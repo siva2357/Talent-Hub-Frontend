@@ -17,26 +17,34 @@
   </p>
 
   <!-- OTP INPUT -->
-  <div class="otp-box d-flex gap-2 mb-4">
+  <!-- OTP INPUTS -->
+<div class="otp-box d-flex gap-2 mb-4 justify-content-center">
+  @for (input of otpInputs; track $index; let i = $index) {
     <input
-      *ngFor="let input of otpInputs; let i = index"
-      id="otp-{{ i }}"
       type="text"
       maxlength="1"
       class="otp-input"
+      [(ngModel)]="otp[i]"
       (input)="onInput($event, i)"
       (keydown)="onKeyDown($event, i)"
-      [(ngModel)]="otp[i]"
     />
-  </div>
+  }
+</div>
 
+  <!-- ERROR -->
+  @if (errorMessage) {
+    <p class="text-danger small">{{ errorMessage }}</p>
+  }
+
+  <!-- VERIFY BUTTON -->
   <button
     class="btn btn-primary w-50 py-2 fw-semibold"
-    [disabled]="otp.join('').length < 6"
+    [disabled]="otp.join('').length < 6 || loading"
     (click)="verify()"
   >
-    Verify
+    {{ loading ? 'Verifying…' : 'Verify' }}
   </button>
+
 
   <p class="small text-muted mt-3">
     Didn’t receive the code?

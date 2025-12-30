@@ -1,0 +1,20 @@
+export enum MetropolitanCities {
+  Mumbai = "Mumbai, Maharashtra",
+  Delhi = "Delhi, National Capital Territory",
+  Bengaluru = "Bengaluru, Karnataka",
+  Kolkata = "Kolkata, West Bengal",
+  Chennai = "Chennai, Tamil Nadu",
+  Hyderabad = "Hyderabad, Telangana",
+  Ahmedabad = "Ahmedabad, Gujarat",
+  Pune = "Pune, Maharashtra",
+  Surat = "Surat, Gujarat",
+  Jaipur = "Jaipur, Rajasthan",
+  Lucknow = "Lucknow, Uttar Pradesh",
+  Kanpur = "Kanpur, Uttar Pradesh",
+  Nagpur = "Nagpur, Maharashtra",
+  Visakhapatnam = "Visakhapatnam, Andhra Pradesh",
+  Bhopal = "Bhopal, Madhya Pradesh",
+  Patna = "Patna, Bihar",
+  Vadodara = "Vadodara, Gujarat",
+  Ghaziabad = "Ghaziabad, Uttar Pradesh"
+}
