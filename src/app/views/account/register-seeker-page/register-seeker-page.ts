@@ -69,7 +69,7 @@ submit(): void {
         })
       );
 
-      this.router.navigate(['sign-up/seeker-profile-form']);
+      this.router.navigate(['sign-up/jobSeeker-profile-form']);
     },
     error: () => {
       this.isLoading = false;
