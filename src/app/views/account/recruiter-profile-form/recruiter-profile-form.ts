@@ -16,6 +16,12 @@ import { socialProfileValidator } from '../../../core/helpers/social-media.helpe
 import { FileUpload } from '../../shared/file-upload/file-upload';
 import { FilePreview } from '../../shared/file-preview/file-preview';
 import { RecruiterProfileService } from '../../../core/services/recruiter-profile-service';
+import { CompanyService } from '../../../core/services/company-service';
+import { DESIGNATION } from '../../../core/enums/designation.enum';
+import { SECTOR } from '../../../core/enums/sector.enum';
+import { SECTOR_DESIGNATION_MAP } from '../../../core/enums/sector-designation.map';
+import { Language, Proficiency } from '../../../core/enums/language.enum';
+import { SOCIAL_ICONS, SocialPlatform } from '../../../core/enums/socialMedia.enum';
 
 function minArrayLength(min: number) {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -33,11 +39,19 @@ function minArrayLength(min: number) {
 export class RecruiterProfileForm implements OnInit {
 
 
+companies: any[] = [];
+selectedCompanyLogo = '';
+socialPlatforms = Object.values(SocialPlatform);
+socialIcons = SOCIAL_ICONS;
 
   userId!: string;
   firstName!: string;
   lastName!: string;
   email!: string;
+sectors = Object.values(SECTOR);      // for sector dropdown
+designations: DESIGNATION[] = [];     // dynamic list
+languagesList = Object.values(Language);
+proficiencyLevels = Object.values(Proficiency);
 
   profileForm!: FormGroup;
 
@@ -51,7 +65,8 @@ export class RecruiterProfileForm implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private recruiterProfileService: RecruiterProfileService
+    private recruiterProfileService: RecruiterProfileService,
+    private companyService: CompanyService
   ) {}
 
   ngOnInit(): void {
@@ -79,7 +94,7 @@ this.profileForm = this.fb.group({
   mobile: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
   gender: ['', Validators.required],
 
-  companyId: ['', Validators.required],
+  companyName: ['', Validators.required],
   companyLocation: [{ value: '', disabled: true }],
   companyDescription: [{ value: '', disabled: true }],
 
@@ -87,14 +102,74 @@ this.profileForm = this.fb.group({
   designation: ['', Validators.required],
   yearsOfExperience: ['', [Validators.required, Validators.min(0)]],
 
-  jobDescription: ['', [Validators.required, Validators.minLength(10)]],
+  bioDescription: ['', [Validators.required, Validators.minLength(10)]],
 
   languages: this.fb.array([], minArrayLength(1)),
   skills: this.fb.array([], minArrayLength(1)),
   socialProfiles: this.fb.array([], minArrayLength(1))
 });
+this.profileForm.get('sector')?.valueChanges.subscribe(() => {
+  this.onSectorChange();
+});
 
-this.addSocialProfile();  }
+this.addSocialProfile();
+this.loadCompanies();
+
+}
+
+loadCompanies(): void {
+  this.companyService.getCompanyList().subscribe({
+    next: (res) => {
+      this.companies = res;
+    },
+    error: () => {}
+  });
+}
+
+getSocialIcon(platform: unknown): string {
+  if (!platform) return '';
+
+  return this.socialIcons[platform as SocialPlatform] || '';
+}
+
+
+onSectorChange(): void {
+  const sector = this.profileForm.get('sector')?.value as SECTOR;
+
+  if (!sector) {
+    this.designations = [];
+    this.profileForm.get('designation')?.reset();
+    return;
+  }
+
+  // 🔥 Load valid designations
+  this.designations = SECTOR_DESIGNATION_MAP[sector] || [];
+
+  // reset designation if sector changes
+  this.profileForm.get('designation')?.reset();
+}
+
+
+onCompanySelect(event: Event): void {
+  const companyName = (event.target as HTMLSelectElement).value;
+
+  const company = this.companies.find(
+    c => c.companyDetails.companyName === companyName
+  );
+
+  if (!company) return;
+
+  // auto-fill (read-only fields)
+  this.profileForm.patchValue({
+    companyLocation: company.companyDetails.companyAddress,
+    companyDescription: company.companyDetails.companyDescription
+  });
+
+  // logo preview (UI only)
+  this.selectedCompanyLogo =
+    company.companyDetails.companyLogo?.url || '';
+}
+
 
 
   /* ================= GETTERS ================= */
@@ -136,19 +211,22 @@ get languagesArray(): FormArray {
   return this.profileForm.get('languages') as FormArray;
 }
 
-addLanguage(languageSelect: HTMLSelectElement, levelSelect: HTMLSelectElement): void {
-  const language = languageSelect.value;
-  const level = levelSelect.value;
+addLanguage(
+  languageSelect: HTMLSelectElement,
+  levelSelect: HTMLSelectElement
+): void {
+  const language = languageSelect.value as Language;
+  const proficiency = levelSelect.value as Proficiency;
 
-  // mark touched only on interaction
   this.languagesArray.markAsTouched();
 
-  if (!language || !level) return;
+  if (!language || !proficiency) return;
 
-  // prevent duplicates
+  // ❌ prevent duplicate languages
   const exists = this.languagesArray.value.some(
     (l: any) => l.language === language
   );
+
   if (exists) {
     languageSelect.value = '';
     levelSelect.value = '';
@@ -158,14 +236,14 @@ addLanguage(languageSelect: HTMLSelectElement, levelSelect: HTMLSelectElement): 
   this.languagesArray.push(
     this.fb.group({
       language: [language, Validators.required],
-      level: [level, Validators.required]
+      level: [proficiency, Validators.required]
     })
   );
 
-  // reset selects
   languageSelect.value = '';
   levelSelect.value = '';
 }
+
 
 
 
@@ -190,7 +268,6 @@ canAddAnotherProfile(): boolean {
 
 
 addSocialProfile(): void {
-  // safety check
   if (!this.canAddAnotherProfile()) {
     this.socialProfiles.at(this.socialProfiles.length - 1).markAsTouched();
     return;
@@ -206,6 +283,10 @@ addSocialProfile(): void {
     )
   );
 }
+
+
+
+
 isProfileInvalid(index: number): boolean {
   const group = this.socialProfiles.at(index);
   return group.invalid && group.touched;

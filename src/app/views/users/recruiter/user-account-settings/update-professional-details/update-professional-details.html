@@ -7,17 +7,23 @@
     >
 
       <!-- ================= COMPANY ================= -->
-      <div class="mb-3">
-        <label class="form-label">
-          Company <span class="text-danger">*</span>
-        </label>
-        <input
-          type="text"
-          formControlName="companyId"
-          class="form-control form-control-sm"
-          placeholder="Company name"
-        />
-      </div>
+        <div class="mb-3">
+          <label class="form-label">Select Company</label>
+<select
+  class="form-select"
+  formControlName="companyName"
+  (change)="onCompanySelect($event)"
+>
+  <option value="" disabled>Select Company</option>
+
+  @for (company of companies; track company.companyDetails.companyName) {
+    <option [value]="company.companyDetails.companyName">
+      {{ company.companyDetails.companyName }}
+    </option>
+  }
+</select>
+
+        </div>
 
             <!-- ================= DESIGNATION ================= -->
       <div class="mb-3">

@@ -26,7 +26,7 @@
       </h3>
 
       <p class="text-muted mt-1"> {{ recruiterProfile.designation }}
-  • {{ recruiterProfile.companyId }}</p>
+  • {{ recruiterProfile.companyName }}</p>
 
       <div class="small text-muted">
           Joined {{ recruiterProfile.createdAt | date:'MMM d, y' }}
@@ -148,7 +148,7 @@
   <div class="col-md-6">
     <label class="text-muted">Company</label>
     <p class="fw-semibold">
-      {{ recruiterProfile.companyId || '—' }}
+      {{ recruiterProfile.companyName || '—' }}
     </p>
   </div>
 
