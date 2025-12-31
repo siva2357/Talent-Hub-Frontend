@@ -7,7 +7,7 @@ export interface RecruiterProfile {
   email: string;
   mobile: string
   gender: 'Male' | 'Female' | 'Other';
-  companyId: string;
+  companyName: string;
   companyLocation: string;
   companyDescription: string;
   sector: string;

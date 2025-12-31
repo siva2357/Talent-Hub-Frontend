@@ -13,6 +13,7 @@ import { SocialPlatform } from '../../../../../core/enums/socialMedia.enum';
 import { Language, Proficiency } from '../../../../../core/enums/language.enum';
 import { SECTOR } from '../../../../../core/enums/sector.enum';
 import { SECTOR_DESIGNATION_MAP } from '../../../../../core/enums/sector-designation.map';
+import { CompanyService } from '../../../../../core/services/company-service';
 
 @Component({
   selector: 'app-update-professional-details',
@@ -24,6 +25,7 @@ import { SECTOR_DESIGNATION_MAP } from '../../../../../core/enums/sector-designa
 export class UpdateProfessionalDetails implements OnInit {
 
   professionalForm!: FormGroup;
+selectedCompany!: any;
 
   isLoading = false;
   isUpdating = false;
@@ -31,7 +33,7 @@ export class UpdateProfessionalDetails implements OnInit {
   successMessage = '';
 
   originalProfile!: any;
-
+companies: any[] = [];
   designations = Object.values(DESIGNATION);
 sectors = Object.values(SECTOR);
 languagesList = Object.values(Language);
@@ -41,18 +43,21 @@ platforms = Object.values(SocialPlatform);
 
   constructor(
     private fb: FormBuilder,
-    private profileService: RecruiterProfileService
+    private profileService: RecruiterProfileService,
+        private companyService: CompanyService
   ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.loadProfessionalDetails();
+    this.loadCompanies();
+
   }
 
   /* ================= FORM ================= */
   initForm(): void {
     this.professionalForm = this.fb.group({
-      companyId: ['', Validators.required],
+      companyName: ['', Validators.required], // ✅ correct
       sector: ['', Validators.required],
       designation: ['', Validators.required],
       yearsOfExperience: ['', [Validators.required, Validators.min(0)]],
@@ -72,7 +77,7 @@ platforms = Object.values(SocialPlatform);
           this.originalProfile = structuredClone(data);
 
           this.professionalForm.patchValue({
-            companyId: data.companyId,
+            companyName: data.companyName,
             designation: data.designation,
              sector: data.sector,
             yearsOfExperience: data.yearsOfExperience
@@ -156,6 +161,34 @@ platforms = Object.values(SocialPlatform);
       this.socialProfiles.removeAt(index);
     }
   }
+
+  loadCompanies(): void {
+  this.companyService.getCompanyList().subscribe({
+    next: (res) => {
+      this.companies = res;
+    },
+    error: () => {}
+  });
+}
+
+onCompanySelect(event: Event): void {
+  const companyName = (event.target as HTMLSelectElement).value;
+
+  const company = this.companies.find(
+    c => c.companyDetails.companyName === companyName
+  );
+
+  if (!company) return;
+
+  this.selectedCompany = company;
+
+  // auto-fill (UI only)
+  this.professionalForm.patchValue({
+    companyLocation: company.companyDetails.companyAddress,
+    companyDescription: company.companyDetails.companyDescription
+  });
+}
+
 
   /* ================= UPDATE ================= */
   updateProfessionalDetails(): void {

@@ -21,7 +21,7 @@ export const ADMIN_ROUTES: Routes = [
     children: [
       { path: 'dashboard', component: Dashboard },
       { path: 'companies', component: Companies },
-      { path: 'company-details', component: CompanyDetails },
+      { path: 'companies/:id/company-details', component: CompanyDetails },
       { path: 'recruiters-list', component: Recruiters },
       { path: 'recruiters-list/:id/profile', component: RecruiterProfilePage },
       { path: 'seekers-list', component: Seekers },
