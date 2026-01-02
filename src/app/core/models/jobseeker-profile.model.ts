@@ -60,3 +60,9 @@ export interface SocialProfile {
     | 'Behance';
   link: string;
 }
+
+
+export interface JobSeekerProfileResponse {
+  profile: JobSeekerProfile;
+  portfolios: any[]; // later replace with Portfolio[]
+}

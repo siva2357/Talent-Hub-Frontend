@@ -84,7 +84,7 @@ loadNotifications(): void {
 getJobSeekerDetails() {
   this.profileService.getJobSeekerProfile().subscribe(
     (res: any) => {
-      this.userProfile = res.data; // ✅ FIX
+      this.userProfile = res.data.profile; // ✅ FIX
       this.fullName = `${this.userProfile.firstName} ${this.userProfile.lastName}`;
       this.profileImage = this.userProfile.profilePhoto; // ✅ now works
       this.loading = false;

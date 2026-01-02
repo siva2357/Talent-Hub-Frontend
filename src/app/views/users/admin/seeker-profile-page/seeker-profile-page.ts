@@ -4,6 +4,7 @@ import { SOCIAL_ICONS, SocialPlatform } from '../../../../core/enums/socialMedia
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from '../../../../core/services/admin-service';
 import { CommonModule } from '@angular/common';
+import { Projects } from '../../../../core/models/portfolio.model';
 @Component({
   selector: 'app-seeker-profile-page',
   imports: [CommonModule],
@@ -16,7 +17,7 @@ export class SeekerProfilePage {
   jobSeekerId: string = '';
 
   public jobSeekerProfile!: JobSeekerProfile;
-
+portfolios: Projects[] = []; // ✅ ADD THIS
   socialIcons = SOCIAL_ICONS;
 
   constructor(
@@ -37,10 +38,13 @@ export class SeekerProfilePage {
 
   loadRecruiterProfile(id: string): void {
     this.adminService.getJobSeekerProfileById(id).subscribe({
-      next: (response: any) => {
-        if (response.success && response.profile) {
-          this.jobSeekerProfile = response.profile;
-          console.log('✅ Recruiter profile loaded:', this.jobSeekerProfile);
+      next: (response:any) => {
+        if (response.success && response.data) {
+          this.jobSeekerProfile = response.data.profile;
+          this.portfolios = response.data.portfolios || []; // ✅ FIXED
+
+          console.log('Profile:', this.jobSeekerProfile);
+          console.log('Portfolios:', this.portfolios);
         }
       },
       error: (err) => {
