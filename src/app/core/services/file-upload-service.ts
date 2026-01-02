@@ -24,14 +24,15 @@ export class FileUploadService {
     file: File,
     bucketKey: string,
     section: string,
-    userId?: string
+    userId?: string,
+      replace = false
   ) {
 
     const formData = new FormData();
     formData.append('file', file);
     formData.append('bucketKey', bucketKey);
     formData.append('section', section);
-
+  formData.append('replace', String(replace)); // ✅ important
     let url = this.API + '/upload';
 
     // 🔓 PRE-LOGIN (NO TOKEN)

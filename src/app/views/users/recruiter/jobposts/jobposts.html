@@ -57,144 +57,449 @@
 
 
   <!-- Add button -->
-  <div class="row my-3">
-    <div class="col text-end">
-      <button class="btn btn-outline-primary rounded-0" style="font-size: 14px;">
-        + Add Jobpost
-      </button>
-    </div>
+<!-- Add button -->
+<div class="row my-3">
+  <div class="col text-end">
+    <button
+      class="btn btn-outline-primary rounded-0"
+      style="font-size: 14px;"
+      data-bs-toggle="modal"
+      data-bs-target="#addJobPostModal"
+    >
+      + Add Jobpost
+    </button>
   </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
 
     <!-- Filters -->
-  <div class="row g-3 align-items-end">
-    <div class="col-md-4">
-      <input type="text" class="form-control" placeholder="Search Job Title" style="font-size:14px;">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search Job Title"
+          [(ngModel)]="filters.search"
+          (input)="applyFilters()"
+        />
+      </div>
+
+      <div class="col-md-3">
+        <select
+          class="form-select"
+          [(ngModel)]="filters.jobType"
+          (change)="applyFilters()"
+        >
+          <option value="">Job Type</option>
+          @for (type of jobPostType; track type) {
+            <option [value]="type">{{ type }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <select
+          class="form-select"
+          [(ngModel)]="filters.jobCategory"
+          (change)="applyFilters()"
+        >
+          <option value="">Job Category</option>
+          @for (cat of jobPostCategories; track cat) {
+            <option [value]="cat">{{ cat }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <select
+          class="form-select"
+          [(ngModel)]="filters.status"
+          (change)="applyFilters()"
+        >
+          <option value="">Job Status</option>
+          <option value="Pending">Pending</option>
+          <option value="Open">Open</option>
+          <option value="Closed">Closed</option>
+        </select>
+      </div>
     </div>
 
-    <div class="col-md-3">
-      <select class="form-select" style="font-size:14px;">
-        <option selected>Job Type</option>
-        <option>Full-Time</option>
-        <option>Part-Time</option>
-        <option>Contract</option>
-        <option>Internship</option>
-      </select>
-    </div>
+    <!-- Active Filter Badges -->
+    @if (
+      filters.search ||
+      filters.jobType ||
+      filters.jobCategory ||
+      filters.status
+    ) {
+      <div class="d-flex flex-wrap gap-2 mt-3">
+        <span
+          *ngIf="filters.search"
+          class="badge bg-light text-dark border"
+          (click)="removeFilter('search')"
+          style="cursor:pointer"
+        >
+          Title: {{ filters.search }} ✕
+        </span>
 
-    <div class="col-md-3">
-      <select class="form-select" style="font-size:14px;">
-        <option selected>Job Category</option>
-        <option>Design</option>
-        <option>Development</option>
-        <option>Marketing</option>
-        <option>Finance</option>
-      </select>
-    </div>
+        <span
+          *ngIf="filters.jobType"
+          class="badge bg-light text-dark border"
+          (click)="removeFilter('jobType')"
+          style="cursor:pointer"
+        >
+          Type: {{ filters.jobType }} ✕
+        </span>
 
-    <div class="col-md-2">
-      <select class="form-select" style="font-size:14px;">
-        <option selected>Job Status</option>
-        <option>Open</option>
-        <option>Closed</option>
-        <option>Paused</option>
-      </select>
-    </div>
-  </div>
+        <span
+          *ngIf="filters.jobCategory"
+          class="badge bg-light text-dark border"
+          (click)="removeFilter('jobCategory')"
+          style="cursor:pointer"
+        >
+          Category: {{ filters.jobCategory }} ✕
+        </span>
 
-  <!-- Active filters row -->
-<div class="row align-items-center my-3">
-
-  <!-- FILTERS (show on top for small screens) -->
-  <div class="col-12 col-md d-flex flex-wrap gap-2 align-items-center mb-2 mb-md-0">
-    <span class="badge p-2 d-flex align-items-center justify-content-center"
-          style="font-size:13px; border:1px solid #6c757d; color:#6c757d; cursor:pointer;">
-      Job Type: Full-Time &nbsp; ×
-    </span>
-
-    <span class="badge p-2 d-flex align-items-center justify-content-center"
-          style="font-size:13px; border:1px solid #6c757d; color:#6c757d; cursor:pointer;">
-      Status: Open &nbsp; ×
-    </span>
-  </div>
-
-  <!-- COUNT (moves below filters on small screens) -->
-  <div class="col-12 col-md-auto text-md-end">
-    <p class="mb-0 text-muted" style="font-size:14px;">Showing 0 of 100</p>
-  </div>
-
-</div>
-
-  <!-- Job Cards Grid -->
-  <div class="row g-4 mb-5 mt-5">
-
-    @for (i of [1,2,3,4,5,6,7,8]; track i) {
-    <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-        <div class="job-card border rounded-3 p-3 d-flex gap-3">
-
-          <img
-            src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png"
-            class="company-logo"
-          >
-
-          <div class="flex-grow-1">
-
-
-            <h6 class="fw-semibold mb-2">Angular Developer</h6>
-            <div class="d-flex justify-content-between align-items-center mb-2 flex-nowrap overflow-hidden">
-  <span class="text-muted small text-truncate me-2" style="font-size: 12px;">
-    Hyderabad • Full-time • Remote
-  </span>
-
-  <span class="text-muted small flex-shrink-0" style="font-size: 12px;">
-    <i class="bi bi-clock"></i> 14h ago
-  </span>
-</div>
-
-
-            <p class="small text-muted mb-3">
-              Angular Developer skilled in building responsive, modern web applications.
-              Focused on performance and clean UI design.
-            </p>
-
-            <div class="d-flex gap-2">
-              <button class="btn btn-sm btn-outline-primary">View</button>
-              <button class="btn btn-sm btn-outline-danger">Close</button>
-              <button class="btn btn-sm btn-outline-warning">Reopen</button>
-              <button class="btn btn-sm btn-outline-danger">Delete</button>
-            </div>
-
-          </div>
-
-        </div>
+        <span
+          *ngIf="filters.status"
+          class="badge bg-light text-dark border"
+          (click)="removeFilter('status')"
+          style="cursor:pointer"
+        >
+          Status: {{ filters.status }} ✕
+        </span>
       </div>
     }
 
   </div>
+</div>
 
 
+@if (filteredJobPosts.length > 0) {
+<div class="row g-3 mt-3 mb-4">
 
 
-<div class="position-relative text-center my-4"
-     style=" border-radius: 6px; overflow:hidden;">
+@for (job of filteredJobPosts; track job._id){
 
-  <!-- Background Image -->
-  <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1716276008/No_data-amico_zhoryt.svg"
-       alt="empty-state"
-       style=" object-fit:cover; opacity: 0.3; height: 600px; width: auto;">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+      <div class="job-card border rounded-3 p-3 d-flex gap-3">
 
-  <!-- Overlay Content -->
-  <div class="position-absolute top-50 start-50 translate-middle px-3" style="width:100%; ">
+        <!-- Company Logo (static as requested) -->
+        <img
+          src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png"
+          class="company-logo"
+        >
 
-    <p class="mb-3" style="font-size:24px; font-weight:600;">
-      Create your first job post to start hiring talent.
-    </p>
+        <div class="flex-grow-1">
 
-    <button class="btn btn-outline-primary rounded-0 px-4 mt-3">
-      + Add Jobpost
+          <!-- Job Title -->
+          <h6 class="fw-semibold mb-2">
+            {{ job.jobTitle }}
+          </h6>
+
+          <!-- Location • Type • Posted Time -->
+          <div class="d-flex justify-content-between align-items-center mb-2 flex-nowrap overflow-hidden">
+            <span class="text-muted small text-truncate me-2" style="font-size: 12px;">
+              {{ job.location }} • {{ job.jobType }}
+            </span>
+
+  <span class="text-muted small flex-shrink-0" style="font-size: 12px;">
+  <i class="bi bi-clock"></i>
+  {{ job.postedOn | timeAgo }}
+</span>
+
+          </div>
+
+          <!-- Job Description -->
+          <p class="small text-muted mb-3">
+            {{ job.jobDescription }}
+          </p>
+
+          <!-- Buttons (UNCHANGED) -->
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-outline-primary" (click)="openEditModal(job)">Edit</button>
+            <button class="btn btn-sm btn-outline-info"  (click)="viewJob(job._id!)">View</button>
+              <!-- Close (only if not closed) -->
+  @if (job.status == 'Open') {
+    <button
+      class="btn btn-sm btn-outline-danger"
+      (click)="closeJob(job._id!)">
+      Close
     </button>
+  }
 
+
+    <!-- Reopen (only if closed) -->
+  @if (job.status === 'Closed') {
+    <button
+      class="btn btn-sm btn-outline-warning"
+      (click)="reopenJob(job._id!)">
+      Reopen
+    </button>
+  }
+
+
+    @if (job.status === 'Closed') {
+            <button class="btn btn-sm btn-outline-danger"  (click)="deleteJob(job._id!)">Delete</button>
+
+  }
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  }
+
+</div>
+}
+
+
+@if (allJobPosts.length > 0 && filteredJobPosts.length === 0) {
+  <div class="text-center py-5 text-muted">
+    <p style="font-size:18px; font-weight:500;">
+      No jobs match your filters
+    </p>
+    <p style="font-size:14px;">
+      Try clearing or changing the filters above.
+    </p>
   </div>
+}
+
+
+
+
+@if (allJobPosts.length === 0) {
+  <div class="position-relative text-center my-4"
+       style="border-radius: 6px; overflow:hidden;">
+
+    <img
+      src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1716276008/No_data-amico_zhoryt.svg"
+      alt="empty-state"
+      style="object-fit:cover; opacity:0.25; height:480px;"
+    >
+
+    <div class="position-absolute top-50 start-50 translate-middle px-3">
+
+      <p class="mb-3" style="font-size:22px; font-weight:600;">
+        Create your first job post to start hiring talent
+      </p>
+
+      <button class="btn btn-primary px-4">
+        + Add Jobpost
+      </button>
+
+    </div>
+  </div>
+}
+
 
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ================= ADD JOB POST MODAL ================= -->
+<div
+  class="modal fade"
+  id="addJobPostModal"
+  tabindex="-1"
+  aria-labelledby="addJobPostModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-0">
+
+      <!-- HEADER -->
+      <div class="modal-header py-2">
+        <h6 class="modal-title fw-semibold">
+          {{ isEditMode ? 'Edit Job Post' : 'Add Job Post' }}
+        </h6>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body px-4">
+
+        <form [formGroup]="jobPostForm" class="small">
+
+          <!-- Row 1 -->
+          <div class="row g-3 mb-2">
+            <div class="col-md-6">
+              <label class="form-label fw-medium">Job ID *</label>
+              <input class="form-control form-control-sm" formControlName="jobId" placeholder="Enter Job Id" />
+              @if (jobPostForm.get('jobId')?.touched && jobPostForm.get('jobId')?.invalid) {
+              <small class="text-danger">Job ID is required</small>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-medium">Job Title *</label>
+              <input class="form-control form-control-sm" formControlName="jobTitle" placeholder="Enter Job Title" />
+              @if (jobPostForm.get('jobTitle')?.touched && jobPostForm.get('jobTitle')?.invalid) {
+              <small class="text-danger">Job Title is required</small>
+              }
+            </div>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="row g-3 mb-2">
+            <div class="col-md-6">
+              <label class="form-label fw-medium">Job Type *</label>
+              <select class="form-select form-select-sm" formControlName="jobType">
+                <option value="">Select job type</option>
+
+                @for (type of jobPostType; track type) {
+                <option [value]="type">{{ type }}</option>
+                }
+              </select>
+
+              @if (jobPostForm.get('jobType')?.touched && jobPostForm.get('jobType')?.invalid) {
+              <small class="text-danger">Job Type is required</small>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-medium">Category *</label>
+              <select class="form-select form-select-sm" formControlName="jobCategory">
+                <option value="">Select job category</option>
+
+                @for (category of jobPostCategories; track category) {
+                <option [value]="category">{{ category }}</option>
+                }
+              </select>
+
+              @if (jobPostForm.get('jobCategory')?.touched && jobPostForm.get('jobCategory')?.invalid) {
+              <small class="text-danger">Category is required</small>
+              }
+            </div>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="row g-3 mb-2">
+            <div class="col-md-6">
+              <label class="form-label fw-medium">Experience *</label>
+              <select class="form-select form-select-sm" formControlName="experience">
+                <option value="">Select experience</option>
+
+                @for (exp of experience; track exp) {
+                <option [value]="exp">{{ exp }}</option>
+                }
+              </select>
+
+              @if (jobPostForm.get('experience')?.touched && jobPostForm.get('experience')?.invalid) {
+              <small class="text-danger">Experience is required</small>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-medium">Qualification *</label>
+              <select class="form-select form-select-sm" formControlName="qualification">
+                <option value="">Select qualification</option>
+
+                @for (q of qualifications; track q) {
+                <option [value]="q">{{ q }}</option>
+                }
+              </select>
+
+              @if (jobPostForm.get('qualification')?.touched && jobPostForm.get('qualification')?.invalid) {
+              <small class="text-danger">Qualification is required</small>
+              }
+            </div>
+          </div>
+
+          <!-- Row 4 -->
+          <div class="row g-3 mb-2">
+            <div class="col-md-4">
+              <label class="form-label fw-medium">Salary *</label>
+              <input class="form-control form-control-sm" formControlName="salary" placeholder="Enter salary" />
+              @if (jobPostForm.get('salary')?.touched && jobPostForm.get('salary')?.invalid) {
+              <small class="text-danger">Salary is required</small>
+              }
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label fw-medium">Vacancy *</label>
+              <input class="form-control form-control-sm" formControlName="vacancy" placeholder="Enter vacancy" />
+              @if (jobPostForm.get('vacancy')?.touched && jobPostForm.get('vacancy')?.invalid) {
+              <small class="text-danger">Vacancy is required</small>
+              }
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label fw-medium">Location *</label>
+              <select class="form-select form-select-sm" formControlName="location">
+                <option value="">Select location</option>
+
+                @for (l of locations; track l) {
+                <option [value]="l">{{ l }}</option>
+                }
+              </select>
+
+              @if (jobPostForm.get('location')?.touched && jobPostForm.get('location')?.invalid) {
+              <small class="text-danger">Location is required</small>
+              }
+            </div>
+          </div>
+
+          <!-- Apply By -->
+          <div class="mb-2">
+            <label class="form-label fw-medium">Apply By *</label>
+            <input type="date" class="form-control form-control-sm" formControlName="applyByDate" />
+            @if (jobPostForm.get('applyByDate')?.touched && jobPostForm.get('applyByDate')?.invalid) {
+            <small class="text-danger">Apply By date is required</small>
+            }
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <label class="form-label fw-medium">Job Description *</label>
+            <textarea rows="4" class="form-control form-control-sm" formControlName="jobDescription"></textarea>
+            @if (jobPostForm.get('jobDescription')?.touched && jobPostForm.get('jobDescription')?.invalid) {
+            <small class="text-danger">Job description is required</small>
+            }
+          </div>
+
+        </form>
+
+        @if (isLoading) {
+        <div class="text-center my-3">
+          <div class="spinner-border spinner-border-sm text-primary"></div>
+          <p class="mt-2 mb-0">Creating job…</p>
+        </div>
+        }
+
+      </div>
+
+      <!-- FOOTER -->
+      <div class="modal-footer py-2">
+        <button class="btn btn-outline-secondary btn-sm rounded-0" data-bs-dismiss="modal">
+          Cancel
+        </button>
+
+        <button class="btn btn-primary btn-sm rounded-0" [disabled]="jobPostForm.invalid || isSubmitting" data-bs-dismiss="modal"
+          (click)="submitJobPost()">
+          {{ isEditMode ? 'Update Job' : 'Create Job' }}
+        </button>
+
+      </div>
+
+    </div>
+  </div>
 </div>
+
