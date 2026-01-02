@@ -183,15 +183,26 @@ openEdit(project: Projects): void {
   });
 }
 
-  // ---------------- DELETE ----------------
-  deleteProject(projectId: string): void {
-    if (!confirm('Are you sure you want to delete this project?')) return;
+// ---------------- DELETE ----------------
+deleteProject(projectId: string): void {
+  const confirmed = confirm(
+    'Are you sure you want to delete this project?\nThis action cannot be undone.'
+  );
 
-    this.portfolioService.deleteProjectById(projectId).subscribe({
-      next: () => this.loadProjects(),
-      error: err => (this.errorMessage = err)
-    });
-  }
+  if (!confirmed) return;
+
+  this.portfolioService.deleteProjectById(projectId).subscribe({
+    next: () => {
+      // ✅ remove from UI immediately (no flicker)
+      this.allProjects = this.allProjects.filter(p => p._id !== projectId);
+      this.filteredProjects = this.filteredProjects.filter(p => p._id !== projectId);
+    },
+    error: err => {
+      this.errorMessage = err;
+    }
+  });
+}
+
 
   // ---------------- VIEW ----------------
   viewProject(projectId: string): void {
@@ -201,6 +212,9 @@ openEdit(project: Projects): void {
       'project-details'
     ]);
   }
+
+
+
 
 resetForm(): void {
   this.projectForm.reset({

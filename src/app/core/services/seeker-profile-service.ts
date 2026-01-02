@@ -4,7 +4,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
-import { JobSeekerProfile } from '../models/jobseeker-profile.model';
+import { JobSeekerProfile, JobSeekerProfileResponse } from '../models/jobseeker-profile.model';
 
 @Injectable({
   providedIn: 'root',
@@ -32,9 +32,9 @@ export class SeekerProfileService  {
     return this.http.post(`${this.baseUrl}/jobSeeker/createProfile`, payload);
   }
 
-getJobSeekerProfile(): Observable<ApiResponse<JobSeekerProfile>> {
+getJobSeekerProfile(): Observable<ApiResponse<JobSeekerProfileResponse>> {
   return this.http
-    .get<ApiResponse<JobSeekerProfile>>(
+    .get<ApiResponse<JobSeekerProfileResponse>>(
       `${this.baseUrl}/jobSeeker/getProfile`,
       { headers: this.getHeaders() }
     )

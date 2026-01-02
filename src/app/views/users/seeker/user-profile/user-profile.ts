@@ -4,6 +4,7 @@ import { JobSeekerProfile } from '../../../../core/models/jobseeker-profile.mode
 import { SOCIAL_ICONS, SocialPlatform } from '../../../../core/enums/socialMedia.enum';
 import { SeekerProfileService } from '../../../../core/services/seeker-profile-service';
 import { CommonModule } from '@angular/common';
+import { Projects } from '../../../../core/models/portfolio.model';
 @Component({
   selector: 'app-user-profile',
   imports: [RouterModule,CommonModule],
@@ -12,7 +13,8 @@ import { CommonModule } from '@angular/common';
     standalone: true,
 })
 export class UserProfile {
- public  jobSeekerProfile!: JobSeekerProfile;
+public jobSeekerProfile: JobSeekerProfile | null = null;
+portfolios: Projects[] = []; // ✅ ADD THIS
 
   socialIcons = SOCIAL_ICONS;
 
@@ -29,19 +31,23 @@ export class UserProfile {
 
 
 
-loadJobSeekerProfile(): void {
-  this.jobSeekerProfileService.getJobSeekerProfile().subscribe({
-    next: (response) => {
-      if (response.success && response.data) {
-        this.jobSeekerProfile = response.data;
-        console.log('JobSeeker profile loaded:', this.jobSeekerProfile);
+  loadJobSeekerProfile(): void {
+    this.jobSeekerProfileService.getJobSeekerProfile().subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.jobSeekerProfile = response.data.profile;
+          this.portfolios = response.data.portfolios || []; // ✅ FIXED
+
+          console.log('Profile:', this.jobSeekerProfile);
+          console.log('Portfolios:', this.portfolios);
+        }
+      },
+      error: (err) => {
+        console.error('❌ Failed to load job seeker profile', err);
       }
-    },
-    error: (err) => {
-      console.error('❌ Failed to load recruiter profile', err);
-    }
-  });
-}
+    });
+  }
+
 
 
 goBack(){
