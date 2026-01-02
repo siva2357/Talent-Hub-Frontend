@@ -1,4 +1,4 @@
-export enum MetropolitanCities {
+export enum LOCATIONS {
   Mumbai = "Mumbai, Maharashtra",
   Delhi = "Delhi, National Capital Territory",
   Bengaluru = "Bengaluru, Karnataka",
