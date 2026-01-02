@@ -6,8 +6,6 @@ import { UserProfile } from './user-profile/user-profile';
 import { Seeker } from './seeker';
 import { Portfolio } from './portfolio/portfolio';
 import { UserAccountSettings } from './user-account-settings/user-account-settings';
-import { ProjectForm } from './project-form/project-form';
-import { EditProjectForm } from './edit-project-form/edit-project-form';
 import { JobDetailsPage } from './job-details-page/job-details-page';
 import { ProjectDetailsPage } from './project-details-page/project-details-page';
 import { CompanyDetailsPage } from './company-details-page/company-details-page';
@@ -40,8 +38,7 @@ export const SEEKER_ROUTES: Routes = [
       { path: 'scheduled-meetings', component: ScheduledMeetings },
 
       { path: 'my-portfolio', component: Portfolio },
-      { path: 'post-project', component: ProjectForm },
-      { path: 'project/:id/edit-project', component: EditProjectForm },
+
       { path: 'project/:id/project-details', component:ProjectDetailsPage },
       { path: 'analytics-performance', component:  AnalyticsPerformancePage  },
       { path: 'resume-builder', component:  ResumeBuilder  },

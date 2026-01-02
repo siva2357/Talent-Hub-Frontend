@@ -30,7 +30,7 @@ export class AiMockInterviewPage {
 
     // You can store this in service / state if needed
     this.router.navigate(
-      ['/seeker/ai-mock/live-session'],
+      ['/jobSeeker/ai-mock/live-session'],
       { state: sessionConfig }
     );
   }

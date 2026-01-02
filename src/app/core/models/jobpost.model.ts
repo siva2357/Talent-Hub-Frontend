@@ -32,3 +32,42 @@ export interface JobPost {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+
+export interface AppliedJobsResponse {
+  totalAppliedJobs: number;
+  appliedJobs: JobPost[];
+}
+
+export interface SavedJobs {
+  totalJobPosts: number;
+  savedJobPosts: SavedJobPost[];
+}
+
+
+export interface SavedJobPost {
+   jobPostId: string;
+  saved: boolean;
+  savedAt: string;
+  savedJobId: string;
+  jobId: string;
+  jobTitle: string;
+  jobType: string;
+  jobCategory: string;
+  location: string;
+  salary: string;
+  vacancy: string;
+  experience: string;
+  qualification: string;
+  applyByDate: string;
+  postedOn: string;
+  companyDetails: {
+    companyLogo: {
+      fileName: string;
+      url: string;
+    };
+    companyId: string;
+    companyName: string;
+    companyAddress: string;
+  };
+}
