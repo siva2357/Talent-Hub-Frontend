@@ -141,7 +141,7 @@ export class JobpostService {
 
 getAllJobPosts(): Observable<any> {
   return this.http.get<any>(
-    `${this.baseUrl}/jobSeeker/jobposts`,
+    `${this.baseUrl}/jobSeeker/jobs`,
     { headers: this.getHeaders() }
   ).pipe(catchError(this.handleError));
 }
@@ -151,7 +151,7 @@ getAllJobPosts(): Observable<any> {
 
   getJobPostById(jobPostId: string): Observable<any> {
   return this.http.get<any>(
-    `${this.baseUrl}/jobSeeker/jobpost/${jobPostId}/details`,
+    `${this.baseUrl}/jobSeeker/job/${jobPostId}/details`,
     { headers: this.getHeaders() }
   ).pipe(catchError(this.handleError));
 }
@@ -160,7 +160,7 @@ getAllJobPosts(): Observable<any> {
 
 applyJobPost(jobPostId: string): Observable<any> {
   return this.http.post(
-    `${this.baseUrl}/jobSeeker/jobpost/apply`,
+    `${this.baseUrl}/jobSeeker/job/apply`,
     { jobPostId },
     { headers: this.getHeaders() }
   ).pipe(catchError(this.handleError));
@@ -169,7 +169,7 @@ applyJobPost(jobPostId: string): Observable<any> {
 
 withdrawJobPost(jobPostId: string): Observable<any> {
   return this.http.delete(
-    `${this.baseUrl}/jobSeeker/jobpost/withdraw`,
+    `${this.baseUrl}/jobSeeker/job/withdraw`,
     {
       headers: this.getHeaders(),
       body: { jobPostId }
@@ -180,7 +180,7 @@ withdrawJobPost(jobPostId: string): Observable<any> {
 
 getAppliedJobPosts(): Observable<AppliedJobsResponse> {
   return this.http.get<AppliedJobsResponse>(
-    `${this.baseUrl}/jobSeeker/jobposts/applied`,
+    `${this.baseUrl}/jobSeeker/jobs/applied`,
     { headers: this.getHeaders() }
   ).pipe(catchError(this.handleError));
 }
@@ -188,7 +188,7 @@ getAppliedJobPosts(): Observable<AppliedJobsResponse> {
 
 isJobPostApplied(jobPostId: string): Observable<{ isApplied: boolean }> {
   return this.http.get<{ isApplied: boolean }>(
-    `${this.baseUrl}/jobSeeker/jobpost/is-applied/${jobPostId}`,
+    `${this.baseUrl}/jobSeeker/job/is-applied/${jobPostId}`,
     { headers: this.getHeaders() }
   ).pipe(catchError(this.handleError));
 }
@@ -198,7 +198,7 @@ isJobPostApplied(jobPostId: string): Observable<{ isApplied: boolean }> {
 
 saveJobPost(jobPostId: string): Observable<any> {
   return this.http.post(
-    `${this.baseUrl}/jobSeeker/save-jobpost`,
+    `${this.baseUrl}/jobSeeker/job/save`,
     { jobPostId },
     { headers: this.getHeaders() }
   ).pipe(catchError(this.handleError));
@@ -208,7 +208,7 @@ saveJobPost(jobPostId: string): Observable<any> {
 unsaveJobPost(jobPostId: string): Observable<any> {
   return this.http.request(
     'DELETE',
-    `${this.baseUrl}/jobSeeker/unsave-jobpost`,
+    `${this.baseUrl}/jobSeeker/job/unsave`,
     {
       headers: this.getHeaders(),
       body: { jobPostId }
@@ -219,7 +219,7 @@ unsaveJobPost(jobPostId: string): Observable<any> {
 
 getSavedJobPosts(): Observable<SavedJobs> {
   return this.http.get<SavedJobs>(
-    `${this.baseUrl}/jobSeeker/saved-jobposts`,
+    `${this.baseUrl}/jobSeeker/jobs/saved`,
     { headers: this.getHeaders() }
   ).pipe(catchError(this.handleError));
 }

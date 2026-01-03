@@ -1,3 +1,5 @@
+import { CompanyDetails } from "./company.modal";
+
 export interface Applicant {
   jobSeekerId: string;
   appliedAt: Date;
@@ -8,7 +10,7 @@ export interface Applicant {
 }
 
 export interface JobPost {
-  _id?: string;
+  _id: string;
   recruiterId?: string;
   companyId: string;
   jobId: string;
@@ -31,6 +33,10 @@ export interface JobPost {
   savedBy?: string[];
   createdAt?: Date;
   updatedAt?: Date;
+  saved?: boolean;
+  isApplied?: boolean;
+  companyDetails: CompanyDetails;
+  applicationStatus:string
 }
 
 

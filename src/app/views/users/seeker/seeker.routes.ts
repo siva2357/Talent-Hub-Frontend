@@ -23,6 +23,7 @@ import { ResumeAnalyzer } from './resume-analyzer/resume-analyzer';
 import { ResumeAnalyzerReport } from './resume-analyzer-report/resume-analyzer-report';
 import { ResumeBuilder } from './resume-builder/resume-builder';
 import { ResumeMaking } from './resume-making/resume-making';
+import { AppliedJobpostsPage } from './applied-jobposts-page/applied-jobposts-page';
 
 export const SEEKER_ROUTES: Routes = [
   {
@@ -30,8 +31,9 @@ export const SEEKER_ROUTES: Routes = [
     component: Seeker,
     children: [
       { path: 'jobposts', component: Jobposts },
-      { path: 'jobposts/:id/job-details', component: JobDetailsPage },
+      { path: 'jobposts/:jobPostId/job-details', component: JobDetailsPage },
       { path: 'company/:id/company-details', component: CompanyDetailsPage },
+      { path: 'applied-jobposts', component: AppliedJobpostsPage },
 
       { path: 'assessments', component: AssessmentsRoomPage },
       { path: 'assessments/live-test', component: LiveAssessmentPage },

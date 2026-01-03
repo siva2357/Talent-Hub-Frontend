@@ -4,6 +4,7 @@ export interface CompanyLogo {
 }
 
 export interface CompanyDetails {
+  _id:string;
   companyId: string;
   companyLogo: CompanyLogo;
   companyName: string;

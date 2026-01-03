@@ -1,1 +1,86 @@
-<p>job-details-page works!</p>
+<!-- Loading -->
+<div *ngIf="loading" class="text-center my-5">
+  <div class="spinner-border text-secondary"></div>
+</div>
+
+<!-- Error -->
+<div *ngIf="errorMessage" class="alert alert-danger">
+  {{ errorMessage }}
+</div>
+
+<!-- Job Details -->
+<div *ngIf="!loading && job" class="container my-4">
+
+  <button class="btn btn-link mb-3 p-0" (click)="goBack()">
+    ← Back to Jobs
+  </button>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+
+      <!-- Company -->
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <img
+          [src]="job.companyDetails.companyLogo.url"
+          alt="logo"
+          style="height:40px"
+        />
+        <div>
+          <h6 class="mb-0">{{ job.companyDetails.companyName }}</h6>
+             <!-- ✅ View Company Info -->
+<a
+  class="text-primary small"
+  (click)="goToCompanyDetailsPage()"
+>
+  View company information →
+</a>
+
+          <small class="text-muted">{{ job.location }}</small>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <h4 class="fw-semibold mb-2">{{ job.jobTitle }}</h4>
+
+      <!-- Meta -->
+      <p class="text-muted mb-3">
+        {{ job.jobType }} • {{ job.jobCategory }}
+      </p>
+
+      <!-- Description -->
+      <p>{{ job.jobDescription }}</p>
+
+      <hr />
+
+      <!-- Details -->
+      <div class="row mb-3">
+        <div class="col-md-6"><strong>Experience:</strong> {{ job.experience }}</div>
+        <div class="col-md-6"><strong>Qualification:</strong> {{ job.qualification }}</div>
+        <div class="col-md-6"><strong>Salary:</strong> {{ job.salary }}</div>
+        <div class="col-md-6"><strong>Apply By:</strong> {{ job.applyByDate | date }}</div>
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex gap-2 mt-4">
+
+        <button
+          *ngIf="!job.isApplied"
+          class="btn btn-primary"
+          (click)="applyJob()"
+        >
+          Apply Now
+        </button>
+
+        <button
+          *ngIf="job.isApplied"
+          class="btn btn-outline-danger"
+          (click)="withdrawJob()"
+        >
+          Withdraw Application
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
