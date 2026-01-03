@@ -6,7 +6,7 @@ import {
   HttpHeaders
 } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
-import { JobPost } from '../models/jobpost.model';
+import { AppliedJobsResponse, JobPost, SavedJobs } from '../models/jobpost.model';
 
 @Injectable({
   providedIn: 'root',
@@ -133,6 +133,104 @@ export class JobpostService {
       )
       .pipe(catchError(this.handleError));
   }
+
+
+
+
+
+
+getAllJobPosts(): Observable<any> {
+  return this.http.get<any>(
+    `${this.baseUrl}/jobSeeker/jobs`,
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
+
+
+
+
+  getJobPostById(jobPostId: string): Observable<any> {
+  return this.http.get<any>(
+    `${this.baseUrl}/jobSeeker/job/${jobPostId}/details`,
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
+
+
+
+applyJobPost(jobPostId: string): Observable<any> {
+  return this.http.post(
+    `${this.baseUrl}/jobSeeker/job/apply`,
+    { jobPostId },
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
+
+
+withdrawJobPost(jobPostId: string): Observable<any> {
+  return this.http.delete(
+    `${this.baseUrl}/jobSeeker/job/withdraw`,
+    {
+      headers: this.getHeaders(),
+      body: { jobPostId }
+    }
+  ).pipe(catchError(this.handleError));
+}
+
+
+getAppliedJobPosts(): Observable<AppliedJobsResponse> {
+  return this.http.get<AppliedJobsResponse>(
+    `${this.baseUrl}/jobSeeker/jobs/applied`,
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
+
+
+isJobPostApplied(jobPostId: string): Observable<{ isApplied: boolean }> {
+  return this.http.get<{ isApplied: boolean }>(
+    `${this.baseUrl}/jobSeeker/job/is-applied/${jobPostId}`,
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
+
+
+
+
+saveJobPost(jobPostId: string): Observable<any> {
+  return this.http.post(
+    `${this.baseUrl}/jobSeeker/job/save`,
+    { jobPostId },
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
+
+
+unsaveJobPost(jobPostId: string): Observable<any> {
+  return this.http.request(
+    'DELETE',
+    `${this.baseUrl}/jobSeeker/job/unsave`,
+    {
+      headers: this.getHeaders(),
+      body: { jobPostId }
+    }
+  ).pipe(catchError(this.handleError));
+}
+
+
+getSavedJobPosts(): Observable<SavedJobs> {
+  return this.http.get<SavedJobs>(
+    `${this.baseUrl}/jobSeeker/jobs/saved`,
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
+
+
+getJobPosts(): Observable<AppliedJobsResponse> {
+  return this.http.get<AppliedJobsResponse>(
+    `${this.baseUrl}/jobsSeeker/my-jobposts`,
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
 
   /* =========================
      ERROR HANDLER

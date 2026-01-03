@@ -64,43 +64,91 @@ This page shows all the freelancers who have applied to your job. You can review
 
 
 
-<div class="mt-5 mb-5">
+<!-- Loading -->
+@if (loading) {
+  <div class="text-center my-5">
+    <div class="spinner-border text-secondary"></div>
+  </div>
+}
 
-  <div class="card shadow-sm border border-dark rounded-0 p-3 h-100">
+<!-- Error -->
+@if (errorMessage) {
+  <div class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+}
 
-    <div class="d-flex justify-content-between align-items-center flex-wrap">
+<!-- Job Applications -->
+@for (job of applicationsSummary; track job._id) {
 
-      <!-- LEFT SIDE CONTENT -->
-      <div style="flex: 1 1 auto; min-width: 250px;">
+  <div class="mt-5 mb-5">
 
-        <h6 class="mb-1">Angular Developer - Job001</h6>
+    <div class="card shadow-sm border border-dark rounded-0 p-3 h-100">
 
-        <p class="mb-2" style="font-size:14px;">
-          Angular Developer skilled in building dynamic, responsive web applications using modern frontend
-          technologies.
-        </p>
+      <div class="d-flex justify-content-between align-items-center flex-wrap">
 
-        <div class="d-flex flex-wrap align-items-center" style="gap:10px; font-size:14px;">
-          <span class="text-muted"><i class="bi bi-geo-alt"></i> Hyderabad</span>
-          <span class="text-muted"><i class="bi bi-clock"></i> Full Time</span>
-          <span class="text-muted"><i class="bi bi-buildings"></i> Remote</span>
-          <span class="text-muted"><i class="bi bi-people-fill"></i> Applicants - 1</span>
+        <!-- LEFT SIDE -->
+        <div style="flex: 1 1 auto; min-width: 250px;">
+
+          <h6 class="mb-1">
+            {{ job.jobTitle }} - {{ job.jobId }}
+          </h6>
+
+          <p class="mb-2" style="font-size:14px;">
+            {{ job.jobDescription }}
+          </p>
+
+          <div
+            class="d-flex flex-wrap align-items-center"
+            style="gap:10px; font-size:14px;"
+          >
+            <span class="text-muted">
+              <i class="bi bi-geo-alt"></i> {{ job.location }}
+            </span>
+
+            <span class="text-muted">
+              <i class="bi bi-clock"></i> {{ job.jobType }}
+            </span>
+
+            <span class="text-muted">
+              <i class="bi bi-people-fill"></i>
+              Applicants - {{ job.totalApplicants }}
+            </span>
+          </div>
+
         </div>
 
-      </div>
+        <!-- RIGHT SIDE -->
+        <div
+          class="d-flex justify-content-end align-items-center mt-3 mt-lg-0"
+          style="flex: 0 0 auto;"
+        >
+          <button
+            class="btn btn-outline-info btn-sm px-3"
+            (click)="goToApplicantsList(job._id)"
+          >
+            View Applicants
+          </button>
+        </div>
 
-      <!-- RIGHT SIDE BUTTON -->
-      <div class="d-flex justify-content-end align-items-center mt-3 mt-lg-0" style="flex: 0 0 auto;">
-        <button class="btn btn-outline-info btn-sm px-3">
-          View Applicants
-        </button>
       </div>
 
     </div>
 
   </div>
+}
 
-</div>
+<!-- No Jobs -->
+@if (!loading && applicationsSummary.length === 0) {
+  <div class="text-center my-5">
+    <i class="bi bi-people fs-1 text-muted d-block mb-3"></i>
+    <h6 class="fw-semibold">No job applications found</h6>
+    <p class="text-muted small">
+      You don’t have any applicants yet.
+    </p>
+  </div>
+}
+
 
 
 

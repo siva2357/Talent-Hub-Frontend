@@ -94,6 +94,17 @@ export class CompanyService {
       .pipe(catchError(this.handleError));
   }
 
+
+
+    getCompanyDetails(id: string): Observable<Company> {
+    return this.http
+      .get<Company>(`${this.baseUrl}/jobSeeker/company/${id}/details`, {
+        headers: this.getHeaders(),
+      })
+      .pipe(catchError(this.handleError));
+  }
+
+
   /* =========================
      ERROR HANDLER
   ========================= */

@@ -1,3 +1,5 @@
+import { CompanyDetails } from "./company.modal";
+
 export interface Applicant {
   jobSeekerId: string;
   appliedAt: Date;
@@ -8,7 +10,7 @@ export interface Applicant {
 }
 
 export interface JobPost {
-  _id?: string;
+  _id: string;
   recruiterId?: string;
   companyId: string;
   jobId: string;
@@ -31,4 +33,47 @@ export interface JobPost {
   savedBy?: string[];
   createdAt?: Date;
   updatedAt?: Date;
+  saved?: boolean;
+  isApplied?: boolean;
+  companyDetails: CompanyDetails;
+  applicationStatus:string
+}
+
+
+export interface AppliedJobsResponse {
+  totalAppliedJobs: number;
+  appliedJobs: JobPost[];
+}
+
+export interface SavedJobs {
+  totalJobPosts: number;
+  savedJobPosts: SavedJobPost[];
+}
+
+
+export interface SavedJobPost {
+   jobPostId: string;
+  saved: boolean;
+  savedAt: string;
+  savedJobId: string;
+  jobId: string;
+  jobTitle: string;
+  jobType: string;
+  jobCategory: string;
+  location: string;
+  salary: string;
+  vacancy: string;
+  experience: string;
+  qualification: string;
+  applyByDate: string;
+  postedOn: string;
+  companyDetails: {
+    companyLogo: {
+      fileName: string;
+      url: string;
+    };
+    companyId: string;
+    companyName: string;
+    companyAddress: string;
+  };
 }

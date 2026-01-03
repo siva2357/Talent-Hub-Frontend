@@ -21,7 +21,7 @@ export class ResumeBuilder {
     if (!this.selectedTemplate) return;
 
     this.router.navigate(
-      ['/seeker/resume-making'],
+      ['/jobSeeker/resume-making'],
       {
         queryParams: {
           template: this.selectedTemplate

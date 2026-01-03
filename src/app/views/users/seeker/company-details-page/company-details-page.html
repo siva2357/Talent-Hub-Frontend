@@ -1,1 +1,98 @@
-<p>company-details-page works!</p>
+@if (loading) {
+  <div class="text-center my-5">
+    <div class="spinner-border text-secondary"></div>
+  </div>
+}
+
+@if (!loading && errorMessage) {
+  <div class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+}
+
+@if (!loading && company) {
+
+  <div class="container my-5">
+
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4">
+
+        <!-- Header -->
+        <div class="d-flex align-items-center gap-3 mb-4">
+
+          <img
+            [src]="company.companyDetails.companyLogo.url"
+            alt="company-logo"
+            class="company-logo"
+          />
+
+          <div>
+            <h4 class="fw-semibold mb-1">
+              {{ company.companyDetails.companyName }}
+            </h4>
+            <small class="text-muted">
+              {{ company.companyDetails.industry }}
+            </small>
+          </div>
+
+        </div>
+
+        <hr />
+
+        <!-- Company Info -->
+        <div class="row g-3 mt-2">
+
+          <div class="col-md-6">
+            <strong>Company ID</strong>
+            <p class="text-muted mb-0">
+              {{ company.companyDetails.companyId }}
+            </p>
+          </div>
+
+          <div class="col-md-6">
+            <strong>Website</strong>
+            <p class="mb-0">
+              <a
+                [href]="company.companyDetails.companyWebsiteUrl"
+                target="_blank"
+                class="text-primary"
+              >
+                {{ company.companyDetails.companyWebsiteUrl }}
+              </a>
+            </p>
+          </div>
+
+          <div class="col-md-12">
+            <strong>Address</strong>
+            <p class="text-muted mb-0">
+              {{ company.companyDetails.companyAddress }}
+            </p>
+          </div>
+
+          <div class="col-md-12">
+            <strong>Description</strong>
+            <p class="text-muted">
+              {{ company.companyDetails.companyDescription }}
+            </p>
+          </div>
+
+        </div>
+
+        <hr />
+
+        <!-- Meta -->
+        <div class="d-flex justify-content-between text-muted small">
+          <span>
+            Created: {{ company.createdAt | date:'mediumDate' }}
+          </span>
+          <span>
+            Last Updated: {{ company.updatedAt | date:'mediumDate' }}
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+}

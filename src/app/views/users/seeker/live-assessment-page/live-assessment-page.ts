@@ -48,7 +48,7 @@ function solution(input) {
   // UI-only flow for now
   // Later you can send code, language, output to backend
 
-  this.router.navigate(['/seeker/assessments']);
+  this.router.navigate(['/jobSeeker/assessments']);
 }
 
 

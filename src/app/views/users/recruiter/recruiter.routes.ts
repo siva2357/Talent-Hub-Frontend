@@ -14,6 +14,7 @@ import { TalentProfilePage } from './talent-profile-page/talent-profile-page';
 import { AnalyticsPerformancePage } from './analytics-performance-page/analytics-performance-page';
 import { InterviewMeetingPage } from '../../shared/interview-meeting-page/interview-meeting-page';
 import { HiredTalents } from './hired-talents/hired-talents';
+import { ApplicantListProfilePage } from './applicant-list-profile-page/applicant-list-profile-page';
 
 export const RECRUITER_ROUTES: Routes = [
   {
@@ -23,7 +24,8 @@ export const RECRUITER_ROUTES: Routes = [
       { path: 'my-jobs', component: Jobposts },
       { path: 'my-jobs/:id/job-details', component: JobDetailsPage },
       { path: 'job-applications', component: JobApplications },
-      { path: 'job-applications/:id/applicant-list', component: ApplicantsListPage },
+      { path: 'job-applications/:jobId/applicant-list', component: ApplicantsListPage },
+      { path: 'job-applications/:jobId/applicant-list/:applicantId/profile', component: ApplicantListProfilePage },
       { path: 'scheduled-meetings', component: ScheduledMeetings },
       { path: 'talents', component: Talents },
       { path: 'talents/:id/profile', component: TalentProfilePage },

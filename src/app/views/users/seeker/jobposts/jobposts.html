@@ -66,152 +66,203 @@
 
   </div>
 
-  <div class="row g-3 align-items-end">
-    <div class="col-md-4">
-      <input type="text" class="form-control" placeholder="Search Job Title" style="font-size:14px;">
-    </div>
 
-    <div class="col-md-2">
-      <select class="form-select" style="font-size:14px;">
-        <option selected>Job Type</option>
-        <option>Full-Time</option>
-        <option>Part-Time</option>
-        <option>Contract</option>
-        <option>Internship</option>
-      </select>
-    </div>
+<div class="row g-3 align-items-end mb-3">
 
-    <div class="col-md-3">
-      <select class="form-select" style="font-size:14px;">
-        <option selected>Job Category</option>
-        <option>Design</option>
-        <option>Development</option>
-        <option>Marketing</option>
-        <option>Finance</option>
-      </select>
-    </div>
-
-    <div class="col-md-3">
-          <select class="form-select" style="font-size:14px;">
-      <option>Salary Range</option>
-      <option>₹10k – ₹20k</option>
-      <option>₹20k – ₹40k</option>
-      <option>₹40k – ₹60k</option>
-      <option>₹60k – ₹80k</option>
-      <option>₹80k – ₹1L+</option>
-    </select>
-    </div>
-
-
+  <!-- Search -->
+  <div class="col-md-4">
+    <input
+      type="text"
+      class="form-control form-control-sm"
+      placeholder="Search job title"
+      [(ngModel)]="filters.search"
+      (input)="applyFilters()"
+    >
   </div>
 
-<div class="row align-items-center my-3">
+  <!-- Job Type -->
+<div class="col-md-2">
+  <select
+    class="form-select form-select-sm"
+    [(ngModel)]="filters.jobType"
+    (change)="applyFilters()"
+  >
+    <option value="">Job Type</option>
 
-  <!-- FILTERS (show on top for small screens) -->
-  <div class="col-12 col-md d-flex flex-wrap gap-2 align-items-center mb-2 mb-md-0">
-    <span class="badge p-2 d-flex align-items-center justify-content-center"
-          style="font-size:13px; border:1px solid #6c757d; color:#6c757d; cursor:pointer;">
-      Job Type: Full-Time &nbsp; ×
-    </span>
+    @for (type of jobTypes; track type) {
+      <option [value]="type">
+        {{ type }}
+      </option>
+    }
 
-    <span class="badge p-2 d-flex align-items-center justify-content-center"
-          style="font-size:13px; border:1px solid #6c757d; color:#6c757d; cursor:pointer;">
-      Status: Open &nbsp; ×
-    </span>
-  </div>
+  </select>
+</div>
 
-  <!-- COUNT (moves below filters on small screens) -->
-  <div class="col-12 col-md-auto text-md-end">
-    <p class="mb-0 text-muted" style="font-size:14px;">Showing 0 of 100</p>
+  <!-- Job Category -->
+<div class="col-md-3">
+  <select
+    class="form-select form-select-sm"
+    [(ngModel)]="filters.jobCategory"
+    (change)="applyFilters()"
+  >
+    <option value="">Job Category</option>
+
+    @for (category of jobCategories; track category) {
+      <option [value]="category">
+        {{ category }}
+      </option>
+    }
+
+  </select>
+</div>
+
+
+  <!-- Job Status -->
+  <div class="col-md-3">
+<select
+  class="form-select form-select-sm"
+  [(ngModel)]="filters.jobStatus"
+  (change)="applyFilters()"
+>
+  <option value="">Job Status</option>
+  <option value="Applied">Applied</option>
+  <option value="Saved">Saved</option>
+</select>
+
   </div>
 
 </div>
 
+<div class="row align-items-center mb-4">
+
+  <!-- Active Filters -->
+  <div class="col-12 col-md d-flex flex-wrap gap-2">
+
+    <span
+      *ngIf="filters.search"
+      class="filter-badge"
+      (click)="clearFilter('search')"
+      title="Remove filter"
+    >
+      Search: <strong>{{ filters.search }}</strong>
+      <span class="ms-1">×</span>
+    </span>
+
+    <span
+      *ngIf="filters.jobType"
+      class="filter-badge"
+      (click)="clearFilter('jobType')"
+    >
+      Job Type: <strong>{{ filters.jobType }}</strong>
+      <span class="ms-1">×</span>
+    </span>
+
+    <span
+      *ngIf="filters.jobCategory"
+      class="filter-badge"
+      (click)="clearFilter('jobCategory')"
+    >
+      Category: <strong>{{ filters.jobCategory }}</strong>
+      <span class="ms-1">×</span>
+    </span>
+
+    <span
+      *ngIf="filters.jobStatus"
+      class="filter-badge"
+      (click)="clearFilter('jobStatus')"
+    >
+      Status: <strong>{{ filters.jobStatus }}</strong>
+      <span class="ms-1">×</span>
+    </span>
+
+  </div>
+
+  <!-- Count -->
+  <div class="col-12 col-md-auto text-md-end mt-2 mt-md-0">
+    <span class="text-muted small">
+      Showing <strong>{{ filteredJobPosts.length }}</strong> of {{ totalJobPosts }}
+    </span>
+  </div>
+
+</div>
+
+
+
 <div class="row job-cards mt-5 mb-5">
 
-  @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
+  @for (job of filteredJobPosts; track job._id) {
 
     <div class="col-12 col-sm-6 col-lg-4 mb-4">
-      <div class="card h-100 border shadow-none job-card p-2 border border-black border-1 rounded-0">
-        <div class="card-body d-flex flex-column">
+      <div class="card h-100 job-card border-1 border-dark shadow-sm rounded-3">
+        <div class="card-body d-flex flex-column p-3">
 
-          <!-- Top Row: Company Logo + Bookmark -->
-          <div class="d-flex justify-content-between mb-3">
+          <!-- Top Row -->
+          <div class="d-flex justify-content-between align-items-start mb-3">
 
-            <img
-              src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png"
-              alt="company-logo"
-              class="company-logo"
-              style="height: 32px; width: auto;"
+            <!-- Company Logo + Name -->
+            <div class="company-info d-flex flex-column align-items-start">
+
+              <img
+                [src]="job.companyDetails.companyLogo.url"
+                alt="company-logo"
+                class="company-logo mb-1"
+              />
+
+              <span
+                class="company-name"
+                title="{{ job.companyDetails.companyName }}"
+              >
+                {{ job.companyDetails.companyName }}
+              </span>
+
+            </div>
+
+            <!-- Bookmark -->
+            <button
+              class="btn btn-light bookmark-btn"
+              (click)="toggleSave(job)"
             >
+              <i
+                class="bi fs-5"
+                [ngClass]="job.saved ? 'bi-bookmark-fill text-primary' : 'bi-bookmark'"
+              ></i>
+            </button>
 
-            <button class="btn btn-light   bookmark-btn">
-              <i class="bi bi-bookmark fs-5"></i>
+          </div>
+
+          <!-- Job Title -->
+          <h6 class="card-title fw-semibold mb-1">
+            {{ job.jobTitle }}
+          </h6>
+
+          <!-- Meta -->
+          <div class="job-meta text-muted small mb-2">
+            {{ job.location }} • {{ job.jobType }}
+          </div>
+
+          <!-- Description -->
+          <p class="card-text text-muted mb-3" style="font-size:14px;">
+            {{ job.jobDescription | slice:0:100 }}...
+          </p>
+
+          <!-- Applied Badge -->
+          <span
+            *ngIf="job.isApplied"
+            class="badge bg-success align-self-start mb-3"
+          >
+            Applied
+          </span>
+
+          <!-- View Details -->
+          <div class="mt-auto text-center">
+            <button
+              class="btn btn-outline-secondary btn-sm px-4 py-2"
+              (click)="goToJobDetails(job._id!)"
+            >
+              View Details
             </button>
           </div>
 
-          <h6 class="card-title">Angular Developer</h6>
-
-          <div class="job-meta small text-muted mb-2">
-            Hyderabad • Full-time • Remote • 2 days ago
-          </div>
-
-       <p class="card-text text-muted  mb-3" style="font-size: 14px;">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Suspendisse varius enim in eros elementum tristique.
-          </p>
-
-         <div class="text-center">
-            <button class="btn btn-outline-secondary btn-sm rounded-0 px-5 py-2 mt-3 mb-3">View Details</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-  }
-
-</div>
-
-
-<div class="row job-cards mt-5 mb-5">
-
-  @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
-
-    <div class="col-12 col-sm-6 col-lg-4 mb-4">
-      <div class="card h-100 border shadow-none job-card p-2 border border-black border-1 rounded-0">
-        <div class="card-body d-flex flex-column">
-
-          <!-- Top Row: Company Logo + Bookmark -->
-          <div class="d-flex justify-content-between mb-3">
-
-            <img
-              src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png"
-              alt="company-logo"
-              class="company-logo"
-              style="height: 32px; width: auto;"
-            >
-
-            <button class="btn btn-light   bookmark-btn">
-              <i class="bi  bi-bookmark-fill text-primary fs-5"></i>
-            </button>
-          </div>
-
-          <h6 class="card-title">Angular Developer</h6>
-
-          <div class="job-meta small text-muted mb-2">
-            Hyderabad • Full-time • Remote • 2 days ago
-          </div>
-
-          <p class="card-text text-muted  mb-3" style="font-size: 14px;">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Suspendisse varius enim in eros elementum tristique.
-          </p>
-
-          <div class="text-center">
-            <button class="btn btn-outline-secondary btn-sm rounded-0 px-5 py-2 mt-3 mb-3">View Details</button>
-          </div>
-
         </div>
       </div>
     </div>
@@ -223,131 +274,31 @@
 
 
 
-<div class="row job-cards mt-5 mb-5">
 
-  @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
+<!-- No Jobs Found Message -->
+<div
+  *ngIf="filteredJobPosts.length === 0"
+  class="text-center my-5"
+>
+  <i class="bi bi-briefcase fs-1 text-muted mb-3 d-block"></i>
 
-<div class="col-12 col-sm-6 col-lg-4 mb-4">
-  <div class="card h-100 border shadow-none job-card p-2 border border-black border-1 rounded-0">
-    <div class="card-body d-flex flex-column">
+  <h6 class="fw-semibold mb-2">
+    No jobs found
+  </h6>
 
-      <!-- Logo + Single Badge (Right aligned) -->
-      <div class="d-flex justify-content-between align-items-start mb-3">
-        <img
-          src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png"
-          class="company-logo"
-          style="height: 32px; width: auto;"
-        >
-        <span class="badge bg-secondary status-badge">Pending</span>
+  <p class="text-muted mb-3" style="font-size:14px;">
+    Try adjusting your filters or search keywords.
+  </p>
 
-      </div>
-
-      <h6 class="card-title">Angular Developer</h6>
-
-      <div class="job-meta small text-muted mb-2">
-        Hyderabad • Full-time • Remote • 2 days ago
-      </div>
-
-      <p class="text-muted mb-3" style="font-size: 14px;">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      </p>
-
-      <p class="card-text text-muted mb-3" style="font-size: 14px;">
-        Applied On : 04-12-2025
-      </p>
-
-      <div class="text-center">
-        <button class="btn btn-outline-secondary btn-sm rounded-0 px-5 py-2 mt-3 mb-3">
-          View Details
-        </button>
-
-      </div>
-
-
-
-
-
-    </div>
-  </div>
+  <button
+    class="btn btn-outline-secondary btn-sm"
+    (click)="clearFilter('search'); clearFilter('jobType'); clearFilter('jobCategory'); clearFilter('jobStatus')"
+  >
+    Clear all filters
+  </button>
 </div>
 
 
-  }
-
-</div>
-
-<div class="row job-cards mt-5 mb-5">
-
-  @for (i of [1,2,3,4,5,6,7,8,9]; track i) {
-
-<div class="col-12 col-sm-6 col-lg-4 mb-4">
-  <div class="card h-100 border shadow-none job-card p-2 border border-black border-1 rounded-0">
-    <div class="card-body d-flex flex-column">
-
-      <!-- Top Row: Company Logo + Bookmark -->
-      <div class="d-flex justify-content-between align-items-start mb-3">
-        <img
-          src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png"
-          class="company-logo"
-          style="height: 32px; width: auto;"
-        >
-        <span class="badge bg-secondary status-badge">Pending</span>
-
-      </div>
-
-      <!-- Title -->
-      <h6 class="card-title">Angular Developer</h6>
-
-      <!-- Meta -->
-      <div class="job-meta small text-muted mb-2">
-        Hyderabad • Full-time • Remote • 2 days ago
-      </div>
-
-      <!-- Description -->
-      <p class="card-text text-muted small mb-3">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Suspendisse varius enim in eros elementum tristique.
-      </p>
-
-      <!-- Actions -->
-      <div class="mt-auto text-center">
-
-        <!-- Accept + Reject -->
-        <div class="d-flex r gap-2 mb-3">
-          <button class="btn btn-outline-success btn-sm rounded-0 px-4">
-            Accept
-          </button>
-          <button class="btn btn-outline-danger btn-sm rounded-0 px-4">
-            Reject
-          </button>
-        </div>
-
-          <div class="col">
-        <button class="btn btn-outline-primary btn-sm rounded-0 py-1 mb-3" style="font-size: 14px;">
-          View Offer Letter
-        </button>
-          </div>
-
-        <!-- View Offer Letter -->
-
-        <div class="col">
-                  <button class="btn btn-outline-secondary btn-sm rounded-0  py-1" style="font-size: 14px;">
-          Upload Signed Offer Letter
-        </button>
-        </div>
-        <!-- Upload Signed Offer Letter -->
-
-
-      </div>
-
-    </div>
-  </div>
-</div>
-
-
-  }
-
-</div>
 
 
 </div>
