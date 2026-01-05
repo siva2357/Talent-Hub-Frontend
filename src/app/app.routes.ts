@@ -72,9 +72,9 @@ export const routes: Routes = [
 },
 
 
-  { path: 'interview/live-session/:meetingId/:sessionId', component: InterviewSessionPage},
+  { path: 'interview/live-session/:interviewId/:meetingId', component: InterviewSessionPage},
 
-  { path: 'interview/meet-session/:meetingId/:sessionId', component: InterviewMeetingPage},
+  { path: 'interview/meet-session/:interviewId/:meetingId', component: InterviewMeetingPage},
 
 
   //User routes

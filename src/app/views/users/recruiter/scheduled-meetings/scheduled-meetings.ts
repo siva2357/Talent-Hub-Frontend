@@ -41,8 +41,8 @@ export class ScheduledMeetings implements OnInit {
   joinMeeting(interview: Interview): void {
     this.router.navigate([
       '/interview/meet-session',
-      interview.meetingId,
-      interview.sessionId
+      interview._id,
+      interview.meetingId
     ]);
   }
 

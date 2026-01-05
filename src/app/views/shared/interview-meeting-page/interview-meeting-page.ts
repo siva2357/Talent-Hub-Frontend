@@ -19,6 +19,8 @@ import { FileUpload } from '../file-upload/file-upload';
 import { BucketKey } from '../../../core/enums/bucket-key.constant';
 import { UploadSection } from '../../../core/enums/upload-section.constant';
 import { ChangeDetectorRef } from '@angular/core';
+import { SubmitInterviewReportPayload } from '../../../core/models/interview-report.model';
+import { InterviewReportService } from '../../../core/services/interview-report-service';
 
 
 @Component({
@@ -43,6 +45,7 @@ export class InterviewMeetingPage
 
   meetingId!: string;
   role!: 'recruiter' | 'jobSeeker';
+  interviewId!: string;   // Mongo _id
 
   participantName = '';
   remoteUserLabel = '';
@@ -72,30 +75,35 @@ private remoteDescriptionSet = false;
     private auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-      private cdr: ChangeDetectorRef   // 🔥 ADD
+    private cdr: ChangeDetectorRef ,
+    private interviewReportService: InterviewReportService
   ) {}
 
   /* 🔥 FIX NG0100 HERE */
-  ngOnInit(): void {
-    const role = this.auth.getRole();
-    if (role !== 'recruiter' && role !== 'jobSeeker') {
-      this.router.navigate(['/']);
-      return;
-    }
-
-    this.role = role;
-    this.participantName = this.auth.getUserName() || '';
-    this.remoteUserLabel =
-      role === 'recruiter' ? 'Interviewee' : 'Interviewer';
-
-    const meetingId = this.route.snapshot.paramMap.get('meetingId');
-    const sessionId = this.route.snapshot.paramMap.get('sessionId');
-    if (!meetingId || !sessionId) {
-      this.router.navigate(['/']);
-      return;
-    }
-    this.meetingId = meetingId;
+ngOnInit(): void {
+  const role = this.auth.getRole();
+  if (role !== 'recruiter' && role !== 'jobSeeker') {
+    this.router.navigate(['/']);
+    return;
   }
+
+  this.role = role;
+  this.participantName = this.auth.getUserName() || '';
+  this.remoteUserLabel =
+    role === 'recruiter' ? 'Interviewee' : 'Interviewer';
+
+  const interviewId = this.route.snapshot.paramMap.get('interviewId');
+  const meetingId = this.route.snapshot.paramMap.get('meetingId');
+
+  if (!interviewId || !meetingId) {
+    this.router.navigate(['/']);
+    return;
+  }
+
+  this.interviewId = interviewId;   // ✅ Mongo ObjectId
+  this.meetingId = meetingId;       // ✅ socket room
+}
+
 
   async ngAfterViewInit(): Promise<void> {
     await this.rtc.initLocalMedia(this.selfVideo.nativeElement);
@@ -305,15 +313,35 @@ onPhotoUploaded(url: string): void {
 
 
 submitInterviewReport(): void {
-  if (!this.interviewVideoUrl || this.rating < 1 || this.rating > 10) return;
+  if (!this.interviewVideoUrl || this.rating < 1 || this.rating > 10) {
+    return;
+  }
 
-  this.signaling.endCall(this.meetingId);
-  this.rtc.close();
+  const payload: SubmitInterviewReportPayload = {
+    interviewId: this.interviewId,   // ✅ Mongo _id
+    meetingId: this.meetingId,       // ✅ socket id
+    interviewVideoUrl: this.interviewVideoUrl,
+    rating: this.rating,
+    remarks: this.remarks
+  };
 
-  setTimeout(() => {
-    this.router.navigate(['/recruiter/scheduled-meetings']);
-  }, 300);
+  console.log('📄 submitting interview report:', payload);
+
+  this.interviewReportService.submitInterviewReport(payload).subscribe({
+    next: () => {
+      console.log('✅ interview report submitted');
+
+      this.signaling.endCall(this.meetingId);
+      this.rtc.close();
+      this.router.navigate(['/recruiter/scheduled-meetings']);
+    },
+    error: err => {
+      console.error('❌ interview report submit failed', err);
+    }
+  });
 }
+
+
 
 
 

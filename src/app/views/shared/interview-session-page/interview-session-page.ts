@@ -33,17 +33,18 @@ constructor(
   private router: Router,
   private route: ActivatedRoute
 ) {
+  const interviewId = this.route.snapshot.paramMap.get('interviewId');
   const meetingId = this.route.snapshot.paramMap.get('meetingId');
-  const sessionId = this.route.snapshot.paramMap.get('sessionId');
 
-  if (!meetingId || !sessionId) {
+  if (!interviewId || !meetingId) {
     this.router.navigate(['/']);
     return;
   }
 
+  this.interviewId = interviewId; // ✅ FIX
   this.meetingId = meetingId;
-  this.sessionId = sessionId;
 }
+
 
   async ngAfterViewInit() {
     await this.initMedia();
@@ -86,8 +87,9 @@ joinMeeting() {
 
   this.router.navigate([
     '/interview/meet-session',
+  this.interviewId,
     this.meetingId,
-    this.sessionId
+
   ]);
 }
 

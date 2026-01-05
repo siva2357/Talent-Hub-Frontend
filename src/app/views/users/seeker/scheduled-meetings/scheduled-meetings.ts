@@ -38,7 +38,7 @@ export class ScheduledMeetings implements OnInit {
 
 
 joinInterview(interview: Interview): void {
-  if (!interview?.meetingId || !interview?.sessionId) {
+  if (!interview?._id || !interview?.meetingId) {
     console.error('Missing meetingId or sessionId', interview);
     return;
   }
@@ -46,8 +46,8 @@ joinInterview(interview: Interview): void {
   // Navigate using Angular Router (DO NOT use window.open)
   this.router.navigate([
     '/interview/live-session',
+    interview._id,
     interview.meetingId,
-    interview.sessionId
   ]);
 }
 
