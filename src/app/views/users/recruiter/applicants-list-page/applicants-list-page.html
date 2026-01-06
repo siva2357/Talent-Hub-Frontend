@@ -81,23 +81,32 @@
                     </button>
                   </li>
 
-                  <li>
-<button
-  type="button"
-  class="dropdown-item"
-  (click)="openInterviewModal(applicant)"
->
-  <i class="bi"
-     [ngClass]="applicant.interviewScheduled
-       ? 'bi-pencil-square'
-       : 'bi-calendar-event'">
-  </i>
-  <span class="ms-2">
-    {{ applicant.interviewScheduled ? 'Edit Interview' : 'Schedule Interview' }}
-  </span>
-</button>
+<!-- INTERVIEW ACTION -->
+<li *ngIf="!applicant.interviewCompleted">
+  <button
+    type="button"
+    class="dropdown-item"
+    (click)="openInterviewModal(applicant)"
+  >
+    <i class="bi"
+       [ngClass]="applicant.interviewScheduled
+         ? 'bi-pencil-square'
+         : 'bi-calendar-event'">
+    </i>
+    <span class="ms-2">
+      {{ applicant.interviewScheduled ? 'Edit Interview' : 'Schedule Interview' }}
+    </span>
+  </button>
+</li>
 
-                  </li>
+<!-- COMPLETED LABEL -->
+<li *ngIf="applicant.interviewCompleted">
+  <span class="dropdown-item text-success fw-semibold disabled">
+    <i class="bi bi-check-circle me-2"></i>
+    Interview Completed
+  </span>
+</li>
+
 
                   <li>
                     <hr class="dropdown-divider">

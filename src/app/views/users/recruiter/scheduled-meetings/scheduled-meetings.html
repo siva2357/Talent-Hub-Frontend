@@ -76,14 +76,29 @@
 
             <hr>
 
+
+
             <!-- Action -->
-            <div class="d-flex justify-content-end">
-              <button
-                class="btn btn-link p-0 text-primary text-decoration-underline"
-                (click)="joinMeeting(interview)">
-                Join Interview
-              </button>
-            </div>
+<div class="d-flex justify-content-end">
+
+  <!-- JOIN (only if NOT completed) -->
+  @if (interview.status !== 'Completed') {
+    <button
+      class="btn btn-link p-0 text-primary text-decoration-underline"
+      (click)="joinMeeting(interview)">
+      Join Interview
+    </button>
+  }
+
+  <!-- COMPLETED LABEL -->
+  @if (interview.status === 'Completed') {
+    <span class="text-success fw-semibold">
+      Interview Completed
+    </span>
+  }
+
+</div>
+
 
           </div>
         </div>

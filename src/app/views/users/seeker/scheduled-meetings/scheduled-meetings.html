@@ -100,12 +100,23 @@
             </p>
 
             <!-- JOIN BUTTON -->
-            <a
-              (click)="joinInterview(interview)"
-              class="text-primary text-decoration-underline"
-              style="font-size:14px; cursor:pointer;">
-              Join Interview
-            </a>
+<!-- JOIN BUTTON (only if NOT completed) -->
+@if (interview.status !== 'Completed') {
+  <a
+    (click)="joinInterview(interview)"
+    class="text-primary text-decoration-underline"
+    style="font-size:14px; cursor:pointer;">
+    Join Interview
+  </a>
+}
+
+<!-- COMPLETED MESSAGE -->
+@if (interview.status === 'Completed') {
+  <span class="text-success fw-semibold">
+    Interview Completed
+  </span>
+}
+
 
             <div class="mt-2">
 
