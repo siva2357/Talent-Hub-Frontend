@@ -75,10 +75,14 @@
                 <ul class="dropdown-menu dropdown-menu-end shadow-sm">
 
                   <li>
-                    <button class="dropdown-item">
-                      <i class="bi bi-file-earmark-plus me-2"></i>
-                      Assign Test
-                    </button>
+<button
+  class="dropdown-item"
+  (click)="openAssignAssessmentModal(applicant)"
+>
+  <i class="bi bi-file-earmark-plus me-2"></i>
+  Assign Test
+</button>
+
                   </li>
 
 <!-- INTERVIEW ACTION -->
@@ -302,6 +306,57 @@
 
         <button class="btn btn-primary" (click)="submitInterview()">
           {{ isEditMode ? 'Update Interview' : 'Schedule Interview' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- ================= ASSIGN ASSESSMENT MODAL ================= -->
+<div class="modal fade" id="assignAssessmentModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Assign MCQ Assessment</h5>
+        <button type="button" class="btn-close" (click)="closeAssignModal()"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="mb-3">
+          <label class="form-label">Applicant</label>
+          <input class="form-control" [value]="selectedApplicant?.fullName" disabled />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Job Title</label>
+          <input class="form-control" [value]="jobTitle" disabled />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Job Category</label>
+          <input class="form-control" [value]="jobCategory" disabled />
+        </div>
+
+        <div class="alert alert-info small">
+          10 MCQs will be randomly selected and assigned.
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" (click)="closeAssignModal()">
+          Cancel
+        </button>
+
+        <button class="btn btn-primary" (click)="assignAssessment()">
+          Assign Assessment
         </button>
       </div>
 

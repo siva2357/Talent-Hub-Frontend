@@ -1,3 +1,4 @@
+import { AssessmentService } from './../../../../core/services/assessment-service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,6 +30,11 @@ export class ApplicantsListPage implements OnInit {
 
   private interviewModal!: any;
 
+  assignModal!: any;
+jobTitle = '';
+jobCategory = '';
+
+
   // ✅ UI-only form (NOT Interview interface)
   interviewForm = {
     title: '',
@@ -43,7 +49,8 @@ export class ApplicantsListPage implements OnInit {
     private route: ActivatedRoute,
     private jobpostService: JobpostService,
     private interviewService: InterviewService,
-    private router: Router
+    private router: Router,
+    private assessmentService :AssessmentService,
   ) {}
 
   ngOnInit(): void {
@@ -199,4 +206,49 @@ submitInterview(): void {
   private extractTime(date: string | Date): string {
     return new Date(date).toTimeString().slice(0, 5);
   }
+
+
+
+
+  openAssignAssessmentModal(applicant: any): void {
+  this.selectedApplicant = applicant;
+
+  // You already have this info from backend response
+  this.jobTitle = this.route.snapshot.data['jobTitle'] || 'Angular Developer';
+  this.jobCategory = 'Frontend Development'; // or from job API
+
+  if (!this.assignModal) {
+    this.assignModal = new bootstrap.Modal(
+      document.getElementById('assignAssessmentModal')
+    );
+  }
+
+  this.assignModal.show();
+}
+
+
+assignAssessment(): void {
+  const payload = {
+    jobPostId: this.jobPostId,
+    jobSeekerId: this.selectedApplicant.jobSeekerId,
+    jobCategory: this.jobCategory,
+    jobTitle: this.jobTitle
+  };
+
+  this.assessmentService.assignAssessment(payload).subscribe({
+    next: () => {
+      alert('Assessment assigned successfully');
+      this.closeAssignModal();
+    },
+    error: err => {
+      alert(err);
+    }
+  });
+}
+
+closeAssignModal(): void {
+  this.assignModal?.hide();
+}
+
+
 }

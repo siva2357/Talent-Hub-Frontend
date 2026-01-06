@@ -1,56 +1,108 @@
 <div class="container-fluid editor-page">
 
-  <!-- TOP BAR -->
-  <div class="editor-topbar mt-5">
-
+  <!-- BACK + TITLE -->
+  <div class="d-flex align-items-center justify-content-between mb-3">
     <button
       class="btn btn-outline-primary btn-sm d-flex align-items-center gap-2"
-      routerLink="/seeker/assessments">
+      routerLink="/jobSeeker/assessments">
       <i class="bi bi-arrow-left"></i>
       Go Back
     </button>
 
-    <h5 class="fw-bold m-0">Practice Editor</h5>
-
-<div class="editor-actions">
-
-  <!-- LEFT: Language Select -->
-  <select
-    class="form-select form-select-sm lang-select"
-    #langSelect
-    (change)="changeLanguage(langSelect.value)">
-    <option value="javascript">JavaScript</option>
-    <option value="python">Python</option>
-    <option value="java">Java</option>
-  </select>
-
-  <!-- RIGHT: Buttons -->
-  <div class="action-buttons">
-    <button class="btn btn-success btn-sm" (click)="runCode()">
-      Run
-    </button>
-
-    <button class="btn btn-primary btn-sm" (click)="submitTest()">
-      Submit Test
-    </button>
+    <h5 class="fw-bold m-0">
+      {{ section === 'mcq' ? 'MCQ Assessment' : 'Coding Exercise' }}
+    </h5>
   </div>
 
-</div>
+  <!-- ================= MCQ SECTION ================= -->
+  @if (section === 'mcq') {
+    <div class="container mt-4">
+@for (q of mcqs; let i = $index; track i) {
+  <div class="card mb-3 p-3">
+
+    <p class="fw-semibold mb-3">
+      {{ i + 1 }}. {{ q.question }}
+    </p>
+
+    <div class="list-group">
+      @for (opt of q.options; let idx = $index; track idx) {
+        <button
+          type="button"
+          class="list-group-item list-group-item-action"
+          [class.active]="isOptionSelected(q._id.toString(), idx)"
+          (click)="selectOption(q._id.toString(), idx)">
+          {{ opt }}
+        </button>
+      }
+    </div>
 
   </div>
+}
 
-  <!-- EDITOR -->
-  <div class="editor-container">
-    <ngx-monaco-editor
-      [options]="editorOptions"
-      [(ngModel)]="code">
-    </ngx-monaco-editor>
-  </div>
 
-  <!-- OUTPUT -->
-  <div class="output-panel">
-    <h6 class="fw-bold mb-2">Output</h6>
-    <pre>{{ output || 'Run code to see output...' }}</pre>
-  </div>
+      <div class="text-end mt-4">
+        <button
+          class="btn btn-primary"
+          (click)="goToCodingSection()">
+          Next: Coding Section →
+        </button>
+      </div>
+
+    </div>
+  }
+
+  <!-- ================= CODING SECTION ================= -->
+  @if (section === 'coding') {
+
+    <!-- TOP BAR -->
+    <div class="editor-topbar mt-4 mb-3">
+      <div class="editor-actions d-flex align-items-center justify-content-between">
+
+        <!-- LANGUAGE SELECT -->
+        <select
+          class="form-select form-select-sm lang-select"
+          #langSelect
+          (change)="changeLanguage(langSelect.value)">
+          <option value="javascript">JavaScript</option>
+          <option value="python">Python</option>
+          <option value="java">Java</option>
+          <option value="sql">SQL</option>
+          <option value="typescript">TypeScript</option>
+        </select>
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-buttons d-flex gap-2">
+          <button
+            class="btn btn-success btn-sm"
+            (click)="runCode()">
+            Run
+          </button>
+
+@if (section === 'coding') {
+  <button class="btn btn-primary btn-sm" (click)="submitTest()">
+    Submit Test
+  </button>
+}
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CODE EDITOR -->
+    <div class="editor-container">
+      <ngx-monaco-editor
+        [options]="editorOptions"
+        [(ngModel)]="code">
+      </ngx-monaco-editor>
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="output-panel mt-3">
+      <h6 class="fw-bold mb-2">Output</h6>
+      <pre>{{ output || 'Run code to see output...' }}</pre>
+    </div>
+
+  }
 
 </div>

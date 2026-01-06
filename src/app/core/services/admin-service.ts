@@ -84,4 +84,13 @@ rejectUser(data: { userId: string; role: string }): Observable<any> {
   ).pipe(catchError(error => this.handleError(error)));
 }
 
+
+uploadMcqs(formData: FormData): Observable<any> {
+  return this.http.post(
+    `${this.baseUrl}/upload-file`,formData,
+    { headers: this.getHeaders() }
+  ).pipe(catchError(error => this.handleError(error)));
+}
+
+
 }
