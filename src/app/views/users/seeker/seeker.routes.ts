@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { Jobposts } from './jobposts/jobposts';
 import { ScheduledMeetings } from './scheduled-meetings/scheduled-meetings';
-import { ChatPage } from './chat-page/chat-page';
 import { UserProfile } from './user-profile/user-profile';
 import { Seeker } from './seeker';
 import { Portfolio } from './portfolio/portfolio';
@@ -40,7 +39,6 @@ export const SEEKER_ROUTES: Routes = [
       { path: '', redirectTo: 'jobposts', pathMatch: 'full' }
     ],
   },
-  { path: 'chat-page', component: ChatPage },
   { path: 'profile', component: UserProfile },
   { path: 'account-settings', component: UserAccountSettings },
 ];
