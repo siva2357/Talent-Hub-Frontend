@@ -25,10 +25,9 @@ sidebarOpen = false; // start collapsed (icon-only mode)
     { label: 'Companies', icon: ' bi-buildings', link: 'companies' },
     { label: 'Recruiters', icon: 'bi-person-badge', link: 'recruiters-list' },
     { label: 'Seekers', icon: 'bi-people', link: 'seekers-list' },
-    { label: 'Job Posts', icon: 'bi-briefcase', link: 'jobposts' },
     { label: 'Applicants', icon: 'bi-person-lines-fill', link: 'job-applicants' },
     { label: 'Interviews', icon: 'bi bi-laptop', link: 'interviews' },
-    { label: 'Support requests', icon: 'bi bi-gear', link: 'support-requests' },
+    { label: 'Imports', icon: 'bi bi-gear', link: 'import-requests' },
 
   ];
 
