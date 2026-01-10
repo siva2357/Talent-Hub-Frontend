@@ -1,6 +1,6 @@
 <div class="container-fluid editor-page">
 
-  <!-- BACK + TITLE -->
+  <!-- HEADER -->
   <div class="d-flex align-items-center justify-content-between mb-3">
     <button
       class="btn btn-outline-primary btn-sm d-flex align-items-center gap-2"
@@ -17,37 +17,32 @@
   <!-- ================= MCQ SECTION ================= -->
   @if (section === 'mcq') {
     <div class="container mt-4">
-@for (q of mcqs; let i = $index; track i) {
-  <div class="card mb-3 p-3">
 
-    <p class="fw-semibold mb-3">
-      {{ i + 1 }}. {{ q.question }}
-    </p>
+      @for (q of mcqs; let i = $index; track i) {
+        <div class="card mb-3 p-3">
+          <p class="fw-semibold mb-3">
+            {{ i + 1 }}. {{ q.question }}
+          </p>
 
-    <div class="list-group">
-      @for (opt of q.options; let idx = $index; track idx) {
-        <button
-          type="button"
-          class="list-group-item list-group-item-action"
-          [class.active]="isOptionSelected(q._id.toString(), idx)"
-          (click)="selectOption(q._id.toString(), idx)">
-          {{ opt }}
-        </button>
+          <div class="list-group">
+            @for (opt of q.options; let idx = $index; track idx) {
+              <button
+                type="button"
+                class="list-group-item list-group-item-action"
+                [class.active]="isOptionSelected(q._id.toString(), idx)"
+                (click)="selectOption(q._id.toString(), idx)">
+                {{ opt }}
+              </button>
+            }
+          </div>
+        </div>
       }
-    </div>
-
-  </div>
-}
-
 
       <div class="text-end mt-4">
-        <button
-          class="btn btn-primary"
-          (click)="goToCodingSection()">
+        <button class="btn btn-primary" (click)="goToCodingSection()">
           Next: Coding Section →
         </button>
       </div>
-
     </div>
   }
 
@@ -55,35 +50,37 @@
   @if (section === 'coding') {
 
     <!-- TOP BAR -->
-    <div class="editor-topbar mt-4 mb-3">
-      <div class="editor-actions d-flex align-items-center justify-content-between">
+    <div class="editor-topbar">
+      <div class="editor-actions">
 
-        <!-- LANGUAGE SELECT -->
-        <select
-          class="form-select form-select-sm lang-select"
-          #langSelect
-          (change)="changeLanguage(langSelect.value)">
-          <option value="javascript">JavaScript</option>
-          <option value="python">Python</option>
-          <option value="java">Java</option>
-          <option value="sql">SQL</option>
-          <option value="typescript">TypeScript</option>
-        </select>
+<select
+  class="form-select form-select-sm lang-select"
+  #lang
+  (change)="changeLanguage(lang.value)">
+  <option value="javascript">JavaScript</option>
+  <option value="python">Python</option>
+  <option value="java">Java</option>
+  <option value="sql">SQL</option>
+  <option value="nosql">NoSQL</option>
+</select>
 
-        <!-- ACTION BUTTONS -->
-        <div class="action-buttons d-flex gap-2">
+
+
+        <div class="action-buttons">
+<button
+  class="btn btn-success btn-sm"
+  [disabled]="!canRunCode()"
+  (click)="runCode()">
+  Run
+</button>
+
+
           <button
-            class="btn btn-success btn-sm"
-            (click)="runCode()">
-            Run
+            class="btn btn-primary btn-sm"
+            [disabled]="!code || !code.trim()"
+            (click)="submitTest()">
+            Submit Test
           </button>
-
-@if (section === 'coding') {
-  <button class="btn btn-primary btn-sm" (click)="submitTest()">
-    Submit Test
-  </button>
-}
-
         </div>
 
       </div>
@@ -91,15 +88,16 @@
 
     <!-- CODE EDITOR -->
     <div class="editor-container">
-      <ngx-monaco-editor
-        [options]="editorOptions"
-        [(ngModel)]="code">
-      </ngx-monaco-editor>
+<ngx-monaco-editor
+  [options]="editorOptions"
+  [(ngModel)]="code"
+  [ngModelOptions]="{ standalone: true }">
+</ngx-monaco-editor>
+
     </div>
 
     <!-- OUTPUT -->
-    <div class="output-panel mt-3">
-      <h6 class="fw-bold mb-2">Output</h6>
+    <div class="output-panel">
       <pre>{{ output || 'Run code to see output...' }}</pre>
     </div>
 

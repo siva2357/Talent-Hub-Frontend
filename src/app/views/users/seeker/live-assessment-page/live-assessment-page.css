@@ -1,26 +1,17 @@
-/* PAGE LAYOUT */
 .editor-page {
   height: calc(100vh - 90px);
   display: flex;
   flex-direction: column;
+  background: #f8fafc;
 }
 
-/* BACK BUTTON */
-.editor-page > button {
-  align-self: flex-start;
-}
-
-/* HEADER */
-.editor-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* TOP BAR */
+.editor-topbar {
   padding: 10px 14px;
   border-bottom: 1px solid #e5e7eb;
   background: #ffffff;
+  flex-shrink: 0;
 }
-
-
 
 .editor-actions {
   display: flex;
@@ -28,26 +19,29 @@
   width: 100%;
 }
 
-/* LEFT */
 .lang-select {
   width: 150px;
 }
 
-/* RIGHT */
 .action-buttons {
-  margin-left: auto;          /* pushes buttons to right */
+  margin-left: auto;
   display: flex;
   gap: 8px;
 }
 
-
-
-/* EDITOR CONTAINER */
+/* EDITOR */
 .editor-container {
   flex: 1;
-  min-height: 0; /* IMPORTANT for Monaco */
+  min-height: 300px;
+  position: relative;
+  background: #1e1e1e;
   border-left: 1px solid #e5e7eb;
   border-right: 1px solid #e5e7eb;
+}
+
+ngx-monaco-editor {
+  height: 100%;
+  display: block;
 }
 
 /* OUTPUT */
@@ -58,16 +52,11 @@
   color: #22c55e;
   max-height: 120px;
   overflow-y: auto;
-}
-
-.output-panel h6 {
-  margin-bottom: 6px;
-  color: #e5e7eb;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .output-panel pre {
   margin: 0;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 13px;
   white-space: pre-wrap;
 }

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { AssessmentService } from '../../../../core/services/assessment-service';
+import { CodeExecutionService } from '../../../../core/services/code-execution-service';
 
 interface McqAnswer {
   questionId: string;
@@ -50,23 +51,40 @@ function solution(input) {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private assessmentService: AssessmentService
+    private assessmentService: AssessmentService,
+    private codeService:CodeExecutionService
   ) {}
 
   /* =====================
      INIT
   ====================== */
-  ngOnInit(): void {
-    this.assessmentId =
-      this.route.snapshot.queryParamMap.get('assessmentId') || '';
+ngOnInit(): void {
+  this.assessmentId =
+    this.route.snapshot.queryParamMap.get('assessmentId') || '';
 
-    if (!this.assessmentId) {
-      this.router.navigate(['/jobSeeker/assessments']);
-      return;
-    }
-
-    this.fetchMcqs();
+  if (!this.assessmentId) {
+    this.router.navigate(['/jobSeeker/assessments']);
+    return;
   }
+
+  const saved = localStorage.getItem(`assessment_${this.assessmentId}`);
+
+  if (saved) {
+    const state = JSON.parse(saved);
+
+    this.section = state.section || 'mcq';
+    this.mcqAnswers = state.mcqAnswers || [];
+    this.code = state.code || this.code;
+    this.selectedLanguage = state.language || 'javascript';
+
+    this.editorOptions = {
+      ...this.editorOptions,
+      language: this.selectedLanguage
+    };
+  }
+
+  this.fetchMcqs();
+}
 
   /* =====================
      MCQ LOGIC
@@ -105,72 +123,140 @@ goToCodingSection(): void {
     return;
   }
 
-  // lock MCQs & move forward
   this.section = 'coding';
+
+  localStorage.setItem(
+    `assessment_${this.assessmentId}`,
+    JSON.stringify({
+      section: 'coding',
+      mcqAnswers: this.mcqAnswers,
+      code: this.code,
+      language: this.selectedLanguage
+    })
+  );
 }
 
 
-  /* =====================
-     CODING LOGIC (UI ONLY)
-  ====================== */
-  changeLanguage(lang: string): void {
-    this.selectedLanguage = lang;
-    this.editorOptions = {
-      ...this.editorOptions,
-      language: lang
-    };
-    this.code = this.getStarterCode(lang);
-  }
+changeLanguage(lang: string): void {
+  this.selectedLanguage = lang;
 
-  getStarterCode(lang: string): string {
-    switch (lang) {
-      case 'python':
-        return `def solution(input):
+  const monacoLang =
+    lang === 'nosql' ? 'javascript' :
+    lang === 'sql' ? 'sql' :
+    lang;
+
+  this.editorOptions = {
+    ...this.editorOptions,
+    language: monacoLang
+  };
+
+  this.code = this.getStarterCode(lang);
+  this.saveCodingProgress();
+}
+
+getStarterCode(lang: string): string {
+  switch (lang) {
+    case 'python':
+      return `def solution(input):
     return input`;
 
-      case 'java':
-        return `public class Main {
+    case 'java':
+      return `public class Main {
   public static void main(String[] args) {
-    System.out.println("Hello World");
+    // write your logic here
   }
 }`;
 
-      case 'sql':
-        return `-- Write your SQL query here
+    case 'sql':
+      return `-- Write SQL query only
 SELECT * FROM users;`;
 
-      default:
-        return `function solution(input) {
+    case 'nosql':
+      return `// MongoDB query example
+db.users.find({ active: true })`;
+
+    default:
+      return `function solution(input) {
   return input;
 }`;
-    }
   }
+}
 
-  runCode(): void {
-    this.output = 'Code execution is disabled (UI only)';
-  }
 
-  /* =====================
-     SUBMIT
-  ====================== */
-submitTest(): void {
-  console.log('FINAL SUBMIT PAYLOAD', {
-    assessmentId: this.assessmentId,
-    mcqAnswers: this.mcqAnswers
-  });
 
-  this.assessmentService.submitAssessment({
-    assessmentId: this.assessmentId,
-    mcqAnswers: this.mcqAnswers
+
+  saveCodingProgress(): void {
+  const saved = localStorage.getItem(`assessment_${this.assessmentId}`);
+  const state = saved ? JSON.parse(saved) : {};
+
+  localStorage.setItem(
+    `assessment_${this.assessmentId}`,
+    JSON.stringify({
+      ...state,
+      section: this.section,
+      mcqAnswers: this.mcqAnswers,
+      code: this.code,
+      language: this.selectedLanguage
+    })
+  );
+}
+
+canRunCode(): boolean {
+  return this.selectedLanguage === 'javascript'
+      || this.selectedLanguage === 'python';
+}
+
+
+runCode(): void {
+  this.output = 'Running...';
+
+  this.codeService.runCode({
+    language: this.selectedLanguage,
+    code: this.code
   }).subscribe({
     next: res => {
-      console.log('SUBMIT SUCCESS', res);
-      this.router.navigate(['/jobSeeker/assessments']);
+      if (res.error) {
+        this.output = res.error;
+      } else {
+        this.output = res.output || 'No output';
+      }
     },
     error: err => {
+      this.output = typeof err === 'string'
+        ? err
+        : 'Execution failed';
+    }
+  });
+
+  this.saveCodingProgress();
+
+}
+
+
+
+submitTest(): void {
+  const payload = {
+    assessmentId: this.assessmentId,
+    mcqAnswers: this.mcqAnswers,
+    coding: {
+      language: this.selectedLanguage,
+      code: this.code
+    }
+  };
+
+  console.log('FINAL SUBMIT PAYLOAD', payload);
+
+  this.assessmentService.submitAssessment(payload).subscribe({
+next: res => {
+  localStorage.removeItem(`assessment_${this.assessmentId}`);
+  this.router.navigate(['/jobSeeker/assessments']);
+},
+    error: err => {
       console.error('SUBMIT ERROR', err);
+      alert(err);
     }
   });
 }
+
 
 }

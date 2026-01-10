@@ -71,19 +71,23 @@ private baseUrl: string = `${environment.apiGatewayUrl}/assessment`;
   }
 
   /** Submit MCQ answers */
-  submitAssessment(payload: {
-    assessmentId: string;
-    mcqAnswers: {
-      questionId: string;
-      selectedOption: number;
-    }[];
-  }): Observable<any> {
-    return this.http.post(
-      `${this.baseUrl}/submit`,
-      payload,
-      { headers: this.getHeaders() }
+submitAssessment(payload: {
+  assessmentId: string;
+  mcqAnswers: {
+    questionId: string;
+    selectedOption: number;
+  }[];
+  coding?: {
+    language: string;
+    code: string;
+  };
+}): Observable<any> {
+  return this.http.post(
+    `${this.baseUrl}/submit`,
+    payload,
+    { headers: this.getHeaders() }
   ).pipe(catchError(this.handleError));
-  }
+}
 
   /* =========================
      ERROR HANDLER
