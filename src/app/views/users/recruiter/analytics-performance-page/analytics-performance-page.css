@@ -1,22 +1,157 @@
+/* ================= GLOBAL ================= */
+.analytics-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 24px;
+  font-family: system-ui, sans-serif;
+}
+
+.page-title {
+  margin-bottom: 20px;
+}
+
+/* ================= STAT CARDS ================= */
 .stat-card {
-  background: #fff;
+  background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   padding: 16px;
   text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
-.analytics-card {
+.stat-card h5 {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.stat-card small {
+  color: #6c757d;
+}
+
+.stat-danger h5 {
+  color: #dc3545;
+}
+
+/* ================= ACCORDION ================= */
+.accordion-item {
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+/* ================= APPLICANT LIST ================= */
+.applicant-list {
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.applicant-card {
   background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 14px;
+  border-radius: 10px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.ai-insight-card {
-  background: #f8fafc;
-  border-left: 4px solid #2563eb;
+.applicant-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ================= AVATAR ================= */
+.applicant-avatar {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.avatar-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #6c757d;
+  color: #fff;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ================= STATUS BADGES ================= */
+.status-badge {
+  font-size: 0.7rem;
+}
+
+.badge-pass {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-fail {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ================= PROGRESS ================= */
+.progress {
+  height: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  font-size: 10px;
+  line-height: 10px;
+}
+
+/* ================= SECTION HEADERS ================= */
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ================= QUESTION CARD ================= */
+.question-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+/* ================= MODAL ================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.interview-modal {
+  background: #fff;
+  padding: 24px;
+  width: 420px;
+  max-width: 90%;
   border-radius: 12px;
-  padding: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.2);
+}
+
+/* ================= BUTTONS ================= */
+.btn {
+  border-radius: 6px;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

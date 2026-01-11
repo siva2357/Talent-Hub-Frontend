@@ -1,73 +1,171 @@
-/* PAGE LAYOUT */
-.editor-page {
-  height: calc(100vh - 90px);
+/* =========================
+   ROOT
+========================= */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Root container must control height */
+.container-fluid {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* BACK BUTTON */
-.editor-page > button {
-  align-self: flex-start;
-}
-
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 .editor-header {
+  height: 56px;
+  flex-shrink: 0;
+  padding: 0 16px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 10px 14px;
+  justify-content: space-between;
   border-bottom: 1px solid #e5e7eb;
   background: #ffffff;
 }
 
-
-
-.editor-actions {
+/* =========================
+   EDITOR PAGE
+========================= */
+.editor-page {
+  flex: 1;
+  min-height: 0;
   display: flex;
-  align-items: center;
-  width: 100%;
+  flex-direction: column;
 }
 
-/* LEFT */
+/* Row must be flex */
+.editor-row {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+/* Bootstrap columns MUST shrink */
+.col-3,
+.col-9 {
+  min-height: 0;
+}
+
+/* =========================
+   LEFT PANEL
+========================= */
+.question-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+}
+
+.question-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.question-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 10px;
+}
+
+.question-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.question-list li {
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+.question-list li.active {
+  background: #e0f2fe;
+  font-weight: 600;
+}
+
+/* =========================
+   RIGHT PANEL
+========================= */
+.editor-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  position: relative; /* 🔥 REQUIRED FOR MONACO */
+}
+
+/* =========================
+   TOP BAR
+========================= */
+.editor-topbar {
+  height: 48px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
 .lang-select {
   width: 150px;
 }
 
-/* RIGHT */
 .action-buttons {
-  margin-left: auto;          /* pushes buttons to right */
+  margin-left: auto;
   display: flex;
   gap: 8px;
 }
 
-
-
-/* EDITOR CONTAINER */
+/* =========================
+   MONACO EDITOR
+========================= */
 .editor-container {
   flex: 1;
-  min-height: 0; /* IMPORTANT for Monaco */
-  border-left: 1px solid #e5e7eb;
-  border-right: 1px solid #e5e7eb;
+  min-height: 0;
+  position: relative;
+  background: #1e1e1e;
 }
 
-/* OUTPUT */
+ngx-monaco-editor {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* =========================
+   OUTPUT
+========================= */
 .output-panel {
+  height: 110px;
   padding: 10px 14px;
   border-top: 1px solid #e5e7eb;
   background: #0f172a;
   color: #22c55e;
-  max-height: 120px;
   overflow-y: auto;
+  font-family: ui-monospace, monospace;
 }
 
-.output-panel h6 {
-  margin-bottom: 6px;
-  color: #e5e7eb;
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #cbd5f5;
 }
 
-.output-panel pre {
-  margin: 0;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 13px;
-  white-space: pre-wrap;
+.status-dot.done {
+  background: #22c55e;
 }

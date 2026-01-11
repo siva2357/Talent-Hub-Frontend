@@ -67,4 +67,35 @@ onFileSelect(event: Event) {
   input.value = '';
 }
 
+uploadFile(file: File) {
+  this.uploading = true;
+  this.progress = 0;
+
+  this.uploadService
+    .uploadFile(
+      file,
+      this.bucketKey,
+      this.section,
+      this.preLoginUserId,
+      this.replace
+    )
+    .subscribe({
+      next: (event) => {
+        if (event.type === HttpEventType.UploadProgress && event.total) {
+          this.progress = Math.round((event.loaded / event.total) * 100);
+        }
+
+        if (event.type === HttpEventType.Response && event.body) {
+          this.uploaded.emit(event.body.url);
+          this.uploading = false;
+        }
+      },
+      error: () => {
+        this.uploading = false;
+      }
+    });
+}
+
+
+
 }

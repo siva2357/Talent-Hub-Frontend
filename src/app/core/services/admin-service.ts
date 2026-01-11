@@ -74,8 +74,6 @@ approveUser(data: { userId: string; role: string }): Observable<any> {
 }
 
 
-
-
 rejectUser(data: { userId: string; role: string }): Observable<any> {
   return this.http.post(
     `${this.baseUrl}/users/reject`,
@@ -83,5 +81,21 @@ rejectUser(data: { userId: string; role: string }): Observable<any> {
     { headers: this.getHeaders() }
   ).pipe(catchError(error => this.handleError(error)));
 }
+
+
+uploadMcqs(formData: FormData): Observable<any> {
+  return this.http.post(
+    `${this.baseUrl}/upload-file`,formData,
+    { headers: this.getHeaders() }
+  ).pipe(catchError(error => this.handleError(error)));
+}
+
+uploadCoding(formData: FormData): Observable<any> {
+  return this.http.post(
+    `${this.baseUrl}/upload-coding-file`,formData,
+    { headers: this.getHeaders() }
+  ).pipe(catchError(error => this.handleError(error)));
+}
+
 
 }

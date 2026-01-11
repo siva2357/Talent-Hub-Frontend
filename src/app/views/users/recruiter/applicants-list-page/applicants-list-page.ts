@@ -1,13 +1,19 @@
+import { AssessmentService } from './../../../../core/services/assessment-service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+
 import { JobpostService } from '../../../../core/services/jobpost-service';
+import { InterviewService } from '../../../../core/services/interview-service';
+import { CreateInterviewPayload, Interview } from '../../../../core/models/interview.model';
+
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-applicants-list-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './applicants-list-page.html',
   styleUrl: './applicants-list-page.css',
 })
@@ -18,27 +24,49 @@ export class ApplicantsListPage implements OnInit {
   loading = true;
   errorMessage = '';
 
+  selectedApplicant!: any;
+  isEditMode = false;
+  interviewId?: string;
+
+  private interviewModal!: any;
+
+  assignModal!: any;
+jobTitle = '';
+jobCategory = '';
+
+
+  // ✅ UI-only form (NOT Interview interface)
+  interviewForm = {
+    title: '',
+    description: '',
+    date: '',
+    startTime: '',
+    endTime: '',
+    status: 'Scheduled' as 'Scheduled' | 'Completed' | 'Not Completed'
+  };
+
+
+  report: any;
+reportLoading = false;
+private reportModal!: any;
+
+
   constructor(
     private route: ActivatedRoute,
     private jobpostService: JobpostService,
-    private router:Router
+    private interviewService: InterviewService,
+    private router: Router,
+    private assessmentService :AssessmentService,
   ) {}
 
-  /* =========================
-     Lifecycle
-  ========================== */
-ngOnInit(): void {
-  this.jobPostId = this.route.snapshot.paramMap.get('jobId')!;
-  this.fetchApplicants();
-}
+  ngOnInit(): void {
+    this.jobPostId = this.route.snapshot.paramMap.get('jobId')!;
+    this.fetchApplicants();
+  }
 
-
-  /* =========================
-     Fetch Applicants
-  ========================== */
   fetchApplicants(): void {
     this.jobpostService.getJobApplicants(this.jobPostId).subscribe({
-      next: (res) => {
+      next: res => {
         this.applicants = res.applicants || res;
         this.loading = false;
       },
@@ -49,20 +77,229 @@ ngOnInit(): void {
     });
   }
 
-viewApplicantProfile(applicantId: string): void {
-  this.router.navigate([
-    'recruiter/job-applications',
-    this.jobPostId,
-    'applicant-list',
-    applicantId,
-    'profile'
-  ]);
+  viewApplicantProfile(applicantId: string): void {
+    this.router.navigate([
+      'recruiter/job-applications',
+      this.jobPostId,
+      'applicant-list',
+      applicantId,
+      'profile'
+    ]);
+  }
+
+  /* ================= INTERVIEW MODAL ================= */
+
+openInterviewModal(applicant: any): void {
+  this.selectedApplicant = applicant;
+  this.isEditMode = applicant.interviewScheduled === true;
+
+  // reset form
+  this.interviewForm = {
+    title: '',
+    description: '',
+    date: '',
+    startTime: '',
+    endTime: '',
+    status: 'Scheduled'
+  };
+
+  if (!this.interviewModal) {
+    this.interviewModal = new bootstrap.Modal(
+      document.getElementById('interviewModal')
+    );
+  }
+
+  // ✅ CREATE MODE
+  if (!this.isEditMode) {
+    this.interviewModal.show();
+    return;
+  }
+
+  // ✅ EDIT MODE → FETCH INTERVIEW
+  this.interviewService
+    .getInterviewByApplicant(this.jobPostId, applicant.jobSeekerId)
+    .subscribe(interview => {
+      this.interviewId = interview._id;
+
+      this.interviewForm = {
+        title: interview.interviewTitle,
+        description: interview.interviewDescription || '',
+        date: this.extractDate(interview.scheduledDate),
+        startTime: this.extractTime(interview.startTime),
+        endTime: this.extractTime(interview.endTime),
+        status: interview.status
+      };
+
+      this.interviewModal.show();
+    });
 }
 
-goBack(): void {
-  this.router.navigate([
-    'recruiter/job-applications'
-  ]);
+
+submitInterview(): void {
+  if (!this.interviewForm.date || !this.interviewForm.startTime || !this.interviewForm.endTime) {
+    alert('Date, start time and end time are required');
+    return;
+  }
+
+  const start = this.buildDateTime(this.interviewForm.date, this.interviewForm.startTime);
+  const end = this.buildDateTime(this.interviewForm.date, this.interviewForm.endTime);
+
+  if (end <= start) {
+    alert('End time must be after start time');
+    return;
+  }
+
+  /* ================= EDIT MODE ================= */
+  if (this.isEditMode && this.interviewId) {
+
+    const updateData: Partial<Interview> = {
+      interviewTitle: this.interviewForm.title,
+      interviewDescription: this.interviewForm.description,
+      startTime: start,
+      endTime: end,
+      status: this.interviewForm.status
+    };
+
+    this.interviewService
+      .updateInterview(this.interviewId, updateData)
+      .subscribe(() => this.afterSubmit());
+
+    return;
+  }
+
+  /* ================= CREATE MODE ================= */
+  const payload: CreateInterviewPayload = {
+    jobSeekerId: this.selectedApplicant.jobSeekerId,
+    jobPostId: this.jobPostId,
+
+    interviewTitle: this.interviewForm.title || 'Networking Interview',
+    interviewDescription: this.interviewForm.description || '',
+
+    scheduledDate: this.interviewForm.date,
+    startTime: start,
+    endTime: end
+  };
+
+  this.interviewService
+    .createInterview(payload)
+    .subscribe(() => this.afterSubmit());
 }
+
+
+  afterSubmit(): void {
+    this.closeModal();
+    this.fetchApplicants();
+  }
+
+  closeModal(): void {
+    this.interviewModal?.hide();
+  }
+
+  goBack(): void {
+    this.router.navigate(['recruiter/job-applications']);
+  }
+
+  /* ================= UTIL ================= */
+
+  private buildDateTime(date: string, time: string): Date {
+    return new Date(`${date}T${time}`);
+  }
+
+  private extractDate(date: string | Date): string {
+    return new Date(date).toISOString().split('T')[0];
+  }
+
+  private extractTime(date: string | Date): string {
+    return new Date(date).toTimeString().slice(0, 5);
+  }
+
+
+
+
+  openAssignAssessmentModal(applicant: any): void {
+  this.selectedApplicant = applicant;
+
+  // You already have this info from backend response
+  this.jobTitle = this.route.snapshot.data['jobTitle'] || 'Angular Developer';
+  this.jobCategory = 'Frontend Development'; // or from job API
+
+  if (!this.assignModal) {
+    this.assignModal = new bootstrap.Modal(
+      document.getElementById('assignAssessmentModal')
+    );
+  }
+
+  this.assignModal.show();
+}
+
+
+assignAssessment(): void {
+  const payload = {
+    jobPostId: this.jobPostId,
+    jobSeekerId: this.selectedApplicant.jobSeekerId
+  };
+
+  this.assessmentService.assignAssessment(payload).subscribe({
+    next: () => {
+      alert('Assessment assigned successfully');
+      this.closeAssignModal();
+      this.fetchApplicants()
+    },
+    error: err => {
+      alert(err);
+    }
+  });
+}
+
+
+openReportModal(applicant: any): void {
+  this.reportLoading = true;
+  this.report = null;
+
+  if (!this.reportModal) {
+    this.reportModal = new bootstrap.Modal(
+      document.getElementById('assessmentReportModal')
+    );
+  }
+
+  // 1️⃣ Get assessmentId
+  this.assessmentService
+    .getAssessmentIdByJob(this.jobPostId, applicant.jobSeekerId)
+    .subscribe({
+      next: res => {
+
+        // 2️⃣ Fetch report
+        this.assessmentService
+          .getAssessmentReport(res.assessmentId)
+          .subscribe({
+            next: report => {
+              this.report = report;
+              this.reportLoading = false;
+              this.reportModal.show();
+            },
+            error: () => {
+              this.reportLoading = false;
+              alert('Failed to load report');
+            }
+          });
+
+      },
+      error: () => {
+        this.reportLoading = false;
+        alert('Assessment not found');
+      }
+    });
+}
+
+closeReportModal(): void {
+  this.reportModal?.hide();
+}
+
+
+
+closeAssignModal(): void {
+  this.assignModal?.hide();
+}
+
 
 }

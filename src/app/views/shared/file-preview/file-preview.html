@@ -1,10 +1,10 @@
 <div class="file-preview-wrapper">
 
-  <!-- DEFAULT PLACEHOLDER (NO FILE) -->
+  <!-- DEFAULT PLACEHOLDER -->
   @if (!fileUrl) {
     <div class="file-placeholder">
-      <i class="bi bi-camera"></i>
-      <p>Upload Image</p>
+      <i class="bi bi-camera-video"></i>
+      <p>No file uploaded</p>
     </div>
   }
 
@@ -16,6 +16,22 @@
       alt="Uploaded image preview"
     />
   }
+
+@if (fileUrl && fileType === 'video') {
+  <video
+    class="file-preview-video"
+    controls
+    playsinline
+    preload="metadata"
+    muted
+    [attr.src]="fileUrl"
+    (loadedmetadata)="onLoaded()"
+  >
+    Your browser does not support video playback.
+  </video>
+}
+
+
 
   <!-- PDF PREVIEW -->
   @if (fileUrl && fileType === 'pdf') {

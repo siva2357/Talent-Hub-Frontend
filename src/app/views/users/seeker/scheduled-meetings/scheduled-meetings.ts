@@ -1,13 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
+import { CommonModule } from '@angular/common';
+import { InterviewService } from '../../../../core/services/interview-service';
+import { Interview } from '../../../../core/models/interview.model';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-scheduled-meetings',
-  imports: [ RouterModule],
+  standalone: true,
+  imports: [RouterModule, CommonModule],
   templateUrl: './scheduled-meetings.html',
-  styleUrl: './scheduled-meetings.css',
-    standalone: true,
+  styleUrl: './scheduled-meetings.css'
 })
-export class ScheduledMeetings {
+export class ScheduledMeetings implements OnInit {
+
+  interviews: Interview[] = [];
+  totalInterviews = 0;
+  loading = true;
+
+  constructor(private interviewService: InterviewService, private router:Router) {}
+
+  ngOnInit(): void {
+    this.loadMeetings();
+  }
+
+  loadMeetings() {
+    this.interviewService.getAllJobSeekerInterviews().subscribe({
+      next: (res) => {
+        this.interviews = res.interviews;
+        this.totalInterviews = res.totalInterviews;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
+    });
+  }
+
+
+joinInterview(interview: Interview): void {
+  if (!interview?._id || !interview?.meetingId) {
+    console.error('Missing meetingId or sessionId', interview);
+    return;
+  }
+
+  // Navigate using Angular Router (DO NOT use window.open)
+  this.router.navigate([
+    '/interview/live-session',
+    interview._id,
+    interview.meetingId,
+  ]);
+}
 
 }

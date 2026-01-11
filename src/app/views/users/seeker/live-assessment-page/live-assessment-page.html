@@ -1,56 +1,199 @@
-<div class="container-fluid editor-page">
+<div class="container-fluid">
 
-  <!-- TOP BAR -->
-  <div class="editor-topbar mt-5">
 
+  <!-- ================= HEADER ================= -->
+  <div class="editor-header mt-5">
     <button
       class="btn btn-outline-primary btn-sm d-flex align-items-center gap-2"
-      routerLink="/seeker/assessments">
+      routerLink="/jobSeeker/assessments">
       <i class="bi bi-arrow-left"></i>
       Go Back
     </button>
 
-    <h5 class="fw-bold m-0">Practice Editor</h5>
-
-<div class="editor-actions">
-
-  <!-- LEFT: Language Select -->
-  <select
-    class="form-select form-select-sm lang-select"
-    #langSelect
-    (change)="changeLanguage(langSelect.value)">
-    <option value="javascript">JavaScript</option>
-    <option value="python">Python</option>
-    <option value="java">Java</option>
-  </select>
-
-  <!-- RIGHT: Buttons -->
-  <div class="action-buttons">
-    <button class="btn btn-success btn-sm" (click)="runCode()">
-      Run
-    </button>
-
-    <button class="btn btn-primary btn-sm" (click)="submitTest()">
-      Submit Test
-    </button>
+    <h5 class="fw-bold m-0">
+      {{ section === 'mcq' ? 'MCQ Assessment' : 'Coding Exercise' }}
+    </h5>
   </div>
 
+  <!-- ================= MCQ SECTION ================= -->
+  @if (section === 'mcq') {
+    <div class="container mt-4 overflow-auto">
+      @for (q of mcqs; let i = $index; track i) {
+        <div class="card mb-3 p-3">
+          <p class="fw-semibold mb-3">
+            {{ i + 1 }}. {{ q.question }}
+          </p>
+
+          <div class="list-group">
+            @for (opt of q.options; let idx = $index; track idx) {
+              <button
+                class="list-group-item list-group-item-action"
+                [class.active]="isOptionSelected(q._id.toString(), idx)"
+                (click)="selectOption(q._id.toString(), idx)">
+                {{ opt }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <div class="text-end mt-4">
+        <button class="btn btn-primary" (click)="goToCodingSection()">
+          Next: Coding Section →
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- ================= CODING SECTION ================= -->
+@if (section === 'coding') {
+
+  <div class="editor-page">
+
+    <div class="row g-0 editor-row">
+
+      <!-- ================= LEFT PANEL ================= -->
+<!-- ================= LEFT PANEL ================= -->
+<div class="col-3 question-panel">
+
+  <!-- FIXED HEADER -->
+  <div class="question-panel-header">
+    <h6 class="m-0">
+      Question {{ currentCodingIndex + 1 }} / {{ codingQuestions.length }}
+    </h6>
+
+    <div class="d-flex gap-1">
+      <button
+        class="btn btn-outline-secondary btn-sm"
+        (click)="prevCoding()"
+        [disabled]="currentCodingIndex === 0">
+        ◀
+      </button>
+
+      <button
+        class="btn btn-outline-secondary btn-sm"
+        (click)="nextCoding()"
+        [disabled]="currentCodingIndex === codingQuestions.length - 1">
+        ▶
+      </button>
+    </div>
+  </div>
+
+  <!-- SCROLLABLE BODY -->
+  <div class="question-panel-body">
+
+    <!-- PROBLEM -->
+    <h6>Problem</h6>
+    <p class="small">{{ problemStatement }}</p>
+
+    <!-- SAMPLE TEST CASES (BEFORE RUN) -->
+    @if (codingQuestions[currentCodingIndex]?.testCases?.length) {
+
+      <h6 class="mt-3">Sample Test Cases</h6>
+
+      @for (tc of codingQuestions[currentCodingIndex].testCases; let t = $index; track t) {
+        <div class="testcase-preview">
+          <div>
+            <p>Input {{ t + 1 }}: <span><code>{{ tc.input }}</code></span></p>
+            <p>Expected: <span><code>{{ tc.expectedOutput }}</code></span></p>
+</div>
+        </div>
+      }
+
+    }
+
+    <!-- RESULTS (AFTER RUN) -->
+    @if (codingAnswers[currentCodingIndex]?.results?.length) {
+
+      <h6 class="mt-4">
+        Test Case Results
+        ({{ codingAnswers[currentCodingIndex].results.length }})
+      </h6>
+
+      @for (r of codingAnswers[currentCodingIndex].results; track r.input) {
+
+        <div
+          class="testcase-row"
+          [class.pass]="r.passed"
+          [class.fail]="!r.passed">
+
+          <div>
+            <strong>Input:</strong>
+            <code>{{ r.input }}</code>
+          </div>
+
+          <div>
+            <strong>Expected:</strong>
+            <code>{{ r.expectedOutput }}</code>
+          </div>
+
+          <div>
+            <strong>Your Output:</strong>
+            <code>{{ r.output }}</code>
+          </div>
+
+          <div class="status">
+            {{ r.passed ? '✅ Passed' : '❌ Failed' }}
+          </div>
+        </div>
+
+      }
+
+    }
+
+  </div>
 </div>
 
-  </div>
+      <!-- ================= RIGHT PANEL ================= -->
+      <div class="col-9 editor-panel">
 
-  <!-- EDITOR -->
-  <div class="editor-container">
-    <ngx-monaco-editor
-      [options]="editorOptions"
-      [(ngModel)]="code">
-    </ngx-monaco-editor>
-  </div>
+        <!-- TOP BAR -->
+        <div class="editor-topbar">
+          <select
+            class="form-select form-select-sm lang-select"
+            #lang
+            (change)="changeLanguage(lang.value)">
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+            <option value="sql">SQL</option>
+          </select>
 
-  <!-- OUTPUT -->
-  <div class="output-panel">
-    <h6 class="fw-bold mb-2">Output</h6>
-    <pre>{{ output || 'Run code to see output...' }}</pre>
+          <div class="action-buttons">
+            <button
+              class="btn btn-success btn-sm"
+              [disabled]="!canRunCode()"
+              (click)="runCode()">
+              Run
+            </button>
+
+            <button
+              class="btn btn-primary btn-sm"
+              (click)="submitTest()">
+              Submit
+            </button>
+          </div>
+        </div>
+
+        <!-- MONACO EDITOR -->
+        <div class="editor-container">
+          <ngx-monaco-editor
+            [options]="editorOptions"
+            [(ngModel)]="code"
+            [ngModelOptions]="{ standalone: true }">
+          </ngx-monaco-editor>
+        </div>
+
+        <!-- OUTPUT -->
+        <div class="output-panel">
+          <pre>{{ output || 'Run code to see output...' }}</pre>
+        </div>
+
+      </div>
+
+    </div>
   </div>
+}
+
 
 </div>

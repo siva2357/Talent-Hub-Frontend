@@ -1,12 +1,54 @@
-import { RouterModule } from '@angular/router';
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
+import { InterviewService } from '../../../../core/services/interview-service';
+import { Interview } from '../../../../core/models/interview.model';
+
 @Component({
   selector: 'app-scheduled-meetings',
-  imports: [RouterModule ],
+  standalone: true,
+  imports: [RouterModule, CommonModule],
   templateUrl: './scheduled-meetings.html',
   styleUrl: './scheduled-meetings.css',
 })
-export class ScheduledMeetings {
+export class ScheduledMeetings implements OnInit {
 
+  loading = true;
+  interviews: Interview[] = [];
+
+  constructor(
+    private router: Router,
+    private interviewService: InterviewService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadMeetings();
+  }
+
+  loadMeetings(): void {
+    this.interviewService.getAllRecruiterInterviews().subscribe({
+      next: res => {
+        this.interviews = res.interviews;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
+    });
+  }
+
+  joinMeeting(interview: Interview): void {
+    this.router.navigate([
+      '/interview/meet-session',
+      interview._id,
+      interview.meetingId
+    ]);
+  }
+
+  duration(start: Date, end: Date): string {
+    const mins =
+      (new Date(end).getTime() - new Date(start).getTime()) / 60000;
+    return `${mins} mins`;
+  }
 }

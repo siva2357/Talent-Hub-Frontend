@@ -38,8 +38,8 @@ export const routes: Routes = [
   { path: 'talent-marketplace', component: TalentMarketplacePage, title: 'Talent marketplace' },
   { path: 'find-work', component: FindWorkPage, title: 'Find work' },
   { path: 'recruitment-process', component: RecruitmentPage, title: 'Recruitment' },
-
-  { path: 'resume-builder', component: ResumeBuilderPage, title: 'Resume builder' },
+  { path: 'interview-process', component: InterviewPage, title: 'Interview Login'},
+  { path: 'resume-analyzer', component: ResumeBuilderPage, title: 'Resume builder' },
   { path: 'about', component: AboutPage, title: 'About' },
   { path: 'blog', component: BlogPage, title: 'Blog' },
 
@@ -63,18 +63,9 @@ export const routes: Routes = [
   { path: 'error', component: ErrorPage, title: 'Error' },
   { path: 'access-denied', component: UnauthorizedPage, title: 'Access denied' },
 
-
-
-  {
-  path: 'interview-preparation',
-  component: InterviewPage,
-  title: 'Interview Login'
-},
-
-
-  { path: 'interview/live-session/:id', component: InterviewSessionPage},
-
-  { path: 'interview/meet-session/:id', component: InterviewMeetingPage},
+  //Interview meet public pages
+  { path: 'interview/live-session/:interviewId/:meetingId', component: InterviewSessionPage},
+  { path: 'interview/meet-session/:interviewId/:meetingId', component: InterviewMeetingPage},
 
 
   //User routes

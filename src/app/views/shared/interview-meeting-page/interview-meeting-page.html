@@ -7,8 +7,7 @@
   <!-- LEFT -->
   <div class="header-left">
     <button
-      class="btn btn-sm btn-outline-light back-btn"
-      routerLink="/seeker/scheduled-meetings">
+      class="btn btn-sm btn-outline-light back-btn" (click)="goBack()">
       <i class="bi bi-arrow-left"></i>
       Back
     </button>
@@ -35,19 +34,40 @@
 <div class="meet-stage">
 
   <!-- VIDEO AREA -->
-  <div class="video-area">
+<!-- VIDEO AREA -->
+<div class="video-area">
 
-    <div class="main-video">
-      <i class="bi bi-person-video3"></i>
-      <span class="label">Interviewer</span>
-    </div>
+  <div class="main-video">
+    <i class="bi bi-person-video3"></i>
 
-    <div class="self-video">
-      <i class="bi bi-person-circle"></i>
-      <span class="label">You</span>
-    </div>
+<span class="label">
+  {{ remoteUserLabel }}
+</span>
+
+
+    <video #mainVideo autoplay playsinline></video>
+  </div>
+
+  <div class="self-video">
+    <i class="bi bi-person-circle"></i>
+
+    <!-- SELF VIDEO LABEL -->
+<span class="label">{{ participantName }} (You)</span>
+
+
+    <video #selfVideo autoplay playsinline muted></video>
 
   </div>
+
+</div>
+
+@if (role === 'jobSeeker' && isRecording) {
+  <div class="recording-indicator">
+    <span class="dot"></span>
+    Recording
+  </div>
+}
+
 
   <!-- CHAT SIDEBAR -->
   <div class="chat-sidebar">
@@ -77,30 +97,118 @@
 
 
 
-  <!-- CONTROLS -->
-  <div class="meet-controls ">
+<!-- CONTROLS -->
+<div class="meet-controls">
 
-    <button class="meet-btn">
-      <i class="bi bi-mic-fill"></i>
-    </button>
+  <!-- MIC -->
+  <button
+    class="meet-btn"
+    (click)="toggleMic()"
+    [title]="micOn ? 'Mute Mic' : 'Unmute Mic'"
+  >
+    <i class="bi" [ngClass]="micOn ? 'bi-mic-fill' : 'bi-mic-mute-fill'"></i>
+  </button>
 
-    <button class="meet-btn">
-      <i class="bi bi-camera-video-fill"></i>
-    </button>
+  <!-- CAMERA -->
+  <button
+    class="meet-btn"
+    (click)="toggleCamera()"
+    [title]="camOn ? 'Turn Camera Off' : 'Turn Camera On'"
+  >
+    <i class="bi"
+       [ngClass]="camOn ? 'bi-camera-video-fill' : 'bi-camera-video-off-fill'">
+    </i>
+  </button>
 
-    <button class="meet-btn">
-      <i class="bi bi-display"></i>
-    </button>
+  <!-- SCREEN (placeholder for later) -->
+  <button class="meet-btn" disabled>
+    <i class="bi bi-display"></i>
+  </button>
 
-      <!-- CHAT TOGGLE -->
+  <!-- CHAT -->
   <label for="chat-toggle" class="meet-btn">
     <i class="bi bi-chat-dots-fill"></i>
   </label>
 
-    <button class="meet-btn end">
-      <i class="bi bi-telephone-x-fill"></i>
-    </button>
+@if (role === 'recruiter' && !showReportForm) {
+  <button
+    class="meet-btn end"
+    (click)="endCall()"
+    title="End Interview"
+  >
+    <i class="bi bi-telephone-x-fill"></i>
+  </button>
+}
 
-  </div>
+@if (role === 'jobSeeker' && !meetingEnded) {
+  <button class="meet-btn end" (click)="leaveMeeting()">
+    <i class="bi bi-box-arrow-right"></i>
+  </button>
+}
+<app-file-upload
+  #videoUploader
+  [bucketKey]="BucketKey.JOBSEEKER_DATA"
+  [section]="UploadSection.INTERVIEW_VIDEO"
+  accept="video/*"
+  class="d-none"
+  [replace]="true"
+  (uploaded)="onPhotoUploaded($event)">
+</app-file-upload>
+
+
 
 </div>
+
+
+</div>
+
+
+@if (role === 'recruiter' && showReportForm) {
+  <div class="report-overlay">
+    <div class="report-card">
+
+      <h5 class="mb-3">Interview Report</h5>
+
+      @if (interviewVideoUrl) {
+        <app-file-preview [fileUrl]="interviewVideoUrl"></app-file-preview>
+      } @else {
+        <div class="alert alert-warning text-center">
+          Waiting for interview video upload…
+        </div>
+      }
+
+      <!-- Rating -->
+      <div class="mb-3">
+        <label class="form-label">Rating (1–10) *</label>
+        <input
+          type="number"
+          class="form-control"
+          min="1"
+          max="10"
+          [(ngModel)]="rating"
+          required
+        />
+      </div>
+
+      <!-- Remarks -->
+      <div class="mb-3">
+        <label class="form-label">Remarks (optional)</label>
+        <textarea
+          class="form-control"
+          rows="3"
+          [(ngModel)]="remarks">
+        </textarea>
+      </div>
+
+      <!-- Submit -->
+      <button
+        class="btn btn-danger w-100"
+        [disabled]="rating < 1 || rating > 10"
+        (click)="submitInterviewReport()">
+        Submit Report & Close
+      </button>
+
+    </div>
+  </div>
+}
+
