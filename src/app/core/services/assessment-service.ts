@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { GetCodingQuestionsResponse } from '../models/assessment.model';
+import { AssessmentReport, GetCodingQuestionsResponse } from '../models/assessment.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -42,14 +42,21 @@ assignAssessment(payload: {
 }
 
 
+getAssessmentIdByJob(jobPostId: string, jobSeekerId: string) {
+  return this.http.get<{ assessmentId: string }>(
+    `${this.baseUrl}/by-job/${jobPostId}/${jobSeekerId}`,
+    { headers: this.getHeaders() }
+  );
+}
 
-    /** View MCQ report */
-  getAssessmentReport(assessmentId: string): Observable<any> {
-    return this.http.get(
-      `${this.baseUrl}/report/${assessmentId}`,
-      { headers: this.getHeaders() }
-    ).pipe(catchError(this.handleError));
-  }
+
+
+getAssessmentReport(assessmentId: string): Observable<AssessmentReport> {
+  return this.http.get<AssessmentReport>(
+    `${this.baseUrl}/report/${assessmentId}`,
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
 
 
 

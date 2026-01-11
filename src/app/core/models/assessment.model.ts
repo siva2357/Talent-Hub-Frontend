@@ -45,3 +45,59 @@ export interface CodingAnswer {
   testCases: CodingTestCase[];
   results: CodingResult[];
 }
+
+
+
+
+export interface AssessmentReport {
+  jobSeeker: {
+    _id: string;
+    registrationDetails: {
+      fullName: string;
+      email: string;
+    };
+  };
+
+  job: {
+    _id: string;
+    jobTitle: string;
+    jobId: string;
+  };
+
+  jobCategory: string;
+  jobTitle: string;
+
+  mcq: {
+    score: number;
+    total: number;
+    percentage: number;
+  };
+
+  coding: {
+    score: number;
+    total: number;
+    percentage: number;
+  } | null;
+
+  overallPercentage: number;
+  eligibleForInterview: boolean;
+  submittedAt: string;
+}
+
+
+export interface JobCategoryAnalytics {
+  jobCategory: string;
+  jobs: {
+    jobTitle: string;
+    totalCandidates: number;
+    eligibleCount: number;
+    jobSeekers: {
+      jobSeekerId: string;
+      name: string;
+      mcqPercentage: number;
+      codingPercentage: number;
+      overallPercentage: number;
+      eligibleForInterview: boolean;
+    }[];
+  }[];
+}
