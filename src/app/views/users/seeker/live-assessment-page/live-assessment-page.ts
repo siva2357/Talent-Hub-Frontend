@@ -4,11 +4,9 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { AssessmentService } from '../../../../core/services/assessment-service';
 import { CodeExecutionService } from '../../../../core/services/code-execution-service';
+import { CodingAnswer, CodingResult, McqAnswer } from '../../../../core/models/assessment.model';
 
-interface McqAnswer {
-  questionId: string;
-  selectedOption: number;
-}
+
 
 @Component({
   selector: 'app-live-assessment-page',
@@ -84,6 +82,7 @@ ngOnInit(): void {
   }
 
   this.fetchMcqs();
+    this.fetchCodingQuestions(); // 👈 ADD THIS
 }
 
   /* =====================
@@ -124,6 +123,7 @@ goToCodingSection(): void {
   }
 
   this.section = 'coding';
+  this.fetchCodingQuestions();
 
   localStorage.setItem(
     `assessment_${this.assessmentId}`,
@@ -135,6 +135,90 @@ goToCodingSection(): void {
     })
   );
 }
+
+
+
+/* =====================
+   CODING DATA (FROM API)
+====================== */
+
+
+problemStatement = '';
+hasCodingQuestion = false;
+
+
+codingQuestions: any[] = [];
+currentCodingIndex = 0;
+codingAnswers: CodingAnswer[] = [];
+
+
+
+
+fetchCodingQuestions(): void {
+  this.assessmentService
+    .getCodingQuestion(this.assessmentId)
+    .subscribe({
+      next: res => {
+        this.codingQuestions = res.codingQuestions || [];
+
+        if (this.codingQuestions.length > 0) {
+          this.hasCodingQuestion = true;
+
+          this.codingAnswers = this.codingQuestions.map(q => ({
+            questionId: q.id,
+            language: this.selectedLanguage,
+            code: q.starterCode || '',
+            testCases: q.testCases || [],
+            results: []
+          }));
+
+          this.loadCurrentCodingQuestion();
+        }
+      },
+      error: () => {
+        this.hasCodingQuestion = false;
+      }
+    });
+}
+
+
+
+loadCurrentCodingQuestion(): void {
+  const q = this.codingQuestions[this.currentCodingIndex];
+  const answer = this.codingAnswers[this.currentCodingIndex];
+
+  if (!q || !answer) return;
+
+  this.problemStatement = q.problemStatement;
+  this.selectedLanguage = answer.language;
+  this.code = answer.code;
+
+  this.editorOptions = {
+    ...this.editorOptions,
+    language: this.selectedLanguage
+  };
+}
+
+
+nextCoding(): void {
+  this.saveCurrentCodingAnswer();
+
+  if (this.currentCodingIndex < this.codingQuestions.length - 1) {
+    this.currentCodingIndex++;
+    this.loadCurrentCodingQuestion();
+  }
+}
+
+prevCoding(): void {
+  this.saveCurrentCodingAnswer();
+
+  if (this.currentCodingIndex > 0) {
+    this.currentCodingIndex--;
+    this.loadCurrentCodingQuestion();
+  }
+}
+
+
 
 
 changeLanguage(lang: string): void {
@@ -151,7 +235,7 @@ changeLanguage(lang: string): void {
   };
 
   this.code = this.getStarterCode(lang);
-  this.saveCodingProgress();
+  this.saveCurrentCodingAnswer();
 }
 
 getStarterCode(lang: string): string {
@@ -184,22 +268,14 @@ db.users.find({ active: true })`;
 
 
 
+saveCurrentCodingAnswer(): void {
+  const answer = this.codingAnswers[this.currentCodingIndex];
+  if (!answer) return;
 
-  saveCodingProgress(): void {
-  const saved = localStorage.getItem(`assessment_${this.assessmentId}`);
-  const state = saved ? JSON.parse(saved) : {};
-
-  localStorage.setItem(
-    `assessment_${this.assessmentId}`,
-    JSON.stringify({
-      ...state,
-      section: this.section,
-      mcqAnswers: this.mcqAnswers,
-      code: this.code,
-      language: this.selectedLanguage
-    })
-  );
+  answer.code = this.code;
+  answer.language = this.selectedLanguage;
 }
+
 
 canRunCode(): boolean {
   return this.selectedLanguage === 'javascript'
@@ -208,51 +284,67 @@ canRunCode(): boolean {
 
 
 runCode(): void {
-  this.output = 'Running...';
+  this.output = 'Running test cases...';
+
+  const current: CodingAnswer | undefined =
+    this.codingAnswers[this.currentCodingIndex];
+
+  if (!current) return;
 
   this.codeService.runCode({
     language: this.selectedLanguage,
-    code: this.code
+    code: this.code,
+    testCases: current.testCases
   }).subscribe({
-    next: res => {
-      if (res.error) {
-        this.output = res.error;
-      } else {
-        this.output = res.output || 'No output';
-      }
+    next: (res: { results: CodingResult[] }) => {
+      current.results = res.results;
+
+      const passed = current.results.every(
+        (r: CodingResult) => r.passed
+      );
+
+      this.output = passed
+        ? '✅ All test cases passed'
+        : '❌ Some test cases failed';
     },
-    error: err => {
-      this.output = typeof err === 'string'
-        ? err
-        : 'Execution failed';
+    error: () => {
+      this.output = 'Execution failed';
     }
   });
 
-  this.saveCodingProgress();
-
+  this.saveCurrentCodingAnswer();
 }
 
 
 
+
+goToQuestion(index: number): void {
+  this.saveCurrentCodingAnswer();
+  this.currentCodingIndex = index;
+  this.loadCurrentCodingQuestion();
+
+  setTimeout(() => {
+    const active = document.querySelector('.question-list li.active');
+    active?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+}
+
+
 submitTest(): void {
+  this.saveCurrentCodingAnswer();
+
   const payload = {
     assessmentId: this.assessmentId,
     mcqAnswers: this.mcqAnswers,
-    coding: {
-      language: this.selectedLanguage,
-      code: this.code
-    }
+    coding: this.codingAnswers // 👈 ARRAY
   };
 
-  console.log('FINAL SUBMIT PAYLOAD', payload);
-
   this.assessmentService.submitAssessment(payload).subscribe({
-next: res => {
-  localStorage.removeItem(`assessment_${this.assessmentId}`);
-  this.router.navigate(['/jobSeeker/assessments']);
-},
+    next: () => {
+      localStorage.removeItem(`assessment_${this.assessmentId}`);
+      this.router.navigate(['/jobSeeker/assessments']);
+    },
     error: err => {
-      console.error('SUBMIT ERROR', err);
       alert(err);
     }
   });

@@ -14,3 +14,22 @@
 
   </form>
 </div>
+
+
+
+<div class="container mt-5 pt-5">
+  <form (ngSubmit)="uploadCodingQuestions()" enctype="multipart/form-data">
+
+    <input
+      type="file"
+      (change)="onFileSelect($event)"
+      accept=".csv,.json"
+      class="form-control mb-3"
+    />
+
+    <button type="submit" class="btn btn-primary">
+      Upload Coding questions
+    </button>
+
+  </form>
+</div>

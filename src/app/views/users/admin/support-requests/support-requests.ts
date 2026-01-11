@@ -42,4 +42,32 @@ export class SupportRequests {
       }
     });
   }
+
+
+
+   uploadCodingQuestions() {
+    console.log('Upload clicked');
+
+    if (!this.selectedFile) {
+      alert('Please select a file');
+      return;
+    }
+
+    console.log('File:', this.selectedFile.name);
+
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+
+    this.adminService.uploadCoding(formData).subscribe({
+      next: res => {
+        alert(`Uploaded ${res.inserted} MCQs`);
+      },
+      error: err => {
+        console.error(err);
+        alert(err.error?.message || 'Upload failed');
+      }
+    });
+  }
+
+
 }

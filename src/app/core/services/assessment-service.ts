@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { GetCodingQuestionsResponse } from '../models/assessment.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -29,19 +30,16 @@ private baseUrl: string = `${environment.apiGatewayUrl}/assessment`;
 
 
 
-  /** Assign MCQ assessment to a job seeker */
-  assignAssessment(payload: {
-    jobPostId: string;
-    jobSeekerId: string;
-    jobCategory: string;
-    jobTitle: string;
-  }): Observable<any> {
-    return this.http.post(
-      `${this.baseUrl}/assign`,
-      payload,
-      { headers: this.getHeaders() }
-    ) .pipe(catchError(this.handleError));
-  }
+assignAssessment(payload: {
+  jobPostId: string;
+  jobSeekerId: string;
+}): Observable<any> {
+  return this.http.post(
+    `${this.baseUrl}/assign`,
+    payload,
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
 
 
 
@@ -70,7 +68,22 @@ private baseUrl: string = `${environment.apiGatewayUrl}/assessment`;
   ).pipe(catchError(this.handleError));
   }
 
+
+getCodingQuestion(
+  assessmentId: string
+): Observable<GetCodingQuestionsResponse> {
+  return this.http.get<GetCodingQuestionsResponse>(
+    `${this.baseUrl}/coding/${assessmentId}`,
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
+
+
+
+
+
   /** Submit MCQ answers */
+/** Submit assessment (MCQ + multiple coding) */
 submitAssessment(payload: {
   assessmentId: string;
   mcqAnswers: {
@@ -78,9 +91,10 @@ submitAssessment(payload: {
     selectedOption: number;
   }[];
   coding?: {
+    questionId: string;
     language: string;
     code: string;
-  };
+  }[];
 }): Observable<any> {
   return this.http.post(
     `${this.baseUrl}/submit`,
@@ -88,6 +102,7 @@ submitAssessment(payload: {
     { headers: this.getHeaders() }
   ).pipe(catchError(this.handleError));
 }
+
 
   /* =========================
      ERROR HANDLER

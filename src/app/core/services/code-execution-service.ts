@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { CodingResult, CodingTestCase } from '../models/assessment.model';
 
 @Injectable({ providedIn: 'root' })
 export class CodeExecutionService {
@@ -18,17 +19,16 @@ export class CodeExecutionService {
     });
   }
 
-  runCode(payload: {
-    language: string;
-    code: string;
-  }): Observable<{ output: string; error: string | null }> {
-    return this.http.post<{ output: string; error: string | null }>(
-      `${this.baseUrl}/execute`,
-      {
-        ...payload,
-        type: 'run'
-      },
-      { headers: this.getHeaders() }
-    );
-  }
+runCode(payload: {
+  language: string;
+  code: string;
+  testCases: CodingTestCase[];
+}): Observable<{ results: CodingResult[] }> {
+  return this.http.post<{ results: CodingResult[] }>(
+    `${this.baseUrl}/execute`,
+    payload,
+    { headers: this.getHeaders() }
+  );
+}
+
 }

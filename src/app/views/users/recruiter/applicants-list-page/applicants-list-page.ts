@@ -230,9 +230,7 @@ submitInterview(): void {
 assignAssessment(): void {
   const payload = {
     jobPostId: this.jobPostId,
-    jobSeekerId: this.selectedApplicant.jobSeekerId,
-    jobCategory: this.jobCategory,
-    jobTitle: this.jobTitle
+    jobSeekerId: this.selectedApplicant.jobSeekerId
   };
 
   this.assessmentService.assignAssessment(payload).subscribe({
@@ -245,6 +243,7 @@ assignAssessment(): void {
     }
   });
 }
+
 
 closeAssignModal(): void {
   this.assignModal?.hide();
