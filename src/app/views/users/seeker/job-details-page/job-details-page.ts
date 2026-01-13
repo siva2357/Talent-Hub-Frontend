@@ -1,4 +1,4 @@
-import { CompanyDetails } from './../../admin/company-details/company-details';
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';

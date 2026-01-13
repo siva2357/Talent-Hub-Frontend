@@ -9,8 +9,7 @@ import { RecruiterProfilePage } from './recruiter-profile-page/recruiter-profile
 import { SeekerProfilePage } from './seeker-profile-page/seeker-profile-page';
 import { JobApplicantsList } from './job-applicants-list/job-applicants-list';
 import { SupportRequests } from './support-requests/support-requests';
-import { Companies } from './companies/companies';
-import { CompanyDetails } from './company-details/company-details';
+
 
 export const ADMIN_ROUTES: Routes = [
   {
@@ -18,8 +17,6 @@ export const ADMIN_ROUTES: Routes = [
     component: Admin,
     children: [
       { path: 'dashboard', component: Dashboard },
-      { path: 'companies', component: Companies },
-      { path: 'companies/:id/company-details', component: CompanyDetails },
       { path: 'recruiters-list', component: Recruiters },
       { path: 'recruiters-list/:id/profile', component: RecruiterProfilePage },
       { path: 'seekers-list', component: Seekers },
