@@ -11,9 +11,6 @@ import { ApiResponse } from '../models/api-response.model';
 export class RecruiterProfileService {
   private baseUrl: string = environment.apiGatewayUrl;
 
-  private role = localStorage.getItem('userRole') || '';
-  private userData = JSON.parse(localStorage.getItem('userData') || '{}');
-
   private getHeaders(): HttpHeaders {
   const token = localStorage.getItem('JWT_Token');
 

@@ -34,6 +34,7 @@ registerRecruiter(
     userId: string;
     fullName: string;
     email: string;
+      role:string;
   };
 }> {
   return this.http
@@ -48,6 +49,7 @@ registerJobSeeker(
     userId: string;
     fullName: string;
     email: string;
+    role:string;
   };}> {
   return this.http
     .post<{ success: boolean; message?: string }>(

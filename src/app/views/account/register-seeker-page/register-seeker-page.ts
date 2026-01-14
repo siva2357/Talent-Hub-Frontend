@@ -65,7 +65,8 @@ submit(): void {
         JSON.stringify({
           userId: res.result?.userId,
           fullName: res.result?.fullName,
-          email: res.result?.email
+          email: res.result?.email,
+          role:res.result?.role
         })
       );
 

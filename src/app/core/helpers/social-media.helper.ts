@@ -1,32 +1,35 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { SocialPlatform } from '../enums/socialMedia.enum';
 
-const PLATFORM_DOMAINS: Record<string, RegExp> = {
-  LinkedIn: /linkedin\.com/i,
-  GitHub: /github\.com/i,
-  Portfolio: /.*/,          // allow any valid URL
-  'Twitter / X': /(twitter\.com|x\.com)/i,
-  Instagram: /instagram\.com/i,
-  Facebook: /facebook\.com/i,
-  Dribbble: /dribbble\.com/i,
-  Behance: /behance\.net/i
+
+/**
+ * Platform-specific URL patterns
+ */
+export const SOCIAL_URL_PATTERNS: Record<SocialPlatform, RegExp> = {
+  [SocialPlatform.LinkedIn]: /^https:\/\/(www\.)?linkedin\.com\/.*$/i,
+  [SocialPlatform.GitHub]: /^https:\/\/(www\.)?github\.com\/.*$/i,
+  [SocialPlatform.Website]: /^https?:\/\/.+$/i,
+  [SocialPlatform.Twitter]: /^https:\/\/(www\.)?(twitter\.com|x\.com)\/.*$/i,
+  [SocialPlatform.Instagram]: /^https:\/\/(www\.)?instagram\.com\/.*$/i,
+  [SocialPlatform.Dribbble]: /^https:\/\/(www\.)?dribbble\.com\/.*$/i,
+  [SocialPlatform.Behance]: /^https:\/\/(www\.)?behance\.net\/.*$/i,
+  [SocialPlatform.Medium]: /^https:\/\/(www\.)?medium\.com\/.*$/i
 };
 
+/**
+ * Cross-field validator for social profile
+ */
 export function socialProfileValidator(): ValidatorFn {
-  return (group: AbstractControl): ValidationErrors | null => {
-    const platform = group.get('platform')?.value;
-    const link = group.get('link')?.value;
+  return (control: AbstractControl): ValidationErrors | null => {
+    const platform = control.get('platform')?.value as SocialPlatform;
+    const link = control.get('link')?.value as string;
 
     if (!platform || !link) return null;
 
-    // basic URL check
-    const urlPattern = /^https?:\/\/.+/i;
-    if (!urlPattern.test(link)) {
-      return { invalidUrl: true };
-    }
+    const pattern = SOCIAL_URL_PATTERNS[platform];
 
-    const domainPattern = PLATFORM_DOMAINS[platform];
-    if (domainPattern && !domainPattern.test(link)) {
-      return { platformMismatch: true };
+    if (!pattern?.test(link)) {
+      return { invalidUrl: true };
     }
 
     return null;

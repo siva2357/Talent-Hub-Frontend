@@ -25,7 +25,6 @@ import { SEEKER_ROUTES } from './views/users/seeker/seeker.routes';
 import { ADMIN_ROUTES } from './views/users/admin/admin.routes';
 import { SeekerProfileForm } from './views/account/seeker-profile-form/seeker-profile-form';
 import { RecruiterProfileForm } from './views/account/recruiter-profile-form/recruiter-profile-form';
-import { AccountRegisteredPage } from './views/account/account-registered-page/account-registered-page';
 import { InterviewMeetingPage } from './views/shared/interview-meeting-page/interview-meeting-page';
 import { InterviewSessionPage } from './views/shared/interview-session-page/interview-session-page';
 import { RoleGuard } from './core/guards/role.guard';
@@ -49,7 +48,6 @@ export const routes: Routes = [
   { path: 'sign-up/recruiter-profile-form', component: RecruiterProfileForm },
   { path: 'sign-up/jobSeeker', component: RegisterSeekerPage, title: 'Register seeker' },
   { path: 'sign-up/jobSeeker-profile-form', component: SeekerProfileForm },
-  { path: 'account-registered', component: AccountRegisteredPage, title: 'Confirmation' },
   { path: 'sign-up/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
   { path: 'login', component: LoginPage, title: 'Login' },

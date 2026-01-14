@@ -52,13 +52,13 @@ sectors = Object.values(SECTOR);      // for sector dropdown
 designations: DESIGNATION[] = [];     // dynamic list
 languagesList = Object.values(Language);
 proficiencyLevels = Object.values(Proficiency);
-
+  role!:string;
   profileForm!: FormGroup;
 
   BucketKey = BucketKey;
   UploadSection = UploadSection;
   profilePhotoUrl!: string;
-
+ logoUrl!: string;
   // profilePhotoUrl =
   //   'https://res.cloudinary.com/dpp8aspqs/image/upload/v1737957959/profie_images_j53njq.png';
 
@@ -79,7 +79,7 @@ proficiencyLevels = Object.values(Proficiency);
     const data = JSON.parse(stored);
     this.userId = data.userId;
     this.email = data.email;
-
+    this.role=data.role;
   const fullNameParts = (data.fullName || '').trim().split(' ');
   this.firstName = fullNameParts[0] || '';
   this.lastName = fullNameParts.slice(1).join(' ') || '';
@@ -93,10 +93,11 @@ this.profileForm = this.fb.group({
 
   mobile: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
   gender: ['', Validators.required],
+logo: [null, Validators.required],
 
   companyName: ['', Validators.required],
-  companyLocation: [{ value: '', disabled: true }],
-  companyDescription: [{ value: '', disabled: true }],
+  companyLocation: ['', Validators.required],
+  companyDescription: ['', Validators.required],
 
   sector: ['', Validators.required],
   designation: ['', Validators.required],
@@ -113,18 +114,9 @@ this.profileForm.get('sector')?.valueChanges.subscribe(() => {
 });
 
 this.addSocialProfile();
-this.loadCompanies();
 
 }
 
-loadCompanies(): void {
-  this.companyService.getCompanyList().subscribe({
-    next: (res) => {
-      this.companies = res;
-    },
-    error: () => {}
-  });
-}
 
 getSocialIcon(platform: unknown): string {
   if (!platform) return '';
@@ -148,29 +140,6 @@ onSectorChange(): void {
   // reset designation if sector changes
   this.profileForm.get('designation')?.reset();
 }
-
-
-onCompanySelect(event: Event): void {
-  const companyName = (event.target as HTMLSelectElement).value;
-
-  const company = this.companies.find(
-    c => c.companyDetails.companyName === companyName
-  );
-
-  if (!company) return;
-
-  // auto-fill (read-only fields)
-  this.profileForm.patchValue({
-    companyLocation: company.companyDetails.companyAddress,
-    companyDescription: company.companyDetails.companyDescription
-  });
-
-  // logo preview (UI only)
-  this.selectedCompanyLogo =
-    company.companyDetails.companyLogo?.url || '';
-}
-
-
 
   /* ================= GETTERS ================= */
 
@@ -313,10 +282,19 @@ onPhotoUploaded(url: string): void {
   this.profileForm.get('profilePhoto')?.markAsTouched();
 }
 
+
+onlogoUploaded(url: string): void {
+  this.logoUrl = url + '?v=' + Date.now();
+
+  this.profileForm.get('logo')?.setValue(url);
+  this.profileForm.get('logo')?.markAsTouched();
+}
+
   /* ================= SUBMIT ================= */
 
 submitProfile(): void {
   this.profileForm.get('profilePhoto')?.markAsTouched();
+  this.profileForm.get('logo')?.markAsTouched();
 
   if (this.profileForm.invalid) {
     this.profileForm.markAllAsTouched();
@@ -329,15 +307,17 @@ submitProfile(): void {
   const payload = {
     userId: this.userId,
     profilePhoto: this.profilePhotoUrl,
+    logo: this.logoUrl,
     ...this.profileForm.getRawValue()
   };
 
-  this.recruiterProfileService.createProfile(payload).subscribe({
-    next: () => {
-      localStorage.removeItem('recruiterRegistration');
-      this.router.navigate(['/account-registered']);
-    }
+  this.recruiterProfileService.createProfile(payload).subscribe(() => {
+    localStorage.removeItem('recruiterRegistration');
+    this.router.navigate(['/sign-up/otp-verification'], {
+      queryParams: { email: this.email, role: this.role }
+    });
   });
 }
+
 
 }
