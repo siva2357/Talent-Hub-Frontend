@@ -2,11 +2,12 @@ export interface RecruiterProfile {
   _id?: string;
   userId: string;
   profilePhoto: string;
+  companyLogo: string;
   firstName: string;
   lastName: string;
   email: string;
-  mobile: string
-  gender: 'Male' | 'Female' | 'Other';
+  mobile: string;
+  gender: string;
   companyName: string;
   companyLocation: string;
   companyDescription: string;
@@ -21,13 +22,16 @@ export interface RecruiterProfile {
   updatedAt?: string;
 }
 
+
 export interface Language {
-  _id:string
+  _id?: string;
   language: string;
   level: string;
 }
 
+
 export interface SocialProfile {
+  _id?: string;
   platform:
     | 'LinkedIn'
     | 'GitHub'
@@ -38,4 +42,21 @@ export interface SocialProfile {
     | 'Dribbble'
     | 'Behance';
   link: string;
+}
+
+export interface RecruiterJobPost {
+  _id: string;
+  jobId: string;
+  jobTitle: string;
+  jobCategory: string;
+  jobDescription: string;
+  status: 'Open' | 'Closed' | 'Rejected';
+  totalApplicants: number;
+  postedOn: string;
+}
+
+
+export interface RecruiterProfileResponse {
+  profile: RecruiterProfile;
+  jobs: RecruiterJobPost[];
 }

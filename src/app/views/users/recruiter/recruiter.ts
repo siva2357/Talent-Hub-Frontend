@@ -81,19 +81,24 @@ loadNotifications(): void {
   }
 
 
-getRecruiterDetails() {
-  this.profileService.getRecruiterProfile().subscribe(
-    (res: any) => {
-      this.userProfile = res.data; // ✅ FIX
-      this.fullName = `${this.userProfile.firstName} ${this.userProfile.lastName}`;
-      this.profileImage = this.userProfile.profilePhoto; // ✅ now works
-      this.loading = false;
+getRecruiterDetails(): void {
+  this.loading = true;
+  this.profileService.getRecruiterProfile().subscribe({
+    next: (response) => {
+      if (response.success) {
+        this.userProfile = response.data.profile;
+        this.fullName = `${this.userProfile.firstName} ${this.userProfile.lastName}`;
+        this.profileImage = this.userProfile.profilePhoto;
+        this.loading = false;
+      }
     },
-    (error) => {
+    error: (error) => {
+      this.loading = false;
       this.handleError(error);
     }
-  );
+  });
 }
+
 
 
 handleError(error: any) {

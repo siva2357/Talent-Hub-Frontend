@@ -202,30 +202,52 @@
   </div>
 
   <!-- RECENT JOB POSTS -->
-  <div class="card border-0 shadow-sm rounded-4 p-2 mb-5">
-    <h5 class="fw-bold mb-3">Recent Job Posts</h5>
+ <!-- RECENT JOB POSTS -->
+<div class="card border-0 shadow-sm rounded-4 p-3 mb-5">
+  <h5 class="fw-bold mb-3">Recent Job Posts</h5>
 
-    <div class="job-list">
+  <div class="job-list">
 
-      <div class="job-card p-3 mb-3 rounded-4 shadow-sm">
-        <div class="d-flex justify-content-between">
-          <h6 class="fw-semibold">UI/UX Designer</h6>
-          <span class="badge bg-primary">Active</span>
-        </div>
-        <small class="text-muted">Job ID #42342 • Applicants: 12 • Posted Jan 20, 2024</small>
-        <p class="text-muted small mt-2">Hiring UI/UX designer with strong Figma skills.</p>
-      </div>
+    @if (recruiterJobs.length === 0) {
+      <p class="text-muted small">No job posts created yet.</p>
+    }
+
+    @for (job of recruiterJobs; track job._id) {
 
       <div class="job-card p-3 mb-3 rounded-4 shadow-sm">
-        <div class="d-flex justify-content-between">
-          <h6 class="fw-semibold">Backend Developer (Node.js)</h6>
-          <span class="badge bg-secondary">Closed</span>
+
+        <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="fw-semibold mb-0">
+            {{ job.jobTitle }}
+          </h6>
+
+<span
+  class="badge"
+  [ngClass]="job.status === 'Open' ? 'bg-success' : 'bg-danger'">
+  {{ job.status }}
+</span>
+
         </div>
-        <small class="text-muted">Job ID #37711 • Applicants: 22 • Posted Dec 2, 2023</small>
-        <p class="text-muted small mt-2">Node.js APIs, MongoDB, microservices experience needed.</p>
+
+        <!-- META -->
+        <small class="text-muted d-block mt-1">
+          Job ID #{{ job.jobId }}
+          • Applicants: {{ job.totalApplicants }}
+          • Posted {{ job.postedOn | date:'MMM d, y' }}
+        </small>
+
+        <!-- DESCRIPTION -->
+        <p class="text-muted small mt-2">
+          {{ job.jobDescription | slice:0:200 }}{{ job.jobDescription.length > 200 ? '…' : '' }}
+        </p>
+
       </div>
 
-    </div>
+    }
+
   </div>
+</div>
+
 
 </div>
