@@ -1,0 +1,230 @@
+/* =========================================================
+   GLOBAL GRID SAFETY (ONLY for talent card grid)
+========================================================= */
+.row.talent-grid > [class*="col-"] {
+  display: flex;
+}
+
+/* =========================================================
+   TALENT CARD
+========================================================= */
+.talent-card {
+  background: #ffffff;
+  border: 2px solid #92a6f3;
+  border-radius: 14px;
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  box-shadow:
+    0 8px 24px rgba(13, 110, 253, 0.18),
+    0 2px 6px rgba(0, 0, 0, 0.08);
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+.talent-card-header {
+  height: 150px;
+  background: url('https://res.cloudinary.com/dpp8aspqs/image/upload/v1735368346/pngtree-modern-design-vibrant-violet-fluid-space-screen-with-rainbow-texture-image_13913957_lhc2ah.png')
+    center / cover no-repeat;
+  position: relative;
+}
+
+/* Avatar */
+.talent-avatar {
+  width: 112px;
+  height: 112px;
+  object-fit: cover;
+
+  border-radius: 50%;
+  border: 3px solid #212529;
+
+  position: absolute;
+  left: 50%;
+  bottom: -56px;
+  transform: translateX(-50%);
+  background: #fff;
+}
+
+/* =========================================================
+   CARD BODY
+========================================================= */
+.talent-card-body {
+  padding: 1rem;
+  padding-top: 64px;
+
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Tight paragraph spacing */
+.talent-card-body p {
+  margin-bottom: 0.3rem;
+}
+
+/* =========================================================
+   STATUS BADGE
+========================================================= */
+.talent-card-body .badge {
+  font-size: 12px;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+.talent-card-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 0.6rem 0;
+  flex-wrap: nowrap;
+}
+
+.talent-card-actions .btn {
+  padding: 4px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   CONTACT DETAILS
+========================================================= */
+.talent-contact {
+  margin-bottom: 0.4rem;
+}
+
+.talent-contact p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 0.2rem;
+}
+
+.talent-contact .label {
+  font-weight: 600;
+  color: #374151;
+}
+
+/* =========================================================
+   BIO DESCRIPTION
+========================================================= */
+.talent-bio-wrapper {
+  margin-top: 0.3rem;
+}
+
+.bio-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 2px;
+}
+
+.talent-bio {
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.45;
+  margin: 0;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* =========================================================
+   FILTER CARD (MATCHES TALENT CARD)
+========================================================= */
+.filter-card {
+  background: #ffffff;
+  border: 2px solid #92a6f3;
+  border-radius: 14px;
+  padding: 1rem;
+
+  box-shadow:
+    0 8px 24px rgba(13, 110, 253, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.06);
+
+  margin-bottom: 1.25rem;
+}
+
+/* =========================================================
+   FILTER BAR
+========================================================= */
+.filter-bar {
+  margin-top: 1rem;
+}
+
+.filter-select {
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #c7d2fe;
+  padding: 8px 12px;
+}
+
+/* =========================================================
+   SKILL DROPDOWN
+========================================================= */
+.skill-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  z-index: 1050;
+
+  max-height: 220px;
+  overflow-y: auto;
+
+  background: #ffffff;
+  border: 1px solid #c7d2fe;
+  border-radius: 10px;
+  padding: 0.5rem;
+
+  box-shadow: 0 8px 24px rgba(13, 110, 253, 0.18);
+}
+
+/* =========================================================
+   ACTIVE FILTER PILLS
+========================================================= */
+.filter-summary {
+  margin-top: 0.75rem;
+}
+
+.filter-pill {
+  font-size: 13px;
+  padding: 6px 12px;
+
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
+  border: 1px solid #c7d2fe;
+
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  transition: background 0.15s ease;
+}
+
+.filter-pill:hover {
+  background: #e0e7ff;
+}
+
+/* =========================================================
+   COUNT TEXT
+========================================================= */
+.filter-count {
+  font-size: 14px;
+  color: #6c757d;
+  margin: 0;
+}

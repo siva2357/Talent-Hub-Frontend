@@ -5,8 +5,9 @@ export interface Talent {
   lastName: string;
   email: string;
   mobile: string;
-  gender: 'Male' | 'Female' | 'Other';
-  skills: string[];
+  gender:  string;
+  bioDescription: string;
+  skills:string[];
   status:string;
   saved?: boolean;
   location?: string;

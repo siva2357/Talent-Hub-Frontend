@@ -13,9 +13,6 @@ import { FormsModule } from '@angular/forms';
 import { WebrtcService } from '../../../core/services/webrtc-service';
 import { SignalingService } from '../../../core/services/signaling-service';
 import { AuthService } from '../../../core/services/auth-service';
-
-import { FilePreview } from '../file-preview/file-preview';
-import { FileUpload } from '../file-upload/file-upload';
 import { BucketKey } from '../../../core/enums/bucket-key.constant';
 import { UploadSection } from '../../../core/enums/upload-section.constant';
 import { ChangeDetectorRef } from '@angular/core';
@@ -30,8 +27,6 @@ import { InterviewReportService } from '../../../core/services/interview-report-
     RouterModule,
     CommonModule,
     FormsModule,
-    FilePreview,
-    FileUpload
   ],
   templateUrl: './interview-meeting-page.html',
   styleUrl: './interview-meeting-page.css'
@@ -41,7 +36,6 @@ export class InterviewMeetingPage
 
   @ViewChild('selfVideo') selfVideo!: ElementRef<HTMLVideoElement>;
   @ViewChild('mainVideo') mainVideo!: ElementRef<HTMLVideoElement>;
-  @ViewChild('videoUploader') videoUploader!: FileUpload;
 
   meetingId!: string;
   role!: 'recruiter' | 'jobSeeker';
@@ -60,9 +54,6 @@ export class InterviewMeetingPage
   interviewVideoUrl = '';
   rating = 0;
   remarks = '';
-
-  BucketKey = BucketKey;
-  UploadSection = UploadSection;
 
   private mediaRecorder?: MediaRecorder;
   private recordedChunks: Blob[] = [];
@@ -144,9 +135,6 @@ private stopRecordingAndUpload(): void {
     const file = new File([blob], `${this.meetingId}.webm`, {
       type: 'video/webm'
     });
-
-    // ✅ ACTUAL UPLOAD
-    this.videoUploader.uploadFile(file);
   };
 }
 

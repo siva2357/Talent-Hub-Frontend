@@ -1,61 +1,79 @@
-/* ================= GLOBAL ================= */
-.analytics-container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 24px;
-  font-family: system-ui, sans-serif;
-}
 
-.page-title {
-  margin-bottom: 20px;
-}
 
 /* ================= STAT CARDS ================= */
 .stat-card {
   background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 18px 14px;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  box-shadow:
+    0 8px 24px rgba(13, 110, 253, 0.18),
+    0 2px 6px rgba(0, 0, 0, 0.08);     /* depth */
+  transition: transform .2s ease, box-shadow .2s ease;
+    border: 2px solid #92a6f3;
 }
 
 .stat-card h5 {
   font-weight: 700;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .stat-card small {
-  color: #6c757d;
+  color: #6b7280;
+  font-size: 12px;
 }
 
-.stat-danger h5 {
-  color: #dc3545;
-}
+
 
 /* ================= ACCORDION ================= */
-.accordion-item {
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-
-/* ================= APPLICANT LIST ================= */
-.applicant-list {
-  padding: 14px;
-  display: grid;
+/* ================= ACCORDION TITLE FIX ================= */
+.accordion-button {
+  display: flex;
+  align-items: center;
   gap: 12px;
 }
 
+.accordion-title-wrap {
+  flex: 1;
+}
+
+.accordion-job-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.accordion-subtitle {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Fix arrow rotation */
+.accordion-button::after {
+  transform: scale(0.9);
+}
+
+.accordion-button:not(.collapsed)::after {
+  transform: rotate(180deg) scale(0.9);
+}
+
+
+/* ================= APPLICANT LIST ================= */
+.applicant-list {
+  padding: 16px;
+  display: grid;
+  gap: 14px;
+}
+
 .applicant-card {
-  background: #fff;
-  border-radius: 10px;
+  background: #ffffff;
+  border-radius: 12px;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .applicant-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 }
 
 /* ================= AVATAR ================= */
@@ -70,7 +88,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: #6c757d;
+  background: #9ca3af;
   color: #fff;
   font-weight: 600;
   display: flex;
@@ -80,53 +98,62 @@
 
 /* ================= STATUS BADGES ================= */
 .status-badge {
-  font-size: 0.7rem;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
 }
 
+/* ================= PASS / FAIL ================= */
 .badge-pass {
-  background: #d1fae5;
-  color: #065f46;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
+  background: #dcfce7;
+  color: #166534;
 }
 
 .badge-fail {
   background: #fee2e2;
   color: #991b1b;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
 }
 
 /* ================= PROGRESS ================= */
 .progress {
   height: 10px;
-  border-radius: 6px;
+  border-radius: 999px;
   overflow: hidden;
 }
 
 .progress-bar {
-  font-size: 10px;
-  line-height: 10px;
+  border-radius: 999px;
 }
 
 /* ================= SECTION HEADERS ================= */
 .section-title {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
 }
 
 /* ================= QUESTION CARD ================= */
 .question-card {
   background: #f9fafb;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 /* ================= MODAL ================= */
+.modal-content {
+  border-radius: 16px;
+}
+
+.modal-header {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-body {
+  background: #f9fafb;
+}
+
+/* ================= INTERVIEW OVERLAY ================= */
 .overlay {
   position: fixed;
   inset: 0;
@@ -138,17 +165,22 @@
 }
 
 .interview-modal {
-  background: #fff;
-  padding: 24px;
+  background: #ffffff;
+  padding: 26px;
   width: 420px;
   max-width: 90%;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0,0,0,.2);
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.25);
+}
+
+.interview-modal h4 {
+  font-weight: 700;
 }
 
 /* ================= BUTTONS ================= */
 .btn {
-  border-radius: 6px;
+  border-radius: 8px;
+  font-size: 13px;
 }
 
 .btn:disabled {

@@ -145,17 +145,6 @@
     <i class="bi bi-box-arrow-right"></i>
   </button>
 }
-<app-file-upload
-  #videoUploader
-  [bucketKey]="BucketKey.JOBSEEKER_DATA"
-  [section]="UploadSection.INTERVIEW_VIDEO"
-  accept="video/*"
-  class="d-none"
-  [replace]="true"
-  (uploaded)="onPhotoUploaded($event)">
-</app-file-upload>
-
-
 
 </div>
 
@@ -168,15 +157,6 @@
     <div class="report-card">
 
       <h5 class="mb-3">Interview Report</h5>
-
-      @if (interviewVideoUrl) {
-        <app-file-preview [fileUrl]="interviewVideoUrl"></app-file-preview>
-      } @else {
-        <div class="alert alert-warning text-center">
-          Waiting for interview video upload…
-        </div>
-      }
-
       <!-- Rating -->
       <div class="mb-3">
         <label class="form-label">Rating (1–10) *</label>
