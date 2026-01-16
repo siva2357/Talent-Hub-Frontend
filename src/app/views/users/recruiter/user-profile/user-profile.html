@@ -2,7 +2,7 @@
 
 
   <!-- MOBILE BACK BUTTON -->
-  <div class="mobile-back p-3  d-flex align-items-center"(click)="goBack()">
+  <div class="mobile-back p-3  d-flex align-items-center" (click)="goBack()">
     <i class="bi bi-arrow-left me-2 fs-5"></i> Back
   </div>
   <!-- PROFILE HEADER -->
@@ -13,38 +13,35 @@
 
     <!-- Avatar + Name -->
     <div class="profile-info text-center">
-           <img
-  [src]="recruiterProfile.profilePhoto || 'https://res.cloudinary.com/dpp8aspqs/image/upload/v1733121824/profie_images_opbm8k.png'"
-  class="profile-avatar"
-/>
+      <img
+        [src]="recruiterProfile.profilePhoto || 'https://res.cloudinary.com/dpp8aspqs/image/upload/v1733121824/profie_images_opbm8k.png'"
+        class="profile-avatar" />
 
       <h3 class="fw-bold mt-3 mb-1 d-flex justify-content-center align-items-center gap-2">
         {{ recruiterProfile.firstName }} {{ recruiterProfile.lastName }}
       </h3>
 
 
-      <p class="text-muted mt-1"> {{ recruiterProfile.designation }}
-  • {{ recruiterProfile.companyName }}</p>
+      <p class="text-muted mt-1"> {{ recruiterProfile.designation }}</p>
+
+
+      <p class="text-muted mt-1">{{ recruiterProfile.companyName }}</p>
 
       <div class="small text-muted">
-          Joined {{ recruiterProfile.createdAt | date:'MMM d, y' }}
+        Joined {{ recruiterProfile.createdAt | date:'MMM d, y' }}
       </div>
 
 
       <!-- Social Icons -->
-@if (recruiterProfile.socialProfiles.length) {
-  <div class="social-links mt-3">
-    @for (social of recruiterProfile.socialProfiles; track social.link) {
-      <a
-        [href]="social.link"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <i [class]="getSocialIcon(social.platform)"></i>
-      </a>
-    }
-  </div>
-}
+      @if (recruiterProfile.socialProfiles.length) {
+      <div class="social-links mt-3">
+        @for (social of recruiterProfile.socialProfiles; track social.link) {
+        <a [href]="social.link" target="_blank" rel="noopener noreferrer">
+          <i [class]="getSocialIcon(social.platform)"></i>
+        </a>
+        }
+      </div>
+      }
 
     </div>
 
@@ -86,18 +83,18 @@
 
   <!-- ABOUT -->
   <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-  <h5 class="fw-bold mb-3">About</h5>
+    <h5 class="fw-bold mb-3">About</h5>
 
-  @if (recruiterProfile.bioDescription) {
+    @if (recruiterProfile.bioDescription) {
     <p class="text-muted">
       {{ recruiterProfile.bioDescription }}
     </p>
-  } @else {
+    } @else {
     <p class="text-muted fst-italic">
       No description provided
     </p>
-  }
-</div>
+    }
+  </div>
 
   <!-- PERSONAL DETAILS -->
   <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
@@ -106,29 +103,29 @@
     <div class="row g-3">
 
       <div class="col-md-6">
-        <label class="text-muted">First Name</label>
-        <p class="fw-semibold">{{recruiterProfile.firstName}}</p>
+        <label class="fw-bold">First Name</label>
+        <p>{{recruiterProfile.firstName}}</p>
       </div>
 
       <div class="col-md-6">
-        <label class="text-muted">Last Name</label>
-        <p class="fw-semibold">{{recruiterProfile.lastName}}</p>
+        <label class="fw-bold">Last Name</label>
+        <p>{{recruiterProfile.lastName}}</p>
       </div>
 
       <div class="col-md-6">
-        <label class="text-muted">Email</label>
-        <p class="fw-semibold">{{recruiterProfile.email}}</p>
+        <label class="fw-bold">Email</label>
+        <p>{{recruiterProfile.email}}</p>
       </div>
 
       <div class="col-md-6">
-        <label class="text-muted">Gender</label>
-        <p class="fw-semibold">{{recruiterProfile.gender}}</p>
+        <label class="fw-bold">Gender</label>
+        <p>{{recruiterProfile.gender}}</p>
       </div>
 
 
       <div class="col-md-6">
-        <label class="text-muted">Contact Number</label>
-        <p class="fw-semibold">{{recruiterProfile.mobile}}</p>
+        <label class="fw-bold">Contact Number</label>
+        <p>{{recruiterProfile.mobile}}</p>
       </div>
 
 
@@ -143,76 +140,75 @@
 
     <div class="row g-3">
 
-  <div class="col-md-6">
-    <label class="text-muted">Company</label>
-    <p class="fw-semibold">
-      {{ recruiterProfile.companyName || '—' }}
-    </p>
-  </div>
+      <div class="col-md-6">
+        <label class="fw-bold">Company</label>
+        <p>
+          {{ recruiterProfile.companyName || '—' }}
+        </p>
+      </div>
 
-  <div class="col-md-6">
-    <label class="text-muted">Designation</label>
-    <p class="fw-semibold">
-      {{ recruiterProfile.designation || '—' }}
-    </p>
-  </div>
+      <div class="col-md-6">
+        <label class="fw-bold">Designation</label>
+        <p>
+          {{ recruiterProfile.designation || '—' }}
+        </p>
+      </div>
 
 
-<div class="col-md-6">
-  <h6 class="text-muted mb-3">Languages</h6>
+      <div class="col-md-6">
+        <label class="fw-bold mb-3">Languages</label>
 
-  @if (recruiterProfile.languages.length > 0) {
-    <div class="d-flex flex-wrap gap-2">
+        @if (recruiterProfile.languages.length > 0) {
+        <div class="d-flex flex-wrap gap-2">
 
-      @for (lang of recruiterProfile.languages; track lang._id) {
-        <span class="badge bg-light text-dark border px-3 py-2">
-          {{ lang.language }} <span class="text-muted">({{ lang.level }})</span>
-        </span>
-      }
+          @for (lang of recruiterProfile.languages; track lang._id) {
+          <span class="badge bg-light text-dark border px-3 py-2">
+            {{ lang.language }} <span class="text-muted">({{ lang.level }})</span>
+          </span>
+          }
+
+        </div>
+        } @else {
+        <p class="text-muted small">No languages added</p>
+        }
+      </div>
+
+
+
+      <div class="col-md-6">
+        <label class="fw-bold">Skills</label>
+
+        @if (recruiterProfile.skills.length) {
+        <div class="mt-3">
+          @for (skill of recruiterProfile.skills; track skill) {
+          <span class="badge bg-light text-dark me-2 mb-2">
+            {{ skill }}
+          </span>
+          }
+        </div>
+        }
+      </div>
+
+
+
+
 
     </div>
-  } @else {
-    <p class="text-muted small">No languages added</p>
-  }
-</div>
-
-
-
-<div class="col-md-6">
-  <label class="text-muted">Skills</label>
-
-@if (recruiterProfile.skills.length) {
-  <div class="mt-3">
-    @for (skill of recruiterProfile.skills; track skill) {
-      <span class="badge bg-light text-dark me-2 mb-2">
-        {{ skill }}
-      </span>
-    }
-  </div>
-}
-</div>
-
-
-
-
-
-</div>
 
 
   </div>
 
-  <!-- RECENT JOB POSTS -->
- <!-- RECENT JOB POSTS -->
-<div class="card border-0 shadow-sm rounded-4 p-3 mb-5">
-  <h5 class="fw-bold mb-3">Recent Job Posts</h5>
 
-  <div class="job-list">
+  <div class="card border-0 shadow-sm rounded-4 p-3 mb-5">
+    <h5 class="fw-bold mb-3">Recent Job Posts</h5>
 
-    @if (recruiterJobs.length === 0) {
+    <div class="job-list">
+
+      @if (recruiterJobs.length === 0) {
       <p class="text-muted small">No job posts created yet.</p>
-    }
+      }
 
-    @for (job of recruiterJobs; track job._id) {
+      @for (job of recruiterJobs; track job._id) {
 
       <div class="job-card p-3 mb-3 rounded-4 shadow-sm">
 
@@ -222,32 +218,34 @@
             {{ job.jobTitle }}
           </h6>
 
-<span
-  class="badge"
-  [ngClass]="job.status === 'Open' ? 'bg-success' : 'bg-danger'">
-  {{ job.status }}
-</span>
+          <span class="badge" [ngClass]="job.status === 'Open' ? 'bg-success' : 'bg-danger'">
+            {{ job.status }}
+          </span>
 
         </div>
-
-        <!-- META -->
-        <small class="text-muted d-block mt-1">
-          Job ID #{{ job.jobId }}
-          • Applicants: {{ job.totalApplicants }}
-          • Posted {{ job.postedOn | date:'MMM d, y' }}
-        </small>
 
         <!-- DESCRIPTION -->
         <p class="text-muted small mt-2">
           {{ job.jobDescription | slice:0:200 }}{{ job.jobDescription.length > 200 ? '…' : '' }}
         </p>
 
+        <p class="text-muted d-block mt-1">
+          <i class="bi bi-people me-1"></i>
+          Applicants: {{ job.totalApplicants }}
+
+          <span class="mx-2">•</span>
+
+          <i class="bi bi-calendar3 me-1"></i>
+          Posted {{ job.postedOn | date:'MMM d, y' }}
+        </p>
+
+
       </div>
 
-    }
+      }
 
+    </div>
   </div>
-</div>
 
 
 </div>

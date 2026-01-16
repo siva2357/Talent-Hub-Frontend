@@ -1,25 +1,45 @@
-<div class="container mt-5" style="font-family: 'Poppins', sans-serif; max-width: 600px;">
-  <h3 class="fw-bold mb-2">Manage Account</h3>
-  <p class="text-muted mb-4">
-    Deleting your account is <strong>permanent</strong> and cannot be undone. All your data will be lost.
-    Please proceed with caution.
-  </p>
+<div class="container profile-container d-flex justify-content-center">
 
-  <!-- Warning Box -->
-  <div class="alert alert-warning d-flex align-items-center" role="alert">
-    <i class="bi bi-exclamation-triangle-fill me-2" style="font-size: 1.5rem;"></i>
-    <div>
-      This action is <strong>irreversible</strong>. Once you delete your account, all your profile data,
-      uploaded files, and history will be permanently removed.
-    </div>
-  </div>
+  <div class="col-12 col-sm-10 col-md-8 col-lg-6 mt-4">
 
-  <!-- Delete Button -->
-  <div class="d-flex justify-content-center mt-4 mb-4">
-    <button type="button"
+    <div class="card profile-card">
+      <div class="card-body">
+
+        <!-- HEADER -->
+        <div class="mb-3">
+          <h5 class="section-title text-danger">Manage Account</h5>
+          <p class="section-subtitle">
+            Deleting your account is <strong>permanent</strong> and cannot be undone.
+          </p>
+        </div>
+
+        <!-- WARNING BOX -->
+        <div class="alert alert-warning d-flex align-items-start gap-3" role="alert">
+          <i class="bi bi-exclamation-triangle-fill warning-icon"></i>
+          <div>
+            <p class="mb-1 fw-semibold">
+              This action is irreversible
+            </p>
+            <p class="mb-0 small">
+              Once your account is deleted, all profile data, uploaded files,
+              and activity history will be permanently removed.
+            </p>
+          </div>
+        </div>
+
+        <!-- ACTION -->
+        <div class="d-flex justify-content-center mt-4">
+          <button
+            type="button"
             class="btn btn-danger btn-sm px-4"
-            (click)="deleteAccount()">
-      Delete Account
-    </button>
+            (click)="deleteAccount()"
+          >
+            Delete Account
+          </button>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>
