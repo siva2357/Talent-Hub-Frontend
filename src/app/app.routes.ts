@@ -61,11 +61,6 @@ export const routes: Routes = [
   { path: 'error', component: ErrorPage, title: 'Error' },
   { path: 'access-denied', component: UnauthorizedPage, title: 'Access denied' },
 
-  //Interview meet public pages
-  { path: 'interview/live-session/:interviewId/:meetingId', component: InterviewSessionPage},
-  { path: 'interview/meet-session/:interviewId/:meetingId', component: InterviewMeetingPage},
-
-
   //User routes
   { path: 'admin', loadChildren: () => ADMIN_ROUTES, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'admin' }},
   { path: 'recruiter', loadChildren: () => RECRUITER_ROUTES,canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'recruiter' } },

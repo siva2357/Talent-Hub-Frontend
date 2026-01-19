@@ -201,19 +201,16 @@
 
             <!-- Company Logo + Name -->
             <div class="company-info d-flex flex-column align-items-start">
+<img
+  [src]="job.companyDetails.logo"
+  alt="company-logo"
+  class="company-logo mb-1"
+/>
 
-              <img
-                [src]="job.companyDetails.companyLogo.url"
-                alt="company-logo"
-                class="company-logo mb-1"
-              />
+<span class="company-name" title="{{ job.companyDetails.name }}">
+  {{ job.companyDetails.name }}
+</span>
 
-              <span
-                class="company-name"
-                title="{{ job.companyDetails.companyName }}"
-              >
-                {{ job.companyDetails.companyName }}
-              </span>
 
             </div>
 

@@ -1,4 +1,4 @@
-import { CompanyDetails } from "./company.modal";
+
 
 export interface Applicant {
   jobSeekerId: string;
@@ -33,7 +33,7 @@ export interface JobPost {
   updatedAt?: Date;
     saved?: boolean;
   isApplied?: boolean;
-  companyDetails: CompanyDetails;
+  companyDetails: Company;
   applicationStatus:string
 }
 

@@ -9,7 +9,6 @@ import { UserAccountSettings } from './user-account-settings/user-account-settin
 import { UserProfile } from './user-profile/user-profile';
 import { ApplicantsListPage } from './applicants-list-page/applicants-list-page';
 import { TalentProfilePage } from './talent-profile-page/talent-profile-page';
-import { AnalyticsPerformancePage } from './analytics-performance-page/analytics-performance-page';
 import { HiredTalents } from './hired-talents/hired-talents';
 import { ApplicantListProfilePage } from './applicant-list-profile-page/applicant-list-profile-page';
 
@@ -26,7 +25,6 @@ export const RECRUITER_ROUTES: Routes = [
       { path: 'talents', component: Talents },
       { path: 'talents/:id/profile', component: TalentProfilePage },
       { path: 'hired-talents', component: HiredTalents },
-      { path: 'analytics-performance', component:  AnalyticsPerformancePage  },
       { path: '', redirectTo: 'my-jobs', pathMatch: 'full' }
     ],
   },

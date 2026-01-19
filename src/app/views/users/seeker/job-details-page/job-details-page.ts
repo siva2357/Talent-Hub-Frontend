@@ -77,15 +77,7 @@ export class JobDetailsPage implements OnInit {
 
 
 goToCompanyDetailsPage(): void {
-  if (!this.job?.companyDetails._id) {
-    return;
-  }
 
-  this.router.navigate([
-    '/jobSeeker/company',
-    this.job.companyDetails._id,
-    'company-details'
-  ]);
 }
 
 
