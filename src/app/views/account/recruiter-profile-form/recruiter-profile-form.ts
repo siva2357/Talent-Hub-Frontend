@@ -16,7 +16,6 @@ import { socialProfileValidator } from '../../../core/helpers/social-media.helpe
 import { FileUpload } from '../../shared/file-upload/file-upload';
 import { FilePreview } from '../../shared/file-preview/file-preview';
 import { RecruiterProfileService } from '../../../core/services/recruiter-profile-service';
-import { CompanyService } from '../../../core/services/company-service';
 import { DESIGNATION } from '../../../core/enums/designation.enum';
 import { SECTOR } from '../../../core/enums/sector.enum';
 import { SECTOR_DESIGNATION_MAP } from '../../../core/enums/sector-designation.map';
@@ -66,7 +65,6 @@ proficiencyLevels = Object.values(Proficiency);
     private fb: FormBuilder,
     private router: Router,
     private recruiterProfileService: RecruiterProfileService,
-    private companyService: CompanyService
   ) {}
 
   ngOnInit(): void {

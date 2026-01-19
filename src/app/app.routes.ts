@@ -25,8 +25,6 @@ import { SEEKER_ROUTES } from './views/users/seeker/seeker.routes';
 import { ADMIN_ROUTES } from './views/users/admin/admin.routes';
 import { SeekerProfileForm } from './views/account/seeker-profile-form/seeker-profile-form';
 import { RecruiterProfileForm } from './views/account/recruiter-profile-form/recruiter-profile-form';
-import { InterviewMeetingPage } from './views/shared/interview-meeting-page/interview-meeting-page';
-import { InterviewSessionPage } from './views/shared/interview-session-page/interview-session-page';
 import { RoleGuard } from './core/guards/role.guard';
 import { AuthGuard } from './core/guards/auth.guard';
 

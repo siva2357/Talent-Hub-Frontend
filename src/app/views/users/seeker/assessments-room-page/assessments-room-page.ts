@@ -33,10 +33,4 @@ export class AssessmentsRoomPage implements OnInit {
     });
   }
 
-  startAssessment(assessmentId: string): void {
-    this.router.navigate(
-      ['/jobSeeker/assessments/live-test'],
-      { queryParams: { assessmentId } }
-    );
-  }
 }

@@ -234,66 +234,23 @@ submitInterview(): void {
 
 
 assignAssessment(): void {
-  const payload = {
-    jobPostId: this.jobPostId,
-    jobSeekerId: this.selectedApplicant.jobSeekerId
-  };
+  // const payload = {
+  //   jobPostId: this.jobPostId,
+  //   jobSeekerId: this.selectedApplicant.jobSeekerId
+  // };
 
-  this.assessmentService.assignAssessment(payload).subscribe({
-    next: () => {
-      alert('Assessment assigned successfully');
-      this.closeAssignModal();
-      this.fetchApplicants()
-    },
-    error: err => {
-      alert(err);
-    }
-  });
+  // this.assessmentService.assignAssessment(payload).subscribe({
+  //   next: () => {
+  //     alert('Assessment assigned successfully');
+  //     this.closeAssignModal();
+  //     this.fetchApplicants()
+  //   },
+  //   error: err => {
+  //     alert(err);
+  //   }
+  // });
 }
 
-
-openReportModal(applicant: any): void {
-  this.reportLoading = true;
-  this.report = null;
-
-  if (!this.reportModal) {
-    this.reportModal = new bootstrap.Modal(
-      document.getElementById('assessmentReportModal')
-    );
-  }
-
-  // 1️⃣ Get assessmentId
-  this.assessmentService
-    .getAssessmentIdByJob(this.jobPostId, applicant.jobSeekerId)
-    .subscribe({
-      next: res => {
-
-        // 2️⃣ Fetch report
-        this.assessmentService
-          .getAssessmentReport(res.assessmentId)
-          .subscribe({
-            next: report => {
-              this.report = report;
-              this.reportLoading = false;
-              this.reportModal.show();
-            },
-            error: () => {
-              this.reportLoading = false;
-              alert('Failed to load report');
-            }
-          });
-
-      },
-      error: () => {
-        this.reportLoading = false;
-        alert('Assessment not found');
-      }
-    });
-}
-
-closeReportModal(): void {
-  this.reportModal?.hide();
-}
 
 
 
