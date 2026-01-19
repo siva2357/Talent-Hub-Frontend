@@ -4,11 +4,9 @@ import { Dashboard } from './dashboard/dashboard';
 import { Recruiters } from './recruiters/recruiters';
 import { Seekers } from './seekers/seekers';
 import { Interviews } from './interviews/interviews';
-import { JobApplicants } from './job-applicants/job-applicants';
 import { RecruiterProfilePage } from './recruiter-profile-page/recruiter-profile-page';
 import { SeekerProfilePage } from './seeker-profile-page/seeker-profile-page';
-import { JobApplicantsList } from './job-applicants-list/job-applicants-list';
-import { SupportRequests } from './support-requests/support-requests';
+
 
 
 export const ADMIN_ROUTES: Routes = [
@@ -21,10 +19,7 @@ export const ADMIN_ROUTES: Routes = [
       { path: 'recruiters-list/:id/profile', component: RecruiterProfilePage },
       { path: 'seekers-list', component: Seekers },
       { path: 'seekers-list/:id/profile', component: SeekerProfilePage },
-      { path: 'job-applicants', component: JobApplicants},
-      { path: 'job-applicants/:id/list', component: JobApplicantsList},
       { path: 'interviews', component: Interviews },
-      { path: 'import-requests', component: SupportRequests },
 
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ],

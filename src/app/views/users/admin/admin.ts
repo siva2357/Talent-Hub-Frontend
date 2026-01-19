@@ -24,9 +24,7 @@ sidebarOpen = false; // start collapsed (icon-only mode)
     { label: 'Dashboard', icon: ' bi-grid', link: 'dashboard' },
     { label: 'Recruiters', icon: 'bi-person-badge', link: 'recruiters-list' },
     { label: 'Seekers', icon: 'bi-people', link: 'seekers-list' },
-    { label: 'Applicants', icon: 'bi-person-lines-fill', link: 'job-applicants' },
     { label: 'Interviews', icon: 'bi bi-laptop', link: 'interviews' },
-    { label: 'Imports', icon: 'bi bi-gear', link: 'import-requests' },
 
   ];
 
