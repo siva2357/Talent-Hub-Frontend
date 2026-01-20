@@ -34,17 +34,21 @@ export class ApplicantsListPage implements OnInit {
 jobTitle = '';
 jobCategory = '';
 
+assessmentStatus: 'Assigned' | 'Completed' | 'Reviewed' | null = null;
 
-  // ✅ UI-only form (NOT Interview interface)
-  interviewForm = {
-    title: '',
-    description: '',
-    date: '',
-    startTime: '',
-    endTime: '',
-    status: 'Scheduled' as 'Scheduled' | 'Completed' | 'Not Completed'
-  };
+interviewForm = {
+  title: '',
+  description: '',
+  date: '',
+  startTime: '',
+  endTime: '',
+  meetingJoinUrl: '',
+  status: 'Scheduled' as 'Scheduled' | 'Completed' | 'Not Completed'
+};
 
+isAssessmentEditMode = false;
+assessmentLink = '';
+assessmentId: string | null = null;
 
   report: any;
 reportLoading = false;
@@ -95,13 +99,15 @@ openInterviewModal(applicant: any): void {
 
   // reset form
   this.interviewForm = {
-    title: '',
-    description: '',
-    date: '',
-    startTime: '',
-    endTime: '',
-    status: 'Scheduled'
-  };
+  title: '',
+  description: '',
+  date: '',
+  startTime: '',
+  endTime: '',
+  meetingJoinUrl: '',
+  status: 'Scheduled' as 'Scheduled' | 'Completed' | 'Not Completed'
+};
+
 
   if (!this.interviewModal) {
     this.interviewModal = new bootstrap.Modal(
@@ -120,15 +126,16 @@ openInterviewModal(applicant: any): void {
     .getInterviewByApplicant(this.jobPostId, applicant.jobSeekerId)
     .subscribe(interview => {
       this.interviewId = interview._id;
+this.interviewForm = {
+  title: interview.interviewTitle,
+  description: interview.interviewDescription || '',
+  date: this.extractDate(interview.scheduledDate),
+  startTime: this.extractTime(interview.startTime),
+  endTime: this.extractTime(interview.endTime),
+  meetingJoinUrl: interview.meetingJoinUrl,
+  status: interview.status
+};
 
-      this.interviewForm = {
-        title: interview.interviewTitle,
-        description: interview.interviewDescription || '',
-        date: this.extractDate(interview.scheduledDate),
-        startTime: this.extractTime(interview.startTime),
-        endTime: this.extractTime(interview.endTime),
-        status: interview.status
-      };
 
       this.interviewModal.show();
     });
@@ -140,6 +147,11 @@ submitInterview(): void {
     alert('Date, start time and end time are required');
     return;
   }
+  if (!this.interviewForm.meetingJoinUrl) {
+  alert('Meeting link is required');
+  return;
+}
+
 
   const start = this.buildDateTime(this.interviewForm.date, this.interviewForm.startTime);
   const end = this.buildDateTime(this.interviewForm.date, this.interviewForm.endTime);
@@ -152,13 +164,15 @@ submitInterview(): void {
   /* ================= EDIT MODE ================= */
   if (this.isEditMode && this.interviewId) {
 
-    const updateData: Partial<Interview> = {
-      interviewTitle: this.interviewForm.title,
-      interviewDescription: this.interviewForm.description,
-      startTime: start,
-      endTime: end,
-      status: this.interviewForm.status
-    };
+const updateData: Partial<Interview> = {
+  interviewTitle: this.interviewForm.title,
+  interviewDescription: this.interviewForm.description,
+  startTime: start,
+  endTime: end,
+  meetingJoinUrl: this.interviewForm.meetingJoinUrl,
+  status: this.interviewForm.status
+};
+
 
     this.interviewService
       .updateInterview(this.interviewId, updateData)
@@ -168,17 +182,19 @@ submitInterview(): void {
   }
 
   /* ================= CREATE MODE ================= */
-  const payload: CreateInterviewPayload = {
-    jobSeekerId: this.selectedApplicant.jobSeekerId,
-    jobPostId: this.jobPostId,
+const payload: CreateInterviewPayload = {
+  jobSeekerId: this.selectedApplicant.jobSeekerId,
+  jobPostId: this.jobPostId,
 
-    interviewTitle: this.interviewForm.title || 'Networking Interview',
-    interviewDescription: this.interviewForm.description || '',
+  interviewTitle: this.interviewForm.title || 'Networking Interview',
+  interviewDescription: this.interviewForm.description || '',
 
-    scheduledDate: this.interviewForm.date,
-    startTime: start,
-    endTime: end
-  };
+  scheduledDate: this.interviewForm.date,
+  startTime: start,
+  endTime: end,
+
+  meetingJoinUrl: this.interviewForm.meetingJoinUrl
+};
 
   this.interviewService
     .createInterview(payload)
@@ -216,12 +232,21 @@ submitInterview(): void {
 
 
 
-  openAssignAssessmentModal(applicant: any): void {
+
+
+openAssignAssessmentModal(applicant: any): void {
   this.selectedApplicant = applicant;
+
 
   // You already have this info from backend response
   this.jobTitle = this.route.snapshot.data['jobTitle'] || 'Angular Developer';
   this.jobCategory = 'Frontend Development'; // or from job API
+
+
+  this.isAssessmentEditMode = false;
+  this.assessmentId = null;
+  this.assessmentLink = '';
+  this.assessmentStatus = null;
 
   if (!this.assignModal) {
     this.assignModal = new bootstrap.Modal(
@@ -233,22 +258,73 @@ submitInterview(): void {
 }
 
 
-assignAssessment(): void {
-  // const payload = {
-  //   jobPostId: this.jobPostId,
-  //   jobSeekerId: this.selectedApplicant.jobSeekerId
-  // };
 
-  // this.assessmentService.assignAssessment(payload).subscribe({
-  //   next: () => {
-  //     alert('Assessment assigned successfully');
-  //     this.closeAssignModal();
-  //     this.fetchApplicants()
-  //   },
-  //   error: err => {
-  //     alert(err);
-  //   }
-  // });
+openUpdateAssessmentModal(applicant: any): void {
+  this.selectedApplicant = applicant;
+
+  // You already have this info from backend response
+  this.jobTitle = this.route.snapshot.data['jobTitle'] || 'Angular Developer';
+  this.jobCategory = 'Frontend Development'; // or from job API
+  this.isAssessmentEditMode = true;
+  this.assessmentId = applicant.assessmentId;
+  this.assessmentLink = applicant.assessmentLink;
+
+  // 👇 THIS IS THE KEY LINE
+  this.assessmentStatus = applicant.assessmentStatus;
+
+  if (!this.assignModal) {
+    this.assignModal = new bootstrap.Modal(
+      document.getElementById('assignAssessmentModal')
+    );
+  }
+
+  this.assignModal.show();
+}
+
+
+
+
+submitAssessment(): void {
+
+  if (!this.assessmentLink) {
+    alert('Assessment link is required');
+    return;
+  }
+
+  // ✅ UPDATE MODE
+  if (this.isAssessmentEditMode && this.assessmentId) {
+
+    this.assessmentService
+      .updateAssessment(this.assessmentId, {
+        assessmentLink: this.assessmentLink
+      })
+      .subscribe({
+        next: () => {
+          alert('Assessment updated successfully');
+          this.closeAssignModal();
+          this.fetchApplicants();
+        },
+        error: err => alert(err)
+      });
+
+    return;
+  }
+
+  // ✅ CREATE MODE
+  const payload = {
+    jobPostId: this.jobPostId,
+    jobSeekerId: this.selectedApplicant.jobSeekerId,
+    assessmentLink: this.assessmentLink
+  };
+
+  this.assessmentService.createAssessment(payload).subscribe({
+    next: () => {
+      alert('Assessment assigned successfully');
+      this.closeAssignModal();
+      this.fetchApplicants();
+    },
+    error: err => alert(err)
+  });
 }
 
 
@@ -256,6 +332,45 @@ assignAssessment(): void {
 
 closeAssignModal(): void {
   this.assignModal?.hide();
+}
+
+
+
+shortlistApplicant(applicant: any): void {
+  if (!confirm('Are you sure you want to shortlist this applicant?')) {
+    return;
+  }
+
+  this.jobpostService
+    .hireApplicant(this.jobPostId, applicant.jobSeekerId)
+    .subscribe({
+      next: () => {
+        applicant.status = 'Shortlisted';
+        applicant.offerLetter = true;
+        applicant.interviewCompleted = true;
+      },
+      error: () => {
+        alert('Failed to shortlist applicant');
+      }
+    });
+}
+
+rejectApplicant(applicant: any): void {
+  if (!confirm('Are you sure you want to reject this applicant?')) {
+    return;
+  }
+
+  this.jobpostService
+    .rejectApplicant(this.jobPostId, applicant.jobSeekerId)
+    .subscribe({
+      next: () => {
+        applicant.status = 'Rejected';
+        applicant.rejectionReason = 'Interview Failed';
+      },
+      error: () => {
+        alert('Failed to reject applicant');
+      }
+    });
 }
 
 

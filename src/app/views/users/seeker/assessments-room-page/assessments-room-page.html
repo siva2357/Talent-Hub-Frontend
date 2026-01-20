@@ -19,8 +19,7 @@
 
           <div class="d-flex align-items-center gap-3 mb-3">
 <img
-  [src]="a.jobPostId?.companyId?.companyDetails?.companyLogo?.url
-         || 'https://via.placeholder.com/60'"
+  [src]="a.jobPostId?.company?.logo || 'https://via.placeholder.com/60'"
   class="company-logo"
 />
 
@@ -30,39 +29,48 @@
   </h6>
 
   <small class="text-muted">
-    {{ a.jobPostId?.companyId?.companyDetails?.companyName }}
+    {{ a.jobPostId?.company?.name }}
   </small>
 </div>
 
-            <span class="badge ms-auto"
-              [ngClass]="{
-                'bg-warning text-dark': a.status === 'Assigned',
-                'bg-secondary': a.status === 'Started',
-                'bg-success': a.status === 'Submitted'
-              }">
-              {{ a.status }}
-            </span>
+
+<span class="badge ms-auto"
+  [ngClass]="{
+    'bg-warning text-dark': a.status === 'Assigned',
+    'bg-success': a.status === 'Completed',
+  }">
+  {{ a.status }}
+</span>
+
           </div>
 
-          <!-- <div class="d-flex justify-content-between align-items-center">
-            <span class="small text-muted">
-              {{ a.createdAt | date:'mediumDate' }}
-            </span>
+<div class="d-flex justify-content-between align-items-center mt-3">
 
-            @if (a.status !== 'Submitted') {
-              <button
-                class="btn btn-primary btn-sm"
-                (click)="startAssessment(a._id)">
-                {{ a.status === 'Started' ? 'Resume' : 'Start' }} Assessment
-              </button>
-            }
+  <span class="small text-muted">
+    Assigned on {{ a.assignedAt | date:'mediumDate' }}
+  </span>
 
-            @if (a.status === 'Submitted') {
-              <button class="btn btn-outline-success btn-sm">
-                View Report
-              </button>
-            }
-          </div> -->
+  @if (a.status === 'Assigned') {
+    <div class="d-flex gap-2">
+
+      <a
+        class="btn btn-outline-primary btn-sm"
+        [href]="a.assessmentLink"
+        target="_blank">
+        Open Assessment
+      </a>
+
+      <button
+        class="btn btn-success btn-sm"
+        (click)="markAsCompleted(a._id)">
+        Mark as Completed
+      </button>
+
+    </div>
+  }
+
+</div>
+
 
         </div>
       }

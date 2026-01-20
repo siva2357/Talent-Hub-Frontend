@@ -33,4 +33,26 @@ export class AssessmentsRoomPage implements OnInit {
     });
   }
 
+
+markAsCompleted(assessmentId: string): void {
+  if (!confirm('Are you sure you want to mark this assessment as completed?')) {
+    return;
+  }
+
+  this.assessmentService
+    .markCompleted(assessmentId)
+    .subscribe({
+      next: () => {
+        const assessment = this.assessments.find(a => a._id === assessmentId);
+        if (assessment) {
+          assessment.status = 'Completed';
+        }
+      },
+      error: () => {
+        alert('Failed to mark assessment as completed');
+      }
+    });
+}
+
+
 }

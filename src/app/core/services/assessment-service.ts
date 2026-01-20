@@ -31,7 +31,6 @@ export class AssessmentService {
     jobPostId: string;
     jobSeekerId: string;
     assessmentLink?: string;
-    assessmentType?: 'External' | 'Interview';
   }): Observable<any> {
     return this.http.post(
       this.baseUrl,
@@ -45,8 +44,6 @@ export class AssessmentService {
     assessmentId: string,
     payload: {
       assessmentLink?: string;
-      assessmentType?: 'External' | 'Interview';
-      recruiterNotes?: string;
       status?: 'Assigned' | 'Reviewed';
     }
   ): Observable<any> {

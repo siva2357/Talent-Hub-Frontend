@@ -23,7 +23,8 @@ export class Jobposts implements OnInit {
   errorMessage = '';
   jobCategories = Object.values(JOBPOSTCATEGORY);
 jobTypes = Object.values(JOBPOSTTYPE);
-
+selectedJob: JobPost | null = null;
+  jobPostId!: string;
 
   filters = {
     search: '',
@@ -82,13 +83,6 @@ jobTypes = Object.values(JOBPOSTTYPE);
     });
   }
 
-  /* =========================
-     Navigation
-  ========================== */
-  goToJobDetails(jobPostId: string): void {
-    this.router.navigate([`/jobSeeker/jobposts/${jobPostId}/job-details`]);
-  }
-
 
 
 
@@ -129,4 +123,51 @@ applyFilters(): void {
     this.filters[filterKey] = '';
     this.applyFilters();
   }
+
+
+
+
+
+
+openJobOffcanvas(job: any) {
+  this.selectedJob = job;
+}
+
+private closeOffcanvas(): void {
+  const offcanvasEl = document.getElementById('jobOffcanvas');
+  if (!offcanvasEl) return;
+
+  const win = window as any;
+
+  const bsOffcanvas = win.bootstrap?.Offcanvas?.getInstance(offcanvasEl);
+  bsOffcanvas?.hide();
+}
+
+
+
+applyJob(): void {
+  if (!this.selectedJob) return;
+
+  this.jobpostService.applyJobPost(this.selectedJob._id).subscribe({
+    next: () => {
+      this.selectedJob!.isApplied = true;   // updates card + offcanvas
+      this.closeOffcanvas();                // auto close
+    },
+    error: () => alert('Failed to apply for job')
+  });
+}
+
+withdrawJob(): void {
+  if (!this.selectedJob) return;
+
+  this.jobpostService.withdrawJobPost(this.selectedJob._id).subscribe({
+    next: () => {
+      this.selectedJob!.isApplied = false;  // updates card + offcanvas
+      this.closeOffcanvas();                // auto close
+    },
+    error: () => alert('Failed to withdraw application')
+  });
+}
+
+
 }

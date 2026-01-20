@@ -57,10 +57,8 @@
 <span
   class="badge px-3 py-2"
   [ngClass]="{
-    'bg-warning text-dark': applicant.status === 'Pending',
     'bg-primary': applicant.status === 'InProcess',
     'bg-info': applicant.status === 'Shortlisted',
-    'bg-success': applicant.status === 'Hired',
     'bg-danger': applicant.status === 'Rejected'
   }"
 >
@@ -80,31 +78,37 @@
 
 <li>
   @if (!applicant.assessmentAssigned) {
+    <!-- NOT ASSIGNED -->
     <button
       class="dropdown-item"
-      (click)="openAssignAssessmentModal(applicant)"
-    >
+      (click)="openAssignAssessmentModal(applicant)">
       <i class="bi bi-file-earmark-plus me-2"></i>
-      Assign Test
+      Assign Assessment
     </button>
   }
-  @else if (applicant.assessmentSubmitted) {
-    <span class="dropdown-item text-primary fw-semibold disabled">
+
+  @else if (!applicant.assessmentSubmitted) {
+    <!-- ASSIGNED BUT NOT SUBMITTED -->
+    <button
+      class="dropdown-item"
+      (click)="openUpdateAssessmentModal(applicant)">
+      <i class="bi bi-pencil-square me-2"></i>
+      Update Assessment
+    </button>
+  }
+
+  @else {
+    <!-- SUBMITTED -->
+    <span class="dropdown-item text-success fw-semibold disabled">
       <i class="bi bi-file-earmark-check me-2"></i>
       Assessment Submitted
-    </span>
-  }
-  @else {
-    <span class="dropdown-item text-success fw-semibold disabled">
-      <i class="bi bi-check-circle me-2"></i>
-      Assessment Assigned
     </span>
   }
 </li>
 
 
+
 <li>
-  @if (applicant.assessmentResult === 'Pass') {
 
     @if (!applicant.interviewCompleted) {
       <button
@@ -129,35 +133,56 @@
       </span>
     }
 
-  }
 </li>
 
 
 
 
+<!-- ACTIONS BASED ON STATUS -->
 
-@if (
-  applicant.assessmentResult === 'Pass' &&
-  applicant.interviewCompleted &&
-  applicant.status !== 'Rejected' &&
-  applicant.status !== 'Hired'
-) {
+<!-- InProcess → can Shortlist or Reject -->
+@if (applicant.status === 'InProcess' && applicant.interviewCompleted) {
 
   <li>
-    <button class="dropdown-item text-success">
+    <button
+      class="dropdown-item text-success"
+      (click)="shortlistApplicant(applicant)">
       <i class="bi bi-check-circle me-2"></i>
       Shortlist
     </button>
   </li>
 
   <li>
-    <button class="dropdown-item text-danger">
+    <button
+      class="dropdown-item text-danger"
+      (click)="rejectApplicant(applicant)">
       <i class="bi bi-x-circle me-2"></i>
       Reject
     </button>
   </li>
 
 }
+
+<!-- Shortlisted → show only status -->
+@if (applicant.status === 'Shortlisted') {
+  <li>
+    <span class="dropdown-item text-success fw-semibold disabled">
+      <i class="bi bi-check-circle me-2"></i>
+      Shortlisted
+    </span>
+  </li>
+}
+
+<!-- Rejected → show only status -->
+@if (applicant.status === 'Rejected') {
+  <li>
+    <span class="dropdown-item text-danger fw-semibold disabled">
+      <i class="bi bi-x-circle me-2"></i>
+      Rejected
+    </span>
+  </li>
+}
+
 
 
                 </ul>
@@ -293,6 +318,18 @@
           ></textarea>
         </div>
 
+        <!-- Meeting Join URL -->
+<div class="mb-3">
+  <label class="form-label">Meeting Link</label>
+  <input
+    type="url"
+    class="form-control"
+    placeholder="https://meet.google.com/xxx-xxxx-xxx"
+    [(ngModel)]="interviewForm.meetingJoinUrl"
+  />
+</div>
+
+
         <!-- Date -->
         <div class="mb-3">
           <label class="form-label">Interview Date</label>
@@ -384,8 +421,30 @@
           <input class="form-control" [value]="jobCategory" disabled />
         </div>
 
-<div class="alert alert-info small">
-  Assessment will be created based on the job’s category and title.
+<div class="mb-3">
+  <label class="form-label">Assessment Link</label>
+  <input
+    type="url"
+    class="form-control"
+    [(ngModel)]="assessmentLink"
+    placeholder="https://forms.google.com / hackerrank.com"
+  />
+</div>
+
+<!-- STATUS (READ ONLY) -->
+<div *ngIf="isAssessmentEditMode && assessmentStatus" class="mb-3">
+  <label class="form-label">Assessment Status</label>
+
+  <span
+    class="badge px-3 py-2"
+    [ngClass]="{
+      'bg-primary': assessmentStatus === 'Assigned',
+      'bg-warning text-dark': assessmentStatus === 'Completed',
+      'bg-success': assessmentStatus === 'Reviewed'
+    }"
+  >
+    {{ assessmentStatus }}
+  </span>
 </div>
 
 
@@ -395,10 +454,10 @@
         <button class="btn btn-outline-secondary" (click)="closeAssignModal()">
           Cancel
         </button>
+<button class="btn btn-primary" (click)="submitAssessment()">
+  {{ isAssessmentEditMode ? 'Update Assessment' : 'Assign Assessment' }}
+</button>
 
-        <button class="btn btn-primary" (click)="assignAssessment()">
-          Assign Assessment
-        </button>
       </div>
 
     </div>

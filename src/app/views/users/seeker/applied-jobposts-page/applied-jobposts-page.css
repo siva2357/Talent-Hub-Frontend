@@ -1,72 +1,11 @@
-.welcome-box {
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
-  border: 1px solid #e5e7f1;
-  border-radius: 14px;
-  padding: 28px;
-  box-shadow: 0 2px 14px rgba(120, 125, 160, 0.08);
-  transition: 0.25s ease-in-out;
-}
-
-.welcome-box:hover {
-  box-shadow: 0 6px 22px rgba(90, 98, 140, 0.15);
-}
-
-.welcome-box h5 {
-  font-weight: 700;
-  font-size: 20px;
-  color: #2f2f35;
-}
-
-.welcome-box p {
-  color: #6e6e77 !important;
-  line-height: 1.5;
-  font-size: 14px;
-}
-
-
-/* Feature cards */
-.feature-card {
-  background: #fff;
-  border-radius: 10px;
-}
-
-.feature-icon {
-  font-size: 28px;
-  margin-right: 12px;
-  color: #3a6ef5;
-}
-
-/* Job cards */
-.job-card {
-  min-height: 250px;
-  border-radius: 8px;
-}
-
-.company-logo {
-  height: 32px;
-  width: auto;
-  object-fit: contain;
-}
-
-.bookmark-btn {
-  border: 1px solid #e6e6e6;
-}
-
-/* Text adjustments */
-h4, h5, h6 {
-  font-weight: 600;
-}
-
-.small {
-  font-size: 0.86rem;
-}
-
-
+/* =========================
+   FILTER BADGES
+========================= */
 .filter-badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 6px 10px;
+  gap: 6px;
+  padding: 6px 14px;
   font-size: 12px;
   border: 1px solid #dee2e6;
   border-radius: 20px;
@@ -85,17 +24,59 @@ h4, h5, h6 {
   font-weight: 600;
 }
 
-
+/* =========================
+   JOB CARD (FINAL)
+========================= */
 .job-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  position: relative; /* anchor for badge */
+  background: #ffffff;
+  border: 2px solid #92a6f3;
+  border-radius: 14px;
+  height: 100%;
 
+  box-shadow:
+    0 8px 24px rgba(13, 110, 253, 0.18),
+    0 2px 6px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  flex-direction: column;
 }
 
+/* Space reserved so badge never collides */
+.job-card .card-body {
+  padding: 20px;
+  padding-top: 44px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
+/* =========================
+   STATUS BADGE – TOP RIGHT
+========================= */
+.status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+
+  font-size: 11px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+/* =========================
+   COMPANY INFO
+========================= */
 .company-logo {
-  height: 36px;
-  width: auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #f8f9fa;
+  padding: 4px;
+  border: 1px solid #dee2e6;
   object-fit: contain;
 }
 
@@ -109,10 +90,71 @@ h4, h5, h6 {
   text-overflow: ellipsis;
 }
 
-.bookmark-btn {
-  padding: 4px 6px;
+/* =========================
+   JOB TITLE & META
+========================= */
+h6 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #212529;
+  line-height: 1.35;
 }
 
-.job-meta {
-  line-height: 1.4;
+.small {
+  font-size: 13px;
+}
+
+/* =========================
+   DESCRIPTION (CLAMP)
+========================= */
+.card-text {
+  font-size: 14px;
+  line-height: 1.45;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+/* =========================
+   BUTTON
+========================= */
+.btn-outline-secondary {
+  border-radius: 20px;
+}
+
+/* =========================
+   RESPONSIVE FIXES
+========================= */
+@media (max-width: 992px) {
+  .company-name {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .job-card .card-body {
+    padding: 18px;
+    padding-top: 42px;
+  }
+
+  h6 {
+    font-size: 14px;
+  }
+
+  .small {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .job-cards {
+    margin-top: 1rem;
+  }
+
+  .company-name {
+    max-width: 130px;
+  }
 }
