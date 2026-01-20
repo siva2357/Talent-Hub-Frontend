@@ -7,128 +7,101 @@
   </p>
 
 
+<div class="filter-card">
 
-<div class="row g-3">
+  <div class="row g-3 filter-bar">
 
-  <!-- LOCATION -->
-  <div class="col-12 col-md-4">
-    <select
-      class="form-select rounded-0"
-      [(ngModel)]="selectedLocation"
-      (change)="applyFilters()"
-    >
-      <option value="">Filter by Location</option>
-      @for (loc of LOCATIONS; track loc) {
-        <option [value]="loc">{{ loc }}</option>
+    <!-- LOCATION -->
+    <div class="col-12 col-md-4">
+      <select
+        class="form-select form-select-sm filter-select"
+        [(ngModel)]="selectedLocation"
+        (change)="applyFilters()">
+        <option value="">Filter by Location</option>
+        @for (loc of LOCATIONS; track loc) {
+          <option [value]="loc">{{ loc }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="col-12 col-md-4 position-relative">
+      <button
+        type="button"
+        class="form-select form-select-sm filter-select text-start"
+        (click)="skillsOpen = !skillsOpen; $event.stopPropagation()">
+        @if (selectedSkills.length === 0) {
+          Select skills
+        } @else {
+          {{ selectedSkills.length }} skill(s) selected
+        }
+      </button>
+
+      @if (skillsOpen) {
+        <div class="skill-dropdown" (click)="$event.stopPropagation()">
+          @for (skill of SKILLS; track skill) {
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [checked]="selectedSkills.includes(skill)"
+                (change)="toggleSkill(skill)"
+                id="skill-{{ skill }}" />
+              <label class="form-check-label" for="skill-{{ skill }}">
+                {{ skill }}
+              </label>
+            </div>
+          }
+        </div>
       }
-    </select>
+    </div>
+
+    <!-- SECTOR -->
+    <div class="col-12 col-md-4">
+      <select
+        class="form-select form-select-sm filter-select"
+        [(ngModel)]="selectedSector"
+        (change)="applyFilters()">
+        <option value="">Filter by Sector</option>
+        @for (sector of SECTORS; track sector) {
+          <option [value]="sector">{{ sector }}</option>
+        }
+      </select>
+    </div>
+
   </div>
 
-<div class="col-12 col-md-4 position-relative">
+  <!-- FILTER SUMMARY -->
+  <div class="row align-items-center filter-summary mt-2">
 
-<button
-  type="button"
-  class="form-select rounded-0 text-start"
-  (click)="skillsOpen = !skillsOpen; $event.stopPropagation()"
->
-  @if (selectedSkills.length === 0) {
-    Select skills
-  } @else {
-    {{ selectedSkills.length }} skill(s) selected
-  }
-</button>
+    <div class="col-12 col-md d-flex flex-wrap gap-2">
 
-@if (skillsOpen) {
-  <div
-    class="border bg-white position-absolute w-100 p-2"
-    style="z-index:1050; max-height:220px; overflow:auto;"
-    (click)="$event.stopPropagation()"
-  >
-    @for (skill of SKILLS; track skill) {
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          [checked]="selectedSkills.includes(skill)"
-          (change)="toggleSkill(skill)"
-          id="skill-{{ skill }}"
-        />
-        <label class="form-check-label" for="skill-{{ skill }}">
-          {{ skill }}
-        </label>
-      </div>
-    }
-  </div>
-}
-
-
-</div>
-
-
-
-
-  <!-- SECTOR / CATEGORY -->
-  <div class="col-12 col-md-4">
-    <select
-      class="form-select rounded-0"
-      [(ngModel)]="selectedSector"
-      (change)="applyFilters()"
-    >
-      <option value="">Filter by Sector</option>
-      @for (sector of SECTORS; track sector) {
-        <option [value]="sector">{{ sector }}</option>
+      @if (selectedLocation) {
+        <span class="filter-pill" (click)="clearLocation()">
+          Location: {{ selectedLocation }} ×
+        </span>
       }
-    </select>
-  </div>
 
-</div>
+      @for (skill of selectedSkills; track skill) {
+        <span class="filter-pill" (click)="removeSkill(skill)">
+          Skill: {{ skill }} ×
+        </span>
+      }
 
+      @if (selectedSector) {
+        <span class="filter-pill" (click)="clearSector()">
+          Sector: {{ selectedSector }} ×
+        </span>
+      }
 
-<div class="row align-items-center my-3">
+    </div>
 
-  <!-- ACTIVE FILTER BADGES -->
-  <div class="col-12 col-md d-flex flex-wrap gap-2 align-items-center mb-2 mb-md-0">
+    <div class="col-12 col-md-auto text-md-end">
+      <p class="filter-count">
+        Showing {{ filteredTalents.length }} of {{ talents.length }}
+      </p>
+    </div>
 
-    @if (selectedLocation) {
-      <span
-        class="badge p-2 d-flex align-items-center justify-content-center"
-        style="font-size:13px; border:1px solid #6c757d; color:#6c757d; cursor:pointer;"
-        (click)="clearLocation()"
-      >
-        Location: {{ selectedLocation }} &nbsp; ×
-      </span>
-    }
-
-@if (selectedSkills.length > 0) {
-  @for (skill of selectedSkills; track skill) {
-    <span
-      class="badge p-2 d-flex align-items-center justify-content-center"
-      style="font-size:13px; border:1px solid #6c757d; color:#6c757d; cursor:pointer;"
-      (click)="removeSkill(skill)"
-    >
-      Skill: {{ skill }} &nbsp; ×
-    </span>
-  }
-}
-
-
-    @if (selectedSector) {
-      <span
-        class="badge p-2 d-flex align-items-center justify-content-center"
-        style="font-size:13px; border:1px solid #6c757d; color:#6c757d; cursor:pointer;"
-        (click)="clearSector()"
-      >
-        Sector: {{ selectedSector }} &nbsp; ×
-      </span>
-    }
-
-  </div>
-
-  <!-- COUNT -->
-  <div class="col-12 col-md-auto text-md-end">
-    <p class="mb-0 text-muted" style="font-size:14px;">
-      Showing {{ filteredTalents.length }} of {{ talents.length }}
-    </p>
   </div>
 
 </div>
@@ -137,106 +110,105 @@
 
 
 
-  <div class="row g-4 mb-5 mt-2">
+<div class="row g-4 mb-5 mt-2 talent-grid">
+
 
 @for (talent of filteredTalents; track talent.userId) {
 
     <div class="col-12 col-md-6 col-lg-4">
 
-      <div class="card shadow-sm border border-dark rounded-3 p-0 h-100 position-relative">
 
-        <!-- HEADER BACKGROUND -->
-        <div
-          class="position-relative rounded-top-3"
-          style="
-            height:160px;
-            background:url('https://res.cloudinary.com/dpp8aspqs/image/upload/v1735368346/pngtree-modern-design-vibrant-violet-fluid-space-screen-with-rainbow-texture-image_13913957_lhc2ah.png')
-            center/cover no-repeat;
-          "
-        >
-          <!-- PROFILE IMAGE -->
-          <img
-            [src]="talent.profilePhoto || 'https://res.cloudinary.com/dpp8aspqs/image/upload/v1733121824/profie_images_opbm8k.png'"
-            class="rounded-circle border border-3 border-dark position-absolute start-50 translate-middle"
-            style="top:100%; width:120px; height:120px; object-fit:cover;"
-            alt="Profile photo"
-          />
-        </div>
+<div class="talent-card position-relative">
 
-        <!-- BODY -->
-        <div class="p-4 mt-5">
 
-          <!-- NAME -->
-          <h5 class="fw-semibold text-center mb-1" style="font-size:17px;">
-            {{ talent.firstName }} {{ talent.lastName }}
-          </h5>
+  <!-- HEADER -->
+  <div class="talent-card-header">
+    <img
+      [src]="talent.profilePhoto || 'https://res.cloudinary.com/dpp8aspqs/image/upload/v1733121824/profie_images_opbm8k.png'"
+      class="talent-avatar"
+      alt="Profile photo"
+    />
+  </div>
 
-          <!-- STATUS -->
-<p class="text-center mb-3">
-  <span
-    class="badge rounded-pill"
-    [style.background]="talent.status === 'active' ? '#d4f8d4' : '#ffe7d8'"
-    [style.color]="talent.status === 'active' ? '#15803d' : '#b45309'"
-    style="font-size:12px;"
-  >
-    ● {{ talent.status === 'active' ? 'Online' : 'Offline' }}
+  <!-- BODY -->
+  <div class="talent-card-body">
+
+    <h5 class="fw-semibold text-center mb-1" style="font-size:17px;">
+      {{ talent.firstName }} {{ talent.lastName }}
+    </h5>
+
+    <!-- STATUS -->
+    <p class="text-center">
+      <span
+        class="badge rounded-pill"
+        [style.background]="talent.status === 'active' ? '#d4f8d4' : '#ffe7d8'"
+        [style.color]="talent.status === 'active' ? '#15803d' : '#b45309'"
+        style="font-size:12px;"
+      >
+        ● {{ talent.status === 'active' ? 'Online' : 'Offline' }}
+      </span>
+    </p>
+
+    <!-- BUTTONS -->
+<div class="talent-card-actions mt-3">
+  <button class="btn btn-outline-primary btn-sm rounded-0" (click)="viewProfile(talent)">
+    View profile
+  </button>
+
+  @if (!talent.saved) {
+    <button class="btn btn-outline-dark btn-sm rounded-0"  (click)="saveTalent(talent)">
+      Save
+    </button>
+  } @else {
+    <button class="btn btn-dark btn-sm rounded-0"  (click)="unsaveTalent(talent)">
+      Unsave
+    </button>
+  }
+</div>
+
+
+<!-- DETAILS -->
+<div class="talent-contact">
+
+  <p>
+    <span class="label">Email:</span>
+    <span class="value">{{ talent.email }}</span>
+  </p>
+
+  <p>
+    <span class="label">Contact:</span>
+    <span class="value">
+      {{ talent.mobile || 'Not provided' }}
+    </span>
+  </p>
+
+  <p>
+    <span class="label">Gender:</span>
+    <span class="value">{{ talent.gender }}</span>
+  </p>
+
+</div>
+
+<!-- BIO -->
+<!-- BIO -->
+<div class="talent-bio-wrapper">
+  <span class="bio-label">
+    Bio Description
   </span>
-</p>
+
+  <p class="talent-bio">
+    {{ talent.bioDescription || 'No bio provided.' }}
+  </p>
+</div>
 
 
+</div>
 
 
-
-          <!-- BUTTONS -->
-          <div class="d-flex justify-content-center gap-2 mb-4">
-
-            <button
-              class="btn btn-outline-primary btn-sm rounded-0 px-3 py-1 flex-fill" (click)="viewProfile(talent)"
-            >
-              View Profile
-            </button>
-
-            <button
-              class="btn btn-outline-dark btn-sm rounded-0 px-3 py-1 flex-fill"
-              (click)="messageTalent(talent)"
-            >
-              Message Me
-            </button>
-
-@if (!talent.saved) {
-  <button
-    class="btn btn-outline-dark btn-sm rounded-0 px-3 py-1 flex-fill"
-    (click)="saveTalent(talent)"
-  >
-    Save Talent
-  </button>
-} @else {
-  <button
-    class="btn btn-dark btn-sm rounded-0 px-3 py-1 flex-fill"
-    (click)="unsaveTalent(talent)"
-  >
-    Unsave
-  </button>
-}
+  </div>
+</div>
 
 
-          </div>
-
-          <!-- DETAILS -->
-          <div style="font-size:14px; line-height:1.5;">
-            <p class="mb-2">
-              <strong>Skills:</strong>
-              {{ talent.skills.join(', ') || 'Not specified' }}
-            </p>
-
-            <p class="mb-0">
-              <strong>Email:</strong> {{ talent.email }}
-            </p>
-          </div>
-
-        </div>
-      </div>
-    </div>
   }
 
   @if (talents.length === 0) {

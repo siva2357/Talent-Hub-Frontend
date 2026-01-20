@@ -13,7 +13,6 @@ import { SocialPlatform } from '../../../../../core/enums/socialMedia.enum';
 import { Language, Proficiency } from '../../../../../core/enums/language.enum';
 import { SECTOR } from '../../../../../core/enums/sector.enum';
 import { SECTOR_DESIGNATION_MAP } from '../../../../../core/enums/sector-designation.map';
-import { CompanyService } from '../../../../../core/services/company-service';
 
 @Component({
   selector: 'app-update-professional-details',
@@ -44,14 +43,11 @@ platforms = Object.values(SocialPlatform);
   constructor(
     private fb: FormBuilder,
     private profileService: RecruiterProfileService,
-        private companyService: CompanyService
   ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.loadProfessionalDetails();
-    this.loadCompanies();
-
   }
 
   /* ================= FORM ================= */
@@ -162,14 +158,7 @@ platforms = Object.values(SocialPlatform);
     }
   }
 
-  loadCompanies(): void {
-  this.companyService.getCompanyList().subscribe({
-    next: (res) => {
-      this.companies = res;
-    },
-    error: () => {}
-  });
-}
+
 
 onCompanySelect(event: Event): void {
   const companyName = (event.target as HTMLSelectElement).value;

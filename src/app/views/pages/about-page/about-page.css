@@ -2,28 +2,28 @@
 .about-page {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 56px 16px;
+  padding: 56px 16px 72px;
 }
 
 /* ================= HEADER ================= */
 .about-header {
-  margin-bottom: 56px;
+  margin-bottom: 64px;
 }
 
 .about-header h2 {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .about-subtitle {
   max-width: 720px;
   margin: 0 auto;
   font-size: 1.05rem;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 /* ================= SECTIONS ================= */
 .about-page > section {
-  margin-bottom: 60px;
+  margin-bottom: 64px;
 }
 
 .about-page > section:last-child {
@@ -36,6 +36,7 @@
   height: 260px;
   border-radius: 16px;
   background: linear-gradient(135deg, #e5e7eb, #dbeafe);
+  display: block;
 }
 
 /* ================= CARDS ================= */
@@ -45,6 +46,15 @@
   border-radius: 16px;
   padding: 24px;
   height: 100%;
+  transition: 0.2s ease;
+}
+
+/* Optional subtle hover (desktop only) */
+@media (hover: hover) {
+  .about-card:hover {
+    border-color: #c7d6ff;
+    transform: translateY(-2px);
+  }
 }
 
 /* ================= LISTS ================= */
@@ -55,16 +65,18 @@
 }
 
 .about-list li {
-  padding-left: 22px;
   position: relative;
+  padding-left: 22px;
   margin-bottom: 10px;
   color: #4b5563;
+  line-height: 1.5;
 }
 
 .about-list li::before {
   content: "✓";
   position: absolute;
   left: 0;
+  top: 0;
   color: #2563eb;
   font-weight: 600;
 }
@@ -74,7 +86,11 @@
 /* Tablets */
 @media (max-width: 992px) {
   .about-page {
-    padding: 48px 16px;
+    padding: 48px 16px 64px;
+  }
+
+  .about-header {
+    margin-bottom: 52px;
   }
 
   .about-page > section {
@@ -89,7 +105,7 @@
 /* Mobile */
 @media (max-width: 768px) {
   .about-page {
-    padding: 40px 14px;
+    padding: 40px 14px 56px;
   }
 
   .about-header {
@@ -102,20 +118,50 @@
 
   .about-image {
     height: 220px;
+    margin-bottom: 12px;
   }
 
   .about-subtitle {
     font-size: 1rem;
+  }
+
+  .about-card {
+    padding: 20px;
   }
 }
 
 /* Small mobile */
 @media (max-width: 576px) {
   .about-page {
-    padding: 32px 12px;
+    padding: 32px 12px 48px;
   }
 
   .about-header {
     margin-bottom: 36px;
   }
+
+  .about-page > section {
+    margin-bottom: 36px;
+  }
+
+  .about-image {
+    height: 200px;
+  }
+}
+
+
+/* Mission & Vision separation */
+.mission-vision {
+  margin-top: 72px;      /* clear break from header */
+  padding-top: 16px;
+}
+
+.mission-vision::before {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #e5e7eb;
+  margin: 0 auto 28px;
+  border-radius: 2px;
 }

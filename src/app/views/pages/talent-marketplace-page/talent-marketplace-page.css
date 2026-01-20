@@ -9,21 +9,31 @@ section p.text-muted {
   font-size: clamp(0.95rem, 1.2vw, 1.05rem);
 }
 
+.talent-card h6 {
+  font-size: 1rem;
+}
+
+.talent-card p.small {
+  font-size: 0.85rem;
+}
+
 /* ================= INFO & AI CARDS ================= */
 .info-card,
 .ai-card {
   background: #ffffff;
   border-radius: 16px;
   border: 1px solid #e5e7eb;
+  border-left: 4px solid #2563eb;
   padding: 1.5rem;
   height: 100%;
-  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    border-left-width: 5px;
 }
 
 .info-card:hover,
 .ai-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0,0,0,.06);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
   border-color: #2563eb;
 }
 
@@ -51,6 +61,13 @@ section p.text-muted {
 .info-content {
   flex: 1;
 }
+
+
+.ai-card h6,
+.info-card h6 {
+  min-height: 44px;
+}
+
 
 /* Mobile + Tablet */
 @media (max-width: 991px) {
@@ -95,12 +112,12 @@ section p.text-muted {
   border-radius: 16px;
   border: 1px solid #e5e7eb;
   height: 100%;
-  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .talent-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(0,0,0,.08);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
   border-color: #2563eb;
 }
 
@@ -116,7 +133,7 @@ section p.text-muted {
   border-radius: 50%;
   background: #e5e7eb;
   margin: auto;
-  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* Tags */
@@ -160,5 +177,6 @@ section p.text-muted {
   .talent-card:hover {
     transform: none;
     box-shadow: none;
+    border-color: #e5e7eb;
   }
 }

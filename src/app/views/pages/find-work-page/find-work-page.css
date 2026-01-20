@@ -21,6 +21,7 @@ p {
 .info-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
+  border-left: 4px solid #2563eb;
   border-radius: 14px;
   padding: 1.5rem;
   height: 100%;
@@ -29,7 +30,7 @@ p {
 
 .info-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, .06);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
 }
 
 .info-card h6 {
@@ -48,10 +49,18 @@ p {
   padding: 10px 12px;
 }
 
+.row.my-4 {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid #000000;
+}
+
 /* ================= JOB CARD ================= */
 .job-card {
+  position: relative;
   background: #ffffff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #000000;
   border-radius: 14px;
   padding: 1.5rem;
   transition: transform .2s ease, box-shadow .2s ease;
@@ -59,15 +68,28 @@ p {
 
 .job-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
 }
 
 .job-card h6 {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
 }
 
 .job-card p {
   font-size: 0.9rem;
+}
+
+/* AI Recommendation Badge */
+.job-card::after {
+  content: "AI Recommended";
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 0.7rem;
+  color: #2563eb;
+  background: #eef2ff;
+  padding: 4px 8px;
+  border-radius: 8px;
 }
 
 /* ================= LIST ================= */
@@ -77,6 +99,7 @@ ol {
 
 ol li {
   margin-bottom: 0.5rem;
+  line-height: 1.6;
 }
 
 /* ================= MOBILE OPTIMIZATION ================= */
@@ -101,6 +124,62 @@ ol li {
 @media (hover: none) {
   .info-card:hover,
   .job-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+
+/* ================= HIRING FLOW ================= */
+.hire-step {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 1.5rem;
+  height: 100%;
+  text-align: center;
+  transition: transform .25s ease, box-shadow .25s ease;
+   border-left: 4px solid #2563eb;
+}
+
+.hire-step:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0,0,0,.06);
+}
+
+/* Step number */
+.hire-step-number {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+/* Text */
+.hire-step h6 {
+  font-size: 1.05rem;
+}
+
+.hire-step p {
+  font-size: 0.9rem;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .hire-step {
+    padding: 1.25rem;
+  }
+}
+
+/* Touch devices */
+@media (hover: none) {
+  .hire-step:hover {
     transform: none;
     box-shadow: none;
   }

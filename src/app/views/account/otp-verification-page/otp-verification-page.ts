@@ -86,7 +86,7 @@ this.authService.verifyOtp(
 ).subscribe({
   next: () => {
     this.loading = false;
-    this.router.navigate(['/login']);
+    this.router.navigate(['/confirmation-page']);
   },
   error: () => {
     this.loading = false;

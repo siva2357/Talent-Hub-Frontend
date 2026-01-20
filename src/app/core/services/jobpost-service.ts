@@ -232,6 +232,32 @@ getJobPosts(): Observable<AppliedJobsResponse> {
   ).pipe(catchError(this.handleError));
 }
 
+
+
+
+
+
+
+/** Shortlist (Hire) applicant */
+hireApplicant(jobPostId: string, jobSeekerId: string): Observable<any> {
+  return this.http.put(
+    `${this.baseUrl}/analytics/job/${jobPostId}/hire/${jobSeekerId}`,
+    {},
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
+
+/** Reject applicant */
+rejectApplicant(jobPostId: string, jobSeekerId: string): Observable<any> {
+  return this.http.put(
+    `${this.baseUrl}/analytics/job/${jobPostId}/reject/${jobSeekerId}`,
+    {},
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
+
+
+
   /* =========================
      ERROR HANDLER
   ========================= */

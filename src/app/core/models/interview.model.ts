@@ -65,9 +65,13 @@ export class User {
 export interface CreateInterviewPayload {
   jobSeekerId: string;
   jobPostId: string;
+
   interviewTitle: string;
   interviewDescription?: string;
+
   scheduledDate: string; // YYYY-MM-DD
   startTime: Date;
   endTime: Date;
+
+  meetingJoinUrl: string; // ✅ REQUIRED
 }

@@ -1,103 +1,189 @@
-  /* Prevent card squeezing on small screens */
-  .job-card {
-    min-height: 200px;
-  }
 
-  /* Logo box stays responsive */
-  .logo-box {
-    width: 75px;
-    height: 65px;
-  }
-
-  /* Ensure text wraps cleanly */
-  .job-title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    line-height: 1.2;
-  }
-
-  /* Space out buttons on small screens */
-  @media (max-width: 576px) {
-    .action-buttons {
-      flex-direction: column;
-      width: 100%;
-    }
-    .action-buttons button {
-      width: 100%;
-    }
-  }
-
-
-
-    .button-row {
-    white-space: nowrap;
-    overflow-x: auto;
-  }
-
-  .button-row button {
-    flex-shrink: 0;
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Welcome Box */
-.welcome-box {
-  background: #fff;
-  border-radius: 14px;
-  border: 1px solid #e6e6e6;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-}
-
-/* Steps Section */
-.step-card {
-  background: #fff;
-  border: 1px solid #dcdcdc;
-  transition: 0.25s ease;
-}
-
-.step-card:hover {
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-}
-
-/* Job Card */
 .job-card {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  transition: 0.22s ease;
+  background: #ffffff;
+  border: 2px solid #92a6f3;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow:
+    0 8px 24px rgba(13, 110, 253, 0.18),
+    0 2px 6px rgba(0, 0, 0, 0.08);     /* depth */
+  transition: none; /* no hover animation */
 }
 
-.job-card:hover {
-  box-shadow: 0 5px 18px rgba(0,0,0,0.07);
-}
 
-.company-logo {
-  width: 52px;
-  height: 52px;
+
+.job-card .company-logo {
+  width: 46px;
+  height: 46px;
   border-radius: 10px;
+  background: #f8f9fa;
+  padding: 4px;
+  border: 1px solid #dee2e6;
   object-fit: contain;
 }
 
-/* Tags */
-.tag-badge {
-  border: 1px solid #6c757d;
-  color: #6c757d;
-  padding: 5px 10px;
-  font-size: 13px;
+.job-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #212529;
+  line-height: 1.35;
+}
+
+
+
+
+/* Description clamp */
+.job-desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.45;
+  min-height: calc(1.45em * 2);
+}
+
+.job-card .mt-auto {
+  padding-top: 12px;
+  border-top: 1px dashed #e5e7eb;
+}
+
+
+.job-actions button {
+  white-space: nowrap;
+  font-size: 12px;
+  padding: 4px 10px;
+}
+
+
+/* Responsive fixes */
+@media (max-width: 576px) {
+    .job-card {
+    padding: 14px;
+  }
+
+  .job-title {
+    font-size: 16px;
+  }
+  .job-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+
+/* Off canvas job details */
+/* Logo */
+.company-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: contain;
+  border: 1px solid #eee;
+}
+/* ===== Job Offcanvas Width Control ===== */
+
+/* Default: full width (mobile & tablet) */
+#jobOffcanvas {
+  width: 100% !important;
+}
+
+/* Desktop and above */
+@media (min-width: 992px) {
+  #jobOffcanvas {
+    width: 50% !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ===== JOB MODAL ===== */
+.job-modal {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.job-modal-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid #e6e6e6;
+  background: #fff;
+}
+
+.job-modal-body {
+  background: #fafbfc;
+  padding: 18px;
+}
+
+.job-modal-footer {
+  padding: 14px 18px;
+  border-top: 1px solid #e6e6e6;
+  background: #fff;
+}
+
+/* Labels */
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+/* Required star */
+.required {
+  color: #dc3545;
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+/* Inputs */
+.form-control,
+.form-select,
+textarea {
   border-radius: 6px;
+}
+
+/* Validation text */
+small.text-danger {
+  font-size: 12px;
+  margin-top: 2px;
+  display: block;
+}
+
+/* Spinner */
+.spinner-border {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+
+
+
+/* Filter badges */
+.filter-badge {
+  font-size: 13px;
+  padding: 4px 10px;
+  border: 1px solid #75b4f3;
+  border-radius: 20px;
+  background: #f8f9fa;
+  color: #212529;
   cursor: pointer;
 }
+
+.filter-badge:hover {
+  background: #e9ecef;
+}
+
+
+
+

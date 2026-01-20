@@ -21,7 +21,8 @@ export class FileUpload {
 
   // ✅ parent decides pre-login or not
   @Input() preLoginUserId?: string;
-
+// 🔥 important
+@Input() oldFileUrl?: string;
   @Output() uploaded = new EventEmitter<string>();
 
   uploading = false;
@@ -44,7 +45,8 @@ onFileSelect(event: Event) {
         this.bucketKey,
         this.section,
         this.preLoginUserId,
-        this.replace
+        this.replace,
+
       )
       .subscribe({
         next: (event) => {

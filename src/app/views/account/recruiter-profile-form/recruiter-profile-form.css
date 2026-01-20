@@ -1,58 +1,222 @@
-/* ================= CARD ================= */
+/* =====================================================
+   CARD & GLOBAL LAYOUT
+===================================================== */
+
 .profile-card {
-  padding: 24px;
-  border-radius: 14px;
+  padding: 28px;
+  border-radius: 16px;
   background: #ffffff;
 }
 
-/* ================= SECTIONS ================= */
-.section-title {
-  font-weight: 700;
-  margin: 28px 0 12px;
-  padding-bottom: 6px;
-  border-bottom: 2px solid #eaeaea;
-  color: #333;
+.profile-card h4 {
+  font-size: 22px;
+  color: #1f2937;
 }
 
-/* ================= UPLOAD ================= */
+/* =====================================================
+   SECTION HEADERS
+===================================================== */
+
+.section-title {
+  font-weight: 700;
+  font-size: 16px;
+  margin: 32px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e5e7eb;
+  color: #374151;
+}
+
+/* Sub-section headers (Languages, Skills, etc.) */
+h6.fw-bold {
+  margin-top: 36px;
+  color: #1f2937;
+}
+
+/* Space after section titles */
+.section-title + .row,
+.section-title + div {
+  margin-bottom: 16px;
+}
+
+/* =====================================================
+   FORM CONTROLS
+===================================================== */
+
+.form-label {
+  font-weight: 600;
+  color: #374151;
+}
+
+.form-control,
+.form-select {
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.form-control:disabled {
+  background-color: #f3f4f6;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+/* Bootstrap row rhythm control */
+.profile-card .row {
+  --bs-gutter-y: 1.2rem;
+}
+
+/* =====================================================
+   UPLOAD / IMAGE PREVIEWS
+===================================================== */
+
 .upload-box {
-  border: 2px dashed #9bbad1;
-  border-radius: 12px;
+  border: 2px dashed #93c5fd;
+  border-radius: 14px;
   background: #f8fbff;
-  padding: 20px;
+  padding: 24px;
 }
 
 .upload-passport {
   width: 140px;
   height: 180px;
   object-fit: cover;
-  border-radius: 10px;
-  border: 2px solid #c8d4e2;
+  border-radius: 12px;
+  border: 2px solid #c7d2fe;
 }
 
-/* ================= BADGES ================= */
+/* =====================================================
+   COMPANY LOGO (FINAL, SINGLE SOURCE OF TRUTH)
+===================================================== */
+
+.company-logo-box {
+  background: #ffffff;
+  border: 2px dashed #c7d2fe;
+  border-radius: 18px;
+  padding: 20px;
+  min-height: 260px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* Logo preview container */
+.company-logo-box app-file-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 140px;
+  height: 140px;
+  border-radius: 14px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+/* Actual image inside preview */
+.company-logo-box app-file-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Upload spacing */
+.company-logo-box app-file-upload {
+  margin-top: 6px;
+}
+
+/* =====================================================
+   PROFESSIONAL DETAILS BLOCK
+===================================================== */
+
+.profile-card .row.g-4.align-items-start {
+  background: #fafafa;
+  padding: 20px;
+  border-radius: 18px;
+  margin-bottom: 28px;
+}
+
+.col-md-8 .row.g-3 {
+  row-gap: 18px;
+}
+
+/* =====================================================
+   LISTS, BADGES & CARDS
+===================================================== */
+
+.border.rounded.p-2,
+.border.rounded.p-3 {
+  background: #f9fafb;
+  border-color: #e5e7eb !important;
+}
+
 .badge {
-  font-size: 14px;
-  padding: 8px 14px;
-  border-radius: 50px;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 999px;
   white-space: nowrap;
 }
 
-/* ================= ERRORS ================= */
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.btn {
+  border-radius: 10px;
+}
+
+.btn-success {
+  font-weight: 600;
+}
+
+.btn-sm {
+  margin-top: 8px;
+}
+
+/* Submit section emphasis */
+.text-end.mt-4 {
+  margin-top: 48px !important;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* =====================================================
+   ERRORS & INPUT GROUPS
+===================================================== */
+
 .text-danger {
-  font-size: 13px;
+  font-size: 12px;
   margin-top: 4px;
 }
 
-/* ================= MOBILE ================= */
+.input-group-text {
+  background: #f3f4f6;
+  border-radius: 10px 0 0 10px;
+}
+
+/* =====================================================
+   SOCIAL PROFILES
+===================================================== */
+
+[formarrayname="socialProfiles"] > div {
+  margin-top: 12px;
+}
+
+/* =====================================================
+   MOBILE REFINEMENTS
+===================================================== */
+
 @media (max-width: 768px) {
 
   .profile-card {
-    padding: 16px;
+    padding: 18px;
   }
 
   h4 {
     font-size: 18px;
+    text-align: center;
   }
 
   .section-title {
@@ -71,4 +235,26 @@
     height: 150px;
   }
 
+  .company-logo-box {
+    min-height: auto;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .company-logo-box app-file-preview {
+    width: 120px;
+    height: 120px;
+  }
+
+  h6.fw-bold {
+    margin-top: 28px;
+  }
+
+  .text-end {
+    text-align: center !important;
+  }
+
+  .btn-success {
+    width: 100%;
+  }
 }

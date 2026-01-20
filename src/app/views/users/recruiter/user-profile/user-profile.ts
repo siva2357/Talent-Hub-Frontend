@@ -3,7 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { SOCIAL_ICONS, SocialPlatform } from '../../../../core/enums/socialMedia.enum';
 import { RecruiterProfileService } from '../../../../core/services/recruiter-profile-service';
 import { CommonModule } from '@angular/common';
-import { RecruiterProfile } from '../../../../core/models/recruiter-profile.model';
+import { RecruiterJobPost, RecruiterProfile, RecruiterProfileResponse } from '../../../../core/models/recruiter-profile.model';
 @Component({
   selector: 'app-user-profile',
   imports: [RouterModule,CommonModule],
@@ -13,8 +13,8 @@ import { RecruiterProfile } from '../../../../core/models/recruiter-profile.mode
 })
 export class UserProfile {
 
-
-  public  recruiterProfile!: RecruiterProfile;
+recruiterProfile!: RecruiterProfile;
+  recruiterJobs: RecruiterJobPost[] = [];
 
   socialIcons = SOCIAL_ICONS;
 
@@ -23,20 +23,20 @@ export class UserProfile {
     private router: Router
   ) {}
 
-
-
   ngOnInit(): void {
-     this.loadRecruiterProfile()
+    this.loadRecruiterProfile();
   }
-
 
 
 loadRecruiterProfile(): void {
   this.recruiterProfileService.getRecruiterProfile().subscribe({
-    next: (response) => {
-      if (response.success && response.data) {
-        this.recruiterProfile = response.data;
-        console.log('✅ Recruiter profile loaded:', this.recruiterProfile);
+    next: (response) => { // ✅ let TS infer the type
+      if (response.success) {
+        this.recruiterProfile = response.data.profile;
+        this.recruiterJobs = response.data.jobs;
+
+        console.log('✅ Profile:', this.recruiterProfile);
+        console.log('✅ Jobs:', this.recruiterJobs);
       }
     },
     error: (err) => {
@@ -44,6 +44,8 @@ loadRecruiterProfile(): void {
     }
   });
 }
+
+
 
 
 goBack(){

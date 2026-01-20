@@ -151,35 +151,93 @@
 </section>
 
 
+<section class="mb-4 text-center">
+  <h3 class="fw-bold">Available Candidates</h3>
+  <p class="text-muted small">
+    Browse job-ready profiles curated using skill, role fit, and AI insights.
+  </p>
+</section>
+
+
   <!-- ================= TALENT GRID ================= -->
   <section>
     <div class="row g-4">
 
-      @for (i of [1,2,3,4,5,6]; track i) {
+@for (c of [
+  {
+    name: 'Arjun Patel',
+    role: 'Frontend Developer',
+        img: 'https://res.cloudinary.com/dpp8aspqs/image/upload/v1735402917/profile_10_bdrj6v.jpg',
+
+
+    skills: ['Angular', 'TypeScript', 'UI/UX']
+  },
+  {
+    name: 'Sneha Reddy',
+    role: 'Backend Developer',
+    img: 'https://res.cloudinary.com/dpp8aspqs/image/upload/v1735402918/profile_12_ioepgp.jpg',
+    skills: ['Node.js', 'MongoDB', 'REST APIs']
+  },
+  {
+    name: 'Rahul Verma',
+    role: 'Full Stack Engineer',
+    img: 'https://res.cloudinary.com/dpp8aspqs/image/upload/v1735402915/profile_7_rtpiw9.jpg',
+    skills: ['Angular', 'Node.js', 'PostgreSQL']
+  },
+  {
+    name: 'Neha Sharma',
+    role: 'UI/UX Designer',
+    img: 'https://res.cloudinary.com/dpp8aspqs/image/upload/v1735402917/profile_9_niroj6.jpg',
+    skills: ['Figma', 'Design Systems', 'Prototyping']
+  },
+  {
+    name: 'Karthik Iyer',
+    role: 'Data Analyst',
+    img: 'https://res.cloudinary.com/dpp8aspqs/image/upload/v1735402914/profile_6_o0q8qy.jpg',
+    skills: ['SQL', 'Python', 'Power BI']
+  },
+  {
+    name: 'Pooja Mehta',
+    role: 'QA Engineer',
+    img: 'https://res.cloudinary.com/dpp8aspqs/image/upload/v1735402916/profile_8_sxcj2r.jpg',
+    skills: ['Manual Testing', 'Automation', 'Selenium']
+  }
+]; track c.name) {
+
 <div class="col-12 col-md-6 col-lg-4">
 
-          <div class="talent-card h-100 shadow-sm">
+  <div class="talent-card h-100">
 
-            <div class="card-body text-center">
-              <div class="avatar mx-auto mb-3"></div>
+    <div class="card-body text-center">
 
-              <h6 class="fw-semibold mb-1">Candidate Name</h6>
-              <p class="text-muted small mb-2">Frontend Developer</p>
+      <!-- Avatar -->
+      <img
+        [src]="c.img"
+        alt="Candidate profile"
+        class="avatar mx-auto mb-3"
+      />
 
-              <div class="tags mb-3">
-                <span class="badge bg-light text-dark">Angular</span>
-                <span class="badge bg-light text-dark">React</span>
-                <span class="badge bg-light text-dark">UI/UX</span>
-              </div>
+      <!-- Name & Role -->
+      <h6 class="fw-semibold mb-1">{{ c.name }}</h6>
+      <p class="text-muted small mb-2">{{ c.role }}</p>
 
-              <button class="btn btn-outline-primary btn-sm w-100">
-                View Profile
-              </button>
-            </div>
+      <!-- Skills -->
+      <div class="tags mb-3">
+        @for (s of c.skills; track s) {
+          <span class="badge bg-light text-dark">{{ s }}</span>
+        }
+      </div>
 
-          </div>
-        </div>
-      }
+      <button class="btn btn-outline-primary btn-sm w-100">
+        View Profile
+      </button>
+
+    </div>
+
+  </div>
+</div>
+}
+
 
     </div>
   </section>

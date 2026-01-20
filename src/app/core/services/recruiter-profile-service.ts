@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { RecruiterProfile } from '../models/recruiter-profile.model';
+import { RecruiterProfile, RecruiterProfileResponse } from '../models/recruiter-profile.model';
 import { catchError, Observable, of, throwError } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 @Injectable({
@@ -10,9 +10,6 @@ import { ApiResponse } from '../models/api-response.model';
 })
 export class RecruiterProfileService {
   private baseUrl: string = environment.apiGatewayUrl;
-
-  private role = localStorage.getItem('userRole') || '';
-  private userData = JSON.parse(localStorage.getItem('userData') || '{}');
 
   private getHeaders(): HttpHeaders {
   const token = localStorage.getItem('JWT_Token');
@@ -31,9 +28,9 @@ export class RecruiterProfileService {
     return this.http.post(`${this.baseUrl}/recruiter/createProfile`, payload);
   }
 
-getRecruiterProfile(): Observable<ApiResponse<RecruiterProfile>> {
+getRecruiterProfile(): Observable<ApiResponse<RecruiterProfileResponse>> {
   return this.http
-    .get<ApiResponse<RecruiterProfile>>(
+    .get<ApiResponse<RecruiterProfileResponse>>(
       `${this.baseUrl}/recruiter/getProfile`,
       { headers: this.getHeaders() }
     )

@@ -25,9 +25,6 @@ import { SEEKER_ROUTES } from './views/users/seeker/seeker.routes';
 import { ADMIN_ROUTES } from './views/users/admin/admin.routes';
 import { SeekerProfileForm } from './views/account/seeker-profile-form/seeker-profile-form';
 import { RecruiterProfileForm } from './views/account/recruiter-profile-form/recruiter-profile-form';
-import { AccountRegisteredPage } from './views/account/account-registered-page/account-registered-page';
-import { InterviewMeetingPage } from './views/shared/interview-meeting-page/interview-meeting-page';
-import { InterviewSessionPage } from './views/shared/interview-session-page/interview-session-page';
 import { RoleGuard } from './core/guards/role.guard';
 import { AuthGuard } from './core/guards/auth.guard';
 
@@ -49,7 +46,6 @@ export const routes: Routes = [
   { path: 'sign-up/recruiter-profile-form', component: RecruiterProfileForm },
   { path: 'sign-up/jobSeeker', component: RegisterSeekerPage, title: 'Register seeker' },
   { path: 'sign-up/jobSeeker-profile-form', component: SeekerProfileForm },
-  { path: 'account-registered', component: AccountRegisteredPage, title: 'Confirmation' },
   { path: 'sign-up/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
   { path: 'login', component: LoginPage, title: 'Login' },
@@ -62,11 +58,6 @@ export const routes: Routes = [
   { path: 'maintenance', component: MaintenancePage, title: 'Maintenance' },
   { path: 'error', component: ErrorPage, title: 'Error' },
   { path: 'access-denied', component: UnauthorizedPage, title: 'Access denied' },
-
-  //Interview meet public pages
-  { path: 'interview/live-session/:interviewId/:meetingId', component: InterviewSessionPage},
-  { path: 'interview/meet-session/:interviewId/:meetingId', component: InterviewMeetingPage},
-
 
   //User routes
   { path: 'admin', loadChildren: () => ADMIN_ROUTES, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'admin' }},

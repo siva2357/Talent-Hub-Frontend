@@ -17,6 +17,8 @@ import { socialProfileValidator } from '../../../core/helpers/social-media.helpe
 import { CommonModule } from '@angular/common';
 import { FileUpload } from '../../shared/file-upload/file-upload';
 import { FilePreview } from '../../shared/file-preview/file-preview';
+import { Language, LanguageEntry, Proficiency } from '../../../core/enums/language.enum';
+import { SocialPlatform } from '../../../core/enums/socialMedia.enum';
 
 function minArrayLength(min: number) {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -36,10 +38,15 @@ export class SeekerProfileForm {
   firstName!: string;
   lastName!: string;
   email!: string;
+  role!:string;
   profileForm!: FormGroup;
   BucketKey = BucketKey;
   UploadSection = UploadSection;
   profilePhotoUrl!: string;
+// profile.component.ts
+languages = Object.values(Language);
+proficiencyLevels = Object.values(Proficiency);
+socialPlatforms = Object.values(SocialPlatform);
 
   constructor(
     private fb: FormBuilder,
@@ -57,6 +64,7 @@ export class SeekerProfileForm {
     const data = JSON.parse(stored);
     this.userId = data.userId;
     this.email = data.email;
+    this.role=data.role;
 
     const fullNameParts = (data.fullName || '').trim().split(' ');
     this.firstName = fullNameParts[0] || '';
@@ -141,23 +149,25 @@ removeCertification(index: number): void {
     return this.profileForm.get('skills') as FormArray;
   }
 
-  addSkill(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const value = input.value.trim();
+addSkill(event: Event): void {
+  event.preventDefault(); // 👈 important
 
-    // 👇 user interacted → mark touched
-    this.skillsArray.markAsTouched();
+  const input = event.target as HTMLInputElement;
+  const value = input.value.trim();
 
-    if (!value) return;
+  this.skillsArray.markAsTouched();
 
-    if (this.skillsArray.value.includes(value)) {
-      input.value = '';
-      return;
-    }
+  if (!value) return;
 
-    this.skillsArray.push(this.fb.control(value));
+  if (this.skillsArray.value.includes(value)) {
     input.value = '';
+    return;
   }
+
+  this.skillsArray.push(this.fb.control(value));
+  input.value = '';
+}
+
 
   removeSkill(index: number): void {
     this.skillsArray.removeAt(index);
@@ -167,34 +177,39 @@ removeCertification(index: number): void {
     return this.profileForm.get('languages') as FormArray;
   }
 
-  addLanguage(languageSelect: HTMLSelectElement, levelSelect: HTMLSelectElement): void {
-    const language = languageSelect.value;
-    const level = levelSelect.value;
+addLanguage(
+  languageSelect: HTMLSelectElement,
+  levelSelect: HTMLSelectElement
+): void {
+  const language = languageSelect.value as Language;
+  const proficiency = levelSelect.value as Proficiency;
 
-    // mark touched only on interaction
-    this.languagesArray.markAsTouched();
+  this.languagesArray.markAsTouched();
 
-    if (!language || !level) return;
+  if (!language || !proficiency) return;
 
-    // prevent duplicates
-    const exists = this.languagesArray.value.some((l: any) => l.language === language);
-    if (exists) {
-      languageSelect.value = '';
-      levelSelect.value = '';
-      return;
-    }
+  const exists = this.languagesArray.value.some(
+    (l: LanguageEntry) => l.language === language
+  );
 
-    this.languagesArray.push(
-      this.fb.group({
-        language: [language, Validators.required],
-        level: [level, Validators.required],
-      })
-    );
-
-    // reset selects
+  if (exists) {
     languageSelect.value = '';
     levelSelect.value = '';
+    return;
   }
+
+  this.languagesArray.push(
+    this.fb.group({
+      language: [language, Validators.required],
+      proficiency: [proficiency, Validators.required],
+    })
+  );
+
+  languageSelect.value = '';
+  levelSelect.value = '';
+}
+
+
 
   removeLanguage(index: number): void {
     this.languagesArray.removeAt(index);
@@ -215,23 +230,24 @@ removeCertification(index: number): void {
     return lastGroup.valid;
   }
 
-  addSocialProfile(): void {
-    // safety check
-    if (!this.canAddAnotherProfile()) {
-      this.socialProfiles.at(this.socialProfiles.length - 1).markAsTouched();
-      return;
-    }
-
-    this.socialProfiles.push(
-      this.fb.group(
-        {
-          platform: ['', Validators.required],
-          link: ['', Validators.required],
-        },
-        { validators: socialProfileValidator() }
-      )
-    );
+addSocialProfile(): void {
+  if (!this.canAddAnotherProfile()) {
+    this.socialProfiles.at(this.socialProfiles.length - 1)?.markAllAsTouched();
+    return;
   }
+
+this.socialProfiles.push(
+  this.fb.group(
+    {
+      platform: ['', Validators.required],
+      link: ['', Validators.required],
+    },
+    { validators: socialProfileValidator() }
+  )
+);
+
+}
+
   isProfileInvalid(index: number): boolean {
     const group = this.socialProfiles.at(index);
     return group.invalid && group.touched;
@@ -277,7 +293,16 @@ removeCertification(index: number): void {
     this.jobSeekerProfileService.createProfile(payload).subscribe({
       next: () => {
         localStorage.removeItem('jobSeekerRegistration');
-        this.router.navigate(['/account-registered']);
+
+this.router.navigate(
+  ['/sign-up/otp-verification'],
+  {
+    queryParams: {
+      email: this.email,
+      role: this.role
+    }
+  }
+);
       },
     });
   }

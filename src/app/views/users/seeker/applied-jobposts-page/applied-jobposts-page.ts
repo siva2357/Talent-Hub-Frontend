@@ -76,11 +76,4 @@ export class AppliedJobpostsPage implements OnInit {
     this.applyFilters();
   }
 
-  /* =========================
-     Navigation
-  ========================== */
-  goToJobDetails(jobPostId: string): void {
-    this.router.navigate([`/jobSeeker/jobposts/${jobPostId}/job-details`]);
-  }
-
 }

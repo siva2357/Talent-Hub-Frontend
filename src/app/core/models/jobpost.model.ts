@@ -1,4 +1,4 @@
-import { CompanyDetails } from "./company.modal";
+
 
 export interface Applicant {
   jobSeekerId: string;
@@ -11,8 +11,8 @@ export interface Applicant {
 
 export interface JobPost {
   _id: string;
-  recruiterId?: string;
-  companyId: string;
+  recruiterId: string;
+
   jobId: string;
   jobTitle: string;
   jobType: string;
@@ -23,19 +23,17 @@ export interface JobPost {
   salary: string;
   vacancy: string;
   location: string;
-  postedOn: Date;
   applyByDate: Date;
-  status?: 'Pending' | 'Open' | 'Closed' | 'Rejected';
-  verifiedByAdmin?: boolean;
-  adminReviewedOn?: Date;
+  postedOn: Date;
+  status: 'Pending' | 'Open' | 'Closed';
+  totalApplicants: number;
+  company: Company;
   applicants?: Applicant[];
-  totalApplicants?: number;
-  savedBy?: string[];
   createdAt?: Date;
   updatedAt?: Date;
-  saved?: boolean;
+    saved?: boolean;
   isApplied?: boolean;
-  companyDetails: CompanyDetails;
+  companyDetails: Company;
   applicationStatus:string
 }
 
@@ -52,28 +50,34 @@ export interface SavedJobs {
 
 
 export interface SavedJobPost {
-   jobPostId: string;
-  saved: boolean;
-  savedAt: string;
   savedJobId: string;
+  jobPostId: string;
+
+  saved: boolean;
+  savedAt: Date;
+
   jobId: string;
   jobTitle: string;
   jobType: string;
   jobCategory: string;
+
   location: string;
   salary: string;
   vacancy: string;
   experience: string;
   qualification: string;
-  applyByDate: string;
-  postedOn: string;
-  companyDetails: {
-    companyLogo: {
-      fileName: string;
-      url: string;
-    };
-    companyId: string;
-    companyName: string;
-    companyAddress: string;
-  };
+
+  applyByDate: Date;
+  postedOn: Date;
+
+  company: Company;
+}
+
+
+
+export interface Company {
+  name: string;
+  location: string;
+  description: string;
+  logo: string;
 }

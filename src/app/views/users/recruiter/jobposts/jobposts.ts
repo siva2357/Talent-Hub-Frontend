@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { QUALIFICATION } from '../../../../core/enums/qualification.enum';
 import { JobpostService } from '../../../../core/services/jobpost-service';
@@ -11,6 +11,7 @@ import { JOBPOSTTYPE } from '../../../../core/enums/jobpost-type.enum';
 import { EXPERIENCE } from '../../../../core/enums/experience.enum';
 import { LOCATIONS } from '../../../../core/enums/location.enum';
 import { TimeAgoPipe } from '../../../../core/pipes/time.pipe';
+
 @Component({
   selector: 'app-jobposts',
   imports: [FormsModule,ReactiveFormsModule,CommonModule,TimeAgoPipe],
@@ -18,7 +19,7 @@ import { TimeAgoPipe } from '../../../../core/pipes/time.pipe';
   styleUrl: './jobposts.css',
   standalone: true,
 })
-export class Jobposts {
+export class Jobposts implements OnInit {
 
  jobPostForm!: FormGroup;
   jobPostCreated: boolean = false;
@@ -29,6 +30,7 @@ export class Jobposts {
   jobPosts: JobPost[] = [];
 selectedJobPostId: string | null = null;
 isEditMode = false;
+selectedJob: any = null;
 
 
   public qualifications = Object.values(QUALIFICATION);
@@ -130,6 +132,12 @@ applyFilters() {
 removeFilter(key: 'search' | 'jobType' | 'jobCategory' | 'status') {
   this.filters[key] = '';
   this.applyFilters();
+}
+
+
+
+openJobOffcanvas(job: any) {
+  this.selectedJob = job;
 }
 
 
