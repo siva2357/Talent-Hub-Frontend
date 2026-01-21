@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-file-preview',
@@ -9,6 +10,13 @@ import { Component, Input } from '@angular/core';
 export class FilePreview {
 
   @Input() fileUrl!: string;
+
+  constructor(private sanitizer: DomSanitizer) {}
+
+  get safeUrl(): SafeResourceUrl | null {
+    if (!this.fileUrl) return null;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(this.fileUrl);
+  }
 
   get fileType(): 'image' | 'video' | 'pdf' | 'unknown' {
     if (!this.fileUrl) return 'unknown';
