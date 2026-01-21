@@ -311,7 +311,7 @@ submitProfile(): void {
 
   this.recruiterProfileService.createProfile(payload).subscribe(() => {
     localStorage.removeItem('recruiterRegistration');
-    this.router.navigate(['/sign-up/otp-verification'], {
+    this.router.navigate(['/register/otp-verification'], {
       queryParams: { email: this.email, role: this.role }
     });
   });

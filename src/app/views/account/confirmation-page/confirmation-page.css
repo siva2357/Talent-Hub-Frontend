@@ -1,18 +1,23 @@
 .confirm-container {
-  width: 100%;
+background-image: url('/assets/background-images/Background-2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   padding: 20px;
-  text-align: center;
-  margin: auto;
 }
 
-/* Limits text width to prevent breaking */
-.text-box {
-  max-width: 300px;
+.confirm-card {
+  background: #ffffff;
+  padding: 40px 32px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  max-width: 360px;
+  width: 100%;
 }
 
 /* Logo */
 .logo {
-  height: 70px;
+  height: 80px;
 }
 
 @media (max-width: 480px) {
@@ -23,15 +28,22 @@
 
 /* Success Icon */
 .success-img {
-  height: 60px;
-  animation: pop 0.3s ease-out;
+  height: 45px;
+  animation: pop 0.5s ease-out;
 }
 
 @keyframes pop {
-  0% { transform: scale(0.6); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
+/* Heading */
 h3 {
   font-weight: 700;
 }
@@ -39,17 +51,5 @@ h3 {
 /* Text */
 .text-muted {
   font-size: 14px;
-  line-height: 1.5;
-}
-
-/* Login link */
-.login-link {
-  text-decoration: none;
-  font-size: 15px;
-  transition: 0.2s ease;
-}
-
-.login-link:hover {
-  text-decoration: underline;
-  color: #0d6efd;
+  line-height: 1.6;
 }

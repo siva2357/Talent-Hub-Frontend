@@ -1,358 +1,402 @@
-<div class="container my-5">
-  <form [formGroup]="profileForm" (ngSubmit)="submitProfile()" class="mx-auto" style="max-width: 1100px;">
-    <div class="card p-4 shadow-sm">
+<section class="profileForm-section py-5">
+  <h4 class="fw-semibold mb-4 text-center">Seeker Profile Setup</h4>
+  <div class="container mt-5">
 
-      <!-- HEADER -->
-      <h4 class="fw-bold mb-4">Seeker Profile Setup</h4>
+    <form [formGroup]="profileForm" (ngSubmit)="submitProfile()" class="mx-auto" style="max-width: 1100px;">
+      <div class="card p-4 shadow-sm">
 
-      <!-- ================= PROFILE PHOTO ================= -->
-      <div class="profile-section">
-        <h5 class="section-title">Profile Photo</h5>
+        <!-- ================= PROFILE PHOTO ================= -->
+        <div class="profile-section">
+          <h5 class="fw-semibold mb-3">Profile Photo</h5>
 
-        <app-file-preview [fileUrl]="profilePhotoUrl"></app-file-preview>
+          <app-file-preview [fileUrl]="profilePhotoUrl"></app-file-preview>
 
-        <div class="mt-3">
-          <app-file-upload
-            [bucketKey]="BucketKey.JOBSEEKER_DATA"
-            [section]="UploadSection.PROFILE_PHOTO"
-            [preLoginUserId]="userId"
-            accept="image/*"
-            (uploaded)="onPhotoUploaded($event)">
-          </app-file-upload>
-        </div>
+          <div class="mt-3">
+            <app-file-upload [bucketKey]="BucketKey.JOBSEEKER_DATA" [section]="UploadSection.PROFILE_PHOTO"
+              [preLoginUserId]="userId" accept="image/*" (uploaded)="onPhotoUploaded($event)">
+            </app-file-upload>
+          </div>
 
-        @if (
+          @if (
           profileForm.get('profilePhoto')?.touched &&
           profileForm.get('profilePhoto')?.errors?.['required']
-        ) {
+          ) {
           <small class="text-danger d-block mt-2">
             Profile photo is required
           </small>
-        }
-      </div>
+          }
+        </div>
 
-      <!-- ================= BASIC DETAILS ================= -->
-      <div class="profile-section">
-        <h5 class="section-title">Basic Details</h5>
+        <!-- ================= BASIC DETAILS ================= -->
+        <div class="basic-details mt-5">
+          <h5 class="fw-semibold">Basic Details</h5>
 
-        <div class="row g-3">
-          <div class="col-md-4">
-            <label class="form-label">First Name</label>
-            <input class="form-control" [value]="firstName" disabled />
-          </div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">First Name</label>
+              <input class="form-control form-control-sm" [value]="firstName" disabled />
+            </div>
 
-          <div class="col-md-4">
-            <label class="form-label">Last Name</label>
-            <input class="form-control" [value]="lastName" disabled />
-          </div>
+            <div class="col-md-4">
+              <label class="form-label">Last Name</label>
+              <input class="form-control form-control-sm" [value]="lastName" disabled />
+            </div>
 
-          <div class="col-md-4">
-            <label class="form-label">Email</label>
-            <input class="form-control" [value]="email" disabled />
-          </div>
+            <div class="col-md-4">
+              <label class="form-label">Email</label>
+              <input class="form-control form-control-sm" [value]="email" disabled />
+            </div>
 
-          <div class="col-md-4">
-            <label class="form-label">Mobile Number</label>
-            <input
-              class="form-control"
-              placeholder="Phone number"
-              formControlName="mobile"
-            />
-            @if (f['mobile'].invalid && (f['mobile'].touched || f['mobile'].dirty)) {
+            <div class="col-md-4">
+              <label class="form-label">Mobile Number</label>
+              <input class="form-control form-control-sm" placeholder="Phone number" formControlName="mobile" />
+              @if (f['mobile'].invalid && (f['mobile'].touched || f['mobile'].dirty)) {
               <small class="text-danger">Enter valid 10-digit mobile</small>
-            }
-          </div>
+              }
+            </div>
 
-          <div class="col-md-4">
-            <label class="form-label">Gender</label>
-            <select class="form-select" formControlName="gender">
-              <option value="">Select Gender</option>
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
-            </select>
-            @if (f['gender'].invalid && (f['gender'].touched || f['gender'].dirty)) {
+            <div class="col-md-4">
+              <label class="form-label">Gender</label>
+              <select class="form-select form-select-sm" formControlName="gender">
+                <option value="">Select Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </select>
+              @if (f['gender'].invalid && (f['gender'].touched || f['gender'].dirty)) {
               <small class="text-danger">Gender required</small>
-            }
+              }
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- ================= WORK EXPERIENCE ================= -->
-      <div class="profile-section">
-        <h5 class="section-title">Work Experience</h5>
+        <!-- ================= CURRENT EXPERIENCE ================= -->
+        <div class="current-experience mt-5">
 
-        @if (experiencesArray.touched && experiencesArray.errors?.['minArrayLength']) {
+          <h5 class="fw-semibold">Current Experience</h5>
+
+          <div [formGroup]="currentExperienceGroup">
+
+            <div class="row g-3">
+
+              <!-- Job Title -->
+              <div class="col-md-4">
+                <input class="form-control form-control-sm" placeholder="Job Title" formControlName="jobTitle" />
+                @if (
+                currentExperienceGroup.get('jobTitle')?.touched &&
+                currentExperienceGroup.get('jobTitle')?.invalid
+                ) {
+                <small class="text-danger">Job title is required</small>
+                }
+              </div>
+
+              <!-- Company -->
+              <div class="col-md-4">
+                <input class="form-control form-control-sm" placeholder="Company" formControlName="company" />
+                @if (
+                currentExperienceGroup.get('company')?.touched &&
+                currentExperienceGroup.get('company')?.invalid
+                ) {
+                <small class="text-danger">Company is required</small>
+                }
+              </div>
+
+              <!-- Duration -->
+              <div class="col-md-4">
+                <input class="form-control form-control-sm" placeholder="Duration (2021 - Present)" formControlName="duration" />
+                @if (
+                currentExperienceGroup.get('duration')?.touched &&
+                currentExperienceGroup.get('duration')?.invalid
+                ) {
+                <small class="text-danger">Duration is required</small>
+                }
+              </div>
+
+              <!-- Description -->
+              <div class="col-12">
+                <textarea class="form-control form-control-sm" rows="2" placeholder="Description" formControlName="description"></textarea>
+
+                @if (
+                currentExperienceGroup.get('description')?.touched &&
+                currentExperienceGroup.get('description')?.invalid
+                ) {
+
+                @if (currentExperienceGroup.get('description')?.errors?.['required']) {
+                <small class="text-danger">
+                  Description is required
+                </small>
+                }
+
+                @if (currentExperienceGroup.get('description')?.errors?.['minlength']) {
+                <small class="text-danger">
+                  Minimum 20 characters required
+                </small>
+                }
+
+                @if (currentExperienceGroup.get('description')?.errors?.['maxlength']) {
+                <small class="text-danger">
+                  Maximum 500 characters allowed
+                </small>
+                }
+
+                }
+              </div>
+
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= WORK EXPERIENCE ================= -->
+        <div class="previous-experience mt-5">
+          <div class="d-flex justify-content-between mb-3">
+            <h5 class="fw-semibold">Work Experience</h5>
+            <button type="button" class="btn btn-outline-primary btn-sm" (click)="addExperience()">
+              + Add Experience
+            </button>
+
+          </div>
+
+
+          @if (experiencesArray.touched && experiencesArray.errors?.['minArrayLength']) {
           <small class="text-danger d-block mb-2">
             At least one work experience is required
           </small>
-        }
+          }
 
-        <div formArrayName="experiences">
-          @for (exp of experiencesArray.controls; track $index) {
+          <div formArrayName="experiences">
+            @for (exp of experiencesArray.controls; track $index) {
             <div class="exp-card" [formGroupName]="$index">
               <div class="row g-3">
                 <div class="col-md-4">
-                  <input class="form-control" placeholder="Job Title" formControlName="jobTitle" />
+                  <input class="form-control form-control-sm" placeholder="Job Title" formControlName="jobTitle" />
                 </div>
                 <div class="col-md-4">
-                  <input class="form-control" placeholder="Company" formControlName="company" />
+                  <input class="form-control form-control-sm" placeholder="Company" formControlName="company" />
                 </div>
                 <div class="col-md-4">
-                  <input class="form-control" placeholder="Duration (2021 - 2024)" formControlName="duration" />
+                  <input class="form-control form-control-sm" placeholder="Duration (2021 - 2024)" formControlName="duration" />
                 </div>
                 <div class="col-12">
-                  <textarea class="form-control" rows="2" placeholder="Description" formControlName="description"></textarea>
+                  <textarea class="form-control form-control-sm" rows="2" placeholder="Description"
+                    formControlName="description"></textarea>
                 </div>
               </div>
 
-              <div class="text-end mt-2">
-                <button type="button" class="btn btn-danger btn-sm" (click)="removeExperience($index)">
+              <div class="text-end mt-3">
+                <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeExperience($index)">
                   Remove
                 </button>
               </div>
             </div>
-          }
-        </div>
-
-        <div class="section-actions">
-          <button type="button" class="btn btn-primary btn-sm" (click)="addExperience()">
-            + Add Experience
-          </button>
-        </div>
-      </div>
-
-      <!-- ================= CERTIFICATIONS ================= -->
-      <div class="profile-section">
-        <h5 class="section-title">Certifications</h5>
-
-        <div formArrayName="certifications">
-          @for (cert of certificationsArray.controls; track $index) {
-            <div class="cert-card" [formGroupName]="$index">
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <input class="form-control" placeholder="Certification Name" formControlName="name" />
-                </div>
-                <div class="col-md-6">
-                  <input class="form-control" placeholder="Issued By" formControlName="issuedBy" />
-                </div>
-                <div class="col-md-6">
-                  <input type="date" class="form-control" formControlName="issuedDate" />
-                </div>
-                <div class="col-md-6">
-                  <input class="form-control" placeholder="Certificate URL (optional)" formControlName="certificateUrl" />
-                </div>
-              </div>
-
-              <div class="text-end mt-2">
-                <button type="button" class="btn btn-danger btn-sm" (click)="removeCertification($index)">
-                  Remove
-                </button>
-              </div>
-            </div>
-          }
-        </div>
-
-        <div class="section-actions">
-          <button type="button" class="btn btn-primary btn-sm" (click)="addCertification()">
-            + Add Certification
-          </button>
-        </div>
-      </div>
-
-
-      <!-- ================= LANGUAGES ================= -->
-<div class="profile-section">
-  <h5 class="section-title">Languages</h5>
-
-<div class="row g-2 align-items-end language-row">
-
-
-    <!-- Language -->
-    <div class="col-md-4">
-      <label class="form-label">Language</label>
-      <select #languageSelect class="form-select">
-        <option value="" disabled selected>Select Language</option>
-
-        @for (lang of languages; track lang) {
-          <option [value]="lang">{{ lang }}</option>
-        }
-      </select>
-    </div>
-
-    <!-- Proficiency -->
-    <div class="col-md-4">
-      <label class="form-label">Proficiency</label>
-      <select #levelSelect class="form-select">
-        <option value="" disabled selected>Select Level</option>
-
-        @for (level of proficiencyLevels; track level) {
-          <option [value]="level">{{ level }}</option>
-        }
-      </select>
-    </div>
-
-    <!-- Action -->
-    <div class="col-md-4">
-<button
-  class="btn btn-primary btn-auto"
-  type="button"
-  (click)="addLanguage(languageSelect, levelSelect)">
-  + Add Language
-</button>
-
-    </div>
-  </div>
-
-  <!-- Language List -->
-  <div class="mt-3">
-    @for (lang of languagesArray.controls; track $index) {
-      <div class="lang-card d-flex align-items-center mb-2">
-        <span class="fw-semibold">
-          {{ lang.value.language }} ({{ lang.value.proficiency }})
-        </span>
-
-        <button
-          type="button"
-          class="btn btn-sm btn-outline-danger ms-auto"
-          (click)="removeLanguage($index)">
-          Remove
-        </button>
-      </div>
-    }
-  </div>
-</div>
-
-
-      <!-- ================= SKILLS ================= -->
-<!-- ================= SKILLS ================= -->
-<div class="profile-section">
-  <h5 class="section-title">Skills</h5>
-
-  <input
-    class="form-control"
-    placeholder="Type a skill & press Enter"
-    (keydown.enter)="addSkill($event)"
-  />
-
-  <div class="mt-3">
-    @for (skill of skillsArray.controls; track $index) {
-      <span class="badge bg-primary me-2 mb-2">
-        {{ skill.value }}
-        <button
-          type="button"
-          class="btn-close btn-close-white ms-2"
-          (click)="removeSkill($index)">
-        </button>
-      </span>
-    }
-  </div>
-</div>
-
-
-      <!-- ================= BIO ================= -->
-      <div class="profile-section">
-        <h5 class="section-title">Bio Description</h5>
-
-        <textarea
-          class="form-control"
-          rows="3"
-          placeholder="Describe your professional background"
-          formControlName="bioDescription">
-        </textarea>
-      </div>
-
-      <!-- ================= SOCIAL PROFILES ================= -->
-
-<div class="profile-section">
-  <h5 class="section-title">Social Profiles</h5>
-
-  <div formArrayName="socialProfiles">
-
-    @for (profile of socialProfiles.controls; track $index) {
-      <div class="social-card" [formGroupName]="$index">
-
-        <div class="row g-3 align-items-center">
-
-          <!-- Platform -->
-          <div class="col-md-4">
-            <label class="form-label">Platform</label>
-            <select class="form-select" formControlName="platform">
-              <option value="" disabled>Select Platform</option>
-
-              @for (platform of socialPlatforms; track platform) {
-                <option [value]="platform">{{ platform }}</option>
-              }
-            </select>
-
-            @if (
-              profile.get('platform')?.touched &&
-              profile.get('platform')?.invalid
-            ) {
-              <small class="text-danger">Platform is required</small>
             }
           </div>
 
-          <!-- Link -->
-          <div class="col-md-7">
-            <label class="form-label">Profile URL</label>
-            <input
-              class="form-control"
-              placeholder="https://..."
-              formControlName="link"
-            />
 
-            @if (isProfileInvalid($index)) {
-@if (profile.errors?.['invalidUrl']) {
-  <small class="text-danger">
-    Please enter a valid URL for the selected platform
-  </small>
-}
+        </div>
 
+        <!-- ================= CERTIFICATIONS ================= -->
+        <div class="certificate-section mt-5">
 
-              @if (profile.get('link')?.errors?.['required']) {
-                <small class="text-danger">
-                  Link is required
-                </small>
-              }
-            }
-          </div>
-
-          <!-- Remove -->
-          <div class="col-md-1">
-            <button
-              type="button"
-              class="btn btn-danger w-100"
-              (click)="removeSocialProfile($index)">
-              ✕
+          <div class="d-flex justify-content-between mb-3">
+            <h5 class="fw-semibold">Certifications</h5>
+            <button type="button" class="btn btn-outline-primary btn-sm" (click)="addCertification()">
+              + Add Certification
             </button>
           </div>
 
+
+          <div formArrayName="certifications">
+            @for (cert of certificationsArray.controls; track $index) {
+            <div class="cert-card" [formGroupName]="$index">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <input class="form-control form-control-sm" placeholder="Certification Name" formControlName="name" />
+                </div>
+                <div class="col-md-6">
+                  <input class="form-control form-control-sm" placeholder="Issued By" formControlName="issuedBy" />
+                </div>
+                <div class="col-md-6">
+                  <input type="date" class="form-control form-control-sm" formControlName="issuedDate" />
+                </div>
+                <div class="col-md-6">
+                  <input class="form-control form-control-sm" placeholder="Certificate URL (optional)" formControlName="certificateUrl" />
+                </div>
+              </div>
+
+              <div class="text-end mt-3">
+                <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeCertification($index)">
+                  Remove
+                </button>
+              </div>
+            </div>
+            }
+          </div>
+
         </div>
+
+        <!-- ================= LANGUAGES ================= -->
+        <div class="language-section mt-5">
+
+          <div class="d-flex justify-content-between mb-3">
+            <h5 class="fw-semibold">Languages</h5>
+
+            <button class="btn btn-sm btn-outline-primary" type="button" (click)="addLanguage(languageSelect, levelSelect)">
+              + Add Language
+            </button>
+
+          </div>
+
+          <div class="row g-2 align-items-end language-row">
+
+
+            <!-- Language -->
+            <div class="col-md-4">
+              <select #languageSelect class="form-select form-select-sm">
+                <option value="" disabled selected>Select Language</option>
+                @for (lang of languages; track lang) {
+                <option [value]="lang">{{ lang }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Proficiency -->
+            <div class="col-md-4">
+              <select #levelSelect class="form-select form-select-sm">
+                <option value="" disabled selected>Select Proficiency</option>
+
+                @for (level of proficiencyLevels; track level) {
+                <option [value]="level">{{ level }}</option>
+                }
+              </select>
+            </div>
+
+
+          </div>
+
+          <!-- Language List -->
+          <div class=" mt-3">
+            @for (lang of languagesArray.controls; track $index) {
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span>
+                {{ lang.value.language }} ({{ lang.value.proficiency }})
+              </span>
+
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeLanguage($index)">
+                Remove
+              </button>
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- ================= SKILLS ================= -->
+        <div class="skills-section mt-5">
+          <h5 class="fw-semibold">Skills</h5>
+
+          <input class="form-control form-control-sm" placeholder="Type a skill & press Enter"
+            (keydown.enter)="addSkill($event)" />
+          <div class="row mt-3">
+            <div class="col-12">
+              <div class="d-flex flex-row flex-wrap align-items-center gap-2">
+                @for (skill of skillsArray.controls; track $index) {
+                <span class="badge badge-outline-primary border border-primary text-dark d-inline-flex align-items-center">
+                  {{ skill.value }}
+                  <button type="button" class="btn-close btn-close-primary btn-sm ms-2" aria-label="Remove"
+                    (click)="removeSkill($index)">
+                  </button>
+                </span>
+
+                }
+
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+        <!-- ================= BIO ================= -->
+        <div class="bio-section mt-5">
+          <h5 class="fw-semibold">Bio Description</h5>
+          <textarea class="form-control form-control-sm" rows="3" placeholder="Describe your professional background" formControlName="bioDescription"></textarea>
+        </div>
+
+        <!-- ================= SOCIAL PROFILES ================= -->
+        <div class="socialProfile-section mt-5">
+
+
+          <div class="d-flex justify-content-between mb-3">
+            <h5 class="fw-semibold">Social Profiles</h5>
+
+            <button type="button" class="btn btn-primary btn-sm" (click)="addSocialProfile()"
+              [disabled]="!canAddAnotherProfile()">
+              + Add Profile
+            </button>
+          </div>
+
+
+          <div formArrayName="socialProfiles">
+
+            @for (profile of socialProfiles.controls; track $index) {
+            <div class="social-card mt-3" [formGroupName]="$index">
+
+              <div class="row g-3 align-items-end">
+
+                <!-- Platform -->
+                <div class="col-md-4">
+                  <select class="form-select form-select-sm" formControlName="platform">
+                    <option value="" disabled>Select Platform</option>
+                    @for (platform of socialPlatforms; track platform) {
+                    <option [value]="platform">{{ platform }}</option>
+                    }
+                  </select>
+
+                  @if (profile.get('platform')?.touched && profile.get('platform')?.invalid) {
+                  <small class="text-danger">Platform is required</small>
+                  }
+                </div>
+
+                <!-- Link -->
+                <div class="col-md-6">
+                  <input class="form-control form-control-sm" placeholder="https://..." formControlName="link" />
+                  @if (isProfileInvalid($index)) {
+                  @if (profile.errors?.['invalidUrl']) {
+                  <small class="text-danger">
+                    Please enter a valid URL for the selected platform
+                  </small>
+                  }
+
+                  @if (profile.get('link')?.errors?.['required']) {
+                  <small class="text-danger">Link is required</small>
+                  }
+                  }
+                </div>
+
+                <!-- Remove -->
+                <div class="col-md-2 d-flex justify-content-end">
+                  <button type="button" class="btn btn-outline-danger btn-sm w-100" (click)="removeSocialProfile($index)">
+                    Remove
+                  </button>
+                </div>
+
+              </div>
+
+            </div>
+            }
+          </div>
+
+        </div>
+
+        <!-- ================= SUBMIT ================= -->
+        <div class="submit-area text-end mt-5">
+          <button class="btn btn-sm btn-success" type="submit" [disabled]="profileForm.invalid">
+            Submit Profile
+          </button>
+        </div>
+
       </div>
-    }
+    </form>
   </div>
-
-  <!-- Add Button -->
-  <div class="section-actions">
-    <button
-      type="button"
-      class="btn btn-primary btn-sm"
-      (click)="addSocialProfile()"
-      [disabled]="!canAddAnotherProfile()">
-      + Add Profile
-    </button>
-  </div>
-</div>
-
-
-      <!-- ================= SUBMIT ================= -->
-      <div class="submit-area text-end">
-        <button class="btn btn-success" type="submit" [disabled]="profileForm.invalid">
-          Submit Profile
-        </button>
-      </div>
-
-    </div>
-  </form>
-</div>
+</section>

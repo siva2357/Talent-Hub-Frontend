@@ -80,8 +80,21 @@ this.profileForm = this.fb.group({
   gender: ['', Validators.required],
 
   bioDescription: ['', [Validators.required, Validators.minLength(10)]],
+currentExperience: this.fb.group({
+  jobTitle: ['', Validators.required],
+  company: ['', Validators.required],
+  duration: ['', Validators.required],
+  description: [
+    '',
+    [
+      Validators.required,
+      Validators.minLength(20),
+      Validators.maxLength(500)
+    ]
+  ],
+}),
 
-  experiences: this.fb.array([], minArrayLength(1)),
+  experiences: this.fb.array([]),
   certifications: this.fb.array([], minArrayLength(1)),
 
   languages: this.fb.array([], minArrayLength(1)),
@@ -105,6 +118,11 @@ this.profileForm = this.fb.group({
   return this.profileForm.get('experiences') as FormArray;
 }
 
+get currentExperienceGroup(): FormGroup {
+  return this.profileForm.get('currentExperience') as FormGroup;
+}
+
+
 addExperience(): void {
    this.experiencesArray.markAsTouched();
   this.experiencesArray.push(
@@ -121,6 +139,8 @@ removeExperience(index: number): void {
   this.experiencesArray.removeAt(index);
   this.experiencesArray.markAsTouched();
 }
+
+
 
 
 get certificationsArray(): FormArray {
@@ -295,7 +315,7 @@ this.socialProfiles.push(
         localStorage.removeItem('jobSeekerRegistration');
 
 this.router.navigate(
-  ['/sign-up/otp-verification'],
+  ['/register/otp-verification'],
   {
     queryParams: {
       email: this.email,

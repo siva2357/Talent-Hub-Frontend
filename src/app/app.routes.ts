@@ -18,14 +18,17 @@ import { ErrorPage } from './views/extra-pages/error-page/error-page';
 import { ComingSoonPage } from './views/extra-pages/coming-soon-page/coming-soon-page';
 import { MaintenancePage } from './views/extra-pages/maintenance-page/maintenance-page';
 import { UnauthorizedPage } from './views/extra-pages/unauthorized-page/unauthorized-page';
-import { RECRUITER_ROUTES } from './views/users/recruiter/recruiter.routes';
-import { SEEKER_ROUTES } from './views/users/seeker/seeker.routes';
-import { ADMIN_ROUTES } from './views/users/admin/admin.routes';
 import { SeekerProfileForm } from './views/account/seeker-profile-form/seeker-profile-form';
 import { RecruiterProfileForm } from './views/account/recruiter-profile-form/recruiter-profile-form';
 import { RoleGuard } from './core/guards/role.guard';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RegistrationPage } from './views/account/registration-page/registration-page';
+
+
+import { RECRUITER_ROUTES } from './views/users/recruiter/recruiter.routes';
+import { SEEKER_ROUTES } from './views/users/seeker/seeker.routes';
+import { ADMIN_ROUTES } from './views/users/admin/admin.routes';
+
 
 export const routes: Routes = [
 
@@ -44,7 +47,7 @@ export const routes: Routes = [
   { path: 'register', component: RegistrationPage, title: 'Register recruiter' },
   { path: 'register/recruiter-profile-form', component: RecruiterProfileForm },
   { path: 'register/jobSeeker-profile-form', component: SeekerProfileForm },
-  { path: 'sign-up/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
+  { path: 'register/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
   { path: 'login', component: LoginPage, title: 'Login' },
   { path: 'forgot-password', component: ForgotPasswordPage, title: 'OTP Verification' },
