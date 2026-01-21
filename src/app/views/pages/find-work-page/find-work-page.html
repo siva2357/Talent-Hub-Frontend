@@ -1,134 +1,142 @@
 <app-header-layout></app-header-layout>
 
-<section class="container py-5 mt-5">
+<section class="job-section py-5 ">
+  <div class="container mt-5 mb-5">
 
-  <!-- ================= HEADER ================= -->
-  <div class="mb-4">
-    <h2 class="fw-bold">Find Your Next Job</h2>
-    <p class="text-muted">
-      Discover jobs that match your skills, experience, and career goals —
-      powered by AI-driven recommendations.
-    </p>
-  </div>
 
-  <!-- ================= HOW IT WORKS (JOB SEEKER) ================= -->
-
-<div class="row g-4 mb-5">
-
-  <div class="col-12 col-lg-4">
-    <div class="info-card h-100">
-      <h6 class="fw-semibold">Skill-Based Job Matching</h6>
-      <p class="text-muted small mb-0">
-        Talent Hub analyzes your skills, experience, and preferences
-        to show jobs that truly fit your profile.
+    <!-- ================= HEADER ================= -->
+    <div class="mb-4">
+      <h2 class="fw-bold">Find Your Next Job</h2>
+      <p class="text-muted">
+        Discover jobs that match your skills, experience, and career goals —
+        powered by AI-driven recommendations.
       </p>
     </div>
-  </div>
 
-  <div class="col-12 col-lg-4">
-    <div class="info-card h-100">
-      <h6 class="fw-semibold">AI Job Filtering</h6>
-      <p class="text-muted small mb-0">
-        AI filters out irrelevant roles and highlights opportunities
-        where you have a higher chance of selection.
+    <!-- ================= HOW IT WORKS (JOB SEEKER) ================= -->
+
+    <div class="row g-4 mb-5">
+
+      <div class="col-12 col-lg-4">
+        <div class="info-card h-100 text-center">
+          <i class="bi bi-bullseye info-icon"></i>
+          <h6 class="fw-semibold mt-3">Skill-Based Job Matching</h6>
+          <p class="text-muted small mb-0">
+            Jobs are matched based on your skills, experience,
+            and role preferences to ensure relevance.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <div class="info-card h-100 text-center">
+          <i class="bi bi-funnel-fill info-icon"></i>
+          <h6 class="fw-semibold mt-3">Smart Job Filtering</h6>
+          <p class="text-muted small mb-0">
+            Filters highlight suitable opportunities and remove
+            roles that do not align with your profile.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <div class="info-card h-100 text-center">
+          <i class="bi bi-clipboard-check info-icon"></i>
+          <h6 class="fw-semibold mt-3">Interview Readiness</h6>
+          <p class="text-muted small mb-0">
+            Guidance and preparation insights help you apply
+            with confidence and clarity.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+
+
+    <!-- ================= SEARCH HEADER ================= -->
+    <div class="mb-3">
+      <h4 class="fw-bold mb-1">AI-Recommended Jobs for You</h4>
+      <p class="text-muted small">
+        Jobs ranked based on your skills, experience, and profile strength.
       </p>
     </div>
-  </div>
 
-  <div class="col-12 col-lg-4">
-    <div class="info-card h-100">
-      <h6 class="fw-semibold">Interview Readiness</h6>
-      <p class="text-muted small mb-0">
-        Prepare with AI mock interviews and resume analysis
-        before applying to improve your success rate.
-      </p>
-    </div>
-  </div>
+    <!-- ================= SEARCH ================= -->
+    <div class="row g-3 my-4">
+      <div class="col-md-5">
+        <input class="form-control" placeholder="Job title, skill, or keyword">
+      </div>
 
-</div>
+      <div class="col-md-4">
+        <select class="form-select">
+          <option value="">All Categories</option>
+        </select>
+      </div>
 
-
-<!-- ================= SEARCH HEADER ================= -->
-<div class="mb-3">
-  <h4 class="fw-bold mb-1">AI-Recommended Jobs for You</h4>
-  <p class="text-muted small">
-    Jobs ranked based on your skills, experience, and profile strength.
-  </p>
-</div>
-
-  <!-- ================= SEARCH ================= -->
-  <div class="row g-3 my-4">
-    <div class="col-md-5">
-      <input
-        class="form-control"
-        placeholder="Job title, skill, or keyword">
+      <div class="col-md-3">
+        <button class="btn btn-primary w-100">
+          Search Jobs
+        </button>
+      </div>
     </div>
 
-    <div class="col-md-4">
-      <select class="form-select">
-        <option>All Categories</option>
-        <option>Frontend Development</option>
-        <option>Backend Development</option>
-        <option>UI / UX Design</option>
-        <option>Data & AI</option>
-      </select>
+
+    <div class="mt-4">
+
+      @for (job of [
+      {
+      title: 'Frontend Developer',
+      meta: 'Remote • Full Time • 2–4 Years',
+      desc: 'Strong match for Angular and UI development experience.',
+      match: 'High'
+      },
+      {
+      title: 'UI / UX Designer',
+      meta: 'Hybrid • Contract • 3+ Years',
+      desc: 'Design systems and Figma skills align well with this role.',
+      match: 'Medium'
+      },
+      {
+      title: 'Full Stack Engineer',
+      meta: 'Onsite • Full Time • 4–6 Years',
+      desc: 'Backend + frontend experience required. Your profile is relevant.',
+      match: 'High'
+      }
+      ]; track job.title) {
+
+      <div class="job-card mb-3 p-4">
+
+        <h6 class="fw-semibold mb-1">{{ job.title }}</h6>
+
+        <p class="text-muted small mb-2">
+          {{ job.meta }}
+        </p>
+
+        <p class="text-muted small mb-3">
+          Skills Match: <strong>{{ job.match }}</strong> • {{ job.desc }}
+        </p>
+
+        <button class="btn btn-sm btn-outline-primary">
+          View Job Details
+        </button>
+
+      </div>
+      }
     </div>
 
-    <div class="col-md-3">
-      <button class="btn btn-primary w-100">
-        Search Jobs
-      </button>
-    </div>
-  </div>
-
-
-<div class="mt-4">
-
-  @for (job of [
-  {
-  title: 'Frontend Developer',
-  meta: 'Remote • Full Time • 2–4 Years',
-  desc: 'Strong match for Angular and UI development experience.',
-  match: 'High'
-  },
-  {
-  title: 'UI / UX Designer',
-  meta: 'Hybrid • Contract • 3+ Years',
-  desc: 'Design systems and Figma skills align well with this role.',
-  match: 'Medium'
-  },
-  {
-  title: 'Full Stack Engineer',
-  meta: 'Onsite • Full Time • 4–6 Years',
-  desc: 'Backend + frontend experience required. Your profile is relevant.',
-  match: 'High'
-  }
-  ]; track job.title) {
-
-  <div class="job-card mb-3 p-4">
-
-    <h6 class="fw-semibold mb-1">{{ job.title }}</h6>
-
-    <p class="text-muted small mb-2">
-      {{ job.meta }}
-    </p>
-
-    <p class="text-muted small mb-3">
-      Skills Match: <strong>{{ job.match }}</strong> • {{ job.desc }}
-    </p>
-
-    <button class="btn btn-sm btn-outline-primary">
-      View Job Details
-    </button>
 
   </div>
-  }
-</div>
+</section>
+
 
 
 
 <!-- ================= HIRING FLOW ================= -->
-<section class="mt-5 pt-4 border-top">
+<section class="hiring-process py-5">
+<div class="container mt-5 mb-5">
+
+
 
   <h4 class="fw-bold mb-4 text-center">
     How the Hiring Process Works
@@ -177,10 +185,8 @@
     </div>
 
   </div>
-
+</div>
 </section>
 
-
-</section>
 
 <app-footer-layout></app-footer-layout>

@@ -1,9 +1,12 @@
-/* PAGE */
+/* ================= PAGE ================= */
 .resume-landing {
-  padding: 70px 0;
+  background-image: url('../../../../assets/background-images/Background-3.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-/* HERO */
+/* ================= HERO ================= */
 .hero-section {
   max-width: 760px;
   margin: auto;
@@ -28,40 +31,40 @@
   gap: 14px;
 }
 
-/* OVERVIEW */
+/* ================= OVERVIEW ================= */
 .overview-box {
   background: #fafbfd;
   padding: 22px;
   border-radius: 12px;
   border: 1px solid #e3e8ef;
   height: 100%;
-  transition: 0.25s ease;
+
+  /* BASE SHADOW (NO HOVER) */
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.10),
+    0 3px 6px rgba(0, 0, 0, 0.06);
 }
 
-.overview-box:hover {
-  background: #f2f6ff;
-  border-color: #c7d6ff;
-  transform: translateY(-4px);
-}
 
-/* FEATURES */
+
+/* ================= FEATURES ================= */
 .feature-block {
   background: #ffffff;
   padding: 25px;
   border-radius: 12px;
   border: 1px solid #eeeeee;
   height: 100%;
-  transition: 0.25s ease;
+
+  /* BASE SHADOW */
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.10),
+    0 4px 8px rgba(0, 0, 0, 0.06);
 }
 
-.feature-block:hover {
-  background: #f8faff;
-  border-color: #d7e5ff;
-  transform: translateY(-4px);
-}
 
 .feature-list {
   padding-left: 18px;
+  margin-bottom: 0;
 }
 
 .feature-list li {
@@ -70,15 +73,25 @@
   margin-bottom: 6px;
 }
 
-/* ATS PREVIEW CARD */
+/* ================= FEATURE CARD (ATS PREVIEW) ================= */
 .feature-card {
   background: #f8faff;
   border: 1px solid #d7e5ff;
   border-radius: 14px;
   padding: 30px;
+
+  /* STRONGER BASE SHADOW */
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.12),
+    0 6px 14px rgba(0, 0, 0, 0.08);
 }
 
-/* ATS SVG */
+/* ================= ATS SVG ================= */
+.ats-svg {
+  max-width: 100%;
+  height: auto;
+}
+
 .ats-svg rect {
   fill: #dbe4f0;
 }
@@ -87,7 +100,7 @@
   fill: #c7d6ff;
 }
 
-/* RESPONSIVE */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
   .hero-title {
     font-size: 32px;
@@ -95,9 +108,15 @@
 
   .hero-buttons {
     flex-direction: column;
+    align-items: center;
+  }
+
+  .feature-card {
+    padding: 22px;
   }
 }
 
+/* ================= TOUCH DEVICES ================= */
 @media (hover: none) {
   .overview-box:hover,
   .feature-block:hover {

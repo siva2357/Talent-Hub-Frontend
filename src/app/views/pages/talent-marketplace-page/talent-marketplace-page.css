@@ -1,182 +1,160 @@
-/* ================= SECTION TYPOGRAPHY ================= */
-section h2 {
-  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-  line-height: 1.3;
-  margin-bottom: 0.5rem;
+/* ================= SECTION ================= */
+.recommendation-engine {
+  position: relative;
+  overflow: visible;
+  background-image: url('../../../../assets/background-images/Background-6.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-section p.text-muted {
-  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
-}
-
-.talent-card h6 {
-  font-size: 1rem;
-}
-
-.talent-card p.small {
-  font-size: 0.85rem;
-}
-
-/* ================= INFO & AI CARDS ================= */
-.info-card,
-.ai-card {
-  background: #ffffff;
-  border-radius: 16px;
-  border: 1px solid #e5e7eb;
-  border-left: 4px solid #2563eb;
-  padding: 1.5rem;
-  height: 100%;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-    border-left-width: 5px;
-}
-
-.info-card:hover,
-.ai-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
-  border-color: #2563eb;
-}
-
-/* ================= INFO CARD LAYOUT ================= */
+/* ================= INFO CARDS (TOP 3) ================= */
 .info-card {
-  display: flex;
-  gap: 1rem;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #f1f1f1;
 }
 
-/* Icon */
+
+
+/* Icons */
 .info-icon {
-  font-size: 1.6rem;
-  color: #2563eb;
-  width: 52px;
-  height: 52px;
+  font-size: 2.4rem;
+  color: #0d6efd;
+  background: rgba(13, 110, 253, 0.1);
+  padding: 16px;
   border-radius: 50%;
-  background: #eef2ff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
 }
 
-/* Text */
-.info-content {
-  flex: 1;
+/* ================= AI / DECISION CARDS ================= */
+.ai-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  height: 100%;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.09);
+  border: 1px solid #eeeeee;
+  transition: all 0.3s ease;
 }
 
+
+/* ================= HEADINGS ================= */
+.recommendation-engine h2 {
+  letter-spacing: -0.5px;
+}
 
 .ai-card h6,
 .info-card h6 {
-  min-height: 44px;
+  font-size: 1rem;
 }
 
-
-/* Mobile + Tablet */
-@media (max-width: 991px) {
-  .info-card {
-    flex-direction: row;
-    text-align: left;
-  }
+/* ================= LIGHT SECTION BOX ================= */
+.recommendation-engine .bg-light {
+  background: linear-gradient(
+    180deg,
+    #f8f9fa 0%,
+    #ffffff 100%
+  );
+  box-shadow: inset 0 0 0 1px #f1f1f1;
 }
 
-/* Large screens */
-@media (min-width: 992px) {
-  .info-card {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-/* ================= AI CARD ================= */
-.ai-card h6 {
-  font-size: 1.15rem;
-  margin-bottom: 10px;
-}
-
-.ai-card h6::after {
-  content: "";
-  display: block;
-  width: 40px;
-  height: 3px;
-  background: #2563eb;
-  border-radius: 2px;
-  margin-top: 8px;
-}
-
-.ai-card p {
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-/* ================= TALENT CARD ================= */
-.talent-card {
-  background: #ffffff;
-  border-radius: 16px;
-  border: 1px solid #e5e7eb;
-  height: 100%;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-
-.talent-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
-  border-color: #2563eb;
-}
-
-.talent-card .card-body {
-  padding: 1.5rem;
-  text-align: center;
-}
-
-/* Avatar */
-.avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: #e5e7eb;
-  margin: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-/* Tags */
-.tags {
-  border-top: 1px dashed #e5e7eb;
-  padding-top: 0.75rem;
-}
-
-.tags .badge {
-  font-size: 0.8rem;
-  padding: 6px 10px;
-  margin: 2px;
-  font-weight: 500;
-}
-
-/* Button */
-.btn-sm {
-  font-size: 0.9rem;
-  padding: 8px 12px;
-  border-radius: 10px;
-}
-
-/* ================= MOBILE TUNING ================= */
-@media (max-width: 768px) {
+/* ================= RESPONSIVE ================= */
+@media (max-width: 767px) {
   .info-card,
-  .ai-card,
-  .talent-card .card-body {
-    padding: 1.25rem;
+  .ai-card {
+    padding: 20px;
   }
 
-  .avatar {
-    width: 72px;
-    height: 72px;
+  .info-icon {
+    font-size: 2rem;
+    padding: 14px;
   }
 }
 
-/* ================= TOUCH DEVICES ================= */
-@media (hover: none) {
-  .info-card:hover,
-  .ai-card:hover,
-  .talent-card:hover {
-    transform: none;
-    box-shadow: none;
-    border-color: #e5e7eb;
+
+
+
+/* ================= TALENT SECTION ================= */
+.talent-section {
+  position: relative;
+  overflow: visible;
+  background-image: url('../../../../assets/background-images/Background-2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* ================= CARD BASE ================= */
+.talent-section .card {
+  border-radius: 16px;
+  border: 2px solid #000000;
+  box-shadow:
+    0 14px 36px rgba(13, 110, 253, 0.25),
+    0 6px 14px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+
+/* ================= COVER IMAGE ================= */
+.talent-section .card .rounded-top-3 {
+  border-bottom: 2px solid #92a6f3;
+}
+
+/* ================= PROFILE IMAGE ================= */
+.talent-section img.rounded-circle {
+  background: #ffffff;
+  padding: 4px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* ================= NAME ================= */
+.talent-section h5 {
+  letter-spacing: 0.2px;
+}
+
+/* ================= BADGES ================= */
+.talent-section .badge {
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 12px;
+  padding: 5px 10px;
+  border: 1px solid #d0d8ff;
+  background: #f4f6ff;
+}
+
+/* ================= ACTION BUTTON ================= */
+.talent-section .btn-outline-primary {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+.talent-section .btn-outline-primary:hover {
+  background: #0d6efd;
+  color: #ffffff;
+}
+
+/* ================= TEXT SPACING ================= */
+.talent-section p {
+  margin-bottom: 6px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 767px) {
+  .talent-section .card {
+    border-radius: 14px;
+  }
+
+  .talent-section img.rounded-circle {
+    width: 100px !important;
+    height: 100px !important;
   }
 }
