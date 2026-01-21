@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import {jwtDecode} from 'jwt-decode' ;
 import { environment } from '../../../environments/environment';
 import { JobSeekerSignupPayload, RecruiterSignupPayload } from '../models/auth.dto';
+import { RegistrationPayload, RegistrationResponse } from '../dtos/auth.dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -25,41 +26,13 @@ export class AuthService {
   }
 
 
-registerRecruiter(
-  data: RecruiterSignupPayload
-): Observable<{
-  success: boolean;
-  message?: string;
-  result?: {
-    userId: string;
-    fullName: string;
-    email: string;
-      role:string;
-  };
-}> {
-  return this.http
-    .post<any>(`${this.baseUrl}/auth/recruiter/signup`, data)
-    .pipe(catchError(err => this.handleError(err)));
+register(data: RegistrationPayload): Observable<RegistrationResponse> {
+  const endpoint = data.role === 'recruiter' ? '/auth/recruiter/signup':'/auth/jobSeeker/signup';
+  return this.http.post<RegistrationResponse>(`${this.baseUrl}${endpoint}`,data)
+  .pipe(catchError(err => this.handleError(err)));
 }
 
 
-registerJobSeeker(
-  data: JobSeekerSignupPayload
-): Observable<{ success: boolean; message?: string ;  result?: {
-    userId: string;
-    fullName: string;
-    email: string;
-    role:string;
-  };}> {
-  return this.http
-    .post<{ success: boolean; message?: string }>(
-      `${this.baseUrl}/auth/jobSeeker/signup`,
-      data
-    )
-    .pipe(
-      catchError(err => this.handleError(err))
-    );
-}
 
 
 

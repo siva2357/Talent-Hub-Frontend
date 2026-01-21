@@ -1,0 +1,41 @@
+<div class="signup-wrapper d-flex flex-column justify-content-center align-items-center vh-100 bg-light">
+
+  <!-- Logo -->
+  <img src="/assets/logo/website-logo.png" class="logo-img mb-3" alt="Talent Hub" />
+
+  <h4 class="fw-bold mb-1 text-center">
+    Create {{ roleLabel }} Account
+  </h4>
+
+  <p class="text-muted small text-center mb-3">
+    Join Talent Hub as a {{ roleLabel }}
+  </p>
+
+  <form class="form-area" [formGroup]="registrationForm" (ngSubmit)="submit()" novalidate>
+
+    <!-- FULL NAME -->
+    <div class="mb-3">
+      <input class="form-control" formControlName="fullName" placeholder="Full Name" />
+    </div>
+
+    <!-- EMAIL -->
+    <div class="mb-3">
+      <input class="form-control" formControlName="email" placeholder="Email" />
+    </div>
+
+    <!-- PASSWORD -->
+    <div class="mb-3">
+      <input type="password" class="form-control" formControlName="password" placeholder="Password" />
+    </div>
+
+    <button class="btn btn-primary w-100 py-2 fw-semibold" type="submit">
+      Create Account
+    </button>
+
+  </form>
+
+  <p class="small text-muted mt-3">
+    Already have an account?
+    <a routerLink="/login" class="fw-semibold login-link">Log in</a>
+  </p>
+</div>

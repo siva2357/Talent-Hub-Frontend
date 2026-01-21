@@ -18,13 +18,18 @@ export class SingupPage {
   selectRole(role: 'recruiter' | 'jobSeeker') {
     this.selectedRole = role;
   }
-continue() {
-  if (!this.selectedRole) return;
 
-  this.router.navigate(
-    [`/sign-up/${this.selectedRole}`]
-  );
-}
+
+ continue() {
+    if (!this.selectedRole) return;
+
+    this.router.navigate(
+      ['/register'],
+      {
+        queryParams: { role: this.selectedRole }
+      }
+    );
+  }
 
 
 }

@@ -9,8 +9,6 @@ import { BlogPage } from './views/pages/blog-page/blog-page';
 import { AboutPage } from './views/pages/about-page/about-page';
 import { SingupPage } from './views/account/singup-page/singup-page';
 import { LoginPage } from './views/account/login-page/login-page';
-import { RegisterRecruiterPage } from './views/account/register-recruiter-page/register-recruiter-page';
-import { RegisterSeekerPage } from './views/account/register-seeker-page/register-seeker-page';
 import { OtpVerificationPage } from './views/account/otp-verification-page/otp-verification-page';
 import { ConfirmationPage } from './views/account/confirmation-page/confirmation-page';
 import { ForgotPasswordPage } from './views/account/forgot-password-page/forgot-password-page';
@@ -27,6 +25,7 @@ import { SeekerProfileForm } from './views/account/seeker-profile-form/seeker-pr
 import { RecruiterProfileForm } from './views/account/recruiter-profile-form/recruiter-profile-form';
 import { RoleGuard } from './core/guards/role.guard';
 import { AuthGuard } from './core/guards/auth.guard';
+import { RegistrationPage } from './views/account/registration-page/registration-page';
 
 export const routes: Routes = [
 
@@ -42,10 +41,9 @@ export const routes: Routes = [
 
   //auth pages
   { path: 'sign-up', component: SingupPage, title: 'Singup' },
-  { path: 'sign-up/recruiter', component: RegisterRecruiterPage, title: 'Register recruiter' },
-  { path: 'sign-up/recruiter-profile-form', component: RecruiterProfileForm },
-  { path: 'sign-up/jobSeeker', component: RegisterSeekerPage, title: 'Register seeker' },
-  { path: 'sign-up/jobSeeker-profile-form', component: SeekerProfileForm },
+  { path: 'register', component: RegistrationPage, title: 'Register recruiter' },
+  { path: 'register/recruiter-profile-form', component: RecruiterProfileForm },
+  { path: 'register/jobSeeker-profile-form', component: SeekerProfileForm },
   { path: 'sign-up/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
   { path: 'login', component: LoginPage, title: 'Login' },
