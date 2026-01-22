@@ -25,7 +25,7 @@ sidebarOpen = false; // start collapsed (icon-only mode)
     { label: 'Recruiters', icon: 'bi-person-badge', link: 'recruiters-list' },
     { label: 'Seekers', icon: 'bi-people', link: 'seekers-list' },
     { label: 'Interviews', icon: 'bi bi-laptop', link: 'interviews' },
-
+    { label: 'Blog', icon: 'bi bi-journal-text', link: 'blog' },
   ];
 
 toggleSidebar() {
