@@ -6,13 +6,14 @@ import {
   ReactiveFormsModule,
   FormsModule
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth-service';
+
 
 @Component({
   selector: 'app-registration-page',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './registration-page.html',
   styleUrl: './registration-page.css'
 })
