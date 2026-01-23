@@ -295,32 +295,38 @@
 
   <div class="offcanvas-body">
 
-    <div class="mb-3 small job-meta d-flex flex-wrap align-items-center gap-2">
-
+    <div class="mb-3 small job-meta d-flex flex-wrap align-items-center gap-3">
 
       <!-- Location -->
-      <span class="d-flex align-items-center gap-1">
-        <i class="bi bi-geo-alt-fill"></i>
+      <span class="d-flex align-items-center gap-2">
+        <span class="meta-icon-box">
+          <i class="bi bi-geo-alt-fill"></i>
+        </span>
         {{ selectedJob?.location }}
       </span>
 
       <span class="text-muted">•</span>
 
       <!-- Job Type -->
-      <span class="d-flex align-items-center gap-1">
-        <i class="bi bi-briefcase-fill"></i>
+      <span class="d-flex align-items-center gap-2">
+        <span class="meta-icon-box">
+          <i class="bi bi-briefcase-fill"></i>
+        </span>
         {{ selectedJob?.jobType }}
       </span>
 
       <span class="text-muted">•</span>
 
       <!-- Experience -->
-      <span class="d-flex align-items-center gap-1">
-        <i class="bi bi-bar-chart-steps"></i>
+      <span class="d-flex align-items-center gap-2">
+        <span class="meta-icon-box">
+          <i class="bi bi-bar-chart-steps"></i>
+        </span>
         {{ selectedJob?.experience }}
       </span>
 
     </div>
+
 
 
     <!-- STATUS -->
@@ -360,17 +366,18 @@
     </section>
 
     <!-- COMPANY -->
-    <section class="mb-4 company-section">
+    <section class="company-section">
       <h6 class="fw-semibold">Company Description</h6>
       <p class="small text-muted mb-1">
         {{ selectedJob?.company?.description }}
       </p>
-      <small class="text-muted">
+      <small class="text-muted mb-1">
         <Strong>Address :</Strong> {{ selectedJob?.company?.location }}
       </small>
     </section>
 
   </div>
+
 </div>
 
 <!-- ================= ADD / EDIT JOB POST MODAL ================= -->

@@ -260,8 +260,31 @@
 
 /* Default: full width (mobile & tablet) */
 #jobOffcanvas {
-  width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  background: #f8f9fa; /* same as company section */
 }
+
+
+#jobOffcanvas .offcanvas-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  padding-bottom: 24px;
+  background: #f8f9fa; /* kill white gap */
+}
+
+
+
+/* Chrome, Safari */
+#jobOffcanvas .offcanvas-body::-webkit-scrollbar {
+  display: none;
+}
+
 
 #jobOffcanvas .offcanvas-header {
   padding: 16px 18px;
@@ -275,9 +298,34 @@
   transform: scale(0.9);
 }
 
+
+
 #jobOffcanvas .job-meta {
   font-size: 13px;
   color: #6c757d;
+}
+
+.meta-icon-box {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(13, 110, 253, 0.12); /* light bootstrap blue */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  border: 1px solid rgba(13, 110, 253, 0.25);
+  border-radius: 6px;
+
+  color: #0d6efd;
+  font-size: 14px;
+}
+
+/* icon inside */
+.meta-icon-box i {
+  line-height: 1;
 }
 
 #jobOffcanvas .job-meta i {
@@ -297,12 +345,8 @@
 
 #jobOffcanvas section {
   padding-bottom: 12px;
-  border-bottom: 1px dashed #e5e7eb;
 }
 
-#jobOffcanvas section:last-child {
-  border-bottom: none;
-}
 
 #jobOffcanvas p {
   line-height: 1.6;
@@ -316,6 +360,8 @@
   background: #f8f9fa;
   padding: 12px;
   border-radius: 8px;
+  border:2px solid #75b4f3;
+
 }
 
 
@@ -340,6 +386,8 @@
 .modal-dialog-scrollable .modal-body::-webkit-scrollbar {
   display: none;                  /* Chrome, Edge, Safari */
 }
+
+
 
 /* ===== JOB MODAL ===== */
 .job-modal {
