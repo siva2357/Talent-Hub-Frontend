@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth-service';
 import { RecruiterProfile } from '../../../core/models/recruiter-profile.model';
@@ -14,7 +14,7 @@ import { AppNotification } from '../../../core/models/notification.model';
   templateUrl: './recruiter.html',
   styleUrl: './recruiter.css'
 })
-export class Recruiter {
+export class Recruiter implements OnInit {
   public userProfile!: RecruiterProfile;
 
   constructor(private authService: AuthService, private router: Router, private profileService:RecruiterProfileService ,private notificationService: NotificationService) {}
