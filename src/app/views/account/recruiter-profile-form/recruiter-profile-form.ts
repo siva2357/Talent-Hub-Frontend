@@ -19,7 +19,7 @@ import { RecruiterProfileService } from '../../../core/services/recruiter-profil
 import { DESIGNATION } from '../../../core/enums/designation.enum';
 import { SECTOR } from '../../../core/enums/sector.enum';
 import { SECTOR_DESIGNATION_MAP } from '../../../core/enums/sector-designation.map';
-import { Language, Proficiency } from '../../../core/enums/language.enum';
+import { Language, LanguageEntry, Proficiency } from '../../../core/enums/language.enum';
 import { SOCIAL_ICONS, SocialPlatform } from '../../../core/enums/socialMedia.enum';
 
 function minArrayLength(min: number) {
@@ -49,7 +49,7 @@ socialIcons = SOCIAL_ICONS;
   email!: string;
 sectors = Object.values(SECTOR);      // for sector dropdown
 designations: DESIGNATION[] = [];     // dynamic list
-languagesList = Object.values(Language);
+languages = Object.values(Language);
 proficiencyLevels = Object.values(Proficiency);
   role!:string;
   profileForm!: FormGroup;
@@ -178,6 +178,7 @@ get languagesArray(): FormArray {
   return this.profileForm.get('languages') as FormArray;
 }
 
+
 addLanguage(
   languageSelect: HTMLSelectElement,
   levelSelect: HTMLSelectElement
@@ -189,9 +190,8 @@ addLanguage(
 
   if (!language || !proficiency) return;
 
-  // ❌ prevent duplicate languages
   const exists = this.languagesArray.value.some(
-    (l: any) => l.language === language
+    (l: LanguageEntry) => l.language === language
   );
 
   if (exists) {
@@ -203,7 +203,7 @@ addLanguage(
   this.languagesArray.push(
     this.fb.group({
       language: [language, Validators.required],
-      level: [proficiency, Validators.required]
+      proficiency: [proficiency, Validators.required],
     })
   );
 
@@ -213,11 +213,10 @@ addLanguage(
 
 
 
-
-removeLanguage(index: number): void {
-  this.languagesArray.removeAt(index);
-  this.languagesArray.markAsTouched();
-}
+  removeLanguage(index: number): void {
+    this.languagesArray.removeAt(index);
+    this.languagesArray.markAsTouched();
+  }
 
   get socialProfiles(): FormArray {
     return this.profileForm.get('socialProfiles') as FormArray;
@@ -311,7 +310,7 @@ submitProfile(): void {
 
   this.recruiterProfileService.createProfile(payload).subscribe(() => {
     localStorage.removeItem('recruiterRegistration');
-    this.router.navigate(['/sign-up/otp-verification'], {
+    this.router.navigate(['/register/otp-verification'], {
       queryParams: { email: this.email, role: this.role }
     });
   });

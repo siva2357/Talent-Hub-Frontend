@@ -28,7 +28,7 @@ portfolios: Projects[] = []; // ✅ ADD THIS
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      const id = params.get('id'); // ✅ recruiter param
+      const id = params.get('applicantId'); // ✅ recruiter param
       if (id) {
         this.jobSeekerId = id;
         this.loadTalentProfile(id);
@@ -41,8 +41,6 @@ loadTalentProfile(id: string): void {
   this.userService.getTalentProfileById(id).subscribe({
     next: (response: any) => {
       if (response.success && response.data) {
-
-        // ✅ FIXED MAPPING
         this.jobSeekerProfile = response.data.profileDetails;
         this.portfolios = response.data.portfolio || [];
 

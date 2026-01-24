@@ -1,0 +1,163 @@
+/* ===============================
+   INTERVIEW CARD
+================================ */
+.interview-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1.6px solid #75b4f3;
+  padding: 15px;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.interview-action-btn {
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 500;
+  background: #ffffff;
+  color: #2563eb;               /* custom blue */
+  border: 1.5px solid #2563eb;  /* crisp outline */
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.interview-action-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+
+/* ===============================
+   COMPLETED BADGE
+================================ */
+.interview-completed-badge {
+  background: #e6f7ee;
+  color: #198754;
+  border: 1px solid #198754;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+
+
+/* ===============================
+   STATUS TOP RIGHT
+================================ */
+.status-top-right {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #e2f2ff;
+  border: 1px solid #0056b3;
+  color: #0056b3;
+  font-size: 12px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+/* ===============================
+   HEADER
+================================ */
+.interview-header {
+  padding-right: 80px; /* space so text doesn't go under badge */
+}
+
+.logo-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logo-wrap img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+/* ===============================
+   TEXT TRUNCATION
+================================ */
+.text-truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+}
+
+/* ===============================
+   MOBILE
+================================ */
+@media (max-width: 576px) {
+  .interview-card {
+    padding: 12px;
+  }
+
+  .status-top-right {
+    top: 10px;
+    right: 10px;
+    font-size: 11px;
+  }
+
+  .interview-header {
+    padding-right: 70px;
+  }
+}
+
+
+/* ===============================
+   FILTER BAR
+================================ */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+  flex-wrap: wrap;
+}
+
+/* Inputs */
+.filter-bar .form-select {
+  min-width: 160px;
+  font-size: 14px;
+}
+
+/* Button group */
+.filter-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ===============================
+   MOBILE BEHAVIOR
+================================ */
+@media (max-width: 576px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* inputs full width */
+  .filter-bar .form-select {
+    width: 100%;
+  }
+
+  /* buttons SIDE BY SIDE */
+  .filter-actions {
+    width: 100%;
+  }
+
+  .filter-actions .btn {
+    flex: 1;
+  }
+}

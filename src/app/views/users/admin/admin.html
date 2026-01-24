@@ -77,28 +77,48 @@
       <div class="dropdown ">
 
         <a class="header-icon" data-bs-toggle="dropdown">
-          <img src="https://github.com/mdo.png" alt="profile" width="38" height="38" class="rounded-circle">
+          <img [src]="profileImage" alt="profile" width="35" height="35" class="rounded-circle">
         </a>
 
-        <ul class="dropdown-menu dropdown-menu-end profile-menu" style="width: 200px;">
-          <li class="dropdown-item">Fullname<br><small>User role</small></li>
+        <ul class="dropdown-menu dropdown-menu-start profile-menu" style="width: 200px;">
+          <li class="dropdown-item" style="line-height: 1.2;">
+            {{ fullName }}<br>
+            <small>{{ userRole }}</small>
+          </li>
+
           <li>
             <hr>
           </li>
-          <li><a class="dropdown-item" routerLink="profile">Profile</a></li>
-          <li><a class="dropdown-item" routerLink="account-settings">Settings</a></li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center gap-2">
+              <i class="bi bi-person"></i>
+              Profile
+            </a>
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center gap-2">
+              <i class="bi bi-gear"></i>
+              Settings
+            </a>
+          </li>
+
           <li>
             <hr class="dropdown-divider">
           </li>
-          <li><a class="dropdown-item" routerLink="/login">Log out</a></li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center gap-2 text-danger" (click)="logout()">
+              <i class="bi bi-box-arrow-right"></i>
+              Log out
+            </a>
+          </li>
         </ul>
+
 
       </div>
 
-<div class="user-label" style="margin-right: 20px; margin-left: 10px; line-height: 1.1;">
-  Siva Prasad Kurra<br>
-  <small style="font-size: 12px; opacity: 0.8;">admin</small>
-</div>
 
     </div>
 

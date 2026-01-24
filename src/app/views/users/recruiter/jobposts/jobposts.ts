@@ -26,6 +26,7 @@ export class Jobposts implements OnInit {
   isSubmitting: boolean = false;
   isLoading: boolean = false;
   errorMessage: string = '';
+originalJobData: JobPost | null = null;
 
   jobPosts: JobPost[] = [];
 selectedJobPostId: string | null = null;
@@ -146,6 +147,9 @@ openEditModal(job: JobPost) {
   this.isEditMode = true;
   this.selectedJobPostId = job._id!;
 
+  // 🔥 SAVE ORIGINAL DATA
+  this.originalJobData = { ...job };
+
   this.jobPostForm.patchValue({
     jobId: job.jobId,
     jobTitle: job.jobTitle,
@@ -162,13 +166,37 @@ openEditModal(job: JobPost) {
       : ''
   });
 
-  // open bootstrap modal
   const modal = new (window as any).bootstrap.Modal(
     document.getElementById('addJobPostModal')
   );
   modal.show();
 }
 
+
+openAddModal() {
+  // 🔥 RESET EDIT STATE
+  this.isEditMode = false;
+  this.selectedJobPostId = null;
+
+  // 🔥 RESET FORM (empty form)
+  this.jobPostForm.reset({
+    jobType: '',
+    jobCategory: '',
+    experience: '',
+    qualification: '',
+    location: ''
+  });
+
+  // 🔥 OPEN MODAL
+  const modalEl = document.getElementById('addJobPostModal');
+  if (modalEl && (window as any).bootstrap) {
+    const modal =
+      (window as any).bootstrap.Modal.getInstance(modalEl) ||
+      new (window as any).bootstrap.Modal(modalEl);
+
+    modal.show();
+  }
+}
 
 
 
@@ -198,8 +226,7 @@ submitJobPost() {
       });
       this.isEditMode = false;
       this.selectedJobPostId = null;
-
-      this.loadMyJobPosts(); // refresh list
+      this.loadMyJobPosts();
     },
     error: err => {
       this.isSubmitting = false;
@@ -210,18 +237,69 @@ submitJobPost() {
 }
 
 
-
-  confirmDiscard() {
-    if (confirm('Are you sure you want to discard the changes?')) {
-      this.discard();
-    }
+confirmDiscard() {
+  if (!this.jobPostForm.dirty) {
+    this.discard();
+    return;
   }
 
+  if (confirm('Are you sure you want to discard the changes?')) {
+    this.discard();
+  }
+}
+
+
 discard() {
-  this.jobPostForm.reset();
+  if (this.isEditMode && this.originalJobData) {
+    // 🔁 REVERT TO ORIGINAL VALUES
+    const job = this.originalJobData;
+
+    this.jobPostForm.patchValue({
+      jobId: job.jobId,
+      jobTitle: job.jobTitle,
+      jobType: job.jobType,
+      jobCategory: job.jobCategory,
+      experience: job.experience,
+      qualification: job.qualification,
+      jobDescription: job.jobDescription,
+      salary: job.salary,
+      vacancy: job.vacancy,
+      location: job.location,
+      applyByDate: job.applyByDate
+        ? new Date(job.applyByDate).toISOString().split('T')[0]
+        : ''
+    });
+  } else {
+    // ➕ ADD MODE → CLEAR FORM
+    this.jobPostForm.reset({
+      jobType: '',
+      jobCategory: '',
+      experience: '',
+      qualification: '',
+      location: ''
+    });
+  }
+
+  // 🔄 Keep mode correct
   this.isEditMode = false;
   this.selectedJobPostId = null;
+  this.originalJobData = null;
+
+  // Close modal cleanly
+  const modalEl = document.getElementById('addJobPostModal');
+  if (modalEl && (window as any).bootstrap) {
+    const modal =
+      (window as any).bootstrap.Modal.getInstance(modalEl) ||
+      new (window as any).bootstrap.Modal(modalEl);
+
+    modal.hide();
+  }
+
+  document.body.classList.remove('modal-open');
+  document.body.style.removeProperty('padding-right');
+  document.querySelector('.modal-backdrop')?.remove();
 }
+
 
 
 

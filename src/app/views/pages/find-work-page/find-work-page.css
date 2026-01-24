@@ -1,186 +1,155 @@
-/* ================= BASE ================= */
-section {
-  overflow-x: hidden;
+/* ================= JOB SECTION ================= */
+.job-section {
+  position: relative;
+  background-image: url('../../../../assets/background-images/Background-7.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-/* ================= HEADINGS ================= */
-h2 {
-  font-size: clamp(1.6rem, 2.5vw, 2.1rem);
-  line-height: 1.3;
+
+.job-section > .container {
+  position: relative;
+  z-index: 1;
 }
 
-h4 {
-  font-size: 1.25rem;
+/* ================= HEADERS ================= */
+.job-section h2,
+.job-section h4 {
+  letter-spacing: -0.3px;
 }
 
-p {
-  line-height: 1.6;
-}
-
-/* ================= INFO CARD ================= */
-.info-card {
+/* ================= INFO CARDS ================= */
+.job-section .info-card {
   background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-left: 4px solid #2563eb;
-  border-radius: 14px;
-  padding: 1.5rem;
+  border-radius: 16px;
+  padding: 24px;
   height: 100%;
-  transition: transform .25s ease, box-shadow .25s ease;
+  border: 1px solid #e6ebff;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+  transition: all 0.3s ease;
 }
 
-.info-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+
+/* ================= INFO CARD ICON ================= */
+.job-section .info-icon {
+  font-size: 2.2rem;
+  color: #0d6efd;
+  background: #eef3ff;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.info-card h6 {
-  font-size: 1.05rem;
-  margin-bottom: 0.5rem;
-}
-
-.info-card p {
-  font-size: 0.95rem;
-}
-
-/* ================= SEARCH ================= */
-.form-control,
-.form-select {
+/* ================= SEARCH INPUTS ================= */
+.job-section .form-control,
+.job-section .form-select {
   border-radius: 10px;
   padding: 10px 12px;
 }
 
-.row.my-4 {
-  background: #f8fafc;
-  border-radius: 14px;
-  padding: 16px;
-  border: 1px solid #000000;
-}
-
 /* ================= JOB CARD ================= */
 .job-card {
-  position: relative;
   background: #ffffff;
-  border: 1px solid #000000;
   border-radius: 14px;
-  padding: 1.5rem;
-  transition: transform .2s ease, box-shadow .2s ease;
+  border: 1px solid #e6ebff;
+  box-shadow:
+    0 12px 32px rgba(13, 110, 253, 0.18),
+    0 6px 14px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-.job-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
-}
 
+/* ================= JOB TEXT ================= */
 .job-card h6 {
-  font-size: 1.1rem;
+  font-size: 16px;
 }
 
 .job-card p {
-  font-size: 0.9rem;
+  margin-bottom: 6px;
 }
 
-/* AI Recommendation Badge */
-.job-card::after {
-  content: "AI Recommended";
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  font-size: 0.7rem;
-  color: #2563eb;
-  background: #eef2ff;
-  padding: 4px 8px;
+/* ================= MATCH HIGHLIGHT ================= */
+.job-card strong {
+  color: #0d6efd;
+}
+
+/* ================= BUTTON ================= */
+.job-section .btn-outline-primary {
   border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.25s ease;
 }
 
-/* ================= LIST ================= */
-ol {
-  padding-left: 1.2rem;
+.job-section .btn-outline-primary:hover {
+  background: #0d6efd;
+  color: #ffffff;
 }
 
-ol li {
-  margin-bottom: 0.5rem;
-  line-height: 1.6;
-}
-
-/* ================= MOBILE OPTIMIZATION ================= */
-@media (max-width: 768px) {
-
-  section.container {
-    padding-left: 1rem;
-    padding-right: 1rem;
+/* ================= MOBILE ================= */
+@media (max-width: 767px) {
+  .job-section {
+    padding-top: 3rem;
   }
 
-  .info-card,
   .job-card {
-    padding: 1.25rem;
-  }
-
-  h2 {
-    font-size: 1.5rem;
+    padding: 20px;
   }
 }
 
-/* ================= TOUCH DEVICES ================= */
-@media (hover: none) {
-  .info-card:hover,
-  .job-card:hover {
-    transform: none;
-    box-shadow: none;
-  }
+/* ================= HIRING PROCESS ================= */
+.hiring-process {
+ position: relative;
+  background-image: url('../../../../assets/background-images/Background-3.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-
-/* ================= HIRING FLOW ================= */
-.hire-step {
+/* ================= STEP CARD ================= */
+.hiring-process .hire-step {
   background: #ffffff;
-  border: 1px solid #e5e7eb;
   border-radius: 16px;
-  padding: 1.5rem;
+  padding: 24px 20px;
   height: 100%;
   text-align: center;
-  transition: transform .25s ease, box-shadow .25s ease;
-   border-left: 4px solid #2563eb;
+  border: 1px solid #e6ebff;
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.18),
+    0 8px 18px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
 }
 
-.hire-step:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0,0,0,.06);
-}
 
-/* Step number */
-.hire-step-number {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: #2563eb;
+/* ================= STEP NUMBER ================= */
+.hiring-process .hire-step-number {
+  width: 52px;
+  height: 52px;
+  background: #0d6efd;
   color: #ffffff;
+  font-size: 18px;
   font-weight: 600;
+  border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.95rem;
+
+  /* subtle depth */
+  box-shadow: 0 6px 16px rgba(13, 110, 253, 0.35);
 }
 
-/* Text */
-.hire-step h6 {
-  font-size: 1.05rem;
+/* ================= STEP TITLE ================= */
+.hiring-process h6 {
+  margin-top: 14px;
+  letter-spacing: 0.2px;
 }
 
-.hire-step p {
-  font-size: 0.9rem;
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .hire-step {
-    padding: 1.25rem;
-  }
-}
-
-/* Touch devices */
-@media (hover: none) {
-  .hire-step:hover {
-    transform: none;
-    box-shadow: none;
+/* ================= MOBILE ================= */
+@media (max-width: 767px) {
+  .hiring-process .hire-step {
+    padding: 20px;
   }
 }

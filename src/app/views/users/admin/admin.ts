@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-
+import { AppNotification } from '../../../core/models/notification.model';
+import { NotificationService } from '../../../core/services/notification-service';
+import { RouterOutlet, RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth-service';
 interface Notification {
   message: string;
   time: string;
@@ -15,7 +17,40 @@ interface Notification {
   templateUrl: './admin.html',
   styleUrl: './admin.css',
 })
-export class Admin {
+export class Admin implements OnInit{
+
+    constructor(private authService: AuthService, private router: Router, private notificationService: NotificationService) {}
+
+
+  public userName!:string;
+  public fullName! :string;
+  public profileImage! :string;
+  public userId!: string;
+  public errorMessage: string | null = null;
+  public loading: boolean = true;
+  public userRole!: string;
+  public showAll = false;
+  public notifications: AppNotification[] = [];
+
+  ngOnInit(): void {
+  this.userId = localStorage.getItem('userId') || this.authService.getUserId() || '';
+  const role = localStorage.getItem('userRole') || this.authService.getRole() || '';
+  this.fullName = this.authService.getFullName() ||"";
+  this.profileImage = this.authService.getUserData()?.profilePicture || '';
+
+  this.userRole = role;
+
+  if (this.userId) {
+      this.loadNotifications(); // ✅ Add this call
+  } else {
+    this.errorMessage = 'User ID or Role is not available.';
+  }
+
+}
+
+
+
+
 
 sidebarOpen = false; // start collapsed (icon-only mode)
 
@@ -25,7 +60,7 @@ sidebarOpen = false; // start collapsed (icon-only mode)
     { label: 'Recruiters', icon: 'bi-person-badge', link: 'recruiters-list' },
     { label: 'Seekers', icon: 'bi-people', link: 'seekers-list' },
     { label: 'Interviews', icon: 'bi bi-laptop', link: 'interviews' },
-
+    { label: 'Blog', icon: 'bi bi-journal-text', link: 'blog' },
   ];
 
 toggleSidebar() {
@@ -38,16 +73,23 @@ closeSidebarOnMobile() {
   }
 }
 
-notifications: Notification[] = [
-    { message: "New applicant submitted resume", time: "2m ago", read: false },
-    { message: "Job post approved", time: "1h ago", read: false },
-    { message: "Candidate accepted offer", time: "3h ago", read: false },
-    { message: "New message from John", time: "5h ago", read: true },
-    { message: "Job post closed automatically", time: "Yesterday", read: true },
-  ];
 
   showCount = true;
   viewMore = false;
+
+  loadNotifications(): void {
+  if (!this.userId || !this.userRole) return;
+  const apiRole = this.userRole.charAt(0).toUpperCase() + this.userRole.slice(1); // 'client' → 'Client'
+  this.notificationService.getUserNotifications(apiRole, this.userId).subscribe({
+    next: (notifs) => {
+      this.notifications = notifs;
+    },
+    error: (err) => {
+      console.error('Error loading notifications:', err);
+    }
+  });
+}
+
 
   get unreadCount() {
     return this.notifications.filter(n => !n.read).length;
@@ -71,5 +113,28 @@ notifications: Notification[] = [
     this.showCount = false;
   }
 
+
+
+
+    logout(): void {
+  this.authService.logout().subscribe({
+    next: () => {
+      // ✅ Clear frontend state
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // ✅ Redirect
+      this.router.navigate(['/login']);
+    },
+    error: (err) => {
+      console.error('Logout failed', err);
+
+      // 🔐 Fail-safe logout
+      localStorage.clear();
+      sessionStorage.clear();
+      this.router.navigate(['/login']);
+    }
+  });
+}
 
 }

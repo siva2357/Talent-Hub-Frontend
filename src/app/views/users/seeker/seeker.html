@@ -91,7 +91,7 @@
 
 
 
-   <div class="dropdown ">
+  <div class="dropdown ">
 
         <a class="header-icon" data-bs-toggle="dropdown">
           <img [src]="profileImage" alt="profile" width="35" height="35" class="rounded-circle">
@@ -99,19 +99,40 @@
 
         <ul class="dropdown-menu dropdown-menu-start profile-menu" style="width: 200px;">
           <li class="dropdown-item" style="line-height: 1.2;">
-            {{fullName}}<br>
-            <small>{{userRole}}</small>
+            {{ fullName }}<br>
+            <small>{{ userRole }}</small>
           </li>
+
           <li>
             <hr>
           </li>
-          <li><a class="dropdown-item" (click)="goToProfilePage()">Profile</a></li>
-          <li><a class="dropdown-item" (click)="goToAccountSettingsPage()">Settings</a></li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center gap-2" (click)="goToProfilePage()">
+              <i class="bi bi-person"></i>
+              Profile
+            </a>
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center gap-2" (click)="goToAccountSettingsPage()">
+              <i class="bi bi-gear"></i>
+              Settings
+            </a>
+          </li>
+
           <li>
             <hr class="dropdown-divider">
           </li>
-          <li><a class="dropdown-item" (click)="logout()">Log out</a></li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center gap-2 text-danger" (click)="logout()">
+              <i class="bi bi-box-arrow-right"></i>
+              Log out
+            </a>
+          </li>
         </ul>
+
 
       </div>
 

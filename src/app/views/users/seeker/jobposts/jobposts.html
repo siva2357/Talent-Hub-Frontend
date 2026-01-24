@@ -1,205 +1,183 @@
-
-<div class="container" style="padding-top:60px;">
-
-
-  <div class="row mb-4">
-    <div class="col-12">
-      <div class="welcome-box p-4 rounded-3 border">
-<h5 class="mb-2">Welcome to Your Job Dashboard</h5>
-
-<p class="mb-0 text-muted small">
-  Discover job opportunities that match your skills. Use filters to refine results,
-  save jobs for later, and track your applications in one place.
-</p>
-      </div>
-    </div>
-  </div>
+<section class="jobposts-section">
+<div class="container mt-5">
 
 
   <div class="row mb-4">
     <div class="col-12">
-<h5 class="section-title mb-3">How the Platform Works</h5>
+      <div class="welcome-box p-3 rounded-3 ">
+        <h5>Welcome to Your Job Dashboard</h5>
 
-    </div>
-
-    <div class="col-sm-6 col-md-3 mb-3">
-      <div class="feature-card border h-100 d-flex p-3 rounded-3 align-items-start">
-        <i class="bi bi-search feature-icon"></i>
-        <div>
-          <h6 class="mb-1">Find Jobs</h6>
-          <p class="mb-0 small text-muted">Browse thousands of job listings tailored to your skills and location.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-6 col-md-3 mb-3">
-      <div class="feature-card border h-100 d-flex p-3 rounded-3 align-items-start">
-        <i class="bi bi-send feature-icon"></i>
-        <div>
-          <h6 class="mb-1">Apply Easily</h6>
-          <p class="mb-0 small text-muted">Submit applications with just a few clicks and track your progress.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-6 col-md-3 mb-3">
-      <div class="feature-card border h-100 d-flex p-3 rounded-3 align-items-start">
-        <i class="bi bi-calendar-check feature-icon"></i>
-        <div>
-          <h6 class="mb-1">Attend Interviews</h6>
-          <p class="mb-0 small text-muted">Get interview invites, prepare, and meet your potential employers.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-6 col-md-3 mb-3">
-      <div class="feature-card border h-100 d-flex p-3 rounded-3 align-items-start">
-        <i class="bi bi-file-earmark-text feature-icon"></i>
-        <div>
-          <h6 class="mb-1">Receive Offers</h6>
-          <p class="mb-0 small text-muted">Accept offers from employers and start your new career journey.</p>
-        </div>
+        <p class="mb-0 text-muted small">
+          Discover job opportunities that match your skills. Use filters to refine results,
+          save jobs for later, and track your applications in one place.
+        </p>
       </div>
     </div>
   </div>
 
-  <div class="row align-items-center mb-3">
-    <div class="col-12 col-md-6">
-      <h4 class="mb-0">Jobs Matching Your Skills</h4>
-      <p class="text-muted small mb-0">Curated opportunities that align perfectly with your skill set.</p>
+<div class="row mb-4">
+  <div class="col-12">
+    <h5 class="section-title mb-3">How the Platform Works</h5>
+  </div>
+
+  <div class="col-12 col-lg-6 col-md-6 col-xl-3 mb-3">
+
+    <div class="step-card h-100 p-3 rounded-3 d-flex gap-3">
+      <div class="icon-box">
+        <i class="bi bi-search"></i>
+      </div>
+      <div>
+        <h6 class="mb-1 step-title">Find Jobs</h6>
+        <p class="mb-0 step-desc">
+          Browse thousands of job listings tailored to your skills and location.
+        </p>
+      </div>
     </div>
-
   </div>
 
-<div class="filter-panel mb-4">
-<div class="row g-3 align-items-end mb-3">
+  <div class="col-12 col-lg-6 col-md-6 col-xl-3 mb-3">
 
-  <!-- Search -->
-  <div class="col-md-4">
-    <input
-      type="text"
-      class="form-control form-control-sm"
-      placeholder="Search job title"
-      [(ngModel)]="filters.search"
-      (input)="applyFilters()"
-    >
+    <div class="step-card h-100 p-3 rounded-3 d-flex gap-3">
+      <div class="icon-box">
+        <i class="bi bi-send"></i>
+      </div>
+      <div>
+        <h6 class="mb-1 step-title">Apply Easily</h6>
+        <p class="mb-0 step-desc">
+          Submit applications with just a few clicks and track your progress.
+        </p>
+      </div>
+    </div>
   </div>
 
-  <!-- Job Type -->
-<div class="col-md-2">
-  <select
-    class="form-select form-select-sm"
-    [(ngModel)]="filters.jobType"
-    (change)="applyFilters()"
-  >
-    <option value="">Job Type</option>
+  <div class="col-12 col-lg-6  col-md-6 col-xl-3 mb-3">
 
-    @for (type of jobTypes; track type) {
-      <option [value]="type">
-        {{ type }}
-      </option>
-    }
+    <div class="step-card h-100 p-3 rounded-3 d-flex gap-3">
+      <div class="icon-box">
+        <i class="bi bi-calendar-check"></i>
+      </div>
+      <div>
+        <h6 class="mb-1 step-title">Attend Interviews</h6>
+        <p class="mb-0 step-desc">
+          Get interview invites, prepare, and meet your potential employers.
+        </p>
+      </div>
+    </div>
+  </div>
 
-  </select>
-</div>
+  <div class="col-12 col-lg-6 col-md-6 col-xl-3 mb-3">
 
-  <!-- Job Category -->
-<div class="col-md-3">
-  <select
-    class="form-select form-select-sm"
-    [(ngModel)]="filters.jobCategory"
-    (change)="applyFilters()"
-  >
-    <option value="">Job Category</option>
-
-    @for (category of jobCategories; track category) {
-      <option [value]="category">
-        {{ category }}
-      </option>
-    }
-
-  </select>
+    <div class="step-card h-100 p-3 rounded-3 d-flex gap-3">
+      <div class="icon-box">
+        <i class="bi bi-file-earmark-text"></i>
+      </div>
+      <div>
+        <h6 class="mb-1 step-title">Receive Offers</h6>
+        <p class="mb-0 step-desc">
+          Accept offers from employers and start your new career journey.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
 
 
-  <!-- Job Status -->
-  <div class="col-md-3">
-<select
-  class="form-select form-select-sm"
-  [(ngModel)]="filters.jobStatus"
-  (change)="applyFilters()"
->
-  <option value="">Job Status</option>
+<div class="row align-items-center mb-4">
+  <div class="col-12 col-md-8">
+    <h6 class="fw-semibold mb-1">
+      Jobs Matching Your Skills
+    </h6>
+    <p class="text-muted small mb-0">
+      Curated opportunities that align perfectly with your skill set.
+    </p>
+  </div>
+</div>
+
+
+
+    <div class="card shadow-sm mb-4" style="border: 2px solid #75b4f3;">
+      <div class="card-body">
+
+        <!-- Filters -->
+        <div class="row g-3 mb-3  align-items-end">
+
+          <div class="col-md-4">
+            <label class="form-label" style="font-size: 14px;">Search</label>
+            <input type="text" class="form-control form-control-sm" placeholder="Search by job title"
+              [(ngModel)]="filters.search" (input)="applyFilters()" />
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label" style="font-size: 14px;">Job Type</label>
+            <select class="form-select form-select-sm" [(ngModel)]="filters.jobType" (change)="applyFilters()">
+              <option value="">All</option>
+              @for (type of jobTypes; track type) {
+              <option [value]="type">{{ type }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label" style="font-size: 14px;">Category</label>
+            <select class="form-select form-select-sm" [(ngModel)]="filters.jobCategory" (change)="applyFilters()">
+              <option value="" >All</option>
+              @for (cat of jobCategories; track cat) {
+              <option [value]="cat">{{ cat }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label" style="font-size: 14px;">Status</label>
+            <select class="form-select form-select-sm"  [(ngModel)]="filters.jobStatus" (change)="applyFilters()">
+                <option value="">Job Status</option>
   <option value="Applied">Applied</option>
   <option value="Saved">Saved</option>
-</select>
+            </select>
+          </div>
 
-  </div>
+        </div>
 
-</div>
-</div>
-<div class="row align-items-center mb-4">
+        <!-- Active Filters -->
+        @if (filters.search || filters.jobType || filters.jobCategory || filters.jobStatus) {
+        <div class="d-flex flex-wrap gap-2 mt-3">
 
-  <!-- Active Filters -->
-  <div class="col-12 col-md d-flex flex-wrap gap-2">
+          @if (filters.search) {
+          <span class="filter-badge" (click)="clearFilter('search')">
+            Title: {{ filters.search }} ×
+          </span>
+          }
 
-    <span
-      *ngIf="filters.search"
-      class="filter-badge"
-      (click)="clearFilter('search')"
-      title="Remove filter"
-    >
-      Search: <strong>{{ filters.search }}</strong>
-      <span class="ms-1">×</span>
-    </span>
+          @if (filters.jobType) {
+          <span class="filter-badge" (click)="clearFilter('jobType')">
+            Type: {{ filters.jobType }} ×
+          </span>
+          }
 
-    <span
-      *ngIf="filters.jobType"
-      class="filter-badge"
-      (click)="clearFilter('jobType')"
-    >
-      Job Type: <strong>{{ filters.jobType }}</strong>
-      <span class="ms-1">×</span>
-    </span>
+          @if (filters.jobCategory) {
+          <span class="filter-badge" (click)="clearFilter('jobCategory')">
+            Category: {{ filters.jobCategory }} ×
+          </span>
+          }
 
-    <span
-      *ngIf="filters.jobCategory"
-      class="filter-badge"
-      (click)="clearFilter('jobCategory')"
-    >
-      Category: <strong>{{ filters.jobCategory }}</strong>
-      <span class="ms-1">×</span>
-    </span>
+          @if (filters.jobStatus) {
+          <span class="filter-badge" (click)="clearFilter('jobStatus')">
+            Status: {{ filters.jobStatus }} ×
+          </span>
+          }
 
-    <span
-      *ngIf="filters.jobStatus"
-      class="filter-badge"
-      (click)="clearFilter('jobStatus')"
-    >
-      Status: <strong>{{ filters.jobStatus }}</strong>
-      <span class="ms-1">×</span>
-    </span>
+        </div>
+        }
 
-  </div>
 
-  <!-- Count -->
-  <div class="col-12 col-md-auto text-md-end mt-2 mt-md-0">
-    <span class="text-muted small">
-      Showing <strong>{{ filteredJobPosts.length }}</strong> of {{ totalJobPosts }}
-    </span>
-  </div>
-
-</div>
+      </div>
+    </div>
 
 
 
 
 
-
-
-
-
-<div class="row job-cards mt-5 mb-5">
+<div class="row job-cards ">
 
   @for (job of filteredJobPosts; track job._id) {
 
@@ -212,10 +190,10 @@
 
           <!-- Company -->
           <div class="company-info">
-            <img [src]="job.companyDetails.logo" alt="company-logo" class="company-logo" />
+            <img [src]="job.company.logo" alt="company-logo" class="company-logo" />
 
-            <span class="company-name" title="{{ job.companyDetails.name }}">
-              {{ job.companyDetails.name }}
+            <span class="company-name" title="{{ job.company.name }}">
+              {{ job.company.name }}
             </span>
           </div>
 
@@ -229,7 +207,7 @@
 
         <!-- Job Title -->
         <h6 class="job-title">
-          {{ job.jobTitle }}
+          {{ job.jobTitle }} - {{job.jobId}}
         </h6>
 
         <!-- Meta -->
@@ -252,14 +230,17 @@
         </div>
 
         <!-- CTA -->
-        <div class="card-footer-btn">
-      <button
-        class="btn btn-sm btn-outline-info"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#jobOffcanvas"
-        (click)="openJobOffcanvas(job)">
-        View
-      </button>
+        <div class="card-footer-btn d-flex align-items-center justify-content-between mt-auto ">
+          <!-- LEFT -->
+          <small class="text-muted d-flex align-items-center gap-1">
+            <i class="bi bi-clock"></i>
+            {{ job.postedOn | timeAgo }}
+          </small>
+
+          <button class="btn btn-sm btn-outline-info" data-bs-toggle="offcanvas" data-bs-target="#jobOffcanvas"
+            (click)="openJobOffcanvas(job)">
+            View
+          </button>
         </div>
 
       </div>
@@ -273,97 +254,119 @@
 
 
 
+@if (filteredJobPosts.length === 0) {
+  <div class="text-center my-5">
+    <i class="bi bi-briefcase fs-1 text-muted mb-3 d-block"></i>
+
+    <h6 class="fw-semibold mb-2">
+      No jobs found
+    </h6>
+
+    <p class="text-muted mb-3" style="font-size:14px;">
+      Try adjusting your filters or search keywords.
+    </p>
+
+    <button
+      class="btn btn-outline-secondary btn-sm"
+      (click)="
+        clearFilter('search');
+        clearFilter('jobType');
+        clearFilter('jobCategory');
+        clearFilter('jobStatus')
+      "
+    >
+      Clear all filters
+    </button>
+  </div>
+}
 
 
-<!-- No Jobs Found Message -->
-<div
-  *ngIf="filteredJobPosts.length === 0"
-  class="text-center my-5"
->
-  <i class="bi bi-briefcase fs-1 text-muted mb-3 d-block"></i>
 
-  <h6 class="fw-semibold mb-2">
-    No jobs found
-  </h6>
 
-  <p class="text-muted mb-3" style="font-size:14px;">
-    Try adjusting your filters or search keywords.
-  </p>
-
-  <button
-    class="btn btn-outline-secondary btn-sm"
-    (click)="clearFilter('search'); clearFilter('jobType'); clearFilter('jobCategory'); clearFilter('jobStatus')"
-  >
-    Clear all filters
-  </button>
 </div>
-
-
-
-
-</div>
-
+</section>
 
 
 
 
 
+<div class="offcanvas offcanvas-end" tabindex="-1" id="jobOffcanvas">
 
-
-
-<div class="offcanvas offcanvas-end " tabindex="-1" id="jobOffcanvas" >
   <div class="offcanvas-header border-bottom">
     <div class="d-flex align-items-center gap-2">
-      <img  [src]="selectedJob?.companyDetails?.logo" class="company-logo"/>
+      <img [src]="selectedJob?.company?.logo" class="company-logo" />
       <div>
         <h6 class="mb-0 fw-semibold">
-          {{ selectedJob?.jobTitle }}
+          {{ selectedJob?.jobTitle }} - {{selectedJob?.jobId}}
         </h6>
         <small class="text-muted">
-          {{ selectedJob?.companyDetails?.name }}
+          {{ selectedJob?.company?.name }}
         </small>
       </div>
     </div>
 
-    <button type="button" class="btn-close"  data-bs-dismiss="offcanvas"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
 
   </div>
 
   <div class="offcanvas-body">
 
-    <div class="mb-3 small text-muted d-flex flex-wrap align-items-center gap-2">
+<div class="mb-3 small job-meta d-flex flex-wrap align-items-center gap-4">
 
-      <!-- Location -->
-      <span class="d-flex align-items-center gap-1">
-        <i class="bi bi-geo-alt-fill"></i>
-        {{ selectedJob?.location }}
-      </span>
+  <!-- Location -->
+  <span class="d-flex align-items-center gap-2">
+    <span class="meta-icon-box">
+      <i class="bi bi-geo-alt-fill"></i>
+    </span>
+    {{ selectedJob?.location }}
+  </span>
 
-      <span class="text-muted">•</span>
+  <!-- Job Type -->
+  <span class="d-flex align-items-center gap-2">
+    <span class="meta-icon-box">
+      <i class="bi bi-briefcase-fill"></i>
+    </span>
+    {{ selectedJob?.jobType }}
+  </span>
 
-      <!-- Job Type -->
-      <span class="d-flex align-items-center gap-1">
-        <i class="bi bi-briefcase-fill"></i>
-        {{ selectedJob?.jobType }}
-      </span>
+  <!-- Experience -->
+  <span class="d-flex align-items-center gap-2">
+    <span class="meta-icon-box">
+      <i class="bi bi-bar-chart-steps"></i>
+    </span>
+    {{ selectedJob?.experience }}
+  </span>
 
-      <span class="text-muted">•</span>
-
-      <!-- Experience -->
-      <span class="d-flex align-items-center gap-1">
-        <i class="bi bi-bar-chart-steps"></i>
-        {{ selectedJob?.experience }}
-      </span>
-
-    </div>
+</div>
 
 
-    <!-- STATUS -->
-    <div class="mb-3">
-      <span  class="badge"  [ngClass]="{ 'bg-success': selectedJob?.status === 'Open', 'bg-secondary': selectedJob?.status === 'Closed' }">
-        {{ selectedJob?.status }}
-      </span>
-    </div>
+
+<div class="mb-3 d-flex align-items-center justify-content-between">
+
+  <!-- Status badge (unchanged) -->
+  <span class="badge" [ngClass]="{
+      'bg-success': selectedJob?.status === 'Open',
+      'bg-secondary': selectedJob?.status === 'Closed'
+    }">
+    {{ selectedJob?.status }}
+  </span>
+
+
+
+  @if (!selectedJob?.isApplied) {
+  <button class="btn btn-outline-success btm-sm" (click)="applyJob()">
+    Apply Now
+  </button>
+  }
+
+  @if (selectedJob?.isApplied) {
+  <button class="btn btn-outline-danger btn-sm" (click)="withdrawJob()">
+    Withdraw Application
+  </button>
+  }
+
+</div>
+
 
     <!-- JOB DESCRIPTION -->
     <section class="mb-4">
@@ -393,183 +396,167 @@
       </ul>
     </section>
 
-
-<div class="d-flex gap-2 mt-4">
-
-  @if (!selectedJob?.isApplied) {
-    <button
-      class="btn btn-primary btm-sm"
-      (click)="applyJob()"
-    >
-      Apply Now
-    </button>
-  }
-
-  @if (selectedJob?.isApplied) {
-    <button
-      class="btn btn-outline-danger btn-sm"
-      (click)="withdrawJob()"
-    >
-      Withdraw Application
-    </button>
-  }
-
-</div>
-
-
     <!-- COMPANY -->
-    <section class="mb-4">
+    <section class="company-section">
       <h6 class="fw-semibold">Company Description</h6>
       <p class="small text-muted mb-1">
-        {{ selectedJob?.companyDetails?.description }}
+        {{ selectedJob?.company?.description }}
       </p>
-      <small class="text-muted">
-       <Strong>Address :</Strong> {{ selectedJob?.companyDetails?.location }}
+      <small class="text-muted mb-1">
+        <Strong>Address :</Strong> {{ selectedJob?.company?.location }}
       </small>
     </section>
 
 
 
-<!-- RECOMMENDED JOBS -->
-<section class="mb-4">
-  <h6 class="fw-semibold mb-3">
-    Recommended Jobs
-  </h6>
+    <!-- RECOMMENDED JOBS -->
+    <section class="mb-4 mt-5">
+      <h5 class="fw-semibold mb-3">
+        Recommended Jobs
+      </h5>
 
-  <div class="row g-3">
+      <div class="row g-3">
 
-    <!-- Job 1 -->
-    <div class="col-12 col-lg-6">
-      <div class="job-card recommended-full-card h-100">
-        <div class="card-body">
+        <!-- Job 1 -->
+        <div class="col-12 col-lg-6">
+          <div class="job-card recommended-full-card h-100">
+            <div class="card-body">
 
-          <div class="card-top">
-            <div class="company-info">
-              <img src="assets/default-company.png" class="company-logo" />
-              <span class="company-name">ABC Tech Pvt Ltd</span>
+              <div class="card-top">
+                <div class="company-info">
+                  <img src="assets/default-company.png" class="company-logo" />
+                  <span class="company-name">ABC Tech Pvt Ltd</span>
+                </div>
+              </div>
+
+              <h6 class="job-title">Angular Frontend Developer</h6>
+
+              <div class="job-meta text-muted small">
+                Hyderabad • Full-Time
+              </div>
+
+              <p class="job-desc text-muted">
+                Build scalable Angular applications with reusable UI components...
+              </p>
+
+
+
+              <div class="card-footer-btn d-flex align-items-center justify-content-between mt-auto ">
+                <!-- LEFT -->
+                <small class="text-muted d-flex align-items-center gap-1">
+                  <i class="bi bi-clock"></i>
+                  16h ago
+                </small>
+
+                <button class="btn btn-sm btn-outline-info" data-bs-toggle="offcanvas" data-bs-target="#jobOffcanvas">
+                  View
+                </button>
+              </div>
+
             </div>
           </div>
-
-          <h6 class="job-title">Angular Frontend Developer</h6>
-
-          <div class="job-meta text-muted small">
-            Hyderabad • Full-Time
-          </div>
-
-          <p class="job-desc text-muted">
-            Build scalable Angular applications with reusable UI components...
-          </p>
-
-          <div class="card-footer-btn">
-            <button class="btn btn-outline-secondary btn-sm w-100">
-              View Job
-            </button>
-          </div>
-
         </div>
-      </div>
-    </div>
 
-    <!-- Job 2 -->
-    <div class="col-12 col-lg-6">
-      <div class="job-card recommended-full-card h-100">
-        <div class="card-body">
+        <!-- Job 2 -->
+        <div class="col-12 col-lg-6">
+          <div class="job-card recommended-full-card h-100">
+            <div class="card-body">
 
-          <div class="card-top">
-            <div class="company-info">
-              <img src="assets/default-company.png" class="company-logo" />
-              <span class="company-name">XYZ Solutions</span>
+              <div class="card-top">
+                <div class="company-info">
+                  <img src="assets/default-company.png" class="company-logo" />
+                  <span class="company-name">XYZ Solutions</span>
+                </div>
+              </div>
+
+              <h6 class="job-title">UI Engineer (Angular)</h6>
+
+              <div class="job-meta text-muted small">
+                Bengaluru • Hybrid
+              </div>
+
+              <p class="job-desc text-muted">
+                Design clean UI interfaces and collaborate with UX teams...
+              </p>
+
+              <div class="card-footer-btn">
+                <button class="btn btn-outline-secondary btn-sm w-100">
+                  View Job
+                </button>
+              </div>
+
             </div>
           </div>
-
-          <h6 class="job-title">UI Engineer (Angular)</h6>
-
-          <div class="job-meta text-muted small">
-            Bengaluru • Hybrid
-          </div>
-
-          <p class="job-desc text-muted">
-            Design clean UI interfaces and collaborate with UX teams...
-          </p>
-
-          <div class="card-footer-btn">
-            <button class="btn btn-outline-secondary btn-sm w-100">
-              View Job
-            </button>
-          </div>
-
         </div>
-      </div>
-    </div>
 
-    <!-- Job 3 -->
-    <div class="col-12 col-lg-6">
-      <div class="job-card recommended-full-card h-100">
-        <div class="card-body">
+        <!-- Job 3 -->
+        <div class="col-12 col-lg-6">
+          <div class="job-card recommended-full-card h-100">
+            <div class="card-body">
 
-          <div class="card-top">
-            <div class="company-info">
-              <img src="assets/default-company.png" class="company-logo" />
-              <span class="company-name">Startup Labs</span>
+              <div class="card-top">
+                <div class="company-info">
+                  <img src="assets/default-company.png" class="company-logo" />
+                  <span class="company-name">Startup Labs</span>
+                </div>
+              </div>
+
+              <h6 class="job-title">Frontend Developer</h6>
+
+              <div class="job-meta text-muted small">
+                Remote • Contract
+              </div>
+
+              <p class="job-desc text-muted">
+                Work on modern frontend stacks with performance-focused UI...
+              </p>
+
+              <div class="card-footer-btn">
+                <button class="btn btn-outline-secondary btn-sm w-100">
+                  View Job
+                </button>
+              </div>
+
             </div>
           </div>
-
-          <h6 class="job-title">Frontend Developer</h6>
-
-          <div class="job-meta text-muted small">
-            Remote • Contract
-          </div>
-
-          <p class="job-desc text-muted">
-            Work on modern frontend stacks with performance-focused UI...
-          </p>
-
-          <div class="card-footer-btn">
-            <button class="btn btn-outline-secondary btn-sm w-100">
-              View Job
-            </button>
-          </div>
-
         </div>
-      </div>
-    </div>
 
-    <!-- Job 4 -->
-    <div class="col-12 col-lg-6">
-      <div class="job-card recommended-full-card h-100">
-        <div class="card-body">
+        <!-- Job 4 -->
+        <div class="col-12 col-lg-6">
+          <div class="job-card recommended-full-card h-100">
+            <div class="card-body">
 
-          <div class="card-top">
-            <div class="company-info">
-              <img src="assets/default-company.png" class="company-logo" />
-              <span class="company-name">TechNova Systems</span>
+              <div class="card-top">
+                <div class="company-info">
+                  <img src="assets/default-company.png" class="company-logo" />
+                  <span class="company-name">TechNova Systems</span>
+                </div>
+              </div>
+
+              <h6 class="job-title">Angular UI Specialist</h6>
+
+              <div class="job-meta text-muted small">
+                Chennai • Full-Time
+              </div>
+
+              <p class="job-desc text-muted">
+                Build reusable Angular UI components and design systems...
+              </p>
+
+              <div class="card-footer-btn">
+                <button class="btn btn-outline-secondary btn-sm w-100">
+                  View Job
+                </button>
+              </div>
+
             </div>
           </div>
-
-          <h6 class="job-title">Angular UI Specialist</h6>
-
-          <div class="job-meta text-muted small">
-            Chennai • Full-Time
-          </div>
-
-          <p class="job-desc text-muted">
-            Build reusable Angular UI components and design systems...
-          </p>
-
-          <div class="card-footer-btn">
-            <button class="btn btn-outline-secondary btn-sm w-100">
-              View Job
-            </button>
-          </div>
-
         </div>
+
       </div>
-    </div>
+    </section>
+
 
   </div>
-</section>
 
-
-
-  </div>
 </div>

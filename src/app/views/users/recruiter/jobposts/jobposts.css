@@ -1,19 +1,115 @@
+.welcome-box{
+   border: 2px solid #75b4f3;
+
+}
+
+.step-card{
+   border: 2px solid #75b4f3;
+}
+/* Step number (h6) */
+.step-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Step heading */
+.step-heading {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Step description */
+.step-desc {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+
+/* Filter badges */
+.filter-badge {
+  font-size: 13px;
+  padding: 4px 10px;
+  border: 1px solid #75b4f3;
+  border-radius: 20px;
+  background: #f8f9fa;
+  color: #212529;
+  cursor: pointer;
+}
+
+.filter-badge:hover {
+  background: #e9ecef;
+}
+
+
+
+.empty-state-container {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Image */
+.empty-state-img {
+  width: 100%;
+  max-height: 550px;
+  object-fit: contain;
+  opacity: 0.25;
+}
+
+/* 🔥 CENTER TEXT PERFECTLY */
+.empty-state-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  padding: 0 16px;
+}
+
+/* Text */
+.empty-state-text {
+  font-size: 20px;
+  font-weight: 500;
+  color: #212529;
+}
+
+/* 📱 SMALL SCREENS */
+@media (max-width: 576px) {
+  .empty-state-img {
+    max-height: 300px;
+  }
+
+  .empty-state-text {
+    font-size: 15px;
+  }
+}
+
+
+
+
+.btn-create {
+  background: #e8efff;
+  color: #3b5bfd;
+  border:1px solid #3b5bfd;
+}
+
+.btn-create:hover {
+  background: #3b5bfd;
+  color: #fff;
+}
+
+
+
 
 .job-card {
   background: #ffffff;
-  border: 2px solid #92a6f3;
+  border: 2px solid #75b4f3;
   border-radius: 14px;
   padding: 16px;
   display: flex;
   flex-direction: column;
   height: 100%;
-  box-shadow:
-    0 8px 24px rgba(13, 110, 253, 0.18),
-    0 2px 6px rgba(0, 0, 0, 0.08);     /* depth */
-  transition: none; /* no hover animation */
 }
-
-
 
 .job-card .company-logo {
   width: 46px;
@@ -31,9 +127,6 @@
   color: #212529;
   line-height: 1.35;
 }
-
-
-
 
 /* Description clamp */
 .job-desc {
@@ -59,6 +152,67 @@
   padding: 4px 10px;
 }
 
+/* ===== JOB ACTION BUTTONS (CUSTOM STYLE) ===== */
+.job-actions .btn {
+  border-radius: 5px;              /* cute pill shape */
+  font-size: 12px;
+  padding: 4px 12px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  background: #f8f9fa;
+  color: #212529;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* EDIT */
+.job-actions .btn-outline-primary {
+  background: #eef2ff;
+  color: #3b5bfd;
+  border: 1px solid #3b5bfd;
+}
+
+.job-actions .btn-outline-primary:hover {
+  background: #3b5bfd;
+  color: #fff;
+
+}
+
+/* VIEW */
+.job-actions .btn-outline-info {
+  background: #e7f6ff;
+  color: #0dcaf0;
+  border:1px solid #0dcaf0
+}
+
+.job-actions .btn-outline-info:hover {
+  background: #0dcaf0;
+  color: #fff;
+}
+
+/* CLOSE / DELETE */
+.job-actions .btn-outline-danger {
+  background: #ffeaea;
+  color: #dc3545;
+  border:1px solid #dc3545
+}
+
+.job-actions .btn-outline-danger:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+/* REOPEN */
+.job-actions .btn-outline-warning {
+  background: #fff4e0;
+  color: #fd7e14;
+}
+
+.job-actions .btn-outline-warning:hover {
+  background: #fd7e14;
+  color: #fff;
+}
+
+
 
 /* Responsive fixes */
 @media (max-width: 576px) {
@@ -69,10 +223,26 @@
   .job-title {
     font-size: 16px;
   }
-  .job-actions {
-    width: 100%;
-    justify-content: flex-start;
-  }
+ .job-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+      gap: 10px;
+}
+
+.job-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;   /* 🔥 force right */
+  white-space: nowrap;
+
+}
+
+.job-actions button {
+  white-space: nowrap;
+}
+
 }
 
 
@@ -89,8 +259,110 @@
 
 /* Default: full width (mobile & tablet) */
 #jobOffcanvas {
-  width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  background: #f8f9fa; /* same as company section */
 }
+
+
+#jobOffcanvas .offcanvas-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  padding-bottom: 24px;
+  background: #f8f9fa; /* kill white gap */
+}
+
+
+
+/* Chrome, Safari */
+#jobOffcanvas .offcanvas-body::-webkit-scrollbar {
+  display: none;
+}
+
+
+#jobOffcanvas .offcanvas-header {
+  padding: 16px 18px;
+}
+
+#jobOffcanvas .offcanvas-header h6 {
+  font-size: 15px;
+}
+
+#jobOffcanvas .btn-close {
+  transform: scale(0.9);
+}
+
+
+
+#jobOffcanvas .job-meta {
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.meta-icon-box {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(13, 110, 253, 0.12); /* light bootstrap blue */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  border: 1px solid rgba(13, 110, 253, 0.25);
+  border-radius: 6px;
+
+  color: #0d6efd;
+  font-size: 14px;
+}
+
+/* icon inside */
+.meta-icon-box i {
+  line-height: 1;
+}
+
+#jobOffcanvas .job-meta i {
+  color: #0d6efd;
+}
+
+#jobOffcanvas .badge {
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 12px;
+}
+
+#jobOffcanvas section h6 {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+#jobOffcanvas section {
+  padding-bottom: 12px;
+}
+
+
+#jobOffcanvas p {
+  line-height: 1.6;
+}
+
+#jobOffcanvas ul li {
+  margin-bottom: 6px;
+}
+
+#jobOffcanvas .company-section {
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 8px;
+  border:2px solid #75b4f3;
+
+}
+
 
 /* Desktop and above */
 @media (min-width: 992px) {
@@ -103,87 +375,155 @@
 
 
 
+/* Hide scrollbar but keep scroll */
+.modal-dialog-scrollable .modal-body {
+  overflow-y: auto;
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE */
+}
 
-
-
+.modal-dialog-scrollable .modal-body::-webkit-scrollbar {
+  display: none;                  /* Chrome, Edge, Safari */
+}
 
 
 
 /* ===== JOB MODAL ===== */
 .job-modal {
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
 }
 
+/* Header */
 .job-modal-header {
   padding: 14px 18px;
   border-bottom: 1px solid #e6e6e6;
   background: #fff;
 }
 
+/* Body */
 .job-modal-body {
   background: #fafbfc;
   padding: 18px;
 }
 
+/* Footer */
 .job-modal-footer {
   padding: 14px 18px;
   border-top: 1px solid #e6e6e6;
   background: #fff;
 }
 
-/* Labels */
-.form-label {
+/* ===== LABELS ===== */
+.job-modal .form-label {
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 4px;
 }
 
 /* Required star */
-.required {
+.job-modal .required {
   color: #dc3545;
   font-weight: 600;
   margin-left: 2px;
 }
 
-/* Inputs */
-.form-control,
-.form-select,
-textarea {
+/* ===== INPUTS ===== */
+.job-modal .form-control,
+.job-modal .form-select,
+.job-modal textarea {
+  font-size: 14px;
   border-radius: 6px;
 }
 
-/* Validation text */
-small.text-danger {
+/* Placeholder text */
+.job-modal .form-control::placeholder,
+.job-modal textarea::placeholder {
+  font-size: 14px;
+}
+
+/* ===== VALIDATION TEXT ===== */
+.job-modal small.text-danger {
   font-size: 12px;
   margin-top: 2px;
   display: block;
 }
 
-/* Spinner */
-.spinner-border {
-  width: 1.2rem;
-  height: 1.2rem;
-}
 
 
 
+/* ===== JOB MODAL BUTTON SYSTEM (FINAL) ===== */
 
-/* Filter badges */
-.filter-badge {
+/* Base button */
+.job-modal .btn {
+  border-radius: 5px;
   font-size: 13px;
-  padding: 4px 10px;
-  border: 1px solid #75b4f3;
-  border-radius: 20px;
+  padding: 6px 14px;
+  font-weight: 500;
+  border: none;
   background: #f8f9fa;
   color: #212529;
   cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
-.filter-badge:hover {
+/* Disabled */
+.job-modal .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ===== CANCEL ===== */
+.job-modal .btn-cancel {
+  background: #f1f3f5;
+  color: #495057;
+  border:1px solid #495057
+}
+
+.job-modal .btn-cancel:hover {
   background: #e9ecef;
 }
 
+/* ===== CREATE (Blue) ===== */
+.job-modal .btn-create {
+  background: #e8efff;
+  color: #3b5bfd;
+  border:1px solid #3b5bfd;
+}
+
+.job-modal .btn-create:hover {
+  background: #3b5bfd;
+  color: #fff;
+}
+
+/* ===== UPDATE (Green) ===== */
+.job-modal .btn-update {
+ background: #e8efff;
+  color: #3b5bfd;
+  border:1px solid #3b5bfd;
+}
+
+.job-modal .btn-update:hover {
+  background: #3b5bfd;
+  color: #fff;
+}
+
+.job-modal .btn-discard {
+  background: #ffeaea;
+  color: #dc3545;
+  border:1px solid #dc3545
+}
+
+.job-modal .btn-discard:hover {
+  background: #dc3545;
+  color: #fff;
+}
 
 
-
+/* ===== SPINNER ===== */
+.job-modal .spinner-border {
+  width: 1.2rem;
+  height: 1.2rem;
+}

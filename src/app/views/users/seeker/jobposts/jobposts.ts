@@ -7,11 +7,12 @@ import { JobpostService } from '../../../../core/services/jobpost-service';
 import { JobPost } from '../../../../core/models/jobpost.model';
 import { JOBPOSTCATEGORY } from '../../../../core/enums/jobpost-category.enum';
 import { JOBPOSTTYPE } from '../../../../core/enums/jobpost-type.enum';
+import { TimeAgoPipe } from "../../../../core/pipes/time.pipe";
 
 @Component({
   selector: 'app-jobposts',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule, TimeAgoPipe],
   templateUrl: './jobposts.html',
   styleUrl: './jobposts.css'
 })

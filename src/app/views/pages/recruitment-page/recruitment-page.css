@@ -1,136 +1,112 @@
-/* =====================================================
-   BASE
-===================================================== */
-section {
-  overflow-x: hidden;
+/* ================= RECRUITER FLOW ================= */
+.recruiter-flow {
+  background-image: url('../../../../assets/background-images/Background-5.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.recruiter-flow,
-.evaluation-section {
-  padding-top: 72px;
-  padding-bottom: 72px;
+/* ================= HEADER ================= */
+.recruiter-flow h2 {
+  letter-spacing: -0.4px;
 }
 
-/* =====================================================
-   HEADINGS & TEXT
-===================================================== */
-h2 {
-  font-size: clamp(1.7rem, 2.5vw, 2.2rem);
-  line-height: 1.3;
+.recruiter-flow p {
+  max-width: 720px;
 }
 
-p {
-  line-height: 1.65;
-}
-
-/* =====================================================
-   RECRUITER FLOW CARDS
-===================================================== */
-.recruit-card {
+/* ================= RECRUIT CARD ================= */
+.recruiter-flow .recruit-card {
   background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 18px;
-  padding: 2rem 1.75rem;
-  height: 100%;
+  border-radius: 16px;
+  padding: 30px 22px;
   text-align: center;
-  transition: transform .25s ease, box-shadow .25s ease;
+  height: 100%;
+  border: 1px solid #e6ebff;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.18),
+    0 8px 18px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.recruit-card i {
-  font-size: 2.2rem;
-  color: #2563eb;
+
+
+/* ================= ICON ================= */
+.recruiter-flow .recruit-card i {
+  font-size: 2.3rem;
+  color: #0d6efd;
+  background: #eef3ff;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 6px;
 }
 
-.recruit-card h6 {
-  margin-top: 1rem;
-  font-size: 1.05rem;
+/* ================= TEXT ================= */
+.recruiter-flow .recruit-card h6 {
+  margin-top: 12px;
+  letter-spacing: 0.2px;
 }
 
-.recruit-card p {
-  font-size: 0.92rem;
+
+
+/* ================= MOBILE ================= */
+@media (max-width: 767px) {
+  .recruiter-flow .recruit-card {
+    padding: 24px 18px;
+  }
+
+  .recruiter-flow p {
+    max-width: 100%;
+  }
 }
 
-.recruit-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.07);
+
+/* ================= EVALUATION SECTION ================= */
+.evaluation-section {
+  background-image: url('../../../../assets/background-images/Background-3.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-/* =====================================================
-   EVALUATION IMAGE CARDS
-===================================================== */
-.evaluation-section .card {
-  border-radius: 18px;
-  overflow: hidden;
-  background: #ffffff;
-}
-
-.card-img-top {
-  height: 210px;
-  object-fit: cover;
-}
-
-.card-body {
-  padding: 1.75rem;
-}
-
-.card-body h6 {
-  font-size: 1.05rem;
-}
-
-.card-body p {
-  font-size: 0.92rem;
-}
-
-/* =====================================================
-   SECTION HEADERS
-===================================================== */
+/* ================= HEADER ================= */
 .evaluation-section h2 {
-  margin-bottom: 0.75rem;
+  letter-spacing: -0.3px;
 }
 
-.evaluation-section p {
-  max-width: 620px;
+/* ================= CARD ================= */
+.evaluation-section .card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.18),
+    0 8px 18px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* =====================================================
-   CTA BUTTON
-===================================================== */
-.recruiter-flow .btn {
-  border-radius: 14px;
-  font-weight: 500;
+
+
+/* ================= IMAGES ================= */
+.evaluation-section img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
 }
 
-/* =====================================================
-   MOBILE OPTIMIZATION
-===================================================== */
-@media (max-width: 768px) {
-
-  .recruiter-flow,
-  .evaluation-section {
-    padding-top: 56px;
-    padding-bottom: 56px;
-  }
-
-  .recruit-card {
-    padding: 1.6rem;
-  }
-
-  .card-img-top {
-    height: 190px;
-  }
-
-  h2 {
-    font-size: 1.55rem;
-  }
+/* ================= CARD BODY ================= */
+.evaluation-section .card-body {
+  padding: 20px;
 }
 
-/* =====================================================
-   TOUCH DEVICES (NO HOVER JUMP)
-===================================================== */
-@media (hover: none) {
-  .recruit-card:hover,
-  .card:hover {
-    transform: none;
-    box-shadow: none;
-  }
+/* ================= TEXT ================= */
+.evaluation-section h6 {
+  letter-spacing: 0.2px;
+  margin-bottom: 6px;
 }

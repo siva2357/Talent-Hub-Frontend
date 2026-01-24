@@ -38,13 +38,7 @@ export class ScheduledMeetings implements OnInit {
     });
   }
 
-  joinMeeting(interview: Interview): void {
-    this.router.navigate([
-      '/interview/meet-session',
-      interview._id,
-      interview.meetingId
-    ]);
-  }
+
 
   duration(start: Date, end: Date): string {
     const mins =

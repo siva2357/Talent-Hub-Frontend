@@ -18,81 +18,79 @@
     <div class="row justify-content-center mt-4 mb-5">
 
       @for (interview of interviews; track interview._id) {
-        <div class="col-12 col-md-10 col-lg-10 mb-3">
+<div class="col-12 col-md-10 col-lg-10 mb-3">
 
-          <div class="card shadow-sm border border-dark rounded-0 p-3">
+  <div class="card interview-card p-3">
 
-            <!-- Top -->
-            <div class="d-flex justify-content-between align-items-center">
+    <!-- STATUS (TOP RIGHT) -->
+    <span class="badge interview-status">
+      {{ interview.status }}
+    </span>
 
-              <div class="d-flex align-items-center gap-3">
-                <img
-                  [src]="'https://ui-avatars.com/api/?name=' + interview.jobSeekerName"
-                  class="rounded-circle"
-                  style="width:50px;height:50px;"
-                />
+    <!-- TOP -->
+    <div class="d-flex align-items-center gap-3 mb-2">
 
-                <div>
-                  <h6 class="mb-0 fw-semibold">{{ interview.jobSeekerName }}</h6>
-                  <small class="text-muted">{{ interview.interviewTitle }}</small>
-                </div>
-              </div>
+  <img
+    [src]="interview.profilePhoto"
+    class="rounded-circle interview-avatar"
+    alt="Job Seeker Avatar"
+  />
 
-              <span class="badge px-2 py-1 rounded-0"
-                [ngClass]="{
-                  'bg-info text-dark': interview.status === 'Scheduled',
-                  'bg-success': interview.status === 'Completed',
-                  'bg-danger': interview.status === 'Not Completed'
-                }">
-                {{ interview.status }}
-              </span>
-            </div>
+      <div>
+        <h6 class="mb-0 fw-semibold">
+          {{ interview.jobSeekerName }}
+        </h6>
+        <small class="text-muted">
+          {{ interview.interviewTitle }}
+        </small>
+      </div>
 
-            <hr>
+    </div>
 
-            <!-- Job -->
-            <p class="mb-1">
-              <i class="bi bi-briefcase"></i>
-              <strong>{{ interview.jobTitle }}</strong>
-            </p>
+    <!-- JOB INFO -->
+    <div class="interview-meta">
 
-            <p class="text-muted mb-1">
-              <i class="bi bi-hash"></i>
-              Job ID: <strong>{{ interview.jobId }}</strong>
-            </p>
+      <div  style="font-size:14px;">
+        <strong class="text-dark">
+          {{ interview.jobTitle }}
+        </strong>
+        – {{ interview.jobId }}
+      </div>
 
-            <!-- Time -->
-            <p class="text-muted mb-1">
-              <i class="bi bi-calendar-check"></i>
-              {{ interview.scheduledDate | date:'mediumDate' }}
-            </p>
+      <div>
+        <p class="mb-1" style="font-size:14px;">
+          <strong>Date:</strong>
+          {{ interview.scheduledDate | date:'mediumDate' }}
+        </p>
 
-            <p class="text-muted">
-              <i class="bi bi-clock"></i>
-              {{ interview.startTime | date:'shortTime' }} –
-              {{ interview.endTime | date:'shortTime' }}
-              ({{ duration(interview.startTime, interview.endTime) }})
-            </p>
+        <p class="mb-1 d-flex align-items-center gap-1" style="font-size:14px;">
+          <strong>Timings:</strong>
+          <i class="bi bi-clock"></i>
+          {{ interview.startTime | date:'shortTime' }} –
+          {{ interview.endTime | date:'shortTime' }}
+        </p>
+      </div>
 
-            <hr>
+    </div>
 
+<!-- ACTION -->
+<div class="d-flex justify-content-end mt-2">
 
-
-            <!-- Action -->
-<div class="d-flex justify-content-end">
-
-  <!-- JOIN (only if NOT completed) -->
+  <!-- JOIN BUTTON (only if NOT completed) -->
   @if (interview.status !== 'Completed') {
-    <button
-      class="btn btn-link p-0 text-primary text-decoration-underline"
-      (click)="joinMeeting(interview)">
-      Join Interview
-    </button>
+<a
+  class="btn btn-sm interview-action-btn"
+  [href]="interview.meetingJoinUrl"
+  target="_blank"
+  rel="noopener noreferrer">
+  Join Interview
+</a>
+
   }
 
-  <!-- COMPLETED LABEL -->
+  <!-- COMPLETED BADGE -->
   @if (interview.status === 'Completed') {
-    <span class="text-success fw-semibold">
+    <span class="badge interview-completed-badge">
       Interview Completed
     </span>
   }
@@ -100,8 +98,10 @@
 </div>
 
 
-          </div>
-        </div>
+  </div>
+</div>
+
+
       }
     </div>
   }
