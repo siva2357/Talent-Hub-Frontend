@@ -19,6 +19,7 @@ export class AppliedJobpostsPage implements OnInit {
   filteredJobPosts: JobPost[] = [];
   totalJobPosts = 0;
   errorMessage = '';
+selectedJob: any = null;
 
   filters = {
     search: '',
@@ -75,5 +76,18 @@ export class AppliedJobpostsPage implements OnInit {
     this.filters[filterKey] = '';
     this.applyFilters();
   }
+
+
+viewTracking(job: any) {
+  this.selectedJob = job;
+
+  const offcanvasEl = document.getElementById('trackingOffcanvas');
+  if (offcanvasEl) {
+    // @ts-ignore
+    const offcanvas = new bootstrap.Offcanvas(offcanvasEl);
+    offcanvas.show();
+  }
+}
+
 
 }

@@ -31,10 +31,12 @@ export interface JobPost {
   applicants?: Applicant[];
   createdAt?: Date;
   updatedAt?: Date;
-    saved?: boolean;
+  saved?: boolean;
   isApplied?: boolean;
   companyDetails: Company;
   applicationStatus:string
+appliedOn?:Date
+
 }
 
 

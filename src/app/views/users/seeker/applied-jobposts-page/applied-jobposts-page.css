@@ -1,3 +1,19 @@
+.page-title {
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: #212529;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+
+
+
+
+
 /* =========================
    FILTER BADGES
 ========================= */
@@ -33,7 +49,6 @@
   border: 2px solid #92a6f3;
   border-radius: 14px;
   height: 100%;
-
   box-shadow:
     0 8px 24px rgba(13, 110, 253, 0.18),
     0 2px 6px rgba(0, 0, 0, 0.08);
@@ -41,6 +56,8 @@
   display: flex;
   flex-direction: column;
 }
+
+
 
 /* Space reserved so badge never collides */
 .job-card .card-body {
@@ -50,6 +67,32 @@
   flex-direction: column;
   height: 100%;
 }
+
+
+.btn {
+  border-radius: 5px;              /* cute pill shape */
+  font-size: 12px;
+  padding: 4px 12px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  background: #f8f9fa;
+  color: #212529;
+  transition: background 0.2s ease, color 0.2s ease;
+
+}
+
+
+.btn-view-tracking  {
+  background: #e8efff;
+  color: #0d6efd;
+  border: 1px solid #0d6efd;
+}
+
+.btn-view-tracking :hover {
+  background-color:#0d6efd;
+  color: #fff;
+}
+
 
 /* =========================
    STATUS BADGE – TOP RIGHT
@@ -62,7 +105,7 @@
 
   font-size: 11px;
   padding: 6px 12px;
-  border-radius: 20px;
+  border-radius: 5px;
   letter-spacing: 0.3px;
   white-space: nowrap;
 }
@@ -71,11 +114,10 @@
    COMPANY INFO
 ========================= */
 .company-logo {
-  width: 42px;
-  height: 42px;
+  width: 50px;
+  height: 50px;
   border-radius: 10px;
   background: #f8f9fa;
-  padding: 4px;
   border: 1px solid #dee2e6;
   object-fit: contain;
 }
@@ -113,8 +155,8 @@ h6 {
 
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  line-clamp: 3;
-  -webkit-line-clamp: 3;
+  line-clamp: 4;
+  -webkit-line-clamp: 4;
   overflow: hidden;
 }
 
@@ -157,4 +199,76 @@ h6 {
   .company-name {
     max-width: 130px;
   }
+}
+
+
+/* Timeline container */
+.tracking-timeline {
+  position: relative;
+  padding-left: 22px;
+}
+
+/* Vertical line */
+.tracking-timeline::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #dee2e6;
+}
+
+/* Timeline item */
+.timeline-item {
+  position: relative;
+  padding-bottom: 45px;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+/* Dot */
+.timeline-item .dot {
+  position: absolute;
+  left: -16px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  background: #adb5bd;
+  border-radius: 50%;
+}
+
+/* Completed state */
+.timeline-item.completed .dot {
+  background: #0d6efd;
+}
+
+/* Content */
+.timeline-item .content h6 {
+  margin-bottom: 2px;
+  font-weight: 600;
+}
+
+.timeline-item.completed .content h6 {
+  color: #0d6efd;
+}
+
+
+/* Timeline dot colors based on status */
+.timeline-item.status-pending .dot {
+  background: #ffc107; /* yellow */
+}
+
+.timeline-item.status-inprocess .dot {
+  background: #0d6efd; /* blue */
+}
+
+.timeline-item.status-completed .dot {
+  background: #198754; /* green */
+}
+
+.timeline-item.status-rejected .dot {
+  background: #dc3545; /* red */
 }

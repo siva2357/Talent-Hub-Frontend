@@ -1,12 +1,13 @@
-<div class="container" style="padding-top:60px;">
+<div class="container mt-5">
 
   <!-- Header -->
   <div class="row mb-4">
     <div class="col-12">
-      <h4 class="mb-1">My Applications</h4>
-      <p class="text-muted small">
+      <h4 class="page-title mb-1">My Applications</h4>
+      <p class="page-subtitle mb-0">
         Track the status of jobs you’ve applied for
       </p>
+
     </div>
   </div>
 
@@ -14,23 +15,16 @@
   <div class="row g-3 align-items-end mb-3">
 
     <!-- Search -->
-    <div class="col-md-6">
-      <input
-        type="text"
-        class="form-control form-control-sm"
-        placeholder="Search job title"
-        [(ngModel)]="filters.search"
-        (input)="applyFilters()"
-      />
+    <div class="col-12 col-md-3">
+
+      <input type="text" class="form-control form-control-sm" placeholder="Search job title"
+        [(ngModel)]="filters.search" (input)="applyFilters()" />
     </div>
 
     <!-- Status -->
-    <div class="col-md-6">
-      <select
-        class="form-select form-select-sm"
-        [(ngModel)]="filters.jobStatus"
-        (change)="applyFilters()"
-      >
+    <div class="col-12 col-md-3">
+
+      <select class="form-select form-select-sm" [(ngModel)]="filters.jobStatus" (change)="applyFilters()">
         <option value="">Application Status</option>
         <option value="Pending">Applied</option>
         <option value="Shortlisted">Shortlisted</option>
@@ -47,15 +41,15 @@
     <div class="col-12 col-md d-flex flex-wrap gap-2">
 
       @if (filters.search) {
-        <span class="filter-badge" (click)="clearFilter('search')">
-          Search: <strong>{{ filters.search }}</strong> ×
-        </span>
+      <span class="filter-badge" (click)="clearFilter('search')">
+        Search: <strong>{{ filters.search }}</strong> ×
+      </span>
       }
 
       @if (filters.jobStatus) {
-        <span class="filter-badge" (click)="clearFilter('jobStatus')">
-          Status: <strong>{{ filters.jobStatus }}</strong> ×
-        </span>
+      <span class="filter-badge" (click)="clearFilter('jobStatus')">
+        Status: <strong>{{ filters.jobStatus }}</strong> ×
+      </span>
       }
 
     </div>
@@ -69,96 +63,210 @@
 
   </div>
 
+  @if (filteredJobPosts.length > 0) {
   <!-- Job Cards -->
-  <div class="row job-cards mt-4 mb-5">
+  <div class="row job-cards mt-4">
+
 
     @for (job of filteredJobPosts; track job._id) {
 
-      <div class="col-12 col-sm-6 col-lg-4 mb-4">
-<div class="job-card  h-100">
+<div class="col-12 col-sm-6 col-lg-4 mb-4">
 
+      <div class="job-card ">
 
-              <!-- Status Badge -->
-<!-- Status Badge (Top Right) -->
-<span
-  class="badge status-badge"
-  [ngClass]="{
-    'bg-secondary': job.applicationStatus === 'Pending',
-    'bg-info': job.applicationStatus === 'Shortlisted',
-    'bg-success': job.applicationStatus === 'Hired',
+        <span class="badge status-badge" [ngClass]="{
+    'bg-warning text-dark': job.applicationStatus === 'Pending',
+    'bg-primary': job.applicationStatus === 'InProcess',
+    'bg-success': job.applicationStatus === 'Shortlisted',
     'bg-danger': job.applicationStatus === 'Rejected'
-  }"
->
-  {{ job.applicationStatus }}
-</span>
+  }">
+          {{ job.applicationStatus }}
+        </span>
 
 
-          <div class="card-body d-flex flex-column p-3">
+        <div class="card-body d-flex flex-column p-3">
 
-            <!-- Company -->
+          <!-- Company -->
 
 
-<div class="d-flex justify-content-between mb-3">
+          <div class="d-flex align-items-start gap-3 mb-2">
+            <img [src]="job.company.logo" class="company-logo">
 
-  <div class="d-flex flex-column">
-    <img
-      [src]="job.company.logo || 'assets/default-company.png'"
-      class="company-logo mb-1"
-      alt="Company Logo"
-    />
+            <div class="flex-grow-1">
+              <h6 class="fw-semibold mb-1 job-title">
+                {{ job.jobTitle }}
+              </h6>
 
-    <span class="company-name">
-      {{ job.company.name }}
-    </span>
+              <div class="text-muted small d-flex gap-2 flex-wrap">
+                <span>{{ job.location }}</span>
+                <span>•</span>
+                <span>{{ job.jobType }}</span>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Description -->
+          <p class="card-text text-muted mb-3">
+            {{ job.jobDescription }}
+          </p>
+
+
+
+          <!-- View -->
+          <!-- Applied date + Tracking -->
+          <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top">
+
+            <!-- Applied On (LEFT) -->
+            <span class="text-muted small">
+              Applied on
+              {{ job.appliedOn | date:'dd MMM yyyy' }}
+            </span>
+
+            <!-- View Tracking (RIGHT) -->
+            <button class="btn  btn-sm  btn-view-tracking" (click)="viewTracking(job)">
+              View Tracking
+            </button>
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    }
+
   </div>
+  }
+  <!-- Empty State -->
+  @if (filteredJobPosts.length === 0) {
+  <div class="text-center my-5">
+    <i class="bi bi-briefcase fs-1 text-muted mb-3 d-block"></i>
+    <h6>No applied jobs found</h6>
+    <p class="text-muted small">
+      Try adjusting your filters
+    </p>
+  </div>
+  }
 
 </div>
 
 
 
+<!-- Application Tracking Offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="trackingOffcanvas">
+  <div class="offcanvas-header align-items-start">
 
-            <!-- Job Title -->
-            <h6 class="fw-semibold mb-1">
-              {{ job.jobTitle }}
-            </h6>
+    <div class="d-flex align-items-center gap-3">
+      <!-- Company Logo -->
+      <img [src]="selectedJob?.company?.logo" alt="Company Logo" class="company-logo"
+        style="width:36px; height:36px;" />
 
-            <div class="text-muted small mb-2">
-              {{ job.location }} • {{ job.jobType }}
-            </div>
+      <!-- Company + Title -->
+      <div>
+        <h6 class="mb-0 fw-semibold">
+          {{ selectedJob?.company?.name }}
+        </h6>
+        <small class="text-muted">
+          {{ selectedJob?.location }}
+        </small>
+      </div>
+    </div>
 
-                      <!-- Description -->
-          <p class="card-text text-muted mb-3" style="font-size:14px;">
-            {{ job.jobDescription | slice:0:100 }}...
-          </p>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas">
+    </button>
 
+  </div>
 
+  <div class="offcanvas-body">
 
-            <!-- View -->
-            <div class="mt-auto text-center">
-              <button
-                class="btn btn-outline-secondary btn-sm "
-              >
-                View Details
-              </button>
-            </div>
+    @if (selectedJob) {
 
+    <!-- Job Info -->
+    <h6 class="fw-semibold mb-1">
+      {{ selectedJob.jobTitle }} - {{ selectedJob.jobId }}
+    </h6>
+    <p class="text-muted small mb-3">
+      Applied on {{ selectedJob.appliedOn | date:'dd MMM yyyy' }}
+    </p>
+
+    <ul class="list-group list-group-flush">
+
+      <h5 class="mb-4">Application Tracking</h5>
+
+      <div class="tracking-timeline">
+
+        <!-- Applied -->
+        <div class="timeline-item status-pending">
+
+          <div class="dot"></div>
+          <div class="content">
+            <h6>Applied</h6>
+            <small class="text-muted">
+              {{ selectedJob.appliedOn | date:'dd MMM yyyy' }}
+            </small>
           </div>
         </div>
+
+        <!-- Assessment -->
+        <div class="timeline-item" [ngClass]="{
+    'status-inprocess': selectedJob.assessmentAssigned && !selectedJob.assessmentSubmitted,
+    'status-completed': selectedJob.assessmentSubmitted
+  }">
+
+          <div class="dot"></div>
+          <div class="content">
+            <h6>Assessment</h6>
+            <small class="text-muted">
+              {{
+              selectedJob.assessmentAssigned
+              ? (selectedJob.assessmentSubmitted ? 'Completed' : 'Assigned')
+              : 'Pending'
+              }}
+            </small>
+          </div>
+        </div>
+
+        <!-- Interview -->
+        <div class="timeline-item" [ngClass]="{
+    'status-inprocess': selectedJob.interviewScheduled && !selectedJob.interviewCompleted,
+    'status-completed': selectedJob.interviewCompleted
+  }">
+
+          <div class="dot"></div>
+          <div class="content">
+            <h6>Interview</h6>
+            <small class="text-muted">
+              {{
+              selectedJob.interviewScheduled
+              ? (selectedJob.interviewCompleted ? 'Completed' : 'Scheduled')
+              : 'Pending'
+              }}
+            </small>
+          </div>
+        </div>
+
+        <!-- Offer -->
+        <div class="timeline-item" [ngClass]="{
+    'status-completed': selectedJob.offerLetter,
+    'status-rejected': selectedJob.applicationStatus === 'Rejected'
+  }">
+
+          <div class="dot"></div>
+          <div class="content">
+            <h6>Offer Letter</h6>
+            <small class="text-muted">
+              {{ selectedJob.offerLetter ? 'Released' : 'Pending' }}
+            </small>
+          </div>
+        </div>
+
       </div>
+
+    </ul>
 
     }
 
   </div>
-
-  <!-- Empty State -->
-  @if (filteredJobPosts.length === 0) {
-    <div class="text-center my-5">
-      <i class="bi bi-briefcase fs-1 text-muted mb-3 d-block"></i>
-      <h6>No applied jobs found</h6>
-      <p class="text-muted small">
-        Try adjusting your filters
-      </p>
-    </div>
-  }
-
 </div>

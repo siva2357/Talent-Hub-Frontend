@@ -1,3 +1,4 @@
+import { Proficiency } from './../enums/language.enum';
 
 
 /* =========================
@@ -12,6 +13,7 @@ export interface JobSeekerProfile {
   email: string;
   mobile: string;
   gender: 'Male' | 'Female' | 'Other';
+  currentExperience: Experience;
   experiences: Experience[];
   certifications: Certification[];
   languages: Language[];
@@ -24,7 +26,7 @@ export interface JobSeekerProfile {
 export interface Language {
   _id:string;
   language: string;
-  level: string;
+  proficiency: string;
 }
 
 export interface CompanyIdProof {
