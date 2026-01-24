@@ -2,11 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, switchMap, tap, throwError } from 'rxjs';
 import { Login, LoginResponse } from '../models/auth.model';
-import { Recruiter, JobSeeker } from '../models/user.model';
 import { Router } from '@angular/router';
 import {jwtDecode} from 'jwt-decode' ;
 import { environment } from '../../../environments/environment';
-import { JobSeekerSignupPayload, RecruiterSignupPayload } from '../models/auth.dto';
 import { RegistrationPayload, RegistrationResponse } from '../dtos/auth.dto';
 @Injectable({
   providedIn: 'root'

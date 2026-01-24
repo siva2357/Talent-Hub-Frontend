@@ -1,249 +1,175 @@
-<div class="container  pt-5 mb-5">
+<div class="container mt-4">
 
-  <!-- MOBILE BACK BUTTON -->
-  <div class="mobile-back p-3  d-flex align-items-center" (click)="goBack()">
-    <i class="bi bi-arrow-left me-2 fs-5"></i> Back
+  <div class="mobile-back p-3 d-flex align-items-center" (click)="goBack()">
+    <i class="bi bi-arrow-left me-2 fs-4"></i> Back
   </div>
 
-
-  <!-- Loading -->
+  <!-- LOADING -->
   @if (loading) {
   <div class="text-center my-5">
     <div class="spinner-border text-secondary"></div>
   </div>
   }
 
-  <!-- Error -->
+  <!-- ERROR -->
   @if (!loading && errorMessage) {
-  <div class="alert alert-danger">
-    {{ errorMessage }}
-  </div>
+  <div class="alert alert-danger">{{ errorMessage }}</div>
   }
+
+  <!-- HEADER -->
   @if (!loading && applicants.length > 0) {
 
-  <h5 class="mb-4 text-center">
-    Applicants ({{ applicants.length }})
+  <h5 class="mb-3">
+    Applicants : <strong>{{ applicants.length }}</strong>
   </h5>
 
-  <div class="row justify-content-center">
+  <div class="row g-3 applicants-card-wrapper">
 
-    @for (applicant of applicants; track applicant.jobSeekerId) {
+    @for (applicant of applicants; track applicant.jobSeekerId; let i = $index) {
 
-    <div class="col-12 col-md-10 col-lg-8 mb-4">
+    <div class="col-xl-4 col-lg-4 col-md-6 col-12">
 
-      <div class="card shadow-sm border border-dark rounded-4">
+      <div class="card applicant-card shadow-sm h-100">
 
-        <div class="card-body p-4">
+        <!-- HEADER -->
+        <div class="card-body">
 
-          <!-- HEADER -->
-          <!-- HEADER -->
-          <div class="d-flex align-items-start align-items-md-center gap-3 mb-3 flex-wrap">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <img [src]="applicant.profileImage || 'https://via.placeholder.com/50'" class="rounded-circle border"
+              style="width:50px;height:50px;object-fit:cover" />
 
-            <img [src]="applicant.profileImage || 'https://via.placeholder.com/70'"
-              class="rounded-circle border flex-shrink-0" style="width:70px;height:70px;object-fit:cover" />
-
-            <div class="flex-grow-1 min-w-0">
-              <h6 class="mb-1 fw-semibold text-truncate">
-                {{ applicant.fullName || 'Unnamed Applicant' }}
-              </h6>
-              <small class="text-muted">
-                {{ applicant.gender }}
-              </small>
+            <div class="flex-grow-1">
+              <h6 class="mb-0 text-truncate">{{ applicant.fullName }}</h6>
+              <small class="text-muted">{{ applicant.gender }}</small>
             </div>
 
+            <!-- ACTION MENU -->
+            <div class="dropdown">
+              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+                <i class="bi bi-three-dots"></i>
+              </button>
 
-            <!-- STATUS + DROPDOWN (RECRUITER VIEW) -->
-            <div class="d-flex align-items-center gap-2">
-<span
-  class="badge px-3 py-2"
-  [ngClass]="{
-    'bg-primary': applicant.status === 'InProcess',
-    'bg-info': applicant.status === 'Shortlisted',
-    'bg-danger': applicant.status === 'Rejected'
-  }"
->
-  {{ applicant.status }}
-</span>
+              <ul class="dropdown-menu dropdown-menu-end action-dropdown shadow">
 
+                <li class="dropdown-header small text-muted">
+                  Applicant Actions
+                </li>
 
-              <!-- RECRUITER ACTIONS -->
-              <div class="dropdown">
-
-                <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown"
-                  aria-expanded="false">
-                  <i class="bi bi-three-dots-vertical"></i>
-                </button>
-
-                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-
-<li>
-  @if (!applicant.assessmentAssigned) {
-    <!-- NOT ASSIGNED -->
-    <button
-      class="dropdown-item"
-      (click)="openAssignAssessmentModal(applicant)">
-      <i class="bi bi-file-earmark-plus me-2"></i>
-      Assign Assessment
-    </button>
-  }
-
-  @else if (!applicant.assessmentSubmitted) {
-    <!-- ASSIGNED BUT NOT SUBMITTED -->
-    <button
-      class="dropdown-item"
-      (click)="openUpdateAssessmentModal(applicant)">
-      <i class="bi bi-pencil-square me-2"></i>
-      Update Assessment
-    </button>
-  }
-
-  @else {
-    <!-- SUBMITTED -->
-    <span class="dropdown-item text-success fw-semibold disabled">
-      <i class="bi bi-file-earmark-check me-2"></i>
-      Assessment Submitted
-    </span>
-  }
-</li>
+                <li>
+                  <button class="dropdown-item" (click)="viewApplicantProfile(applicant.jobSeekerId)">
+                    <i class="bi bi-person-circle me-2 text-primary"></i>
+                    View Profile
+                  </button>
+                </li>
 
 
+                <!-- ASSESSMENT -->
+                <li>
+                  @if (!applicant.assessmentAssigned) {
+                  <button class="dropdown-item" (click)="openAssignAssessmentModal(applicant)">
+                    <i class="bi bi-file-earmark-plus me-2 text-info"></i>
+                    Assign Assessment
+                  </button>
+                  }
+                  @else if (!applicant.assessmentSubmitted) {
+                  <button class="dropdown-item" (click)="openUpdateAssessmentModal(applicant)">
+                    <i class="bi bi-pencil-square me-2 text-warning"></i>
+                    Update Assessment
+                  </button>
+                  }
+                  @else {
+                  <span class="dropdown-item disabled text-success fw-semibold">
+                    <i class="bi bi-file-earmark-check me-2"></i>
+                    Assessment Submitted
+                  </span>
+                  }
+                </li>
 
-<li>
-
-    @if (!applicant.interviewCompleted) {
-      <button
-        type="button"
-        class="dropdown-item"
-        (click)="openInterviewModal(applicant)"
-      >
-        <i class="bi"
-           [ngClass]="applicant.interviewScheduled
-             ? 'bi-pencil-square'
-             : 'bi-calendar-event'">
-        </i>
-        <span class="ms-2">
-          {{ applicant.interviewScheduled ? 'Edit Interview' : 'Schedule Interview' }}
-        </span>
-      </button>
-    }
-    @else {
-      <span class="dropdown-item text-success fw-semibold disabled">
-        <i class="bi bi-check-circle me-2"></i>
-        Interview Completed
-      </span>
-    }
-
-</li>
-
-
-
-
-<!-- ACTIONS BASED ON STATUS -->
-
-<!-- InProcess → can Shortlist or Reject -->
-@if (applicant.status === 'InProcess' && applicant.interviewCompleted) {
-
-  <li>
-    <button
-      class="dropdown-item text-success"
-      (click)="shortlistApplicant(applicant)">
-      <i class="bi bi-check-circle me-2"></i>
-      Shortlist
-    </button>
-  </li>
-
-  <li>
-    <button
-      class="dropdown-item text-danger"
-      (click)="rejectApplicant(applicant)">
-      <i class="bi bi-x-circle me-2"></i>
-      Reject
-    </button>
-  </li>
-
-}
-
-<!-- Shortlisted → show only status -->
-@if (applicant.status === 'Shortlisted') {
-  <li>
-    <span class="dropdown-item text-success fw-semibold disabled">
-      <i class="bi bi-check-circle me-2"></i>
-      Shortlisted
-    </span>
-  </li>
-}
-
-<!-- Rejected → show only status -->
-@if (applicant.status === 'Rejected') {
-  <li>
-    <span class="dropdown-item text-danger fw-semibold disabled">
-      <i class="bi bi-x-circle me-2"></i>
-      Rejected
-    </span>
-  </li>
-}
+                <!-- INTERVIEW -->
+                <li>
+                  @if (!applicant.interviewCompleted) {
+                  <button class="dropdown-item" (click)="openInterviewModal(applicant)">
+                    <i class="bi me-2 text-secondary" [ngClass]="applicant.interviewScheduled
+            ? 'bi-pencil-square'
+            : 'bi-calendar-event'"></i>
+                    {{ applicant.interviewScheduled ? 'Edit Interview' : 'Schedule Interview' }}
+                  </button>
+                  }
+                  @else {
+                  <span class="dropdown-item disabled text-success fw-semibold">
+                    <i class="bi bi-check-circle me-2"></i>
+                    Interview Completed
+                  </span>
+                  }
+                </li>
 
 
+                <!-- FINAL STATUS -->
+                @if (applicant.status === 'InProcess' && applicant.interviewCompleted) {
+                <li>
+                  <button class="dropdown-item action-success" (click)="shortlistApplicant(applicant)">
+                    <i class="bi bi-check-circle me-2"></i>
+                    Shortlist
+                  </button>
+                </li>
 
-                </ul>
-              </div>
+                <li>
+                  <button class="dropdown-item action-danger" (click)="rejectApplicant(applicant)">
+                    <i class="bi bi-x-circle me-2"></i>
+                    Reject
+                  </button>
+                </li>
+                }
+
+                @if (applicant.status === 'Shortlisted') {
+                <li>
+                  <span class="dropdown-item disabled action-success fw-semibold">
+                    <i class="bi bi-check-circle me-2"></i>
+                    Shortlisted
+                  </span>
+                </li>
+                }
+
+                @if (applicant.status === 'Rejected') {
+                <li>
+                  <span class="dropdown-item disabled action-danger fw-semibold">
+                    <i class="bi bi-x-circle me-2"></i>
+                    Rejected
+                  </span>
+                </li>
+                }
+
+              </ul>
 
             </div>
-
           </div>
 
-          <div class="row text-muted mb-3">
-
-            <div class="col-12 col-md-6 d-flex align-items-center gap-2 small min-w-0">
-              <i class="bi bi-envelope"></i>
-              <span class="text-truncate">{{ applicant.email }}</span>
-            </div>
-
-            <div class="col-12 col-md-6 d-flex align-items-center gap-2 small mt-1 mt-md-0">
-              <i class="bi bi-telephone"></i>
-              <span>{{ applicant.phoneNumber }}</span>
-            </div>
-
+          <!-- DETAILS -->
+          <div class="small text-muted mb-2">
+            <i class="bi bi-envelope me-1"></i> {{ applicant.email }}
           </div>
 
-
-          <!-- META -->
-          <div class="text-muted small mb-4">
-            Applied on {{ applicant.appliedAt | date:'mediumDate' }}
+          <div class="small text-muted mb-2">
+            <i class="bi bi-telephone me-1"></i> {{ applicant.phoneNumber }}
           </div>
 
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <span class="badge" [ngClass]="{
+                  'bg-warning': applicant.status === 'Pending',
+                  'bg-primary': applicant.status === 'InProcess',
+                  'bg-info': applicant.status === 'Shortlisted',
+                  'bg-danger': applicant.status === 'Rejected'
+                }">
+              {{ applicant.status }}
+            </span>
 
-@if (applicant.status === 'Rejected') {
-  <div class="alert alert-danger py-2 px-3 small mb-4">
-    <strong>Rejected:</strong>
-    {{ applicant.rejectionReason || 'Not selected after evaluation' }}
-  </div>
-} @else {
-  <div class="mb-4"></div>
-}
-
-<div class="mt-3 pt-3 border-top">
-  <div class="d-flex flex-wrap gap-2">
-
-    <!-- View Profile -->
-    <button
-      class="btn btn-outline-primary btn-sm px-3"
-      (click)="viewApplicantProfile(applicant.jobSeekerId)">
-      View Profile
-    </button>
-
-
-  </div>
-</div>
-
-
-
-
-
+            <small class="text-muted">
+              {{ applicant.appliedAt | date:'dd MMM yyyy' }}
+            </small>
+          </div>
 
         </div>
       </div>
-
     </div>
 
     }
@@ -251,22 +177,17 @@
   </div>
   }
 
-  <!-- No Applicants -->
+
+  <!-- EMPTY -->
   @if (!loading && applicants.length === 0) {
   <div class="text-center my-5">
-    <i class="bi bi-people fs-1 text-muted d-block mb-2"></i>
+    <i class="bi bi-people fs-1 text-muted mb-2"></i>
     <h6>No applicants found</h6>
-    <p class="text-muted small">
-      No one has applied for this job yet.
-    </p>
+    <p class="text-muted small">No one has applied yet.</p>
   </div>
   }
 
 </div>
-
-
-
-
 
 
 <!-- ================= INTERVIEW MODAL ================= -->
@@ -288,76 +209,48 @@
         <!-- Applicant -->
         <div class="mb-3">
           <label class="form-label">Applicant</label>
-          <input
-            type="text"
-            class="form-control"
-            [value]="selectedApplicant?.fullName"
-            disabled
-          />
+          <input type="text" class="form-control" [value]="selectedApplicant?.fullName" disabled />
         </div>
 
         <!-- Interview Title -->
         <div class="mb-3">
           <label class="form-label">Interview Title</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Frontend Developer – Technical Interview"
-            [(ngModel)]="interviewForm.title"
-          />
+          <input type="text" class="form-control" placeholder="Frontend Developer – Technical Interview"
+            [(ngModel)]="interviewForm.title" />
         </div>
 
         <!-- Interview Description -->
         <div class="mb-3">
           <label class="form-label">Interview Description</label>
-          <textarea
-            class="form-control"
-            rows="3"
+          <textarea class="form-control" rows="3"
             placeholder="Discussion on Angular, system design, and problem solving"
-            [(ngModel)]="interviewForm.description"
-          ></textarea>
+            [(ngModel)]="interviewForm.description"></textarea>
         </div>
 
         <!-- Meeting Join URL -->
-<div class="mb-3">
-  <label class="form-label">Meeting Link</label>
-  <input
-    type="url"
-    class="form-control"
-    placeholder="https://meet.google.com/xxx-xxxx-xxx"
-    [(ngModel)]="interviewForm.meetingJoinUrl"
-  />
-</div>
+        <div class="mb-3">
+          <label class="form-label">Meeting Link</label>
+          <input type="url" class="form-control" placeholder="https://meet.google.com/xxx-xxxx-xxx"
+            [(ngModel)]="interviewForm.meetingJoinUrl" />
+        </div>
 
 
         <!-- Date -->
         <div class="mb-3">
           <label class="form-label">Interview Date</label>
-          <input
-            type="date"
-            class="form-control"
-            [(ngModel)]="interviewForm.date"
-          />
+          <input type="date" class="form-control" [(ngModel)]="interviewForm.date" />
         </div>
 
         <!-- Time -->
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label">Start Time</label>
-            <input
-              type="time"
-              class="form-control"
-              [(ngModel)]="interviewForm.startTime"
-            />
+            <input type="time" class="form-control" [(ngModel)]="interviewForm.startTime" />
           </div>
 
           <div class="col-md-6 mb-3">
             <label class="form-label">End Time</label>
-            <input
-              type="time"
-              class="form-control"
-              [(ngModel)]="interviewForm.endTime"
-            />
+            <input type="time" class="form-control" [(ngModel)]="interviewForm.endTime" />
           </div>
         </div>
 
@@ -391,9 +284,6 @@
 </div>
 
 
-
-
-
 <!-- ================= ASSIGN ASSESSMENT MODAL ================= -->
 <div class="modal fade" id="assignAssessmentModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -421,19 +311,21 @@
           <input class="form-control" [value]="jobCategory" disabled />
         </div>
 
-<div class="mb-3">
-  <label class="form-label">Assessment Link</label>
-  <input
-    type="url"
-    class="form-control"
-    [(ngModel)]="assessmentLink"
-    placeholder="https://forms.google.com / hackerrank.com"
-  />
-</div>
+        <div class="mb-3">
+          <label class="form-label">Assessment Link</label>
+          <input type="url" class="form-control" [(ngModel)]="assessmentLink"
+            placeholder="https://forms.google.com / hackerrank.com" />
+        </div>
 
-<!-- STATUS (READ ONLY) -->
-<div *ngIf="isAssessmentEditMode && assessmentStatus" class="mb-3">
-  <label class="form-label">Assessment Status</label>
+        <!-- STATUS (READ ONLY) -->
+@if (isAssessmentEditMode && assessmentStatus) {
+
+
+<div class="mb-3 d-flex align-items-center gap-3">
+
+  <label class="form-label mb-0">
+    Assessment Status
+  </label>
 
   <span
     class="badge px-3 py-2"
@@ -441,11 +333,14 @@
       'bg-primary': assessmentStatus === 'Assigned',
       'bg-warning text-dark': assessmentStatus === 'Completed',
       'bg-success': assessmentStatus === 'Reviewed'
-    }"
-  >
+    }">
     {{ assessmentStatus }}
   </span>
+
 </div>
+
+}
+
 
 
       </div>
@@ -454,9 +349,9 @@
         <button class="btn btn-outline-secondary" (click)="closeAssignModal()">
           Cancel
         </button>
-<button class="btn btn-primary" (click)="submitAssessment()">
-  {{ isAssessmentEditMode ? 'Update Assessment' : 'Assign Assessment' }}
-</button>
+        <button class="btn btn-primary" (click)="submitAssessment()">
+          {{ isAssessmentEditMode ? 'Update Assessment' : 'Assign Assessment' }}
+        </button>
 
       </div>
 

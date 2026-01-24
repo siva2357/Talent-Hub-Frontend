@@ -1,32 +1,22 @@
 export interface Interview {
   _id: string;
-
   meetingId: string;
   sessionId: string;
-
   recruiterId: string;
   recruiterName: string;
-
   jobSeekerId: string;
   jobSeekerName: string;
-
+  profilePhoto:string;
   jobPostId: string;
   jobId: string;
   jobTitle: string;
-
-  // ✅ ADD THESE (YOU MISSED THEM)
   interviewTitle: string;
   interviewDescription?: string;
-
   scheduledDate: Date;
-
   startTime: Date;
   endTime: Date;
-
   meetingJoinUrl: string;
-
   status: 'Scheduled' | 'Completed' | 'Not Completed';
-
   createdAt?: Date;
   updatedAt?: Date;
 }
