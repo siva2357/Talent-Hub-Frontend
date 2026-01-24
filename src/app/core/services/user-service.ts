@@ -67,6 +67,21 @@ getTalentProfileById(id: string): Observable<any> {
   }
 
 
+getShortlistedTalents(
+  jobPostId: string
+): Observable<{ total: number; candidates: Talent[] }> {
+
+  return this.http
+    .get<{ total: number; candidates: Talent[] }>(
+      `${this.baseUrl}/jobs/${jobPostId}/shortlisted-candidates`,
+      { headers: this.getHeaders() }
+    )
+    .pipe(
+      catchError(error => this.handleError(error))
+    );
+}
+
+
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
