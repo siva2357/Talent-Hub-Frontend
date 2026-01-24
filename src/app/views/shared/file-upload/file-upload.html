@@ -1,36 +1,19 @@
 <div class="file-upload-wrapper text-center">
 
   <!-- Hidden file input -->
-  <input
-    type="file"
-    [accept]="accept"
-    hidden
-    #fileInput
-    (change)="onFileSelect($event)"
-  />
+  <input type="file"  [accept]="accept" hidden #fileInput  (change)="onFileSelect($event)"/>
 
   <!-- Upload button -->
-  <button
-    type="button"
-    class="btn btn-outline-primary upload-btn"
-    (click)="fileInput.click()">
-
-    <i class="bi bi-upload me-2"></i>
-    Upload File
-
+  <button type="button" class="btn btn-outline-primary upload-btn" (click)="fileInput.click()">
+    <i class="bi bi-upload me-2"></i> Upload File
   </button>
 
   <!-- Upload progress -->
   @if (uploading) {
     <div class="upload-progress mt-3">
       <div class="progress">
-        <div
-          class="progress-bar bg-success progress-bar-striped progress-bar-animated"
-          [style.width.%]="progress">
-        </div>
+        <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" [style.width.%]="progress"> </div>
       </div>
-
-
       <small class="text-muted mt-1 d-block">
         Uploading… {{ progress }}%
       </small>
