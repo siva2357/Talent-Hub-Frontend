@@ -44,9 +44,20 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         message = 'Unable to connect to server. Please try again.';
       }
 
-      if (error.status === 401) {
-        message = 'Session expired. Please login again.';
-      }
+
+  // ❌ AUTH FAILURE (ONLY 401)
+  if (error.status === 401) {
+    toastr.error('Session expired. Please login again.');
+    // optional: redirect to login here
+    return throwError(() => error);
+  }
+
+  // ✅ BUSINESS RULE (403)
+  if (error.status === 403) {
+    toastr.warning(message);
+    return throwError(() => error);
+  }
+
 
       toastr.error(message);
       return throwError(() => error);
