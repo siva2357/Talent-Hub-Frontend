@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppNotification } from '../../../core/models/notification.model';
 import { NotificationService } from '../../../core/services/notification-service';
-import { RouterOutlet, RouterModule, Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth-service';
 interface Notification {
   message: string;
