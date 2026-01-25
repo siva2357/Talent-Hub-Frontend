@@ -25,11 +25,11 @@ export class HeaderLayout implements OnInit {
   }
 
 goToLogin() {
-  window.open('/login', '_blank');
+  window.open(`${window.location.origin}/login`, '_blank', 'noopener,noreferrer');
 }
 
 goToSignup() {
-  window.open('/sign-up', '_blank');
+  window.open(`${window.location.origin}/sign-up`, '_blank', 'noopener,noreferrer');
 }
 
 }
