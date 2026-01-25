@@ -36,7 +36,7 @@ export class Admin implements OnInit{
   this.userId = localStorage.getItem('userId') || this.authService.getUserId() || '';
   const role = localStorage.getItem('userRole') || this.authService.getRole() || '';
   this.fullName = this.authService.getFullName() ||"";
-  this.profileImage = this.authService.getUserData()?.profilePicture || '';
+  this.profileImage = this.authService.getUserData()?.profileImage || '';
 
   this.userRole = role;
 
