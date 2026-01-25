@@ -12,7 +12,7 @@
           <app-file-preview [fileUrl]="profilePhotoUrl"></app-file-preview>
           <div class="mt-3">
             <app-file-upload [bucketKey]="BucketKey.RECRUITER_DATA" [section]="UploadSection.PROFILE_PHOTO"
-              [preLoginUserId]="userId" accept="image/*" (uploaded)="onPhotoUploaded($event)">
+              accept="image/*" (uploaded)="onPhotoUploaded($event)">
             </app-file-upload>
           </div>
 
@@ -95,7 +95,7 @@
               <div class="company-logo-box mt-2">
                 <app-file-preview [fileUrl]="logoUrl"></app-file-preview>
 
-                <app-file-upload class="mt-3" [bucketKey]="BucketKey.RECRUITER_DATA" [preLoginUserId]="userId"
+                <app-file-upload class="mt-3" [bucketKey]="BucketKey.RECRUITER_DATA"
                   [section]="UploadSection.COMPANY_LOGO" accept="image/*" (uploaded)="onlogoUploaded($event)">
                 </app-file-upload>
               </div>

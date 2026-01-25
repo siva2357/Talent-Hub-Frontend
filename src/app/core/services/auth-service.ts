@@ -35,7 +35,7 @@ register(data: RegistrationPayload): Observable<RegistrationResponse> {
 
 
 login(loginData: Login): Observable<LoginResponse> {
-  return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login/user`, loginData,  { withCredentials: true })
+  return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login/user`, loginData,)
     .pipe(
       tap(response => {
         if (response && response.role && response.token !== undefined) {

@@ -55,7 +55,6 @@ submit(): void {
     this.registrationForm.markAllAsTouched();
     return;
   }
-
   const payload = {
     registrationDetails: this.registrationForm.value,
     role: this.role
@@ -63,17 +62,23 @@ submit(): void {
 
   this.authService.register(payload).subscribe({
     next: res => {
-      if (!res.result) return;
-
-      localStorage.setItem(`${this.role}Registration`, JSON.stringify(res.result));
-
-      this.router.navigate([ this.role === 'recruiter' ? 'register/recruiter-profile-form' : 'register/jobSeeker-profile-form'
-      ]);
+      if (!res?.result) return;
+      const email = this.registrationForm.value.email;
+      this.router.navigate(
+        ['register/otp-verification'],
+        {
+          queryParams: {
+            email: email,
+            role: this.role
+          }
+        }
+      );
     },
     error: () => {
-      // optional: show toast / error msg
+      // optional: show error toast
     }
   });
 }
+
 
 }

@@ -1,14 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators,} from '@angular/forms';
 import { BucketKey } from '../../../core/enums/bucket-key.constant';
 import { UploadSection } from '../../../core/enums/upload-section.constant';
 import { SeekerProfileService } from '../../../core/services/seeker-profile-service';
@@ -310,20 +301,8 @@ this.socialProfiles.push(
       ...this.profileForm.getRawValue(),
     };
 
-    this.jobSeekerProfileService.createProfile(payload).subscribe({
-      next: () => {
-        localStorage.removeItem('jobSeekerRegistration');
-
-this.router.navigate(
-  ['/register/otp-verification'],
-  {
-    queryParams: {
-      email: this.email,
-      role: this.role
-    }
-  }
-);
-      },
+    this.jobSeekerProfileService.createProfile(payload).subscribe(()=>{
+        this.router.navigate(['/jobSeeker']);
     });
   }
 }

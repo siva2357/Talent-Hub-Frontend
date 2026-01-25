@@ -28,9 +28,19 @@ export class SeekerProfileService  {
 
   constructor(private http: HttpClient, private router: Router) { }
 
+
+
   createProfile(payload: any) {
-    return this.http.post(`${this.baseUrl}/jobSeeker/createProfile`, payload);
-  }
+  return this.http.post(
+    `${this.baseUrl}/jobSeeker/createProfile`,
+    payload,
+    {
+      headers: this.getHeaders()
+    }
+  )
+    .pipe(catchError(error => this.handleError(error)));
+}
+
 
 getJobSeekerProfile(): Observable<ApiResponse<JobSeekerProfileResponse>> {
   return this.http

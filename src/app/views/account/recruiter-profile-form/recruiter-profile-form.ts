@@ -68,7 +68,7 @@ proficiencyLevels = Object.values(Proficiency);
   ) {}
 
   ngOnInit(): void {
-    const stored = localStorage.getItem('recruiterRegistration');
+    const stored = localStorage.getItem('userData');
     if (!stored) {
       this.router.navigate(['/sign-up/recruiter']);
       return;
@@ -309,10 +309,7 @@ submitProfile(): void {
   };
 
   this.recruiterProfileService.createProfile(payload).subscribe(() => {
-    localStorage.removeItem('recruiterRegistration');
-    this.router.navigate(['/register/otp-verification'], {
-      queryParams: { email: this.email, role: this.role }
-    });
+    this.router.navigate(['/recruiter']);
   });
 }
 

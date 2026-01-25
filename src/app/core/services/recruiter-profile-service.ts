@@ -24,9 +24,17 @@ export class RecruiterProfileService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  createProfile(payload: any) {
-    return this.http.post(`${this.baseUrl}/recruiter/createProfile`, payload);
-  }
+createProfile(payload: any) {
+  return this.http.post(
+    `${this.baseUrl}/recruiter/createProfile`,
+    payload,
+    {
+      headers: this.getHeaders()
+    }
+  )
+    .pipe(catchError(error => this.handleError(error)));
+}
+
 
 getRecruiterProfile(): Observable<ApiResponse<RecruiterProfileResponse>> {
   return this.http

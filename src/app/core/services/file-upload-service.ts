@@ -24,33 +24,22 @@ export class FileUploadService {
     file: File,
     bucketKey: string,
     section: string,
-    userId?: string,
-      replace = false
+    replace = false
   ) {
-
     const formData = new FormData();
     formData.append('file', file);
     formData.append('bucketKey', bucketKey);
     formData.append('section', section);
-  formData.append('replace', String(replace)); // ✅ important
-    let url = this.API + '/upload';
+    formData.append('replace', String(replace));
 
-    // 🔓 PRE-LOGIN (NO TOKEN)
-    if (userId) {
-      formData.append('userId', userId);
-      url = this.API + '/pre-login';
-
-      return this.http.post<UploadResponse>(url, formData, {
+    return this.http.post<UploadResponse>(
+      this.API + '/upload',
+      formData,
+      {
+        headers: this.getAuthHeaders(),
         reportProgress: true,
         observe: 'events'
-      });
-    }
-
-    // 🔐 AUTHENTICATED UPLOAD (TOKEN REQUIRED)
-    return this.http.post<UploadResponse>(url, formData, {
-      headers: this.getAuthHeaders(),
-      reportProgress: true,
-      observe: 'events'
-    });
+      }
+    );
   }
 }

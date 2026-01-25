@@ -45,8 +45,8 @@ export const routes: Routes = [
   //auth pages
   { path: 'sign-up', component: SingupPage, title: 'Singup' },
   { path: 'register', component: RegistrationPage, title: 'Register recruiter' },
-  { path: 'register/recruiter-profile-form', component: RecruiterProfileForm },
-  { path: 'register/jobSeeker-profile-form', component: SeekerProfileForm },
+  { path: 'recruiter-profile-form', component: RecruiterProfileForm },
+  { path: 'jobSeeker-profile-form', component: SeekerProfileForm },
   { path: 'register/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
   { path: 'login', component: LoginPage, title: 'Login' },
