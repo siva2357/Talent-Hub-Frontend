@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiGatewayUrl: 'https://talent-hub-backend.onrender.com/api',
+  apiGatewayUrl: 'https://talent-hub-backend-hel3.onrender.com/api',
   firebase: {
     apiKey: 'AIzaSyCG05DLoF-NM9hj5Xdfv2OjXhSp9wpUbc0',
     authDomain: 'talent-hub-257d6.firebaseapp.com',
