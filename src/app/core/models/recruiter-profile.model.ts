@@ -26,7 +26,7 @@ export interface RecruiterProfile {
 export interface Language {
   _id?: string;
   language: string;
-  level: string;
+  proficiency: string;
 }
 
 

@@ -84,7 +84,7 @@ platforms = Object.values(SocialPlatform);
           (data.languages || []).forEach(l => {
             langArray.push(this.fb.group({
               language: [l.language, Validators.required],
-              level: [l.level, Validators.required]
+              level: [l.proficiency, Validators.required]
             }));
           });
           this.professionalForm.setControl(

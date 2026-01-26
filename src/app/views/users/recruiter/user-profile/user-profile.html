@@ -1,10 +1,10 @@
-<div class="container user-profile mt-3">
-
-
   <!-- MOBILE BACK BUTTON -->
   <div class="mobile-back p-3  d-flex align-items-center" (click)="goBack()">
     <i class="bi bi-arrow-left me-2 fs-5"></i> Back
   </div>
+@if (recruiterProfile) {
+<div class="container user-profile mt-3">
+
   <!-- PROFILE HEADER -->
   <div class="profile-header card border-0 shadow-sm rounded-4 mb-4">
 
@@ -13,9 +13,7 @@
 
     <!-- Avatar + Name -->
     <div class="profile-info text-center">
-      <img
-        [src]="recruiterProfile.profilePhoto || 'https://res.cloudinary.com/dpp8aspqs/image/upload/v1733121824/profie_images_opbm8k.png'"
-        class="profile-avatar" />
+      <img [src]="recruiterProfile.profilePhoto" class="profile-avatar" />
 
       <h3 class="fw-bold mt-3 mb-1 d-flex justify-content-center align-items-center gap-2">
         {{ recruiterProfile.firstName }} {{ recruiterProfile.lastName }}
@@ -79,7 +77,6 @@
     </div>
 
   </div>
-
 
   <!-- ABOUT -->
   <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
@@ -163,7 +160,7 @@
 
           @for (lang of recruiterProfile.languages; track lang._id) {
           <span class="badge bg-light text-dark border px-3 py-2">
-            {{ lang.language }} <span class="text-muted">({{ lang.level }})</span>
+            {{ lang.language }} <span class="text-muted">({{ lang.proficiency }})</span>
           </span>
           }
 
@@ -249,3 +246,4 @@
 
 
 </div>
+}
