@@ -1,34 +1,19 @@
-<div class="signup-container d-flex flex-column justify-content-center align-items-center bg-light vh-100">
+<div class="signup-container d-flex flex-column justify-content-center align-items-center vh-100">
 
-  <!-- Logo -->
-  <img
-    src="/assets/logo/website-logo.png "
-    alt="Talent Hub Logo"
-    class="logo"
-  />
+  <img src="/assets/logo/website-logo.png " alt="Talent Hub Logo" class="logo"/>
 
-  <!-- Title -->
   <h3 class="fw-bold mt-3 mb-1">Create your account</h3>
   <p class="text-muted small">Select how you want to use Talent Hub</p>
 
-  <!-- Role Selection -->
   <div class="role-row mt-4">
 
-    <!-- Recruiter -->
-    <div
-      class="role-box"
-      [class.active]="selectedRole === 'recruiter'"
-      (click)="selectRole('recruiter')">
+    <div class="role-box"  [class.active]="selectedRole === 'recruiter'" (click)="selectRole('recruiter')">
       <div class="circle" [class.active]="selectedRole === 'recruiter'"></div>
       <span class="role-title">Recruiter</span>
       <p class="role-desc small text-muted">Hire talent for your company</p>
     </div>
 
-    <!-- Seeker -->
-    <div
-      class="role-box"
-      [class.active]="selectedRole === 'jobSeeker'"
-      (click)="selectRole('jobSeeker')">
+    <div class="role-box" [class.active]="selectedRole === 'jobSeeker'" (click)="selectRole('jobSeeker')">
       <div class="circle" [class.active]="selectedRole === 'jobSeeker'"></div>
       <span class="role-title">Job Seeker</span>
       <p class="role-desc small text-muted">Apply for jobs & get hired</p>
@@ -36,11 +21,8 @@
 
   </div>
 
-  <!-- Continue Button -->
   @if (selectedRole) {
-    <button class="btn btn-outline-primary mt-4 px-5 py-2 fw-semibold" (click)="continue()">
-      Create Account
-    </button>
+    <button class="btn btn-outline-primary mt-4 px-5 py-2 fw-semibold" (click)="continue()">Create Account</button>
   }
 
 

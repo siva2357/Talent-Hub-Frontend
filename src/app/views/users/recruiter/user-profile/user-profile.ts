@@ -9,11 +9,11 @@ import { RecruiterJobPost, RecruiterProfile, RecruiterProfileResponse } from '..
   imports: [RouterModule,CommonModule],
   templateUrl: './user-profile.html',
   styleUrl: './user-profile.css',
-    standalone: true,
+  standalone: true,
 })
 export class UserProfile {
 
-recruiterProfile!: RecruiterProfile;
+public recruiterProfile!: RecruiterProfile;
   recruiterJobs: RecruiterJobPost[] = [];
 
   socialIcons = SOCIAL_ICONS;
@@ -34,9 +34,6 @@ loadRecruiterProfile(): void {
       if (response.success) {
         this.recruiterProfile = response.data.profile;
         this.recruiterJobs = response.data.jobs;
-
-        console.log('✅ Profile:', this.recruiterProfile);
-        console.log('✅ Jobs:', this.recruiterJobs);
       }
     },
     error: (err) => {

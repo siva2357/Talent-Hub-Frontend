@@ -226,7 +226,11 @@ submitJobPost() {
       });
       this.isEditMode = false;
       this.selectedJobPostId = null;
+
+    // ✅ CLOSE MODAL HERE
+    this.closeAddJobModal();
       this.loadMyJobPosts();
+
     },
     error: err => {
       this.isSubmitting = false;
@@ -234,6 +238,22 @@ submitJobPost() {
       this.errorMessage = err;
     }
   });
+}
+
+closeAddJobModal() {
+  const modalEl = document.getElementById('addJobPostModal');
+  if (modalEl && (window as any).bootstrap) {
+    const modal =
+      (window as any).bootstrap.Modal.getInstance(modalEl) ||
+      new (window as any).bootstrap.Modal(modalEl);
+
+    modal.hide();
+  }
+
+  // Clean backdrop & body state
+  document.body.classList.remove('modal-open');
+  document.body.style.removeProperty('padding-right');
+  document.querySelector('.modal-backdrop')?.remove();
 }
 
 
