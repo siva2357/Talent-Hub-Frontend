@@ -57,45 +57,6 @@ openLogsModal(recruiter: any) {
     this.router.navigate([`admin/recruiters-list/${id}/profile`]);
   }
 
-  approveRecruiter(userId: string) {
-  this.loading = true;
-
-  this.adminService.approveUser({
-    userId,
-    role: 'recruiter'
-  }).subscribe({
-    next: () => {
-      this.fetchRecruiters(); // refresh list
-      this.loading = false;
-    },
-    error: () => {
-      this.errorMessage = 'Failed to approve recruiter';
-      this.loading = false;
-    }
-  });
-}
-
-rejectRecruiter(userId: string) {
-  if (!confirm('Are you sure you want to permanently block this recruiter?')) {
-    return;
-  }
-
-  this.loading = true;
-
-  this.adminService.rejectUser({
-    userId,
-    role: 'recruiter'
-  }).subscribe({
-    next: () => {
-      this.fetchRecruiters(); // refresh list
-      this.loading = false;
-    },
-    error: () => {
-      this.errorMessage = 'Failed to reject recruiter';
-      this.loading = false;
-    }
-  });
-}
 
 
   /** Pagination */

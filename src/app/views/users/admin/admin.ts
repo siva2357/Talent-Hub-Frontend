@@ -137,4 +137,18 @@ closeSidebarOnMobile() {
   });
 }
 
+
+goToProfilePage(): void {
+  const userId = this.authService.getUserId() || localStorage.getItem('userId') || '';
+  const userRole = this.authService.getRole() || localStorage.getItem('userRole') || '';
+  if (!userId || !userRole) {
+    console.error('User ID or role is missing');
+    return;
+  }
+  const rolePath = userRole;  // Ensures route path is consistent
+  this.router.navigate([`/${rolePath}/profile`]);
+}
+
+
+
 }

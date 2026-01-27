@@ -59,45 +59,8 @@ export class Seekers {
     this.router.navigate([`admin/seekers-list/${id}/profile`]);
   }
 
-  approveJobSeeker(userId: string): void {
-    this.loading = true;
 
-    this.adminService.approveUser({
-      userId,
-      role: 'jobSeeker'
-    }).subscribe({
-      next: () => {
-        this.fetchJobSeekers();
-        this.loading = false;
-      },
-      error: () => {
-        this.errorMessage = 'Failed to approve job seeker';
-        this.loading = false;
-      }
-    });
-  }
 
-  rejectJobSeeker(userId: string): void {
-    if (!confirm('Are you sure you want to permanently block this job seeker?')) {
-      return;
-    }
-
-    this.loading = true;
-
-    this.adminService.rejectUser({
-      userId,
-      role: 'jobSeeker'
-    }).subscribe({
-      next: () => {
-        this.fetchJobSeekers();
-        this.loading = false;
-      },
-      error: () => {
-        this.errorMessage = 'Failed to reject job seeker';
-        this.loading = false;
-      }
-    });
-  }
 
   openLogsModal(jobSeeker: any): void {
     this.selectedJobSeeker = jobSeeker;
