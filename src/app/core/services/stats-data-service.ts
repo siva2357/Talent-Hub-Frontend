@@ -33,6 +33,24 @@ export class StatsDataService {
     );
   }
 
+    getRecruiterStats(): Observable<RecruiterStatsResponse> {
+    return this.http.get<RecruiterStatsResponse>(
+      `${this.baseUrl}/recruiter/stats`,
+      { headers: this.getHeaders() }
+    ).pipe(
+      catchError((error) => this.handleError(error))
+    );
+  }
+
+    getJobSeekerStats(): Observable<JobSeekerStatsResponse> {
+    return this.http.get<JobSeekerStatsResponse>(
+      `${this.baseUrl}/jobSeeker/stats`,
+      { headers: this.getHeaders() }
+    ).pipe(
+      catchError((error) => this.handleError(error))
+    );
+  }
+
 
     private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';

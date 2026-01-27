@@ -4,6 +4,8 @@ import { SOCIAL_ICONS, SocialPlatform } from '../../../../core/enums/socialMedia
 import { RecruiterProfileService } from '../../../../core/services/recruiter-profile-service';
 import { CommonModule } from '@angular/common';
 import { RecruiterJobPost, RecruiterProfile, RecruiterProfileResponse } from '../../../../core/models/recruiter-profile.model';
+import { StatsDataService } from '../../../../core/services/stats-data-service';
+import { RecruiterStatsResponse } from '../../../../core/models/analytics.model';
 @Component({
   selector: 'app-user-profile',
   imports: [RouterModule,CommonModule],
@@ -15,17 +17,38 @@ export class UserProfile {
 
 public recruiterProfile!: RecruiterProfile;
   recruiterJobs: RecruiterJobPost[] = [];
-
+  recruiterStats!: RecruiterStatsResponse;
+    loading = false;
+  errorMessage = '';
   socialIcons = SOCIAL_ICONS;
 
   constructor(
     private recruiterProfileService: RecruiterProfileService,
-    private router: Router
+    private router: Router,
+        private statsService: StatsDataService
   ) {}
 
   ngOnInit(): void {
     this.loadRecruiterProfile();
+    this.loadRecruiterStats();
   }
+
+
+
+loadRecruiterStats(){
+      this.loading = true;
+    this.statsService.getRecruiterStats().subscribe({
+      next: (res) => {
+        this.recruiterStats = res;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.errorMessage = err;
+        this.loading = false;
+      }
+    });
+}
+
 
 
 loadRecruiterProfile(): void {
