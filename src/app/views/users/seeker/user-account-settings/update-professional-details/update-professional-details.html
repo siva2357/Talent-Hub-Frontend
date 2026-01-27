@@ -1,5 +1,6 @@
 @if (!isLoading) {
-<div class="container my-4">
+<div class="container-fluid professional-details-container px-0">
+
 
 <form [formGroup]="professionalForm" (ngSubmit)="updateProfessionalDetails()">
 
@@ -22,7 +23,7 @@
           </div>
 
           <div class="col-md-5">
-            <select class="form-select form-select-sm" formControlName="level">
+            <select class="form-select form-select-sm" formControlName="proficiency">
               <option value="">Level</option>
               @for (p of proficiencyList; track p) {
                 <option [value]="p">{{ p }}</option>

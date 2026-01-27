@@ -23,7 +23,7 @@
     Applicants : <strong>{{ applicants.length }}</strong>
   </h5>
 
-  <div class="row g-3 applicants-card-wrapper">
+  <div class="row g-3 ">
 
     @for (applicant of applicants; track applicant.jobSeekerId; let i = $index) {
 
@@ -31,10 +31,8 @@
 
       <div class="card applicant-card shadow-sm h-100">
 
-        <!-- HEADER -->
-        <div class="card-body">
-
-          <div class="d-flex align-items-center gap-3 mb-3">
+        <div class="card-header">
+          <div class="d-flex align-items-center gap-3 ">
             <img [src]="applicant.profileImage || 'https://via.placeholder.com/50'" class="rounded-circle border"
               style="width:50px;height:50px;object-fit:cover" />
 
@@ -44,16 +42,13 @@
             </div>
 
             <!-- ACTION MENU -->
-            <div class="dropdown">
-              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+            <div class="dropend">
+
+              <button class="btn btn-sm btn-light dropdown-toggle-split" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 <i class="bi bi-three-dots"></i>
               </button>
-
-              <ul class="dropdown-menu dropdown-menu-end action-dropdown shadow">
-
-                <li class="dropdown-header small text-muted">
-                  Applicant Actions
-                </li>
+              <ul class="dropdown-menu  action-dropdown shadow">
 
                 <li>
                   <button class="dropdown-item" (click)="viewApplicantProfile(applicant.jobSeekerId)">
@@ -90,8 +85,8 @@
                   @if (!applicant.interviewCompleted) {
                   <button class="dropdown-item" (click)="openInterviewModal(applicant)">
                     <i class="bi me-2 text-secondary" [ngClass]="applicant.interviewScheduled
-            ? 'bi-pencil-square'
-            : 'bi-calendar-event'"></i>
+                        ? 'bi-pencil-square'
+                        : 'bi-calendar-event'"></i>
                     {{ applicant.interviewScheduled ? 'Edit Interview' : 'Schedule Interview' }}
                   </button>
                   }
@@ -142,7 +137,14 @@
               </ul>
 
             </div>
+
           </div>
+        </div>
+
+        <!-- HEADER -->
+        <div class="card-body">
+
+
 
           <!-- DETAILS -->
           <div class="small text-muted mb-2">
@@ -163,8 +165,8 @@
               {{ applicant.status }}
             </span>
 
-            <small class="text-muted">
-              {{ applicant.appliedAt | date:'dd MMM yyyy' }}
+            <small class="text-muted small" style="font-size: 13px;">
+              Applied on : {{ applicant.appliedAt | date:'dd MMM yyyy' }}
             </small>
           </div>
 

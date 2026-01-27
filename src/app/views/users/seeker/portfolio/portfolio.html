@@ -17,7 +17,6 @@
     </div>
   </section>
 
-
   <div class="row">
     <div class="col-12 d-flex justify-content-end mt-4">
       <button class="btn  btn-sm btn-create" data-bs-toggle="modal" data-bs-target="#addProjectModal"
@@ -94,13 +93,13 @@
 
               <!-- PREVIEW GRID (when files exist) -->
               @if (uploadedFiles.length > 0) {
-              <div class="row g-3 border border-primary rounded p-2">
+              <div class="row gap-3 border  rounded p-2">
                 @for (file of uploadedFiles; track file.url) {
                 <div class="col-md-4 col-lg-3">
-                  <div class="border border-primary rounded p-2 h-100">
+                  <div class="border border-dark rounded p-2 h-100">
                     <app-file-preview [fileUrl]="file.url"></app-file-preview>
 
-                    <button type="button" class="btn btn-sm btn-outline-danger w-100 mt-2" (click)="removeFile(file.url)">
+                    <button type="button" class="btn btn-sm btn-outline-danger w-100 mt-4" (click)="removeFile(file.url)">
                       Remove
                     </button>
                   </div>

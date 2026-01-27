@@ -66,7 +66,7 @@ export class UpdateProfessionalDetails implements OnInit {
           (data.languages || []).forEach((l: any) => {
             langArray.push(this.fb.group({
               language: [l.language, Validators.required],
-              level: [l.level, Validators.required]
+              proficiency: [l.proficiency, Validators.required]
             }));
           });
           this.professionalForm.setControl(
@@ -147,7 +147,7 @@ export class UpdateProfessionalDetails implements OnInit {
   createLanguage(): FormGroup {
     return this.fb.group({
       language: ['', Validators.required],
-      level: ['', Validators.required]
+      proficiency: ['', Validators.required]
     });
   }
 

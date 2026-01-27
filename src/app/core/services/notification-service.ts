@@ -13,24 +13,20 @@ export class NotificationService {
 
   constructor(private http: HttpClient) {}
 
-  private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('JWT_Token');
-    if (!token) {
-      console.error("🚨 No token found in localStorage!");
-      return new HttpHeaders();
-    }
+private getHeaders(): HttpHeaders {
+  const token = localStorage.getItem('Authorization'); // ✅ FIXED KEY
 
-    try {
-      jwtDecode(token); // Just to validate
-    } catch (error) {
-      console.error("🚨 Token decoding failed:", error);
-    }
-
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+  if (!token) {
+    console.error("🚨 No token found in localStorage!");
+    return new HttpHeaders();
   }
+
+  return new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+}
+
 
   getUserNotifications(userType: string, userId: string): Observable<AppNotification[]> {
     return this.http.get<AppNotification[]>(`${this.baseUrl}/notification/${userType}/${userId}`, {

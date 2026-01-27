@@ -2,7 +2,14 @@
   <h4 class="fw-semibold mb-4 text-center">Seeker Profile Setup</h4>
   <div class="container mt-5">
 
-    <form [formGroup]="profileForm" (ngSubmit)="submitProfile()" class="mx-auto" style="max-width: 1100px;">
+@if (profileForm) {
+  <form
+    [formGroup]="profileForm"
+    (ngSubmit)="submitProfile()"
+    class="mx-auto"
+    style="max-width: 1100px;"
+  >
+
       <div class="card p-4 shadow-sm">
 
         <!-- ================= PROFILE PHOTO ================= -->
@@ -397,5 +404,7 @@
 
       </div>
     </form>
+
+  }
   </div>
 </section>

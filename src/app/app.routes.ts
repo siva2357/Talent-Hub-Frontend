@@ -45,8 +45,8 @@ export const routes: Routes = [
   //auth pages
   { path: 'sign-up', component: SingupPage, title: 'Singup' },
   { path: 'register', component: RegistrationPage, title: 'Register recruiter' },
-  { path: 'recruiter-profile-form', component: RecruiterProfileForm },
-  { path: 'jobSeeker-profile-form', component: SeekerProfileForm },
+  { path: 'recruiter-profile-form', component: RecruiterProfileForm ,canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'recruiter' }},
+  { path: 'jobSeeker-profile-form', component: SeekerProfileForm,canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'jobSeeker' } },
   { path: 'register/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
   { path: 'login', component: LoginPage, title: 'Login' },
