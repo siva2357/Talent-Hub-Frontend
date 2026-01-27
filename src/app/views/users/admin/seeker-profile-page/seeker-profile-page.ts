@@ -31,12 +31,12 @@ portfolios: Projects[] = []; // ✅ ADD THIS
       const id = params.get('id'); // ✅ recruiter param
       if (id) {
         this.jobSeekerId = id;
-        this.loadRecruiterProfile(id);
+        this.loadJobSeekerProfile(id);
       }
     });
   }
 
-  loadRecruiterProfile(id: string): void {
+  loadJobSeekerProfile(id: string): void {
     this.adminService.getJobSeekerProfileById(id).subscribe({
       next: (response:any) => {
         if (response.success && response.data) {

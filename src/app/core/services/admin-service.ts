@@ -43,7 +43,7 @@ export class AdminService {
 
   getAllRecruiters(): Observable<any> {
     return this.http
-      .get(`${this.baseUrl}/recruiters/pending`, { headers: this.getHeaders() })
+      .get(`${this.baseUrl}/recruiters-list`, { headers: this.getHeaders() })
       .pipe(catchError((error) => this.handleError(error)));
   }
 
@@ -55,47 +55,21 @@ export class AdminService {
 
   getAllJobSeekers(): Observable<any> {
     return this.http
-      .get(`${this.baseUrl}/job-seekers/pending`, { headers: this.getHeaders() })
+      .get(`${this.baseUrl}/jobSeekers-list`, { headers: this.getHeaders() })
       .pipe(catchError((error) => this.handleError(error)));
   }
 
   getJobSeekerProfileById(userId: string): Observable<any> {
     return this.http
-      .get(`${this.baseUrl}/job-seekers/${userId}/profile`, { headers: this.getHeaders() })
+      .get(`${this.baseUrl}/jobSeekers/${userId}/profile`, { headers: this.getHeaders() })
       .pipe(catchError((error) => this.handleError(error)));
   }
 
-approveUser(data: { userId: string; role: string }): Observable<any> {
-  return this.http.post(
-    `${this.baseUrl}/users/approve`,
-    data,
-    { headers: this.getHeaders() }
-  ).pipe(catchError(error => this.handleError(error)));
-}
-
-
-rejectUser(data: { userId: string; role: string }): Observable<any> {
-  return this.http.post(
-    `${this.baseUrl}/users/reject`,
-    data,
-    { headers: this.getHeaders() }
-  ).pipe(catchError(error => this.handleError(error)));
-}
-
-
-uploadMcqs(formData: FormData): Observable<any> {
-  return this.http.post(
-    `${this.baseUrl}/upload-file`,formData,
-    { headers: this.getHeaders() }
-  ).pipe(catchError(error => this.handleError(error)));
-}
-
-uploadCoding(formData: FormData): Observable<any> {
-  return this.http.post(
-    `${this.baseUrl}/upload-coding-file`,formData,
-    { headers: this.getHeaders() }
-  ).pipe(catchError(error => this.handleError(error)));
-}
+ getAdminById(): Observable<any> {
+    return this.http
+      .get(`${this.baseUrl}/admin/profile`, { headers: this.getHeaders() })
+      .pipe(catchError((error) => this.handleError(error)));
+  }
 
 
 }
