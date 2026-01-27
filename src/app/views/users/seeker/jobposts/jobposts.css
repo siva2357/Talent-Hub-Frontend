@@ -195,7 +195,7 @@
 }
 
 .company-name {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: #212529;
   line-height: 1.35;
@@ -279,7 +279,20 @@
   }
 }
 
-/* Desktop and above */
+
+/* Small screens (mobile) — full width */
+#jobOffcanvas {
+  width: 100%;
+}
+
+/* Medium screens (tablet ≥768px) — 75% */
+@media (min-width: 768px) {
+  #jobOffcanvas {
+    width: 75% !important;
+  }
+}
+
+/* Large screens (desktop ≥992px) — 50% */
 @media (min-width: 992px) {
   #jobOffcanvas {
     width: 50% !important;
@@ -406,14 +419,6 @@
   border-radius: 8px;
   border:2px solid #75b4f3;
 
-}
-
-
-/* Desktop and above */
-@media (min-width: 992px) {
-  #jobOffcanvas {
-    width: 50% !important;
-  }
 }
 
 

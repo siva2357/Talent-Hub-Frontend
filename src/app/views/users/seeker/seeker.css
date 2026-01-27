@@ -144,40 +144,91 @@
   font-weight: 700;
 }
 
+
 /* =========================
-   NOTIFICATION DROPDOWN
+   NOTIFICATIONS DROPDOWN
 ========================= */
 
 .notif-menu {
-  width: 320px;
-  border-radius: 14px;
+  width: 300px;
+  border-radius: 6px;
   margin-top: 12px;
+  padding: 0;
 }
 
 .notif-header {
   background: #f8f9fa;
   font-size: 14px;
+  border-bottom: 1px solid #eee;
 }
+
+/* =========================
+   NOTIFICATION LIST
+========================= */
+
+.notif-list {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+/* =========================
+   NOTIFICATION ITEM
+========================= */
 
 .notif-item {
-  padding: 12px 16px;
-  border-bottom: 1px solid #f1f1f1;
   display: flex;
   gap: 10px;
-  cursor: pointer;
+  padding: 12px 14px;
+  border: none;
+  border-bottom: 1px solid #f1f1f1;
+  cursor: default;
+  align-items: flex-start;
 }
 
+.notif-item:last-child {
+  border-bottom: none;
+}
+
+.notif-item:hover {
+  background-color: #f9f9f9;
+}
+
+/* Unread highlight */
+.notif-item.unread {
+  background-color: #f4f8ff;
+}
+
+/* =========================
+   DOT INDICATOR
+========================= */
+
 .notif-dot {
-  font-size: 1.4rem;
-  color: #0d6efd;
+  width: 8px;
+  height: 8px;
+  background-color: #0d6efd;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.notif-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .notif-text {
   font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 2px;
   font-weight: 400;
 }
 
-.unread .notif-text {
+.notif-item.unread .notif-text {
   font-weight: 600;
 }
 
@@ -186,26 +237,29 @@
   color: #6c757d;
 }
 
-/* Prevent dropdown close on click */
-.notif-dropdown [data-bs-toggle="dropdown"] {
-  cursor: pointer;
-}
-
 /* =========================
    VIEW MORE BUTTON
 ========================= */
 
-.btn-link {
-  color: #0d6efd !important;
+.notif-view-btn {
+  font-size: 13px;
   font-weight: 500;
-  text-decoration: none;
+  color: #0d6efd;
   padding: 6px 0;
+  text-decoration: none;
 }
 
-.btn-link:hover {
+.notif-view-btn:hover {
   text-decoration: underline;
 }
 
+/* =========================
+   PREVENT DROPDOWN CLOSE
+========================= */
+
+.notif-dropdown [data-bs-toggle="dropdown"] {
+  cursor: pointer;
+}
 /* =========================
    PROFILE MENU
 ========================= */

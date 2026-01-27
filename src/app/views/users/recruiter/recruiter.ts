@@ -70,15 +70,40 @@ loadNotifications(): void {
     this.viewMore = !this.viewMore;
   }
 
-  markAllRead() {
-    this.notifications.forEach(n => n.read = true);
-    this.showCount = false;
-  }
+markAllRead() {
+  const apiRole =
+    this.userRole.charAt(0).toUpperCase() + this.userRole.slice(1);
 
-  clearAll() {
-    this.notifications = [];
-    this.showCount = false;
-  }
+  this.notificationService
+    .markAllAsRead(apiRole, this.userId)
+    .subscribe({
+      next: () => {
+        // ✅ Update UI after backend success
+        this.notifications.forEach(n => (n.read = true));
+        this.showCount = false;
+      },
+      error: (err) => {
+        console.error('Failed to mark all as read', err);
+      }
+    });
+}
+
+clearAll() {
+  const apiRole =
+    this.userRole.charAt(0).toUpperCase() + this.userRole.slice(1);
+
+  this.notificationService
+    .clearUserNotifications(apiRole, this.userId)
+    .subscribe({
+      next: () => {
+        this.notifications = [];
+        this.showCount = false;
+      },
+      error: (err) => {
+        console.error('Failed to clear notifications', err);
+      }
+    });
+}
 
 
 getRecruiterDetails(): void {
@@ -99,6 +124,25 @@ getRecruiterDetails(): void {
   });
 }
 
+markAsRead(notification: AppNotification, event: Event) {
+  event.stopPropagation();
+
+  if (notification.read) return;
+
+  this.notificationService.markAsRead(notification._id).subscribe(() => {
+    notification.read = true;
+  });
+}
+
+deleteNotification(notification: AppNotification, event: Event) {
+  event.stopPropagation();
+
+  this.notificationService.deleteNotification(notification._id).subscribe(() => {
+    this.notifications = this.notifications.filter(
+      n => n._id !== notification._id
+    );
+  });
+}
 
 
 handleError(error: any) {

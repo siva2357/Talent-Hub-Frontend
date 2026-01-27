@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators,} from '@angular/forms';
 import { BucketKey } from '../../../core/enums/bucket-key.constant';
 import { UploadSection } from '../../../core/enums/upload-section.constant';
@@ -24,7 +24,7 @@ function minArrayLength(min: number) {
   templateUrl: './seeker-profile-form.html',
   styleUrl: './seeker-profile-form.css',
 })
-export class SeekerProfileForm {
+export class SeekerProfileForm implements OnInit {
   userId!: string;
   firstName!: string;
   lastName!: string;
@@ -46,7 +46,7 @@ socialPlatforms = Object.values(SocialPlatform);
   ) {}
 
   ngOnInit(): void {
-    const stored = localStorage.getItem('jobSeekerRegistration');
+   const stored = localStorage.getItem('userData');
     if (!stored) {
       this.router.navigate(['/sign-up/seeker']);
       return;
