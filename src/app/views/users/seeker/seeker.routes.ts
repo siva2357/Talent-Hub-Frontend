@@ -9,6 +9,7 @@ import { ProjectDetailsPage } from './project-details-page/project-details-page'
 import { AppliedJobpostsPage } from './applied-jobposts-page/applied-jobposts-page';
 import { AssessmentsRoomPage } from './assessments-room-page/assessments-room-page';
 
+
 export const SEEKER_ROUTES: Routes = [
   {
     path: '',
