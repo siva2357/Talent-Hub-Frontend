@@ -8,6 +8,9 @@ import { JobPost } from '../../../../core/models/jobpost.model';
 import { JOBPOSTCATEGORY } from '../../../../core/enums/jobpost-category.enum';
 import { JOBPOSTTYPE } from '../../../../core/enums/jobpost-type.enum';
 import { TimeAgoPipe } from "../../../../core/pipes/time.pipe";
+import { RecommendationService } from '../../../../core/services/recommendation-service';
+import { JobMatchResponse } from '../../../../core/models/jobMatchReponse.model';
+import { getMatchBadge } from '../../../../core/helpers/job-match.helper';
 
 @Component({
   selector: 'app-jobposts',
@@ -26,6 +29,11 @@ export class Jobposts implements OnInit {
 jobTypes = Object.values(JOBPOSTTYPE);
 selectedJob: JobPost | null = null;
   jobPostId!: string;
+    jobMatch!: JobMatchResponse;
+  loading = true;
+  recommendedJobs: any[] = [];
+
+badge: { label: string; color: string } | null = null;
 
   filters = {
     search: '',
@@ -36,7 +44,8 @@ selectedJob: JobPost | null = null;
 
   constructor(
     private router: Router,
-    private jobpostService: JobpostService
+    private jobpostService: JobpostService,
+    private recommendService:RecommendationService
   ) {}
 
   /* =========================
@@ -44,7 +53,6 @@ selectedJob: JobPost | null = null;
   ========================== */
   ngOnInit(): void {
     this.fetchJobPosts();
-
   }
 
   /* =========================
@@ -83,7 +91,6 @@ selectedJob: JobPost | null = null;
       job.saved = false;
     });
   }
-
 
 
 
@@ -132,7 +139,39 @@ applyFilters(): void {
 
 openJobOffcanvas(job: any) {
   this.selectedJob = job;
+  this.jobPostId = job._id;   // or job._id depending on API
+  this.loadJobMatch();
+  this.loadRecommendedJobs();// 👈 NEW
 }
+
+loadJobMatch(): void {
+  if (!this.jobPostId) return; // safety
+
+  this.recommendService.getJobResumeMatch(this.jobPostId).subscribe({
+    next: (res) => {
+      this.jobMatch = res;
+      this.badge = getMatchBadge(res.matchLevel); // ✅ SAFE
+      this.loading = false;
+    },
+    error: () => {
+      this.loading = false;
+    }
+  });
+}
+
+loadRecommendedJobs(): void {
+  if (!this.jobPostId) return;
+
+  this.recommendService.getRecommendedJobs(this.jobPostId).subscribe({
+    next: (jobs) => {
+      this.recommendedJobs = jobs;
+    },
+    error: () => {
+      this.recommendedJobs = [];
+    }
+  });
+}
+
 
 private closeOffcanvas(): void {
   const offcanvasEl = document.getElementById('jobOffcanvas');
