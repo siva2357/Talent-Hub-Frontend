@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { JobpostService } from '../../../../core/services/jobpost-service';
 import { InterviewService } from '../../../../core/services/interview-service';
 import { CreateInterviewPayload, Interview } from '../../../../core/models/interview.model';
+import { getMatchBadge } from '../../../../core/helpers/job-match.helper';
 
 declare var bootstrap: any;
 
@@ -52,9 +53,9 @@ assessmentId: string | null = null;
 
   report: any;
 reportLoading = false;
-private reportModal!: any;
 
-
+matchFilter: 'all' | 'great_match' | 'partial_match' | 'low_match' = 'all';
+sortByMatch: 'desc' | 'asc' = 'desc';
   constructor(
     private route: ActivatedRoute,
     private jobpostService: JobpostService,
@@ -80,6 +81,34 @@ private reportModal!: any;
       }
     });
   }
+
+  getApplicantBadge(matchLevel: string) {
+  return getMatchBadge(matchLevel);
+}
+
+resetFilters(): void {
+  this.matchFilter = 'all';
+  this.sortByMatch = 'desc';
+}
+
+
+get filteredApplicants() {
+  let list = [...this.applicants];
+
+  // filter
+  if (this.matchFilter !== 'all') {
+    list = list.filter(a => a.matchLevel === this.matchFilter);
+  }
+
+  // sort
+  list.sort((a, b) =>
+    this.sortByMatch === 'desc'
+      ? (b.jobMatchScore ?? 0) - (a.jobMatchScore ?? 0)
+      : (a.jobMatchScore ?? 0) - (b.jobMatchScore ?? 0)
+  );
+
+  return list;
+}
 
   viewApplicantProfile(applicantId: string): void {
     this.router.navigate([
