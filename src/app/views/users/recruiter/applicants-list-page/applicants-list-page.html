@@ -3,193 +3,146 @@
   <div class="mobile-back p-3 d-flex align-items-center" (click)="goBack()">
     <i class="bi bi-arrow-left me-2 fs-4"></i> Back
   </div>
-
-  <!-- LOADING -->
-  @if (loading) {
-  <div class="text-center my-5">
-    <div class="spinner-border text-secondary"></div>
-  </div>
-  }
-
-  <!-- ERROR -->
-  @if (!loading && errorMessage) {
-  <div class="alert alert-danger">{{ errorMessage }}</div>
-  }
-
-  <!-- HEADER -->
-  @if (!loading && applicants.length > 0) {
+<!-- HEADER -->
+@if (!loading && applicants.length > 0) {
 
   <h5 class="mb-3">
     Applicants : <strong>{{ applicants.length }}</strong>
   </h5>
 
-  <div class="row g-3 ">
+  <!-- FILTERS -->
+  <div class="d-flex gap-2 mb-3">
+<select
+  class="form-select form-select-sm w-auto"
+  [(ngModel)]="matchFilter"
+>
+  <option value="all">All Matches</option>
+  <option value="great_match">Great Match</option>
+  <option value="partial_match">Partial Match</option>
+  <option value="low_match">Low Match</option>
+</select>
 
-    @for (applicant of applicants; track applicant.jobSeekerId; let i = $index) {
+<select
+  class="form-select form-select-sm w-auto"
+  [(ngModel)]="sortByMatch"
+>
+  <option value="desc">Highest Match</option>
+  <option value="asc">Lowest Match</option>
+</select>
 
-    <div class="col-xl-4 col-lg-4 col-md-6 col-12">
 
-      <div class="card applicant-card shadow-sm h-100">
 
-        <div class="card-header">
-          <div class="d-flex align-items-center gap-3 ">
-            <img [src]="applicant.profileImage || 'https://via.placeholder.com/50'" class="rounded-circle border"
-              style="width:50px;height:50px;object-fit:cover" />
 
-            <div class="flex-grow-1">
-              <h6 class="mb-0 text-truncate">{{ applicant.fullName }}</h6>
-              <small class="text-muted">{{ applicant.gender }}</small>
+
+      <!-- RESET -->
+  <button
+    class="btn btn-sm btn-outline-secondary"
+    (click)="resetFilters()"
+  >
+
+    Reset
+  </button>
+
+  </div>
+
+  <!-- FILTERED RESULTS -->
+  @if (filteredApplicants.length > 0) {
+
+    <div class="row g-3">
+      @for (applicant of filteredApplicants; track applicant.jobSeekerId) {
+
+        <div class="col-xl-4 col-lg-4 col-md-6 col-12">
+          <div class="card applicant-card shadow-sm h-100">
+
+            <!-- CARD HEADER -->
+            <div class="card-header">
+              <div class="d-flex align-items-center gap-3">
+                <img
+                  [src]="applicant.profileImage || 'https://via.placeholder.com/50'"
+                  class="rounded-circle border"
+                  style="width:50px;height:50px;object-fit:cover"
+                />
+
+                <div class="flex-grow-1">
+                  <h6 class="mb-0 text-truncate">{{ applicant.fullName }}</h6>
+                  <small class="text-muted">{{ applicant.gender }}</small>
+                </div>
+              </div>
             </div>
 
-            <!-- ACTION MENU -->
-            <div class="dropend">
+            <!-- CARD BODY -->
+            <div class="card-body">
 
-              <button class="btn btn-sm btn-light dropdown-toggle-split" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <i class="bi bi-three-dots"></i>
-              </button>
-              <ul class="dropdown-menu  action-dropdown shadow">
+              <div class="small text-muted mb-2">
+                <i class="bi bi-envelope me-1"></i> {{ applicant.email }}
+              </div>
 
-                <li>
-                  <button class="dropdown-item" (click)="viewApplicantProfile(applicant.jobSeekerId)">
-                    <i class="bi bi-person-circle me-2 text-primary"></i>
-                    View Profile
-                  </button>
-                </li>
+              <div class="small text-muted mb-2">
+                <i class="bi bi-telephone me-1"></i> {{ applicant.phoneNumber }}
+              </div>
 
+              @if (applicant.jobMatchScore !== null) {
+                @let badge = getApplicantBadge(applicant.matchLevel);
 
-                <!-- ASSESSMENT -->
-                <li>
-                  @if (!applicant.assessmentAssigned) {
-                  <button class="dropdown-item" (click)="openAssignAssessmentModal(applicant)">
-                    <i class="bi bi-file-earmark-plus me-2 text-info"></i>
-                    Assign Assessment
-                  </button>
-                  }
-                  @else if (!applicant.assessmentSubmitted) {
-                  <button class="dropdown-item" (click)="openUpdateAssessmentModal(applicant)">
-                    <i class="bi bi-pencil-square me-2 text-warning"></i>
-                    Update Assessment
-                  </button>
-                  }
-                  @else {
-                  <span class="dropdown-item disabled text-success fw-semibold">
-                    <i class="bi bi-file-earmark-check me-2"></i>
-                    Assessment Submitted
+                <div class="d-flex align-items-center mb-2 mt-2">
+                  <span
+                    class="badge"
+                    [ngClass]="{
+                      'bg-success': badge.color === 'green',
+                      'bg-warning text-dark': badge.color === 'orange',
+                      'bg-danger': badge.color === 'red'
+                    }"
+                  >
+                    {{ badge.label }}
                   </span>
-                  }
-                </li>
 
-                <!-- INTERVIEW -->
-                <li>
-                  @if (!applicant.interviewCompleted) {
-                  <button class="dropdown-item" (click)="openInterviewModal(applicant)">
-                    <i class="bi me-2 text-secondary" [ngClass]="applicant.interviewScheduled
-                        ? 'bi-pencil-square'
-                        : 'bi-calendar-event'"></i>
-                    {{ applicant.interviewScheduled ? 'Edit Interview' : 'Schedule Interview' }}
-                  </button>
-                  }
-                  @else {
-                  <span class="dropdown-item disabled text-success fw-semibold">
-                    <i class="bi bi-check-circle me-2"></i>
-                    Interview Completed
+                  <span
+                    class="fw-semibold ms-3"
+                    [ngClass]="{
+                      'text-success': badge.color === 'green',
+                      'text-warning': badge.color === 'orange',
+                      'text-danger': badge.color === 'red'
+                    }"
+                  >
+                    {{ applicant.jobMatchScore }}%
                   </span>
-                  }
-                </li>
+                </div>
+              }
 
-
-                <!-- FINAL STATUS -->
-                @if (applicant.status === 'InProcess' && applicant.interviewCompleted) {
-                <li>
-                  <button class="dropdown-item action-success" (click)="shortlistApplicant(applicant)">
-                    <i class="bi bi-check-circle me-2"></i>
-                    Shortlist
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item action-danger" (click)="rejectApplicant(applicant)">
-                    <i class="bi bi-x-circle me-2"></i>
-                    Reject
-                  </button>
-                </li>
-                }
-
-                @if (applicant.status === 'Shortlisted') {
-                <li>
-                  <span class="dropdown-item disabled action-success fw-semibold">
-                    <i class="bi bi-check-circle me-2"></i>
-                    Shortlisted
-                  </span>
-                </li>
-                }
-
-                @if (applicant.status === 'Rejected') {
-                <li>
-                  <span class="dropdown-item disabled action-danger fw-semibold">
-                    <i class="bi bi-x-circle me-2"></i>
-                    Rejected
-                  </span>
-                </li>
-                }
-
-              </ul>
-
-            </div>
-
-          </div>
-        </div>
-
-        <!-- HEADER -->
-        <div class="card-body">
-
-
-
-          <!-- DETAILS -->
-          <div class="small text-muted mb-2">
-            <i class="bi bi-envelope me-1"></i> {{ applicant.email }}
-          </div>
-
-          <div class="small text-muted mb-2">
-            <i class="bi bi-telephone me-1"></i> {{ applicant.phoneNumber }}
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center mt-3">
-            <span class="badge" [ngClass]="{
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="badge" [ngClass]="{
                   'bg-warning': applicant.status === 'Pending',
                   'bg-primary': applicant.status === 'InProcess',
                   'bg-info': applicant.status === 'Shortlisted',
                   'bg-danger': applicant.status === 'Rejected'
                 }">
-              {{ applicant.status }}
-            </span>
+                  {{ applicant.status }}
+                </span>
 
-            <small class="text-muted small" style="font-size: 13px;">
-              Applied on : {{ applicant.appliedAt | date:'dd MMM yyyy' }}
-            </small>
+                <small class="text-muted">
+                  Applied on {{ applicant.appliedAt | date:'dd MMM yyyy' }}
+                </small>
+              </div>
+
+            </div>
           </div>
-
         </div>
-      </div>
+
+      }
     </div>
 
-    }
+  } @else {
 
-  </div>
+    <!-- EMPTY FILTER RESULT -->
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-people fs-1 mb-3 d-block"></i>
+      <h6 class="fw-semibold">No applicants match this filter</h6>
+      <p class="small mb-0">Try changing the match level or sorting option</p>
+    </div>
+
   }
 
-
-  <!-- EMPTY -->
-  @if (!loading && applicants.length === 0) {
-  <div class="text-center my-5">
-    <i class="bi bi-people fs-1 text-muted mb-2"></i>
-    <h6>No applicants found</h6>
-    <p class="text-muted small">No one has applied yet.</p>
-  </div>
-  }
-
-</div>
+}
 
 
 <!-- ================= INTERVIEW MODAL ================= -->
