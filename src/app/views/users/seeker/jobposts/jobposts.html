@@ -364,6 +364,64 @@
 
 </div>
 
+@if (jobMatch && badge) {
+  <section class="mb-4 p-3 rounded job-match-box">
+
+    <!-- BADGE -->
+    <span
+      class="badge mb-2"
+      [ngClass]="{
+        'bg-success': badge.color === 'green',
+        'bg-warning text-dark': badge.color === 'orange',
+        'bg-danger': badge.color === 'red'
+      }"
+    >
+      {{ badge.label }}
+    </span>
+
+    <!-- SCORE -->
+    <div
+      class="job-match-score"
+      [ngClass]="{
+        green: badge.color === 'green',
+        yellow: badge.color === 'orange',
+        red: badge.color === 'red'
+      }"
+    >
+      {{ jobMatch.jobMatchScore }}%
+    </div>
+
+    <p class="small text-muted mt-2">
+      {{ jobMatch.summary }}
+    </p>
+
+    <!-- MATCHED SKILLS -->
+    <div class="mt-3">
+      <strong class="small">Matched Skills</strong>
+      <div class="d-flex flex-wrap gap-2 mt-1">
+        @for (skill of jobMatch.matchedSkills; track skill) {
+          <span class="badge bg-success-subtle text-success">
+           {{ skill }}
+          </span>
+        }
+      </div>
+    </div>
+
+    <!-- MISSING SKILLS -->
+    <div class="mt-3">
+      <strong class="small">Missing Skills</strong>
+      <div class="d-flex flex-wrap gap-2 mt-1">
+        @for (skill of jobMatch.missingSkills; track skill) {
+          <span class="badge bg-danger-subtle text-danger">
+          {{ skill }}
+          </span>
+        }
+      </div>
+    </div>
+
+  </section>
+}
+
 
     <!-- JOB DESCRIPTION -->
     <section class="mb-4">
@@ -407,45 +465,47 @@
 
 
     <!-- RECOMMENDED JOBS -->
-    <section class="mb-4 mt-5">
-      <h5 class="fw-semibold mb-3">
-        Recommended Jobs
-      </h5>
+<section class="mb-4 mt-5">
+  <h5 class="fw-semibold mb-3">Recommended Jobs</h5>
 
-      <div class="row g-3">
-
-        <!-- Job 1 -->
+  @if (recommendedJobs.length > 0) {
+    <div class="row g-3">
+      @for (job of recommendedJobs; track job._id) {
         <div class="col-12 col-lg-6">
           <div class="job-card recommended-full-card h-100">
             <div class="card-body">
 
-              <div class="card-top">
-                <div class="company-info">
-                  <img src="assets/default-company.png" class="company-logo" />
-                  <span class="company-name">ABC Tech Pvt Ltd</span>
-                </div>
+              <div class="company-info mb-2">
+                <img
+                  [src]="job.company?.logo || 'assets/default-company.png'"
+                  class="company-logo"
+                />
+                <span class="company-name">
+                  {{ job.company?.name }}
+                </span>
               </div>
 
-              <h6 class="job-title">Angular Frontend Developer</h6>
+              <h6 class="job-title">{{ job.jobTitle }}</h6>
 
               <div class="job-meta text-muted small">
-                Hyderabad • Full-Time
+                {{ job.location }} • {{ job.jobType }}
               </div>
 
-              <p class="job-desc text-muted">
-                Build scalable Angular applications with reusable UI components...
+              <p class="job-desc text-muted small">
+                {{ job.jobDescription | slice:0:100 }}...
               </p>
 
-
-
-              <div class="card-footer-btn d-flex align-items-center justify-content-between mt-auto ">
-                <!-- LEFT -->
-                <small class="text-muted d-flex align-items-center gap-1">
-                  <i class="bi bi-clock"></i>
-                  16h ago
+              <div
+                class="d-flex align-items-center justify-content-between mt-auto"
+              >
+                <small class="text-muted">
+                  {{ job.postedOn | timeAgo }}
                 </small>
 
-                <button class="btn btn-sm btn-outline-info" data-bs-toggle="offcanvas" data-bs-target="#jobOffcanvas">
+                <button
+                  class="btn btn-sm btn-outline-info"
+                  (click)="openJobOffcanvas(job)"
+                >
                   View
                 </button>
               </div>
@@ -453,126 +513,15 @@
             </div>
           </div>
         </div>
+      }
+    </div>
+  } @else {
+    <p class="text-muted small">
+      No similar jobs available right now
+    </p>
+  }
+</section>
 
-        <!-- Job 2 -->
-        <div class="col-12 col-lg-6">
-          <div class="job-card recommended-full-card h-100">
-            <div class="card-body">
-
-              <div class="card-top">
-                <div class="company-info">
-                  <img src="assets/default-company.png" class="company-logo" />
-                  <span class="company-name">XYZ Solutions</span>
-                </div>
-              </div>
-
-              <h6 class="job-title">UI Engineer (Angular)</h6>
-
-              <div class="job-meta text-muted small">
-                Bengaluru • Hybrid
-              </div>
-
-              <p class="job-desc text-muted">
-                Design clean UI interfaces and collaborate with UX teams...
-              </p>
-
-
-              <div class="card-footer-btn d-flex align-items-center justify-content-between mt-auto ">
-                <!-- LEFT -->
-                <small class="text-muted d-flex align-items-center gap-1">
-                  <i class="bi bi-clock"></i>
-                  16h ago
-                </small>
-
-                <button class="btn btn-sm btn-outline-info" data-bs-toggle="offcanvas" data-bs-target="#jobOffcanvas">
-                  View
-                </button>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- Job 3 -->
-        <div class="col-12 col-lg-6">
-          <div class="job-card recommended-full-card h-100">
-            <div class="card-body">
-
-              <div class="card-top">
-                <div class="company-info">
-                  <img src="assets/default-company.png" class="company-logo" />
-                  <span class="company-name">Startup Labs</span>
-                </div>
-              </div>
-
-              <h6 class="job-title">Frontend Developer</h6>
-
-              <div class="job-meta text-muted small">
-                Remote • Contract
-              </div>
-
-              <p class="job-desc text-muted">
-                Work on modern frontend stacks with performance-focused UI...
-              </p>
-
-
-              <div class="card-footer-btn d-flex align-items-center justify-content-between mt-auto ">
-                <!-- LEFT -->
-                <small class="text-muted d-flex align-items-center gap-1">
-                  <i class="bi bi-clock"></i>
-                  16h ago
-                </small>
-
-                <button class="btn btn-sm btn-outline-info" data-bs-toggle="offcanvas" data-bs-target="#jobOffcanvas">
-                  View
-                </button>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- Job 4 -->
-        <div class="col-12 col-lg-6">
-          <div class="job-card recommended-full-card h-100">
-            <div class="card-body">
-
-              <div class="card-top">
-                <div class="company-info">
-                  <img src="assets/default-company.png" class="company-logo" />
-                  <span class="company-name">TechNova Systems</span>
-                </div>
-              </div>
-
-              <h6 class="job-title">Angular UI Specialist</h6>
-
-              <div class="job-meta text-muted small">
-                Chennai • Full-Time
-              </div>
-
-              <p class="job-desc text-muted">
-                Build reusable Angular UI components and design systems...
-              </p>
-
-
-              <div class="card-footer-btn d-flex align-items-center justify-content-between mt-auto ">
-                <!-- LEFT -->
-                <small class="text-muted d-flex align-items-center gap-1">
-                  <i class="bi bi-clock"></i>
-                  16h ago
-                </small>
-
-                <button class="btn btn-sm btn-outline-info" data-bs-toggle="offcanvas" data-bs-target="#jobOffcanvas">
-                  View
-                </button>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
 
 
   </div>
