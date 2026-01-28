@@ -8,6 +8,7 @@ import { UserAccountSettings } from './user-account-settings/user-account-settin
 import { ProjectDetailsPage } from './project-details-page/project-details-page';
 import { AppliedJobpostsPage } from './applied-jobposts-page/applied-jobposts-page';
 import { AssessmentsRoomPage } from './assessments-room-page/assessments-room-page';
+import { ResumeAnalytics } from './resume-analytics/resume-analytics';
 
 
 export const SEEKER_ROUTES: Routes = [
@@ -21,7 +22,8 @@ export const SEEKER_ROUTES: Routes = [
       { path: 'scheduled-meetings', component: ScheduledMeetings },
       { path: 'my-portfolio', component: Portfolio },
       { path: 'project/:id/project-details', component:ProjectDetailsPage },
-      { path: '', redirectTo: 'jobposts', pathMatch: 'full' }
+      { path: '', redirectTo: 'jobposts', pathMatch: 'full' },
+      { path: 'resume-analytics', component: ResumeAnalytics },
     ],
   },
   { path: 'profile', component: UserProfile },
