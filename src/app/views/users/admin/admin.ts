@@ -37,14 +37,7 @@ export class Admin implements OnInit{
   const role = localStorage.getItem('userRole') || this.authService.getRole() || '';
   this.fullName = this.authService.getFullName() ||"";
   this.profileImage = this.authService.getUserData()?.profileImage || '';
-
   this.userRole = role;
-
-  if (this.userId) {
-      this.loadNotifications(); // ✅ Add this call
-  } else {
-    this.errorMessage = 'User ID or Role is not available.';
-  }
 
 }
 
@@ -59,7 +52,6 @@ sidebarOpen = false; // start collapsed (icon-only mode)
     { label: 'Dashboard', icon: ' bi-grid', link: 'dashboard' },
     { label: 'Recruiters', icon: 'bi-person-badge', link: 'recruiters-list' },
     { label: 'Seekers', icon: 'bi-people', link: 'seekers-list' },
-    { label: 'Interviews', icon: 'bi bi-laptop', link: 'interviews' },
     { label: 'Blog', icon: 'bi bi-journal-text', link: 'blog' },
   ];
 
@@ -77,18 +69,6 @@ closeSidebarOnMobile() {
   showCount = true;
   viewMore = false;
 
-  loadNotifications(): void {
-  if (!this.userId || !this.userRole) return;
-  const apiRole = this.userRole.charAt(0).toUpperCase() + this.userRole.slice(1); // 'client' → 'Client'
-  this.notificationService.getUserNotifications(apiRole, this.userId).subscribe({
-    next: (notifs) => {
-      this.notifications = notifs;
-    },
-    error: (err) => {
-      console.error('Error loading notifications:', err);
-    }
-  });
-}
 
 
   get unreadCount() {

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { AppNotification } from '../models/notification.model';
 
 @Injectable({
@@ -13,48 +13,63 @@ export class NotificationService {
 
   constructor(private http: HttpClient) {}
 
-private getHeaders(): HttpHeaders {
-  const token = localStorage.getItem('Authorization'); // ✅ FIXED KEY
 
-  if (!token) {
-    console.error("🚨 No token found in localStorage!");
-    return new HttpHeaders();
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('JWT_Token');
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
   }
 
-  return new HttpHeaders({
-    Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  });
-}
 
-
-  getUserNotifications(userType: string, userId: string): Observable<AppNotification[]> {
-    return this.http.get<AppNotification[]>(`${this.baseUrl}/notification/${userType}/${userId}`, {
-      headers: this.getHeaders()
-    });
+  getUserNotifications(): Observable<AppNotification[]> {
+    return this.http
+      .get<{ notifications: AppNotification[] }>(
+        `${this.baseUrl}/notifications`,
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        map(res => res.notifications || []),
+        catchError(this.handleError)
+      );
   }
 
   markAsRead(id: string): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/notification/${id}/read`, {}, {
+    return this.http.patch(`${this.baseUrl}/notifications/${id}/read`, {}, {
       headers: this.getHeaders()
     });
   }
 
-  markAllAsRead(userType: string, userId: string): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/notification/${userType}/${userId}/read-all`, {}, {
+  markAllAsRead(): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/notifications/read-all`, {}, {
       headers: this.getHeaders()
     });
   }
 
   deleteNotification(id: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/notification/${id}`, {
+    return this.http.delete(`${this.baseUrl}/notifications/${id}/delete`, {
       headers: this.getHeaders()
     });
   }
 
-  clearUserNotifications(userType: string, userId: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/notification/clear/${userType}/${userId}`, {
+  clearUserNotifications(): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/notifications/clear`, {
       headers: this.getHeaders()
     });
   }
+
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'Something went wrong. Please try again later.';
+
+    if (error.error?.message) {
+      errorMessage = error.error.message;
+    }
+
+    console.error('API Error:', error);
+    return throwError(() => errorMessage);
+  }
+
 }
+
+

@@ -137,9 +137,21 @@ removeFilter(key: 'search' | 'jobType' | 'jobCategory' | 'status') {
 
 
 
-openJobOffcanvas(job: any) {
-  this.selectedJob = job;
+openJobOffcanvas(job: JobPost) {
+  this.selectedJob = null;
+  this.isLoading = true;
+
+  this.jobPostService.getRecruiterJobPostById(job._id!).subscribe({
+    next: (res: any) => {
+      this.selectedJob = res.jobPost; // ✅ FIXED
+      this.isLoading = false;
+    },
+    error: () => {
+      this.isLoading = false;
+    }
+  });
 }
+
 
 
 

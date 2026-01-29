@@ -67,6 +67,164 @@
                   <h6 class="mb-0 text-truncate">{{ applicant.fullName }}</h6>
                   <small class="text-muted">{{ applicant.gender }}</small>
                 </div>
+
+            <div class="dropend">
+
+              <button class="btn btn-sm btn-light dropdown-toggle-split" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="bi bi-three-dots"></i>
+              </button>
+              <ul class="dropdown-menu  action-dropdown shadow">
+
+                <li>
+                  <button class="dropdown-item" (click)="viewApplicantProfile(applicant.jobSeekerId)">
+                    <i class="bi bi-person-circle me-2 text-primary"></i>
+                    View Profile
+                  </button>
+                </li>
+
+
+                <!-- ASSESSMENT -->
+                <li>
+                  @if (!applicant.assessmentAssigned) {
+                  <button class="dropdown-item" (click)="openAssignAssessmentModal(applicant)">
+                    <i class="bi bi-file-earmark-plus me-2 text-info"></i>
+                    Assign Assessment
+                  </button>
+                  }
+                  @else if (!applicant.assessmentSubmitted) {
+                  <button class="dropdown-item" (click)="openUpdateAssessmentModal(applicant)">
+                    <i class="bi bi-pencil-square me-2 text-warning"></i>
+                    Update Assessment
+                  </button>
+                  }
+                  @else {
+                  <span class="dropdown-item disabled text-success fw-semibold">
+                    <i class="bi bi-file-earmark-check me-2"></i>
+                    Assessment Submitted
+                  </span>
+                  }
+                </li>
+
+                <!-- INTERVIEW -->
+                <li>
+                  @if (!applicant.interviewCompleted) {
+                  <button class="dropdown-item" (click)="openInterviewModal(applicant)">
+                    <i class="bi me-2 text-secondary" [ngClass]="applicant.interviewScheduled
+                        ? 'bi-pencil-square'
+                        : 'bi-calendar-event'"></i>
+                    {{ applicant.interviewScheduled ? 'Edit Interview' : 'Schedule Interview' }}
+                  </button>
+                  }
+                  @else {
+                  <span class="dropdown-item disabled text-success fw-semibold">
+                    <i class="bi bi-check-circle me-2"></i>
+                    Interview Completed
+                  </span>
+                  }
+                </li>
+
+
+                <!-- FINAL STATUS -->
+                @if (applicant.status === 'InProcess' && applicant.interviewCompleted) {
+                <li>
+                  <button class="dropdown-item action-success" (click)="shortlistApplicant(applicant)">
+                    <i class="bi bi-check-circle me-2"></i>
+                    Shortlist
+                  </button>
+                </li>
+
+                <li>
+                  <button class="dropdown-item action-danger" (click)="rejectApplicant(applicant)">
+                    <i class="bi bi-x-circle me-2"></i>
+                    Reject
+                  </button>
+                </li>
+                }
+
+                @if (applicant.status === 'Shortlisted') {
+                <li>
+                  <span class="dropdown-item disabled action-success fw-semibold">
+                    <i class="bi bi-check-circle me-2"></i>
+                    Shortlisted
+                  </span>
+                </li>
+                }
+
+                @if (applicant.status === 'Rejected') {
+                <li>
+                  <span class="dropdown-item disabled action-danger fw-semibold">
+                    <i class="bi bi-x-circle me-2"></i>
+                    Rejected
+                  </span>
+                </li>
+                }
+
+              </ul>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               </div>
             </div>
 

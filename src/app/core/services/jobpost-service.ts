@@ -76,14 +76,6 @@ export class JobpostService {
       .pipe(catchError(this.handleError));
   }
 
-  getClosedJobs(): Observable<any> {
-    return this.http
-      .get(`${this.baseUrl}/jobposts/closed`, {
-        headers: this.getHeaders(),
-      })
-      .pipe(catchError(this.handleError));
-  }
-
   getRecruiterJobPostById(jobPostId: string): Observable<any> {
     return this.http
       .get(`${this.baseUrl}/jobpost/${jobPostId}/jobPost-details`, {
@@ -91,6 +83,7 @@ export class JobpostService {
       })
       .pipe(catchError(this.handleError));
   }
+
 
   /* =========================
      APPLICANTS
@@ -120,22 +113,6 @@ export class JobpostService {
       .pipe(catchError(this.handleError));
   }
 
-  updateApplicantStatus(
-    jobPostId: string,
-    jobSeekerId: string,
-    status: 'Shortlisted' | 'Rejected'
-  ): Observable<any> {
-    return this.http
-      .put(
-        `${this.baseUrl}/jobpost/${jobPostId}/applicants/${jobSeekerId}/status`,
-        { status },
-        { headers: this.getHeaders() }
-      )
-      .pipe(catchError(this.handleError));
-  }
-
-
-
 
 
 
@@ -145,9 +122,6 @@ getAllJobPosts(): Observable<any> {
     { headers: this.getHeaders() }
   ).pipe(catchError(this.handleError));
 }
-
-
-
 
   getJobPostById(jobPostId: string): Observable<any> {
   return this.http.get<any>(
@@ -186,13 +160,6 @@ getAppliedJobPosts(): Observable<AppliedJobsResponse> {
 }
 
 
-isJobPostApplied(jobPostId: string): Observable<{ isApplied: boolean }> {
-  return this.http.get<{ isApplied: boolean }>(
-    `${this.baseUrl}/jobSeeker/job/is-applied/${jobPostId}`,
-    { headers: this.getHeaders() }
-  ).pipe(catchError(this.handleError));
-}
-
 
 
 
@@ -225,42 +192,24 @@ getSavedJobPosts(): Observable<SavedJobs> {
 }
 
 
-getJobPosts(): Observable<AppliedJobsResponse> {
-  return this.http.get<AppliedJobsResponse>(
-    `${this.baseUrl}/jobsSeeker/my-jobposts`,
-    { headers: this.getHeaders() }
-  ).pipe(catchError(this.handleError));
-}
 
-
-
-
-
-
-
-/** Shortlist (Hire) applicant */
 hireApplicant(jobPostId: string, jobSeekerId: string): Observable<any> {
   return this.http.put(
-    `${this.baseUrl}/analytics/job/${jobPostId}/hire/${jobSeekerId}`,
+    `${this.baseUrl}/job/${jobPostId}/hire/${jobSeekerId}`,
     {},
     { headers: this.getHeaders() }
   ).pipe(catchError(this.handleError));
 }
 
-/** Reject applicant */
+
 rejectApplicant(jobPostId: string, jobSeekerId: string): Observable<any> {
   return this.http.put(
-    `${this.baseUrl}/analytics/job/${jobPostId}/reject/${jobSeekerId}`,
+    `${this.baseUrl}/job/${jobPostId}/reject/${jobSeekerId}`,
     {},
     { headers: this.getHeaders() }
   ).pipe(catchError(this.handleError));
 }
 
-
-
-  /* =========================
-     ERROR HANDLER
-  ========================= */
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'Something went wrong. Please try again later.';
