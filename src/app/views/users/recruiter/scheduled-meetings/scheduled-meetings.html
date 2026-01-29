@@ -15,95 +15,91 @@
 
   <!-- Meetings -->
   @if (!loading && interviews.length > 0) {
-    <div class="row justify-content-center mt-4 mb-5">
+  <div class="row justify-content-center mt-4 mb-5">
 
-      @for (interview of interviews; track interview._id) {
-<div class="col-12 col-md-10 col-lg-10 mb-3">
+    @for (interview of interviews; track interview._id) {
+    <div class="col-12 col-md-10 col-lg-10 mb-3">
 
-  <div class="card interview-card p-3">
+      <div class="card interview-card p-3">
 
-    <!-- STATUS (TOP RIGHT) -->
-    <span class="badge interview-status">
-      {{ interview.status }}
-    </span>
+        <!-- STATUS (TOP RIGHT) -->
+        <span class="badge interview-status">
+          {{ interview.status }}
+        </span>
 
-    <!-- TOP -->
-    <div class="d-flex align-items-center gap-3 mb-2">
+        <!-- TOP -->
+        <div class="d-flex align-items-center gap-3 mb-2">
 
-  <img
-    [src]="interview.profilePhoto"
-    class="rounded-circle interview-avatar"
-    alt="Job Seeker Avatar"
-  />
+          <img [src]="interview.profilePhoto" class="rounded-circle interview-avatar" alt="Job Seeker Avatar" />
 
-      <div>
-        <h6 class="mb-0 fw-semibold">
-          {{ interview.jobSeekerName }}
-        </h6>
-        <small class="text-muted">
-          {{ interview.interviewTitle }}
-        </small>
+          <div>
+            <h6 class="mb-0 fw-semibold">
+              {{ interview.jobSeekerName }}
+            </h6>
+            <small class="text-muted">
+              {{ interview.interviewTitle }}
+            </small>
+          </div>
+
+        </div>
+
+        <!-- JOB INFO -->
+        <div class="interview-meta">
+
+          <div style="font-size:14px;">
+            <strong class="text-dark">
+              {{ interview.jobTitle }}
+            </strong>
+            – {{ interview.jobId }}
+          </div>
+
+          <div>
+            <p class="mb-1" style="font-size:14px;">
+              <strong>Date:</strong>
+              {{ interview.scheduledDate | date:'mediumDate' }}
+            </p>
+
+            <p class="mb-1 d-flex align-items-center gap-1" style="font-size:14px;">
+              <strong>Timings:</strong>
+              <i class="bi bi-clock"></i>
+              {{ interview.startTime | date:'shortTime' }} –
+              {{ interview.endTime | date:'shortTime' }}
+            </p>
+          </div>
+
+        </div>
+
+        <!-- ACTION -->
+        <div class="d-flex justify-content-end mt-2">
+
+          <!-- JOIN BUTTON (only if NOT completed) -->
+          @if (interview.status !== 'Completed') {
+          <a class="btn btn-sm interview-action-btn" [href]="interview.meetingJoinUrl" target="_blank"
+            rel="noopener noreferrer">
+            Join Interview
+          </a>
+
+          }
+
+          <!-- COMPLETED BADGE -->
+          @if (interview.status === 'Completed') {
+
+
+          <a class="btn btn-sm interview-action-btn disabled" [href]="interview.meetingJoinUrl" target="_blank"
+            rel="noopener noreferrer">
+            Interview Completed
+          </a>
+          }
+
+        </div>
+
+
       </div>
-
     </div>
 
-    <!-- JOB INFO -->
-    <div class="interview-meta">
 
-      <div  style="font-size:14px;">
-        <strong class="text-dark">
-          {{ interview.jobTitle }}
-        </strong>
-        – {{ interview.jobId }}
-      </div>
-
-      <div>
-        <p class="mb-1" style="font-size:14px;">
-          <strong>Date:</strong>
-          {{ interview.scheduledDate | date:'mediumDate' }}
-        </p>
-
-        <p class="mb-1 d-flex align-items-center gap-1" style="font-size:14px;">
-          <strong>Timings:</strong>
-          <i class="bi bi-clock"></i>
-          {{ interview.startTime | date:'shortTime' }} –
-          {{ interview.endTime | date:'shortTime' }}
-        </p>
-      </div>
-
-    </div>
-
-<!-- ACTION -->
-<div class="d-flex justify-content-end mt-2">
-
-  <!-- JOIN BUTTON (only if NOT completed) -->
-  @if (interview.status !== 'Completed') {
-<a
-  class="btn btn-sm interview-action-btn"
-  [href]="interview.meetingJoinUrl"
-  target="_blank"
-  rel="noopener noreferrer">
-  Join Interview
-</a>
-
-  }
-
-  <!-- COMPLETED BADGE -->
-  @if (interview.status === 'Completed') {
-    <span class="badge interview-completed-badge">
-      Interview Completed
-    </span>
-  }
-
-</div>
-
-
+    }
   </div>
-</div>
-
-
-      }
-    </div>
   }
 
   <!-- Empty State -->

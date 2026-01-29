@@ -34,11 +34,13 @@ export class ResumeAnalytics implements OnInit {
 
 feedback: any;
 parsedData: any;
-resumes: any[] = [];
+resume: any | null = null;
+
 loadingResumes = false;
 
 selectedReport: any = null;
 showReportModal = false;
+
 
 
 
@@ -54,12 +56,12 @@ showReportModal = false;
       this.loadMyResumes();
   }
 
-  loadMyResumes(): void {
+loadMyResumes(): void {
   this.loadingResumes = true;
 
   this.resumeService.getMyResumes().subscribe({
     next: (res) => {
-      this.resumes = res.resumes || [];
+      this.resume = res.resumes?.[0] || null;
       this.loadingResumes = false;
     },
     error: () => {
@@ -67,35 +69,40 @@ showReportModal = false;
     }
   });
 }
+
 
 
 onResumeUploaded(url: string): void {
-  this.resumeUrl = url + '?v=' + Date.now();
-
   this.resumeForm.get('resume')?.setValue(url);
   this.resumeForm.get('resume')?.markAsTouched();
 
-  // 🔥 SAVE TO BACKEND
+  // reset UI state
+  this.selectedReport = null;
+  this.showReportModal = false;
+
   this.resumeService.saveResumeUrl(url).subscribe({
-    next: () => console.log('Resume URL saved'),
+    next: () => this.loadMyResumes(),
     error: (err) => console.error(err)
   });
-  this.loadMyResumes()
 }
 
-runScoreForResume(resumeId: string): void {
+
+runScoreForResume(): void {
+  if (!this.resume) return;
+
   this.scoring = true;
 
-  this.resumeService.runResumeScoring(resumeId, true).subscribe({
+  this.resumeService.runResumeScoring(this.resume._id, true).subscribe({
     next: () => {
       this.scoring = false;
-      this.loadMyResumes(); // refresh score badge
+      this.loadMyResumes();
     },
     error: () => {
       this.scoring = false;
     }
   });
 }
+
 
 closeReport(): void {
   this.showReportModal = false;
@@ -112,25 +119,18 @@ openReport(resumeId: string): void {
 }
 
 
-deleteResume(resumeId: string): void {
-  const confirmed = confirm(
-    'Are you sure you want to delete this resume? This action cannot be undone.'
-  );
+deleteResume(): void {
+  if (!this.resume) return;
 
+  const confirmed = confirm('Delete resume permanently?');
   if (!confirmed) return;
 
-  this.resumeService.deleteResume(resumeId).subscribe({
+  this.resumeService.deleteResume(this.resume._id).subscribe({
     next: () => {
-      // close report if deleted resume is open
-      if (this.selectedReport?.resumeId === resumeId) {
-        this.closeReport();
-      }
-
-      this.loadMyResumes(); // refresh list
+      this.resume = null;
+      this.closeReport();
     },
-    error: (err) => {
-      console.error(err);
-    }
+    error: (err) => console.error(err)
   });
 }
 

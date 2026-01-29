@@ -10,7 +10,7 @@
           alt="logo"
           style="height: 48px; width: auto;">
 
-   <button class="hamburger-btn" (click)="toggleSidebar()">
+   <button class="hamburger-btn " (click)="toggleSidebar()">
       <i class="bi bi-list fs-3"></i>
     </button>
 
@@ -18,109 +18,71 @@
 
     </div>
 
-    <div class="d-flex align-items-center" style="gap: 10px; ">
+<div class="d-flex align-items-center gap-3">
+
+  <!-- Name + Role -->
+<div class="d-flex flex-column justify-content-center text-end d-none d-md-block">
+  <div class="fw-semibold lh-1">{{ fullName }}</div>
+  <small class="text-muted text-capitalize lh-1 mt-1">
+    {{ userRole }}
+  </small>
+</div>
 
 
+  <!-- Profile Dropdown -->
+  <div class="dropdown">
+    <a
+      class="d-flex align-items-center"
+      data-bs-toggle="dropdown"
+      role="button"
+      aria-expanded="false"
+    >
+      <img
+        [src]="profileImage || 'assets/avatar.png'"
+        alt="Profile"
+        width="36"
+        height="36"
+        class="rounded-circle border"
+      />
+    </a>
 
-      <div class="dropdown notif-dropdown mx-2">
-        <a class="header-icon position-relative" data-bs-toggle="dropdown">
-          <i class="bi bi-bell fs-5"></i>
+    <ul class="dropdown-menu dropdown-menu-end shadow-sm profile-menu">
+      <li class="px-3 py-2">
+        <div class="fw-semibold">{{ fullName }}</div>
+        <small class="text-muted text-capitalize">{{ userRole }}</small>
+      </li>
 
-          @if (unreadCount > 0 && showCount) {
-          <span class="notif-badge">{{ unreadCount }}</span>
-          }
+      <li><hr class="dropdown-divider"></li>
+
+      <li>
+        <a class="dropdown-item d-flex align-items-center gap-2"
+           (click)="goToProfilePage()">
+          <i class="bi bi-person"></i>
+          Profile
         </a>
-        <div class="dropdown-menu dropdown-menu-end shadow notif-menu" data-bs-auto-close="outside"
-          (click)="$event.stopPropagation()">
+      </li>
 
-
-          <div class="notif-header d-flex justify-content-between align-items-center px-3 py-2">
-            <strong>Notifications</strong>
-
-            <div class="actions">
-              <button class="btn btn-sm btn-light me-2" (click)="markAllRead()">Mark all read</button>
-              <button class="btn btn-sm btn-danger" (click)="clearAll()">Clear all</button>
-            </div>
-          </div>
-
-          <hr class="my-1">
-
-          <div class="notif-list">
-
-            @if (notifications.length === 0) {
-            <p class="text-center text-muted py-3">No notifications</p>
-
-            } @else {
-
-            @for (n of visibleNotifications; track n) {
-            <div class="notif-item" [class.unread]="!n.read">
-              @if (!n.read) {
-              <i class="bi bi-dot notif-dot"></i>
-              }
-
-              <div>
-                <p class="mb-0 notif-text">{{ n.message }}</p>
-                <small class="notif-time">{{ n.time }}</small>
-              </div>
-            </div>
-            }
-
-            <button class="btn btn-link small w-100 text-center mt-2" (click)="toggleView()">
-              {{ viewMore ? "View less" : "View more" }}
-            </button>
-
-            }
-          </div>
-        </div>
-      </div>
-
-      <div class="dropdown ">
-
-        <a class="header-icon" data-bs-toggle="dropdown">
-          <img [src]="profileImage" alt="profile" width="35" height="35" class="rounded-circle">
+      <li>
+        <a class="dropdown-item d-flex align-items-center gap-2">
+          <i class="bi bi-gear"></i>
+          Settings
         </a>
+      </li>
 
-        <ul class="dropdown-menu dropdown-menu-start profile-menu" style="width: 200px;">
-          <li class="dropdown-item" style="line-height: 1.2;">
-            {{ fullName }}<br>
-            <small>{{ userRole }}</small>
-          </li>
+      <li><hr class="dropdown-divider"></li>
 
-          <li>
-            <hr>
-          </li>
+      <li>
+        <a class="dropdown-item d-flex align-items-center gap-2 text-danger"
+           (click)="logout()">
+          <i class="bi bi-box-arrow-right"></i>
+          Log out
+        </a>
+      </li>
+    </ul>
+  </div>
 
-          <li>
-            <a class="dropdown-item d-flex align-items-center gap-2" (click)="goToProfilePage()">
-              <i class="bi bi-person"></i>
-              Profile
-            </a>
-          </li>
+</div>
 
-          <li>
-            <a class="dropdown-item d-flex align-items-center gap-2">
-              <i class="bi bi-gear"></i>
-              Settings
-            </a>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li>
-            <a class="dropdown-item d-flex align-items-center gap-2 text-danger" (click)="logout()">
-              <i class="bi bi-box-arrow-right"></i>
-              Log out
-            </a>
-          </li>
-        </ul>
-
-
-      </div>
-
-
-    </div>
 
   </div>
 

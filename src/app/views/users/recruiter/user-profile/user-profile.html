@@ -1,10 +1,15 @@
   <!-- MOBILE BACK BUTTON -->
+@if (!recruiterProfile) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+    <p class="mt-3 text-muted">Loading profile…</p>
+  </div>
+} @else {
+
+<div class="container user-profile mt-3">
   <div class="mobile-back p-3  d-flex align-items-center" (click)="goBack()">
     <i class="bi bi-arrow-left me-2 fs-5"></i> Back
   </div>
-@if (recruiterProfile) {
-<div class="container user-profile mt-3">
-
   <!-- PROFILE HEADER -->
   <div class="profile-header card border-0 shadow-sm rounded-4 mb-4">
 

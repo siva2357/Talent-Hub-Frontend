@@ -1,7 +1,7 @@
 export interface AppNotification {
   _id: string;
   userId: string;
-  userType: string;
+  role: string;
   title: string;
   message: string;
   link?: string;

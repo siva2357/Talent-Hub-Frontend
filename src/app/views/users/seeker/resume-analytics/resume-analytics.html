@@ -34,62 +34,59 @@
 
 
 
-@if (!loadingResumes && resumes.length) {
-<div class="card shadow-sm border-0 mb-4">
-  <div class="card-body">
-    <h5 class="fw-semibold mb-3">My Resumes</h5>
+@if (!loadingResumes && resume) {
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
 
-    <ul class="list-group list-group-flush">
-      @for (resume of resumes; track resume._id) {
-      <li class="list-group-item">
+      <h5 class="fw-semibold mb-3">My Resume</h5>
 
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span>
-            Resume uploaded on
-            {{ resume.createdAt | date:'mediumDate' }}
-          </span>
+      <div class="d-flex justify-content-between mb-2">
+        <span>
+          Uploaded on {{ resume.updatedAt | date:'mediumDate' }}
+        </span>
 
-          <span class="badge bg-primary">
-            {{ resume.resumeScore ?? 'Not Scored' }}
-          </span>
-        </div>
+        <span class="badge bg-primary">
+          {{ resume.resumeScore ?? 'Not Scored' }}
+        </span>
+      </div>
 
-        <div class="d-flex gap-2">
-            <a
-    class="btn btn-sm btn-outline-dark"
-    [href]="resume.resumeUrl"
-    target="_blank"
-    rel="noopener">
-    View Resume
-  </a>
+      <div class="d-flex gap-2">
+        <a
+          class="btn btn-sm btn-outline-dark"
+          [href]="resume.resumeUrl + '?v=' + resume.updatedAt"
+          target="_blank">
+          View Resume
+        </a>
 
-          <button class="btn btn-sm btn-outline-primary" (click)="runScoreForResume(resume._id)">
-            {{ resume.hasScore ? 'Run Score Again' : 'Run Score' }}
-          </button>
+        <button
+          class="btn btn-sm btn-outline-primary"
+          [disabled]="scoring"
+          (click)="runScoreForResume()">
+          {{ resume.hasScore ? 'Run Score Again' : 'Run Score' }}
+        </button>
 
-          @if (resume.hasScore){
-          <button class="btn btn-sm btn-outline-secondary"
+        @if (resume.hasScore) {
+          <button
+            class="btn btn-sm btn-outline-secondary"
             (click)="openReport(resume._id)">
             View Report
           </button>
-          }
+        }
 
+        <button
+          class="btn btn-sm btn-outline-danger"
+          (click)="deleteResume()">
+          Delete
+        </button>
+      </div>
 
-          <button class="btn btn-sm btn-outline-danger" (click)="deleteResume(resume._id)">
-            Delete
-          </button>
-
-        </div>
-
-      </li>
-      }
-    </ul>
+    </div>
   </div>
-</div>
 }
 
 
-@if (!loadingResumes && resumes.length === 0) {
+
+@if (!loadingResumes && !resume) {
   <div class="card shadow-sm border-0 mb-4">
     <div class="card-body text-center py-5">
 

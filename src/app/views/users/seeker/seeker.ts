@@ -45,8 +45,7 @@ ngOnInit(): void {
 
 loadNotifications(): void {
   if (!this.userId || !this.userRole) return;
-  const apiRole = this.userRole.charAt(0).toUpperCase() + this.userRole.slice(1); // 'client' → 'Client'
-  this.notificationService.getUserNotifications(apiRole, this.userId).subscribe({
+  this.notificationService.getUserNotifications().subscribe({
     next: (notifs) => {
       this.notifications = notifs;
     },
@@ -71,11 +70,8 @@ loadNotifications(): void {
   }
 
 markAllRead() {
-  const apiRole =
-    this.userRole.charAt(0).toUpperCase() + this.userRole.slice(1);
-
   this.notificationService
-    .markAllAsRead(apiRole, this.userId)
+    .markAllAsRead()
     .subscribe({
       next: () => {
         // ✅ Update UI after backend success
@@ -89,11 +85,8 @@ markAllRead() {
 }
 
 clearAll() {
-  const apiRole =
-    this.userRole.charAt(0).toUpperCase() + this.userRole.slice(1);
-
   this.notificationService
-    .clearUserNotifications(apiRole, this.userId)
+    .clearUserNotifications()
     .subscribe({
       next: () => {
         this.notifications = [];
