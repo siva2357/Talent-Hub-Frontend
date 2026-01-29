@@ -1,0 +1,62 @@
+<!-- 👋 INTRO SLIDE POPUP -->
+@if (showIntro) {
+  <div class="ai-intro">
+    <div class="intro-header">
+      👋 Hello
+      <span class="intro-close" (click)="closeIntro()">✕</span>
+    </div>
+
+    <div class="intro-section">
+      <strong>I’m your AI Assistant</strong>
+      <p>Ask me anything about jobs or features.</p>
+    </div>
+
+    <div class="intro-section">
+      <ul>
+        <li>🔍 Find jobs</li>
+        <li>📘 Explain features</li>
+        <li>💬 Quick answers</li>
+      </ul>
+    </div>
+
+    <div class="intro-footer">
+      <button (click)="openChatFromIntro()">Chat with me →</button>
+    </div>
+  </div>
+}
+
+<!-- Floating Button -->
+<div class="ai-btn" (click)="toggleChat()">
+  <img src="assets/logo/chatbot.png" alt="AI Assistant" />
+</div>
+
+<!-- Chat Box -->
+@if (isOpen) {
+  <div class="ai-box">
+
+    <div class="ai-header">
+      <div class="ai-title">
+        <img src="assets/logo/chatbot.png" alt="AI" />
+        <span>AI Assistant</span>
+      </div>
+      <div class="ai-close" (click)="toggleChat()">✕</div>
+    </div>
+
+    <div class="ai-messages">
+      @for (m of messages; track m) {
+        <div class="msg" [class.user]="m.sender === 'user'" [class.ai]="m.sender === 'ai'">
+          {{ m.text }}
+        </div>
+      }
+    </div>
+
+    <div class="ai-input">
+      <input
+        [(ngModel)]="input"
+        (keyup.enter)="sendMessage()"
+        placeholder="Ask something…" />
+      <button (click)="sendMessage()">Send</button>
+    </div>
+
+  </div>
+}
