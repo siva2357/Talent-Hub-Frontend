@@ -1,11 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ChatbotService } from '../../../core/services/chatbot-service';
+
 
 interface ChatMessage {
   sender: 'user' | 'ai';
-  text: string;
+  text?: string;        // for user messages
+  paragraph?: string;   // for AI main answer
+  points?: string[];    // for AI bullet points
+  raw?: string;         // optional (debug)
 }
+
 
 @Component({
   selector: 'app-ai-chabot-component',
@@ -20,8 +26,10 @@ export class AiChabotComponent implements OnInit {
   input = '';
   messages: ChatMessage[] = [];
 
-  // 👋 intro popup
   showIntro = false;
+  loading = false;
+
+  constructor(private chatbotService: ChatbotService) {}
 
   ngOnInit() {
     const seen = localStorage.getItem('aiIntroSeen');
@@ -46,17 +54,82 @@ export class AiChabotComponent implements OnInit {
     this.isOpen = true;
   }
 
-  sendMessage() {
-    if (!this.input.trim()) return;
+sendMessage() {
+  if (!this.input.trim() || this.loading) return;
 
-    this.messages.push({ sender: 'user', text: this.input });
-    this.input = '';
+  const userMessage = this.input;
 
-    setTimeout(() => {
+  // push user message
+  this.messages.push({
+    sender: 'user',
+    text: userMessage
+  });
+
+  this.input = '';
+  this.loading = true;
+
+  this.chatbotService.askQuestion(userMessage).subscribe({
+    next: (res) => {
+      const formatted = this.formatAIResponse(res.answer);
+
       this.messages.push({
         sender: 'ai',
-        text: 'Hi! I can help you explore jobs or answer questions 😊'
+        paragraph: formatted.paragraph,
+        points: formatted.points,
+        raw: res.answer
       });
-    }, 600);
+
+      this.loading = false;
+      this.scrollToBottom();
+    },
+    error: () => {
+      this.messages.push({
+        sender: 'ai',
+        paragraph: 'Sorry, something went wrong. Please try again.',
+        points: []
+      });
+      this.loading = false;
+    }
+  });
+}
+
+
+
+
+private formatAIResponse(text: string): { paragraph: string; points: string[] } {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+
+  const paragraphLines: string[] = [];
+  const points: string[] = [];
+
+  for (let line of lines) {
+    // remove markdown bold/italic markers
+    line = line.replace(/\*\*/g, '').replace(/__/g, '').replace(/\*/g, '');
+
+    if (
+      line.startsWith('-') ||
+      line.startsWith('•') ||
+      /^\d+\./.test(line)
+    ) {
+      points.push(line.replace(/^(-|•|\d+\.)\s*/, ''));
+    } else if (!line.toLowerCase().includes('key aspects')) {
+      paragraphLines.push(line);
+    }
+  }
+
+  return {
+    paragraph: paragraphLines.join(' '),
+    points
+  };
+}
+
+
+
+
+  private scrollToBottom() {
+    setTimeout(() => {
+      const el = document.querySelector('.ai-messages');
+      el?.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+    });
   }
 }

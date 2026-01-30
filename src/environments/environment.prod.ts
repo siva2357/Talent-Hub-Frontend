@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   apiGatewayUrl: 'https://talent-hub-backend-394209614268.asia-south1.run.app/api',
+  CHATBOT_API: 'https://rag-chatbot-394209614268.asia-south1.run.app/api',
   firebase: {
     apiKey: 'AIzaSyCG05DLoF-NM9hj5Xdfv2OjXhSp9wpUbc0',
     authDomain: 'talent-hub-257d6.firebaseapp.com',
