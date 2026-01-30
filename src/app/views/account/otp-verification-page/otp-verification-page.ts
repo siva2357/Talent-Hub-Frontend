@@ -71,29 +71,29 @@ export class OtpVerificationPage {
   }
 
   /* ================= VERIFY OTP ================= */
-  verify(): void {
-    const providedCode = this.otp.join('');
+verify(): void {
+  const providedCode = this.otp.join('');
 
-    if (providedCode.length !== 6) return;
+  if (providedCode.length !== 6) return;
 
-    this.loading = true;
-    this.errorMessage = '';
+  this.loading = true;
+  this.errorMessage = '';
 
-this.authService.verifyOtp(
-  providedCode,
-  this.email,
-  this.role
-).subscribe({
-  next: () => {
-    this.loading = false;
-    this.router.navigate(['/confirmation-page']);
-  },
-  error: () => {
-    this.loading = false;
-    this.errorMessage = 'Invalid or expired OTP';
-  }
-});
+  this.authService.verifyOtp({
+    email: this.email,
+    providedCode,
+    role: this.role as 'jobSeeker' | 'recruiter'
+  }).subscribe({
+    next: () => {
+      this.loading = false;
+      this.router.navigate(['/confirmation-page']);
+    },
+    error: () => {
+      this.loading = false;
+      this.errorMessage = 'Invalid or expired OTP';
+    }
+  });
+}
 
-  }
 
 }

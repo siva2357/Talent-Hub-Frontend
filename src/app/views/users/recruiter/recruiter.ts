@@ -179,23 +179,15 @@ goToProfilePage(): void {
 logout(): void {
   this.authService.logout().subscribe({
     next: () => {
-      // ✅ Clear frontend state
-      localStorage.clear();
-      sessionStorage.clear();
-
-      // ✅ Redirect
       this.router.navigate(['/login']);
     },
-    error: (err) => {
-      console.error('Logout failed', err);
-
-      // 🔐 Fail-safe logout
-      localStorage.clear();
-      sessionStorage.clear();
+    error: () => {
+      this.authService.clearAuthData();
       this.router.navigate(['/login']);
     }
   });
 }
+
 
 
 }

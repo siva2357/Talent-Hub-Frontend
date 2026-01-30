@@ -1,12 +1,12 @@
 import { Component, OnInit, ElementRef, HostListener } from '@angular/core';
 import { UserService } from '../../../../core/services/user-service';
 import { Router, RouterModule } from '@angular/router';
-import { Talent } from '../../../../core/models/talent.model';
 import { CommonModule } from '@angular/common';
 import { LOCATIONS } from '../../../../core/enums/location.enum';
 import { SECTOR } from '../../../../core/enums/sector.enum';
 import { FormsModule } from '@angular/forms';
 import { SKILLS } from '../../../../core/enums/skills.enum';
+import { Talent } from '../../../../core/models/talent.model';
 
 @Component({
   selector: 'app-talents',
@@ -101,11 +101,7 @@ toggleSkill(skill: string): void {
 applyFilters(): void {
   this.filteredTalents = this.talents.filter(talent => {
 
-    const matchLocation =
-      !this.selectedLocation || talent.location === this.selectedLocation;
 
-    const matchSector =
-      !this.selectedSector || talent.sector === this.selectedSector;
 
     const matchSkill =
       this.selectedSkills.length === 0 ||
@@ -113,7 +109,7 @@ applyFilters(): void {
         talent.skills?.includes(skill)
       );
 
-    return matchLocation && matchSector && matchSkill;
+    return  matchSkill;
   });
 }
 

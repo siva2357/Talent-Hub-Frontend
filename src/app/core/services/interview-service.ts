@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import {  HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { CreateInterviewPayload, Interview } from '../models/interview.model';
+import { Interview, JobSeekerInterview, MeetingsResponse } from '../models/interview.model';
+import { CreateInterviewDTO, UpdateInterviewDTO } from '../dtos/interview.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -23,67 +24,58 @@ export class InterviewService {
 
   // ==================== RECRUITER ====================
 
-createInterview(payload: CreateInterviewPayload): Observable<Interview> {
-  return this.http
-    .post<{ interview: Interview }>(
-      `${this.baseUrl}/recruiter/meetings`,
-      payload,
-      { headers: this.getHeaders() }
-    )
-    .pipe(
-      map(res => res.interview),
-      catchError(this.handleError)
-    );
-}
-
-
-  getAllRecruiterInterviews(): Observable<{ totalInterviews: number; interviews: Interview[] }> {
+  createInterview(
+    payload: CreateInterviewDTO
+  ): Observable<Interview> {
     return this.http
-      .get<{ totalMeetings: number; meetings: Interview[] }>(
+      .post<{ success: boolean; interview: Interview }>(
         `${this.baseUrl}/recruiter/meetings`,
+        payload,
         { headers: this.getHeaders() }
       )
       .pipe(
-        map(res => ({
-          totalInterviews: res.totalMeetings,
-          interviews: res.meetings
-        })),
+        map(res => res.interview),
         catchError(this.handleError)
       );
   }
 
 
-  getRecruiterInterviewById(id: string): Observable<Interview> {
+
+ getAllRecruiterInterviews(): Observable<MeetingsResponse> {
     return this.http
-      .get<{ interview: Interview }>(
-        `${this.baseUrl}/recruiter/meetings/${id}`,
+      .get<MeetingsResponse>(
+        `${this.baseUrl}/recruiter/meetings`,
         { headers: this.getHeaders() }
       )
-      .pipe(map(res => res.interview), catchError(this.handleError));
+      .pipe(catchError(this.handleError));
   }
 
 
 
-updateInterview(
-  interviewId: string,
-  updateData: Partial<Interview>
-): Observable<Interview> {
-  return this.http
-    .patch<{ interview: Interview }>(
-      `${this.baseUrl}/recruiter/meetings/${interviewId}`,
-      updateData,
-      { headers: this.getHeaders() }
-    )
-    .pipe(
-      map(res => res.interview),
-      catchError(this.handleError)
-    );
-}
 
 
-  deleteInterview(interviewId: string): Observable<{ message: string }> {
+  updateInterview(
+    interviewId: string,
+    payload: UpdateInterviewDTO
+  ): Observable<Interview> {
     return this.http
-      .delete<{ message: string }>(
+      .put<{ success: boolean; meeting: Interview }>(
+        `${this.baseUrl}/recruiter/meetings/${interviewId}`,
+        payload,
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        map(res => res.meeting),
+        catchError(this.handleError)
+      );
+  }
+
+
+  deleteInterview(
+    interviewId: string
+  ): Observable<{ success: boolean; message: string }> {
+    return this.http
+      .delete<{ success: boolean; message: string }>(
         `${this.baseUrl}/recruiter/meetings/${interviewId}`,
         { headers: this.getHeaders() }
       )
@@ -92,59 +84,51 @@ updateInterview(
 
 
 
-getInterviewByApplicant(
-  jobPostId: string,
-  jobSeekerId: string
-): Observable<Interview> {
-  return this.http.get<Interview>(
-    `${this.baseUrl}/recruiter/interview/by-applicant`,
-    {
-      headers: this.getHeaders(),
-      params: { jobPostId, jobSeekerId }
-    }
-  );
+  /** Get interview by applicant (jobPost + jobSeeker) */
+  getInterviewByApplicant(
+    jobPostId: string,
+    jobSeekerId: string
+  ): Observable<Interview> {
+    return this.http
+      .get<Interview>(
+        `${this.baseUrl}/recruiter/interview/by-applicant`,
+        {
+          headers: this.getHeaders(),
+          params: { jobPostId, jobSeekerId }
+        }
+      )
+      .pipe(catchError(this.handleError));
+  }
+
+
+
+getAllJobSeekerInterviews(): Observable<{
+  totalMeetings: number;
+  meetings: JobSeekerInterview[];
+}> {
+  return this.http
+    .get<{
+      totalMeetings: number;
+      meetings: JobSeekerInterview[];
+    }>(
+      `${this.baseUrl}/jobSeeker/meetings`,
+      { headers: this.getHeaders() }
+    )
+    .pipe(catchError(this.handleError));
 }
 
 
 
 
 
-  getAllJobSeekerInterviews(): Observable<{ totalInterviews: number; interviews: Interview[] }> {
-    return this.http
-      .get<{ totalMeetings: number; meetings: Interview[] }>(
-        `${this.baseUrl}/jobseeker/meetings`,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map(res => ({
-          totalInterviews: res.totalMeetings,
-          interviews: res.meetings
-        })),
-        catchError(this.handleError)
-      );
-  }
-
-
-  getJobSeekerInterviewById(id: string): Observable<Interview> {
-    return this.http
-      .get<{ interview: Interview }>(
-        `${this.baseUrl}/jobseeker/meetings/${id}`,
-        { headers: this.getHeaders() }
-      )
-      .pipe(map(res => res.interview), catchError(this.handleError));
-  }
-
-
-
-
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'Something went wrong. Please try again later.';
-    if (error.error?.message) {
-      errorMessage = error.error.message;
-    }
-    console.error('API Error:', error);
-    return throwError(() => errorMessage);
+    const message =
+      error.error?.message ||
+      `Error ${error.status}: ${error.statusText}`;
+
+    console.error('Interview API Error:', error);
+    return throwError(() => message);
   }
 
 }

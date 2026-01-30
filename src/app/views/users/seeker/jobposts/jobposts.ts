@@ -4,13 +4,13 @@ import { Router } from '@angular/router';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 
 import { JobpostService } from '../../../../core/services/jobpost-service';
-import { JobPost } from '../../../../core/models/jobpost.model';
+import { JobPost, JobSeekerJobPost } from '../../../../core/models/jobpost.model';
 import { JOBPOSTCATEGORY } from '../../../../core/enums/jobpost-category.enum';
 import { JOBPOSTTYPE } from '../../../../core/enums/jobpost-type.enum';
 import { TimeAgoPipe } from "../../../../core/pipes/time.pipe";
 import { RecommendationService } from '../../../../core/services/recommendation-service';
-import { JobMatchResponse } from '../../../../core/models/jobMatchReponse.model';
 import { getMatchBadge } from '../../../../core/helpers/job-match.helper';
+import { JobMatchResponse } from '../../../../core/models/jobMatchReponse.model';
 
 @Component({
   selector: 'app-jobposts',
@@ -20,14 +20,14 @@ import { getMatchBadge } from '../../../../core/helpers/job-match.helper';
   styleUrl: './jobposts.css'
 })
 export class Jobposts implements OnInit {
+jobPosts: JobSeekerJobPost[] = [];
+filteredJobPosts: JobSeekerJobPost[] = [];
+selectedJob: JobSeekerJobPost | null = null;
 
-  jobPosts: JobPost[] = [];
-  filteredJobPosts: JobPost[] = [];
   totalJobPosts = 0;
   errorMessage = '';
   jobCategories = Object.values(JOBPOSTCATEGORY);
 jobTypes = Object.values(JOBPOSTTYPE);
-selectedJob: JobPost | null = null;
   jobPostId!: string;
     jobMatch!: JobMatchResponse;
   loading = true;
@@ -76,21 +76,22 @@ badge: { label: string; color: string } | null = null;
   /* =========================
      Save / Unsave
   ========================== */
-  toggleSave(job: JobPost): void {
-    job.saved ? this.unsaveJob(job) : this.saveJob(job);
-  }
+toggleSave(job: JobSeekerJobPost): void {
+  job.saved ? this.unsaveJob(job) : this.saveJob(job);
+}
 
-  saveJob(job: JobPost): void {
-    this.jobpostService.saveJobPost(job._id).subscribe(() => {
-      job.saved = true;
-    });
-  }
+saveJob(job: JobSeekerJobPost): void {
+  this.jobpostService.saveJobPost(job._id).subscribe(() => {
+    job.saved = true;
+  });
+}
 
-  unsaveJob(job: JobPost): void {
-    this.jobpostService.unsaveJobPost(job._id).subscribe(() => {
-      job.saved = false;
-    });
-  }
+unsaveJob(job: JobSeekerJobPost): void {
+  this.jobpostService.unsaveJobPost(job._id).subscribe(() => {
+    job.saved = false;
+  });
+}
+
 
 
 
@@ -184,14 +185,13 @@ private closeOffcanvas(): void {
 }
 
 
-
 applyJob(): void {
   if (!this.selectedJob) return;
 
   this.jobpostService.applyJobPost(this.selectedJob._id).subscribe({
     next: () => {
-      this.selectedJob!.isApplied = true;   // updates card + offcanvas
-      this.closeOffcanvas();                // auto close
+      this.selectedJob!.isApplied = true;
+      this.closeOffcanvas();
     },
     error: () => alert('Failed to apply for job')
   });
@@ -202,12 +202,13 @@ withdrawJob(): void {
 
   this.jobpostService.withdrawJobPost(this.selectedJob._id).subscribe({
     next: () => {
-      this.selectedJob!.isApplied = false;  // updates card + offcanvas
-      this.closeOffcanvas();                // auto close
+      this.selectedJob!.isApplied = false;
+      this.closeOffcanvas();
     },
     error: () => alert('Failed to withdraw application')
   });
 }
+
 
 
 }

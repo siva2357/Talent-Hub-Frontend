@@ -1,153 +1,149 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
-import { ApiResponse } from '../models/api-response.model';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
-import { JobSeekerProfile, JobSeekerProfileResponse } from '../models/jobseeker-profile.model';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class SeekerProfileService  {
-  private baseUrl: string = environment.apiGatewayUrl;
+import { ApiResponse } from '../models/api-response.model';
+import { CreateJobSeekerProfileDTO, UpdateJobSeekerBasicDTO, UpdateJobSeekerImageDTO, UpdateJobSeekerProfessionalDTO } from '../dtos/jobseeker-profile.dto';
+import { JobSeekerBasicProfile, JobSeekerImage, JobSeekerProfile, JobSeekerProfileResponse } from '../models/jobseeker-profile.model';
 
-  private role = localStorage.getItem('userRole') || '';
-  private userData = JSON.parse(localStorage.getItem('userData') || '{}');
+
+
+@Injectable({ providedIn: 'root' })
+export class SeekerProfileService {
+  private readonly baseUrl = environment.apiGatewayUrl;
+
+  constructor(private http: HttpClient, private router: Router) {}
+
+  /* ================= AUTH HEADER ================= */
 
   private getHeaders(): HttpHeaders {
-  const token = localStorage.getItem('JWT_Token');
-
-    if (!token) {
-      console.error("🚨 No token found in localStorage!");
-      return new HttpHeaders();
-    }
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const token = localStorage.getItem('JWT_Token');
+    return new HttpHeaders({
+      Authorization: `Bearer ${token ?? ''}`,
+    });
   }
 
+  /* ================= CREATE PROFILE ================= */
 
-  constructor(private http: HttpClient, private router: Router) { }
+  createProfile(
+    payload: CreateJobSeekerProfileDTO
+  ): Observable<ApiResponse<JobSeekerProfile>> {
+    return this.http
+      .post<ApiResponse<JobSeekerProfile>>(
+        `${this.baseUrl}/jobSeeker/createProfile`,
+        payload,
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
+  }
 
+  /* ================= FULL PROFILE ================= */
 
+  getJobSeekerProfile(): Observable<
+    ApiResponse<JobSeekerProfileResponse>
+  > {
+    return this.http
+      .get<ApiResponse<JobSeekerProfileResponse>>(
+        `${this.baseUrl}/jobSeeker/getProfile`,
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
+  }
 
-  createProfile(payload: any) {
-  return this.http.post(
-    `${this.baseUrl}/jobSeeker/createProfile`,
-    payload,
-    {
-      headers: this.getHeaders()
-    }
-  )
-    .pipe(catchError(error => this.handleError(error)));
-}
+  /* ================= BASIC PROFILE ================= */
 
+  getJobSeekerBasicDetails(): Observable<
+    ApiResponse<JobSeekerBasicProfile>
+  > {
+    return this.http
+      .get<ApiResponse<JobSeekerBasicProfile>>(
+        `${this.baseUrl}/jobSeeker/basic`,
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
+  }
 
-getJobSeekerProfile(): Observable<ApiResponse<JobSeekerProfileResponse>> {
-  return this.http
-    .get<ApiResponse<JobSeekerProfileResponse>>(
-      `${this.baseUrl}/jobSeeker/getProfile`,
-      { headers: this.getHeaders() }
-    )
-    .pipe(catchError(error => this.handleError(error)));
-}
+  updateJobSeekerBasicDetails(
+    payload: UpdateJobSeekerBasicDTO
+  ): Observable<ApiResponse<JobSeekerProfile>> {
+    return this.http
+      .put<ApiResponse<JobSeekerProfile>>(
+        `${this.baseUrl}/jobSeeker/basic`,
+        payload,
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
+  }
 
+  /* ================= PROFILE IMAGE ================= */
 
+  getJobSeekerProfilePicture(): Observable<
+    ApiResponse<JobSeekerImage>
+  > {
+    return this.http
+      .get<ApiResponse<JobSeekerImage>>(
+        `${this.baseUrl}/jobSeeker/image`,
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
+  }
 
-getJobSeekerBasicDetails(): Observable<ApiResponse<JobSeekerProfile>> {
-  return this.http
-    .get<ApiResponse<JobSeekerProfile>>(
-      `${this.baseUrl}/jobSeeker/basic`,
-      { headers: this.getHeaders() }
-    )
-    .pipe(catchError(error => this.handleError(error)));
-}
+  updateJobSeekerProfilePicture(
+    payload: UpdateJobSeekerImageDTO
+  ): Observable<ApiResponse<JobSeekerProfile>> {
+    return this.http
+      .put<ApiResponse<JobSeekerProfile>>(
+        `${this.baseUrl}/jobSeeker/image`,
+        payload,
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
+  }
 
+  /* ================= PROFESSIONAL ================= */
 
+  getJobSeekerProfessional(): Observable<
+    ApiResponse<JobSeekerProfile>
+  > {
+    return this.http
+      .get<ApiResponse<JobSeekerProfile>>(
+        `${this.baseUrl}/jobSeeker/professional`,
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
+  }
 
-updateJobSeekerBasicDetails(payload: Partial<JobSeekerProfile>):
-  Observable<ApiResponse<JobSeekerProfile>> {
+  updateJobSeekerProfessional(
+    payload: UpdateJobSeekerProfessionalDTO
+  ): Observable<ApiResponse<JobSeekerProfile>> {
+    return this.http
+      .put<ApiResponse<JobSeekerProfile>>(
+        `${this.baseUrl}/jobSeeker/professional`,
+        payload,
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
+  }
 
-  return this.http
-    .put<ApiResponse<JobSeekerProfile>>(
-      `${this.baseUrl}/jobSeeker/basic`,
-      payload,
-      { headers: this.getHeaders() }
-    )
-    .pipe(catchError(error => this.handleError(error)));
-}
+  /* ================= DELETE ACCOUNT ================= */
 
+  deleteJobSeekerAccount(): Observable<ApiResponse<null>> {
+    return this.http
+      .delete<ApiResponse<null>>(
+        `${this.baseUrl}/jobSeeker/delete-account`,
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
+  }
 
-
-/* ================= PROFILE IMAGE ================= */
-
-getJobSeekerProfilePicture(): Observable<{ success: boolean; data: { profilePhoto: string } }> {
-  return this.http
-    .get<{ success: boolean; data: { profilePhoto: string } }>(
-      `${this.baseUrl}/jobSeeker/image`,
-      { headers: this.getHeaders() }
-    )
-    .pipe(catchError(error => this.handleError(error)));
-}
-
-
-updateJobSeekerProfilePicture(
-  profilePhoto: string
-): Observable<{ success: boolean; data: any }> {
-
-  return this.http
-    .put<{ success: boolean; data: any }>(
-      `${this.baseUrl}/jobSeeker/image`,
-      { profilePhoto },
-      { headers: this.getHeaders() }
-    )
-    .pipe(catchError(error => this.handleError(error)));
-}
-
-
-
-getJobSeekerProfessional(): Observable<ApiResponse<JobSeekerProfile>> {
-  return this.http
-    .get<ApiResponse<JobSeekerProfile>>(
-      `${this.baseUrl}/jobSeeker/professional`,
-      { headers: this.getHeaders() }
-    )
-    .pipe(catchError(error => this.handleError(error)));
-}
-
-updateJobSeekerProfessional(
-  payload: Partial<JobSeekerProfile>
-): Observable<ApiResponse<JobSeekerProfile>> {
-
-  return this.http
-    .put<ApiResponse<JobSeekerProfile>>(
-      `${this.baseUrl}/jobSeeker/professional`,
-      payload,
-      { headers: this.getHeaders() }
-    )
-    .pipe(catchError(error => this.handleError(error)));
-}
-
-
-deleteJobSeekerAccount(): Observable<any> {
-  return this.http.delete(
-    `${this.baseUrl}/jobSeeker/delete-account`,
-    {
-      headers: this.getHeaders()
-    }
-  ).pipe(
-    catchError(error => this.handleError(error))
-  );
-}
-
+  /* ================= ERROR HANDLER ================= */
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'An unknown error occurred!';
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    return throwError(errorMessage);
+    const message =
+      error.error?.message ||
+      `Error ${error.status}: ${error.statusText}`;
+    return throwError(() => message);
   }
-
 }

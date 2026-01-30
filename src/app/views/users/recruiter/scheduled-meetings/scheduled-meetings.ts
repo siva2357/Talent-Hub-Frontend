@@ -15,7 +15,10 @@ import { Interview } from '../../../../core/models/interview.model';
 export class ScheduledMeetings implements OnInit {
 
   loading = true;
-  interviews: Interview[] = [];
+  interviews: (Interview & {
+    profilePhoto?: string | null;
+  })[] = [];
+
 
   constructor(
     private router: Router,
@@ -29,7 +32,7 @@ export class ScheduledMeetings implements OnInit {
   loadMeetings(): void {
     this.interviewService.getAllRecruiterInterviews().subscribe({
       next: res => {
-        this.interviews = res.interviews;
+        this.interviews = res.meetings;
         this.loading = false;
       },
       error: () => {

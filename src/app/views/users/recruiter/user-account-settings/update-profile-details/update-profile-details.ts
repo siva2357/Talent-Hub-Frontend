@@ -51,15 +51,16 @@ export class UpdateProfileDetails implements OnInit {
   }
 
   /* ================= HANDLE UPLOADED IMAGE ================= */
-  onPhotoUploaded(url: string): void {
-    if (!url) return;
+onPhotoUploaded(url: string): void {
+  if (!url) return;
 
-    this.isUpdating = true;
-    this.uploadComplete = false;
+  this.isUpdating = true;
+  this.uploadComplete = false;
 
-    this.profileService.updateRecruiterProfilePicture(url).subscribe({
+  this.profileService
+    .updateRecruiterProfilePicture({ profilePhoto: url })
+    .subscribe({
       next: () => {
-        // cache-bust so updated image shows immediately
         this.profilePhotoUrl = `${url}?v=${Date.now()}`;
         this.uploadComplete = true;
         this.isUpdating = false;
@@ -68,5 +69,6 @@ export class UpdateProfileDetails implements OnInit {
         this.isUpdating = false;
       }
     });
-  }
+}
+
 }
