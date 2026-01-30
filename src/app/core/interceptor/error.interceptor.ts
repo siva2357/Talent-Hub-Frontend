@@ -6,10 +6,13 @@ import {
 import { inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, tap, throwError } from 'rxjs';
+import { Router } from '@angular/router';
+
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toastr = inject(ToastrService);
   const isBackendApi = req.url.includes('/api/');
+ const router = inject(Router);
 
   return next(req).pipe(
 
@@ -48,7 +51,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   // ❌ AUTH FAILURE (ONLY 401)
   if (error.status === 401) {
     toastr.error('Session expired. Please login again.');
-    // optional: redirect to login here
+    localStorage.removeItem('JWT_Token');
+localStorage.removeItem('userData');
+localStorage.removeItem('userRole');
+
+    router.navigate(['/login']);
+
     return throwError(() => error);
   }
 
@@ -57,6 +65,16 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     toastr.warning(message);
     return throwError(() => error);
   }
+
+        if (error.status === 429) {
+        toastr.warning('Too many requests. Please slow down.');
+        return throwError(() => error);
+      }
+
+      if (error.status >= 500) {
+        toastr.error('Server error. Please try again later.');
+        return throwError(() => error);
+      }
 
 
       toastr.error(message);

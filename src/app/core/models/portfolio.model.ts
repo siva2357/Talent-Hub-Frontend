@@ -1,4 +1,5 @@
 export interface ProjectDetails {
+
   files: PortfolioFile[];          // single OR multiple
   projectTitle: string;
   projectType: string;             // frontend controlled

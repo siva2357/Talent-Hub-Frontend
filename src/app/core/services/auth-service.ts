@@ -1,189 +1,134 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, catchError, switchMap, tap, throwError } from 'rxjs';
-import { Login, LoginResponse } from '../models/auth.model';
-import { Router } from '@angular/router';
-import {jwtDecode} from 'jwt-decode' ;
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
+
 import { environment } from '../../../environments/environment';
-import { RegistrationPayload, RegistrationResponse } from '../dtos/auth.dto';
+import { LoginRequestDto } from '../dtos/login.dto';
+import { LoginResponse, LogoutResponse } from '../models/auth.model';
+import { SignupRequestDto } from '../dtos/signup.dto';
+import { SignupResponse } from '../models/signup-response.model';
+import { VerifyOtpRequestDto } from '../dtos/verify-otp.dto';
+import { VerifyOtpResponse } from '../models/otp-verify.model';
+import { ResendOtpRequestDto } from '../dtos/resend-otp.dto';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private baseUrl: string = environment.apiGatewayUrl;
-  private userRole: string | null = null;
+  private baseUrl = environment.apiGatewayUrl;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient) {}
 
-  getHeaders() {
-    return new HttpHeaders({
-      Authorization: `Bearer ${localStorage.getItem('JWT_Token')}`,
-      'Content-Type': 'application/json'
-    });
+  /* ================= AUTH ================= */
+
+  login(payload: LoginRequestDto): Observable<LoginResponse> {
+    return this.http
+      .post<LoginResponse>(`${this.baseUrl}/auth/login/user`, payload)
+      .pipe(
+        tap(response => {
+          this.setUserData(response);
+        })
+      );
   }
 
+  logout(): Observable<LogoutResponse> {
+    return this.http
+      .post<LogoutResponse>(`${this.baseUrl}/auth/logout/user`, {})
+      .pipe(
+        tap(() => this.clearAuthData())
+      );
+  }
 
-register(data: RegistrationPayload): Observable<RegistrationResponse> {
-  const endpoint = data.role === 'recruiter' ? '/auth/recruiter/signup':'/auth/jobSeeker/signup';
-  return this.http.post<RegistrationResponse>(`${this.baseUrl}${endpoint}`,data)
-  .pipe(catchError(err => this.handleError(err)));
-}
+register(
+  data: SignupRequestDto & { role: 'recruiter' | 'jobSeeker' }
+): Observable<SignupResponse> {
 
+  const endpoint =
+    data.role === 'recruiter'
+      ? '/auth/recruiter/signup'
+      : '/auth/jobSeeker/signup';
 
-
-
-
-login(loginData: Login): Observable<LoginResponse> {
-  return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login/user`, loginData,)
-    .pipe(
-      tap(response => {
-        if (response && response.role && response.token !== undefined) {
-          if (this.isTokenExpired(response.token)) {
-            window.alert('Session expired, please log in again.');
-            this.logout();
-          } else {
-            this.setUserData(response);
-            localStorage.setItem('userId', response.userId);
-            localStorage.setItem('JWT_Token', response.token);
-            console.log("Received token:", response.token);
-
-          }
-        } else {
-          throw new Error('Invalid login response');
-        }
-      }),
-      catchError(error => {
-        console.error('Login Error:', error);
-        window.alert('Invalid credentials');
-        return throwError(() => new Error(error));
-      })
-    );
-}
-
-isTokenExpired(token: string): boolean {
-  const decoded: any = this.decodeJwt(token);
-  const expTime = decoded?.exp * 1000;
-  return Date.now() > expTime;
-}
-
-decodeJwt(token: string): any {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  return JSON.parse(atob(base64));
-}
-
-// auth-service.ts
-logout(): Observable<any> {
-  const token = localStorage.getItem('JWT_Token');
-
-  const headers = new HttpHeaders({
-    Authorization: token ? `Bearer ${token}` : '',
-    'Content-Type': 'application/json'
-  });
-
-  return this.http.post(
-    `${this.baseUrl}/auth/logout/user`,
-    {},
-    { headers, withCredentials: true }
+  return this.http.post<SignupResponse>(
+    `${this.baseUrl}${endpoint}`,
+    {
+      registrationDetails: data.registrationDetails
+    }
   );
 }
 
 
-private setUserData(user: LoginResponse) {
-  if (user && user.token) {
-    localStorage.setItem('userData', JSON.stringify(user));
-    localStorage.setItem('JWT_Token', user.token);
-    localStorage.setItem('Authorization', user.token);
-    localStorage.setItem('userRole', user.role);
-    localStorage.setItem('userId', user.userId);
-  } else {
-    console.log('Invalid user data:', user);
-  }
-}
-
-private handleError(error: any): Observable<never> {
-  console.error('An error occurred:', error);
-  window.alert('An unexpected error occurred. Please try again.');
-  return throwError(() => new Error('Something went wrong; please try again later.'));
-}
-
-
-
+  /* ================= OTP ================= */
 
 verifyOtp(
-  providedCode: string,
-  email: string,
-  role: string
-): Observable<any> {
-  return this.http.post(
+  payload: VerifyOtpRequestDto
+): Observable<VerifyOtpResponse> {
+  return this.http.post<VerifyOtpResponse>(
     `${this.baseUrl}/auth/verify-verification-code`,
-    { email, providedCode, role }
+    payload
   );
 }
 
 
-
- resendOtp(email: string): Observable<any> {
-  return this.http.post(`${this.baseUrl}/auth/send-verification-code`, { email })
-    .pipe(catchError(error => this.handleError(error)));
+resendOtp(
+  payload: ResendOtpRequestDto
+): Observable<VerifyOtpResponse> {
+  return this.http.post<VerifyOtpResponse>(
+    `${this.baseUrl}/auth/send-verification-code`,
+    payload
+  );
 }
 
 
+  /* ================= TOKEN ================= */
+
   getToken(): string | null {
-    const token = localStorage.getItem('JWT_Token');
-    if (token) {
-      const decodedToken: any = jwtDecode(token);
-    }
-    return token;
+    return localStorage.getItem('JWT_Token');
   }
 
-
-
-
-
-  setUserRole(role: string) {
-    this.userRole = role;
-    localStorage.setItem('userRole', role);
+  isTokenExpired(token: string): boolean {
+    const decoded: any = jwtDecode(token);
+    return Date.now() > decoded.exp * 1000;
   }
-
-  getUserData(): any {
-    const user = JSON.parse(localStorage.getItem('userData') || '{}');
-    return user || null;
-  }
-
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('userData');
+    const token = this.getToken();
+    return !!token && !this.isTokenExpired(token);
   }
 
-  getUserName(): string | null {
-    const user = this.getUserData();
-    return user?.userName || null;
+  /* ================= STORAGE ================= */
+
+  private setUserData(user: LoginResponse): void {
+    localStorage.setItem('JWT_Token', user.token);
+    localStorage.setItem('userRole', user.role);
+    localStorage.setItem('userId', user.userId);
+    localStorage.setItem('userData', JSON.stringify(user));
   }
 
-    getFullName(): string | null {
-    const user = this.getUserData();
-    return user?.fullName || null;
+  clearAuthData(): void {
+    localStorage.removeItem('JWT_Token');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userData');
+  }
 
+  /* ================= HELPERS ================= */
+
+  getUserData(): LoginResponse | null {
+    const data = localStorage.getItem('userData');
+    return data ? JSON.parse(data) : null;
   }
 
   getRole(): string | null {
-    const user = this.getUserData();
-    return user?.role || null;
+    return this.getUserData()?.role ?? null;
   }
 
   getUserId(): string | null {
-    const user = this.getUserData();
-    return user?._id || null;
+    return this.getUserData()?.userId ?? null;
   }
 
-
-
-
-
-
-
-
+  getFullName(): string | null {
+    return this.getUserData()?.fullName ?? null;
+  }
 }
-

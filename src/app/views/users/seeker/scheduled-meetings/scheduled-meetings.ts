@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { InterviewService } from '../../../../core/services/interview-service';
-import { Interview } from '../../../../core/models/interview.model';
+import { Interview, JobSeekerInterview } from '../../../../core/models/interview.model';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-scheduled-meetings',
@@ -13,7 +13,8 @@ import { Router } from '@angular/router';
 })
 export class ScheduledMeetings implements OnInit {
 
-  interviews: Interview[] = [];
+interviews: JobSeekerInterview[] = [];
+
   totalInterviews = 0;
   loading = true;
 
@@ -23,11 +24,11 @@ export class ScheduledMeetings implements OnInit {
     this.loadMeetings();
   }
 
-  loadMeetings() {
+  loadMeetings(): void {
     this.interviewService.getAllJobSeekerInterviews().subscribe({
       next: (res) => {
-        this.interviews = res.interviews;
-        this.totalInterviews = res.totalInterviews;
+        this.interviews = res.meetings;
+        this.totalInterviews = res.totalMeetings;
         this.loading = false;
       },
       error: () => {
@@ -35,6 +36,7 @@ export class ScheduledMeetings implements OnInit {
       }
     });
   }
+
 
 
 joinInterview(interview: Interview): void {

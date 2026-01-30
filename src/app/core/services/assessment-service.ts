@@ -2,6 +2,8 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { CreateAssessmentDTO, UpdateAssessmentDTO } from '../dtos/assessment.dto';
+import { MyAssessment } from '../models/assessment.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,74 +29,85 @@ export class AssessmentService {
   ========================= */
 
   /** Create / assign assessment */
-  createAssessment(payload: {
-    jobPostId: string;
-    jobSeekerId: string;
-    assessmentLink?: string;
-  }): Observable<any> {
-    return this.http.post(
-      this.baseUrl,
-      payload,
-      { headers: this.getHeaders() }
-    ).pipe(catchError(this.handleError));
+  createAssessment(
+    payload: CreateAssessmentDTO
+  ): Observable<{ message: string; assessmentId: string }> {
+    return this.http
+      .post<{ message: string; assessmentId: string }>(
+        this.baseUrl,
+        payload,
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
   }
 
   /** Update assessment (link / notes / status) */
+  /** Update assessment link (ONLY link allowed) */
   updateAssessment(
     assessmentId: string,
-    payload: {
-      assessmentLink?: string;
-      status?: 'Assigned' | 'Reviewed';
-    }
-  ): Observable<any> {
-    return this.http.patch(
-      `${this.baseUrl}/${assessmentId}`,
-      payload,
-      { headers: this.getHeaders() }
-    ).pipe(catchError(this.handleError));
+    payload: UpdateAssessmentDTO
+  ): Observable<{ message: string }> {
+    return this.http
+      .put<{ message: string }>(
+        `${this.baseUrl}/${assessmentId}`,
+        payload,
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
   }
 
   /** Delete assessment */
-  deleteAssessment(assessmentId: string): Observable<any> {
-    return this.http.delete(
-      `${this.baseUrl}/${assessmentId}`,
-      { headers: this.getHeaders() }
-    ).pipe(catchError(this.handleError));
+  deleteAssessment(
+    assessmentId: string
+  ): Observable<{ message: string }> {
+    return this.http
+      .delete<{ message: string }>(
+        `${this.baseUrl}/${assessmentId}`,
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
   }
+
 
   /* =========================
      JOB SEEKER APIs
   ========================= */
 
   /** Get my assessments */
-  getMyAssessments(): Observable<any[]> {
-    return this.http.get<any[]>(
-      `${this.baseUrl}/my`,
-      { headers: this.getHeaders() }
-    ).pipe(catchError(this.handleError));
+ /** Get my assigned assessments */
+  getMyAssessments(): Observable<MyAssessment[]> {
+    return this.http
+      .get<MyAssessment[]>(
+        `${this.baseUrl}/my`,
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
   }
 
   /** Mark assessment as completed */
-  markCompleted(assessmentId: string): Observable<any> {
-    return this.http.patch(
-      `${this.baseUrl}/complete/${assessmentId}`,
-      {},
-      { headers: this.getHeaders() }
-    ).pipe(catchError(this.handleError));
+  markCompleted(
+    assessmentId: string
+  ): Observable<{ message: string }> {
+    return this.http
+      .patch<{ message: string }>(
+        `${this.baseUrl}/complete/${assessmentId}`,
+        {},
+        { headers: this.getHeaders() }
+      )
+      .pipe(catchError(this.handleError));
   }
 
   /* =========================
      ERROR HANDLER
   ========================= */
   private handleError(error: HttpErrorResponse): Observable<never> {
-    let message = 'Something went wrong';
+    const message =
+      error.error?.message ||
+      (error.status === 0
+        ? 'Server unreachable'
+        : `Error ${error.status}`);
 
-    if (error.error?.message) {
-      message = error.error.message;
-    } else if (error.status === 0) {
-      message = 'Server unreachable';
-    }
-
+    console.error('Assessment API Error:', error);
     return throwError(() => message);
   }
 }

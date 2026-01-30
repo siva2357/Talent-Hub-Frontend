@@ -6,8 +6,8 @@ import { FormsModule } from '@angular/forms';
 
 import { JobpostService } from '../../../../core/services/jobpost-service';
 import { InterviewService } from '../../../../core/services/interview-service';
-import { CreateInterviewPayload, Interview } from '../../../../core/models/interview.model';
 import { getMatchBadge } from '../../../../core/helpers/job-match.helper';
+import { CreateInterviewDTO } from '../../../../core/dtos/interview.dto';
 
 declare var bootstrap: any;
 
@@ -193,11 +193,11 @@ submitInterview(): void {
   /* ================= EDIT MODE ================= */
   if (this.isEditMode && this.interviewId) {
 
-const updateData: Partial<Interview> = {
+const updateData = {
   interviewTitle: this.interviewForm.title,
   interviewDescription: this.interviewForm.description,
-  startTime: start,
-  endTime: end,
+  startTime: start.toISOString(),
+  endTime: end.toISOString(),
   meetingJoinUrl: this.interviewForm.meetingJoinUrl,
   status: this.interviewForm.status
 };
@@ -211,7 +211,7 @@ const updateData: Partial<Interview> = {
   }
 
   /* ================= CREATE MODE ================= */
-const payload: CreateInterviewPayload = {
+const payload: CreateInterviewDTO = {
   jobSeekerId: this.selectedApplicant.jobSeekerId,
   jobPostId: this.jobPostId,
 
@@ -219,11 +219,12 @@ const payload: CreateInterviewPayload = {
   interviewDescription: this.interviewForm.description || '',
 
   scheduledDate: this.interviewForm.date,
-  startTime: start,
-  endTime: end,
+  startTime: start.toISOString(),
+  endTime: end.toISOString(),
 
   meetingJoinUrl: this.interviewForm.meetingJoinUrl
 };
+
 
   this.interviewService
     .createInterview(payload)

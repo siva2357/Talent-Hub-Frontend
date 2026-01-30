@@ -54,7 +54,7 @@
   <!-- MEETINGS LIST -->
   <div class="row justify-content-center mt-4 mb-4">
 
-    @for (interview of interviews; track interview.meetingId) {
+    @for (interview of interviews; track interview._id) {
 
       <div class="col-12 col-md-10 col-lg-9 mb-3">
 
@@ -73,15 +73,13 @@
 
       <!-- LOGO -->
       <div class="logo-wrap">
-        <img
-          src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1750695578/logo_1_lcthi4.png"
-          alt="company-logo">
+          <img [src]="interview.companyLogo" class="rounded-circle interview-avatar" alt="Job Seeker Avatar" />
       </div>
 
       <!-- TITLE -->
       <div class="text-truncate">
         <h6 class="mb-0 fw-semibold text-truncate">
-          {{ interview.recruiterName }}
+          {{ interview.companyName }}
         </h6>
         <span class="text-muted text-truncate d-block">
           {{ interview.jobTitle }} — {{ interview.jobId }}

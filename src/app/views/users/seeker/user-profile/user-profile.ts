@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { JobSeekerProfile } from '../../../../core/models/jobseeker-profile.model';
+import { JobSeekerPortfolio, JobSeekerProfile } from '../../../../core/models/jobseeker-profile.model';
 import { SOCIAL_ICONS, SocialPlatform } from '../../../../core/enums/socialMedia.enum';
 import { SeekerProfileService } from '../../../../core/services/seeker-profile-service';
 import { CommonModule } from '@angular/common';
-import { Projects } from '../../../../core/models/portfolio.model';
 import { StatsDataService } from '../../../../core/services/stats-data-service';
 import { JobSeekerStatsResponse } from '../../../../core/models/analytics.model';
 @Component({
@@ -16,7 +15,9 @@ import { JobSeekerStatsResponse } from '../../../../core/models/analytics.model'
 })
 export class UserProfile {
 public jobSeekerProfile: JobSeekerProfile | null = null;
-portfolios: Projects[] = []; // ✅ ADD THIS
+portfolios: JobSeekerPortfolio[] = [];
+trackPortfolio = (_: number, item: JobSeekerPortfolio) =>
+  item.createdAt;
 
   socialIcons = SOCIAL_ICONS;
   jobSeekerStats!: JobSeekerStatsResponse;
