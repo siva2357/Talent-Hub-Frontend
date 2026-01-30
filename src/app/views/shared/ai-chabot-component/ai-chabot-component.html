@@ -44,10 +44,31 @@
 
     <div class="ai-messages">
       @for (m of messages; track m) {
-        <div class="msg" [class.user]="m.sender === 'user'" [class.ai]="m.sender === 'ai'">
-          {{ m.text }}
-        </div>
+<div class="msg" [class.user]="m.sender === 'user'" [class.ai]="m.sender === 'ai'">
+ {{ m.text }}
+  <!-- Paragraph -->
+  @if (m.paragraph) {
+    <p>{{ m.paragraph }}</p>
+  }
+
+  <!-- Bullet points -->
+  @if (m.points?.length) {
+    <ul>
+      @for (p of m.points; track p) {
+        <li>{{ p }}</li>
       }
+    </ul>
+  }
+
+</div>
+
+      }
+      @if (loading) {
+  <div class="msg ai">
+    Thinking…
+  </div>
+}
+
     </div>
 
     <div class="ai-input">
