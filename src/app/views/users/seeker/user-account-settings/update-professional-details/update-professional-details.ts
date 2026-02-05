@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators
@@ -10,11 +11,12 @@ import {
 import { SocialPlatform } from '../../../../../core/enums/socialMedia.enum';
 import { Language, Proficiency } from '../../../../../core/enums/language.enum';
 import { SeekerProfileService } from '../../../../../core/services/seeker-profile-service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-update-professional-details',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,FormsModule],
   templateUrl: './update-professional-details.html',
   styleUrl: './update-professional-details.css'
 })
@@ -26,6 +28,8 @@ export class UpdateProfessionalDetails implements OnInit {
   isUpdating = false;
   errorMessage = '';
   successMessage = '';
+skillInputControl = new FormControl('', { nonNullable: true });
+
 
   languagesList = Object.values(Language);
   proficiencyList = Object.values(Proficiency);
@@ -228,15 +232,34 @@ export class UpdateProfessionalDetails implements OnInit {
     return this.professionalForm.get('skills') as FormArray;
   }
 
+  updateSkill(index: number, event: Event) {
+  const value = (event.target as HTMLElement).innerText.trim();
+  this.skills.at(index).get('name')?.setValue(value);
+}
+
+
   createSkill(): FormGroup {
     return this.fb.group({
       name: ['', Validators.required]
     });
   }
 
-  addSkill(): void {
-    this.skills.push(this.createSkill());
-  }
+skillInput = '';
+
+
+addSkill(): void {
+  const value = this.skillInputControl.value.trim();
+  if (!value) return;
+
+  this.skills.push(
+    this.fb.group({
+      name: [value, Validators.required]
+    })
+  );
+
+  this.skillInputControl.reset('');
+}
+
 
   removeSkill(i: number): void {
     if (this.skills.length > 1) this.skills.removeAt(i);

@@ -11,12 +11,13 @@ import { Router } from '@angular/router';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toastr = inject(ToastrService);
+  const router = inject(Router);
+
   const isBackendApi = req.url.includes('/api/');
- const router = inject(Router);
+  const isLogout = req.url.includes('/auth/logout');
 
   return next(req).pipe(
 
-    // ✅ SUCCESS HANDLING
     tap((event) => {
       if (
         isBackendApi &&
@@ -25,48 +26,42 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         typeof event.body === 'object' &&
         'message' in event.body
       ) {
-        const body = event.body as { message: string };
-        toastr.success(body.message);
+        // 🟢 Logout toast with slight delay so user sees it
+        if (isLogout) {
+          setTimeout(() => {
+            toastr.success((event.body as any).message);
+          }, 100);
+        }
+        // 🟢 Normal success toast (optional)
+        else {
+          toastr.success((event.body as any).message);
+        }
       }
     }),
 
-    // ❌ ERROR HANDLING
     catchError((error: HttpErrorResponse) => {
 
       if (!isBackendApi) {
         return throwError(() => error);
       }
 
-      let message = 'Something went wrong';
-
-      if (error.error?.message) {
-        message = error.error.message;
+      // 🔕 Ignore ALL errors during logout
+      if (localStorage.getItem('isLoggingOut') === 'true') {
+        return throwError(() => error);
       }
 
-      if (error.status === 0) {
-        message = 'Unable to connect to server. Please try again.';
+      if (error.status === 401) {
+        toastr.error('Session expired. Please login again.');
+        router.navigate(['/login']);
+        return throwError(() => error);
       }
 
+      if (error.status === 403) {
+        toastr.warning(error.error?.message ?? 'Access denied');
+        return throwError(() => error);
+      }
 
-  // ❌ AUTH FAILURE (ONLY 401)
-  if (error.status === 401) {
-    toastr.error('Session expired. Please login again.');
-    localStorage.removeItem('JWT_Token');
-localStorage.removeItem('userData');
-localStorage.removeItem('userRole');
-
-    router.navigate(['/login']);
-
-    return throwError(() => error);
-  }
-
-  // ✅ BUSINESS RULE (403)
-  if (error.status === 403) {
-    toastr.warning(message);
-    return throwError(() => error);
-  }
-
-        if (error.status === 429) {
+      if (error.status === 429) {
         toastr.warning('Too many requests. Please slow down.');
         return throwError(() => error);
       }
@@ -76,9 +71,15 @@ localStorage.removeItem('userRole');
         return throwError(() => error);
       }
 
+      if (error.status === 0) {
+        toastr.error('Unable to connect to server. Please try again.');
+        return throwError(() => error);
+      }
 
-      toastr.error(message);
+      toastr.error(error.error?.message ?? 'Something went wrong');
       return throwError(() => error);
     })
   );
 };
+
+

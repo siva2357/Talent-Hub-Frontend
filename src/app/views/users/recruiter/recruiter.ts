@@ -177,12 +177,18 @@ goToProfilePage(): void {
 
 
 logout(): void {
+  localStorage.setItem('isLoggingOut', 'true');
+
   this.authService.logout().subscribe({
     next: () => {
+      this.authService.clearAuthData();
+      localStorage.removeItem('isLoggingOut');
       this.router.navigate(['/login']);
     },
     error: () => {
+      // fallback logout
       this.authService.clearAuthData();
+      localStorage.removeItem('isLoggingOut');
       this.router.navigate(['/login']);
     }
   });

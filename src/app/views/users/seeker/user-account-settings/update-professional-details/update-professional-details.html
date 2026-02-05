@@ -9,40 +9,43 @@
   <div class="card-header fw-semibold">Languages</div>
   <div class="card-body">
 
-    <div formArrayName="languages">
-      @for (l of languages.controls; let i = $index; track i) {
-        <div [formGroupName]="i" class="row g-2 align-items-center mb-2">
+<div formArrayName="languages">
+  @for (l of languages.controls; let i = $index; track i) {
+    <div [formGroupName]="i" class="row g-2 align-items-center mb-2">
 
-          <div class="col-md-5">
-            <select class="form-select form-select-sm" formControlName="language">
-              <option value="">Language</option>
-              @for (x of languagesList; track x) {
-                <option [value]="x">{{ x }}</option>
-              }
-            </select>
-          </div>
+      <!-- Language -->
+      <div class="col-5">
+        <select class="form-select form-select-sm" formControlName="language">
+          <option value="">Language</option>
+          @for (x of languagesList; track x) {
+            <option [value]="x">{{ x }}</option>
+          }
+        </select>
+      </div>
 
-          <div class="col-md-5">
-            <select class="form-select form-select-sm" formControlName="proficiency">
-              <option value="">Level</option>
-              @for (p of proficiencyList; track p) {
-                <option [value]="p">{{ p }}</option>
-              }
-            </select>
-          </div>
+      <!-- Proficiency -->
+      <div class="col-5">
+        <select class="form-select form-select-sm" formControlName="proficiency">
+          <option value="">Level</option>
+          @for (p of proficiencyList; track p) {
+            <option [value]="p">{{ p }}</option>
+          }
+        </select>
+      </div>
 
-          <div class="col-md-2 text-end">
-            @if (languages.length > 1) {
-              <button type="button" class="btn btn-outline-danger btn-sm"
-                (click)="removeLanguage(i)">
-                ✕
-              </button>
-            }
-          </div>
+      <!-- Remove Button -->
+      <div class="col-2 text-end">
+        @if (languages.length > 1) {
+          <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeLanguage(i)">
+            <i class="bi bi-trash"></i>
+          </button>
+        }
+      </div>
 
-        </div>
-      }
     </div>
+  }
+</div>
+
 
     <button type="button" class="btn btn-sm btn-outline-primary mt-2"
       (click)="addLanguage()">+ Add Language</button>
@@ -55,31 +58,58 @@
   <div class="card-header fw-semibold">Skills</div>
   <div class="card-body">
 
-    <div formArrayName="skills">
-      @for (s of skills.controls; let i = $index; track i) {
-        <div [formGroupName]="i" class="row g-2 align-items-center mb-2">
+<div formArrayName="skills">
+  @for (s of skills.controls; let i = $index; track i) {
 
-          <div class="col-md-10">
-            <input class="form-control form-control-sm"
-              formControlName="name"
-              placeholder="Skill" />
-          </div>
+    <div
+      [formGroupName]="i"
+      class="badge rounded-pill bg-light text-dark border border-1 border-dark
+             d-inline-flex align-items-center me-2 mb-2 px-2 py-1">
 
-          <div class="col-md-2 text-end">
-            @if (skills.length > 1) {
-              <button type="button" class="btn btn-outline-danger btn-sm"
-                (click)="removeSkill(i)">
-                ✕
-              </button>
-            }
-          </div>
+      <!-- Skill Text -->
+      <span
+        contenteditable="true"
+        class="small fw-normal skill-text"
+        (blur)="updateSkill(i, $event)">
+        {{ s.value.name || 'Skill' }}
+      </span>
 
-        </div>
+      <!-- Remove -->
+      @if (skills.length > 1) {
+        <button
+          type="button"
+          class="btn btn-sm btn-danger rounded-circle ms-2 d-flex align-items-center justify-content-center"
+          style="width:18px;height:18px;padding:0"
+          (click)="removeSkill(i)">
+         <i class="bi bi-x"></i>
+        </button>
       }
+
     </div>
 
-    <button type="button" class="btn btn-sm btn-outline-primary mt-2"
-      (click)="addSkill()">+ Add Skill</button>
+
+  }
+</div>
+
+
+
+
+<div class="input-group input-group-sm mt-2">
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Type a skill"
+    [formControl]="skillInputControl"
+    (keydown.enter)="$event.preventDefault()" />
+
+  <button
+    type="button"
+    class="btn btn-outline-primary"
+    (click)="addSkill()">
+    + Add Skill
+  </button>
+</div>
+
 
   </div>
 </div>
