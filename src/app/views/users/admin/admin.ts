@@ -98,16 +98,23 @@ closeSidebarOnMobile() {
 
 
 logout(): void {
+  localStorage.setItem('isLoggingOut', 'true');
+
   this.authService.logout().subscribe({
     next: () => {
+      this.authService.clearAuthData();
+      localStorage.removeItem('isLoggingOut');
       this.router.navigate(['/login']);
     },
     error: () => {
+      // fallback logout
       this.authService.clearAuthData();
+      localStorage.removeItem('isLoggingOut');
       this.router.navigate(['/login']);
     }
   });
 }
+
 
 goToProfilePage(): void {
   const userId = this.authService.getUserId() || localStorage.getItem('userId') || '';

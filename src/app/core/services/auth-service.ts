@@ -33,13 +33,14 @@ export class AuthService {
       );
   }
 
-  logout(): Observable<LogoutResponse> {
-    return this.http
-      .post<LogoutResponse>(`${this.baseUrl}/auth/logout/user`, {})
-      .pipe(
-        tap(() => this.clearAuthData())
-      );
-  }
+
+logout(): Observable<LogoutResponse> {
+  return this.http.post<LogoutResponse>(
+    `${this.baseUrl}/auth/logout/user`,
+    {}
+  );
+}
+
 
 register(
   data: SignupRequestDto & { role: 'recruiter' | 'jobSeeker' }

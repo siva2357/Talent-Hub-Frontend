@@ -11,7 +11,7 @@ import { NotificationService } from '../../../core/services/notification-service
   imports: [RouterOutlet, RouterModule],
   templateUrl: './seeker.html',
   styleUrl: './seeker.css',
-    standalone: true,
+  standalone: true,
 })
 export class Seeker {
 
@@ -177,12 +177,18 @@ goToProfilePage(): void {
 
 
 logout(): void {
+  localStorage.setItem('isLoggingOut', 'true');
+
   this.authService.logout().subscribe({
     next: () => {
+      this.authService.clearAuthData();
+      localStorage.removeItem('isLoggingOut');
       this.router.navigate(['/login']);
     },
     error: () => {
+      // fallback logout
       this.authService.clearAuthData();
+      localStorage.removeItem('isLoggingOut');
       this.router.navigate(['/login']);
     }
   });

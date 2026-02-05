@@ -4,6 +4,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { errorInterceptor } from './core/interceptor/error.interceptor';
+import { authInterceptor } from './core/interceptor/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,7 +12,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
 
     provideHttpClient(
-      withInterceptors([errorInterceptor])
+      withInterceptors([
+        authInterceptor,   // 👈 FIRST (adds JWT)
+        errorInterceptor   // 👈 SECOND (handles errors)
+      ])
     ),
     provideToastr({
       positionClass: 'toast-top-right',
