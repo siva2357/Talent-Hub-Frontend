@@ -365,31 +365,25 @@
 </div>
 
 @if (jobMatch && badge) {
-  <section class="mb-4 p-3 rounded job-match-box">
+  <div class="mb-4 rounded job-match-box">
 
-    <!-- BADGE -->
-    <span
-      class="badge mb-2"
-      [ngClass]="{
-        'bg-success': badge.color === 'green',
-        'bg-warning text-dark': badge.color === 'orange',
-        'bg-danger': badge.color === 'red'
-      }"
-    >
-      {{ badge.label }}
-    </span>
+    <h5>Resume based score match</h5>
 
-    <!-- SCORE -->
-    <div
-      class="job-match-score"
-      [ngClass]="{
-        green: badge.color === 'green',
-        yellow: badge.color === 'orange',
-        red: badge.color === 'red'
-      }"
-    >
-      {{ jobMatch.jobMatchScore }}%
-    </div>
+<span class="job-score">
+  {{ jobMatch.jobMatchScore }}% -
+</span>
+
+<span
+  class="badge rounded-pill ms-1"
+  [ngClass]="{
+    'bg-success': badge.color === 'green',
+    'bg-warning text-dark': badge.color === 'orange',
+    'bg-danger': badge.color === 'red'
+  }">
+  {{ badge.label }}
+</span>
+
+
 
     <p class="small text-muted mt-2">
       {{ jobMatch.summary }}
@@ -419,7 +413,7 @@
       </div>
     </div>
 
-  </section>
+  </div>
 }
 
 
