@@ -1,39 +1,25 @@
-/* ================= JOB SECTION ================= */
-.job-section {
-  position: relative;
-  background-image: url('../../../../assets/background-images/Background-7.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+/* ================= SECTION SPACING ================= */
 
-
-.job-section > .container {
-  position: relative;
-  z-index: 1;
-}
-
-/* ================= HEADERS ================= */
-.job-section h2,
-.job-section h4 {
-  letter-spacing: -0.3px;
+.container.py-5 {
+  padding-top: 80px !important;
+  padding-bottom: 80px !important;
 }
 
 /* ================= INFO CARDS ================= */
-.job-section .info-card {
+
+.info-card {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 18px;
+  padding: 28px 22px;
   height: 100%;
-  border: 1px solid #e6ebff;
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
-  transition: all 0.3s ease;
+  border: 1px solid #000000;
 }
 
 
-/* ================= INFO CARD ICON ================= */
-.job-section .info-icon {
-  font-size: 2.2rem;
+/* ================= INFO ICON ================= */
+
+.info-icon {
+  font-size: 2rem;
   color: #0d6efd;
   background: #eef3ff;
   width: 64px;
@@ -44,88 +30,67 @@
   justify-content: center;
 }
 
-/* ================= SEARCH INPUTS ================= */
-.job-section .form-control,
-.job-section .form-select {
+/* ================= SEARCH ================= */
+
+.form-control,
+.form-select {
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.btn-primary {
   border-radius: 10px;
-  padding: 10px 12px;
 }
 
 /* ================= JOB CARD ================= */
+
 .job-card {
   background: #ffffff;
-  border-radius: 14px;
-  border: 1px solid #e6ebff;
-  box-shadow:
-    0 12px 32px rgba(13, 110, 253, 0.18),
-    0 6px 14px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  border-radius: 16px;
+  border: 1px solid #000000;
 }
 
 
-/* ================= JOB TEXT ================= */
 .job-card h6 {
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .job-card p {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #6b7280;
 }
 
-/* ================= MATCH HIGHLIGHT ================= */
 .job-card strong {
   color: #0d6efd;
 }
 
 /* ================= BUTTON ================= */
-.job-section .btn-outline-primary {
+
+.btn-outline-primary {
   border-radius: 8px;
   font-weight: 500;
   transition: all 0.25s ease;
 }
 
-.job-section .btn-outline-primary:hover {
+.btn-outline-primary:hover {
   background: #0d6efd;
   color: #ffffff;
 }
 
-/* ================= MOBILE ================= */
-@media (max-width: 767px) {
-  .job-section {
-    padding-top: 3rem;
-  }
+/* ================= HIRING STEPS ================= */
 
-  .job-card {
-    padding: 20px;
-  }
-}
-
-/* ================= HIRING PROCESS ================= */
-.hiring-process {
- position: relative;
-  background-image: url('../../../../assets/background-images/Background-3.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-/* ================= STEP CARD ================= */
-.hiring-process .hire-step {
+.hire-step {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 24px 20px;
+  border-radius: 18px;
+  padding: 28px 22px;
   height: 100%;
   text-align: center;
-  border: 1px solid #e6ebff;
-  box-shadow:
-    0 18px 42px rgba(0, 0, 0, 0.18),
-    0 8px 18px rgba(0, 0, 0, 0.12);
-  transition: all 0.3s ease;
+  border: 1px solid #000000;
 }
 
 
-/* ================= STEP NUMBER ================= */
-.hiring-process .hire-step-number {
+.hire-step-number {
   width: 52px;
   height: 52px;
   background: #0d6efd;
@@ -136,20 +101,35 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  /* subtle depth */
-  box-shadow: 0 6px 16px rgba(13, 110, 253, 0.35);
 }
 
-/* ================= STEP TITLE ================= */
-.hiring-process h6 {
-  margin-top: 14px;
-  letter-spacing: 0.2px;
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 992px) {
+  .container.py-5 {
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+  }
 }
 
-/* ================= MOBILE ================= */
-@media (max-width: 767px) {
-  .hiring-process .hire-step {
-    padding: 20px;
+@media (max-width: 768px) {
+
+  .info-card,
+  .hire-step {
+    padding: 22px 18px;
+  }
+
+  .job-card {
+    padding: 18px;
+  }
+
+  .container.py-5 {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+
+  /* Make search button full width on mobile */
+  .row.g-3 .col-md-3 button {
+    width: 100%;
   }
 }

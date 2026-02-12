@@ -1,262 +1,117 @@
-
-
 /* ================= HERO ================= */
-.hero-section {
-  position: relative;
-  padding-bottom: 50px;
-  overflow: visible;
-  background-image: url('../../../../assets/background-images/Background-1.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
 
-/* Text refinement */
 .hero-title {
-  font-size: clamp(1.9rem, 4vw, 2.8rem); /* reduced */
+  font-size: 2.5rem;
   line-height: 1.2;
-  color: #111827;
 }
 
-.hero-title span {
-  color: #ffffff; /* white instead of blue */
-}
-
-/* Subtitle refinement */
 .hero-subtitle {
-  max-width: 520px;
-  font-size: clamp(0.95rem, 1vw, 1.05rem);
-  color: #374151;
+  font-size: 1.05rem;
+  color: #6b7280;
+  max-width: 540px;
 }
 
-/* Actions */
-.hero-actions {
-  flex-wrap: nowrap;
-}
-
-.hero-actions .btn {
-  min-width: 140px; /* reduced */
-}
-
-/* Image refinement */
 .hero-visual {
-  width: 100%;
-  max-width: 600px; /* reduced */
-  height: clamp(300px, 36vw, 420px);
+  max-width: 100%;
+  height: auto;
   border-radius: 18px;
-
-  background: linear-gradient(135deg, #e5e7eb, #dbeafe);
 }
 
+/* ================= FEATURE CARDS ================= */
 
-/* ================= FEATURE / TOOL CARDS ================= */
-.feature-section{
-  position: relative;
-
-  overflow: visible;
-  background-image: url('../../../../assets/background-images/Background-2.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
 .feature-card {
-  border-radius: 16px;
   background: #ffffff;
-  height: 100%;
-  padding: 2rem;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  border: 1px solid #000000;
+  padding: 32px 24px;
 }
+
+
 
 .feature-card i {
-  color: #1a7ae9; /* calm primary */
+  color: #0d6efd;
 }
 
+/* ================= STEP CARDS ================= */
 
-
-/* ================= HOW IT WORKS ================= */
-.steps-section {
-  position: relative;
-
-  overflow: visible;
-  background-image: url('../../../../assets/background-images/Background-3.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-/* Step card */
 .step-card {
-  position: relative;
   background: #ffffff;
-  border-radius: 16px;
-  padding: 28px;
-  border-left: 4px solid #1a7ae9;
-
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  border-radius: 18px;
+  padding: 28px 24px;
+  border: 1px solid #000000;
+  text-align: center;
 }
 
-/* Soft hover (no jumpy effect) */
-.step-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
-}
 
-/* Step number */
 .step {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: #1a7ae9;
+  background: #0d6efd;
   color: #ffffff;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 10px;
 }
 
-/* Title */
-.step-card h6 {
-  font-size: 1.05rem;
-  margin-top: 16px;
-}
+/* ================= TOOL CARDS ================= */
 
-/* Text */
-.step-card p {
-  font-size: 0.95rem;
-  margin-bottom: 0;
-}
-
-
-/* ================= CAREER TOOLS SECTION ================= */
-.tools-section{
-  position: relative;
-
-  overflow: visible;
-  background-image: url('../../../../assets/background-images/Background-4.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-/* Card */
 .tool-card {
   background: #ffffff;
-  border-radius: 16px;
-  height: 100%;
-  text-align: left;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-radius: 18px;
+  border: 1px solid #000000;
+  padding: 28px;
 }
 
 
-/* Icon container look */
 .tool-card i {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: rgba(13, 110, 253, 0.12);
+  color: #0d6efd;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-  background: rgba(26, 122, 233, 0.1); /* light icon background */
-  color: #1a7ae9;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
-/* Title */
-.tool-card h5 {
-  font-size: 1.1rem;
-  margin-bottom: 8px;
+/* ================= CTA SECTION ================= */
+
+.container.text-center h2 {
+  letter-spacing: -0.5px;
 }
 
-/* Text */
-.tool-card p {
-  font-size: 0.95rem;
-  line-height: 1.5;
+.container.text-center p {
+  max-width: 600px;
+  margin: 0 auto;
+  color: #6b7280;
 }
-
-
-
-
-/* ================= CTA ================= */
-/* ================= CTA ================= */
-.cta-section {
-  position: relative;
-  overflow: visible;
-  background-image: url('../../../../assets/background-images/Background-5.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-
-
-/* Text */
-.cta-section h2 {
-  font-size: clamp(1.9rem, 4vw, 2.6rem);
-}
-
-.cta-section p {
-  max-width: 640px;
-  margin-left: auto;
-  margin-right: auto;
-  font-size: 1.05rem;
-  opacity: 0.95;
-}
-
-
-
-
 
 /* ================= RESPONSIVE ================= */
+
+@media (max-width: 992px) {
+  .hero-title {
+    font-size: 2.1rem;
+  }
+}
+
 @media (max-width: 768px) {
 
-  .hero-actions {
-    justify-content: center;
+  .hero-title {
+    font-size: 1.8rem;
   }
 
   .hero-subtitle {
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 1rem;
   }
 
-  .stat-card {
-    padding: 20px 12px;
-  }
-
-  .step-card {
-    border-left-width: 3px;
-  }
-}
-
-@media (max-width: 576px) {
-  .hero-section {
-    min-height: auto;
-    padding-top: 48px;
-    padding-bottom: 48px;
-  }
-   .hero-visual {
-    height: 280px;
-  }
-}
-
-
-@media (max-width: 991px) {
-  .hero-section .col-lg-6 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-    .hero-subtitle {
-    margin-left: auto;
-    margin-right: auto;
-  }
-    .hero-actions {
-    justify-content: center;
+  .feature-card,
+  .step-card,
+  .tool-card {
+    padding: 22px 18px;
   }
 
 }
-
-

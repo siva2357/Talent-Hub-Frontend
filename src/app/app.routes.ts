@@ -3,9 +3,7 @@ import { LandingPage } from './views/pages/landing-page/landing-page';
 import { TalentMarketplacePage } from './views/pages/talent-marketplace-page/talent-marketplace-page';
 import { FindWorkPage } from './views/pages/find-work-page/find-work-page';
 import { RecruitmentPage } from './views/pages/recruitment-page/recruitment-page';
-import { InterviewPage } from './views/pages/interview-page/interview-page';
 import { ResumeBuilderPage } from './views/pages/resume-builder-page/resume-builder-page';
-import { BlogPage } from './views/pages/blog-page/blog-page';
 import { AboutPage } from './views/pages/about-page/about-page';
 import { SingupPage } from './views/account/singup-page/singup-page';
 import { LoginPage } from './views/account/login-page/login-page';
@@ -37,10 +35,8 @@ export const routes: Routes = [
   { path: 'talent-marketplace', component: TalentMarketplacePage, title: 'Talent marketplace' },
   { path: 'find-work', component: FindWorkPage, title: 'Find work' },
   { path: 'recruitment-process', component: RecruitmentPage, title: 'Recruitment' },
-  { path: 'interview-process', component: InterviewPage, title: 'Interview Login'},
   { path: 'resume-analyzer', component: ResumeBuilderPage, title: 'Resume builder' },
   { path: 'about', component: AboutPage, title: 'About' },
-  { path: 'blog', component: BlogPage, title: 'Blog' },
 
   //auth pages
   { path: 'sign-up', component: SingupPage, title: 'Singup' },
