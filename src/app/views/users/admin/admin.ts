@@ -52,7 +52,6 @@ sidebarOpen = false; // start collapsed (icon-only mode)
     { label: 'Dashboard', icon: ' bi-grid', link: 'dashboard' },
     { label: 'Recruiters', icon: 'bi-person-badge', link: 'recruiters-list' },
     { label: 'Seekers', icon: 'bi-people', link: 'seekers-list' },
-    { label: 'Blog', icon: 'bi bi-journal-text', link: 'blog' },
   ];
 
 toggleSidebar() {

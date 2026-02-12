@@ -158,9 +158,11 @@ openJobOffcanvas(job: JobPost) {
 openEditModal(job: JobPost) {
   this.isEditMode = true;
   this.selectedJobPostId = job._id!;
-
-  // 🔥 SAVE ORIGINAL DATA
   this.originalJobData = { ...job };
+
+  const applyDate = job.applyByDate
+    ? new Date(job.applyByDate)
+    : null;
 
   this.jobPostForm.patchValue({
     jobId: job.jobId,
@@ -173,8 +175,8 @@ openEditModal(job: JobPost) {
     salary: job.salary,
     vacancy: job.vacancy,
     location: job.location,
-    applyByDate: job.applyByDate
-      ? new Date(job.applyByDate).toISOString().split('T')[0]
+    applyByDate: applyDate
+      ? `${applyDate.getFullYear()}-${String(applyDate.getMonth() + 1).padStart(2, '0')}-${String(applyDate.getDate()).padStart(2, '0')}`
       : ''
   });
 
@@ -183,6 +185,7 @@ openEditModal(job: JobPost) {
   );
   modal.show();
 }
+
 
 
 openAddModal() {

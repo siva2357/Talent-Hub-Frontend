@@ -1,54 +1,56 @@
 /* ================= ABOUT PAGE ================= */
+
 .about-page {
-  padding: 56px 0 72px;
-    background-image: url('../../../../assets/background-images/Background-7.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: #f9fafb;
 }
 
 /* ================= HEADER ================= */
+
 .about-subtitle {
   max-width: 720px;
   margin: 0 auto;
   font-size: 1.05rem;
-  line-height: 1.65;
+  line-height: 1.7;
 }
 
 /* ================= IMAGE ================= */
+
 .about-image {
   width: 100%;
-  height: 350px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #e5e7eb, #dbeafe);
+}
+
+.about-image img {
+  width: 100%;
+  height: auto;
   display: block;
+  border-radius: 16px;
 }
 
 /* ================= CARDS ================= */
+
 .about-card {
   background: #ffffff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #000000;
   border-radius: 16px;
-  padding: 24px;
+  padding: 28px;
   height: 100%;
-  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
 
-
 /* ================= LISTS ================= */
+
 .about-list {
   list-style: none;
   padding-left: 0;
-  margin-top: 14px;
+  margin-top: 16px;
 }
 
 .about-list li {
   position: relative;
-  padding-left: 22px;
-  margin-bottom: 10px;
+  padding-left: 24px;
+  margin-bottom: 12px;
   color: #4b5563;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .about-list li::before {
@@ -60,64 +62,51 @@
   font-weight: 600;
 }
 
-/* ================= SPACING HELPERS ================= */
-/* Consistent vertical rhythm */
+/* ================= SECTION SPACING ================= */
+
 .about-page .mt-5 {
-  margin-top: 64px !important;
+  margin-top: 72px !important;
 }
 
 /* ================= RESPONSIVE ================= */
 
-/* Tablets */
+/* Large Tablets */
 @media (max-width: 992px) {
   .about-page {
-    padding: 48px 0 64px;
-  }
-
-  .about-image {
-    height: 240px;
+    padding-top: 60px;
+    padding-bottom: 60px;
   }
 
   .about-page .mt-5 {
-    margin-top: 52px !important;
+    margin-top: 60px !important;
   }
 }
 
-/* Mobile */
+/* Tablets */
 @media (max-width: 768px) {
-  .about-page {
-    padding: 40px 0 56px;
-  }
-
-  .about-image {
-    height: 220px;
-    margin-bottom: 12px;
-  }
 
   .about-subtitle {
     font-size: 1rem;
   }
 
   .about-card {
-    padding: 20px;
+    padding: 22px;
   }
 
   .about-page .mt-5 {
-    margin-top: 44px !important;
+    margin-top: 48px !important;
   }
 }
 
-/* Small mobile */
+/* Small Mobile */
 @media (max-width: 576px) {
-  .about-page {
-    padding: 32px 0 48px;
-  }
 
-  .about-image {
-    height: 200px;
+  .about-page {
+    padding-top: 48px;
+    padding-bottom: 48px;
   }
 
   .about-page .mt-5 {
-    margin-top: 36px !important;
+    margin-top: 40px !important;
   }
 }

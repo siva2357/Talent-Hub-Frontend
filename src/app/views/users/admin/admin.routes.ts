@@ -5,9 +5,6 @@ import { Recruiters } from './recruiters/recruiters';
 import { Seekers } from './seekers/seekers';
 import { RecruiterProfilePage } from './recruiter-profile-page/recruiter-profile-page';
 import { SeekerProfilePage } from './seeker-profile-page/seeker-profile-page';
-import { BlogPostPage } from './blog-post-page/blog-post-page';
-import { BlogPostForm } from './blog-post-form/blog-post-form';
-import { BlogPostDetails } from './blog-post-details/blog-post-details';
 import { UserProfile } from './user-profile/user-profile';
 
 
@@ -22,9 +19,6 @@ export const ADMIN_ROUTES: Routes = [
       { path: 'recruiters-list/:id/profile', component: RecruiterProfilePage },
       { path: 'seekers-list', component: Seekers },
       { path: 'seekers-list/:id/profile', component: SeekerProfilePage },
-      { path: 'blog', component: BlogPostPage },
-      { path: 'blog-form', component: BlogPostForm },
-      { path: 'blog/:id/blog-details', component: BlogPostDetails },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ],
   },

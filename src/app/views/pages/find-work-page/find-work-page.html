@@ -1,12 +1,12 @@
 <app-header-layout></app-header-layout>
 
-<section class="job-section py-5 ">
-  <div class="container mt-5 mb-5">
+
+  <div class="container py-5 mb-5">
 
 
     <!-- ================= HEADER ================= -->
-    <div class="mb-4">
-      <h2 class="fw-bold">Find Your Next Job</h2>
+    <div class="mb-4 mt-5">
+      <h4 class="fw-bold">Find Your Next Job</h4>
       <p class="text-muted">
         Discover jobs that match your skills, experience, and career goals —
         powered by AI-driven recommendations.
@@ -15,7 +15,7 @@
 
     <!-- ================= HOW IT WORKS (JOB SEEKER) ================= -->
 
-    <div class="row g-4 mb-5">
+    <div class="row  g-4 mb-5">
 
       <div class="col-12 col-lg-4">
         <div class="info-card h-100 text-center">
@@ -55,7 +55,7 @@
 
 
     <!-- ================= SEARCH HEADER ================= -->
-    <div class="mb-3">
+    <div class="mb-3 mt-5 ">
       <h4 class="fw-bold mb-1">Recommended Jobs for You</h4>
       <p class="text-muted small">
         Jobs ranked based on your skills, experience, and profile strength.
@@ -65,17 +65,17 @@
     <!-- ================= SEARCH ================= -->
     <div class="row g-3 my-4">
       <div class="col-md-5">
-        <input class="form-control" placeholder="Job title, skill, or keyword">
+        <input class="form-control form-control-sm" placeholder="Job title, skill, or keyword">
       </div>
 
       <div class="col-md-4">
-        <select class="form-select">
+        <select class="form-select form-select-sm">
           <option value="">All Categories</option>
         </select>
       </div>
 
       <div class="col-md-3">
-        <button class="btn btn-primary w-100">
+        <button class="btn btn-sm btn-primary ">
           Search Jobs
         </button>
       </div>
@@ -101,11 +101,11 @@
       title: 'Full Stack Engineer',
       meta: 'Onsite • Full Time • 4–6 Years',
       desc: 'Backend + frontend experience required. Your profile is relevant.',
-      match: 'High'
+      match: 'Low'
       }
       ]; track job.title) {
 
-      <div class="job-card mb-3 p-4">
+      <div class="job-card mb-3 p-3">
 
         <h6 class="fw-semibold mb-1">{{ job.title }}</h6>
 
@@ -114,7 +114,16 @@
         </p>
 
         <p class="text-muted small mb-3">
-          Skills Match: <strong>{{ job.match }}</strong> • {{ job.desc }}
+          Skills Match: @if (job.match === 'High') {
+  <strong class="text-success">{{ job.match }}</strong>
+}
+@else if (job.match === 'Medium') {
+  <strong class="text-warning">{{ job.match }}</strong>
+}
+@else if (job.match === 'Low') {
+  <strong class="text-danger">{{ job.match }}</strong>
+}
+ • {{ job.desc }}
         </p>
 
         <button class="btn btn-sm btn-outline-primary">
@@ -127,13 +136,12 @@
 
 
   </div>
-</section>
+
 
 
 
 
 <!-- ================= HIRING FLOW ================= -->
-<section class="hiring-process py-5">
   <div class="container mt-5 mb-5">
 
     <h4 class="fw-bold mb-4 text-center">
@@ -184,7 +192,7 @@
 
     </div>
   </div>
-</section>
+
 
 
 
