@@ -1,124 +1,56 @@
-
-
 <header class="app-header shadow-lg">
-
   <div class="d-flex align-items-center justify-content-between px-3" style="height: 70px; gap: 20px;">
 
     <div class="d-flex align-items-center" style="gap: 25px;">
+      <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png" alt="logo" style="height: 48px; width: auto;">
+      <button class="hamburger-btn " (click)="toggleSidebar()"> <i class="bi bi-list fs-3"></i></button>
+    </div>
 
-      <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
-          alt="logo"
-          style="height: 48px; width: auto;">
+    <div class="d-flex align-items-center gap-3">
 
-   <button class="hamburger-btn " (click)="toggleSidebar()">
-      <i class="bi bi-list fs-3"></i>
-    </button>
+      <div class="d-flex flex-column justify-content-center text-end d-none d-md-block">
+        <div class="fw-semibold lh-1">{{ fullName }}</div>
+        <small class="text-muted text-capitalize lh-1 mt-1">
+          {{ userRole }}
+        </small>
+      </div>
 
+      <div class="dropdown">
+        <a class="d-flex align-items-center" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+          <img [src]="profileImage || 'assets/avatar.png'" alt="Profile" width="36" height="36" class="rounded-circle border" />
+        </a>
 
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm profile-menu">
+          <li class="px-3 py-2">
+            <div class="fw-semibold">{{ fullName }}</div><small class="text-muted text-capitalize">{{ userRole }}</small>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item d-flex align-items-center gap-2" (click)="goToProfilePage()"><i class="bi bi-person"></i>Profile</a></li>
+          <li><a class="dropdown-item d-flex align-items-center gap-2"> <i class="bi bi-gear"></i> Settings</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" (click)="logout()"> <i class="bi bi-box-arrow-right"></i>Log out</a></li>
+        </ul>
+      </div>
 
     </div>
 
-<div class="d-flex align-items-center gap-3">
-
-  <!-- Name + Role -->
-<div class="d-flex flex-column justify-content-center text-end d-none d-md-block">
-  <div class="fw-semibold lh-1">{{ fullName }}</div>
-  <small class="text-muted text-capitalize lh-1 mt-1">
-    {{ userRole }}
-  </small>
-</div>
-
-
-  <!-- Profile Dropdown -->
-  <div class="dropdown">
-    <a
-      class="d-flex align-items-center"
-      data-bs-toggle="dropdown"
-      role="button"
-      aria-expanded="false"
-    >
-      <img
-        [src]="profileImage || 'assets/avatar.png'"
-        alt="Profile"
-        width="36"
-        height="36"
-        class="rounded-circle border"
-      />
-    </a>
-
-    <ul class="dropdown-menu dropdown-menu-end shadow-sm profile-menu">
-      <li class="px-3 py-2">
-        <div class="fw-semibold">{{ fullName }}</div>
-        <small class="text-muted text-capitalize">{{ userRole }}</small>
-      </li>
-
-      <li><hr class="dropdown-divider"></li>
-
-      <li>
-        <a class="dropdown-item d-flex align-items-center gap-2"
-           (click)="goToProfilePage()">
-          <i class="bi bi-person"></i>
-          Profile
-        </a>
-      </li>
-
-      <li>
-        <a class="dropdown-item d-flex align-items-center gap-2">
-          <i class="bi bi-gear"></i>
-          Settings
-        </a>
-      </li>
-
-      <li><hr class="dropdown-divider"></li>
-
-      <li>
-        <a class="dropdown-item d-flex align-items-center gap-2 text-danger"
-           (click)="logout()">
-          <i class="bi bi-box-arrow-right"></i>
-          Log out
-        </a>
-      </li>
-    </ul>
   </div>
-
-</div>
-
-
-  </div>
-
 </header>
 
-
-
-<div class="admin-container"  [class.sidebar-open]="sidebarOpen">
-
-<aside class="sidebar "
-       [ngClass]="{'open': sidebarOpen}"
-       style="font-family: 'Poppins', sans-serif;">
-
-  <ul class="nav-list" style="margin-top: 80px;">
-
-    @for (menu of menuItems; track menu) {
+<div class="admin-container" [class.sidebar-open]="sidebarOpen">
+  <aside class="sidebar " [ngClass]="{'open': sidebarOpen}" style="font-family: 'Poppins', sans-serif;">
+    <ul class="nav-list" style="margin-top: 80px;">
+      @for (menu of menuItems; track menu) {
       <li style="margin-left: 10px; margin-right: 10px; margin-top: 15px;">
-        <a [routerLink]="menu.link"
-           routerLinkActive="active"
-           [routerLinkActiveOptions]="{ exact: true }"  (click)="closeSidebarOnMobile()">
+        <a [routerLink]="menu.link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeSidebarOnMobile()">
           <i [class]="menu.icon" style="font-size: 1.3rem;"></i>
-          <span class="links_name poppins-medium"
-                style="margin-left: 15px;">
-            {{ menu.label }}
-          </span>
+          <span class="links_name poppins-medium" style="margin-left: 15px;">{{ menu.label }}</span>
         </a>
       </li>
-    }
+      }
+    </ul>
+  </aside>
 
-  </ul>
-
-</aside>
-
-
-
-  <!-- MAIN CONTENT -->
   <main class="admin-main">
     <router-outlet></router-outlet>
   </main>
