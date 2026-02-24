@@ -90,48 +90,133 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content shadow">
 
+      <!-- Header -->
       <div class="modal-header">
         <h5 class="modal-title">
           @if (isEditMode) { Edit Company } @else { Add Company }
         </h5>
-        <button type="button" class="btn-close" (click)="closeFormModal()"></button>
+        <button type="button"
+                class="btn-close"
+                (click)="closeFormModal()"></button>
       </div>
 
       <form [formGroup]="companyForm" (ngSubmit)="submitForm()">
         <div class="modal-body">
-
           <div class="row g-3">
 
+            <!-- Company Name -->
             <div class="col-md-6">
               <label class="form-label">Company Name</label>
-              <input class="form-control" formControlName="companyName">
+
+              <input class="form-control"
+                     formControlName="companyName"
+                     [class.is-invalid]="companyForm.get('companyName')?.invalid && companyForm.get('companyName')?.touched">
+
+              @if (companyForm.get('companyName')?.touched && companyForm.get('companyName')?.invalid) {
+                <div class="invalid-feedback d-block">
+
+                  @if (companyForm.get('companyName')?.errors?.['required']) {
+                    Company name is required
+                  }
+
+                  @if (companyForm.get('companyName')?.errors?.['minlength']) {
+                    Minimum 3 characters required
+                  }
+
+                  @if (companyForm.get('companyName')?.errors?.['maxlength']) {
+                    Maximum 100 characters allowed
+                  }
+
+                </div>
+              }
             </div>
 
+            <!-- Location -->
             <div class="col-md-6">
               <label class="form-label">Location</label>
-              <input class="form-control" formControlName="companyLocation">
+
+              <input class="form-control"
+                     formControlName="companyLocation"
+                     [class.is-invalid]="companyForm.get('companyLocation')?.invalid && companyForm.get('companyLocation')?.touched">
+
+              @if (companyForm.get('companyLocation')?.touched && companyForm.get('companyLocation')?.invalid) {
+                <div class="invalid-feedback d-block">
+                  Location is required
+                </div>
+              }
             </div>
 
+            <!-- Logo Upload -->
             <div class="col-md-6">
-              <label class="form-label">Logo URL</label>
-              <input class="form-control" formControlName="companyLogo">
+              <label class="form-label">Company Logo</label>
+
+              <app-file-preview [fileUrl]="logoUrl"></app-file-preview>
+
+              <app-file-upload
+                [bucketKey]="BucketKey.ADMIN_COLLECTION"
+                [section]="UploadSection.COMPANY_LOGO"
+                accept="image/*"
+                (uploaded)="onlogoUploaded($event)">
+              </app-file-upload>
+
+              @if (companyForm.get('companyLogo')?.touched && companyForm.get('companyLogo')?.invalid) {
+                <div class="text-danger mt-1">
+                  Company logo is required
+                </div>
+              }
             </div>
 
+            <!-- Founded Date -->
             <div class="col-md-6">
               <label class="form-label">Founded Date</label>
-              <input type="date" class="form-control"
-                     formControlName="companyFoundedDate">
+
+              <input type="date"
+                     class="form-control"
+                     formControlName="companyFoundedDate"
+                     [class.is-invalid]="companyForm.get('companyFoundedDate')?.invalid && companyForm.get('companyFoundedDate')?.touched">
+
+              @if (companyForm.get('companyFoundedDate')?.touched && companyForm.get('companyFoundedDate')?.invalid) {
+                <div class="invalid-feedback d-block">
+                  Founded date is required
+                </div>
+              }
             </div>
 
+            <!-- Employees -->
             <div class="col-md-6">
-              <label class="form-label">Employees</label>
-              <input type="number" class="form-control"
-                     formControlName="totalEmployees">
+              <label class="form-label">Total Employees</label>
+
+              <input type="number"
+                     class="form-control"
+                     formControlName="totalEmployees"
+                     [class.is-invalid]="companyForm.get('totalEmployees')?.invalid && companyForm.get('totalEmployees')?.touched">
+
+              @if (companyForm.get('totalEmployees')?.touched && companyForm.get('totalEmployees')?.invalid) {
+                <div class="invalid-feedback d-block">
+
+                  @if (companyForm.get('totalEmployees')?.errors?.['required']) {
+                    Employees count is required
+                  }
+
+                  @if (companyForm.get('totalEmployees')?.errors?.['min']) {
+                    Must be at least 1 employee
+                  }
+
+                  @if (companyForm.get('totalEmployees')?.errors?.['max']) {
+                    Maximum limit exceeded
+                  }
+
+                </div>
+              }
             </div>
 
+            <!-- Company Size -->
             <div class="col-md-6">
               <label class="form-label">Company Size</label>
-              <select class="form-select" formControlName="companySize">
+
+              <select class="form-select"
+                      formControlName="companySize"
+                      [class.is-invalid]="companyForm.get('companySize')?.invalid && companyForm.get('companySize')?.touched">
                 <option value="">Select Size</option>
                 <option value="Startup">Startup</option>
                 <option value="Small">Small</option>
@@ -139,19 +224,43 @@
                 <option value="Large">Large</option>
                 <option value="Enterprise">Enterprise</option>
               </select>
+
+              @if (companyForm.get('companySize')?.touched && companyForm.get('companySize')?.invalid) {
+                <div class="invalid-feedback d-block">
+                  Company size is required
+                </div>
+              }
             </div>
 
+            <!-- Description -->
             <div class="col-12">
               <label class="form-label">Description</label>
+
               <textarea class="form-control"
                         rows="3"
-                        formControlName="companyDescription"></textarea>
+                        formControlName="companyDescription"
+                        [class.is-invalid]="companyForm.get('companyDescription')?.invalid && companyForm.get('companyDescription')?.touched">
+              </textarea>
+
+              @if (companyForm.get('companyDescription')?.touched && companyForm.get('companyDescription')?.invalid) {
+                <div class="invalid-feedback d-block">
+
+                  @if (companyForm.get('companyDescription')?.errors?.['required']) {
+                    Description is required
+                  }
+
+                  @if (companyForm.get('companyDescription')?.errors?.['minlength']) {
+                    Minimum 10 characters required
+                  }
+
+                </div>
+              }
             </div>
 
           </div>
-
         </div>
 
+        <!-- Footer -->
         <div class="modal-footer">
           <button type="button"
                   class="btn btn-secondary"
@@ -159,9 +268,17 @@
             Cancel
           </button>
 
-          <button type="submit" class="btn btn-primary">
-            @if (isEditMode) { Update } @else { Create }
-          </button>
+<button type="submit"
+        class="btn btn-primary"
+        [disabled]="companyForm.invalid || submitting">
+
+  @if (submitting) {
+    <span class="spinner-border spinner-border-sm me-2"></span>
+  }
+
+  @if (isEditMode) { Update } @else { Create }
+
+</button>
         </div>
 
       </form>

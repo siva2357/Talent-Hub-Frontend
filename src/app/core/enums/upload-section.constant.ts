@@ -3,4 +3,5 @@ export enum UploadSection {
   COMPANY_LOGO = 'COMPANY_LOGO',
   RESUME= "RESUME",
   PROJECT_FILES='PROJECT_FILES',
+  BLOG_FILES='BLOG_FILES',
 }
