@@ -147,9 +147,6 @@ export class JobpostService {
   }
 
 
-
-
-
   getAllJobPosts(): Observable<{
     totalJobs: number;
     jobs: JobSeekerJobPost[];
