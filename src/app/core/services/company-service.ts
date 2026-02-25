@@ -52,6 +52,20 @@ updateCompany(
 }
 
 
+
+getCompaniesList(): Observable<{
+  success: boolean;
+  count: number;
+  data: string[];
+}> {
+  return this.http.get<{
+    success: boolean;
+    count: number;
+    data: string[];
+  }>(`${this.baseUrl}/company/list`)
+  .pipe(catchError(this.handleError));
+}
+
 getAllCompanies(): Observable<{
   success: boolean;
   count: number;
