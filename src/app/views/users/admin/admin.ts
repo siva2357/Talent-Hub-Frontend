@@ -4,11 +4,6 @@ import { AppNotification } from '../../../core/models/notification.model';
 import { NotificationService } from '../../../core/services/notification-service';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth-service';
-interface Notification {
-  message: string;
-  time: string;
-  read: boolean;
-}
 
 @Component({
   selector: 'app-admin',
@@ -17,14 +12,12 @@ interface Notification {
   templateUrl: './admin.html',
   styleUrl: './admin.css',
 })
-export class Admin implements OnInit{
+export class Admin implements OnInit {
+  constructor( private authService: AuthService, private router: Router, private notificationService:NotificationService ) {}
 
-    constructor(private authService: AuthService, private router: Router, private notificationService: NotificationService) {}
-
-
-  public userName!:string;
-  public fullName! :string;
-  public profileImage! :string;
+  public userName!: string;
+  public fullName!: string;
+  public profileImage!: string;
   public userId!: string;
   public errorMessage: string | null = null;
   public loading: boolean = true;
@@ -33,45 +26,37 @@ export class Admin implements OnInit{
   public notifications: AppNotification[] = [];
 
   ngOnInit(): void {
-  this.userId = localStorage.getItem('userId') || this.authService.getUserId() || '';
-  const role = localStorage.getItem('userRole') || this.authService.getRole() || '';
-  this.fullName = this.authService.getFullName() ||"";
-  this.profileImage = this.authService.getUserData()?.profileImage || '';
-  this.userRole = role;
+    this.userId = localStorage.getItem('userId') || this.authService.getUserId() || '';
+    const role = localStorage.getItem('userRole') || this.authService.getRole() || '';
+    this.fullName = this.authService.getFullName() || '';
+    this.profileImage = this.authService.getUserData()?.profileImage || '';
+    this.userRole = role;
+  }
 
-}
-
-
-
-
-
-sidebarOpen = false; // start collapsed (icon-only mode)
-
-
+  sidebarOpen = false;
   menuItems = [
     { label: 'Dashboard', icon: ' bi-grid', link: 'dashboard' },
     { label: 'Recruiters', icon: 'bi-person-badge', link: 'recruiters-list' },
     { label: 'Seekers', icon: 'bi-people', link: 'seekers-list' },
+    { label: 'Companies', icon: 'bi-briefcase', link: 'company-list' },
+    { label: 'Blog posts', icon: 'bi-book', link: 'blog-list' },
   ];
 
-toggleSidebar() {
-  this.sidebarOpen = !this.sidebarOpen;
-}
-
-closeSidebarOnMobile() {
-  if (window.innerWidth <= 992) {
-    this.sidebarOpen = false;
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
   }
-}
 
+  closeSidebarOnMobile() {
+    if (window.innerWidth <= 992) {
+      this.sidebarOpen = false;
+    }
+  }
 
   showCount = true;
   viewMore = false;
 
-
-
   get unreadCount() {
-    return this.notifications.filter(n => !n.read).length;
+    return this.notifications.filter((n) => !n.read).length;
   }
 
   get visibleNotifications() {
@@ -83,7 +68,7 @@ closeSidebarOnMobile() {
   }
 
   markAllRead() {
-    this.notifications.forEach(n => n.read = true);
+    this.notifications.forEach((n) => (n.read = true));
     this.showCount = false;
   }
 
@@ -92,40 +77,30 @@ closeSidebarOnMobile() {
     this.showCount = false;
   }
 
-
-
-
-
-logout(): void {
-  localStorage.setItem('isLoggingOut', 'true');
-
-  this.authService.logout().subscribe({
-    next: () => {
-      this.authService.clearAuthData();
-      localStorage.removeItem('isLoggingOut');
-      this.router.navigate(['/login']);
-    },
-    error: () => {
-      // fallback logout
-      this.authService.clearAuthData();
-      localStorage.removeItem('isLoggingOut');
-      this.router.navigate(['/login']);
-    }
-  });
-}
-
-
-goToProfilePage(): void {
-  const userId = this.authService.getUserId() || localStorage.getItem('userId') || '';
-  const userRole = this.authService.getRole() || localStorage.getItem('userRole') || '';
-  if (!userId || !userRole) {
-    console.error('User ID or role is missing');
-    return;
+  logout(): void {
+    localStorage.setItem('isLoggingOut', 'true');
+    this.authService.logout().subscribe({
+      next: () => {
+        this.authService.clearAuthData();
+        localStorage.removeItem('isLoggingOut');
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        this.authService.clearAuthData();
+        localStorage.removeItem('isLoggingOut');
+        this.router.navigate(['/login']);
+      },
+    });
   }
-  const rolePath = userRole;  // Ensures route path is consistent
-  this.router.navigate([`/${rolePath}/profile`]);
-}
 
-
-
+  goToProfilePage(): void {
+    const userId = this.authService.getUserId() || localStorage.getItem('userId') || '';
+    const userRole = this.authService.getRole() || localStorage.getItem('userRole') || '';
+    if (!userId || !userRole) {
+      console.error('User ID or role is missing');
+      return;
+    }
+    const rolePath = userRole;
+    this.router.navigate([`/${rolePath}/profile`]);
+  }
 }

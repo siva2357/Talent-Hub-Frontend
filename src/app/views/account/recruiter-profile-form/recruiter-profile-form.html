@@ -84,97 +84,34 @@
           </div>
         </div>
 
-        <div class="company-details mt-5">
-          <h5 class="fw-semibold">Company Details</h5>
-          <div class="row g-4 align-items-start">
-
-            <!-- ===== Company Logo ===== -->
-            <div class="col-md-4">
-              <label class="form-label fw-semibold">Company Logo</label>
-
-              <div class="company-logo-box mt-2">
-                <app-file-preview [fileUrl]="logoUrl"></app-file-preview>
-
-                <app-file-upload class="mt-3" [bucketKey]="BucketKey.RECRUITER_DATA"
-                  [section]="UploadSection.COMPANY_LOGO" accept="image/*" (uploaded)="onlogoUploaded($event)">
-                </app-file-upload>
-              </div>
-
-              @if (
-              profileForm.get('logo')?.touched &&
-              profileForm.get('logo')?.errors?.['required']
-              ) {
-              <small class="text-danger d-block mt-2">
-                Company logo is required
-              </small>
-              }
-            </div>
-
-            <!-- ===== Company Info ===== -->
-            <div class="col-md-8">
-
-              <div class="row g-3">
-
-                <!-- Company Name -->
-                <div class="col-md-12">
-                  <label class="form-label fw-semibold">Company Name</label>
-
-                  <input type="text" class="form-control form-control-sm" formControlName="companyName" placeholder="Enter company name" />
-
-                  @if (
-                  f['companyName'].invalid &&
-                  (f['companyName'].touched || f['companyName'].dirty)
-                  ) {
-                  <small class="text-danger">Company name is required</small>
-                  }
-                </div>
-
-                <!-- Company Location -->
-                <div class="col-md-12">
-                  <label class="form-label fw-semibold">Company Location</label>
-                  <input type="text" class="form-control form-control-sm" formControlName="companyLocation" placeholder="City, State, Country" />
-
-                  @if (
-                  f['companyLocation'].invalid &&
-                  (f['companyLocation'].touched || f['companyLocation'].dirty)
-                  ) {
-                  <small class="text-danger">Company location is required</small>
-                  }
-                </div>
-
-                <!-- Company Description -->
-                <div class="col-md-12">
-                  <label class="form-label fw-semibold">Company Description</label>
-
-                  <textarea class="form-control form-control-sm" rows="5" formControlName="companyDescription" placeholder="Brief description about the company"> </textarea>
-
-                  @if (
-                  f['companyDescription'].invalid &&
-                  (f['companyDescription'].touched || f['companyDescription'].dirty)
-                  ) {
-                  <small class="text-danger">
-                    Company description is required
-                  </small>
-                  }
-                </div>
-
-              </div>
-
-            </div>
-
-
-
-
-
-
-          </div>
-
-        </div>
-
-
         <div class="professional-section mt-5">
           <h5 class="fw-semibold">Professional Details</h5>
           <div class="row g-3">
+
+<div class="col-md-4 mt-3">
+  <label class="form-label fw-semibold">Company Name</label>
+
+  <select class="form-select form-select-sm"
+          formControlName="companyName">
+
+    <option value="" disabled selected>Select Company</option>
+
+    <option *ngFor="let company of companies"
+            [value]="company">
+      {{ company }}
+    </option>
+
+  </select>
+
+  @if (
+    f['companyName'].invalid &&
+    (f['companyName'].touched || f['companyName'].dirty)
+  ) {
+    <small class="text-danger">Company name is required</small>
+  }
+
+</div>
+
             <!-- Sector -->
             <div class="col-md-4 mt-3">
               <label class="form-label fw-semibold">Sector / Department</label>
