@@ -1,0 +1,15 @@
+import { Component } from '@angular/core';
+import { HeaderLayout } from '../views/layouts/header-layout/header-layout';
+import { FooterLayout } from '../views/layouts/footer-layout/footer-layout';
+
+
+@Component({
+  selector: 'app-blog-page',
+  imports: [FooterLayout, HeaderLayout],
+  templateUrl: './blog-page.html',
+  styleUrl: './blog-page.css',
+  standalone:true
+})
+export class BlogPage {
+
+}

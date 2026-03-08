@@ -61,7 +61,6 @@ export class LoginPage {
       next: (response) => {
         this.isLoading = false;
 
-        // 🔁 Navigation only (NO auth logic)
         switch (response.role) {
           case 'recruiter':
             this.router.navigate(
@@ -85,7 +84,6 @@ export class LoginPage {
         }
       },
       error: () => {
-        // ❌ Error UI handled by ErrorInterceptor
         this.isLoading = false;
       }
     });
