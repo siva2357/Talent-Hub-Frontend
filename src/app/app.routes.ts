@@ -23,9 +23,10 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { RegistrationPage } from './views/account/registration-page/registration-page';
 
 
-import { RECRUITER_ROUTES } from './views/users/recruiter/recruiter.routes';
-import { SEEKER_ROUTES } from './views/users/seeker/seeker.routes';
-import { ADMIN_ROUTES } from './views/users/admin/admin.routes';
+import { RECRUITER_ROUTES } from './views/recruiter/recruiter.routes';
+import { SEEKER_ROUTES } from './views/seeker/seeker.routes';
+import { ADMIN_ROUTES } from './views/admin/admin.routes';
+import { BlogPage } from './views/pages/blog-page/blog-page';
 
 
 export const routes: Routes = [
@@ -37,12 +38,17 @@ export const routes: Routes = [
   { path: 'recruitment-process', component: RecruitmentPage, title: 'Recruitment' },
   { path: 'resume-analyzer', component: ResumeBuilderPage, title: 'Resume builder' },
   { path: 'about', component: AboutPage, title: 'About' },
+   { path: 'blog', component: BlogPage, title: 'About' },
 
   //auth pages
   { path: 'sign-up', component: SingupPage, title: 'Singup' },
   { path: 'register', component: RegistrationPage, title: 'Register recruiter' },
-  { path: 'recruiter-profile-form', component: RecruiterProfileForm ,canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'recruiter' }},
-  { path: 'jobSeeker-profile-form', component: SeekerProfileForm,canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'jobSeeker' } },
+  { path: 'recruiter-profile-form', component: RecruiterProfileForm ,
+    // canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'recruiter' }
+  },
+  { path: 'jobSeeker-profile-form', component: SeekerProfileForm,
+    // canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'jobSeeker' }
+  },
   { path: 'register/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
   { path: 'login', component: LoginPage, title: 'Login' },
@@ -57,8 +63,14 @@ export const routes: Routes = [
   { path: 'access-denied', component: UnauthorizedPage, title: 'Access denied' },
 
   //User routes
-  { path: 'admin', loadChildren: () => ADMIN_ROUTES, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'admin' }},
-  { path: 'recruiter', loadChildren: () => RECRUITER_ROUTES,canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'recruiter' } },
-  { path: 'jobSeeker', loadChildren: () => SEEKER_ROUTES ,canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'jobSeeker' }},
+  { path: 'admin', loadChildren: () => ADMIN_ROUTES,
+    // canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'admin' }
+  },
+  { path: 'recruiter', loadChildren: () => RECRUITER_ROUTES,
+    // canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'recruiter' }
+  },
+  { path: 'jobSeeker', loadChildren: () => SEEKER_ROUTES ,
+    // canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'jobSeeker' }
+  },
   { path: '**', redirectTo: 'home' },
 ];

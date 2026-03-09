@@ -1,0 +1,205 @@
+<header class="app-header shadow-lg ">
+
+  <!-- TOP NAV CONTAINER -->
+  <div class="d-flex align-items-center justify-content-between px-3" style="height: 70px; gap: 20px;">
+
+    <!-- LEFT SECTION: Logo + Navigation -->
+    <div class="d-flex align-items-center" style="gap: 10px;">
+
+      <!-- Mobile / Tablet toggle (visible below lg) -->
+      <!-- Mobile / Tablet Toggle (visible below lg) -->
+      <button class="nav-toggle-btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNav"
+        aria-controls="offcanvasNav" aria-label="Open navigation">
+        <i class="bi bi-list"></i>
+      </button>
+
+
+      <!-- Logo (visible only on large screens) -->
+      <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png" alt="logo" style="height: 48px; width: auto; margin-right: 10px;">
+
+
+      <!-- Navigation Links -->
+      <!-- Desktop nav (visible lg and up) -->
+      <nav class="d-none d-lg-flex align-items-center" style="gap:20px;">
+        <a routerLink="jobposts" routerLinkActive="active-link" class="nav-link-custom" style="font-size: 14px;">Job Profiles</a>
+        <a routerLink="applied-jobposts" routerLinkActive="active-link" class="nav-link-custom" style="font-size: 14px;">Applied Jobposts</a>
+        <a routerLink="assessments" routerLinkActive="active-link" class="nav-link-custom"style="font-size: 14px;">Assessments</a>
+        <a routerLink="scheduled-meetings" routerLinkActive="active-link" class="nav-link-custom" style="font-size: 14px;">Interviews</a>
+        <a routerLink="my-portfolio" routerLinkActive="active-link" class="nav-link-custom" style="font-size: 14px;">My Portfolio</a>
+        <a routerLink="resume-analytics" routerLinkActive="active-link" class="nav-link-custom" style="font-size: 14px;">Resume Scoring</a>
+
+      </nav>
+
+
+
+    </div>
+
+    <!-- RIGHT SECTION -->
+<div class="d-flex align-items-center" style="gap: 10px;">
+
+  <!-- Notification -->
+  <div class="dropdown notif-dropdown mx-2">
+
+    <a class="header-icon position-relative" data-bs-toggle="dropdown">
+      <i class="bi bi-bell fs-5"></i>
+      <span class="notif-badge">3</span>
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-center shadow notif-menu" data-bs-auto-close="outside">
+
+      <div class="notif-header d-flex justify-content-between align-items-center px-2 py-2">
+        <strong>Notifications</strong>
+
+        <div class="actions">
+          <button class="btn btn-sm btn-outline-primary me-2" style="font-size: 12px;">Mark all read</button>
+          <button class="btn btn-sm btn-outline-danger py-1" style="font-size: 12px;">Clear all</button>
+        </div>
+      </div>
+
+      <hr class="my-1">
+
+      <div class="notif-list list-group list-group-flush">
+
+        <!-- Notification 1 -->
+        <div class="list-group-item notif-item unread">
+          <span class="notif-dot"></span>
+
+          <div class="notif-content">
+            <p class="mb-0 notif-text">New job application received</p>
+            <small class="notif-time">2 min ago</small>
+
+            <div class="notif-actions">
+              <span class="notif-action small text-muted" style="cursor: pointer;">
+                Mark as read
+              </span>
+
+              <span class="notif-action text-danger small" style="cursor: pointer;">
+                Delete
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notification 2 -->
+        <div class="list-group-item notif-item">
+          <div class="notif-content">
+            <p class="mb-0 notif-text">Your job post was approved</p>
+            <small class="notif-time">10 min ago</small>
+
+            <div class="notif-actions">
+              <span class="notif-action text-danger small" style="cursor: pointer;">
+                Delete
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notification 3 -->
+        <div class="list-group-item notif-item">
+          <div class="notif-content">
+            <p class="mb-0 notif-text">Profile updated successfully</p>
+            <small class="notif-time">1 hour ago</small>
+
+            <div class="notif-actions">
+              <span class="notif-action text-danger small" style="cursor: pointer;">
+                Delete
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button class="btn btn-link notif-view-btn">
+            View more
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Profile Dropdown -->
+  <div class="dropdown">
+
+    <a class="header-icon" data-bs-toggle="dropdown">
+      <img src="assets/images/Avatar.jpg" alt="profile" width="35" height="35" class="rounded-circle">
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-start profile-menu" style="width: 200px;">
+
+      <li class="dropdown-item" style="line-height: 1.2;">
+        John Doe <br>
+        <small>Job Seeker</small>
+      </li>
+
+      <li>
+        <hr>
+      </li>
+
+      <li>
+        <a class="dropdown-item d-flex align-items-center gap-2">
+          <i class="bi bi-person"></i>
+          Profile
+        </a>
+      </li>
+
+      <li>
+        <a class="dropdown-item d-flex align-items-center gap-2">
+          <i class="bi bi-gear"></i>
+          Settings
+        </a>
+      </li>
+
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+
+      <li>
+        <a class="dropdown-item d-flex align-items-center gap-2 text-danger">
+          <i class="bi bi-box-arrow-right"></i>
+          Log out
+        </a>
+      </li>
+
+    </ul>
+
+  </div>
+
+</div>
+
+  </div>
+
+</header>
+
+
+<div class="offcanvas offcanvas-start offcanvas-lg" tabindex="-1" id="offcanvasNav" aria-labelledby="offcanvasNavLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasNavLabel">
+      <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png" alt="logo"
+        style="height:34px; width:auto;">
+    </h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+
+  <div class="offcanvas-body">
+    <nav class="d-flex flex-column" style="gap:10px;">
+        <a routerLink="jobposts"  data-bs-dismiss="offcanvas" routerLinkActive="active-link" class="nav-link-custom" style="font-size: 14px;">Job Profiles</a>
+        <a routerLink="applied-jobposts" data-bs-dismiss="offcanvas" routerLinkActive="active-link" class="nav-link-custom" style="font-size: 14px;">Applied Jobposts</a>
+        <a routerLink="assessments" data-bs-dismiss="offcanvas" routerLinkActive="active-link" class="nav-link-custom" style="font-size: 14px;">Assessments</a>
+        <a routerLink="scheduled-meetings"  data-bs-dismiss="offcanvas" routerLinkActive="active-link" class="nav-link-custom" style="font-size: 14px;">Interviews</a>
+        <a routerLink="my-portfolio"   data-bs-dismiss="offcanvas" routerLinkActive="active-link" class="nav-link-custom" style="font-size: 14px;">My Portfolio</a>
+        <a routerLink="resume-analytics" routerLinkActive="active-link" class="nav-link-custom" data-bs-dismiss="offcanvas" style="font-size: 14px;">Resume Scoring</a>
+
+    </nav>
+
+
+  </div>
+</div>
+
+<div class="app-body">
+  <router-outlet></router-outlet>
+</div>
+
+
