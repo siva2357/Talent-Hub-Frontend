@@ -8,7 +8,7 @@
 
   <div class="filter-toolbar">
 
-    <div class="row g-4 align-items-center">
+    <div class="row g-3 align-items-center">
 
       <!-- Search -->
       <div class="col-xl-4 col-lg-4 col-md-12">
@@ -91,12 +91,37 @@
           <td>HR Manager</td>
           <td><span class="badge bg-success">Active</span></td>
           <td class="text-center">
-            <div class="d-flex justify-content-center flex-nowrap gap-1">
-              <button class="btn btn-primary btn-sm">View</button>
-              <button class="btn btn-warning btn-sm">Block</button>
-              <button class="btn btn-success btn-sm">Unblock</button>
-              <button class="btn btn-danger btn-sm">Deactivate</button>
-            </div>
+<div class="d-flex justify-content-center flex-nowrap gap-1">
+
+<button
+class="btn btn-primary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#viewProfileModal">
+View Profile
+</button>
+
+<button
+class="btn btn-warning btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#blockModal">
+Block
+</button>
+
+<button
+class="btn btn-success btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#unblockModal">
+Unblock
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#deactivateModal">
+Deactivate
+</button>
+
+</div>
           </td>
         </tr>
 
@@ -111,7 +136,7 @@
           <td><span class="badge bg-success">Active</span></td>
           <td class="text-center">
             <div class="d-flex justify-content-center flex-nowrap gap-1">
-              <button class="btn btn-primary btn-sm">View</button>
+              <button class="btn btn-primary btn-sm">View profile</button>
               <button class="btn btn-warning btn-sm">Block</button>
               <button class="btn btn-success btn-sm">Unblock</button>
               <button class="btn btn-danger btn-sm">Deactivate</button>
@@ -130,7 +155,7 @@
           <td><span class="badge bg-secondary">Inactive</span></td>
           <td class="text-center">
             <div class="d-flex justify-content-center flex-nowrap gap-1">
-              <button class="btn btn-primary btn-sm">View</button>
+              <button class="btn btn-primary btn-sm">View profile</button>
               <button class="btn btn-warning btn-sm">Block</button>
               <button class="btn btn-success btn-sm">Unblock</button>
               <button class="btn btn-danger btn-sm">Deactivate</button>
@@ -149,7 +174,7 @@
           <td><span class="badge bg-success">Active</span></td>
           <td class="text-center">
             <div class="d-flex justify-content-center flex-nowrap gap-1">
-              <button class="btn btn-primary btn-sm">View</button>
+              <button class="btn btn-primary btn-sm">View profile</button>
               <button class="btn btn-warning btn-sm">Block</button>
               <button class="btn btn-success btn-sm">Unblock</button>
               <button class="btn btn-danger btn-sm">Deactivate</button>
@@ -168,7 +193,7 @@
           <td><span class="badge bg-success">Active</span></td>
           <td class="text-center">
             <div class="d-flex justify-content-center flex-nowrap gap-1">
-              <button class="btn btn-primary btn-sm">View</button>
+              <button class="btn btn-primary btn-sm">View profile</button>
               <button class="btn btn-warning btn-sm">Block</button>
               <button class="btn btn-success btn-sm">Unblock</button>
               <button class="btn btn-danger btn-sm">Deactivate</button>
@@ -187,7 +212,7 @@
           <td><span class="badge bg-secondary">Inactive</span></td>
           <td class="text-center">
             <div class="d-flex justify-content-center flex-nowrap gap-1">
-              <button class="btn btn-primary btn-sm">View</button>
+              <button class="btn btn-primary btn-sm">View profile</button>
               <button class="btn btn-warning btn-sm">Block</button>
               <button class="btn btn-success btn-sm">Unblock</button>
               <button class="btn btn-danger btn-sm">Deactivate</button>
@@ -206,7 +231,7 @@
           <td><span class="badge bg-success">Active</span></td>
           <td class="text-center">
             <div class="d-flex justify-content-center flex-nowrap gap-1">
-              <button class="btn btn-primary btn-sm">View</button>
+              <button class="btn btn-primary btn-sm">View profile</button>
               <button class="btn btn-warning btn-sm">Block</button>
               <button class="btn btn-success btn-sm">Unblock</button>
               <button class="btn btn-danger btn-sm">Deactivate</button>
@@ -225,7 +250,7 @@
           <td><span class="badge bg-success">Active</span></td>
           <td class="text-center">
             <div class="d-flex justify-content-center flex-nowrap gap-1">
-              <button class="btn btn-primary btn-sm">View</button>
+              <button class="btn btn-primary btn-sm">View profile</button>
               <button class="btn btn-warning btn-sm">Block</button>
               <button class="btn btn-success btn-sm">Unblock</button>
               <button class="btn btn-danger btn-sm">Deactivate</button>
@@ -244,7 +269,7 @@
           <td><span class="badge bg-success">Active</span></td>
           <td class="text-center">
             <div class="d-flex justify-content-center flex-nowrap gap-1">
-              <button class="btn btn-primary btn-sm">View</button>
+              <button class="btn btn-primary btn-sm">View profile</button>
               <button class="btn btn-warning btn-sm">Block</button>
               <button class="btn btn-success btn-sm">Unblock</button>
               <button class="btn btn-danger btn-sm">Deactivate</button>
@@ -263,7 +288,7 @@
           <td><span class="badge bg-secondary">Inactive</span></td>
           <td class="text-center">
             <div class="d-flex justify-content-center flex-nowrap gap-1">
-              <button class="btn btn-primary btn-sm">View</button>
+              <button class="btn btn-primary btn-sm">View profile</button>
               <button class="btn btn-warning btn-sm">Block</button>
               <button class="btn btn-success btn-sm">Unblock</button>
               <button class="btn btn-danger btn-sm">Deactivate</button>
@@ -277,54 +302,162 @@
 
   </div>
 
-  <div class="table-footer mb-5">
+<div class="table-footer mb-5">
 
-    <div class="footer-wrapper">
+  <div class="footer-wrapper">
 
-      <small class="result-text">
-        Showing <strong>1–10</strong> of <strong>100</strong> recruiters
-      </small>
+    <small class="result-text">
+      Showing <strong>1–10</strong> of <strong>100</strong> recruiters
+    </small>
 
-      <nav>
-        <ul class="pagination pagination-sm custom-pagination mb-0">
+    <nav>
+      <ul class="pagination pagination-sm custom-pagination mb-0">
 
-          <li class="page-item disabled">
-            <a class="page-link">
-              <i class="bi bi-chevron-left"></i>
-            </a>
-          </li>
+        <li class="page-item disabled">
+          <a class="page-link">
+            <i class="bi bi-chevron-left"></i>
+          </a>
+        </li>
 
-          <li class="page-item active">
-            <a class="page-link">1</a>
-          </li>
+        <li class="page-item active">
+          <a class="page-link">1</a>
+        </li>
 
-          <li class="page-item">
-            <a class="page-link">2</a>
-          </li>
+        <li class="page-item">
+          <a class="page-link">2</a>
+        </li>
 
-          <li class="page-item">
-            <a class="page-link">3</a>
-          </li>
+        <li class="page-item">
+          <a class="page-link">
+            <i class="bi bi-chevron-right"></i>
+          </a>
+        </li>
 
-          <li class="page-item">
-            <a class="page-link">4</a>
-          </li>
-
-          <li class="page-item">
-            <a class="page-link">
-              <i class="bi bi-chevron-right"></i>
-            </a>
-          </li>
-
-        </ul>
-      </nav>
-
-    </div>
+      </ul>
+    </nav>
 
   </div>
+
+</div>
 
 
 
 </div>
 
 
+
+
+
+
+
+
+
+
+<div class="modal fade" id="viewProfileModal" tabindex="-1">
+<div class="modal-dialog modal-xl modal-dialog-centered">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5 class="modal-title">Recruiter Profile</h5>
+<button class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+
+<div class="row">
+
+<div class="col-md-4 text-center">
+<img src="https://i.pravatar.cc/120" class="rounded-circle mb-3">
+<h5>Rahul Sharma</h5>
+<p class="text-muted">HR Manager</p>
+</div>
+
+<div class="col-md-8">
+
+<p><strong>Email:</strong> rahul@technova.com</p>
+<p><strong>Phone:</strong> 9876543210</p>
+<p><strong>Company:</strong> TechNova Pvt Ltd</p>
+<p><strong>Status:</strong> Active</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+
+
+<div class="modal fade" id="blockModal">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5 class="modal-title">Block Recruiter</h5>
+<button class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+Are you sure you want to block this recruiter?
+</div>
+
+<div class="modal-footer">
+<button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+<button class="btn btn-warning">Block</button>
+</div>
+
+</div>
+</div>
+</div>
+
+
+
+<div class="modal fade" id="unblockModal">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5 class="modal-title">Unblock Recruiter</h5>
+<button class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+Are you sure you want to unblock this recruiter?
+</div>
+
+<div class="modal-footer">
+<button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+<button class="btn btn-success">Unblock</button>
+</div>
+
+</div>
+</div>
+</div>
+
+
+
+<div class="modal fade" id="deactivateModal">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5 class="modal-title">Deactivate Account</h5>
+<button class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+Are you sure you want to deactivate this account?
+</div>
+
+<div class="modal-footer">
+<button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+<button class="btn btn-danger">Deactivate</button>
+</div>
+
+</div>
+</div>
+</div>
