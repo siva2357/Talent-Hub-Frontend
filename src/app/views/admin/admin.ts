@@ -22,9 +22,13 @@ export class Admin  {
     { label: 'Blog posts', icon: 'bi-book', link: 'blog-list' },
   ];
 
-  toggleSidebar() {
-    this.sidebarOpen = !this.sidebarOpen;
-  }
+toggleSidebar() {
+  this.sidebarOpen = !this.sidebarOpen;
+
+  setTimeout(() => {
+    window.dispatchEvent(new Event('resize'));
+  },350);
+}
 
   closeSidebarOnMobile() {
     if (window.innerWidth <= 992) {

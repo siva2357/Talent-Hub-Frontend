@@ -1,3 +1,331 @@
-<div class="container mt-5 pt-5">
-  <p>Dashboard Page</p>
+<div class="container-fluid mt-5 pt-5">
+  <h5>Analytics</h5>
+
+<div class="row g-3">
+
+  <!-- CARD -->
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card border rounded-0 h-100">
+      <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="mb-0">Total Recruiters</h6>
+
+          <select class="form-select form-select-sm bg-body-secondary w-auto small">
+            <option>Monthly</option>
+            <option>Yearly</option>
+          </select>
+        </div>
+
+        <h5 class="mt-2">128</h5>
+
+        <p class="text-muted small mb-2">Registered recruiters</p>
+
+<div  class="mini-chart">
+  <canvas id="recruiterChart"></canvas>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- CARD -->
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card border rounded-0 h-100">
+      <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="mb-0">Total Job Seekers</h6>
+
+          <select class="form-select form-select-sm bg-body-secondary w-auto small">
+            <option>Monthly</option>
+            <option>Yearly</option>
+          </select>
+        </div>
+
+        <h5 class="mt-2">1000</h5>
+
+        <p class="text-muted small mb-2">Active job seekers</p>
+
+<div  class="mini-chart">
+  <canvas id="seekerChart"></canvas>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- CARD -->
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card border rounded-0 h-100">
+      <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="mb-0">Total Job Applications</h6>
+
+          <select class="form-select form-select-sm bg-body-secondary w-auto small">
+            <option>Monthly</option>
+            <option>Yearly</option>
+          </select>
+        </div>
+
+        <h5 class="mt-2">5000</h5>
+
+        <p class="text-muted small mb-2">Applications submitted</p>
+<div  class="mini-chart">
+<canvas id="applicationChart"></canvas>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- CARD -->
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card border rounded-0 h-100">
+      <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="mb-0">Total Hired Candidates</h6>
+
+          <select class="form-select form-select-sm bg-body-secondary w-auto small">
+            <option>Monthly</option>
+            <option>Yearly</option>
+          </select>
+        </div>
+
+        <h5 class="mt-2">350</h5>
+
+        <p class="text-muted small mb-2">Successfully hired</p>
+
+<div  class="mini-chart">
+<canvas id="hiredChart"></canvas>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="col-12 mt-3">
+
+  <div class="card border rounded-0 shadow-sm">
+    <div class="card-body p-4">
+
+      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-semibold mb-0">Job Platform Analytics</h5>
+
+        <select class="form-select form-select-sm bg-body-secondary" style="width:170px;">
+          <option>Monthly</option>
+          <option>Quarterly</option>
+          <option>Half-Yearly</option>
+          <option>Annually</option>
+        </select>
+      </div>
+
+      <!-- Metrics -->
+<div class="row g-3 text-center mb-4">
+
+  <div class="col-6 col-md">
+    <div class="card border rounded-0 analytics-metric">
+      <div class="card-body">
+        <h5 class="metric-value text-primary">1,240</h5>
+        <p class="metric-label">Total Jobs</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md">
+    <div class="card border rounded-0 analytics-metric">
+      <div class="card-body">
+        <h5 class="metric-value">5,420</h5>
+        <p class="metric-label">Applications</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md">
+    <div class="card border rounded-0 analytics-metric">
+      <div class="card-body">
+        <h5 class="metric-value text-success">890</h5>
+        <p class="metric-label">Hired</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md">
+    <div class="card border rounded-0 analytics-metric">
+      <div class="card-body">
+        <h5 class="metric-value text-danger">320</h5>
+        <p class="metric-label">Rejected</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+      <!-- Chart -->
+      <div class="analytics-chart">
+        <canvas id="analyticsChart"></canvas>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<div class="row mt-3 mb-5 g-3">
+
+    <div class="col-12 col-xl-6">
+      <div class="card border  border-1 rounded-0" style="font-size:14px;">
+
+        <div class="card-body">
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h6 style="margin:0; font-weight:600;">Recruiters</h6>
+
+            <button type="button" class="btn btn-outline-light btn-sm bg-body-secondary text-dark"
+              style=" font-size:13px;">See All <i class="bi bi-arrow-right"></i></button>
+
+          </div>
+
+
+          <div class="table-responsive table-scroll">
+
+            <table class="table table-sm align-middle">
+
+              <thead style="color:#6c757d;">
+                <tr>
+                  <th style="padding:12px;">ID</th>
+                  <th style="padding:12px;">Full Name</th>
+                  <th style="padding:12px;">Email</th>
+                  <th style="padding:12px;">Phone</th>
+                  <th style="padding:12px;">Company</th>
+                  <th style="padding:12px;">Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr>
+                  <td style="padding:12px;">01</td>
+                  <td style="padding:12px;">John Smith</td>
+                  <td style="padding:12px;">johnsmith@email.com</td>
+                  <td style="padding:12px;">+1 234 567 890</td>
+                  <td style="padding:12px;">Tech Solutions</td>
+                  <td style="padding:12px;"><span class="badge bg-success">Active</span></td>
+                </tr>
+
+                <tr>
+                  <td style="padding:12px;">02</td>
+                  <td style="padding:12px;">Emma Watson</td>
+                  <td style="padding:12px;">emma@email.com</td>
+                  <td style="padding:12px;">+1 456 789 120</td>
+                  <td style="padding:12px;">Global Hiring</td>
+                  <td style="padding:12px;"><span class="badge bg-danger">Inactive</span></td>
+                </tr>
+
+                <tr>
+                  <td style="padding:12px;">03</td>
+                  <td style="padding:12px;">Michael Lee</td>
+                  <td style="padding:12px;">michael@email.com</td>
+                  <td style="padding:12px;">+1 567 890 345</td>
+                  <td style="padding:12px;">Future Tech</td>
+                  <td style="padding:12px;"><span class="badge bg-success">Active</span></td>
+                </tr>
+
+                <tr>
+                  <td style="padding:12px;">04</td>
+                  <td style="padding:12px;">Sophia Brown</td>
+                  <td style="padding:12px;">sophia@email.com</td>
+                  <td style="padding:12px;">+1 678 901 567</td>
+                  <td style="padding:12px;">NextGen Corp</td>
+                  <td style="padding:12px;"><span class="badge bg-success">Active</span></td>
+                </tr>
+
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- RIGHT TABLE -->
+    <div class="col-12 col-lg-6">
+      <div class="card border  border-1 rounded-0" style="font-size:14px;">
+
+        <div class="card-body">
+
+          <!-- Header -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h6 style="margin:0; font-weight:600;">Job Seekers</h6>
+
+            <button type="button" class="btn btn-outline-light btn-sm bg-body-secondary text-dark"
+              style=" font-size:13px;">See All <i class="bi bi-arrow-right"></i></button>
+
+          </div>
+
+          <div class="table-responsive table-scroll">
+            <table class="table table-sm align-middle">
+
+              <thead style="color:#6c757d;">
+                <tr>
+                  <th style="padding:12px;">ID</th>
+                  <th style="padding:12px;">Full Name</th>
+                  <th style="padding:12px;">Email</th>
+                  <th style="padding:12px;">Phone</th>
+                  <th style="padding:12px;">Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr>
+                  <td style="padding:12px;">01</td>
+                  <td style="padding:12px;">Arjun Kumar</td>
+                  <td style="padding:12px;">arjun@email.com</td>
+                  <td style="padding:12px;">+91 9876543210</td>
+                  <td style="padding:12px;"><span class="badge bg-success">Active</span></td>
+                </tr>
+
+                <tr>
+                  <td style="padding:12px;">02</td>
+                  <td style="padding:12px;">Priya Sharma</td>
+                  <td style="padding:12px;">priya@email.com</td>
+                  <td style="padding:12px;">+91 9123456780</td>
+                  <td style="padding:12px;"><span class="badge bg-success">Active</span></td>
+                </tr>
+
+                <tr>
+                  <td style="padding:12px;">03</td>
+                  <td style="padding:12px;">Rahul Verma</td>
+                  <td style="padding:12px;">rahul@email.com</td>
+                  <td style="padding:12px;">+91 9988776655</td>
+                  <td style="padding:12px;"><span class="badge bg-danger">Inactive</span></td>
+                </tr>
+
+                <tr>
+                  <td style="padding:12px;">04</td>
+                  <td style="padding:12px;">Sneha Patel</td>
+                  <td style="padding:12px;">sneha@email.com</td>
+                  <td style="padding:12px;">+91 9871234567</td>
+                  <td style="padding:12px;"><span class="badge bg-success">Active</span></td>
+                </tr>
+
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </div>
