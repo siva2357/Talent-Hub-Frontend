@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiGatewayUrl: 'http://localhost:5000/api',
+  apiGatewayUrl: 'https://talent-hub-backend-51480553352.us-central1.run.app/api',
   CHATBOT_API: 'http://localhost:8000/api',
   firebase: {
     apiKey: 'AIzaSyCG05DLoF-NM9hj5Xdfv2OjXhSp9wpUbc0',
