@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
-import { AiChabotComponent } from "./views/shared/ai-chabot-component/ai-chabot-component";
+import { AiChabotComponent } from "./views/components/ai-chabot-component/ai-chabot-component";
 
 @Component({
   selector: 'app-root',

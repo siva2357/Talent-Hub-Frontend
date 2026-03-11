@@ -1,0 +1,72 @@
+.sidebar {
+  width: 80px;
+  height: 100vh;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  position: fixed;
+  left: 0;
+  top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  backdrop-filter: blur(10px);
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 12px;
+}
+
+/* Menu item */
+.menu-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 10px;
+  margin: 4px 6px;
+  text-decoration: none;
+  color: #555;
+  border-radius: 0px;
+  transition: all 0.25s ease;
+}
+
+/* Icon */
+.menu-item i {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+/* Text */
+.menu-item span {
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Hover effect */
+.menu-item:hover {
+  backdrop-filter: blur(6px);
+  color: #2563eb;
+}
+
+/* Active item */
+.menu-item.active {
+  color: #2563eb;
+  font-weight: 500;
+}
+
+/* Optional: left highlight indicator */
+.menu-item.active::before {
+  content: "";
+  position: absolute;
+  left: -6px;      /* small spacing from item */
+  top: 0;
+  bottom: 0;       /* makes it match item height */
+  width: 3px;
+  background: #2563eb;
+  border-radius: 0px;
+}
