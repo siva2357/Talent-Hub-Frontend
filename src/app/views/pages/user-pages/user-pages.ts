@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterModule} from '@angular/router';
-import { SidebarItem, SidebarLayout } from '../../layouts/sidebar-layout/sidebar-layout';
+import { SidebarLayout } from '../../layouts/sidebar-layout/sidebar-layout';
 import { NavbarLayout } from "../../layouts/navbar-layout/navbar-layout";
 import { MobileLayout } from "../../layouts/mobile-layout/mobile-layout";
+import { SidebarItem } from '../../layouts/sidebar-menu.model';
 
 @Component({
   selector: 'app-user-pages',

@@ -1,13 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { SidebarItem } from '../sidebar-menu.model';
 
-export interface SidebarItem {
-  label: string;
-  icon: string;
-  link: string;
-  badge?: string;
-}
+
+
 
 @Component({
   selector: 'app-sidebar-layout',
