@@ -24,6 +24,7 @@ import { ManageJobsPage } from './manage-jobs-page/manage-jobs-page';
 import { JobProfilesPage } from './job-profiles-page/job-profiles-page';
 import { InterviewManagementPage } from './interview-management-page/interview-management-page';
 import { AnalyticsPage } from './analytics-page/analytics-page';
+import { ResumeAtsReport } from './resume-ats-report/resume-ats-report';
 
 export const USER_ROUTES: Routes = [
   {
@@ -38,6 +39,7 @@ export const USER_ROUTES: Routes = [
       { path: 'my-portfolio', component: Portfolio },
       { path: 'project/:id/project-details', component: ProjectDetailsPage },
       { path: 'resume-analytics', component: ResumeAnalytics },
+      { path: 'resume-analytics/:id/ats-report', component: ResumeAtsReport },
 
       // -------- RECRUITER --------
       { path: 'my-jobposts', component: ManageJobsPage },
