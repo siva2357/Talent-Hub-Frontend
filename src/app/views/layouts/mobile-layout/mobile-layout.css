@@ -67,7 +67,7 @@ nav {
   left: 0;
 
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
 
   background: #ffffff;
 
@@ -109,14 +109,16 @@ nav {
 ========================= */
 
 .sheet-items {
-  display: flex;
-  flex-direction: column;
-
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 
-  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+    padding-bottom: 80px;
 }
+
+
 
 .sheet-items::-webkit-scrollbar {
   display: none;
