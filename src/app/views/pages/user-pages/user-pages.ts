@@ -23,15 +23,17 @@ export class UserPages {
 
   { label: 'My Jobposts', icon: 'bi-briefcase', link: 'my-jobposts' },
   { label: 'Proposals', icon: 'bi-file-earmark-text', link: 'job-applications' },
-  { label: 'Interviews', icon: 'bi-camera-video', link: 'scheduled-meetings' },
+  { label: 'Manage Interviews', icon: 'bi-camera-video', link: 'manage-interviews' },
   { label: 'Talents', icon: 'bi-people', link: 'talents' },
   { label: 'Hired Talents', icon: 'bi-person-check', link: 'hired-talents' },
-    { label: 'Job Profiles', icon: 'bi-briefcase', link: 'jobprofile' },
-    { label: 'Applied Jobposts', icon: 'bi-send', link: 'applied-jobposts' },
-    { label: 'Assessments', icon: 'bi-clipboard-check', link: 'assessments' },
-    { label: 'Interviews', icon: 'bi-camera-video', link: 'scheduled-meetings' },
-    { label: 'My Portfolio', icon: 'bi-person-workspace', link: 'my-portfolio' },
-    { label: 'Resume Scoring', icon: 'bi-file-earmark-bar-graph', link: 'resume-analytics' },
+
+
+  { label: 'Job Profiles', icon: 'bi-briefcase', link: 'jobprofile' },
+  { label: 'Applied Jobposts', icon: 'bi-send', link: 'applied-jobposts' },
+  { label: 'Assessments', icon: 'bi-clipboard-check', link: 'assessments' },
+  { label: 'Interviews', icon: 'bi-camera-video', link: 'scheduled-meetings' },
+  { label: 'My Portfolio', icon: 'bi-person-workspace', link: 'my-portfolio' },
+  { label: 'Resume Scoring', icon: 'bi-file-earmark-bar-graph', link: 'resume-analytics' },
 
 
 

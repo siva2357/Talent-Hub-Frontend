@@ -1,3 +1,4 @@
+
 import { Routes } from '@angular/router';
 import { UserPages } from './user-pages';
 import { AppliedJobpostsPage } from './applied-jobposts-page/applied-jobposts-page';
@@ -21,6 +22,7 @@ import { UserProfile } from './user-profile/user-profile';
 import { UserAccountSettings } from './user-account-settings/user-account-settings';
 import { ManageJobsPage } from './manage-jobs-page/manage-jobs-page';
 import { JobProfilesPage } from './job-profiles-page/job-profiles-page';
+import { InterviewManagementPage } from './interview-management-page/interview-management-page';
 
 export const USER_ROUTES: Routes = [
   {
@@ -47,7 +49,7 @@ export const USER_ROUTES: Routes = [
       // -------- COMMON --------
 
       { path: 'scheduled-meetings', component: ScheduledMeetings },
-
+      { path: 'manage-interviews', component: InterviewManagementPage },
       // -------- ADMIN --------
       { path: 'dashboard', component: Dashboard },
       { path: 'recruiters-list', component: Recruiters },
