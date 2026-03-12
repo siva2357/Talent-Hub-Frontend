@@ -1,5 +1,5 @@
 <div class="container-xxl mt-5 pt-5">
-  <h5>Analytics</h5>
+<h5>Analytics</h5>
 
 <div class="row g-3">
 
@@ -181,6 +181,7 @@
 
 <div class="row mt-3 mb-5 g-3">
 
+  <!-- LEFT TABLE -->
     <div class="col-12 col-xl-6">
       <div class="card border  border-1 rounded-0" style="font-size:14px;">
 
@@ -188,71 +189,151 @@
 
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
             <h6 style="margin:0; font-weight:600;">Recruiters</h6>
-
             <button type="button" class="btn btn-outline-light btn-sm bg-body-secondary text-dark"
-              style=" font-size:13px;">See All <i class="bi bi-arrow-right"></i></button>
-
+              style=" font-size:13px;" routerLink="/recruiters-list">See All <i class="bi bi-arrow-right"></i></button>
           </div>
 
+          <div class="table-responsive  table-card d-none d-lg-block">
 
-          <div class="table-responsive table-scroll">
+            <table class="table table-hover align-middle clean-table">
 
-            <table class="table table-sm align-middle">
-
-              <thead style="color:#6c757d;">
+              <thead class="table-light">
                 <tr>
-                  <th style="padding:12px;">ID</th>
-                  <th style="padding:12px;">Full Name</th>
-                  <th style="padding:12px;">Email</th>
-                  <th style="padding:12px;">Phone</th>
-                  <th style="padding:12px;">Company</th>
-                  <th style="padding:12px;">Status</th>
+                  <th>ID</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Company</th>
+                  <th>Status</th>
                 </tr>
               </thead>
 
               <tbody>
 
                 <tr>
-                  <td style="padding:12px;">01</td>
-                  <td style="padding:12px;">John Smith</td>
-                  <td style="padding:12px;">johnsmith@email.com</td>
-                  <td style="padding:12px;">+1 234 567 890</td>
-                  <td style="padding:12px;">Tech Solutions</td>
-                  <td style="padding:12px;"><span class="badge bg-success">Active</span></td>
+                  <td>01</td>
+                  <td>John Smith</td>
+                  <td>johnsmith@email.com</td>
+                  <td>+1 234 567 890</td>
+                  <td>Tech Solutions</td>
+                  <td><span class="badge bg-success">Active</span></td>
                 </tr>
 
                 <tr>
-                  <td style="padding:12px;">02</td>
-                  <td style="padding:12px;">Emma Watson</td>
-                  <td style="padding:12px;">emma@email.com</td>
-                  <td style="padding:12px;">+1 456 789 120</td>
-                  <td style="padding:12px;">Global Hiring</td>
-                  <td style="padding:12px;"><span class="badge bg-danger">Inactive</span></td>
+                  <td>02</td>
+                  <td>Emma Watson</td>
+                  <td>emma@email.com</td>
+                  <td>+1 456 789 120</td>
+                  <td>Global Hiring</td>
+                  <td><span class="badge bg-danger">Inactive</span></td>
                 </tr>
 
                 <tr>
-                  <td style="padding:12px;">03</td>
-                  <td style="padding:12px;">Michael Lee</td>
-                  <td style="padding:12px;">michael@email.com</td>
-                  <td style="padding:12px;">+1 567 890 345</td>
-                  <td style="padding:12px;">Future Tech</td>
-                  <td style="padding:12px;"><span class="badge bg-success">Active</span></td>
+                  <td>03</td>
+                  <td>Michael Lee</td>
+                  <td>michael@email.com</td>
+                  <td>+1 567 890 345</td>
+                  <td>Future Tech</td>
+                  <td><span class="badge bg-success">Active</span></td>
                 </tr>
 
                 <tr>
-                  <td style="padding:12px;">04</td>
-                  <td style="padding:12px;">Sophia Brown</td>
-                  <td style="padding:12px;">sophia@email.com</td>
-                  <td style="padding:12px;">+1 678 901 567</td>
-                  <td style="padding:12px;">NextGen Corp</td>
-                  <td style="padding:12px;"><span class="badge bg-success">Active</span></td>
+                  <td>04</td>
+                  <td>Sophia Brown</td>
+                  <td>sophia@email.com</td>
+                  <td>+1 678 901 567</td>
+                  <td>NextGen Corp</td>
+                  <td><span class="badge bg-success">Active</span></td>
                 </tr>
 
               </tbody>
 
             </table>
           </div>
+
+          <div class="d-lg-none">
+
+            <ul class="list-group recruiter-list mb-3">
+
+              <!-- Item 1 -->
+              <li class="list-group-item recruiter-card">
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="fw-semibold">John Smith</div>
+                  <span class="badge bg-success">Active</span>
+                </div>
+
+                <div class="small text-muted mt-1">
+                  johnsmith@email.com | +1 234 567 890
+                </div>
+
+                <div class="small mt-1">
+                  Tech Solutions
+                </div>
+
+              </li>
+
+              <!-- Item 2 -->
+              <li class="list-group-item recruiter-card">
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="fw-semibold">Emma Watson</div>
+                  <span class="badge bg-danger">Inactive</span>
+                </div>
+
+                <div class="small text-muted mt-1">
+                  emma@email.com | +1 456 789 120
+                </div>
+
+                <div class="small mt-1">
+                  Global Hiring
+                </div>
+
+              </li>
+
+              <!-- Item 3 -->
+              <li class="list-group-item recruiter-card">
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="fw-semibold">Michael Lee</div>
+                  <span class="badge bg-success">Active</span>
+                </div>
+
+                <div class="small text-muted mt-1">
+                  michael@email.com | +1 567 890 345
+                </div>
+
+                <div class="small mt-1">
+                  Future Tech
+                </div>
+
+              </li>
+
+              <!-- Item 4 -->
+              <li class="list-group-item recruiter-card">
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="fw-semibold">Sophia Brown</div>
+                  <span class="badge bg-success">Active</span>
+                </div>
+
+                <div class="small text-muted mt-1">
+                  sophia@email.com | +1 678 901 567
+                </div>
+
+                <div class="small mt-1">
+                  NextGen Corp
+                </div>
+
+              </li>
+
+            </ul>
+
+          </div>
+
+
         </div>
+
       </div>
     </div>
 
@@ -265,63 +346,149 @@
           <!-- Header -->
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
             <h6 style="margin:0; font-weight:600;">Job Seekers</h6>
-
             <button type="button" class="btn btn-outline-light btn-sm bg-body-secondary text-dark"
-              style=" font-size:13px;">See All <i class="bi bi-arrow-right"></i></button>
+              style=" font-size:13px;" routerLink="/seekers-list">See All <i class="bi bi-arrow-right"></i></button>
 
           </div>
 
-          <div class="table-responsive table-scroll">
-            <table class="table table-sm align-middle">
+          <div class="table-responsive  table-card d-none d-lg-block">
+            <table class="table table-hover align-middle clean-table">
 
-              <thead style="color:#6c757d;">
+              <thead class="table-light">
                 <tr>
-                  <th style="padding:12px;">ID</th>
-                  <th style="padding:12px;">Full Name</th>
-                  <th style="padding:12px;">Email</th>
-                  <th style="padding:12px;">Phone</th>
-                  <th style="padding:12px;">Status</th>
+                  <th>ID</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Experience</th>
+                  <th>Status</th>
                 </tr>
               </thead>
 
               <tbody>
 
                 <tr>
-                  <td style="padding:12px;">01</td>
-                  <td style="padding:12px;">Arjun Kumar</td>
-                  <td style="padding:12px;">arjun@email.com</td>
-                  <td style="padding:12px;">+91 9876543210</td>
-                  <td style="padding:12px;"><span class="badge bg-success">Active</span></td>
+                  <td>01</td>
+                  <td>Arjun Kumar</td>
+                  <td>arjun@email.com</td>
+                  <td>+91 9876543210</td>
+                  <td>3 years</td>
+                  <td><span class="badge bg-success">Active</span></td>
                 </tr>
 
                 <tr>
-                  <td style="padding:12px;">02</td>
-                  <td style="padding:12px;">Priya Sharma</td>
-                  <td style="padding:12px;">priya@email.com</td>
-                  <td style="padding:12px;">+91 9123456780</td>
-                  <td style="padding:12px;"><span class="badge bg-success">Active</span></td>
+                  <td>02</td>
+                  <td>Priya Sharma</td>
+                  <td>priya@email.com</td>
+                  <td>+91 9123456780</td>
+                  <td>6 years</td>
+                  <td><span class="badge bg-success">Active</span></td>
                 </tr>
 
                 <tr>
-                  <td style="padding:12px;">03</td>
-                  <td style="padding:12px;">Rahul Verma</td>
-                  <td style="padding:12px;">rahul@email.com</td>
-                  <td style="padding:12px;">+91 9988776655</td>
-                  <td style="padding:12px;"><span class="badge bg-danger">Inactive</span></td>
+                  <td>03</td>
+                  <td>Rahul Verma</td>
+                  <td>rahul@email.com</td>
+                  <td>+91 9988776655</td>
+                  <td>4 years</td>
+                  <td><span class="badge bg-danger">Inactive</span></td>
                 </tr>
 
                 <tr>
-                  <td style="padding:12px;">04</td>
-                  <td style="padding:12px;">Sneha Patel</td>
-                  <td style="padding:12px;">sneha@email.com</td>
-                  <td style="padding:12px;">+91 9871234567</td>
-                  <td style="padding:12px;"><span class="badge bg-success">Active</span></td>
+                  <td>04</td>
+                  <td>Sneha Patel</td>
+                  <td>sneha@email.com</td>
+                  <td>+91 9871234567</td>
+                  <td>5 years</td>
+                  <td><span class="badge bg-success">Active</span></td>
                 </tr>
 
               </tbody>
 
             </table>
           </div>
+          <div class="d-lg-none">
+
+            <ul class="list-group recruiter-list mb-3">
+
+              <!-- Item 1 -->
+              <li class="list-group-item recruiter-card">
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="fw-semibold">Arjun Kumar</div>
+                  <span class="badge bg-success">Active</span>
+                </div>
+
+                <div class="small text-muted mt-1">
+                  arjun@email.com | +91 9876543210
+                </div>
+
+                <div class="small mt-1">
+                  Experience: 3 years
+                </div>
+
+              </li>
+
+              <!-- Item 2 -->
+              <li class="list-group-item recruiter-card">
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="fw-semibold">Priya Sharma</div>
+                  <span class="badge bg-success">Active</span>
+                </div>
+
+                <div class="small text-muted mt-1">
+                  priya@email.com | +91 9123456780
+                </div>
+
+                <div class="small mt-1">
+                  Experience: 6 years
+                </div>
+
+              </li>
+
+              <!-- Item 3 -->
+              <li class="list-group-item recruiter-card">
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="fw-semibold">Rahul Verma</div>
+                  <span class="badge bg-danger">Inactive</span>
+                </div>
+
+                <div class="small text-muted mt-1">
+                  rahul@email.com | +91 9988776655
+                </div>
+
+                <div class="small mt-1">
+                  Experience: 4 years
+                </div>
+
+              </li>
+
+              <!-- Item 4 -->
+              <li class="list-group-item recruiter-card">
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="fw-semibold">Sneha Patel</div>
+                  <span class="badge bg-success">Active</span>
+                </div>
+
+                <div class="small text-muted mt-1">
+                  sneha@email.com | +91 9871234567
+                </div>
+
+                <div class="small mt-1">
+                  Experience: 5 years
+                </div>
+
+              </li>
+
+            </ul>
+
+          </div>
+
+
+
         </div>
       </div>
     </div>

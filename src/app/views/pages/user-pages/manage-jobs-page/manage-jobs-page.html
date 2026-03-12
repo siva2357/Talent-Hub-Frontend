@@ -1,4 +1,970 @@
+<div class="container-xxl mt-5 pt-5">
 
-<div class="container-fluid mt-5 pt-5">
-<p>manage-jobs-page works!</p>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-semibold mb-0">Manage jobs</h5>
+  </div>
+
+<div class="filter-toolbar">
+
+  <div class="row g-3 align-items-center">
+
+    <!-- Search -->
+    <div class="col-xl-3 col-lg-4 col-md-12">
+      <input
+        type="text"
+        class="form-control filter-input"
+        placeholder="Search job title..."
+      >
+    </div>
+
+    <!-- Category -->
+    <div class="col-xl-2 col-lg-3 col-md-6">
+      <select class="form-select filter-select">
+        <option selected>Category</option>
+        <option>Frontend</option>
+        <option>Backend</option>
+        <option>Full Stack</option>
+        <option>Data Science</option>
+        <option>DevOps</option>
+      </select>
+    </div>
+
+    <!-- Job Type -->
+    <div class="col-xl-2 col-lg-3 col-md-6">
+      <select class="form-select filter-select">
+        <option selected>Job Type</option>
+        <option>Full Time</option>
+        <option>Part Time</option>
+        <option>Contract</option>
+        <option>Internship</option>
+      </select>
+    </div>
+
+    <!-- Status -->
+    <div class="col-xl-2 col-lg-3 col-md-6">
+      <select class="form-select filter-select">
+        <option selected>Status</option>
+        <option>Open</option>
+        <option>Closed</option>
+        <option>Draft</option>
+      </select>
+    </div>
+
+    <!-- Buttons -->
+    <div class="col-xl-3 col-lg-4 col-md-12 d-flex gap-2">
+
+      <button class="btn btn-primary filter-btn w-100">
+        Apply
+      </button>
+
+      <button class="btn btn-outline-secondary filter-btn w-100">
+        Reset
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="d-flex justify-content-end mb-3">
+
+<button
+class="btn btn-sm btn-primary d-flex align-items-center gap-2"
+style="font-size:13px"
+data-bs-toggle="modal"
+data-bs-target="#jobFormModal">
+
+<i class="bi bi-plus-lg"></i>
+Add Job
+</button>
+
+</div>
+
+<div class="table-responsive table-card d-none d-lg-block">
+  <table class="table table-hover align-middle clean-table">
+
+    <thead class="table-light">
+      <tr>
+        <th>S.NO</th>
+        <th>Job ID</th>
+        <th>Job Title</th>
+        <th>Category</th>
+        <th>Job Type</th>
+        <th>Location</th>
+        <th>Status</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr>
+        <td>1</td>
+        <td>JOB-001</td>
+        <td>Angular Developer</td>
+        <td>Frontend</td>
+        <td>Full Time</td>
+        <td>Hyderabad</td>
+        <td><span class="badge bg-success">Open</span></td>
+        <td class="text-center">
+          <div class="dropdown">
+            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" style="font-size:13px;">
+              <li><button class="dropdown-item">View</button></li>
+              <li><button class="dropdown-item">Edit</button></li>
+              <li><button class="dropdown-item">Close</button></li>
+              <li><button class="dropdown-item">Delete</button></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>2</td>
+        <td>JOB-002</td>
+        <td>Node.js Backend Developer</td>
+        <td>Backend</td>
+        <td>Full Time</td>
+        <td>Bangalore</td>
+        <td><span class="badge bg-success">Open</span></td>
+        <td class="text-center">
+          <div class="dropdown">
+            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><button class="dropdown-item">View</button></li>
+              <li><button class="dropdown-item">Edit</button></li>
+              <li><button class="dropdown-item">Close</button></li>
+              <li><button class="dropdown-item">Delete</button></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>3</td>
+        <td>JOB-003</td>
+        <td>React Frontend Engineer</td>
+        <td>Frontend</td>
+        <td>Contract</td>
+        <td>Pune</td>
+        <td><span class="badge bg-success">Open</span></td>
+        <td class="text-center">
+          <div class="dropdown">
+            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><button class="dropdown-item">View</button></li>
+              <li><button class="dropdown-item">Edit</button></li>
+              <li><button class="dropdown-item">Close</button></li>
+              <li><button class="dropdown-item">Delete</button></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>4</td>
+        <td>JOB-004</td>
+        <td>Full Stack Developer</td>
+        <td>Full Stack</td>
+        <td>Full Time</td>
+        <td>Chennai</td>
+        <td><span class="badge bg-success">Open</span></td>
+        <td class="text-center">
+          <div class="dropdown">
+            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><button class="dropdown-item">View</button></li>
+              <li><button class="dropdown-item">Edit</button></li>
+              <li><button class="dropdown-item">Close</button></li>
+              <li><button class="dropdown-item">Delete</button></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>5</td>
+        <td>JOB-005</td>
+        <td>Python Data Analyst</td>
+        <td>Data Science</td>
+        <td>Part Time</td>
+        <td>Remote</td>
+        <td><span class="badge bg-success">Open</span></td>
+        <td class="text-center">
+          <div class="dropdown">
+            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><button class="dropdown-item">View</button></li>
+              <li><button class="dropdown-item">Edit</button></li>
+              <li><button class="dropdown-item">Close</button></li>
+              <li><button class="dropdown-item">Delete</button></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>6</td>
+        <td>JOB-006</td>
+        <td>DevOps Engineer</td>
+        <td>Backend</td>
+        <td>Full Time</td>
+        <td>Delhi</td>
+        <td><span class="badge bg-secondary">Closed</span></td>
+        <td class="text-center">
+          <div class="dropdown">
+            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><button class="dropdown-item">View</button></li>
+              <li><button class="dropdown-item">Edit</button></li>
+              <li><button class="dropdown-item">Close</button></li>
+              <li><button class="dropdown-item">Delete</button></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>7</td>
+        <td>JOB-007</td>
+        <td>UI/UX Designer</td>
+        <td>Design</td>
+        <td>Contract</td>
+        <td>Mumbai</td>
+        <td><span class="badge bg-success">Open</span></td>
+        <td class="text-center">
+          <div class="dropdown">
+            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><button class="dropdown-item">View</button></li>
+              <li><button class="dropdown-item">Edit</button></li>
+              <li><button class="dropdown-item">Close</button></li>
+              <li><button class="dropdown-item">Delete</button></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>8</td>
+        <td>JOB-008</td>
+        <td>Machine Learning Engineer</td>
+        <td>Data Science</td>
+        <td>Full Time</td>
+        <td>Hyderabad</td>
+        <td><span class="badge bg-success">Open</span></td>
+        <td class="text-center">
+          <div class="dropdown">
+            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><button class="dropdown-item">View</button></li>
+              <li><button class="dropdown-item">Edit</button></li>
+              <li><button class="dropdown-item">Close</button></li>
+              <li><button class="dropdown-item">Delete</button></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>9</td>
+        <td>JOB-009</td>
+        <td>Cloud Engineer</td>
+        <td>Backend</td>
+        <td>Full Time</td>
+        <td>Bangalore</td>
+        <td><span class="badge bg-success">Open</span></td>
+        <td class="text-center">
+          <div class="dropdown">
+            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><button class="dropdown-item">View</button></li>
+              <li><button class="dropdown-item">Edit</button></li>
+              <li><button class="dropdown-item">Close</button></li>
+              <li><button class="dropdown-item">Delete</button></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>10</td>
+        <td>JOB-010</td>
+        <td>Java Backend Developer</td>
+        <td>Backend</td>
+        <td>Internship</td>
+        <td>Pune</td>
+        <td><span class="badge bg-secondary">Closed</span></td>
+        <td class="text-center">
+          <div class="dropdown">
+            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><button class="dropdown-item">View</button></li>
+              <li><button class="dropdown-item">Edit</button></li>
+              <li><button class="dropdown-item">Close</button></li>
+              <li><button class="dropdown-item">Delete</button></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+
+    </tbody>
+
+  </table>
+</div>
+
+
+<div class="table-footer d-none d-lg-block mb-5">
+
+  <div class="footer-wrapper">
+
+    <small class="result-text">
+      Showing <strong>1–10</strong> of <strong>100</strong> recruiters
+    </small>
+
+    <nav>
+      <ul class="pagination pagination-sm custom-pagination mb-0">
+
+        <li class="page-item disabled">
+          <a class="page-link">
+            <i class="bi bi-chevron-left"></i>
+          </a>
+        </li>
+
+        <li class="page-item active">
+          <a class="page-link">1</a>
+        </li>
+
+        <li class="page-item">
+          <a class="page-link">2</a>
+        </li>
+
+        <li class="page-item">
+          <a class="page-link">
+            <i class="bi bi-chevron-right"></i>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+  </div>
+
+</div>
+
+<div class="d-lg-none">
+
+  <ol class="list-group recruiter-list mb-5">
+
+    <!-- 1 -->
+    <li class="list-group-item recruiter-card">
+      <span class="badge bg-success recruiter-status">Open</span>
+      <div class="mb-2">
+        <div class="fw-semibold">Angular Developer</div>
+        <div class="small text-muted">Frontend • Full Time</div>
+        <div class="small text-muted">Hyderabad</div>
+        <div class="small text-muted">Job ID: JOB-001</div>
+      </div>
+<div class="d-flex flex-nowrap gap-1">
+
+<button
+class="btn btn-primary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#viewJobModal">
+View
+</button>
+
+<button
+class="btn btn-warning btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#jobFormModal">
+Edit
+</button>
+
+<button
+class="btn btn-secondary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#closeJobModal">
+Close
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#deleteJobModal">
+Delete
+</button>
+
+</div>
+    </li>
+
+    <!-- 2 -->
+    <li class="list-group-item recruiter-card">
+      <span class="badge bg-success recruiter-status">Open</span>
+      <div class="mb-2">
+        <div class="fw-semibold">Node.js Backend Developer</div>
+        <div class="small text-muted">Backend • Full Time</div>
+        <div class="small text-muted">Bangalore</div>
+        <div class="small text-muted">Job ID: JOB-002</div>
+      </div>
+<div class="d-flex flex-nowrap gap-1">
+
+<button
+class="btn btn-primary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#viewJobModal">
+View
+</button>
+
+<button
+class="btn btn-warning btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#jobFormModal">
+Edit
+</button>
+
+<button
+class="btn btn-secondary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#closeJobModal">
+Close
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#deleteJobModal">
+Delete
+</button>
+
+</div>
+    </li>
+
+    <!-- 3 -->
+    <li class="list-group-item recruiter-card">
+      <span class="badge bg-success recruiter-status">Open</span>
+      <div class="mb-2">
+        <div class="fw-semibold">React Frontend Engineer</div>
+        <div class="small text-muted">Frontend • Contract</div>
+        <div class="small text-muted">Pune</div>
+        <div class="small text-muted">Job ID: JOB-003</div>
+      </div>
+<div class="d-flex flex-nowrap gap-1">
+
+<button
+class="btn btn-primary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#viewJobModal">
+View
+</button>
+
+<button
+class="btn btn-warning btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#jobFormModal">
+Edit
+</button>
+
+<button
+class="btn btn-secondary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#closeJobModal">
+Close
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#deleteJobModal">
+Delete
+</button>
+
+</div>
+    </li>
+
+    <!-- 4 -->
+    <li class="list-group-item recruiter-card">
+      <span class="badge bg-success recruiter-status">Open</span>
+      <div class="mb-2">
+        <div class="fw-semibold">Full Stack Developer</div>
+        <div class="small text-muted">Full Stack • Full Time</div>
+        <div class="small text-muted">Chennai</div>
+        <div class="small text-muted">Job ID: JOB-004</div>
+      </div>
+<div class="d-flex flex-nowrap gap-1">
+
+<button
+class="btn btn-primary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#viewJobModal">
+View
+</button>
+
+<button
+class="btn btn-warning btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#jobFormModal">
+Edit
+</button>
+
+<button
+class="btn btn-secondary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#closeJobModal">
+Close
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#deleteJobModal">
+Delete
+</button>
+
+</div>
+    </li>
+
+    <!-- 5 -->
+    <li class="list-group-item recruiter-card">
+      <span class="badge bg-success recruiter-status">Open</span>
+      <div class="mb-2">
+        <div class="fw-semibold">Python Data Analyst</div>
+        <div class="small text-muted">Data Science • Part Time</div>
+        <div class="small text-muted">Remote</div>
+        <div class="small text-muted">Job ID: JOB-005</div>
+      </div>
+<div class="d-flex flex-nowrap gap-1">
+
+<button
+class="btn btn-primary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#viewJobModal">
+View
+</button>
+
+<button
+class="btn btn-warning btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#jobFormModal">
+Edit
+</button>
+
+<button
+class="btn btn-secondary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#closeJobModal">
+Close
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#deleteJobModal">
+Delete
+</button>
+
+</div>
+    </li>
+
+    <!-- 6 -->
+    <li class="list-group-item recruiter-card">
+      <span class="badge bg-secondary recruiter-status">Closed</span>
+      <div class="mb-2">
+        <div class="fw-semibold">DevOps Engineer</div>
+        <div class="small text-muted">Backend • Full Time</div>
+        <div class="small text-muted">Delhi</div>
+        <div class="small text-muted">Job ID: JOB-006</div>
+      </div>
+<div class="d-flex flex-nowrap gap-1">
+
+<button
+class="btn btn-primary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#viewJobModal">
+View
+</button>
+
+<button
+class="btn btn-warning btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#jobFormModal">
+Edit
+</button>
+
+<button
+class="btn btn-secondary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#closeJobModal">
+Close
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#deleteJobModal">
+Delete
+</button>
+
+</div>
+    </li>
+
+    <!-- 7 -->
+    <li class="list-group-item recruiter-card">
+      <span class="badge bg-success recruiter-status">Open</span>
+      <div class="mb-2">
+        <div class="fw-semibold">UI/UX Designer</div>
+        <div class="small text-muted">Design • Contract</div>
+        <div class="small text-muted">Mumbai</div>
+        <div class="small text-muted">Job ID: JOB-007</div>
+      </div>
+<div class="d-flex flex-nowrap gap-1">
+
+<button
+class="btn btn-primary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#viewJobModal">
+View
+</button>
+
+<button
+class="btn btn-warning btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#jobFormModal">
+Edit
+</button>
+
+<button
+class="btn btn-secondary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#closeJobModal">
+Close
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#deleteJobModal">
+Delete
+</button>
+
+</div>
+    </li>
+
+    <!-- 8 -->
+    <li class="list-group-item recruiter-card">
+      <span class="badge bg-success recruiter-status">Open</span>
+      <div class="mb-2">
+        <div class="fw-semibold">Machine Learning Engineer</div>
+        <div class="small text-muted">Data Science • Full Time</div>
+        <div class="small text-muted">Hyderabad</div>
+        <div class="small text-muted">Job ID: JOB-008</div>
+      </div>
+<div class="d-flex flex-nowrap gap-1">
+
+<button
+class="btn btn-primary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#viewJobModal">
+View
+</button>
+
+<button
+class="btn btn-warning btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#jobFormModal">
+Edit
+</button>
+
+<button
+class="btn btn-secondary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#closeJobModal">
+Close
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#deleteJobModal">
+Delete
+</button>
+
+</div>
+    </li>
+
+    <!-- 9 -->
+    <li class="list-group-item recruiter-card">
+      <span class="badge bg-success recruiter-status">Open</span>
+      <div class="mb-2">
+        <div class="fw-semibold">Cloud Engineer</div>
+        <div class="small text-muted">Backend • Full Time</div>
+        <div class="small text-muted">Bangalore</div>
+        <div class="small text-muted">Job ID: JOB-009</div>
+      </div>
+<div class="d-flex flex-nowrap gap-1">
+
+<button
+class="btn btn-primary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#viewJobModal">
+View
+</button>
+
+<button
+class="btn btn-warning btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#jobFormModal">
+Edit
+</button>
+
+<button
+class="btn btn-secondary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#closeJobModal">
+Close
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#deleteJobModal">
+Delete
+</button>
+
+</div>
+    </li>
+
+    <!-- 10 -->
+    <li class="list-group-item recruiter-card">
+      <span class="badge bg-secondary recruiter-status">Closed</span>
+      <div class="mb-2">
+        <div class="fw-semibold">Java Backend Developer</div>
+        <div class="small text-muted">Backend • Internship</div>
+        <div class="small text-muted">Pune</div>
+        <div class="small text-muted">Job ID: JOB-010</div>
+      </div>
+<div class="d-flex flex-nowrap gap-1">
+
+<button
+class="btn btn-primary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#viewJobModal">
+View
+</button>
+
+<button
+class="btn btn-warning btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#jobFormModal">
+Edit
+</button>
+
+<button
+class="btn btn-secondary btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#closeJobModal">
+Close
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+data-bs-toggle="modal"
+data-bs-target="#deleteJobModal">
+Delete
+</button>
+
+</div>
+    </li>
+
+  </ol>
+
+</div>
+
+
+</div>
+
+
+
+<div class="modal fade" id="jobFormModal" tabindex="-1">
+<div class="modal-dialog modal-lg modal-dialog-centered">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5 class="modal-title">Job Form</h5>
+<button class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+
+<form>
+
+<div class="row g-3">
+
+<div class="col-md-6">
+<label class="form-label">Job Title</label>
+<input type="text" class="form-control">
+</div>
+
+<div class="col-md-6">
+<label class="form-label">Category</label>
+<select class="form-select">
+<option>Frontend</option>
+<option>Backend</option>
+<option>Full Stack</option>
+<option>Data Science</option>
+<option>DevOps</option>
+</select>
+</div>
+
+<div class="col-md-6">
+<label class="form-label">Job Type</label>
+<select class="form-select">
+<option>Full Time</option>
+<option>Part Time</option>
+<option>Contract</option>
+<option>Internship</option>
+</select>
+</div>
+
+<div class="col-md-6">
+<label class="form-label">Location</label>
+<input type="text" class="form-control">
+</div>
+
+<div class="col-md-6">
+<label class="form-label">Salary</label>
+<input type="text" class="form-control">
+</div>
+
+<div class="col-md-6">
+<label class="form-label">Status</label>
+<select class="form-select">
+<option>Open</option>
+<option>Closed</option>
+<option>Draft</option>
+</select>
+</div>
+
+<div class="col-12">
+<label class="form-label">Job Description</label>
+<textarea class="form-control" rows="4"></textarea>
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+<div class="modal-footer">
+<button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+<button class="btn btn-primary">Save Job</button>
+</div>
+
+</div>
+</div>
+</div>
+
+
+<div class="modal fade" id="viewJobModal" tabindex="-1">
+<div class="modal-dialog modal-lg modal-dialog-centered">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5 class="modal-title">Job Details</h5>
+<button class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+
+<h5>Angular Developer</h5>
+
+<p><strong>Category:</strong> Frontend</p>
+<p><strong>Job Type:</strong> Full Time</p>
+<p><strong>Location:</strong> Hyderabad</p>
+<p><strong>Salary:</strong> 8 LPA</p>
+<p><strong>Status:</strong> Open</p>
+
+<p>
+<strong>Description:</strong><br>
+We are looking for an Angular developer to build scalable web applications and work with our frontend engineering team.
+</p>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="closeJobModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5 class="modal-title">Close Job</h5>
+<button class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+Are you sure you want to close this job posting?
+</div>
+
+<div class="modal-footer">
+<button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+<button class="btn btn-warning">Close Job</button>
+</div>
+
+</div>
+</div>
+</div>
+
+
+
+
+<div class="modal fade" id="deleteJobModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5 class="modal-title">Delete Job</h5>
+<button class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+Are you sure you want to delete this job?
+</div>
+
+<div class="modal-footer">
+<button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+<button class="btn btn-danger">Delete</button>
+</div>
+
+</div>
+</div>
 </div>
