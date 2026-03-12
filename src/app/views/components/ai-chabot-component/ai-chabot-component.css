@@ -12,8 +12,9 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 9999;
+ z-index: 9999;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+
 }
 
 
@@ -34,7 +35,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
-  z-index: 9999;
+   z-index: 9999;
 }
 
 /* Header */
@@ -118,8 +119,8 @@
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0,0,0,.15);
   animation: slideIn 0.4s ease forwards;
-  z-index: 9998;
   font-size: 14px;
+   z-index: 9999;
 }
 
 @keyframes slideIn {
@@ -166,4 +167,39 @@
   color: #0d6efd;
   cursor: pointer;
   font-weight: 500;
+}
+
+
+
+/* Default (Desktop / XL) */
+.ai-btn { bottom: 24px; }
+.ai-box { bottom: 90px; }
+.ai-intro { bottom: 96px; }
+
+/* Large devices (laptops) */
+@media (max-width: 1200px) {
+  .ai-btn { bottom: 40px; }
+  .ai-box { bottom: 100px; }
+  .ai-intro { bottom: 110px; }
+}
+
+/* Medium devices (tablets) */
+@media (max-width: 992px) {
+  .ai-btn {bottom: 80px; right: 10px; }
+  .ai-box {bottom: 140px; right: 16px; width: 260px; }
+  .ai-intro { bottom: 150px; right: 16px; }
+}
+
+/* Small devices (large phones) */
+@media (max-width: 768px) {
+  .ai-btn {bottom: 80px; right: 10px; }
+  .ai-box {bottom: 140px; right: 16px; width: 260px; }
+  .ai-intro { bottom: 150px; right: 16px; }
+}
+
+/* Extra small devices (phones) */
+@media (max-width: 576px) {
+  .ai-btn { bottom: 80px; right: 10px; }
+  .ai-box { bottom: 140px; right: 16px; width: 260px; }
+  .ai-intro { bottom: 150px; right: 16px; }
 }
