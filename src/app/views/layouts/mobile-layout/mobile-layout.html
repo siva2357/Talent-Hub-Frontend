@@ -1,0 +1,67 @@
+<div class="sidebar">
+
+  <nav>
+
+    @for (item of menuItemsMain; track item.link) {
+
+    <a
+        [routerLink]="item.link"
+        routerLinkActive="active"
+        class="menu-item"
+        (click)="selectItem(item)"
+      >
+        <i class="bi" [ngClass]="item.icon"></i>
+        <span>{{ item.label }}</span>
+      </a>
+
+    }
+
+    @if (menuItemsMore.length > 0) {
+
+      <a class="menu-item" (click)="toggleMoreMenu()">
+        <i class="bi bi-three-dots"></i>
+        <span>More</span>
+      </a>
+
+    }
+
+  </nav>
+
+</div>
+
+
+<!-- FULL SCREEN MORE MENU -->
+
+@if (showMoreMenu) {
+
+<div class="more-sheet">
+
+  <div class="sheet-header">
+    <span>Menu</span>
+    <button class="close-btn" (click)="toggleMoreMenu()">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <div class="sheet-items">
+
+    @for (item of menuItems; track item.link) {
+
+      <a
+        [routerLink]="item.link"
+        class="sheet-item"
+        (click)="selectItem(item)"
+      >
+
+        <i class="bi" [ngClass]="item.icon"></i>
+        <span>{{ item.label }}</span>
+
+      </a>
+
+    }
+
+  </div>
+
+</div>
+
+}

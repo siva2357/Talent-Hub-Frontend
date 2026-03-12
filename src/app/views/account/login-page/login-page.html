@@ -1,85 +1,60 @@
-<div class="login-wrapper d-flex flex-column justify-content-center align-items-center vh-100 ">
+<div class="login-wrapper d-flex flex-column justify-content-center align-items-center vh-100">
 
   <!-- Logo -->
-  <img src="/assets/logo/website-logo.png"   alt="Talent Hub" class="logo-img mb-3" />
+  <img src="/assets/logo/website-logo.png" alt="Talent Hub" class="logo-img mb-3" />
 
   <h4 class="fw-bold text-center mb-1">Welcome Back</h4>
-  <p class="text-center text-muted small mb-4">Log in to your Talent Hub account</p>
+  <p class="text-center text-muted small mb-4">
+    Log in to your Talent Hub account
+  </p>
 
   <!-- LOGIN FORM -->
-  <form [formGroup]="loginDetails" (ngSubmit)="onSubmit()" class="form-area">
+  <form class="form-area">
 
+    <!-- EMAIL -->
     <div class="form-group mb-3">
       <div class="input-group">
-        <input id="email" type="email" formControlName="email" placeholder="Email Address"
-          class="form-control form-control-sm" style="height: 45px;" [ngClass]="{
-        'is-invalid':
-          loginDetails.get('email')?.invalid &&
-          loginDetails.get('email')?.touched
-      }" />
+        <input
+          id="email"
+          type="email"
+          placeholder="Email Address"
+          class="form-control form-control-sm"
+          style="height: 45px;"
+        />
       </div>
-
-      @if (loginDetails.get('email')?.touched) {
-      @if (loginDetails.get('email')?.errors?.['required']) {
-      <small class="text-danger" style="font-size: 12px;">
-        Email is required.
-      </small>
-      }
-
-      @if (loginDetails.get('email')?.errors?.['pattern']) {
-      <small class="text-danger" style="font-size: 12px;">
-        Invalid Email format.
-      </small>
-      }
-      }
     </div>
 
+    <!-- PASSWORD -->
     <div class="form-group mb-2">
       <div class="input-group">
-
-        <input id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
-          placeholder="Create Password" class="form-control form-control-sm" style="height: 45px;" [ngClass]="{
-        'is-invalid':
-          loginDetails.get('password')?.invalid &&
-          loginDetails.get('password')?.touched
-      }" />
-
-
+        <input
+          id="password"
+          type="password"
+          placeholder="Password"
+          class="form-control form-control-sm"
+          style="height: 45px;"
+        />
       </div>
-
-      @if (loginDetails.get('password')?.touched) {
-      @if (loginDetails.get('password')?.errors?.['required']) {
-      <small class="text-danger" style="font-size: 12px;">
-        Password is required.
-      </small>
-      }
-
-      @if (loginDetails.get('password')?.errors?.['pattern']) {
-      <small class="text-danger" style="font-size: 12px;">
-        Invalid Password format.
-      </small>
-      }
-      }
     </div>
 
-
+    <!-- FORGOT PASSWORD -->
     <div class="text-end mb-3">
-      <span class="text-primary poppins-medium" style="cursor: pointer; font-size: 12px;" (click)="goToForgotPassword()">Forgot Password?</span>
+      <a href="/forgot-password" class="text-primary poppins-medium" style="font-size:12px;">
+        Forgot Password?
+      </a>
     </div>
 
+    <!-- LOGIN BUTTON -->
     <button class="btn btn-primary w-100 fw-semibold py-2" type="submit">
       Login
     </button>
 
   </form>
 
-
-
-
-  <!-- Signup link -->
+  <!-- SIGNUP -->
   <p class="text-center text-muted mt-3 small">
     Don’t have an account?
-    <a class="fw-semibold login-link" (click)="goToSignupPage()" style="cursor: pointer;">Sign up</a>
+    <a href="/signup" class="fw-semibold login-link">Sign up</a>
   </p>
 
 </div>
