@@ -1,4 +1,4 @@
-<div class="container-fluid mt-5 pt-5">
+<div class="container mt-5 pt-5">
 
 
 
@@ -68,14 +68,14 @@ Add Blog
 
 </div>
 
-<div class="table-responsive table-card">
+<div class="table-responsive  table-card d-none d-lg-block">
   <table class="table table-hover align-middle clean-table">
 
     <thead class="table-light">
       <tr>
         <th>S.NO</th>
-        <th>Blog Title</th>
-        <th>Description</th>
+        <th>Post Image</th>
+        <th>Title</th>
         <th>Category</th>
         <th>Posted Date</th>
         <th class="text-center">Actions</th>
@@ -87,79 +87,102 @@ Add Blog
       <tr>
         <td>1</td>
 
-        <td class="fw-semibold">
-          How AI is Changing Recruitment
+        <td>
+          <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&q=80" class="blog-img" alt="AI Blog">
         </td>
 
-        <td class="blog-desc">
-          Artificial intelligence is transforming recruitment processes by automating candidate screening, improving hiring accuracy and helping recruiters make better decisions...
+        <td class="fw-semibold">
+          How AI is Changing Recruitment
         </td>
 
         <td>
           <span class="badge bg-warning">Technology</span>
         </td>
 
-        <td>
-          10 Mar 2026
-        </td>
+        <td>10 Mar 2026</td>
 
         <td class="text-center">
+          <div class="dropdown">
 
-          <div class="d-flex justify-content-center gap-1">
-
-            <button class="btn btn-primary btn-sm"
-            data-bs-toggle="modal"
-            data-bs-target="#viewBlogModal">
-              View
+            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots-vertical"></i>
             </button>
 
-            <button class="btn btn-warning btn-sm"
-            data-bs-toggle="modal"
-            data-bs-target="#blogFormModal">
-              Edit
-            </button>
+            <ul class="dropdown-menu dropdown-menu-end" style="font-size:13px">
 
-            <button class="btn btn-danger btn-sm"
-            data-bs-toggle="modal"
-            data-bs-target="#deleteBlogModal">
-              Delete
-            </button>
+              <li>
+                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewBlogModal">
+                  View
+                </button>
+              </li>
+
+              <li>
+                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#blogFormModal">
+                  Edit
+                </button>
+              </li>
+
+              <li>
+                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBlogModal">
+                  Delete
+                </button>
+              </li>
+
+            </ul>
 
           </div>
-
         </td>
       </tr>
 
       <tr>
         <td>2</td>
 
-        <td class="fw-semibold">
-          Top 10 Resume Tips
+        <td>
+         <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&q=80" class="blog-img" alt="Recruitment">
         </td>
 
-        <td class="blog-desc">
-          Writing a professional resume can dramatically improve your chances of getting hired. These practical tips will help job seekers craft stronger resumes...
+        <td class="fw-semibold">
+          Top 10 Resume Tips
         </td>
 
         <td>
           <span class="badge bg-success">Career</span>
         </td>
 
-        <td>
-          08 Mar 2026
-        </td>
+        <td>08 Mar 2026</td>
 
         <td class="text-center">
+          <div class="dropdown">
 
-          <div class="d-flex justify-content-center gap-1">
+            <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
 
-            <button class="btn btn-primary btn-sm">View</button>
-            <button class="btn btn-warning btn-sm">Edit</button>
-            <button class="btn btn-danger btn-sm">Delete</button>
+            <ul class="dropdown-menu dropdown-menu-end" style="font-size:13px">
+
+              <li>
+                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewBlogModal">
+                  View
+                </button>
+              </li>
+
+              <li>
+                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#blogFormModal">
+                  Edit
+                </button>
+              </li>
+
+              <li>
+                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteBlogModal">
+                  Delete
+                </button>
+              </li>
+
+            </ul>
 
           </div>
-
         </td>
+
       </tr>
 
     </tbody>
@@ -168,7 +191,7 @@ Add Blog
 </div>
 
 
-<div class="table-footer mb-5">
+<div class="table-footer d-none d-lg-block mb-5">
 
   <div class="footer-wrapper">
 
@@ -207,6 +230,94 @@ Add Blog
 </div>
 
 
+<div class="d-lg-none">
+
+  <ol class="list-group recruiter-list mb-5">
+
+    <!-- BLOG 1 -->
+    <li class="list-group-item recruiter-card">
+
+      <div class="d-flex align-items-center gap-3 mb-2">
+
+        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&q=80"
+             class="recruiter-img">
+
+        <div class="flex-grow-1">
+          <div class="fw-semibold">How AI is Changing Recruitment</div>
+          <div class="small text-muted">Technology</div>
+          <div class="small text-muted">Posted: 10 Mar 2026</div>
+        </div>
+
+      </div>
+
+      <div class="d-flex flex-nowrap gap-1">
+
+        <button class="btn btn-primary btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#viewBlogModal">
+          View
+        </button>
+
+        <button class="btn btn-warning btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#blogFormModal">
+          Edit
+        </button>
+
+        <button class="btn btn-danger btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#deleteBlogModal">
+          Delete
+        </button>
+
+      </div>
+
+    </li>
+
+
+    <!-- BLOG 2 -->
+    <li class="list-group-item recruiter-card">
+
+      <div class="d-flex align-items-center gap-3 mb-2">
+
+        <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&q=80"
+             class="recruiter-img">
+
+        <div class="flex-grow-1">
+          <div class="fw-semibold">Top 10 Resume Tips</div>
+          <div class="small text-muted">Career</div>
+          <div class="small text-muted">Posted: 08 Mar 2026</div>
+        </div>
+
+      </div>
+
+      <div class="d-flex flex-nowrap gap-1">
+
+        <button class="btn btn-primary btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#viewBlogModal">
+          View
+        </button>
+
+        <button class="btn btn-warning btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#blogFormModal">
+          Edit
+        </button>
+
+        <button class="btn btn-danger btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#deleteBlogModal">
+          Delete
+        </button>
+
+      </div>
+
+    </li>
+
+  </ol>
+
+</div>
 
 </div>
 

@@ -1,10 +1,9 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AiChabotComponent } from "./views/components/ai-chabot-component/ai-chabot-component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, AiChabotComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

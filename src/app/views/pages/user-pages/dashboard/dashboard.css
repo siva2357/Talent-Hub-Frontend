@@ -60,24 +60,26 @@
   margin: 0;
 }
 
-/* ---------------------------
-   TABLE SCROLL AREA
---------------------------- */
+
+
+
+
+
+
+
+
+/* TABLE SCROLL AREA */
 .table-scroll{
   max-height: 260px;
   overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: none;
 }
 
-/* Hide scrollbar */
-.table-scroll::-webkit-scrollbar{
-  display: none;
+/* horizontal scroll */
+.table-responsive{
+  overflow-x: auto;
 }
 
-/* ---------------------------
-   STICKY TABLE HEADER
---------------------------- */
+/* STICKY HEADER */
 .table-scroll thead th{
   position: sticky;
   top: 0;
@@ -85,40 +87,29 @@
   z-index: 2;
 }
 
-/* ---------------------------
-   TABLE STYLE
---------------------------- */
+/* TABLE STYLE */
 .table{
-  min-width: 650px;
+  width: max-content;   /* allows horizontal scroll */
+  min-width: 100%;
 }
 
 .table td,
 .table th{
   padding: 12px;
   vertical-align: middle;
+  white-space: nowrap;  /* single line */
 }
 
-/* Row hover */
+/* hover */
 .table tbody tr:hover{
   background: #f8f9fa;
 }
-
-/* ---------------------------
-   RESPONSIVE TABLE
---------------------------- */
+/* hide scrollbar but keep scrolling */
 .table-responsive{
   overflow-x: auto;
+  scrollbar-width: none;        /* Firefox */
 }
 
-/* Mobile adjustment */
-@media (max-width:768px){
-
-  .table{
-    min-width: 500px;
-  }
-
-  .metric-value{
-    font-size: 18px;
-  }
-
+.table-responsive::-webkit-scrollbar{
+  display: none;                /* Chrome, Edge, Safari */
 }
