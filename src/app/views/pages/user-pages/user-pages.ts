@@ -15,7 +15,8 @@ export class UserPages {
 
     userMenu: SidebarItem[] = [
 
-  { label: 'Dashboard', icon: ' bi-grid', link: 'dashboard' },
+  { label: 'Dashboard', icon: 'bi-grid', link: 'dashboard' },
+  { label: 'Analytics', icon: 'bi-graph-up-arrow', link: 'analytics' },
   { label: 'Recruiters', icon: 'bi-person-badge', link: 'recruiters-list' },
   { label: 'Seekers', icon: 'bi-people', link: 'seekers-list' },
   { label: 'Companies', icon: 'bi-briefcase', link: 'company-list' },

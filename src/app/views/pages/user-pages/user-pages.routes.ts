@@ -23,6 +23,7 @@ import { UserAccountSettings } from './user-account-settings/user-account-settin
 import { ManageJobsPage } from './manage-jobs-page/manage-jobs-page';
 import { JobProfilesPage } from './job-profiles-page/job-profiles-page';
 import { InterviewManagementPage } from './interview-management-page/interview-management-page';
+import { AnalyticsPage } from './analytics-page/analytics-page';
 
 export const USER_ROUTES: Routes = [
   {
@@ -33,6 +34,7 @@ export const USER_ROUTES: Routes = [
       { path: 'jobprofile', component: JobProfilesPage },
       { path: 'applied-jobposts', component: AppliedJobpostsPage },
       { path: 'assessments', component: AssessmentsRoomPage },
+      { path: 'scheduled-meetings', component: ScheduledMeetings },
       { path: 'my-portfolio', component: Portfolio },
       { path: 'project/:id/project-details', component: ProjectDetailsPage },
       { path: 'resume-analytics', component: ResumeAnalytics },
@@ -42,16 +44,18 @@ export const USER_ROUTES: Routes = [
       { path: 'job-applications', component: JobApplications },
       { path: 'job-applications/:jobId/applicant-list', component: ApplicantsListPage },
       { path: 'job-applications/:jobId/applicant-list/:applicantId/profile', component: ApplicantListProfilePage,},
+      { path: 'manage-interviews', component: InterviewManagementPage },
       { path: 'talents', component: Talents },
       { path: 'talents/:id/profile', component: TalentProfilePage },
       { path: 'hired-talents', component: HiredTalents },
 
       // -------- COMMON --------
 
-      { path: 'scheduled-meetings', component: ScheduledMeetings },
-      { path: 'manage-interviews', component: InterviewManagementPage },
+
+
       // -------- ADMIN --------
       { path: 'dashboard', component: Dashboard },
+      { path: 'analytics', component: AnalyticsPage },
       { path: 'recruiters-list', component: Recruiters },
       { path: 'seekers-list', component: Seekers },
       { path: 'company-list', component: Companies },
