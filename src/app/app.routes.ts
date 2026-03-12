@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { LandingPage } from './views/pages/landing-page/landing-page';
-import { TalentMarketplacePage } from './views/pages/talent-marketplace-page/talent-marketplace-page';
-import { FindWorkPage } from './views/pages/find-work-page/find-work-page';
-import { RecruitmentPage } from './views/pages/recruitment-page/recruitment-page';
-import { ResumeBuilderPage } from './views/pages/resume-builder-page/resume-builder-page';
-import { AboutPage } from './views/pages/about-page/about-page';
+import { LandingPage } from './views/pages/public/landing-page/landing-page';
+import { TalentMarketplacePage } from './views/pages/public/talent-marketplace-page/talent-marketplace-page';
+import { FindWorkPage } from './views/pages/public/find-work-page/find-work-page';
+import { RecruitmentPage } from './views/pages/public/recruitment-page/recruitment-page';
+import { ResumeBuilderPage } from './views/pages/public/resume-builder-page/resume-builder-page';
+import { AboutPage } from './views/pages/public/about-page/about-page';
 import { SingupPage } from './views/account/singup-page/singup-page';
 import { LoginPage } from './views/account/login-page/login-page';
 import { OtpVerificationPage } from './views/account/otp-verification-page/otp-verification-page';
@@ -21,16 +21,11 @@ import { RecruiterProfileForm } from './views/account/recruiter-profile-form/rec
 import { RoleGuard } from './core/guards/role.guard';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RegistrationPage } from './views/account/registration-page/registration-page';
-
-
-import { RECRUITER_ROUTES } from './views/recruiter/recruiter.routes';
-import { SEEKER_ROUTES } from './views/seeker/seeker.routes';
-import { ADMIN_ROUTES } from './views/admin/admin.routes';
-import { BlogPage } from './views/pages/blog-page/blog-page';
+import { BlogPage } from './views/pages/public/blog-page/blog-page';
+import { USER_ROUTES } from './views/pages/user-pages/user-pages.routes';
 
 
 export const routes: Routes = [
-
   //public
   { path: 'home', component: LandingPage, title: 'Landing' },
   { path: 'talent-marketplace', component: TalentMarketplacePage, title: 'Talent marketplace' },
@@ -38,7 +33,7 @@ export const routes: Routes = [
   { path: 'recruitment-process', component: RecruitmentPage, title: 'Recruitment' },
   { path: 'resume-analyzer', component: ResumeBuilderPage, title: 'Resume builder' },
   { path: 'about', component: AboutPage, title: 'About' },
-   { path: 'blog', component: BlogPage, title: 'About' },
+  { path: 'blog', component: BlogPage, title: 'About' },
 
   //auth pages
   { path: 'sign-up', component: SingupPage, title: 'Singup' },
@@ -62,15 +57,12 @@ export const routes: Routes = [
   { path: 'error', component: ErrorPage, title: 'Error' },
   { path: 'access-denied', component: UnauthorizedPage, title: 'Access denied' },
 
-  //User routes
-  { path: 'admin', loadChildren: () => ADMIN_ROUTES,
-    // canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'admin' }
+    // default root
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  
+  { path: '', loadChildren: () => import('./views/pages/user-pages/user-pages.routes') .then(m => m.USER_ROUTES),
+     // canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'jobSeeker' }
   },
-  { path: 'recruiter', loadChildren: () => RECRUITER_ROUTES,
-    // canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'recruiter' }
-  },
-  { path: 'jobSeeker', loadChildren: () => SEEKER_ROUTES ,
-    // canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'jobSeeker' }
-  },
+
   { path: '**', redirectTo: 'home' },
 ];

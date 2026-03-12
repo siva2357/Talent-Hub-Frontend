@@ -4,18 +4,17 @@
 
     @for (item of menuItemsMain; track item.link) {
 
-      <a
+    <a
         [routerLink]="item.link"
         routerLinkActive="active"
         class="menu-item"
+        (click)="selectItem(item)"
       >
         <i class="bi" [ngClass]="item.icon"></i>
         <span>{{ item.label }}</span>
       </a>
 
     }
-
-    <!-- MORE BUTTON -->
 
     @if (menuItemsMore.length > 0) {
 

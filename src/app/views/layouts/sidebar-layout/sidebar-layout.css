@@ -1,6 +1,6 @@
 .sidebar {
   width: 80px;
-  height: 100vh;
+  height: calc(100vh - 60px); /* account for top navbar */
   background: #ffffff;
   border-right: 1px solid #e5e7eb;
   position: fixed;
@@ -17,8 +17,19 @@ nav {
   flex-direction: column;
   width: 100%;
   margin-top: 12px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* hide scrollbar */
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE/Edge */
 }
 
+/* Chrome / Safari */
+nav::-webkit-scrollbar {
+  display: none;
+}
 /* Menu item */
 .menu-item {
   position: relative;

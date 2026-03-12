@@ -1,0 +1,17 @@
+<app-navbar-layout></app-navbar-layout>
+
+<div class="user-container">
+<div class="d-none d-lg-block">
+    <app-sidebar-layout [menuItems]="userMenu"></app-sidebar-layout>
+  </div>
+  <main class="user-main">
+    <router-outlet></router-outlet>
+  </main>
+
+   <!-- Mobile Bottom Navigation -->
+  <div class="d-lg-none">
+    <app-mobile-layout [menuItems]="userMenu"></app-mobile-layout>
+  </div>
+
+
+</div>
