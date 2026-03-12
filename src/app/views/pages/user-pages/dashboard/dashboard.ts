@@ -1,11 +1,12 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import Chart, { ChartOptions } from 'chart.js/auto';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
@@ -46,7 +47,7 @@ ngAfterViewInit(): void {
     this.createMiniChart('applicationChart',[100,150,200,250,300,350,400,450,470,490,520]);
     this.createMiniChart('hiredChart',[5,8,12,18,25,30,35,40,42,45,50]);
     this.createAnalyticsChart();
-    
+
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     },200);
