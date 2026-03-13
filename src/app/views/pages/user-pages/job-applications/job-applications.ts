@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-job-applications',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule,ReactiveFormsModule,FormsModule],
   templateUrl: './job-applications.html',
   styleUrl: './job-applications.css',
 })
@@ -108,4 +110,31 @@ export class JobApplications {
       avatar: 'https://i.pravatar.cc/50?img=10',
     },
   ];
+
+selectedInterview:any = {
+jobTitle:'',
+candidateName:'',
+date:'',
+time:'',
+meetingLink:'',
+status:'Scheduled',
+description:''
+};
+
+
+scheduleInterview(){
+this.selectedInterview = {
+jobTitle:'',
+candidateName:'',
+date:'',
+time:'',
+meetingLink:'',
+status:'Scheduled',
+description:''
+};
+}
+
+
+
+
 }

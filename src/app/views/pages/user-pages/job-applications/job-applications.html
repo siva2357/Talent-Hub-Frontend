@@ -148,24 +148,44 @@
 
           <td>{{ applicant.appliedDate }}</td>
 
+
           <td class="text-center">
+            <div class="dropdown">
 
-            <div class="d-flex justify-content-center gap-2">
-
-              <button class="btn btn-info btn-sm w-50" (click)="viewApplicant(applicant)" data-bs-toggle="modal"
-                data-bs-target="#viewApplicantModal">
-
-                View Profile
+              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+                <i class="bi bi-three-dots-vertical"></i>
               </button>
 
-              <button class="btn btn-sm btn-primary">
-                <i class="bi bi-download me-1"></i>
-                Resume
-              </button>
+              <ul class="dropdown-menu dropdown-menu-end" style="font-size:13px;">
+
+                <li>
+                  <button  class="dropdown-item" (click)="viewApplicant(applicant)" data-bs-toggle="modal"
+                    data-bs-target="#viewApplicantModal">
+
+                    View Profile
+                  </button>
+                </li>
+
+                <li>
+                  <button  class="dropdown-item" style="font-size:13px"
+                    data-bs-toggle="modal" data-bs-target="#scheduleInterviewModal" (click)="scheduleInterview()">
+                    Schedule Interview
+                  </button>
+                </li>
+
+                <li>
+                  <button  class="dropdown-item">
+                    Resume
+                  </button>
+                </li>
+
+
+
+              </ul>
 
             </div>
-
           </td>
+
 
         </tr>
 
@@ -346,3 +366,91 @@
 
 
 
+<div class="modal fade" id="scheduleInterviewModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Schedule Interview</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <form>
+
+          <div class="row g-3">
+
+            <!-- Job Title -->
+            <div class="col-md-6">
+              <label class="form-label">Job Title</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedInterview.jobTitle" name="jobTitle" readonly>
+            </div>
+
+            <!-- Candidate Name -->
+            <div class="col-md-6">
+              <label class="form-label">Candidate</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedInterview.candidateName"
+                name="candidateName">
+            </div>
+
+            <!-- Date -->
+            <div class="col-md-6">
+              <label class="form-label">Interview Date</label>
+              <input type="date" class="form-control" [(ngModel)]="selectedInterview.date" name="date">
+            </div>
+
+            <!-- Time -->
+            <div class="col-md-6">
+              <label class="form-label">Interview Time</label>
+              <input type="time" class="form-control" [(ngModel)]="selectedInterview.time" name="time">
+            </div>
+
+            <!-- Meeting Link -->
+            <div class="col-md-6">
+              <label class="form-label">Meeting Link</label>
+              <input type="text" class="form-control" placeholder="Paste Google Meet / Zoom link"
+                [(ngModel)]="selectedInterview.meetingLink" name="meetingLink">
+            </div>
+
+            <!-- Status -->
+            <div class="col-md-6">
+              <label class="form-label">Status</label>
+              <select class="form-select" [(ngModel)]="selectedInterview.status" name="status">
+
+                <option value="Scheduled">Scheduled</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+
+              </select>
+            </div>
+
+            <!-- Description -->
+            <div class="col-12">
+              <label class="form-label">Interview Notes</label>
+              <textarea class="form-control" rows="3" placeholder="Add interview instructions or notes"
+                [(ngModel)]="selectedInterview.description" name="description">
+</textarea>
+            </div>
+
+          </div>
+
+        </form>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+
+        <button class="btn btn-primary">
+          Schedule Interview
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
