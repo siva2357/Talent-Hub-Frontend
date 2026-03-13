@@ -24,7 +24,7 @@ export class UserPages {
 
 
   { label: 'My Jobposts', icon: 'bi-briefcase', link: 'my-jobposts' },
-  { label: 'Proposals', icon: 'bi-file-earmark-text', link: 'job-applications' },
+  // { label: 'Proposals', icon: 'bi-file-earmark-text', link: 'job-applications' },
   { label: 'Manage Interviews', icon: 'bi-camera-video', link: 'manage-interviews' },
   { label: 'Talents', icon: 'bi-people', link: 'talents' },
   { label: 'Hired Talents', icon: 'bi-person-check', link: 'hired-talents' },
