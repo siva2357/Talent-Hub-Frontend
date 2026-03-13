@@ -10,7 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrl: './manage-jobs-page.css',
 })
 export class ManageJobsPage {
-  
+
 selectedJob:any = null;
 isEditMode = false;
 
