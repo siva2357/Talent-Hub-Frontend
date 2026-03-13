@@ -7,8 +7,6 @@ import { Portfolio } from './portfolio/portfolio';
 import { ProjectDetailsPage } from './project-details-page/project-details-page';
 import { ResumeAnalytics } from './resume-analytics/resume-analytics';
 import { JobApplications } from './job-applications/job-applications';
-import { ApplicantsListPage } from './applicants-list-page/applicants-list-page';
-import { ApplicantListProfilePage } from './applicant-list-profile-page/applicant-list-profile-page';
 import { TalentProfilePage } from './talent-profile-page/talent-profile-page';
 import { Talents } from './talents/talents';
 import { HiredTalents } from './hired-talents/hired-talents';
@@ -43,9 +41,8 @@ export const USER_ROUTES: Routes = [
 
       // -------- RECRUITER --------
       { path: 'my-jobposts', component: ManageJobsPage },
-      { path: 'job-applications', component: JobApplications },
-      { path: 'job-applications/:jobId/applicant-list', component: ApplicantsListPage },
-      { path: 'job-applications/:jobId/applicant-list/:applicantId/profile', component: ApplicantListProfilePage,},
+      { path: 'my-jobposts/:id/job-applications', component: JobApplications },
+
       { path: 'manage-interviews', component: InterviewManagementPage },
       { path: 'talents', component: Talents },
       { path: 'talents/:id/profile', component: TalentProfilePage },

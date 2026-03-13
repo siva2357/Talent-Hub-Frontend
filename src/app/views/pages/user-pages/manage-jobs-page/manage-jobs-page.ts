@@ -10,9 +10,10 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrl: './manage-jobs-page.css',
 })
 export class ManageJobsPage {
-  
+
 selectedJob:any = null;
 isEditMode = false;
+
 
 selectJob(job:any){
   this.isEditMode = true;
@@ -46,6 +47,7 @@ addJob(){
 { id:9,jobId:'JOB-009', title:'Cloud Engineer', category:'Backend', type:'Full Time', location:'Bangalore', applicants:9, status:'Open'},
 { id:10,jobId:'JOB-010', title:'Java Backend Developer', category:'Backend', type:'Internship', location:'Pune', applicants:4, status:'Closed'}
 ];
+
 
 
 }
