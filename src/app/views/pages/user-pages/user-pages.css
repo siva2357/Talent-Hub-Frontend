@@ -1,16 +1,28 @@
-/* Default: mobile first (no sidebar space) */
+/* Mobile first */
 
 .user-container .user-main{
   margin-left:0;
 }
 
 
-/* Desktop sidebar space */
+/* Mobile bottom nav spacing */
 
-@media (min-width: 992px) {
+@media (max-width:991px){
 
-  .user-container .user-main{
-    margin-left:80px;
-  }
+.user-container .user-main{
+  padding-bottom:90px;
+}
+
+}
+
+
+/* Desktop sidebar layout */
+
+@media (min-width:992px){
+
+.user-container .user-main{
+  margin-left:80px;
+  padding-bottom:0;
+}
 
 }
