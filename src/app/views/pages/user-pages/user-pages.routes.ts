@@ -23,6 +23,8 @@ import { JobProfilesPage } from './job-profiles-page/job-profiles-page';
 import { InterviewManagementPage } from './interview-management-page/interview-management-page';
 import { AnalyticsPage } from './analytics-page/analytics-page';
 import { ResumeAtsReport } from './resume-ats-report/resume-ats-report';
+import { SavedTalents } from './saved-talents/saved-talents';
+import { RecruiterDashboard } from './recruiter-dashboard/recruiter-dashboard';
 
 export const USER_ROUTES: Routes = [
   {
@@ -40,18 +42,16 @@ export const USER_ROUTES: Routes = [
       { path: 'resume-analytics/:id/ats-report', component: ResumeAtsReport },
 
       // -------- RECRUITER --------
+      { path: 'my-dashboard', component: RecruiterDashboard },
       { path: 'my-jobposts', component: ManageJobsPage },
       { path: 'my-jobposts/:id/job-applications', component: JobApplications },
-
       { path: 'manage-interviews', component: InterviewManagementPage },
       { path: 'talents', component: Talents },
       { path: 'talents/:id/profile', component: TalentProfilePage },
+      { path: 'saved-talents', component: SavedTalents },
       { path: 'hired-talents', component: HiredTalents },
 
       // -------- COMMON --------
-
-
-
       // -------- ADMIN --------
       { path: 'dashboard', component: Dashboard },
       { path: 'analytics', component: AnalyticsPage },

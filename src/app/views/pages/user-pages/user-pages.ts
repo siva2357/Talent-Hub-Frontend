@@ -23,11 +23,13 @@ export class UserPages {
   { label: 'Blog', icon: 'bi-book', link: 'blog-list' },
 
 
+
+  { label: 'My Dashboard', icon: 'bi-grid', link: 'my-dashboard' },
   { label: 'My Jobposts', icon: 'bi-briefcase', link: 'my-jobposts' },
-  // { label: 'Proposals', icon: 'bi-file-earmark-text', link: 'job-applications' },
   { label: 'Manage Interviews', icon: 'bi-camera-video', link: 'manage-interviews' },
   { label: 'Talents', icon: 'bi-people', link: 'talents' },
-  { label: 'Hired Talents', icon: 'bi-person-check', link: 'hired-talents' },
+  { label: 'Saved Talents', icon: 'bi-person-check', link: 'saved-talents' },
+  { label:'Hired Talents', icon:"bi-person-check-fill", link:'hired-talents'},
 
 
   { label: 'Job Profiles', icon: 'bi-briefcase', link: 'jobprofile' },

@@ -1,18 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-
 
 @Component({
-  selector: 'app-talents',
-  templateUrl: './talents.html',
-  styleUrl: './talents.css',
-  standalone: true,
-  imports: [RouterModule,CommonModule, FormsModule,ReactiveFormsModule],
+  selector: 'app-saved-talents',
+  imports: [],
+  templateUrl: './saved-talents.html',
+  styleUrl: './saved-talents.css',
 })
-export class Talents  {
+export class SavedTalents {
 talents = [
 {
   name:'Noah Thompson',
@@ -123,6 +117,4 @@ talents = [
   avatar:'https://i.pravatar.cc/120?img=12'
 }
 ];
-
-
 }
