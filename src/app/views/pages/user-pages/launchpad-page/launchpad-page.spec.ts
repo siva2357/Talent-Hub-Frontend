@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ApplicantListProfilePage } from './applicant-list-profile-page';
+import { LaunchpadPage } from './launchpad-page';
 
-describe('ApplicantListProfilePage', () => {
-  let component: ApplicantListProfilePage;
-  let fixture: ComponentFixture<ApplicantListProfilePage>;
+describe('LaunchpadPage', () => {
+  let component: LaunchpadPage;
+  let fixture: ComponentFixture<LaunchpadPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ApplicantListProfilePage]
+      imports: [LaunchpadPage]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ApplicantListProfilePage);
+    fixture = TestBed.createComponent(LaunchpadPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
