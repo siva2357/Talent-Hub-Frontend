@@ -1,3 +1,182 @@
-<div class="container-fluid mt-5 pt-5">
-  <p>My assessments page</p>
+<div class="container-xxl mt-5 pt-5">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-semibold mb-0">My Assessments</h5>
+  </div>
+
+<div class="filter-toolbar">
+
+  <div class="row g-3 align-items-center">
+
+    <!-- Search -->
+    <div class="col-xl-3 col-lg-3 col-md-3">
+      <input
+        type="text"
+        class="form-control filter-input"
+        placeholder="Search job title..."
+      >
+    </div>
+
+    <!-- Category -->
+    <div class="col-xl-2 col-lg-2 col-md-3">
+      <select class="form-select filter-select">
+        <option selected>Category</option>
+        <option>Frontend</option>
+        <option>Backend</option>
+        <option>Full Stack</option>
+        <option>Data Science</option>
+        <option>DevOps</option>
+      </select>
+    </div>
+
+    <!-- Job Type -->
+    <div class="col-xl-2 col-lg-2 col-md-3">
+      <select class="form-select filter-select">
+        <option selected>Job Type</option>
+        <option>Full Time</option>
+        <option>Part Time</option>
+        <option>Contract</option>
+        <option>Internship</option>
+      </select>
+    </div>
+
+    <!-- Status -->
+    <div class="col-xl-2 col-lg-2 col-md-3">
+      <select class="form-select filter-select">
+        <option selected>Status</option>
+        <option>Not Started</option>
+        <option>Completed</option>
+        <option>Not Completed</option>
+      </select>
+    </div>
+
+    <!-- Buttons -->
+    <div class="col-xl-3 col-lg-3 col-md-3 d-flex gap-2">
+
+      <button class="btn btn-primary filter-btn w-100">
+        Apply
+      </button>
+
+      <button class="btn btn-outline-secondary filter-btn w-100">
+        Reset
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="row justify-content-center">
+
+<div class="col-lg-8 col-12">
+
+@for(assessment of assessments; track assessment.id){
+
+<div class="meeting-card mb-4">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div>
+
+<h6 class="meeting-title">
+{{assessment.jobTitle}} - <span class="badge bg-light text-dark">
+{{assessment.jobId}}
+</span>
+</h6>
+
+
+
+</div>
+
+<span
+class="status-badge"
+[ngClass]="{
+'status-upcoming': assessment.status === 'Not Started',
+'status-completed': assessment.status === 'Completed',
+'status-missed': assessment.status === 'Not Completed'
+}">
+{{assessment.status}}
+</span>
+
+</div>
+
+<p class="meeting-desc mt-2">
+{{assessment.description}}
+</p>
+
+<div class="meeting-info">
+
+<span>
+<i class="bi bi-calendar-event"></i>
+{{assessment.date}}
+</span>
+
+<span>
+<i class="bi bi-clock"></i>
+{{assessment.time}}
+</span>
+
+</div>
+
+<div class="meeting-actions mt-3">
+
+<a
+class="join-btn"
+[target]="'_blank'"
+[href]="assessment.assessmentLink">
+
+Start Assessment
+
+</a>
+
+</div>
+
+</div>
+
+}
+
+</div>
+
+</div>
+
+<div class="table-footer  mb-5">
+
+  <div class="footer-wrapper">
+
+    <small class="result-text">
+      Showing <strong>1–10</strong> of <strong>100</strong> recruiters
+    </small>
+
+    <nav>
+      <ul class="pagination pagination-sm custom-pagination mb-0">
+
+        <li class="page-item disabled">
+          <a class="page-link">
+            <i class="bi bi-chevron-left"></i>
+          </a>
+        </li>
+
+        <li class="page-item active">
+          <a class="page-link">1</a>
+        </li>
+
+        <li class="page-item">
+          <a class="page-link">2</a>
+        </li>
+
+        <li class="page-item">
+          <a class="page-link">
+            <i class="bi bi-chevron-right"></i>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+  </div>
+
+</div>
+
 </div>

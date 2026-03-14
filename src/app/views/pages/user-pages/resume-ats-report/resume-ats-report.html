@@ -1,3 +1,199 @@
 <div class="container-xxl mt-5 pt-5">
-<p>resume-ats-report works!</p>
+
+  <div class="d-flex  align-items-center mb-3">
+    <button class="btn btn-light me-2" [routerLink]="['/resume-analytics']">
+      <i class="bi bi-arrow-left fs-5"></i>
+    </button>
+    <h5 class="fw-semibold mb-0">ATS Resume Report</h5>
+  </div>
+
+<!-- SCORE SECTION -->
+<div class="row g-4 mb-4">
+
+<div class="col-lg-4">
+
+<div class="score-card text-center">
+
+  <div class="score-chart-wrapper">
+    <canvas id="atsScoreChart"></canvas>
+
+    <div class="score-text">
+      <span>{{atsScore}}</span>
+      <small>/100</small>
+    </div>
+  </div>
+
+  <p class="mt-3 mb-1 fw-semibold">ATS Score</p>
+<span class="badge"
+      [ngClass]="getBadgeClass(atsScore)">
+  {{ getMatchLabel(atsScore) }}
+</span>
+
+</div>
+
+</div>
+
+<div class="col-lg-8">
+
+<div class="info-card">
+
+  <h6 class="fw-semibold mb-3">Candidate Information</h6>
+
+  <div class="info-row">
+    <strong>Name:</strong>
+    <span>SIVA PRASAD KURRA</span>
+  </div>
+
+  <div class="info-row">
+    <strong>Email:</strong>
+    <span>sivaprasad@example.com</span>
+  </div>
+
+  <div class="info-row">
+    <strong>Phone:</strong>
+    <span>+91 9876543210</span>
+  </div>
+
+  <div class="info-row">
+    <strong>Location:</strong>
+    <span>Andhra Pradesh, India</span>
+  </div>
+
+  <div class="info-row">
+    <strong>Resume Score:</strong>
+    <span>{{atsScore}} / 100</span>
+  </div>
+
+  <div class="info-row">
+    <strong>LinkedIn:</strong>
+    <a href="https://linkedin.com" target="_blank">
+      linkedin.com/in/siva
+    </a>
+  </div>
+
+  <div class="info-row">
+    <strong>GitHub:</strong>
+    <a href="https://github.com" target="_blank">
+      github.com/sivaprasad
+    </a>
+  </div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- SKILLS DETECTED -->
+<div class="report-card mb-4">
+
+<h5 class="section-title">Skills Detected</h5>
+
+<div class="skill-tags">
+
+<span class="skill">Angular</span>
+<span class="skill">Node.js</span>
+<span class="skill">Express.js</span>
+<span class="skill">PostgreSQL</span>
+<span class="skill">TypeScript</span>
+<span class="skill">Python</span>
+<span class="skill">LangChain</span>
+<span class="skill">RAG</span>
+<span class="skill">Prompt Engineering</span>
+<span class="skill">Bootstrap</span>
+<span class="skill">Git</span>
+<span class="skill">REST APIs</span>
+
+</div>
+
+</div>
+
+
+<!-- MISSING SKILLS -->
+<div class="report-card mb-4">
+
+<h5 class="section-title text-danger">Missing Core Skills</h5>
+
+<ul class="report-list">
+
+<li>Cloud Platforms (AWS, Azure, GCP)</li>
+<li>Testing Frameworks (Jest, Mocha, Karma)</li>
+<li>Containerization (Docker, Kubernetes)</li>
+<li>Advanced CI/CD tools</li>
+<li>NgRx State Management</li>
+
+</ul>
+
+</div>
+
+
+<!-- STRENGTHS -->
+<div class="report-card mb-4">
+
+<h5 class="section-title text-success">Strengths</h5>
+
+<ul class="report-list">
+
+<li>Strong full-stack development skills</li>
+<li>Experience with GenAI technologies</li>
+<li>Multiple professional certifications</li>
+<li>Well structured resume</li>
+<li>Active GitHub profile</li>
+
+</ul>
+
+</div>
+
+
+<!-- WEAKNESSES -->
+<div class="report-card mb-4">
+
+<h5 class="section-title text-warning">Weaknesses</h5>
+
+<ul class="report-list">
+
+<li>Limited quantifiable achievements</li>
+<li>Only one professional experience listed</li>
+<li>No cloud platform experience</li>
+<li>No containerization technologies</li>
+
+</ul>
+
+</div>
+
+
+<!-- GRAMMAR ISSUES -->
+<div class="report-card mb-4">
+
+<h5 class="section-title text-secondary">Grammar Issues</h5>
+
+<ul class="report-list">
+
+<li>Inconsistent punctuation</li>
+<li>Extra spaces before commas</li>
+<li>Formatting inconsistencies</li>
+
+</ul>
+
+</div>
+
+
+<!-- SUGGESTIONS -->
+<div class="report-card">
+
+<h5 class="section-title text-primary">Improvement Suggestions</h5>
+
+<ul class="report-list">
+
+<li>Add quantifiable achievements</li>
+<li>Expand CI/CD experience</li>
+<li>Add personal projects section</li>
+<li>Learn cloud platforms</li>
+<li>Improve punctuation consistency</li>
+
+</ul>
+
+</div>
+
 </div>
