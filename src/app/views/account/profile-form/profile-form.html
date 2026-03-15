@@ -1,0 +1,205 @@
+<div class="profile-page">
+
+<div class="profile-form-container">
+
+<h3 class="form-title">Create Profile</h3>
+
+<!-- STEP INDICATOR -->
+
+<div class="stepper">
+
+<div class="step" [class.active]="step === 1">1</div>
+<div class="step" [class.active]="step === 2">2</div>
+<div class="step" [class.active]="step === 3">3</div>
+<div class="step" [class.active]="step === 4">4</div>
+<div class="step" [class.active]="step === 5">5</div>
+<div class="step" [class.active]="step === 6">6</div>
+<div class="step" [class.active]="step === 7">7</div>
+<div class="step" [class.active]="step === 8">8</div>
+
+</div>
+
+
+<!-- STEP CONTENT -->
+
+@if(step === 1){
+
+<h5>Basic Information</h5>
+
+<input class="form-control mb-2" placeholder="First Name">
+<input class="form-control mb-2" placeholder="Last Name">
+<input class="form-control mb-2" placeholder="Email">
+<input class="form-control mb-2" placeholder="Mobile">
+
+<select class="form-control">
+<option>Gender</option>
+<option>Male</option>
+<option>Female</option>
+<option>Other</option>
+</select>
+
+}
+
+@if(step === 2){
+
+<h5>Profile Photo Upload</h5>
+
+<div class="text-center">
+
+<img
+[src]="previewImage || 'assets/default-profile.png'"
+class="profile-preview">
+
+<input
+type="file"
+accept="image/*"
+class="form-control mt-3"
+(change)="onFileSelected($event)">
+
+</div>
+
+}
+
+
+
+@if(step === 3){
+
+<h5>Skills & Languages</h5>
+
+<input class="form-control mb-2" placeholder="Add Skill">
+
+<input class="form-control mb-2" placeholder="Language">
+<select class="form-control mb-2">
+<option>Proficiency</option>
+<option>Beginner</option>
+<option>Intermediate</option>
+<option>Advanced</option>
+</select>
+
+}
+
+@if(step === 4){
+
+<h5>Social Profiles</h5>
+
+<select class="form-control mb-2">
+<option>Platform</option>
+<option>LinkedIn</option>
+<option>GitHub</option>
+<option>Portfolio</option>
+<option>Twitter / X</option>
+<option>Instagram</option>
+<option>Facebook</option>
+<option>Dribbble</option>
+<option>Behance</option>
+</select>
+
+<input class="form-control mb-2" placeholder="Profile Link">
+
+}
+@if(step === 5){
+
+<h5>Current Experience</h5>
+
+<input class="form-control mb-2" placeholder="Job Title">
+<input class="form-control mb-2" placeholder="Company">
+<input class="form-control mb-2" placeholder="Duration">
+
+<textarea class="form-control"
+placeholder="Description"></textarea>
+
+
+<h5>Company Information</h5>
+
+<input class="form-control mb-2" placeholder="Company Name">
+
+<input class="form-control mb-2" placeholder="Sector / Industry">
+
+<input class="form-control mb-2" placeholder="Designation">
+
+<input type="number"
+class="form-control mb-2"
+placeholder="Years of Experience">
+
+
+}
+
+
+@if(step === 6){
+
+<h5>Previous Experience</h5>
+
+<input class="form-control mb-2" placeholder="Job Title">
+<input class="form-control mb-2" placeholder="Company">
+<input class="form-control mb-2" placeholder="Duration">
+
+<textarea class="form-control"
+placeholder="Description"></textarea>
+
+}
+
+
+@if(step === 7){
+
+<h5>Certifications</h5>
+
+<input class="form-control mb-2" placeholder="Certification Name">
+<input class="form-control mb-2" placeholder="Issued By">
+<input type="date" class="form-control mb-2">
+
+<input class="form-control mb-2"
+placeholder="Certificate URL">
+
+}
+
+@if(step === 8){
+
+<h5>Profile Bio</h5>
+
+<textarea class="form-control"
+placeholder="Write your professional bio"></textarea>
+
+}
+
+
+<!-- NAVIGATION -->
+
+<div class="step-navigation">
+
+<button
+class="btn btn-outline-secondary"
+(click)="prevStep()"
+[disabled]="step === 1">
+
+Previous
+
+</button>
+
+@if(step < totalSteps){
+
+<button
+class="btn btn-primary"
+(click)="nextStep()">
+
+Next
+
+</button>
+
+}
+
+@if(step === totalSteps){
+
+<button
+class="btn btn-success">
+
+Submit
+
+</button>
+
+}
+
+</div>
+
+</div>
+
+</div>

@@ -1,4 +1,3 @@
-
 import { Routes } from '@angular/router';
 import { UserPages } from './user-pages';
 import { AppliedJobpostsPage } from './applied-jobposts-page/applied-jobposts-page';
@@ -21,18 +20,16 @@ import { UserAccountSettings } from './user-account-settings/user-account-settin
 import { ManageJobsPage } from './manage-jobs-page/manage-jobs-page';
 import { JobProfilesPage } from './job-profiles-page/job-profiles-page';
 import { InterviewManagementPage } from './interview-management-page/interview-management-page';
-import { AnalyticsPage } from './analytics-page/analytics-page';
 import { ResumeAtsReport } from './resume-ats-report/resume-ats-report';
 import { SavedTalents } from './saved-talents/saved-talents';
 import { RecruiterDashboard } from './recruiter-dashboard/recruiter-dashboard';
 import { JobDetailsPage } from './job-details-page/job-details-page';
 import { SavedJobposts } from './saved-jobposts/saved-jobposts';
 
+
 export const USER_ROUTES: Routes = [
-  {
-    path: '',
-    component: UserPages,
-    children: [
+  { path: '', component: UserPages,
+     children: [
       // -------- SEEKER --------
       { path: 'jobprofile', component: JobProfilesPage },
       { path: 'jobprofile/:id/job-details', component: JobDetailsPage },
@@ -44,7 +41,6 @@ export const USER_ROUTES: Routes = [
       { path: 'project/:id/project-details', component: ProjectDetailsPage },
       { path: 'resume-analytics', component: ResumeAnalytics },
       { path: 'resume-analytics/:id/ats-report', component: ResumeAtsReport },
-
 
       // -------- RECRUITER --------
       { path: 'my-dashboard', component: RecruiterDashboard },
@@ -58,7 +54,6 @@ export const USER_ROUTES: Routes = [
 
       // -------- ADMIN --------
       { path: 'dashboard', component: Dashboard },
-      { path: 'analytics', component: AnalyticsPage },
       { path: 'recruiters-list', component: Recruiters },
       { path: 'seekers-list', component: Seekers },
       { path: 'company-list', component: Companies },
