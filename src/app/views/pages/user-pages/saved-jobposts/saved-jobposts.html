@@ -1,8 +1,10 @@
 <div class="container-xxl mt-5 pt-5">
 
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h5 class="fw-semibold mb-0">Applied jobposts</h5>
+    <h5 class="fw-semibold mb-0">Your saved jobposts</h5>
   </div>
+
+
 
 <div class="filter-toolbar">
 
@@ -41,15 +43,16 @@
     </div>
 
     <!-- Status -->
-   <div class="col-xl-2 col-lg-3 col-md-6">
+  <div class="col-xl-2 col-lg-3 col-md-6">
       <select class="form-select filter-select">
-        <option selected>Status</option>
-        <option>In Process</option>
-        <option>Interview Scheduled</option>
-        <option>Assessment Assigned</option>
-        <option>Shortlisted</option>
-        <option>Rejected</option>
-        <option>Cannot Move Forward</option>
+        <option selected>Location</option>
+        <option>Hyderabad</option>
+        <option>Bangalore</option>
+        <option>Mumbai</option>
+        <option>Delhi</option>
+        <option>Chennai</option>
+        <option>Pune</option>
+        <option>Remote</option>
       </select>
     </div>
 
@@ -70,6 +73,8 @@
 
 </div>
 
+
+
 <div class="row g-4">
 
 @for(job of jobs; track job.id){
@@ -77,6 +82,8 @@
 <div class="col-12 col-md-6 col-xl-4">
 
 <div class="job-card p-3">
+
+<div class="d-flex justify-content-between align-items-start">
 
 <div class="d-flex gap-3 align-items-center">
 
@@ -91,6 +98,9 @@
 
 </div>
 
+<i class="bi bi-bookmark-fill bookmark-icon"></i>
+
+</div>
 
 <p class="job-desc">
 {{job.description}}
@@ -117,43 +127,19 @@
 </div>
 
 
-<!-- APPLICATION STATUS -->
-<div class="application-status mt-2">
+<!-- ACTION BUTTON -->
+<div class="mt-auto pt-3 d-flex gap-2">
 
-<span class="status-pill"
-[ngClass]="{
-'status-progress': job.status === 'In Process',
-'status-interview': job.status === 'Interview Scheduled',
-'status-assessment': job.status === 'Assessment Assigned',
-'status-shortlisted': job.status === 'Shortlisted',
-'status-rejected': job.status === 'Rejected'
-}">
-{{job.status}}
-</span>
-
-</div>
-
-
-<!-- ACTION BUTTONS -->
-<div class="mt-auto pt-3 d-flex gap-2 flex-wrap">
-
-<button class="view-job-btn"
-[routerLink]="['/jobprofile', job.id, 'job-details']">
+<button class="view-job-btn" [routerLink]="['/jobprofile/:id/job-details']">
 View Job
 </button>
 
-<button class="tracking-btn"
-(click)="openTrackingModal(job)">
-View Tracking
+<button class="apply-btn">
+Apply Now
 </button>
-
-<button class="withdraw-btn"
-(click)="openWithdrawModal(job)">
-Withdraw
-</button>
-
 
 </div>
+
 
 </div>
 
@@ -162,6 +148,8 @@ Withdraw
 }
 
 </div>
+
+
 
 <div class="table-footer  mb-5">
 
@@ -201,104 +189,5 @@ Withdraw
 
 </div>
 
-
-</div>
-
-<!-- TRACKING MODAL -->
-<div class="modal fade" id="trackingModal" tabindex="-1">
-
-<div class="modal-dialog modal-dialog-centered">
-
-<div class="modal-content">
-
-<div class="modal-header">
-<h5 class="modal-title">Application Tracking</h5>
-<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-</div>
-
-<div class="modal-body">
-
-<div class="tracking-job mb-3">
-<strong>{{selectedJob?.title}}</strong> - {{selectedJob?.jobId}}
-</div>
-
-<div class="timeline">
-
-@for(step of trackingSteps; track step.name){
-
-<div class="timeline-step">
-
-<div class="dot"></div>
-
-<div class="timeline-content">
-
-<div class="timeline-text">
-{{step.name}}
-</div>
-
-<div class="timeline-date">
-{{step.date}} • {{step.time}}
-</div>
-
-</div>
-
-</div>
-
-}
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- WITHDRAW MODAL -->
-<div class="modal fade" id="withdrawModal" tabindex="-1">
-
-<div class="modal-dialog modal-dialog-centered">
-
-<div class="modal-content">
-
-<div class="modal-header">
-
-<h5 class="modal-title">
-Withdraw Application
-</h5>
-
-<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-
-</div>
-
-<div class="modal-body">
-
-<p>
-Are you sure you want to withdraw the application for
-<strong>{{selectedJob?.title}}</strong> ({{selectedJob?.jobId}})?
-</p>
-
-</div>
-
-<div class="modal-footer">
-
-<button class="btn btn-outline-secondary"
-data-bs-dismiss="modal">
-Cancel
-</button>
-
-<button class="btn btn-danger"
-(click)="confirmWithdraw()">
-Withdraw
-</button>
-
-</div>
-
-</div>
-
-</div>
 
 </div>

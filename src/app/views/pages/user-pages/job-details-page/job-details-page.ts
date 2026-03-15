@@ -1,14 +1,61 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-job-profiles-page',
-  imports: [RouterModule ],
-  templateUrl: './job-profiles-page.html',
-  styleUrl: './job-profiles-page.css',
+  selector: 'app-job-details-page',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './job-details-page.html',
+  styleUrls: ['./job-details-page.css']
 })
-export class JobProfilesPage {
-jobs = [
+export class JobDetailsPage {
+
+
+job = {
+  title: 'Senior Angular Developer',
+  company: 'TechNova Solutions',
+  logo: 'https://cdn-icons-png.flaticon.com/512/5968/5968292.png',
+
+  category: 'Frontend Development',
+  type: 'Full Time',
+  location: 'Hyderabad',
+
+  salary: '₹12L – ₹18L',
+  experience: '3 - 5 Years',
+  level: 'Mid Level',
+  workMode: 'Hybrid',
+
+  description:
+    'We are looking for an experienced Angular developer to build scalable web applications. You will collaborate with designers and backend engineers to create high performance applications.',
+
+  responsibilities: [
+    'Develop scalable web applications',
+    'Build reusable Angular components',
+    'Integrate REST APIs',
+    'Collaborate with cross-functional teams'
+  ],
+
+  skills: [
+    'Angular',
+    'TypeScript',
+    'REST API',
+    'Git'
+  ],
+
+  benefits: [
+    'Health Insurance',
+    'Flexible working hours',
+    'Remote work support',
+    'Learning & development budget'
+  ],
+
+  posted: '3 days ago',
+  applicants: 24
+};
+
+
+  recommendedJobs = [
 {
 id:1,
 jobId:'JOB-001',
@@ -80,56 +127,6 @@ company:'IBM',
 logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/ibm.svg',
 description:'Manage CI/CD pipelines, automate infrastructure deployment, and monitor cloud environments for reliability.'
 },
-
-{
-id:7,
-jobId:'JOB-007',
-title:'UI/UX Designer',
-category:'Design',
-type:'Contract',
-location:'Mumbai',
-company:'Adobe',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/adobe.svg',
-description:'Design intuitive user interfaces, build wireframes and prototypes, and collaborate with developers on product design.'
-},
-
-{
-id:8,
-jobId:'JOB-008',
-title:'Machine Learning Engineer',
-category:'Data Science',
-type:'Full Time',
-location:'Hyderabad',
-company:'Nvidia',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/nvidia.svg',
-description:'Develop machine learning models, optimize training pipelines, and deploy AI solutions into production systems.'
-},
-
-{
-id:9,
-jobId:'JOB-009',
-title:'Cloud Engineer',
-category:'Backend',
-type:'Full Time',
-location:'Bangalore',
-company:'Oracle',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/oracle.svg',
-description:'Design and manage scalable cloud infrastructure, configure networking services, and ensure system reliability.'
-},
-
-{
-id:10,
-jobId:'JOB-010',
-title:'Java Backend Developer',
-category:'Backend',
-type:'Internship',
-location:'Pune',
-company:'SAP',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/sap.svg',
-description:'Assist in developing backend APIs using Java and Spring Boot, support database integration, and maintain application services.'
-}
-
 ];
-
 
 }

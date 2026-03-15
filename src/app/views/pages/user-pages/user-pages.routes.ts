@@ -25,7 +25,8 @@ import { AnalyticsPage } from './analytics-page/analytics-page';
 import { ResumeAtsReport } from './resume-ats-report/resume-ats-report';
 import { SavedTalents } from './saved-talents/saved-talents';
 import { RecruiterDashboard } from './recruiter-dashboard/recruiter-dashboard';
-import { LaunchpadPage } from './launchpad-page/launchpad-page';
+import { JobDetailsPage } from './job-details-page/job-details-page';
+import { SavedJobposts } from './saved-jobposts/saved-jobposts';
 
 export const USER_ROUTES: Routes = [
   {
@@ -34,14 +35,15 @@ export const USER_ROUTES: Routes = [
     children: [
       // -------- SEEKER --------
       { path: 'jobprofile', component: JobProfilesPage },
+      { path: 'jobprofile/:id/job-details', component: JobDetailsPage },
       { path: 'applied-jobposts', component: AppliedJobpostsPage },
+      { path: 'saved-jobposts', component: SavedJobposts },
       { path: 'assessments', component: AssessmentsRoomPage },
       { path: 'scheduled-meetings', component: ScheduledMeetings },
       { path: 'my-portfolio', component: Portfolio },
       { path: 'project/:id/project-details', component: ProjectDetailsPage },
       { path: 'resume-analytics', component: ResumeAnalytics },
       { path: 'resume-analytics/:id/ats-report', component: ResumeAtsReport },
-      { path: 'launchpad', component: LaunchpadPage },
 
 
       // -------- RECRUITER --------
