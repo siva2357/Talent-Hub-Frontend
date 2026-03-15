@@ -1,0 +1,369 @@
+<div class="container-xxl job-page">
+
+    <div class="d-flex  align-items-center mb-3">
+    <button class="btn btn-light me-2" [routerLink]="['/jobprofile']">
+      <i class="bi bi-arrow-left fs-5"></i>
+    </button>
+    <h5 class="fw-semibold mb-0">Job Overview</h5>
+  </div>
+
+
+<div class="row g-4">
+
+<!-- MAIN CONTENT -->
+<div class="col-lg-8">
+
+<div class="job-details-card">
+
+<!-- HEADER -->
+<div class="job-header">
+
+<img [src]="job.logo" class="company-logo-lg">
+
+<div>
+<h4 class="job-title">{{job.title}}</h4>
+<div class="company-name">{{job.company}} - <a class="company-link"
+   data-bs-toggle="modal"
+   data-bs-target="#companyModal">
+View Company Information
+</a>
+ </div>
+</div>
+
+</div>
+
+<!-- META -->
+<div class="job-meta">
+
+<span class="job-badge">
+<i class="bi bi-briefcase"></i>
+{{job.category}}
+</span>
+
+<span class="job-badge">
+<i class="bi bi-clock"></i>
+{{job.type}}
+</span>
+
+<span class="job-badge">
+<i class="bi bi-geo-alt"></i>
+{{job.location}}
+</span>
+
+</div>
+
+<div class="job-overview">
+
+<div class="overview-item">
+<span class="overview-label">Salary</span>
+<span class="overview-value">{{job.salary}}</span>
+</div>
+
+<div class="overview-item">
+<span class="overview-label">Experience</span>
+<span class="overview-value">{{job.experience}}</span>
+</div>
+
+<div class="overview-item">
+<span class="overview-label">Job Level</span>
+<span class="overview-value">{{job.level}}</span>
+</div>
+
+<div class="overview-item">
+<span class="overview-label">Work Mode</span>
+<span class="overview-value">{{job.workMode}}</span>
+</div>
+
+</div>
+
+
+<!-- DESCRIPTION -->
+<h6 class="section-title">Job Description</h6>
+
+<p class="job-text">
+{{job.description}}
+</p>
+
+<!-- RESPONSIBILITIES -->
+<h6 class="section-title">Responsibilities</h6>
+
+<ul class="job-list">
+
+@for (item of job.responsibilities; track $index) {
+
+<li>
+{{item}}
+</li>
+
+}
+
+</ul>
+
+
+
+<!-- SKILLS -->
+<h6 class="section-title">Required Skills</h6>
+
+<div class="skills">
+
+@for (skill of job.skills; track $index) {
+
+<span class="skill-tag">
+{{skill}}
+</span>
+
+}
+
+</div>
+
+<h6 class="section-title">Benefits</h6>
+
+<ul class="job-list">
+
+@for (benefit of job.benefits; track $index) {
+
+<li>
+{{benefit}}
+</li>
+
+}
+
+</ul>
+
+
+</div>
+
+</div>
+
+
+<div class="col-lg-4">
+
+<div class="job-side-card">
+
+  <h6 class="sidebar-title">Apply for this job</h6>
+
+  <!-- APPLY + WITHDRAW -->
+<div class="apply-row">
+
+<button class="sidebar-apply-btn">
+Apply
+</button>
+
+<button class="withdraw-btn">
+Withdraw
+</button>
+
+</div>
+
+  <!-- SAVE JOB -->
+  <button class="save-job-btn">
+    Save Job
+  </button>
+
+  <hr>
+
+  <!-- JOB INFO -->
+  <div class="job-info">
+
+    <div class="info-row">
+      <span class="info-label">Posted</span>
+      <span>3 days ago</span>
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">Apply by</span>
+      <span>30 March 2026</span>
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">Applicants</span>
+      <span>24</span>
+    </div>
+
+  </div>
+
+  <!-- ATS BUTTON -->
+<div class="ats-section">
+
+<button class="ats-btn">
+Check ATS Compatibility
+</button>
+
+<!-- ATS RESULT -->
+<div class="ats-result mt-3">
+
+<div class="ats-item">
+<span class="ats-label">Score</span>
+<span class="ats-value text-success">78%</span>
+</div>
+
+<div class="ats-item">
+<span class="ats-label">Matching</span>
+<span class="ats-value">Good Match</span>
+</div>
+
+<div class="ats-item">
+<span class="ats-label">Matched Skills</span>
+<span class="ats-value">Angular, TypeScript, REST API</span>
+</div>
+
+<div class="ats-item">
+<span class="ats-label">Missing Skills</span>
+<span class="ats-value text-danger">Docker, AWS</span>
+</div>
+
+<div class="ats-item">
+<span class="ats-label">Suggestions</span>
+<span class="ats-value">
+Add Docker and AWS experience to improve ATS score.
+</span>
+</div>
+
+</div>
+
+</div>
+
+
+
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<h5 class="mb-4 fw-semibold">Recommended Jobs</h5>
+
+<div class="row g-4 mb-5">
+
+@for(job of recommendedJobs; track job.id){
+
+<div class="col-12 col-md-6 col-xl-4">
+
+<div class="job-card p-3">
+
+<div class="d-flex justify-content-between align-items-start">
+
+<div class="d-flex gap-3 align-items-center">
+
+<img [src]="job.logo" class="company-logo">
+
+<div>
+
+<div class="fw-semibold job-title">{{job.title}} - {{job.jobId}}</div>
+<div class="text-muted small">{{job.company}}</div>
+
+</div>
+
+</div>
+
+<i class="bi bi-bookmark bookmark-icon"></i>
+
+</div>
+
+<p class="job-desc">
+{{job.description}}
+</p>
+
+
+<div class="job-meta mt-3">
+
+<span class="job-badge">
+<i class="bi bi-briefcase me-1"></i>
+{{job.category}}
+</span>
+
+<span class="job-badge">
+<i class="bi bi-clock me-1"></i>
+{{job.type}}
+</span>
+
+<span class="job-badge">
+<i class="bi bi-geo-alt me-1"></i>
+{{job.location}}
+</span>
+
+</div>
+
+
+<!-- ACTION BUTTON -->
+<div class="mt-auto pt-3 d-flex gap-2">
+
+<button class="view-job-btn">
+View Job
+</button>
+
+<button class="apply-btn">
+Apply Now
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+}
+</div>
+
+</div>
+
+
+
+<div class="modal fade" id="companyModal" tabindex="-1">
+
+<div class="modal-dialog modal-lg modal-dialog-centered">
+
+<div class="modal-content">
+
+<!-- HEADER -->
+<div class="modal-header">
+
+<h5 class="modal-title">
+{{job.company}}
+</h5>
+
+<button type="button"
+class="btn-close"
+data-bs-dismiss="modal">
+</button>
+
+</div>
+
+<!-- BODY -->
+<div class="modal-body">
+
+<div class="company-modal">
+
+<img [src]="job.logo" class="company-modal-logo">
+
+<div class="company-info">
+
+<p><strong>Industry:</strong> Software Development</p>
+
+<p><strong>Company Size:</strong> 200-500 employees</p>
+
+<p><strong>Headquarters:</strong> Hyderabad</p>
+
+<p><strong>Founded:</strong> 2015</p>
+
+<p class="company-desc">
+TechNova Solutions is a fast-growing technology company
+specializing in enterprise web applications, cloud
+solutions, and scalable SaaS platforms.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>

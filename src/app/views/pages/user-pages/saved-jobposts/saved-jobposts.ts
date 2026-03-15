@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-job-profiles-page',
+  selector: 'app-saved-jobposts',
   imports: [RouterModule ],
-  templateUrl: './job-profiles-page.html',
-  styleUrl: './job-profiles-page.css',
+  templateUrl: './saved-jobposts.html',
+  styleUrl: './saved-jobposts.css',
 })
-export class JobProfilesPage {
+export class SavedJobposts {
 jobs = [
 {
 id:1,

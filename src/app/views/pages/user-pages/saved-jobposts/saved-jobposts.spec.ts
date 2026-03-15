@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LaunchpadPage } from './launchpad-page';
+import { SavedJobposts } from './saved-jobposts';
 
-describe('LaunchpadPage', () => {
-  let component: LaunchpadPage;
-  let fixture: ComponentFixture<LaunchpadPage>;
+describe('SavedJobposts', () => {
+  let component: SavedJobposts;
+  let fixture: ComponentFixture<SavedJobposts>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LaunchpadPage]
+      imports: [SavedJobposts]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LaunchpadPage);
+    fixture = TestBed.createComponent(SavedJobposts);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
