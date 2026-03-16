@@ -1,0 +1,108 @@
+<div class="container-xxl mt-5 pt-5">
+<div class="table-responsive table-card">
+
+<table class="table align-middle clean-table">
+
+<thead>
+<tr>
+<th>S.NO</th>
+<th>Job ID</th>
+<th>Job Title</th>
+<th>Category</th>
+<th>Job Type</th>
+<th>Location</th>
+<th>Applicants</th>
+<th>Status</th>
+<th class="text-center">Actions</th>
+</tr>
+</thead>
+
+<tbody>
+
+@for (job of jobs; track job.id; let i = $index) {
+
+<tr>
+
+<td>{{ i + 1 }}</td>
+<td>{{ job.jobId }}</td>
+<td>{{ job.title }}</td>
+<td>{{ job.category }}</td>
+<td>{{ job.type }}</td>
+<td>{{ job.location }}</td>
+
+<td>
+
+<span class="badge bg-info">
+<i class="bi bi-people me-1"></i>
+{{ job.applicants }}
+
+</span>
+
+</td>
+
+<td>
+
+<span class="badge"
+[ngClass]="job.status === 'Open' ? 'bg-success' : 'bg-secondary'">
+
+{{ job.status }}
+
+</span>
+
+</td>
+
+
+<td class="text-center">
+<div class="dropdown">
+
+<button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+<i class="bi bi-three-dots-vertical"></i>
+</button>
+
+<ul class="dropdown-menu dropdown-menu-end" style="font-size:13px;">
+
+<li>
+<button class="dropdown-item">
+View
+</button>
+</li>
+
+<li>
+<button class="dropdown-item">
+Edit
+</button>
+</li>
+
+<li>
+<button class="dropdown-item">
+Close
+</button>
+</li>
+
+<li>
+<button class="dropdown-item">
+Go to applicants
+</button>
+</li>
+
+<li>
+<button class="dropdown-item">
+Delete
+</button>
+</li>
+
+</ul>
+
+</div>
+</td>
+
+</tr>
+
+}
+
+</tbody>
+
+</table>
+
+</div>
+</div>
