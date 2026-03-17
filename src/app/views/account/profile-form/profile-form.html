@@ -4,38 +4,48 @@
 
 <h3 class="form-title">Create Profile</h3>
 
-<!-- STEP INDICATOR -->
-
 <div class="stepper">
 
-<div class="step" [class.active]="step === 1">1</div>
-<div class="step" [class.active]="step === 2">2</div>
-<div class="step" [class.active]="step === 3">3</div>
-<div class="step" [class.active]="step === 4">4</div>
-<div class="step" [class.active]="step === 5">5</div>
-<div class="step" [class.active]="step === 6">6</div>
-<div class="step" [class.active]="step === 7">7</div>
-<div class="step" [class.active]="step === 8">8</div>
+@for (item of stepsArray; track $index; let i = $index) {
+
+    <div class="step"
+         [class.active]="step === (i + 1)">
+      {{ i + 1 }}
+    </div>
+
+  }
 
 </div>
 
-
+<form [formGroup]="profileForm">
 <!-- STEP CONTENT -->
 
 @if(step === 1){
 
 <h5>Basic Information</h5>
 
-<input class="form-control mb-2" placeholder="First Name">
-<input class="form-control mb-2" placeholder="Last Name">
-<input class="form-control mb-2" placeholder="Email">
-<input class="form-control mb-2" placeholder="Mobile">
+<input class="form-control mb-2"
+       placeholder="First Name"
+       formControlName="firstName">
 
-<select class="form-control">
-<option>Gender</option>
-<option>Male</option>
-<option>Female</option>
-<option>Other</option>
+<input class="form-control mb-2"
+       placeholder="Last Name"
+       formControlName="lastName">
+
+<input class="form-control mb-2"
+       placeholder="Email"
+       formControlName="email">
+
+<input class="form-control mb-2"
+       placeholder="Mobile"
+       formControlName="mobile">
+
+<select class="form-control"
+        formControlName="gender">
+  <option value="">Gender</option>
+  <option>Male</option>
+  <option>Female</option>
+  <option>Other</option>
 </select>
 
 }
@@ -59,8 +69,6 @@ class="form-control mt-3"
 </div>
 
 }
-
-
 
 @if(step === 3){
 
@@ -97,35 +105,60 @@ class="form-control mt-3"
 <input class="form-control mb-2" placeholder="Profile Link">
 
 }
+
+
 @if(step === 5){
 
-<h5>Current Experience</h5>
+<!-- ✅ JOB SEEKER ONLY -->
+@if(role === 'jobSeeker'){
 
-<input class="form-control mb-2" placeholder="Job Title">
-<input class="form-control mb-2" placeholder="Company">
-<input class="form-control mb-2" placeholder="Duration">
+<div formGroupName="currentExperience">
+
+<input class="form-control mb-2"
+       placeholder="Job Title"
+       formControlName="jobTitle">
+
+<input class="form-control mb-2"
+       placeholder="Company"
+       formControlName="company">
+
+<input class="form-control mb-2"
+       placeholder="Duration"
+       formControlName="duration">
 
 <textarea class="form-control"
-placeholder="Description"></textarea>
+          placeholder="Description"
+          formControlName="description"></textarea>
 
-
-<h5>Company Information</h5>
-
-<input class="form-control mb-2" placeholder="Company Name">
-
-<input class="form-control mb-2" placeholder="Sector / Industry">
-
-<input class="form-control mb-2" placeholder="Designation">
-
-<input type="number"
-class="form-control mb-2"
-placeholder="Years of Experience">
-
+</div>
 
 }
 
+<!-- ✅ RECRUITER ONLY -->
+@if(role === 'recruiter'){
 
-@if(step === 6){
+<input class="form-control mb-2"
+       placeholder="Company Name"
+       formControlName="companyName">
+
+<input class="form-control mb-2"
+       placeholder="Sector / Industry"
+       formControlName="sector">
+
+<input class="form-control mb-2"
+       placeholder="Designation"
+       formControlName="designation">
+
+<input type="number"
+       class="form-control mb-2"
+       placeholder="Years of Experience"
+       formControlName="yearsOfExperience">
+
+}
+
+}
+
+@if(step === 6 && role === 'jobSeeker'){
 
 <h5>Previous Experience</h5>
 
@@ -138,8 +171,7 @@ placeholder="Description"></textarea>
 
 }
 
-
-@if(step === 7){
+@if(step === 7 && role === 'jobSeeker'){
 
 <h5>Certifications</h5>
 
@@ -152,12 +184,16 @@ placeholder="Certificate URL">
 
 }
 
-@if(step === 8){
+@if(
+  (role === 'jobSeeker' && step === 8) ||
+  (role === 'recruiter' && step === 6)
+){
 
 <h5>Profile Bio</h5>
 
 <textarea class="form-control"
-placeholder="Write your professional bio"></textarea>
+          placeholder="Write your professional bio"
+          formControlName="bioDescription"></textarea>
 
 }
 
@@ -190,16 +226,15 @@ Next
 @if(step === totalSteps){
 
 <button
-class="btn btn-success">
-
+class="btn btn-success"
+(click)="onSubmit()">
 Submit
-
 </button>
 
 }
 
 </div>
-
+</form>
 </div>
 
 </div>

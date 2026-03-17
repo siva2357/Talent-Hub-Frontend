@@ -1,39 +1,32 @@
-<div class="container mt-3">
+<div class="mb-3" [formGroup]="form">
 
-  <!-- Text Input -->
-  <div class="mb-3">
-    <input type="text" class="form-control" placeholder="Enter text">
-  </div>
+  @if (!isSelect) {
+    <input
+      [type]="type"
+      class="form-control"
+      [placeholder]="placeholder"
+      [formControlName]="controlName"
+      [ngClass]="{ 'is-invalid': isInvalid() }"
+    />
+  } @else {
+    <select
+      class="form-select"
+      [formControlName]="controlName"
+      [ngClass]="{ 'is-invalid': isInvalid() }"
+    >
+      <option value="">Select option</option>
 
-  <!-- Number Input -->
-<div class="mb-3">
-  <input type="number" class="form-control" placeholder="Enter number">
-</div>
-
-  <!-- Email -->
-  <div class="mb-3">
-    <input type="email" class="form-control" placeholder="Enter email">
-  </div>
-
-  <div class="mb-3">
-  <input type="password" class="form-control" placeholder="Enter password">
-</div>
-
-  <!-- Date -->
-  <div class="mb-3">
-    <input type="date" class="form-control">
-  </div>
-
-  <!-- Dropdown Select -->
-  <div class="mb-3">
-    <select class="form-select">
-      <option selected>Select option</option>
-      <option>Option 1</option>
-      <option>Option 2</option>
-      <option>Option 3</option>
+      @for (opt of options; track opt) {
+        <option [value]="opt">{{ opt }}</option>
+      }
     </select>
-  </div>
+  }
 
-
+  <!-- ✅ Error Message -->
+  @if (isInvalid()) {
+    <small class="error-text">
+      {{ getErrorMessage() }}
+    </small>
+  }
 
 </div>

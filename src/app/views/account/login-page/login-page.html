@@ -9,35 +9,33 @@
   </p>
 
   <!-- LOGIN FORM -->
-  <form class="form-area">
+<form class="form-area" [formGroup]="loginForm" (ngSubmit)="onLogin()">
 
-    <!-- EMAIL -->
-    <div class="form-group mb-3">
-      <div class="input-group">
-        <input id="email" type="email" placeholder="Email Address" class="form-control form-control-sm" style="height: 45px;"/>
-      </div>
-    </div>
+<app-input-fields
+  [form]="loginForm"
+  type="email"
+  placeholder="Email Address"
+  controlName="email">
+</app-input-fields>
 
-    <!-- PASSWORD -->
-    <div class="form-group mb-2">
-      <div class="input-group">
-        <input id="password" type="password" placeholder="Password" class="form-control form-control-sm" style="height: 45px;"/>
-      </div>
-    </div>
 
-    <!-- FORGOT PASSWORD -->
-    <div class="text-end mb-3">
-      <a href="/forgot-password" class="text-primary poppins-medium" style="font-size:12px;">
-        Forgot Password?
-      </a>
-    </div>
+<app-input-fields
+  [form]="loginForm"
+  type="password"
+  placeholder="Password"
+  controlName="password">
+</app-input-fields>
 
-    <!-- LOGIN BUTTON -->
-    <button class="btn btn-primary w-100 fw-semibold py-2" type="submit">
-      Login
-    </button>
+<app-button
+  label="Login"
+  variant="primary"
+  type="submit"
+  [isLoading]="isLoading"
+  [disabled]="loginForm.invalid">
+</app-button>
 
-  </form>
+
+</form>
 
   <!-- SIGNUP -->
   <p class="text-center text-muted mt-3 small">

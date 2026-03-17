@@ -16,12 +16,12 @@ import { ErrorPage } from './views/extra-pages/error-page/error-page';
 import { ComingSoonPage } from './views/extra-pages/coming-soon-page/coming-soon-page';
 import { MaintenancePage } from './views/extra-pages/maintenance-page/maintenance-page';
 import { UnauthorizedPage } from './views/extra-pages/unauthorized-page/unauthorized-page';
-import { RoleGuard } from './core/guards/role.guard';
-import { AuthGuard } from './core/guards/auth.guard';
+
 import { RegistrationPage } from './views/account/registration-page/registration-page';
 import { BlogPage } from './views/pages/public/blog-page/blog-page';
-import { USER_ROUTES } from './views/pages/user-pages/user-pages.routes';
 import { ProfileForm } from './views/account/profile-form/profile-form';
+import { AuthGuard } from './core/guards/auth.guard';
+import { RoleGuard } from './core/guards/role.guard';
 
 
 export const routes: Routes = [
@@ -40,9 +40,7 @@ export const routes: Routes = [
   { path: 'register/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
   { path: 'login', component: LoginPage, title: 'Login' },
-  { path: 'profile-form', component: ProfileForm ,
-    // canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'recruiter' }
-  },
+  { path: 'profile-form', component: ProfileForm, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: ['jobSeeker', 'recruiter'] }},
   { path: 'forgot-password', component: ForgotPasswordPage, title: 'OTP Verification' },
   { path: 'reset-otp-verification', component: ResetOtpVerificationPage,title: 'OTP Verification'},
   { path: 'reset-password', component: ResetPasswordPage, title: 'Reset password' },
@@ -56,9 +54,7 @@ export const routes: Routes = [
     // default root
   { path: '', redirectTo: 'home', pathMatch: 'full' },
 
-  { path: '', loadChildren: () => import('./views/pages/user-pages/user-pages.routes') .then(m => m.USER_ROUTES),
-     // canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'jobSeeker' }
-  },
+  { path: '', loadChildren: () => import('./views/pages/user-pages/user-pages.routes') .then(m => m.USER_ROUTES),},
 
   { path: '**', redirectTo: 'home' },
 ];

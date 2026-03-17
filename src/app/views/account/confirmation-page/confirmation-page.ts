@@ -11,16 +11,4 @@ import { RouterModule } from '@angular/router';
 })
 export class ConfirmationPage {
 
-  // Role text: "recruiter" or "job seeker"
-  role: string = 'recruiter';
-
-  constructor(private router: Router) {
-    const savedRole = sessionStorage.getItem('registeredRole');
-    this.role = savedRole === 'recruiter' ? 'recruiter' : 'job seeker';
-  }
-
-  goToLogin() {
-    this.router.navigate(['/login']);
-  }
-
 }

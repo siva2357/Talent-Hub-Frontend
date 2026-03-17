@@ -17,3 +17,11 @@ export interface RegistrationResponse {
     role: string;
   };
 }
+
+export interface LoginRequestDto {
+  email: string;
+  password: string;
+}
+
+
+

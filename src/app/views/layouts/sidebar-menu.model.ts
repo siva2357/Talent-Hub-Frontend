@@ -2,5 +2,5 @@ export interface SidebarItem {
   label: string;
   icon: string;
   link: string;
-  badge?: string;
+  role?:string;
 }

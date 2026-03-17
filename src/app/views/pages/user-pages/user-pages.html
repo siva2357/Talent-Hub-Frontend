@@ -2,7 +2,7 @@
 
 <div class="user-container">
 <div class="d-none d-lg-block">
-    <app-sidebar-layout [menuItems]="userMenu"></app-sidebar-layout>
+    <app-sidebar-layout [menuItems]="filteredMenu"></app-sidebar-layout>
   </div>
   <main class="user-main">
     <router-outlet></router-outlet>
@@ -10,7 +10,7 @@
 
    <!-- Mobile Bottom Navigation -->
   <div class="d-lg-none">
-    <app-mobile-layout [menuItems]="userMenu"></app-mobile-layout>
+    <app-mobile-layout [menuItems]="filteredMenu"></app-mobile-layout>
   </div>
 
 
