@@ -1,43 +1,53 @@
-<section class="otp-section">
+<div class="otp-wrapper d-flex flex-column justify-content-center align-items-center vh-100">
 
-  <div class="otp-wrapper d-flex flex-column justify-content-center align-items-center vh-100">
+  <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
+       class="logo mb-3" />
 
-    <img
-      src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1764499024/Logo_no_background_ybka8q.png"
-      class="logo mb-3"
-      alt="Logo"
-    />
+  <h4 class="fw-bold mb-1 text-center">Verify Your Account</h4>
 
-    <h4 class="fw-bold mb-1 text-center">Verify Your Account</h4>
+  <p class="text-muted small mb-4 text-center px-3">
+    A verification code has been sent to
+    <strong>{{ email }}</strong>
+  </p>
 
-    <p class="text-muted small mb-4 text-center px-3">
-      A verification code has been sent to
-      <strong>use***@gmail.com</strong>.
-      Please enter the 6-digit code below.
-    </p>
+  <!-- OTP INPUTS -->
+  <div class="otp-box d-flex gap-2 mb-3 justify-content-center">
 
-    <!-- OTP INPUTS -->
-    <div class="otp-box d-flex gap-2 mb-4 justify-content-center">
-
-      <input type="text" maxlength="1" class="otp-input">
-      <input type="text" maxlength="1" class="otp-input">
-      <input type="text" maxlength="1" class="otp-input">
-      <input type="text" maxlength="1" class="otp-input">
-      <input type="text" maxlength="1" class="otp-input">
-      <input type="text" maxlength="1" class="otp-input">
-
-    </div>
-
-    <!-- ERROR MESSAGE -->
-    <p class="text-danger small">
-      Invalid or expired OTP
-    </p>
-
-    <!-- VERIFY BUTTON -->
-    <button class="btn btn-primary w-50 py-2 fw-semibold">
-      Verify
-    </button>
+@for (item of otp; track i; let i = $index){
+      <input
+        type="text"
+        maxlength="1"
+        class="otp-input"
+        [(ngModel)]="otp[i]"
+        (input)="onInput($event, i)"
+        (keydown.backspace)="onBackspace($event, i)"
+      />
+    }
 
   </div>
 
-</section>
+  <!-- ERROR -->
+  @if (errorMsg) {
+    <p class="text-danger small mb-2">
+      {{ errorMsg }}
+    </p>
+  }
+
+  <!-- VERIFY BUTTON -->
+  <app-button
+   class="w-50"
+    label="Verify"
+    variant="primary"
+    [isLoading]="isLoading"
+    [disabled]="otp.join('').length !== 6"
+    (click)="verifyOtp()">
+  </app-button>
+
+
+  <!-- RESEND -->
+  <p class="small mt-3">
+    Didn't receive code?
+    <a (click)="resendOtp()" class="resend-link" style="cursor:pointer;">Resend</a>
+  </p>
+
+</div>

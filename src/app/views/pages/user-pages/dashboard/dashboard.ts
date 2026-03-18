@@ -1,121 +1,420 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import Chart, { ChartOptions } from 'chart.js/auto';
 import { RouterModule } from '@angular/router';
+import { Table } from '../../../components/table/table';
+import { DataTableColumnConfiguration, DataTableConfiguration } from '../../../../core/models/datatable-configuration';
+interface DashboardCard {
+  title: string;
+  description: string;
+  chartId: string;
+  data: number[];
+  total?: number; // 👈 add this
+}
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Table],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css'
+  styleUrl: './dashboard.css',
 })
-export class Dashboard implements AfterViewInit {
+export class Dashboard implements AfterViewInit, OnInit {
+  totalApplications = 0;
+  totalHired = 0;
+  totalRejected = 0;
+  totalJobs = 0;
 
-charts: Chart<any, any, any>[] = [];
+  charts: Chart<any, any, any>[] = [];
 
-chartOptions(): ChartOptions<'line'> {
-  return {
-    responsive: true,
-    maintainAspectRatio: false,
-    resizeDelay: 200,
-    animation: false,
+  	@ViewChild('valueTemplate', { static: true })
+	public valueTemplateRef!: TemplateRef<any>;
 
-    interaction:{
-      intersect:false,
-      mode:'index'
+
+  	@ViewChild('statusTemplate', { static: true })
+	public statusTemplateRef!: TemplateRef<any>;
+
+
+
+    public recruiterListTableSettings: DataTableConfiguration;
+    public jobSeekerListTableSettings : DataTableConfiguration
+
+  	constructor() {
+		this.recruiterListTableSettings = new DataTableConfiguration();
+		this.recruiterListTableSettings.scrollbarV = false;
+
+    this.jobSeekerListTableSettings = new DataTableConfiguration();
+		this.jobSeekerListTableSettings.scrollbarV = false;
+	}
+
+
+
+
+  ngOnInit() {
+    this.dashboardCards = this.dashboardCards.map((card) => ({
+      ...card,
+      total: card.data.reduce((sum, v) => sum + v, 0),
+    }));
+
+    this.totalJobs = this.getSum(this.analyticsData.datasets.jobs);
+    this.totalApplications = this.getSum(this.analyticsData.datasets.applications);
+    this.totalHired = this.getSum(this.analyticsData.datasets.hired);
+    this.totalRejected = this.totalApplications - this.totalHired;
+
+let recruiterListColumns: Partial<DataTableColumnConfiguration>[] = [
+  {
+    prop: 'id',
+    name: 'ID',
+    sortable: false,
+    width: 70,
+    cellTemplate: this.valueTemplateRef
+  },
+  {
+    prop: 'name',
+    name: 'Full Name',
+    sortable: false,
+    width:100,
+    cellTemplate: this.valueTemplateRef
+  },
+  {
+    prop: 'email',
+    name: 'Email',
+    sortable: false,
+    width:150,
+    cellTemplate: this.valueTemplateRef
+  },
+  {
+    prop: 'phone',
+    name: 'Phone',
+    sortable: false,
+    width:150,
+    cellTemplate: this.valueTemplateRef
+  },
+  {
+    prop: 'company',
+    name: 'Company',
+    sortable: false,
+    width:150,
+    cellTemplate: this.valueTemplateRef
+  },
+  {
+    prop: 'status',
+    name: 'Status',
+    sortable: false,
+    width:100,
+    cellTemplate: this.statusTemplateRef
+  }
+];
+
+		this.recruiterListTableSettings.columns = recruiterListColumns;
+    this.fetchAllRecruiterList();
+
+let jobSeekerListColumns: Partial<DataTableColumnConfiguration>[] = [
+  {
+    prop: 'id',
+    name: 'ID',
+    sortable: false,
+    width: 70,
+    cellTemplate: this.valueTemplateRef
+  },
+  {
+    prop: 'name',
+    name: 'Full Name',
+    sortable: false,
+    width:100,
+    cellTemplate: this.valueTemplateRef
+  },
+  {
+    prop: 'email',
+    name: 'Email',
+    sortable: false,
+    width:150,
+    cellTemplate: this.valueTemplateRef
+  },
+  {
+    prop: 'phone',
+    name: 'Phone',
+    sortable: false,
+    width:150,
+    cellTemplate: this.valueTemplateRef
+  },
+  {
+    prop: 'experience',
+    name: 'Experience',
+    sortable: false,
+    width:150,
+    cellTemplate: this.valueTemplateRef
+  },
+  {
+    prop: 'status',
+    name: 'Status',
+    sortable: false,
+    width:100,
+    cellTemplate: this.statusTemplateRef
+  }
+];
+
+		this.jobSeekerListTableSettings.columns = jobSeekerListColumns;
+
+
+    this.fetchAllJobSeekerList();
+  }
+
+  getSum(data: number[]): number {
+    return data.reduce((sum, v) => sum + v, 0);
+  }
+
+  dashboardCards: DashboardCard[] = [
+    {
+      title: 'Total Recruiters',
+      description: 'Registered recruiters',
+      chartId: 'recruiterChart',
+      data: [10, 15, 12, 22, 14, 28, 35, 30, 42, 33, 50],
     },
-
-    plugins:{
-      legend:{ display:false }
+    {
+      title: 'Total Job Seekers',
+      description: 'Active job seekers',
+      chartId: 'seekerChart',
+      data: [30, 35, 40, 45, 50, 60, 70, 80, 85, 95, 100],
     },
+    {
+      title: 'Total Job Applications',
+      description: 'Applications submitted',
+      chartId: 'applicationChart',
+      data: [100, 150, 200, 250, 300, 350, 400, 450, 470, 490, 520],
+    },
+    {
+      title: 'Total Hired Candidates',
+      description: 'Successfully hired',
+      chartId: 'hiredChart',
+      data: [5, 8, 12, 18, 25, 30, 35, 40, 42, 45, 50],
+    },
+  ];
 
-    scales:{
-      x:{ display:false, grid:{display:false}},
-      y:{ display:false, grid:{display:false}}
-    }
-  };
-}
+  chartOptions(): ChartOptions<'line'> {
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      resizeDelay: 200,
+      animation: false,
 
+      interaction: {
+        intersect: false,
+        mode: 'index',
+      },
 
-ngAfterViewInit(): void {
+      plugins: {
+        legend: { display: false },
+      },
 
-  setTimeout(() => {
+      scales: {
+        x: { display: false, grid: { display: false } },
+        y: { display: false, grid: { display: false } },
+      },
+    };
+  }
 
-    this.createMiniChart('recruiterChart',[10,15,12,22,14,28,35,30,42,33,50]);
-    this.createMiniChart('seekerChart',[30,35,40,45,50,60,70,80,85,95,100]);
-    this.createMiniChart('applicationChart',[100,150,200,250,300,350,400,450,470,490,520]);
-    this.createMiniChart('hiredChart',[5,8,12,18,25,30,35,40,42,45,50]);
-    this.createAnalyticsChart();
-
+  ngAfterViewInit(): void {
     setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-    },200);
+      this.createMiniChart('recruiterChart', [10, 15, 12, 22, 14, 28, 35, 30, 42, 33, 50]);
+      this.createMiniChart('seekerChart', [30, 35, 40, 45, 50, 60, 70, 80, 85, 95, 100]);
+      this.createMiniChart(
+        'applicationChart',
+        [100, 150, 200, 250, 300, 350, 400, 450, 470, 490, 520],
+      );
+      this.createMiniChart('hiredChart', [5, 8, 12, 18, 25, 30, 35, 40, 42, 45, 50]);
+      this.createAnalyticsChart();
 
-  },200);
-
-}
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      }, 200);
+    }, 200);
+  }
 
   createMiniChart(id: string, dataValues: number[]) {
-
     const canvas = document.getElementById(id) as HTMLCanvasElement;
     if (!canvas) return;
 
     const chart = new Chart(canvas, {
       type: 'line',
       data: {
-        labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov"],
-        datasets: [{
-          data: dataValues,
-          borderColor: "#3da5f4",
-          backgroundColor: "rgba(61,165,244,0.2)",
-          tension: 0.4,
-          pointRadius: 0,
-          fill: true
-        }]
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+        datasets: [
+          {
+            data: dataValues,
+            borderColor: '#3da5f4',
+            backgroundColor: 'rgba(61,165,244,0.2)',
+            tension: 0.4,
+            pointRadius: 0,
+            fill: true,
+          },
+        ],
       },
-      options: this.chartOptions()
+      options: this.chartOptions(),
     });
 
     this.charts.push(chart);
   }
 
-  createAnalyticsChart() {
+  analyticsData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 
+    datasets: {
+      jobs: [120, 150, 180, 200, 220, 250, 230, 240, 210, 190, 170, 260], // 👈 added
+      applications: [500, 600, 720, 850, 900, 1000, 920, 980, 870, 820, 760, 1100],
+      hired: [200, 250, 300, 380, 420, 500, 450, 480, 420, 390, 350, 520],
+    },
+  };
+
+  createAnalyticsChart() {
     const canvas = document.getElementById('analyticsChart') as HTMLCanvasElement;
     if (!canvas) return;
 
     const chart = new Chart(canvas, {
       type: 'bar',
       data: {
-        labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+        labels: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
         datasets: [
           {
-            label: "Applications",
-            data: [500,600,720,850,900,1000,920,980,870,820,760,1100],
-            backgroundColor: "rgba(61,165,244,0.74)"
+            label: 'Jobs',
+            data: this.analyticsData.datasets.jobs,
+            backgroundColor: '#6c757d',
           },
           {
-            label: "Hired",
-            data: [200,250,300,380,420,500,450,480,420,390,350,520],
-            backgroundColor: "#1387df"
-          }
-        ]
+            label: 'Applications',
+            data: [500, 600, 720, 850, 900, 1000, 920, 980, 870, 820, 760, 1100],
+            backgroundColor: 'rgba(61,165,244,0.74)',
+          },
+          {
+            label: 'Hired',
+            data: [200, 250, 300, 380, 420, 500, 450, 480, 420, 390, 350, 520],
+            backgroundColor: '#1387df',
+          },
+        ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { position: "bottom" }
+          legend: { position: 'bottom' },
         },
         scales: {
           x: { grid: { display: false } },
-          y: { beginAtZero: true }
-        }
-      }
+          y: { beginAtZero: true },
+        },
+      },
     });
 
     this.charts.push(chart);
   }
+
+
+
+
+
+
+private fetchAllRecruiterList() {
+  this.recruiterListTableSettings.rows = this.recruiters.map((r, i) => ({
+    ...r,
+    id: r.id || (i + 1).toString().padStart(2, '0')
+  }));
+
+  this.recruiterListTableSettings.count = this.recruiters.length;
+}
+
+  recruiters = [
+  {
+    id: '01',
+    name: 'John Smith',
+    email: 'johnsmith@email.com',
+    phone: '+91 9876543210',
+    company: 'Tech Solutions',
+    status: 'Active'
+  },
+  {
+    id: '02',
+    name: 'Emma Watson',
+    email: 'emma@email.com',
+    phone: '+91 9876543210',
+    company: 'Global Hiring',
+    status: 'Inactive'
+  },
+  {
+    id: '03',
+    name: 'Michael Lee',
+    email: 'michael@email.com',
+    phone: '+91 9876543210',
+    company: 'Future Tech',
+    status: 'Active'
+  },
+  {
+    id: '04',
+    name: 'Sophia Brown',
+    email: 'sophia@email.com',
+    phone: '+91 9876543210',
+    company: 'NextGen Corp',
+    status: 'Active'
+  }
+];
+
+
+private fetchAllJobSeekerList() {
+  this.jobSeekerListTableSettings.rows = this.jobSeekers.map((r, i) => ({
+    ...r,
+    id: r.id || (i + 1).toString().padStart(2, '0')
+  }));
+
+  this.jobSeekerListTableSettings.count = this.jobSeekers.length;
+}
+
+
+
+jobSeekers = [
+  {
+    id: '01',
+    name: 'Arjun Kumar',
+    email: 'arjun@email.com',
+    phone: '+91 9876543210',
+    experience: '3 years',
+    status: 'Active'
+  },
+  {
+    id: '02',
+    name: 'Priya Sharma',
+    email: 'priya@email.com',
+    phone: '+91 9123456780',
+    experience: '6 years',
+    status: 'Active'
+  },
+  {
+    id: '03',
+    name: 'Rahul Verma',
+    email: 'rahul@email.com',
+    phone: '+91 9988776655',
+    experience: '4 years',
+    status: 'Inactive'
+  },
+  {
+    id: '04',
+    name: 'Sneha Patel',
+    email: 'sneha@email.com',
+    phone: '+91 9871234567',
+    experience: '5 years',
+    status: 'Active'
+  }
+];
 
 }

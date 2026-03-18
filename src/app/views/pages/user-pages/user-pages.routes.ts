@@ -1,4 +1,3 @@
-
 import { Routes } from '@angular/router';
 import { UserPages } from './user-pages';
 import { AppliedJobpostsPage } from './applied-jobposts-page/applied-jobposts-page';
@@ -21,54 +20,60 @@ import { UserAccountSettings } from './user-account-settings/user-account-settin
 import { ManageJobsPage } from './manage-jobs-page/manage-jobs-page';
 import { JobProfilesPage } from './job-profiles-page/job-profiles-page';
 import { InterviewManagementPage } from './interview-management-page/interview-management-page';
-import { AnalyticsPage } from './analytics-page/analytics-page';
 import { ResumeAtsReport } from './resume-ats-report/resume-ats-report';
 import { SavedTalents } from './saved-talents/saved-talents';
 import { RecruiterDashboard } from './recruiter-dashboard/recruiter-dashboard';
 import { JobDetailsPage } from './job-details-page/job-details-page';
 import { SavedJobposts } from './saved-jobposts/saved-jobposts';
+import { RoleGuard } from '../../../core/guards/role.guard';
+import { AuthGuard } from '../../../core/guards/auth.guard';
+
 
 export const USER_ROUTES: Routes = [
-  {
-    path: '',
-    component: UserPages,
-    children: [
+  { path: '', component: UserPages,
+     children: [
       // -------- SEEKER --------
-      { path: 'jobprofile', component: JobProfilesPage },
-      { path: 'jobprofile/:id/job-details', component: JobDetailsPage },
-      { path: 'applied-jobposts', component: AppliedJobpostsPage },
-      { path: 'saved-jobposts', component: SavedJobposts },
-      { path: 'assessments', component: AssessmentsRoomPage },
-      { path: 'scheduled-meetings', component: ScheduledMeetings },
-      { path: 'my-portfolio', component: Portfolio },
-      { path: 'project/:id/project-details', component: ProjectDetailsPage },
-      { path: 'resume-analytics', component: ResumeAnalytics },
-      { path: 'resume-analytics/:id/ats-report', component: ResumeAtsReport },
-
+      { path: 'jobprofile', component: JobProfilesPage, canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' }},
+      { path: 'jobprofile/:id/job-details', component: JobDetailsPage ,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' }},
+      { path: 'applied-jobposts', component: AppliedJobpostsPage ,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' }},
+      { path: 'saved-jobposts', component: SavedJobposts,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
+      { path: 'assessments', component: AssessmentsRoomPage ,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' }},
+      { path: 'scheduled-meetings', component: ScheduledMeetings,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
+      { path: 'my-portfolio', component: Portfolio, canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
+      { path: 'project/:id/project-details', component: ProjectDetailsPage,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
+      { path: 'resume-analytics', component: ResumeAnalytics, canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
+      { path: 'resume-analytics/:id/ats-report', component: ResumeAtsReport, canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
 
       // -------- RECRUITER --------
-      { path: 'my-dashboard', component: RecruiterDashboard },
-      { path: 'my-jobposts', component: ManageJobsPage },
-      { path: 'my-jobposts/:id/job-applications', component: JobApplications },
-      { path: 'manage-interviews', component: InterviewManagementPage },
-      { path: 'talents', component: Talents },
-      { path: 'talents/:id/profile', component: TalentProfilePage },
-      { path: 'saved-talents', component: SavedTalents },
-      { path: 'hired-talents', component: HiredTalents },
+      { path: 'my-dashboard', component: RecruiterDashboard,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
+      { path: 'my-jobposts', component: ManageJobsPage,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
+      { path: 'my-jobposts/:id/job-applications', component: JobApplications,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
+      { path: 'manage-interviews', component: InterviewManagementPage,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
+      { path: 'talents', component: Talents,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
+      { path: 'talents/:id/profile', component: TalentProfilePage,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
+      { path: 'saved-talents', component: SavedTalents,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
+      { path: 'hired-talents', component: HiredTalents ,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' }},
 
       // -------- ADMIN --------
-      { path: 'dashboard', component: Dashboard },
-      { path: 'analytics', component: AnalyticsPage },
-      { path: 'recruiters-list', component: Recruiters },
-      { path: 'seekers-list', component: Seekers },
-      { path: 'company-list', component: Companies },
-      { path: 'blog-list', component: BlogPage },
+      { path: 'dashboard', component: Dashboard,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'admin' } },
+      { path: 'recruiters-list', component: Recruiters,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'admin' } },
+      { path: 'seekers-list', component: Seekers,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'admin' } },
+      { path: 'company-list', component: Companies,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'admin' } },
+      { path: 'blog-list', component: BlogPage,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'admin' } },
 
       // default route
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
 
-  { path: 'profile', component: UserProfile },
-  { path: 'account-settings', component: UserAccountSettings },
+{
+  path: 'profile',
+  component: UserProfile,
+  canActivate: [AuthGuard]   // ✅ only login required
+},
+{
+  path: 'account-settings',
+  component: UserAccountSettings,
+  canActivate: [AuthGuard]   // ✅ only login required
+}
 ];

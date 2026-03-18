@@ -1,0 +1,100 @@
+/* ---------------------------
+   TABLE CARD
+--------------------------- */
+.table-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0px;
+  padding: 10px;
+}
+
+
+/* ---------------------------
+   WRAPPER (IMPORTANT)
+--------------------------- */
+.table-wrapper {
+  position: relative;
+}
+
+
+/* ---------------------------
+   NGX DATATABLE BASE
+--------------------------- */
+::ng-deep .ngx-datatable {
+  font-size: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 0px;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+    width:100%;
+}
+
+
+/* ---------------------------
+   HEADER
+--------------------------- */
+::ng-deep .ngx-datatable .datatable-header {
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+::ng-deep .ngx-datatable .datatable-header-cell {
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  text-align: start;
+}
+
+
+/* ---------------------------
+   BODY ROWS
+--------------------------- */
+::ng-deep .ngx-datatable .datatable-body-row {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.2s ease;
+}
+
+
+::ng-deep .ngx-datatable .datatable-body-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+padding: 10px;
+  font-size: 13px;
+  color: #374151;
+
+  text-align: start;   /* ✅ FIX */
+}
+
+
+::ng-deep .ngx-datatable .datatable-body-row:hover {
+  background: #f3f4f6;
+}
+
+
+/* ---------------------------
+   EMPTY OVERLAY (FINAL FIX)
+--------------------------- */
+.empty-overlay {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  color: #9ca3af;
+  font-size: 14px;
+  text-align: center;
+
+  pointer-events: none;
+}
+
+/* hide ngx default empty message */
+::ng-deep .ngx-datatable .empty-row {
+  display: none !important;
+}
+
+

@@ -29,6 +29,6 @@ goToLogin() {
 }
 
 goToSignup() {
-  this.router.navigate(['/sign-up']);
+  this.router.navigate(['/signup']);
 }
 }

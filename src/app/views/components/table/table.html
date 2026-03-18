@@ -1,0 +1,38 @@
+<ng-container>
+  <div class="row">
+    <div class="col-12">
+      <div class="table-responsive">
+
+        <div class="table-wrapper">
+
+          <ngx-datatable
+          class="clean-table"
+					[columns]="dataTableConfiguration.columns"
+          [rows]="dataTableConfiguration.rows"
+          [headerHeight]="45"
+          [rowHeight]="'auto'"
+          [footerHeight]="0"
+          [scrollbarH]="true"
+            columnMode="force">
+          </ngx-datatable>
+
+          <!-- ✅ CUSTOM EMPTY OVERLAY -->
+          <div class="empty-overlay" *ngIf="!dataTableConfiguration.rows || dataTableConfiguration.rows.length === 0">
+
+            No data available
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+
+<ng-template #headerTmpl let-column="column">
+  <span>
+    {{ column.name }}
+  </span>
+</ng-template>

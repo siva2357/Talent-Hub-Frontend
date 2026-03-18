@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TabletLayout } from './tablet-layout';
+import { Modal } from './modal';
 
-describe('TabletLayout', () => {
-  let component: TabletLayout;
-  let fixture: ComponentFixture<TabletLayout>;
+describe('Modal', () => {
+  let component: Modal;
+  let fixture: ComponentFixture<Modal>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TabletLayout]
+      imports: [Modal]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TabletLayout);
+    fixture = TestBed.createComponent(Modal);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

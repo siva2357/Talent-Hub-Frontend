@@ -4,11 +4,6 @@
       <a [routerLink]="item.link" routerLinkActive="active" class="menu-item">
         <i class="bi" [ngClass]="item.icon"></i>
         <span>{{ item.label }}</span>
-        @if (item.badge) {
-          <span class="badge bg-success">
-            {{ item.badge }}
-          </span>
-        }
       </a>
     }
   </nav>

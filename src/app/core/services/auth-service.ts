@@ -4,13 +4,13 @@ import { Observable, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 
 import { environment } from '../../../environments/environment';
-import { LoginRequestDto } from '../dtos/login.dto';
 import { LoginResponse, LogoutResponse } from '../models/auth.model';
 import { SignupRequestDto } from '../dtos/signup.dto';
 import { SignupResponse } from '../models/signup-response.model';
 import { VerifyOtpRequestDto } from '../dtos/verify-otp.dto';
 import { VerifyOtpResponse } from '../models/otp-verify.model';
 import { ResendOtpRequestDto } from '../dtos/resend-otp.dto';
+import { LoginRequestDto } from '../dtos/auth.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,7 @@ export class AuthService {
 
   login(payload: LoginRequestDto): Observable<LoginResponse> {
     return this.http
-      .post<LoginResponse>(`${this.baseUrl}/auth/login/user`, payload)
+      .post<LoginResponse>(`${this.baseUrl}/auth/login`, payload)
       .pipe(
         tap(response => {
           this.setUserData(response);
@@ -36,26 +36,16 @@ export class AuthService {
 
 logout(): Observable<LogoutResponse> {
   return this.http.post<LogoutResponse>(
-    `${this.baseUrl}/auth/logout/user`,
+    `${this.baseUrl}/auth/logout`,
     {}
   );
 }
 
 
-register(
-  data: SignupRequestDto & { role: 'recruiter' | 'jobSeeker' }
-): Observable<SignupResponse> {
-
-  const endpoint =
-    data.role === 'recruiter'
-      ? '/auth/recruiter/signup'
-      : '/auth/jobSeeker/signup';
-
+register(data: SignupRequestDto): Observable<SignupResponse> {
   return this.http.post<SignupResponse>(
-    `${this.baseUrl}${endpoint}`,
-    {
-      registrationDetails: data.registrationDetails
-    }
+    `${this.baseUrl}/auth/signup`,
+    data
   );
 }
 
@@ -132,4 +122,8 @@ resendOtp(
   getFullName(): string | null {
     return this.getUserData()?.fullName ?? null;
   }
+
+  getProfileImage(): string | null {
+  return this.getUserData()?.profileImage ?? null;
+}
 }
