@@ -10,49 +10,71 @@
 
       <!-- Search -->
       <div class="col-xl-3 col-lg-4 col-md-12">
-        <input type="text" class="form-control filter-input" placeholder="Search recruiter...">
+         <input
+        type="text"
+        class="form-control filter-input"
+        placeholder="Search recruiter..."
+        [(ngModel)]="searchText">
       </div>
 
       <!-- Company -->
       <div class="col-xl-2 col-lg-3 col-md-6">
-        <select class="form-select filter-select">
-          <option selected>Company</option>
-          <option>TechNova</option>
-          <option>GlobalHire</option>
-          <option>HireBridge</option>
-        </select>
+         <select class="form-select filter-select" [(ngModel)]="selectedCompany">
+        <option value="">Company</option>
+
+        @for (c of companies; track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
       </div>
 
       <!-- Department -->
       <div class="col-xl-2 col-lg-3 col-md-6">
-        <select class="form-select filter-select">
-          <option selected>Department</option>
-          <option>HR Manager</option>
-          <option>Recruiter</option>
-          <option>Hiring Manager</option>
-        </select>
+        <select class="form-select filter-select" [(ngModel)]="selectedPosition">
+        <option value="">Department</option>
+
+        @for (p of positions; track p) {
+          <option [value]="p">{{ p }}</option>
+        }
+      </select>
       </div>
 
       <!-- Status -->
       <div class="col-xl-2 col-lg-3 col-md-6">
-        <select class="form-select filter-select">
-          <option selected>Status</option>
-          <option>Active</option>
-          <option>Inactive</option>
-          <option>Blocked</option>
-        </select>
+         <select class="form-select filter-select" [(ngModel)]="selectedStatus">
+        <option value="">Status</option>
+
+        @for (s of statuses; track s) {
+          <option [value]="s">{{ s }}</option>
+        }
+      </select>
       </div>
 
       <!-- Buttons -->
       <div class="col-xl-3 col-lg-4 col-md-12 d-flex gap-2">
 
-        <app-button variant="primary" label="Apply" size="md" class="w-100"></app-button>
-        <app-button variant="secondary" label="Reset" size="md" class="w-100"></app-button>
+        <app-button variant="primary" label="Apply" size="md" class="w-100" (click)="applyFilters()"></app-button>
+        <app-button variant="secondary" label="Reset" size="md" class="w-100" (click)="resetFilters()"></app-button>
 
       </div>
 
 
     </div>
+
+      <!-- Chips -->
+  @if (getActiveFilters().length > 0) {
+    <div class="d-flex flex-wrap gap-2 mt-3">
+
+      @for (f of getActiveFilters(); track f.key) {
+        <span class="badge badge-primary d-flex align-items-center gap-2 px-3 py-2">
+          {{ f.label }}
+          <i class="bi bi-x-lg" (click)="removeFilter(f.key)" style="cursor:pointer;"></i>
+        </span>
+      }
+
+    </div>
+  }
+
 
   </div>
 

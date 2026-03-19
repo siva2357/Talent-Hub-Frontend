@@ -13,6 +13,21 @@ import { Pagination } from "../../../components/pagination/pagination";
   imports: [Table, FormsModule, ReactiveFormsModule, CommonModule, Buttons, Pagination],
 })
 export class Recruiters implements OnInit {
+
+  searchText = '';
+selectedCompany = '';
+selectedPosition = '';
+selectedStatus = '';
+
+filteredRecruiters: any[] = [];
+isFiltering = false;
+
+companies = ['TechNova','GlobalHire','HireBridge'];
+positions = ['HR Manager','Recruiter','Hiring Manager'];
+statuses = ['Active', 'Inactive', 'Blocked'];
+
+
+
   @ViewChild('valueTemplate', { static: true })
   public valueTemplateRef!: TemplateRef<any>;
 
@@ -52,13 +67,14 @@ paginatedRecruiters: any[] = [];
 
   }
 
-  applyPagination() {
+applyPagination() {
+  const source = this.isFiltering ? this.filteredRecruiters : this.recruiters;
+
   const start = (this.page - 1) * this.limit;
   const end = start + this.limit;
 
-  this.paginatedRecruiters = this.recruiters.slice(start, end);
+  this.paginatedRecruiters = source.slice(start, end);
 }
-
 onPageChange(p: number) {
   this.page = p;
   this.applyPagination();
@@ -208,4 +224,75 @@ onLimitChange(l: number) {
   onDeactivate(r: any) {
     console.log('Deactivate', r);
   }
+
+  applyFilters() {
+  let data = [...this.recruiters];
+
+  if (this.searchText) {
+    data = data.filter(r =>
+      r.name.toLowerCase().includes(this.searchText.toLowerCase())
+    );
+  }
+
+  if (this.selectedCompany) {
+    data = data.filter(r => r.company === this.selectedCompany);
+  }
+
+  if (this.selectedPosition) {
+    data = data.filter(r => r.position === this.selectedPosition);
+  }
+
+  if (this.selectedStatus) {
+    data = data.filter(r => r.status === this.selectedStatus);
+  }
+
+  this.filteredRecruiters = data;
+  this.isFiltering = true;
+
+  this.total = data.length;
+  this.page = 1;
+
+  this.applyPagination();
+}
+
+
+resetFilters() {
+  this.searchText = '';
+  this.selectedCompany = '';
+  this.selectedPosition = '';
+  this.selectedStatus = '';
+
+  this.filteredRecruiters = [];
+  this.isFiltering = false;
+
+  this.total = this.recruiters.length;
+  this.page = 1;
+
+  this.applyPagination();
+}
+
+
+getActiveFilters(): { key: string; label: string }[] {
+  const f: any[] = [];
+
+  if (this.searchText) f.push({ key: 'search', label: this.searchText });
+  if (this.selectedCompany) f.push({ key: 'company', label: this.selectedCompany });
+  if (this.selectedPosition) f.push({ key: 'position', label: this.selectedPosition });
+  if (this.selectedStatus) f.push({ key: 'status', label: this.selectedStatus });
+
+  return f;
+}
+
+removeFilter(key: string) {
+  if (key === 'search') this.searchText = '';
+  if (key === 'company') this.selectedCompany = '';
+  if (key === 'position') this.selectedPosition = '';
+  if (key === 'status') this.selectedStatus = '';
+
+  this.applyFilters();
+}
+
+
+
+
 }

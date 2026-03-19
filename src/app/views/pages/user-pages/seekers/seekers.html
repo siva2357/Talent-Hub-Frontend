@@ -12,69 +12,75 @@
 
       <!-- Search -->
                <div class="col-xl-3 col-lg-4 col-md-12">
-        <input type="text" class="form-control filter-input" placeholder="Search recruiter...">
+ <input
+  type="text"
+  class="form-control filter-input"
+  placeholder="Search recruiter..."
+  [(ngModel)]="searchText">
       </div>
 
       <!-- Company -->
       <div class="col-xl-2 col-lg-3 col-md-6">
-        <select class="form-select filter-select">
+<select class="form-select filter-select" [(ngModel)]="selectedExperience">
+  <option value="">Experience</option>
 
-          <option selected>Experience</option>
-
-          <option>0–1 Years</option>
-          <option>1–2 Years</option>
-          <option>2–3 Years</option>
-          <option>3–5 Years</option>
-          <option>5–8 Years</option>
-          <option>8+ Years</option>
-
-        </select>
+  @for (e of experiences; track e) {
+    <option [value]="e">{{ e }}</option>
+  }
+</select>
       </div>
 
       <!-- Department -->
        <div class="col-xl-2 col-lg-3 col-md-6">
-        <select class="form-select filter-select">
+<select class="form-select filter-select" [(ngModel)]="selectedCategory">
+  <option value="">Category</option>
 
-          <option selected>Category</option>
-
-          <option>Frontend Developer</option>
-          <option>Backend Developer</option>
-          <option>Full Stack Developer</option>
-          <option>Java Developer</option>
-          <option>Python Developer</option>
-          <option>Mobile Developer</option>
-          <option>DevOps Engineer</option>
-          <option>Data Analyst</option>
-
-        </select>
+  @for (c of categories; track c) {
+    <option [value]="c">{{ c }}</option>
+  }
+</select>
       </div>
 
 
       <!-- Status -->
       <div class="col-xl-2 col-lg-3 col-md-6">
-        <select class="form-select filter-select">
-          <option selected>Status</option>
-          <option>Active</option>
-          <option>Inactive</option>
-          <option>Blocked</option>
-        </select>
+<select class="form-select filter-select" [(ngModel)]="selectedStatus">
+  <option value="">Status</option>
+
+  @for (s of statuses; track s) {
+    <option [value]="s">{{ s }}</option>
+  }
+</select>
       </div>
 
       <!-- Buttons -->
     <div class="col-xl-3 col-lg-4 col-md-12 d-flex gap-2">
 
-      <button class="btn btn-primary filter-btn w-100">
-        Apply
-      </button>
+  <app-button variant="primary" label="Apply" size="md" class="w-100" (click)="applyFilters()"></app-button>
+        <app-button variant="secondary" label="Reset" size="md" class="w-100" (click)="resetFilters()"></app-button>
 
-      <button class="btn btn-outline-secondary filter-btn w-100">
-        Reset
-      </button>
 
     </div>
     </div>
+
+          <!-- Chips -->
+  @if (getActiveFilters().length > 0) {
+    <div class="d-flex flex-wrap gap-2 mt-3">
+
+      @for (f of getActiveFilters(); track f.key) {
+        <span class="badge badge-primary d-flex align-items-center gap-2 px-3 py-2">
+          {{ f.label }}
+          <i class="bi bi-x-lg" (click)="removeFilter(f.key)" style="cursor:pointer;"></i>
+        </span>
+      }
+
+    </div>
+  }
 
   </div>
+
+
+
   <app-table [columns]="columns" [data]="paginatedJobSeekers" class="d-none d-lg-block mb-5"></app-table>
 
 
