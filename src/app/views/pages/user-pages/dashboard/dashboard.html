@@ -115,7 +115,7 @@
             style=" font-size:13px;" routerLink="/recruiters-list">See All <i class="bi bi-arrow-right"></i></button>
         </div>
 
-        <app-table [dataTableConfiguration]="recruiterListTableSettings" class="d-none d-lg-block"></app-table>
+        <app-table [columns]="columns" [data]="recruiters"  class="d-none d-lg-block"></app-table>
 
         <div class="d-lg-none">
 
@@ -160,7 +160,7 @@
             style=" font-size:13px;" routerLink="/seekers-list">See All <i class="bi bi-arrow-right"></i></button>
         </div>
 
-        <app-table [dataTableConfiguration]="jobSeekerListTableSettings" class="d-none d-lg-block"></app-table>
+        <app-table [columns]="jobSeekercolumns" [data]="jobSeekers"  class="d-none d-lg-block"></app-table>
 
         <div class="d-lg-none">
 
@@ -197,16 +197,14 @@
 </div>
 
 
-<ng-template #valueTemplate let-value="value">
-  <span>
-    {{ value || '--' }}
+
+<ng-template #statusTemplate let-row>
+  <span
+    class="badge"
+    [ngClass]="row.status === 'Active' ? 'badge-success' : 'badge-danger'">
+    {{ row.status || '--' }}
   </span>
 </ng-template>
 
-<ng-template #statusTemplate let-value="value">
-  <span
-    class="badge"
-    [ngClass]="value === 'Active' ? 'badge-success' : 'badge-danger'">
-    {{ value  || '--'}}
-  </span>
-</ng-template>
+
+</div>
