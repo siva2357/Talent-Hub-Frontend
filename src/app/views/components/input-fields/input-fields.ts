@@ -17,8 +17,8 @@ export class InputFields {
   @Input() controlName!: string;
   @Input() isSelect: boolean = false;
   @Input() options: string[] = [];
-
-
+@Input() height: string = ''; // optional
+@Input() isTextarea: boolean = false;
   getControl() {
   return this.form.get(this.controlName);
 }

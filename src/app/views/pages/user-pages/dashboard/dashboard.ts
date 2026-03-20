@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import Chart, { ChartOptions } from 'chart.js/auto';
 import { RouterModule } from '@angular/router';
 import { Table } from '../../../components/table/table';
-import { DataTableColumnConfiguration, DataTableConfiguration } from '../../../../core/models/datatable-configuration';
 interface DashboardCard {
   title: string;
   description: string;

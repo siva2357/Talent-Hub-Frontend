@@ -15,7 +15,9 @@
   [form]="loginForm"
   type="email"
   placeholder="Email Address"
-  controlName="email">
+  controlName="email"
+  height="45px"
+  >
 </app-input-fields>
 
 
@@ -23,7 +25,8 @@
   [form]="loginForm"
   type="password"
   placeholder="Password"
-  controlName="password">
+  controlName="password"
+  height="45px">
 </app-input-fields>
 
 <app-button
@@ -31,6 +34,7 @@ class="w-100"
   label="Login"
   variant="primary"
   type="submit"
+  size="lg"
   [isLoading]="isLoading"
   [disabled]="loginForm.invalid">
 </app-button>

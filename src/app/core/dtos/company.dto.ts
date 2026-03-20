@@ -6,6 +6,10 @@ export interface CreateCompanyDTO {
   companyFoundedDate: Date;
   companySize: 'Startup' | 'Small' | 'Medium' | 'Large' | 'Enterprise';
   totalEmployees: number;
+
+  email: string;
+  phone: string;
+  industry: string;
 }
 
 
@@ -17,4 +21,8 @@ export interface UpdateCompanyDTO {
   companyFoundedDate?: Date;
   companySize?: 'Startup' | 'Small' | 'Medium' | 'Large' | 'Enterprise';
   totalEmployees?: number;
+
+  email: string;
+  phone: string;
+  industry: string;
 }
