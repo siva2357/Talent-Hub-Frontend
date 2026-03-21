@@ -3,11 +3,18 @@ import { CommonModule } from '@angular/common';
 import { Table } from "../../../components/table/table";
 import { Pagination } from "../../../components/pagination/pagination";
 import { Buttons } from "../../../components/buttons/buttons";
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { InputFields } from "../../../components/input-fields/input-fields";
+import { FilePreview } from "../../../shared/file-preview/file-preview";
+import { FileUpload } from "../../../shared/file-upload/file-upload";
+import { BucketKey } from '../../../../core/enums/bucket-key.constant';
+import { UploadSection } from '../../../../core/enums/upload-section.constant';
+import { BlogService } from '../../../../core/services/blogPost-service';
+import { Blog } from '../../../../core/models/blog.model';
 
 @Component({
   selector: 'app-blog-page',
-  imports: [CommonModule, Table, Pagination, Buttons,FormsModule],
+  imports: [CommonModule, Table, Pagination, Buttons, FormsModule, InputFields, ReactiveFormsModule, FilePreview, FileUpload],
   templateUrl: './blog-page.html',
   styleUrl: './blog-page.css',
 })
@@ -26,10 +33,29 @@ statuses = ['Draft', 'Published', 'Archived'];
 searchText = '';
 selectedCategory = '';
 selectedStatus = '';
+isImage(url: string) {
+  return url?.match(/\.(jpeg|jpg|png|webp)$/i);
+}
 
+isVideo(url: string) {
+  return url?.match(/\.(mp4|webm|ogg)$/i);
+}
 
 selectedDate = '';
 filteredBlogs: any[] = [];
+
+isLoading = false;
+blogForm!: FormGroup;
+isEditMode = false;
+selectedBlog: Blog | null = null;
+BucketKey = BucketKey;
+UploadSection = UploadSection;
+
+selectedDeleteBlogId: string | null = null;
+
+  columns: any[] = [];
+blogs: Blog[] = [];
+selectedBlogId:string | null = null;
 
   @ViewChild('valueTemplate', { static: true })
   public valueTemplateRef!: TemplateRef<any>;
@@ -43,27 +69,32 @@ filteredBlogs: any[] = [];
   @ViewChild('actionsTemplate', { static: true })
   public actionsTemplateRef!: TemplateRef<any>;
 
-  columns: any[] = [];
+
 
 
 
 isFiltering = false;
 
 
-  constructor() {}
+  constructor(private fb: FormBuilder, private blogService:BlogService) {
+this.blogForm = this.fb.group({
+  blogTitle: ['', [Validators.required, Validators.minLength(3)]],
+  category: ['', Validators.required],
+  blogDescription: ['', [Validators.required, Validators.minLength(10)]],
+  blogMedia: ['', Validators.required] // image/video URL (GCP)
+});
+  }
 
   ngOnInit() {
     this.columns = [
       { name: 'ID', prop: 'id' },
       { name: 'Image', template: this.imageTemplateRef },
-      { name: 'Title', prop: 'title' },
+      { name: 'Title', prop: 'blogTitle' },
       { name: 'Category',  template: this.categoryTemplateRef  },
-      { name: 'Posted Date', prop: 'postedDate' },
+      { name: 'Posted Date', prop: 'createdAt' },
       { name: 'Action', template: this.actionsTemplateRef, center: true },
     ];
-
-        this.total = this.blogs.length;
-    this.applyPagination();
+this.getBlogs()
 
   }
 
@@ -95,39 +126,48 @@ applyPagination() {
 
 
 
+onLogoUploaded(url: string) {
+  this.blogForm.patchValue({
+    blogMedia: url
+  });
+}
 
-  blogs = [
-  {
-    id: 1,
-    title: 'How AI is Changing Recruitment',
-    category: 'Technology',
-     postedDate: '2026-03-10',
-     status: 'Published',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&q=80'
-  },
-  {
-    id: 2,
-    title: 'Top 10 Resume Tips',
-    category: 'Career',
-    postedDate: '2026-03-08',
-    status: 'Archived',
-    image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&q=80'
+afterSave() {
+  this.blogForm.reset();
+  this.selectedBlogId = null;
+  this.isEditMode = false;
+  const modal = document.getElementById('blogFormModal');
+  if (modal) {
+    (window as any).bootstrap.Modal.getInstance(modal)?.hide();
   }
-];
 
-
-
-onView(blog: any) {
-  console.log('View:', blog);
+  // reload list
+  this.getBlogs();
 }
 
-onEdit(blog: any) {
-  console.log('Edit:', blog);
+
+
+
+getBlogs() {
+  this.isLoading = true;
+
+  this.blogService.getAdminBlogs().subscribe({
+    next: (res) => {
+      this.blogs = res.data || [];
+
+      this.total = this.blogs.length;   // ✅ set total
+      this.applyPagination();               // ✅ IMPORTANT
+
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error(err);
+      this.isLoading = false;
+    }
+  });
 }
 
-onDelete(blog: any) {
-  console.log('Delete:', blog);
-}
+
 
 
 
@@ -138,7 +178,7 @@ applyFilters() {
 
   if (this.searchText) {
     data = data.filter(b =>
-      b.title.toLowerCase().includes(this.searchText.toLowerCase())
+      b. blogTitle.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 
@@ -146,12 +186,12 @@ applyFilters() {
     data = data.filter(b => b.category === this.selectedCategory);
   }
 
-    if (this.selectedStatus) {
-    data = data.filter(b => b.status === this.selectedStatus);
-  }
+  //   if (this.selectedStatus) {
+  //   data = data.filter(b => b.status === this.selectedStatus);
+  // }
 
   if (this.selectedDate) {
-    data = data.filter(b => b.postedDate === this.selectedDate);
+    data = data.filter(b => b.createdAt === this.selectedDate);
   }
 
   this.filteredBlogs = data;
@@ -199,4 +239,101 @@ removeFilter(key: string) {
 
   this.applyFilters();
 }
+
+
+
+
+openAddModal() {
+  this.isEditMode = false;
+  this.selectedBlogId = null;
+  this.blogForm.reset();
+}
+
+
+// =============================
+// OPEN EDIT MODAL
+// =============================
+openEditModal(blog: Blog) {
+  this.isEditMode = true;
+  this.selectedBlogId = blog._id;
+
+  this.blogForm.patchValue({
+    blogTitle: blog.blogTitle,
+    category: blog.category,
+    blogDescription: blog.blogDescription,
+    blogMedia: blog.blogMedia
+  });
+}
+
+
+onSubmit() {
+  if (this.blogForm.invalid) {
+    this.blogForm.markAllAsTouched();
+    return;
+  }
+
+  const payload = this.blogForm.value;
+
+  if (this.isEditMode && this.selectedBlogId) {
+    // UPDATE
+    this.blogService.updateBlog(this.selectedBlogId, payload)
+      .subscribe(() => {
+        this.afterSave();
+      });
+  } else {
+    // CREATE
+    this.blogService.createBlog(payload)
+      .subscribe(() => {
+        this.afterSave();
+      });
+  }
+}
+
+
+// =============================
+// OPEN VIEW MODAL
+// =============================
+openViewModal(blog: Blog) {
+  this.selectedBlog = blog;
+}
+
+
+// =============================
+// OPEN DELETE MODAL
+// =============================
+openDeleteModal(blog: Blog) {
+  this.selectedDeleteBlogId = blog._id;
+  this.selectedBlog = blog; // optional (for UI display)
+}
+
+
+
+// =============================
+// CONFIRM DELETE
+// =============================
+confirmDelete() {
+  if (!this.selectedDeleteBlogId) return;
+
+  this.blogService.deleteBlog(this.selectedDeleteBlogId)
+    .subscribe({
+      next: () => {
+
+        // close modal
+        const modalEl = document.getElementById('deleteBlogModal');
+        if (modalEl) {
+          (window as any).bootstrap.Modal.getInstance(modalEl)?.hide();
+        }
+
+        // reset
+        this.selectedDeleteBlogId = null;
+
+        // refresh list
+        this.getBlogs();
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+}
+
 }
