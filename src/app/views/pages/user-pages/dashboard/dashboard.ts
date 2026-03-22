@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import Chart, { ChartOptions } from 'chart.js/auto';
 import { RouterModule } from '@angular/router';
 import { Table } from '../../../components/table/table';
-import { DataTableColumnConfiguration, DataTableConfiguration } from '../../../../core/models/datatable-configuration';
 interface DashboardCard {
   title: string;
   description: string;
@@ -27,25 +26,18 @@ export class Dashboard implements AfterViewInit, OnInit {
 
   charts: Chart<any, any, any>[] = [];
 
-  	@ViewChild('valueTemplate', { static: true })
+  @ViewChild('valueTemplate', { static: true })
 	public valueTemplateRef!: TemplateRef<any>;
 
 
   	@ViewChild('statusTemplate', { static: true })
 	public statusTemplateRef!: TemplateRef<any>;
 
+columns: any[] = [];
+  jobSeekercolumns:any[]=[]
 
 
-    public recruiterListTableSettings: DataTableConfiguration;
-    public jobSeekerListTableSettings : DataTableConfiguration
-
-  	constructor() {
-		this.recruiterListTableSettings = new DataTableConfiguration();
-		this.recruiterListTableSettings.scrollbarV = false;
-
-    this.jobSeekerListTableSettings = new DataTableConfiguration();
-		this.jobSeekerListTableSettings.scrollbarV = false;
-	}
+  	constructor() {}
 
 
 
@@ -61,103 +53,24 @@ export class Dashboard implements AfterViewInit, OnInit {
     this.totalHired = this.getSum(this.analyticsData.datasets.hired);
     this.totalRejected = this.totalApplications - this.totalHired;
 
-let recruiterListColumns: Partial<DataTableColumnConfiguration>[] = [
-  {
-    prop: 'id',
-    name: 'ID',
-    sortable: false,
-    width: 70,
-    cellTemplate: this.valueTemplateRef
-  },
-  {
-    prop: 'name',
-    name: 'Full Name',
-    sortable: false,
-    width:100,
-    cellTemplate: this.valueTemplateRef
-  },
-  {
-    prop: 'email',
-    name: 'Email',
-    sortable: false,
-    width:150,
-    cellTemplate: this.valueTemplateRef
-  },
-  {
-    prop: 'phone',
-    name: 'Phone',
-    sortable: false,
-    width:150,
-    cellTemplate: this.valueTemplateRef
-  },
-  {
-    prop: 'company',
-    name: 'Company',
-    sortable: false,
-    width:150,
-    cellTemplate: this.valueTemplateRef
-  },
-  {
-    prop: 'status',
-    name: 'Status',
-    sortable: false,
-    width:100,
-    cellTemplate: this.statusTemplateRef
-  }
-];
+        this.columns = [
+      { name: 'ID', prop: 'id' },
+      { name: 'Full Name', prop: 'name' },
+      { name: 'Email', prop: 'email' },
+      { name: 'Phone', prop: 'phone' },
+      { name: 'Company', prop: 'company' },
+      { name: 'Status', template: this.statusTemplateRef },
+    ];
 
-		this.recruiterListTableSettings.columns = recruiterListColumns;
-    this.fetchAllRecruiterList();
+        this.jobSeekercolumns=[
+       { name: 'ID', prop: 'id' },
+      { name: 'Full Name', prop: 'name' },
+      { name: 'Email', prop: 'email' },
+      { name: 'Phone', prop: 'phone' },
+      { name: 'Experience', prop: 'experience' },
+      { name: 'Status', template: this.statusTemplateRef },
+    ]
 
-let jobSeekerListColumns: Partial<DataTableColumnConfiguration>[] = [
-  {
-    prop: 'id',
-    name: 'ID',
-    sortable: false,
-    width: 70,
-    cellTemplate: this.valueTemplateRef
-  },
-  {
-    prop: 'name',
-    name: 'Full Name',
-    sortable: false,
-    width:100,
-    cellTemplate: this.valueTemplateRef
-  },
-  {
-    prop: 'email',
-    name: 'Email',
-    sortable: false,
-    width:150,
-    cellTemplate: this.valueTemplateRef
-  },
-  {
-    prop: 'phone',
-    name: 'Phone',
-    sortable: false,
-    width:150,
-    cellTemplate: this.valueTemplateRef
-  },
-  {
-    prop: 'experience',
-    name: 'Experience',
-    sortable: false,
-    width:150,
-    cellTemplate: this.valueTemplateRef
-  },
-  {
-    prop: 'status',
-    name: 'Status',
-    sortable: false,
-    width:100,
-    cellTemplate: this.statusTemplateRef
-  }
-];
-
-		this.jobSeekerListTableSettings.columns = jobSeekerListColumns;
-
-
-    this.fetchAllJobSeekerList();
   }
 
   getSum(data: number[]): number {
@@ -325,16 +238,6 @@ let jobSeekerListColumns: Partial<DataTableColumnConfiguration>[] = [
 
 
 
-
-private fetchAllRecruiterList() {
-  this.recruiterListTableSettings.rows = this.recruiters.map((r, i) => ({
-    ...r,
-    id: r.id || (i + 1).toString().padStart(2, '0')
-  }));
-
-  this.recruiterListTableSettings.count = this.recruiters.length;
-}
-
   recruiters = [
   {
     id: '01',
@@ -369,16 +272,6 @@ private fetchAllRecruiterList() {
     status: 'Active'
   }
 ];
-
-
-private fetchAllJobSeekerList() {
-  this.jobSeekerListTableSettings.rows = this.jobSeekers.map((r, i) => ({
-    ...r,
-    id: r.id || (i + 1).toString().padStart(2, '0')
-  }));
-
-  this.jobSeekerListTableSettings.count = this.jobSeekers.length;
-}
 
 
 

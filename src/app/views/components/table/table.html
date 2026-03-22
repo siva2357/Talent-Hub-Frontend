@@ -1,38 +1,57 @@
-<ng-container>
-  <div class="row">
-    <div class="col-12">
-      <div class="table-responsive">
 
-        <div class="table-wrapper">
+  <div class="table-responsive table-card">
 
-          <ngx-datatable
-          class="clean-table"
-					[columns]="dataTableConfiguration.columns"
-          [rows]="dataTableConfiguration.rows"
-          [headerHeight]="45"
-          [rowHeight]="'auto'"
-          [footerHeight]="0"
-          [scrollbarH]="true"
-            columnMode="force">
-          </ngx-datatable>
+    <table class="table align-middle clean-table">
 
-          <!-- ✅ CUSTOM EMPTY OVERLAY -->
-          <div class="empty-overlay" *ngIf="!dataTableConfiguration.rows || dataTableConfiguration.rows.length === 0">
+      <thead>
+        <tr>
+          @for (col of columns; track col.name) {
+            <th>{{ col.name }}</th>
+          }
+        </tr>
+      </thead>
 
-            No data available
+      <tbody>
 
-          </div>
+        @for (row of data; track row._id; let i = $index) {
+          <tr>
 
-        </div>
+            @for (col of columns; track col.name) {
+              <td [class.text-center]="col.center">
 
+                <!-- S.NO -->
+                @if (col.type === 'index') {
+                  {{ i + 1 }}
+                }
+
+                <!-- CUSTOM TEMPLATE -->
+                @else if (col.template) {
+                  <ng-container
+                    *ngTemplateOutlet="col.template; context: { $implicit: row }">
+                  </ng-container>
+                }
+
+                <!-- DEFAULT -->
+                @else {
+                  {{ row[col.prop] }}
+                }
+
+              </td>
+            }
+
+          </tr>
+        }
+
+      </tbody>
+
+    </table>
+
+    <!-- EMPTY -->
+    @if (!data.length) {
+      <div class="text-center py-3 text-muted">
+        No data available
       </div>
-    </div>
+    }
+
   </div>
-</ng-container>
 
-
-<ng-template #headerTmpl let-column="column">
-  <span>
-    {{ column.name }}
-  </span>
-</ng-template>

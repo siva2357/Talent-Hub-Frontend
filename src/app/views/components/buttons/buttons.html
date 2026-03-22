@@ -1,7 +1,7 @@
 <button
   [type]="type"
   class="btn"
-  [ngClass]="'btn-' + variant"
+[ngClass]="['btn-' + variant, 'btn-' + size]"
   [disabled]="isLoading || disabled"
 >
   @if (isLoading) {

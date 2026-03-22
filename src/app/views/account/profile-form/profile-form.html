@@ -17,36 +17,48 @@
 
 </div>
 
-<form [formGroup]="profileForm">
+<form [formGroup]="activeForm" (ngSubmit)="onSubmit()">
 <!-- STEP CONTENT -->
 
 @if(step === 1){
 
 <h5>Basic Information</h5>
 
-<input class="form-control mb-2"
-       placeholder="First Name"
-       formControlName="firstName">
+<app-input-fields
+  [form]="activeForm"
+  controlName="firstName"
+  [readonly]="true"
+  placeholder="First Name">
+</app-input-fields>
 
-<input class="form-control mb-2"
-       placeholder="Last Name"
-       formControlName="lastName">
+<app-input-fields
+  [form]="activeForm"
+  controlName="lastName"
+  [readonly]="true"
+  placeholder="Last Name">
+</app-input-fields>
 
-<input class="form-control mb-2"
-       placeholder="Email"
-       formControlName="email">
+<app-input-fields
+  [form]="activeForm"
+  controlName="email"
+  placeholder="Email"
+  [readonly]="true"
+  type="email">
+</app-input-fields>
 
-<input class="form-control mb-2"
-       placeholder="Mobile"
-       formControlName="mobile">
+<app-input-fields
+  [form]="activeForm"
+  controlName="mobile"
+  placeholder="Mobile">
+</app-input-fields>
 
-<select class="form-control"
-        formControlName="gender">
-  <option value="">Gender</option>
-  <option>Male</option>
-  <option>Female</option>
-  <option>Other</option>
-</select>
+<app-input-fields
+  [form]="activeForm"
+  controlName="gender"
+  placeholder="Gender"
+  [isSelect]="true"
+  [options]="['Male', 'Female', 'Other']">
+</app-input-fields>
 
 }
 
@@ -56,15 +68,35 @@
 
 <div class="text-center">
 
-<img
-[src]="previewImage || 'assets/default-profile.png'"
-class="profile-preview">
+  <!-- ✅ Preview -->
+ <!-- ✅ Preview -->
+  @if(activeForm.get('profilePhoto')?.value){
+    <app-file-preview
+      [fileUrl]="activeForm.get('profilePhoto')?.value">
+    </app-file-preview>
+  }
 
-<input
-type="file"
-accept="image/*"
-class="form-control mt-3"
-(change)="onFileSelected($event)">
+
+  <!-- ❌ Show placeholder if no image -->
+  @if(!activeForm.get('profilePhoto')?.value){
+    <img src="assets/default-profile.png" class="profile-preview">
+  }
+
+  <!-- ✅ Upload -->
+  <app-file-upload
+    [bucketKey]="role === 'recruiter' ? bucket.RECRUITER_DATA : bucket.JOBSEEKER_DATA"
+    [section]="uploadSection.PROFILE_PHOTO"
+    accept="image/*"
+    [replace]="true"
+    (uploaded)="onUploadSuccess($event)">
+  </app-file-upload>
+
+  <!-- ✅ Validation error -->
+  @if(activeForm.get('profilePhoto')?.touched && !activeForm.get('profilePhoto')?.value){
+    <small class="text-danger d-block mt-2">
+      Profile photo is required
+    </small>
+  }
 
 </div>
 
@@ -74,36 +106,118 @@ class="form-control mt-3"
 
 <h5>Skills & Languages</h5>
 
-<input class="form-control mb-2" placeholder="Add Skill">
+<div formArrayName="skills">
 
-<input class="form-control mb-2" placeholder="Language">
-<select class="form-control mb-2">
-<option>Proficiency</option>
-<option>Beginner</option>
-<option>Intermediate</option>
-<option>Advanced</option>
-</select>
+  @for (skill of skills.controls; track $index; let i = $index) {
+
+    <div [formGroupName]="i" class="d-flex gap-2">
+
+      <app-input-fields
+        [form]="skill"
+        controlName="value"
+        placeholder="Skill">
+      </app-input-fields>
+
+      <app-button
+        label="X"
+        variant="danger"
+        (click)="removeSkill(i)">
+      </app-button>
+
+    </div>
+
+  }
+
+</div>
+
+<app-button label="Add Skill" variant="primary" (click)="addSkill()"></app-button>
+
+<div formArrayName="languages">
+  @for (lang of languages.controls; track $index; let i = $index) {
+
+    <div [formGroupName]="i">
+
+      <app-input-fields
+        [form]="lang"
+        controlName="language"
+        placeholder="Language">
+      </app-input-fields>
+
+      <app-input-fields
+        [form]="lang"
+        controlName="proficiency"
+        placeholder="Proficiency"
+        [isSelect]="true"
+        [options]="['Beginner','Intermediate','Advanced']">
+      </app-input-fields>
+
+      <app-button
+        label="X"
+        variant="danger"
+        type="button"
+        (click)="removeLanguage(i)">
+      </app-button>
+
+    </div>
+
+  }
+
+</div>
+
+<app-button label="Add Language" variant="primary" (click)="addLanguage()"></app-button>
 
 }
 
 @if(step === 4){
 
-<h5>Social Profiles</h5>
 
-<select class="form-control mb-2">
-<option>Platform</option>
-<option>LinkedIn</option>
-<option>GitHub</option>
-<option>Portfolio</option>
-<option>Twitter / X</option>
-<option>Instagram</option>
-<option>Facebook</option>
-<option>Dribbble</option>
-<option>Behance</option>
-</select>
+  <h5>Social Media Profiles</h5>
 
-<input class="form-control mb-2" placeholder="Profile Link">
+<div formArrayName="socialProfiles">
 
+  @for (sp of socialProfiles.controls; track $index; let i = $index) {
+
+    <div [formGroupName]="i" class="mb-3 border p-2 rounded">
+
+      <app-input-fields
+        [form]="sp"
+        controlName="platform"
+        placeholder="Platform"
+        [isSelect]="true"
+        [options]="socialPlatformOptions">
+      </app-input-fields>
+
+<div class="d-flex align-items-center gap-2">
+
+  @if(sp.value.platform){
+    <i [class]="getSocialIcon(sp.value.platform)"></i>
+  }
+
+  <app-input-fields
+    [form]="sp"
+    controlName="link"
+    placeholder="Profile Link">
+  </app-input-fields>
+
+</div>
+
+      <app-button
+        label="Remove"
+        variant="danger"
+        (click)="removeSocialProfile(i)">
+      </app-button>
+
+    </div>
+
+  }
+
+</div>
+
+<app-button
+  label="Add Social Profile"
+  variant="primary"
+  (click)="addSocialProfile()">
+</app-button>
 }
 
 
@@ -114,21 +228,31 @@ class="form-control mt-3"
 
 <div formGroupName="currentExperience">
 
-<input class="form-control mb-2"
-       placeholder="Job Title"
-       formControlName="jobTitle">
+<app-input-fields
+  [form]="currentExperienceGroup"
+  controlName="jobTitle"
+  placeholder="Job Title">
+</app-input-fields>
 
-<input class="form-control mb-2"
-       placeholder="Company"
-       formControlName="company">
 
-<input class="form-control mb-2"
-       placeholder="Duration"
-       formControlName="duration">
+<app-input-fields
+  [form]="currentExperienceGroup"
+  controlName="company"
+  placeholder="Company">
+</app-input-fields>
 
-<textarea class="form-control"
-          placeholder="Description"
-          formControlName="description"></textarea>
+<app-input-fields
+  [form]="currentExperienceGroup"
+  controlName="duration"
+  placeholder="Duration">
+</app-input-fields>
+
+<app-input-fields
+  [form]="currentExperienceGroup"
+  controlName="description"
+  placeholder="Description"
+  [isTextarea]="true">
+</app-input-fields>
 
 </div>
 
@@ -137,37 +261,80 @@ class="form-control mt-3"
 <!-- ✅ RECRUITER ONLY -->
 @if(role === 'recruiter'){
 
-<input class="form-control mb-2"
-       placeholder="Company Name"
-       formControlName="companyName">
+<app-input-fields
+  [form]="activeForm"
+  controlName="companyName"
+  placeholder="Company Name">
+</app-input-fields>
 
-<input class="form-control mb-2"
-       placeholder="Sector / Industry"
-       formControlName="sector">
+<app-input-fields
+  [form]="activeForm"
+  controlName="sector"
+  placeholder="Sector / Industry">
+</app-input-fields>
 
-<input class="form-control mb-2"
-       placeholder="Designation"
-       formControlName="designation">
+<app-input-fields
+  [form]="activeForm"
+  controlName="designation"
+  placeholder="Designation">
+</app-input-fields>
 
-<input type="number"
-       class="form-control mb-2"
-       placeholder="Years of Experience"
-       formControlName="yearsOfExperience">
+<app-input-fields
+  [form]="activeForm"
+  controlName="yearsOfExperience"
+  placeholder="Years of Experience"
+  type="number">
+</app-input-fields>
 
 }
 
 }
 
-@if(step === 6 && role === 'jobSeeker'){
+@if(step === 6){
+
+@if(role === 'jobSeeker'){
 
 <h5>Previous Experience</h5>
 
-<input class="form-control mb-2" placeholder="Job Title">
-<input class="form-control mb-2" placeholder="Company">
-<input class="form-control mb-2" placeholder="Duration">
+<div formArrayName="experiences">
+  @for (exp of experiences.controls; track $index; let i = $index) {
 
-<textarea class="form-control"
-placeholder="Description"></textarea>
+    <div [formGroupName]="i" class="border p-2 mb-3 rounded">
+
+      <app-input-fields [form]="exp" controlName="jobTitle" placeholder="Job Title"></app-input-fields>
+      <app-input-fields [form]="exp" controlName="company" placeholder="Company"></app-input-fields>
+      <app-input-fields [form]="exp" controlName="duration" placeholder="Duration"></app-input-fields>
+
+      <app-input-fields
+        [form]="exp"
+        controlName="description"
+        placeholder="Description"
+        [isTextarea]="true">
+      </app-input-fields>
+
+      <app-button label="Remove" variant="danger" (click)="removeExperience(i)"></app-button>
+
+    </div>
+
+  }
+</div>
+
+<app-button label="Add Experience" variant="primary" (click)="addExperience()"></app-button>
+
+}
+
+@if(role === 'recruiter'){
+
+<h5>Profile Bio</h5>
+
+<app-input-fields
+  [form]="activeForm"
+  controlName="bioDescription"
+  placeholder="Description"
+  [isTextarea]="true">
+</app-input-fields>
+
+}
 
 }
 
@@ -175,26 +342,41 @@ placeholder="Description"></textarea>
 
 <h5>Certifications</h5>
 
-<input class="form-control mb-2" placeholder="Certification Name">
-<input class="form-control mb-2" placeholder="Issued By">
-<input type="date" class="form-control mb-2">
+<div formArrayName="certifications">
 
-<input class="form-control mb-2"
-placeholder="Certificate URL">
+  @for (cert of certifications.controls; track $index; let i = $index) {
+
+    <div [formGroupName]="i" class="border p-2 mb-2">
+
+      <app-input-fields [form]="cert" controlName="name" placeholder="Certification Name"></app-input-fields>
+
+      <app-input-fields [form]="cert" controlName="issuedBy" placeholder="Issued By"></app-input-fields>
+
+      <app-input-fields [form]="cert" controlName="issuedDate" type="date" placeholder="Date"></app-input-fields>
+
+      <app-input-fields [form]="cert" controlName="certificateUrl" placeholder="URL"></app-input-fields>
+
+      <app-button label="Remove" variant="danger" (click)="removeCertification(i)"></app-button>
+
+    </div>
+
+  }
+
+</div>
+
+<app-button label="Add Certification" (click)="addCertification()"></app-button>
 
 }
 
-@if(
-  (role === 'jobSeeker' && step === 8) ||
-  (role === 'recruiter' && step === 6)
-){
+@if(step === 8 && role === 'jobSeeker'){
+  <h5>Profile Bio</h5>
 
-<h5>Profile Bio</h5>
-
-<textarea class="form-control"
-          placeholder="Write your professional bio"
-          formControlName="bioDescription"></textarea>
-
+  <app-input-fields
+    [form]="activeForm"
+    controlName="bioDescription"
+    placeholder="Description"
+    [isTextarea]="true">
+  </app-input-fields>
 }
 
 
@@ -202,39 +384,21 @@ placeholder="Certificate URL">
 
 <div class="step-navigation">
 
-<button
-class="btn btn-outline-secondary"
-(click)="prevStep()"
-[disabled]="step === 1">
-
-Previous
-
-</button>
+<app-button label="Previous" (click)="prevStep()"  [disabled]="step === 1" variant="secondary" ></app-button>
 
 @if(step < totalSteps){
-
-<button
-class="btn btn-primary"
-(click)="nextStep()">
-
-Next
-
-</button>
-
+<app-button label="Next" (click)="nextStep()" type="button" variant="primary" ></app-button>
 }
 
 @if(step === totalSteps){
-
-<button
-class="btn btn-success"
-(click)="onSubmit()">
-Submit
-</button>
+<app-button label="Submit" type="submit"  variant="success"
+  [disabled]="activeForm.invalid"></app-button>
 
 }
 
 </div>
 </form>
+
 </div>
 
 </div>

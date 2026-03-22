@@ -9,869 +9,137 @@
     <div class="row g-3 align-items-center">
 
       <!-- Search -->
-          <div class="col-xl-3 col-lg-4 col-md-12">
-        <input type="text" class="form-control filter-input" placeholder="Search recruiter...">
+      <div class="col-xl-3 col-lg-4 col-md-12">
+         <input
+        type="text"
+        class="form-control filter-input"
+        placeholder="Search recruiter..."
+        [(ngModel)]="searchText">
       </div>
 
       <!-- Company -->
-       <div class="col-xl-2 col-lg-3 col-md-6">
-        <select class="form-select filter-select">
-          <option selected>Company</option>
-          <option>TechNova</option>
-          <option>GlobalHire</option>
-          <option>HireBridge</option>
-        </select>
+      <div class="col-xl-2 col-lg-3 col-md-6">
+         <select class="form-select filter-select" [(ngModel)]="selectedCompany">
+        <option value="">Company</option>
+
+        @for (c of companies; track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
       </div>
 
       <!-- Department -->
-       <div class="col-xl-2 col-lg-3 col-md-6">
-        <select class="form-select filter-select">
-          <option selected>Department</option>
-          <option>HR Manager</option>
-          <option>Recruiter</option>
-          <option>Hiring Manager</option>
-        </select>
+      <div class="col-xl-2 col-lg-3 col-md-6">
+        <select class="form-select filter-select" [(ngModel)]="selectedPosition">
+        <option value="">Department</option>
+
+        @for (p of positions; track p) {
+          <option [value]="p">{{ p }}</option>
+        }
+      </select>
       </div>
 
       <!-- Status -->
-       <div class="col-xl-2 col-lg-3 col-md-6">
-        <select class="form-select filter-select">
-          <option selected>Status</option>
-          <option>Active</option>
-          <option>Inactive</option>
-          <option>Blocked</option>
-        </select>
+      <div class="col-xl-2 col-lg-3 col-md-6">
+         <select class="form-select filter-select" [(ngModel)]="selectedStatus">
+        <option value="">Status</option>
+
+        @for (s of statuses; track s) {
+          <option [value]="s">{{ s }}</option>
+        }
+      </select>
       </div>
 
       <!-- Buttons -->
-    <div class="col-xl-3 col-lg-4 col-md-12 d-flex gap-2">
+      <div class="col-xl-3 col-lg-4 col-md-12 d-flex gap-2">
 
-      <button class="btn btn-primary w-100">
-        Apply
-      </button>
+        <app-button variant="primary" label="Apply" size="md" class="w-100" (click)="applyFilters()"></app-button>
+        <app-button variant="secondary" label="Reset" size="md" class="w-100" (click)="resetFilters()"></app-button>
 
-      <button class="btn btn-secondary w-100">
-        Reset
-      </button>
-
-    </div>
+      </div>
 
 
     </div>
 
-  </div>
-
-  <div class="table-responsive table-card d-none d-lg-block">
-    <table class="table table-hover align-middle clean-table">
-
-      <thead class="table-light">
-        <tr>
-          <th>S.NO</th>
-          <th>Profile</th>
-          <th>Full Name</th>
-          <th>Email</th>
-          <th>Phone Number</th>
-          <th>Company</th>
-          <th>Position</th>
-          <th>Status</th>
-          <th class="text-center">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        <tr>
-          <td>1</td>
-          <td><img src="https://i.pravatar.cc/40?img=1" class="recruiter-img"></td>
-          <td>Rahul Sharma</td>
-          <td>rahul@technova.com</td>
-          <td>9876543210</td>
-          <td>TechNova Pvt Ltd</td>
-          <td>HR Manager</td>
-          <td><span class="badge bg-success">Active</span></td>
-          <td class="text-center">
-
-            <div class="dropdown">
-
-              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
-
-              <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewProfileModal">
-                    View Profile
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#blockModal">
-                    Block
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unblockModal">
-                    Unblock
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal">
-                    Deactivate
-                  </button>
-                </li>
-
-              </ul>
-
-            </div>
-
-          </td>
-        </tr>
-
-        <tr>
-          <td>2</td>
-          <td><img src="https://i.pravatar.cc/40?img=2" class="recruiter-img"></td>
-          <td>Anita Verma</td>
-          <td>anita@globalhire.com</td>
-          <td>9123456780</td>
-          <td>GlobalHire Solutions</td>
-          <td>Talent Acquisition Lead</td>
-          <td><span class="badge bg-success">Active</span></td>
-          <td class="text-center">
-
-            <div class="dropdown">
-
-              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
-
-              <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewProfileModal">
-                    View Profile
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#blockModal">
-                    Block
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unblockModal">
-                    Unblock
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal">
-                    Deactivate
-                  </button>
-                </li>
-
-              </ul>
-
-            </div>
-
-          </td>
-        </tr>
-
-        <tr>
-          <td>3</td>
-          <td><img src="https://i.pravatar.cc/40?img=3" class="recruiter-img"></td>
-          <td>Vikram Singh</td>
-          <td>vikram@hirebridge.com</td>
-          <td>9988776655</td>
-          <td>HireBridge</td>
-          <td>Senior Recruiter</td>
-          <td><span class="badge bg-danger">Inactive</span></td>
-          <td class="text-center">
-
-            <div class="dropdown">
-
-              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
-
-              <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewProfileModal">
-                    View Profile
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#blockModal">
-                    Block
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unblockModal">
-                    Unblock
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal">
-                    Deactivate
-                  </button>
-                </li>
-
-              </ul>
-
-            </div>
-
-          </td>
-        </tr>
-
-        <tr>
-          <td>4</td>
-          <td><img src="https://i.pravatar.cc/40?img=4" class="recruiter-img"></td>
-          <td>Pooja Mehta</td>
-          <td>pooja@talentforge.com</td>
-          <td>9898989898</td>
-          <td>TalentForge</td>
-          <td>HR Specialist</td>
-          <td><span class="badge bg-success">Active</span></td>
-          <td class="text-center">
-
-            <div class="dropdown">
-
-              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
-
-              <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewProfileModal">
-                    View Profile
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#blockModal">
-                    Block
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unblockModal">
-                    Unblock
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal">
-                    Deactivate
-                  </button>
-                </li>
-
-              </ul>
-
-            </div>
-
-          </td>
-        </tr>
-
-        <tr>
-          <td>5</td>
-          <td><img src="https://i.pravatar.cc/40?img=5" class="recruiter-img"></td>
-          <td>Karan Patel</td>
-          <td>karan@nextstep.com</td>
-          <td>9001122334</td>
-          <td>NextStep Careers</td>
-          <td>Hiring Manager</td>
-          <td><span class="badge bg-success">Active</span></td>
-          <td class="text-center">
-
-            <div class="dropdown">
-
-              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
-
-              <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewProfileModal">
-                    View Profile
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#blockModal">
-                    Block
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unblockModal">
-                    Unblock
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal">
-                    Deactivate
-                  </button>
-                </li>
-
-              </ul>
-
-            </div>
-
-          </td>
-        </tr>
-
-        <tr>
-          <td>6</td>
-          <td><img src="https://i.pravatar.cc/40?img=6" class="recruiter-img"></td>
-          <td>Sneha Reddy</td>
-          <td>sneha@careerpath.com</td>
-          <td>9012345678</td>
-          <td>CareerPath</td>
-          <td>Recruitment Lead</td>
-          <td><span class="badge bg-danger">Inactive</span></td>
-          <td class="text-center">
-
-            <div class="dropdown">
-
-              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
-
-              <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewProfileModal">
-                    View Profile
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#blockModal">
-                    Block
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unblockModal">
-                    Unblock
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal">
-                    Deactivate
-                  </button>
-                </li>
-
-              </ul>
-
-            </div>
-
-          </td>
-        </tr>
-
-        <tr>
-          <td>7</td>
-          <td><img src="https://i.pravatar.cc/40?img=7" class="recruiter-img"></td>
-          <td>Arjun Kapoor</td>
-          <td>arjun@brighthire.com</td>
-          <td>8887766554</td>
-          <td>BrightHire</td>
-          <td>HR Director</td>
-          <td><span class="badge bg-success">Active</span></td>
-          <td class="text-center">
-
-            <div class="dropdown">
-
-              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
-
-              <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewProfileModal">
-                    View Profile
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#blockModal">
-                    Block
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unblockModal">
-                    Unblock
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal">
-                    Deactivate
-                  </button>
-                </li>
-
-              </ul>
-
-            </div>
-
-          </td>
-        </tr>
-
-        <tr>
-          <td>8</td>
-          <td><img src="https://i.pravatar.cc/40?img=8" class="recruiter-img"></td>
-          <td>Neha Gupta</td>
-          <td>neha@talentlink.com</td>
-          <td>9112233445</td>
-          <td>TalentLink</td>
-          <td>HR Manager</td>
-          <td><span class="badge bg-success">Active</span></td>
-          <td class="text-center">
-
-            <div class="dropdown">
-
-              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
-
-              <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewProfileModal">
-                    View Profile
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#blockModal">
-                    Block
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unblockModal">
-                    Unblock
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal">
-                    Deactivate
-                  </button>
-                </li>
-
-              </ul>
-
-            </div>
-
-          </td>
-        </tr>
-
-        <tr>
-          <td>9</td>
-          <td><img src="https://i.pravatar.cc/40?img=9" class="recruiter-img"></td>
-          <td>Rohit Kumar</td>
-          <td>rohit@futurejobs.com</td>
-          <td>9223344556</td>
-          <td>FutureJobs</td>
-          <td>Recruiter</td>
-          <td><span class="badge bg-success">Active</span></td>
-          <td class="text-center">
-
-            <div class="dropdown">
-
-              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
-
-              <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewProfileModal">
-                    View Profile
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#blockModal">
-                    Block
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unblockModal">
-                    Unblock
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal">
-                    Deactivate
-                  </button>
-                </li>
-
-              </ul>
-
-            </div>
-
-          </td>
-        </tr>
-
-        <tr>
-          <td>10</td>
-          <td><img src="https://i.pravatar.cc/40?img=10" class="recruiter-img"></td>
-          <td>Priya Nair</td>
-          <td>priya@elite.com</td>
-          <td>9334455667</td>
-          <td>Elite Recruiters</td>
-          <td>Talent Manager</td>
-          <td><span class="badge bg-danger">Inactive</span></td>
-          <td class="text-center">
-
-            <div class="dropdown">
-
-              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
-
-              <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewProfileModal">
-                    View Profile
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#blockModal">
-                    Block
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unblockModal">
-                    Unblock
-                  </button>
-                </li>
-
-                <li>
-                  <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal">
-                    Deactivate
-                  </button>
-                </li>
-
-              </ul>
-
-            </div>
-
-          </td>
-        </tr>
-
-      </tbody>
-
-    </table>
-
-  </div>
-
-  <div class="table-footer  d-none d-lg-block mb-5">
-
-    <div class="footer-wrapper">
-
-      <small class="result-text">
-        Showing <strong>1–10</strong> of <strong>100</strong> recruiters
-      </small>
-
-      <nav>
-        <ul class="pagination pagination-sm custom-pagination mb-0">
-
-          <li class="page-item disabled">
-            <a class="page-link">
-              <i class="bi bi-chevron-left"></i>
-            </a>
-          </li>
-
-          <li class="page-item active">
-            <a class="page-link">1</a>
-          </li>
-
-          <li class="page-item">
-            <a class="page-link">2</a>
-          </li>
-
-          <li class="page-item">
-            <a class="page-link">
-              <i class="bi bi-chevron-right"></i>
-            </a>
-          </li>
-
-        </ul>
-      </nav>
+      <!-- Chips -->
+  @if (getActiveFilters().length > 0) {
+    <div class="d-flex flex-wrap gap-2 mt-3">
+
+      @for (f of getActiveFilters(); track f.key) {
+        <span class="badge badge-primary d-flex align-items-center gap-2 px-3 py-2">
+          {{ f.label }}
+          <i class="bi bi-x-lg" (click)="removeFilter(f.key)" style="cursor:pointer;"></i>
+        </span>
+      }
 
     </div>
+  }
+
 
   </div>
 
+  <app-table [columns]="columns" [data]="paginatedRecruiters" class="d-none d-lg-block mb-5"></app-table>
 
   <div class="d-lg-none">
 
     <ol class="list-group recruiter-list">
 
-      <!-- 1 -->
+      @for (r of paginatedRecruiters; track r.id) {
+
       <li class="list-group-item recruiter-card">
-        <span class="badge bg-success recruiter-status">Active</span>
+
+        <span class="badge" style="position:absolute;  top:12px;
+  right:12px;" [ngClass]="{
+    'badge-success': r.status === 'Active',
+    'badge-danger': r.status === 'Inactive'
+  }">
+          {{ r.status }}
+        </span>
 
         <div class="d-flex align-items-center gap-3 mb-2">
-          <img src="https://i.pravatar.cc/40?img=1" class="recruiter-img">
+          <img [src]="r.image" class="recruiter-img">
 
           <div class="flex-grow-1">
-            <div class="fw-semibold">Rahul Sharma</div>
-            <div class="small text-muted">TechNova Pvt Ltd • HR Manager</div>
-            <div class="small text-muted">rahul@technova.com</div>
-            <div class="small text-muted">📞 9876543210</div>
+            <div class="fw-semibold">{{ r.name }}</div>
+            <div class="small text-muted">
+              {{ r.company }} • {{ r.position }}
+            </div>
+            <div class="small text-muted">{{ r.email }}</div>
+            <div class="small text-muted">📞 {{ r.phone }}</div>
           </div>
         </div>
 
         <div class="d-flex flex-nowrap gap-1">
-          <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewProfileModal">View Profile</button>
-          <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#blockModal">Block</button>
-          <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#unblockModal">Unblock</button>
-          <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deactivateModal">Deactivate</button>
+
+          <app-button label="View" variant="primary" size="sm" (click)="onView(r)">
+          </app-button>
+
+          <app-button label="Block" variant="warning" size="sm" (click)="onBlock(r)">
+          </app-button>
+
+          <app-button label="Unblock" variant="success" size="sm" (click)="onUnblock(r)">
+          </app-button>
+
+          <app-button label="Deactivate" variant="danger" size="sm" (click)="onDeactivate(r)">
+          </app-button>
         </div>
       </li>
 
-      <!-- 2 -->
-      <li class="list-group-item recruiter-card">
-        <span class="badge bg-success recruiter-status">Active</span>
-
-        <div class="d-flex align-items-center gap-3 mb-2">
-          <img src="https://i.pravatar.cc/40?img=2" class="recruiter-img">
-
-          <div class="flex-grow-1">
-            <div class="fw-semibold">Anita Verma</div>
-            <div class="small text-muted">GlobalHire • Talent Lead</div>
-            <div class="small text-muted">anita@globalhire.com</div>
-            <div class="small text-muted">📞 9123456780</div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-nowrap gap-1">
-          <button class="btn btn-primary btn-sm">View Profile</button>
-          <button class="btn btn-warning btn-sm">Block</button>
-          <button class="btn btn-success btn-sm">Unblock</button>
-          <button class="btn btn-danger btn-sm">Deactivate</button>
-        </div>
-      </li>
-
-      <!-- 3 -->
-      <li class="list-group-item recruiter-card">
-        <span class="badge bg-secondary recruiter-status">Inactive</span>
-
-        <div class="d-flex align-items-center gap-3 mb-2">
-          <img src="https://i.pravatar.cc/40?img=3" class="recruiter-img">
-
-          <div class="flex-grow-1">
-            <div class="fw-semibold">Vikram Singh</div>
-            <div class="small text-muted">HireBridge • Senior Recruiter</div>
-            <div class="small text-muted">vikram@hirebridge.com</div>
-            <div class="small text-muted">📞 9988776655</div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-nowrap gap-1">
-          <button class="btn btn-primary btn-sm">View Profile</button>
-          <button class="btn btn-warning btn-sm">Block</button>
-          <button class="btn btn-success btn-sm">Unblock</button>
-          <button class="btn btn-danger btn-sm">Deactivate</button>
-        </div>
-      </li>
-
-      <!-- 4 -->
-      <li class="list-group-item recruiter-card">
-        <span class="badge bg-success recruiter-status">Active</span>
-
-        <div class="d-flex align-items-center gap-3 mb-2">
-          <img src="https://i.pravatar.cc/40?img=4" class="recruiter-img">
-
-          <div class="flex-grow-1">
-            <div class="fw-semibold">Pooja Mehta</div>
-            <div class="small text-muted">TalentForge • HR Specialist</div>
-            <div class="small text-muted">pooja@talentforge.com</div>
-            <div class="small text-muted">📞 9898989898</div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-nowrap gap-1">
-          <button class="btn btn-primary btn-sm">View Profile</button>
-          <button class="btn btn-warning btn-sm">Block</button>
-          <button class="btn btn-success btn-sm">Unblock</button>
-          <button class="btn btn-danger btn-sm">Deactivate</button>
-        </div>
-      </li>
-
-      <!-- 5 -->
-      <li class="list-group-item recruiter-card">
-        <span class="badge bg-success recruiter-status">Active</span>
-
-        <div class="d-flex align-items-center gap-3 mb-2">
-          <img src="https://i.pravatar.cc/40?img=5" class="recruiter-img">
-
-          <div class="flex-grow-1">
-            <div class="fw-semibold">Karan Patel</div>
-            <div class="small text-muted">NextStep Careers • Hiring Manager</div>
-            <div class="small text-muted">karan@nextstep.com</div>
-            <div class="small text-muted">📞 9001122334</div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-nowrap gap-1">
-          <button class="btn btn-primary btn-sm">View Profile</button>
-          <button class="btn btn-warning btn-sm">Block</button>
-          <button class="btn btn-success btn-sm">Unblock</button>
-          <button class="btn btn-danger btn-sm">Deactivate</button>
-        </div>
-      </li>
-
-      <!-- 6 -->
-      <li class="list-group-item recruiter-card">
-        <span class="badge bg-secondary recruiter-status">Inactive</span>
-
-        <div class="d-flex align-items-center gap-3 mb-2">
-          <img src="https://i.pravatar.cc/40?img=6" class="recruiter-img">
-
-          <div class="flex-grow-1">
-            <div class="fw-semibold">Sneha Reddy</div>
-            <div class="small text-muted">CareerPath • Recruitment Lead</div>
-            <div class="small text-muted">sneha@careerpath.com</div>
-            <div class="small text-muted">📞 9012345678</div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-nowrap gap-1">
-          <button class="btn btn-primary btn-sm">View Profile</button>
-          <button class="btn btn-warning btn-sm">Block</button>
-          <button class="btn btn-success btn-sm">Unblock</button>
-          <button class="btn btn-danger btn-sm">Deactivate</button>
-        </div>
-      </li>
-
-      <!-- 7 -->
-      <li class="list-group-item recruiter-card">
-        <span class="badge bg-success recruiter-status">Active</span>
-
-        <div class="d-flex align-items-center gap-3 mb-2">
-          <img src="https://i.pravatar.cc/40?img=7" class="recruiter-img">
-
-          <div class="flex-grow-1">
-            <div class="fw-semibold">Arjun Kapoor</div>
-            <div class="small text-muted">BrightHire • HR Director</div>
-            <div class="small text-muted">arjun@brighthire.com</div>
-            <div class="small text-muted">📞 8887766554</div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-nowrap gap-1">
-          <button class="btn btn-primary btn-sm">View Profile</button>
-          <button class="btn btn-warning btn-sm">Block</button>
-          <button class="btn btn-success btn-sm">Unblock</button>
-          <button class="btn btn-danger btn-sm">Deactivate</button>
-        </div>
-      </li>
-
-      <!-- 8 -->
-      <li class="list-group-item recruiter-card">
-        <span class="badge bg-success recruiter-status">Active</span>
-
-        <div class="d-flex align-items-center gap-3 mb-2">
-          <img src="https://i.pravatar.cc/40?img=8" class="recruiter-img">
-
-          <div class="flex-grow-1">
-            <div class="fw-semibold">Neha Gupta</div>
-            <div class="small text-muted">TalentLink • HR Manager</div>
-            <div class="small text-muted">neha@talentlink.com</div>
-            <div class="small text-muted">📞 9112233445</div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-nowrap gap-1">
-          <button class="btn btn-primary btn-sm">View Profile</button>
-          <button class="btn btn-warning btn-sm">Block</button>
-          <button class="btn btn-success btn-sm">Unblock</button>
-          <button class="btn btn-danger btn-sm">Deactivate</button>
-        </div>
-      </li>
-
-      <!-- 9 -->
-      <li class="list-group-item recruiter-card">
-        <span class="badge bg-success recruiter-status">Active</span>
-
-        <div class="d-flex align-items-center gap-3 mb-2">
-          <img src="https://i.pravatar.cc/40?img=9" class="recruiter-img">
-
-          <div class="flex-grow-1">
-            <div class="fw-semibold">Rohit Kumar</div>
-            <div class="small text-muted">FutureJobs • Recruiter</div>
-            <div class="small text-muted">rohit@futurejobs.com</div>
-            <div class="small text-muted">📞 9223344556</div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-nowrap gap-1">
-          <button class="btn btn-primary btn-sm">View Profile</button>
-          <button class="btn btn-warning btn-sm">Block</button>
-          <button class="btn btn-success btn-sm">Unblock</button>
-          <button class="btn btn-danger btn-sm">Deactivate</button>
-        </div>
-      </li>
-
-      <!-- 10 -->
-      <li class="list-group-item recruiter-card">
-        <span class="badge bg-secondary recruiter-status">Inactive</span>
-
-        <div class="d-flex align-items-center gap-3 mb-2">
-          <img src="https://i.pravatar.cc/40?img=10" class="recruiter-img">
-
-          <div class="flex-grow-1">
-            <div class="fw-semibold">Priya Nair</div>
-            <div class="small text-muted">Elite Recruiters • Talent Manager</div>
-            <div class="small text-muted">priya@elite.com</div>
-            <div class="small text-muted">📞 9334455667</div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-nowrap gap-1">
-          <button class="btn btn-primary btn-sm">View Profile</button>
-          <button class="btn btn-warning btn-sm">Block</button>
-          <button class="btn btn-success btn-sm">Unblock</button>
-          <button class="btn btn-danger btn-sm">Deactivate</button>
-        </div>
-      </li>
-
+      }
 
     </ol>
 
   </div>
 
-
+<app-pagination
+  [total]="total"
+  [page]="page"
+  [limit]="limit"
+  (pageChange)="onPageChange($event)"
+  (limitChange)="onLimitChange($event)">
+</app-pagination>
 
 </div>
-
-
-
-
-
 
 
 
@@ -913,9 +181,6 @@
   </div>
 </div>
 
-
-
-
 <div class="modal fade" id="blockModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -937,8 +202,6 @@
     </div>
   </div>
 </div>
-
-
 
 <div class="modal fade" id="unblockModal">
   <div class="modal-dialog modal-dialog-centered">
@@ -962,8 +225,6 @@
   </div>
 </div>
 
-
-
 <div class="modal fade" id="deactivateModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -985,3 +246,72 @@
     </div>
   </div>
 </div>
+
+
+
+
+<ng-template #statusTemplate let-row>
+  <span
+    class="badge"
+    [ngClass]="row.status === 'Active' ? 'badge-success' : 'badge-danger'">
+    {{ row.status || '--' }}
+  </span>
+</ng-template>
+
+<ng-template #imageTemplate let-row>
+  <div class="d-flex align-items-center gap-2">
+    <img
+      [src]="row.image"
+      width="32"
+      height="32"
+      class="rounded-circle"
+    />
+  </div>
+</ng-template>
+
+<ng-template #actionsTemplate let-row="row">
+  <div class="d-flex justify-content-center">
+
+
+    <div class="dropdown ">
+
+     <button
+        class="btn btn-sm btn-light"
+        type="button"
+        data-bs-toggle="dropdown"
+        data-bs-display="static"
+        data-bs-boundary="viewport">
+        <i class="bi bi-three-dots-vertical"></i>
+      </button>
+
+      <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
+
+                <li>
+                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewProfileModal">
+                    View Profile
+                  </button>
+                </li>
+
+                <li>
+                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#blockModal">
+                    Block
+                  </button>
+                </li>
+
+                <li>
+                  <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#unblockModal">
+                    Unblock
+                  </button>
+                </li>
+
+                <li>
+                  <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal">
+                    Deactivate
+                  </button>
+                </li>
+      </ul>
+
+    </div>
+
+  </div>
+</ng-template>

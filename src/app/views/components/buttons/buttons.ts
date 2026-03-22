@@ -13,4 +13,5 @@ export class Buttons {
   @Input() type: 'button' | 'submit' = 'button';
   @Input() isLoading: boolean = false;
   @Input() disabled: boolean = false;
+  @Input() size: 'sm' | 'md' | 'lg' = 'sm';
 }

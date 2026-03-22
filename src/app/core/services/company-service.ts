@@ -53,16 +53,16 @@ updateCompany(
 
 
 
-getCompaniesList(): Observable<{
+getCompaniesDropdown(): Observable<{
   success: boolean;
   count: number;
-  data: string[];
+  data: { _id: string; companyName: string }[];
 }> {
   return this.http.get<{
     success: boolean;
     count: number;
-    data: string[];
-  }>(`${this.baseUrl}/company/list`)
+    data: { _id: string; companyName: string }[];
+  }>(`${this.baseUrl}/company/dropdown`)
   .pipe(catchError(this.handleError));
 }
 
@@ -85,15 +85,8 @@ getAllCompanies(): Observable<{
 
 
 
-getCompanyById(
-  companyId: string
-): Observable<{ success: boolean; data: Company }> {
-  return this.http
-    .get<{ success: boolean; data: Company }>(
-      `${this.baseUrl}/company/${companyId}`,
-      { headers: this.getHeaders() }
-    )
-    .pipe(catchError(this.handleError));
+getCompanyById( companyId: string): Observable<{ success: boolean; data: Company }> {
+  return this.http.get<{ success: boolean; data: Company }>(`${this.baseUrl}/company/${companyId}`).pipe(catchError(this.handleError));
 }
 
 

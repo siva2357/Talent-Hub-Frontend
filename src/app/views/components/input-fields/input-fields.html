@@ -1,20 +1,36 @@
 <div class="mb-3" [formGroup]="form">
 
-  @if (!isSelect) {
+  @if (isTextarea) {
+    <textarea
+      class="form-control"
+      [placeholder]="placeholder"
+      [readonly]="readonly"
+      [formControlName]="controlName"
+      [ngClass]="{ 'is-invalid': isInvalid() }"
+      rows="4">
+    </textarea>
+  }
+
+  @else if (!isSelect) {
     <input
       [type]="type"
       class="form-control"
       [placeholder]="placeholder"
+      [readonly]="readonly"
       [formControlName]="controlName"
       [ngClass]="{ 'is-invalid': isInvalid() }"
+      [ngStyle]="height ? { height: height } : null"
     />
   } @else {
     <select
       class="form-select"
       [formControlName]="controlName"
       [ngClass]="{ 'is-invalid': isInvalid() }"
+      [ngStyle]="height ? { height: height } : null"
     >
-      <option value="">Select option</option>
+<option value="" disabled>
+  {{ placeholder || 'Select option' }}
+</option>
 
       @for (opt of options; track opt) {
         <option [value]="opt">{{ opt }}</option>
@@ -22,7 +38,6 @@
     </select>
   }
 
-  <!-- ✅ Error Message -->
   @if (isInvalid()) {
     <small class="error-text">
       {{ getErrorMessage() }}
