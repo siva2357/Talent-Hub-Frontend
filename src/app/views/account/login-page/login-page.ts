@@ -61,7 +61,7 @@ next: (res) => {
   localStorage.setItem('role', role);
 
   if (role === 'admin') {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['user/dashboard']);
     return;
   }
 
@@ -74,10 +74,10 @@ next: (res) => {
 
   switch (role) {
     case 'recruiter':
-      this.router.navigate(['/my-jobposts']);
+      this.router.navigate(['user/my-jobposts']);
       break;
     case 'jobSeeker':
-      this.router.navigate(['/jobprofile']);
+      this.router.navigate(['user/jobprofile']);
       break;
   }
 },

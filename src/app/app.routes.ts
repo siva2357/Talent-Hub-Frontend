@@ -40,6 +40,8 @@ export const routes: Routes = [
   { path: 'register/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
   { path: 'login', component: LoginPage, title: 'Login' },
+
+
   { path: 'profile-form', component: ProfileForm, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: ['jobSeeker', 'recruiter'] }},
   { path: 'forgot-password', component: ForgotPasswordPage, title: 'OTP Verification' },
   { path: 'reset-otp-verification', component: ResetOtpVerificationPage,title: 'OTP Verification'},
@@ -50,11 +52,7 @@ export const routes: Routes = [
   { path: 'maintenance', component: MaintenancePage, title: 'Maintenance' },
   { path: 'error', component: ErrorPage, title: 'Error' },
   { path: 'access-denied', component: UnauthorizedPage, title: 'Access denied' },
-
-    // default root
+  { path: 'user', loadChildren: () => import('./views/pages/user-pages/user-pages.routes') .then(m => m.USER_ROUTES),canActivate: [AuthGuard]},
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-
-  { path: '', loadChildren: () => import('./views/pages/user-pages/user-pages.routes') .then(m => m.USER_ROUTES),},
-
   { path: '**', redirectTo: 'home' },
 ];

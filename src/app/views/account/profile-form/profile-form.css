@@ -1,84 +1,176 @@
+/* ===== PAGE LAYOUT ===== */
 .profile-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f3f4f6;
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
   padding: 20px;
 }
 
+/* ===== FORM CARD ===== */
 .profile-form-container {
   width: 100%;
-  max-width: 700px;
+  max-width: 720px;
   margin: auto;
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  padding: 32px 28px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  transition: 0.3s ease;
 }
 
+/* ===== TITLE ===== */
 .form-title {
   text-align: center;
-  margin-bottom: 25px;
-  font-weight: 600;
+  margin-bottom: 20px;
+  font-weight: 700;
+  font-size: 22px;
+  color: #1f2937;
 }
 
-/* ✅ STEP HEADER */
+/* ===== STEPPER ===== */
 .stepper {
   display: flex;
   justify-content: center;
-  gap: 12px; /* better than space-between */
+  gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 25px;
 }
 
 .step {
-  width: 35px;
-  height: 35px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  transition: 0.3s;
+  font-size: 14px;
+  transition: all 0.3s ease;
 }
 
 .step.active {
-  background: #2563eb;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
   color: white;
   transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
-/* ✅ NAVIGATION */
+/* ===== SECTION HEADINGS ===== */
+h5 {
+  margin-bottom: 15px;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* ===== INPUT SPACING ===== */
+.mb-3 {
+  margin-bottom: 14px !important;
+}
+
+/* ===== FORM GROUP CARDS (ARRAY SECTIONS) ===== */
+.border {
+  border: 1px solid #e5e7eb !important;
+  border-radius: 10px !important;
+  background: #f9fafb;
+  transition: 0.2s;
+}
+
+.border:hover {
+  border-color: #2563eb !important;
+}
+
+/* ===== PROFILE IMAGE ===== */
+.profile-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e5e7eb;
+  margin-bottom: 10px;
+  transition: 0.3s;
+}
+
+.profile-preview:hover {
+  transform: scale(1.05);
+}
+
+/* ===== BUTTON AREA ===== */
 .step-navigation {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
   margin-top: 25px;
 }
 
 .step-navigation button {
   flex: 1;
+  border-radius: 8px;
+  font-weight: 500;
 }
 
-/* ✅ PROFILE IMAGE */
-.profile-preview {
-  width: 130px;
-  height: 130px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #e5e7eb;
-  margin-bottom: 10px;
+/* ===== BUTTON IMPROVEMENTS ===== */
+button.btn {
+  transition: all 0.2s ease;
 }
 
-/* ✅ MOBILE FIX */
-@media (max-width: 576px) {
+button.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* ===== ADD BUTTONS ===== */
+app-button[label="Add Skill"],
+app-button[label="Add Language"],
+app-button[label="Add Experience"],
+app-button[label="Add Certification"],
+app-button[label="Add Social Profile"] {
+  display: block;
+  margin-top: 10px;
+}
+
+/* ===== REMOVE BUTTON ===== */
+button.btn-danger {
+  height: 38px;
+  min-width: 40px;
+  padding: 0 10px;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
   .profile-form-container {
     padding: 20px;
+    border-radius: 12px;
   }
 
+  .step {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  .profile-preview {
+    width: 90px;
+    height: 90px;
+  }
+
+  h5 {
+    font-size: 16px;
+  }
+}
+
+/* ===== SMALL MOBILE ===== */
+@media (max-width: 480px) {
   .step-navigation {
     flex-direction: row;
+  }
+
+  .step-navigation button {
+    width: 100%;
+  }
+
+  .profile-form-container {
+    padding: 16px;
   }
 }

@@ -19,6 +19,7 @@ export class InputFields {
   @Input() options: string[] = [];
 @Input() height: string = ''; // optional
 @Input() isTextarea: boolean = false;
+@Input() readonly = false;
   getControl() {
   return this.form.get(this.controlName);
 }

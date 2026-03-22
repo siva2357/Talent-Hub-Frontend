@@ -4,6 +4,7 @@
     <textarea
       class="form-control"
       [placeholder]="placeholder"
+      [readonly]="readonly"
       [formControlName]="controlName"
       [ngClass]="{ 'is-invalid': isInvalid() }"
       rows="4">
@@ -15,6 +16,7 @@
       [type]="type"
       class="form-control"
       [placeholder]="placeholder"
+      [readonly]="readonly"
       [formControlName]="controlName"
       [ngClass]="{ 'is-invalid': isInvalid() }"
       [ngStyle]="height ? { height: height } : null"
@@ -26,7 +28,7 @@
       [ngClass]="{ 'is-invalid': isInvalid() }"
       [ngStyle]="height ? { height: height } : null"
     >
-<option [ngValue]="null" disabled selected>
+<option value="" disabled>
   {{ placeholder || 'Select option' }}
 </option>
 
