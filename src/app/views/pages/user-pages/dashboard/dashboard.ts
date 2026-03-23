@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import Chart, { ChartOptions } from 'chart.js/auto';
 import { RouterModule } from '@angular/router';
 import { Table } from '../../../components/table/table';
+import { AdminService } from '../../../../core/services/admin-service';
 interface DashboardCard {
   title: string;
   description: string;
@@ -37,7 +38,7 @@ columns: any[] = [];
   jobSeekercolumns:any[]=[]
 
 
-  	constructor() {}
+  	constructor(private adminService:AdminService) {}
 
 
 
@@ -70,6 +71,9 @@ columns: any[] = [];
       { name: 'Experience', prop: 'experience' },
       { name: 'Status', template: this.statusTemplateRef },
     ]
+
+    this.recruiterList()
+    this.jobSeekerList()
 
   }
 
@@ -235,79 +239,25 @@ columns: any[] = [];
   }
 
 
+jobSeekers:any[] =[]
+recruiters:any[] =[]
 
+recruiterList() {
+  this.adminService.getAllRecruiters().subscribe({
+    next: (res: any) => {
+      this.recruiters = res.recruiters; // ✅ important
+    },
+    error: (err) => console.error(err)
+  });
+}
 
-
-  recruiters = [
-  {
-    id: '01',
-    name: 'John Smith',
-    email: 'johnsmith@email.com',
-    phone: '+91 9876543210',
-    company: 'Tech Solutions',
-    status: 'Active'
-  },
-  {
-    id: '02',
-    name: 'Emma Watson',
-    email: 'emma@email.com',
-    phone: '+91 9876543210',
-    company: 'Global Hiring',
-    status: 'Inactive'
-  },
-  {
-    id: '03',
-    name: 'Michael Lee',
-    email: 'michael@email.com',
-    phone: '+91 9876543210',
-    company: 'Future Tech',
-    status: 'Active'
-  },
-  {
-    id: '04',
-    name: 'Sophia Brown',
-    email: 'sophia@email.com',
-    phone: '+91 9876543210',
-    company: 'NextGen Corp',
-    status: 'Active'
-  }
-];
-
-
-
-jobSeekers = [
-  {
-    id: '01',
-    name: 'Arjun Kumar',
-    email: 'arjun@email.com',
-    phone: '+91 9876543210',
-    experience: '3 years',
-    status: 'Active'
-  },
-  {
-    id: '02',
-    name: 'Priya Sharma',
-    email: 'priya@email.com',
-    phone: '+91 9123456780',
-    experience: '6 years',
-    status: 'Active'
-  },
-  {
-    id: '03',
-    name: 'Rahul Verma',
-    email: 'rahul@email.com',
-    phone: '+91 9988776655',
-    experience: '4 years',
-    status: 'Inactive'
-  },
-  {
-    id: '04',
-    name: 'Sneha Patel',
-    email: 'sneha@email.com',
-    phone: '+91 9871234567',
-    experience: '5 years',
-    status: 'Active'
-  }
-];
+  jobSeekerList() {
+  this.adminService.getAllJobSeekers().subscribe({
+    next: (res: any) => {
+      this.jobSeekers = res.jobSeekers; // ✅ important
+    },
+    error: (err) => console.error(err)
+  });
+}
 
 }
