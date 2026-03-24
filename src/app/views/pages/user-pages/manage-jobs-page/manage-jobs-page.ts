@@ -6,6 +6,7 @@ import { JobpostService } from '../../../../core/services/jobpost-service';
 import { Pagination } from "../../../components/pagination/pagination";
 import { Table } from "../../../components/table/table";
 import { Buttons } from '../../../components/buttons/buttons';
+import { InputFields } from "../../../components/input-fields/input-fields";
 
 export interface JobPost {
   _id?: string;          // MongoDB id (used for update)
@@ -25,7 +26,7 @@ export interface JobPost {
 
 @Component({
   selector: 'app-manage-jobs-page',
-  imports: [RouterModule, CommonModule, FormsModule, ReactiveFormsModule, Pagination,Table,Buttons],
+  imports: [RouterModule, CommonModule, FormsModule, ReactiveFormsModule, Pagination, Table, Buttons, InputFields],
   templateUrl: './manage-jobs-page.html',
   styleUrl: './manage-jobs-page.css',
 })
@@ -102,7 +103,7 @@ initForm() {
     jobCategory: ['', Validators.required],
     jobType: ['', Validators.required],
     location: ['', Validators.required],
-    salary: [''],
+    salary: ['', Validators.required],
     status: ['Open'],
     jobDescription: ['', Validators.required],
     applyByDate:['',Validators.required]

@@ -24,7 +24,6 @@ import { ResumeAtsReport } from './resume-ats-report/resume-ats-report';
 import { SavedTalents } from './saved-talents/saved-talents';
 import { RecruiterDashboard } from './recruiter-dashboard/recruiter-dashboard';
 import { JobDetailsPage } from './job-details-page/job-details-page';
-import { SavedJobposts } from './saved-jobposts/saved-jobposts';
 import { RoleGuard } from '../../../core/guards/role.guard';
 import { AuthGuard } from '../../../core/guards/auth.guard';
 
@@ -36,7 +35,6 @@ export const USER_ROUTES: Routes = [
       { path: 'jobprofile', component: JobProfilesPage, canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' }},
       { path: 'jobprofile/:id/job-details', component: JobDetailsPage ,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' }},
       { path: 'applied-jobposts', component: AppliedJobpostsPage ,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' }},
-      { path: 'saved-jobposts', component: SavedJobposts,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
       { path: 'assessments', component: AssessmentsRoomPage ,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' }},
       { path: 'scheduled-meetings', component: ScheduledMeetings,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
       { path: 'my-portfolio', component: Portfolio, canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },

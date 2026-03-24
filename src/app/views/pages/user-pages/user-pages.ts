@@ -46,7 +46,6 @@ userMenu: SidebarItem[] = [
 
   // JOB SEEKER
   { label: 'Job Profiles', icon: 'bi-briefcase', link: 'jobprofile', role: 'jobSeeker' },
-  { label: 'Saved Jobposts', icon: 'bi-bookmark-heart', link: 'saved-jobposts', role: 'jobSeeker' },
   { label: 'Applied Jobposts', icon: 'bi-send', link: 'applied-jobposts', role: 'jobSeeker' },
   { label: 'Assessments', icon: 'bi-clipboard-check', link: 'assessments', role: 'jobSeeker' },
   { label: 'Interviews', icon: 'bi-camera-video', link: 'scheduled-meetings', role: 'jobSeeker' },

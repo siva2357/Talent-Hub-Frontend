@@ -182,8 +182,7 @@
 
 
 
-  <app-pagination [total]="total" [page]="page" [limit]="limit" (pageChange)="onPageChange($event)"
-    (limitChange)="onLimitChange($event)"></app-pagination>
+  <app-pagination [total]="total" [page]="page" [limit]="limit" (pageChange)="onPageChange($event)" (limitChange)="onLimitChange($event)"></app-pagination>
 
 </div>
 
@@ -205,54 +204,37 @@
         <div class="modal-body">
 
           <div class="row g-3">
+
             <div class="col-md-6">
-              <label class="form-label">Job ID</label>
-              <input type="text" class="form-control" formControlName="jobId" placeholder="Auto or Enter Job ID">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Job Title</label>
-              <input type="text" class="form-control" formControlName="jobTitle">
+              <app-input-fields [form]="jobForm" type="text" placeholder="Job ID" controlName="jobId"> </app-input-fields>
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">Category</label>
-              <select class="form-select" formControlName="jobCategory">
-                <option value="Frontend">Frontend</option>
-                <option value="Backend">Backend</option>
-                <option value="Full Stack">Full Stack</option>
-                <option value="Data Science">Data Science</option>
-                <option value="DevOps">DevOps</option>
-              </select>
+              <app-input-fields [form]="jobForm" type="text" placeholder="Job Title" controlName="jobTitle"> </app-input-fields>
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">Job Type</label>
-              <select class="form-select" formControlName="jobType">
-                <option value="Full Time">Full Time</option>
-                <option value="Part Time">Part Time</option>
-                <option value="Contract">Contract</option>
-                <option value="Internship">Internship</option>
-              </select>
+               <app-input-fields  [form]="jobForm" [isSelect]="true" [options]="categories" placeholder="Category" controlName="jobCategory"></app-input-fields>
+           </div>
+
+           <div class="col-md-6">
+               <app-input-fields  [form]="jobForm" [isSelect]="true" [options]="jobTypes" placeholder="Job Type" controlName="jobType"></app-input-fields>
+           </div>
+
+            <div class="col-md-6">
+              <app-input-fields [form]="jobForm" type="text" placeholder="Location" controlName="location"> </app-input-fields>
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">Location</label>
-              <input type="text" class="form-control" formControlName="location">
+              <app-input-fields [form]="jobForm" type="text" placeholder="Salary" controlName="salary"></app-input-fields>
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">Salary</label>
-              <input type="text" class="form-control" formControlName="salary">
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Apply By Date</label>
-              <input type="date" class="form-control" formControlName="applyByDate">
+              <app-input-fields [form]="jobForm" type="date" placeholder="Apply By Date" controlName="applyByDate"></app-input-fields>
             </div>
 
             <div class="col-12">
-              <label class="form-label">Job Description</label>
-              <textarea class="form-control" rows="4" formControlName="jobDescription"></textarea>
+              <app-input-fields [form]="jobForm" placeholder="Job Description" controlName="jobDescription" [isTextarea]="true"></app-input-fields>
             </div>
 
           </div>
@@ -334,9 +316,6 @@
   </div>
 </div>
 
-
-
-
 <div class="modal fade" id="actionModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -364,6 +343,8 @@
     </div>
   </div>
 </div>
+
+
 
 
 
