@@ -1,115 +1,129 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ApplicationService } from '../../../../core/services/applications-service';
+import { Table } from "../../../components/table/table";
+import { Pagination } from "../../../components/pagination/pagination";
 @Component({
   selector: 'app-job-applications',
   standalone: true,
-  imports: [CommonModule, RouterModule,ReactiveFormsModule,FormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, Table, Pagination],
   templateUrl: './job-applications.html',
   styleUrl: './job-applications.css',
 })
 export class JobApplications {
+
   selectedApplicant: any = null;
+job: any = {};
+applicants: any[] = [];
+
+columns: any[] = [];
+page = 1;
+limit = 5;
+total = 0;
+filteredApplicants: any[] = [];
+paginatedApplicants: any[] = [];
+isFiltering = false;
+
+  @ViewChild('actionsTemplate', { static: true })
+  public actionsTemplateRef!: TemplateRef<any>;
+
+
+
+    @ViewChild('statusTemplate', { static: true })
+  public statusTemplateRef!: TemplateRef<any>;
+
+  ngOnInit() {
+  this.route.paramMap.subscribe(params => {
+    const jobId = params.get('id');
+
+    if (jobId) {
+      console.log('Job ID from route:', jobId);
+      this.loadApplicants(jobId);
+    }
+  });
+
+    this.columns = [
+  { name: 'S.No', prop: 'sno' }, // ✅ new
+  { name: 'Full Name', prop: 'name' },
+  { name: 'Email', prop: 'email' },
+  { name: 'Phone', prop: 'phone' },
+  { name: 'Applied Date', prop: 'appliedAt' },
+  { name: 'Status', template: this.statusTemplateRef },
+  { name: 'Action', template: this.actionsTemplateRef, center: true },
+];
+
+
+
+}
+
+
+constructor( private route: ActivatedRoute, private appService: ApplicationService) {}
+
+
+loadApplicants(jobId: string) {
+  this.appService.getApplicants(jobId).subscribe({
+    next: (res: any) => {
+      console.log('Full Response:', res);
+
+      this.loadJobData(res);
+      this.loadApplicantsData(res);
+
+      this.total = this.applicants.length;   // ✅ total count
+      this.applyPagination();                // ✅ apply after data load
+    },
+    error: (err) => {
+      console.error('Error:', err);
+    }
+  });
+}
+
+
+loadJobData(res: any) {
+  this.job = res.job || {};
+
+  console.log('Job Loaded:', this.job);
+}
+
+
+loadApplicantsData(res: any) {
+  this.applicants = res.job?.applicants || [];
+
+  console.log('Applicants Loaded:', this.applicants);
+}
+
+
+applyPagination() {
+  const source = this.isFiltering
+    ? this.filteredApplicants   // ✅ FIX
+    : this.applicants;          // ✅ FIX
+
+  const start = (this.page - 1) * this.limit;
+  const end = start + this.limit;
+
+  this.paginatedApplicants = source.slice(start, end).map((item, index) => ({
+    ...item,
+    sno: start + index + 1
+  }));
+}
+
+onPageChange(p: number) {
+  this.page = p;
+  this.applyPagination();
+}
+
+onLimitChange(l: number) {
+  this.limit = l;
+  this.page = 1;
+  this.applyPagination();
+}
+
 
   viewApplicant(applicant: any) {
     this.selectedApplicant = applicant;
   }
-
-  job = {
-    id: 1,
-    jobId: 'JOB-001',
-    title: 'Angular Developer',
-    category: 'Frontend',
-    type: 'Full Time',
-    location: 'Hyderabad',
-    applicants: 24,
-    status: 'Open',
-  };
-
-  applicants = [
-    {
-      id: 1,
-      name: 'Michael Wilson',
-      email: 'michael.wilson@email.com',
-      phone: '+91 9876543210',
-      appliedDate: '5 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=1',
-    },
-    {
-      id: 2,
-      name: 'Jennifer Miller',
-      email: 'jennifer.miller@email.com',
-      phone: '+91 9123456780',
-      appliedDate: '7 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=2',
-    },
-    {
-      id: 3,
-      name: 'William Anderson',
-      email: 'william.anderson@email.com',
-      phone: '+91 9012345678',
-      appliedDate: '7 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=3',
-    },
-    {
-      id: 4,
-      name: 'Sophia Martinez',
-      email: 'sophia.martinez@email.com',
-      phone: '+91 9988776655',
-      appliedDate: '9 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=4',
-    },
-    {
-      id: 5,
-      name: 'James Thompson',
-      email: 'james.thompson@email.com',
-      phone: '+91 9098765432',
-      appliedDate: '10 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=5',
-    },
-    {
-      id: 6,
-      name: 'Olivia Brown',
-      email: 'olivia.brown@email.com',
-      phone: '+91 9345678901',
-      appliedDate: '11 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=6',
-    },
-    {
-      id: 7,
-      name: 'Daniel Garcia',
-      email: 'daniel.garcia@email.com',
-      phone: '+91 9871203456',
-      appliedDate: '12 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=7',
-    },
-    {
-      id: 8,
-      name: 'Emma Rodriguez',
-      email: 'emma.rodriguez@email.com',
-      phone: '+91 9765432109',
-      appliedDate: '13 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=8',
-    },
-    {
-      id: 9,
-      name: 'Alexander Lee',
-      email: 'alexander.lee@email.com',
-      phone: '+91 9654321789',
-      appliedDate: '14 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=9',
-    },
-    {
-      id: 10,
-      name: 'Isabella Walker',
-      email: 'isabella.walker@email.com',
-      phone: '+91 9543219876',
-      appliedDate: '15 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=10',
-    },
-  ];
 
 selectedInterview:any = {
 jobTitle:'',

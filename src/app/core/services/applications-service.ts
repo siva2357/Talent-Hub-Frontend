@@ -27,7 +27,7 @@ export class ApplicationService {
 
   apply(jobPostId: string): Observable<any> {
     return this.http.post(
-      `${this.baseUrl}/applications/apply`,
+      `${this.baseUrl}/apply`,
       { jobPostId },
       { headers: this.getHeaders() }
     ).pipe(catchError(this.handleError));
@@ -36,7 +36,7 @@ export class ApplicationService {
   withdraw(jobPostId: string): Observable<any> {
     return this.http.request(
       'DELETE',
-      `${this.baseUrl}/applications/withdraw`,
+      `${this.baseUrl}/withdraw`,
       {
         headers: this.getHeaders(),
         body: { jobPostId }
@@ -46,24 +46,31 @@ export class ApplicationService {
 
   getAppliedJobs(): Observable<any> {
     return this.http.get(
-      `${this.baseUrl}/applications/applied`,
+      `${this.baseUrl}/applied`,
       { headers: this.getHeaders() }
     ).pipe(catchError(this.handleError));
   }
 
 
+getAppliedJobIds(): Observable<any> {
+  return this.http.get(
+    `${this.baseUrl}/applied-ids`, // ✅ correct route
+    { headers: this.getHeaders() }
+  ).pipe(catchError(this.handleError));
+}
+
   // ================= RECRUITER =================
 
   getApplicants(jobPostId: string): Observable<any> {
     return this.http.get(
-      `${this.baseUrl}/applications/job/${jobPostId}/applicants`,
+      `${this.baseUrl}/job/${jobPostId}/applicants`,
       { headers: this.getHeaders() }
     ).pipe(catchError(this.handleError));
   }
 
   hire(jobPostId: string, jobSeekerId: string): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/applications/job/${jobPostId}/hire/${jobSeekerId}`,
+      `${this.baseUrl}/job/${jobPostId}/hire/${jobSeekerId}`,
       {},
       { headers: this.getHeaders() }
     ).pipe(catchError(this.handleError));
@@ -71,7 +78,7 @@ export class ApplicationService {
 
   reject(jobPostId: string, jobSeekerId: string): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/applications/job/${jobPostId}/reject/${jobSeekerId}`,
+      `${this.baseUrl}/job/${jobPostId}/reject/${jobSeekerId}`,
       {},
       { headers: this.getHeaders() }
     ).pipe(catchError(this.handleError));

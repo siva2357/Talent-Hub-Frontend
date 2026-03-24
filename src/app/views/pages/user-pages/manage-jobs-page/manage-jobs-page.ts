@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, Validators,ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { JobpostService } from '../../../../core/services/jobpost-service';
@@ -61,8 +61,6 @@ filteredJobPosts: any[] = [];
 paginatedJobPosts: any[] = [];
 isFiltering = false;
 
-  @ViewChild('valueTemplate', { static: true })
-  public valueTemplateRef!: TemplateRef<any>;
 
   @ViewChild('statusTemplate', { static: true })
   public statusTemplateRef!: TemplateRef<any>;
@@ -74,7 +72,7 @@ public applicantsTemplateRef!: TemplateRef<any>;
   @ViewChild('actionsTemplate', { static: true })
   public actionsTemplateRef!: TemplateRef<any>;
 
-constructor(private jobService: JobpostService,  private fb: FormBuilder) {}
+constructor(private jobService: JobpostService,  private fb: FormBuilder,private router: Router) {}
 
 ngOnInit() {
 
@@ -453,6 +451,20 @@ openViewModal() {
     document.getElementById('viewJobModal')
   );
   modal.show();
+}
+
+
+goToApplicants(jobId: string) {
+  if (!jobId) {
+    console.error('Job ID missing');
+    return;
+  }
+
+  this.router.navigate([
+    '/user/my-jobposts',
+    jobId,
+    'job-applications'
+  ]);
 }
 
 }

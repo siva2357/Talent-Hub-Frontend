@@ -23,6 +23,7 @@ import { InterviewManagementPage } from './interview-management-page/interview-m
 import { ResumeAtsReport } from './resume-ats-report/resume-ats-report';
 import { SavedTalents } from './saved-talents/saved-talents';
 import { RecruiterDashboard } from './recruiter-dashboard/recruiter-dashboard';
+import { ManageAssessments } from './manage-assessments/manage-assessments';
 import { JobDetailsPage } from './job-details-page/job-details-page';
 import { RoleGuard } from '../../../core/guards/role.guard';
 import { AuthGuard } from '../../../core/guards/auth.guard';
@@ -47,6 +48,7 @@ export const USER_ROUTES: Routes = [
       { path: 'my-jobposts', component: ManageJobsPage,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
       { path: 'my-jobposts/:id/job-applications', component: JobApplications,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
       { path: 'manage-interviews', component: InterviewManagementPage,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
+      { path:  'manage-assessments',component:ManageAssessments,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
       { path: 'talents', component: Talents,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
       { path: 'talents/:id/profile', component: TalentProfilePage,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
       { path: 'saved-talents', component: SavedTalents,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },

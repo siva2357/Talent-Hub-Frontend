@@ -40,6 +40,7 @@ userMenu: SidebarItem[] = [
   { label: 'My Dashboard', icon: 'bi-grid', link: 'my-dashboard', role: 'recruiter' },
   { label: 'My Jobposts', icon: 'bi-briefcase', link: 'my-jobposts', role: 'recruiter' },
   { label: 'Manage Interviews', icon: 'bi-camera-video', link: 'manage-interviews', role: 'recruiter' },
+  { label: 'Manage Assessments', icon: 'bi-book', link: 'manage-assessments', role: 'recruiter' },
   { label: 'Talents', icon: 'bi-people', link: 'talents', role: 'recruiter' },
   { label: 'Saved Talents', icon: 'bi-person-check', link: 'saved-talents', role: 'recruiter' },
   { label:'Hired Talents', icon:"bi-person-check-fill", link:'hired-talents', role: 'recruiter' },
