@@ -1,132 +1,146 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { JobpostService } from '../../../../core/services/jobpost-service';
+import { Buttons } from "../../../components/buttons/buttons";
+import { ApplicationService } from '../../../../core/services/applications-service';
 
 @Component({
   selector: 'app-job-details-page',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Buttons],
   templateUrl: './job-details-page.html',
   styleUrls: ['./job-details-page.css']
 })
-export class JobDetailsPage {
+export class JobDetailsPage implements OnInit{
+
+  jobId: string | null = null;
+  job: any = null;
+  loading = false;
+  error = '';
 
 
-job = {
-  title: 'Senior Angular Developer',
-  company: 'TechNova Solutions',
-  logo: 'https://cdn-icons-png.flaticon.com/512/5968/5968292.png',
+  constructor(
+    private route: ActivatedRoute,
+    private jobService: JobpostService,
+    private applicationService:ApplicationService
+  ) {}
 
-  category: 'Frontend Development',
-  type: 'Full Time',
-  location: 'Hyderabad',
+    ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      this.jobId = params.get('id');
 
-  salary: '₹12L – ₹18L',
-  experience: '3 - 5 Years',
-  level: 'Mid Level',
-  workMode: 'Hybrid',
-
-  description:
-    'We are looking for an experienced Angular developer to build scalable web applications. You will collaborate with designers and backend engineers to create high performance applications.',
-
-  responsibilities: [
-    'Develop scalable web applications',
-    'Build reusable Angular components',
-    'Integrate REST APIs',
-    'Collaborate with cross-functional teams'
-  ],
-
-  skills: [
-    'Angular',
-    'TypeScript',
-    'REST API',
-    'Git'
-  ],
-
-  benefits: [
-    'Health Insurance',
-    'Flexible working hours',
-    'Remote work support',
-    'Learning & development budget'
-  ],
-
-  posted: '3 days ago',
-  applicants: 24
-};
+      if (this.jobId) {
+        this.getJobDetails(this.jobId);
+         this.loadAllJobs(); // for recommendations
+      }
+    });
+  }
 
 
-  recommendedJobs = [
-{
-id:1,
-jobId:'JOB-001',
-title:'Angular Developer',
-category:'Frontend',
-type:'Full Time',
-location:'Hyderabad',
-company:'Google',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/google.svg',
-description:'Build scalable Angular applications, create reusable UI components, and integrate REST APIs for enterprise platforms.'
-},
+getJobDetails(id: string) {
+  this.loading = true;
 
-{
-id:2,
-jobId:'JOB-002',
-title:'Node.js Backend Developer',
-category:'Backend',
-type:'Full Time',
-location:'Bangalore',
-company:'Microsoft',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/microsoft.svg',
-description:'Develop backend services using Node.js and Express, design REST APIs, and manage PostgreSQL database operations.'
-},
+  this.jobService.getJobPostById(id).subscribe({
+    next: (res: any) => {
+      this.job = res.jobDetails;
 
-{
-id:3,
-jobId:'JOB-003',
-title:'React Frontend Engineer',
-category:'Frontend',
-type:'Contract',
-location:'Pune',
-company:'Netflix',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/netflix.svg',
-description:'Develop modern React interfaces, optimize UI performance, and collaborate with backend teams to deliver scalable web apps.'
-},
+      this.getRecommendedJobs();
+      this.checkIfApplied(); // ✅ MOVE HERE
 
-{
-id:4,
-jobId:'JOB-004',
-title:'Full Stack Developer',
-category:'Full Stack',
-type:'Full Time',
-location:'Chennai',
-company:'Amazon',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/amazon.svg',
-description:'Work across frontend and backend layers using modern frameworks, develop APIs, and maintain scalable applications.'
-},
+      this.loading = false;
+    },
+    error: (err) => {
+      console.error(err);
+      this.error = 'Failed to load job details';
+      this.loading = false;
+    }
+  });
+}
 
-{
-id:5,
-jobId:'JOB-005',
-title:'Python Data Analyst',
-category:'Data Science',
-type:'Part Time',
-location:'Remote',
-company:'Meta',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/meta.svg',
-description:'Analyze large datasets using Python, create dashboards and visualizations, and generate insights for business teams.'
-},
 
-{
-id:6,
-jobId:'JOB-006',
-title:'DevOps Engineer',
-category:'Backend',
-type:'Full Time',
-location:'Delhi',
-company:'IBM',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/ibm.svg',
-description:'Manage CI/CD pipelines, automate infrastructure deployment, and monitor cloud environments for reliability.'
-},
-];
+jobs: any[] = [];
+recommendedJobs: any[] = [];
+
+
+loadAllJobs() {
+  this.jobService.getAllJobPosts().subscribe({
+    next: (res: any) => {
+      this.jobs = res.jobs || [];
+
+      this.getRecommendedJobs(); // ✅ now works
+    },
+    error: (err) => console.error(err)
+  });
+}
+
+getRecommendedJobs() {
+  if (!this.job || !this.jobs.length) return;
+
+  this.recommendedJobs = this.jobs
+    .filter((j: any) =>
+      j.category?.toLowerCase() === this.job.jobCategory?.toLowerCase() &&
+      j._id !== this.job._id
+    )
+    .slice(0, 4);
+}
+
+
+
+isApplied = false;
+
+
+applyJob() {
+  if (!this.job?._id) return;
+
+  this.isApplied = true; // 🔥 instant UI
+
+  this.applicationService.apply(this.job._id).subscribe({
+    error: (err) => {
+      console.error(err);
+      this.isApplied = false; // rollback if failed
+    }
+  });
+}
+
+withdrawJob() {
+  if (!this.job?._id) return;
+
+  this.isApplied = false; // 🔥 instant UI
+
+  this.applicationService.withdraw(this.job._id).subscribe({
+    error: (err) => {
+      console.error(err);
+      this.isApplied = true; // rollback
+    }
+  });
+}
+
+markAppliedJobs() {
+  this.applicationService.getAppliedJobIds().subscribe({
+    next: (res: any) => {
+      const appliedIds = res.appliedJobIds;
+
+      this.jobs = this.jobs.map(job => ({
+        ...job,
+        isApplied: appliedIds.includes(job._id)
+      }));
+    },
+    error: (err) => console.error(err)
+  });
+}
+
+checkIfApplied() {
+  if (!this.job?._id) return;
+
+  this.applicationService.getAppliedJobIds().subscribe({
+    next: (res: any) => {
+      const appliedIds = res.appliedJobIds;
+
+      this.isApplied = appliedIds.includes(this.job._id);
+    },
+    error: (err) => console.error(err)
+  });
+}
 
 }

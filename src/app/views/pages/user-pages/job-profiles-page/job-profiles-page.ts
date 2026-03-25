@@ -1,135 +1,211 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { JobpostService } from '../../../../core/services/jobpost-service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Pagination } from "../../../components/pagination/pagination";
+import { Buttons } from "../../../components/buttons/buttons";
 
 @Component({
   selector: 'app-job-profiles-page',
-  imports: [RouterModule ],
+  imports: [RouterModule, FormsModule, CommonModule, Pagination, Buttons],
   templateUrl: './job-profiles-page.html',
   styleUrl: './job-profiles-page.css',
 })
-export class JobProfilesPage {
-jobs = [
-{
-id:1,
-jobId:'JOB-001',
-title:'Angular Developer',
-category:'Frontend',
-type:'Full Time',
-location:'Hyderabad',
-company:'Google',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/google.svg',
-description:'Build scalable Angular applications, create reusable UI components, and integrate REST APIs for enterprise platforms.'
-},
+export class JobProfilesPage implements OnInit {
 
-{
-id:2,
-jobId:'JOB-002',
-title:'Node.js Backend Developer',
-category:'Backend',
-type:'Full Time',
-location:'Bangalore',
-company:'Microsoft',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/microsoft.svg',
-description:'Develop backend services using Node.js and Express, design REST APIs, and manage PostgreSQL database operations.'
-},
+categories = ['Frontend', 'Backend', 'Full Stack', 'Data Science'];
+jobTypes = ['Full Time', 'Part Time', 'Contract', 'Internship'];
+locations = [ 'Hyderabad', 'Bangalore', 'Chennai','Mumbai','Delhi','Pune','Kolkata','Ahmedabad','Noida','Gurgaon','Remote'];
+searchText = '';
+selectedCategory = '';
+selectedJobtype = '';
+selectedLocation = '';
 
-{
-id:3,
-jobId:'JOB-003',
-title:'React Frontend Engineer',
-category:'Frontend',
-type:'Contract',
-location:'Pune',
-company:'Netflix',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/netflix.svg',
-description:'Develop modern React interfaces, optimize UI performance, and collaborate with backend teams to deliver scalable web apps.'
-},
 
-{
-id:4,
-jobId:'JOB-004',
-title:'Full Stack Developer',
-category:'Full Stack',
-type:'Full Time',
-location:'Chennai',
-company:'Amazon',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/amazon.svg',
-description:'Work across frontend and backend layers using modern frameworks, develop APIs, and maintain scalable applications.'
-},
 
-{
-id:5,
-jobId:'JOB-005',
-title:'Python Data Analyst',
-category:'Data Science',
-type:'Part Time',
-location:'Remote',
-company:'Meta',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/meta.svg',
-description:'Analyze large datasets using Python, create dashboards and visualizations, and generate insights for business teams.'
-},
+  loading = false;
+  error = '';
 
-{
-id:6,
-jobId:'JOB-006',
-title:'DevOps Engineer',
-category:'Backend',
-type:'Full Time',
-location:'Delhi',
-company:'IBM',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/ibm.svg',
-description:'Manage CI/CD pipelines, automate infrastructure deployment, and monitor cloud environments for reliability.'
-},
+  constructor(private jobService: JobpostService) {}
 
-{
-id:7,
-jobId:'JOB-007',
-title:'UI/UX Designer',
-category:'Design',
-type:'Contract',
-location:'Mumbai',
-company:'Adobe',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/adobe.svg',
-description:'Design intuitive user interfaces, build wireframes and prototypes, and collaborate with developers on product design.'
-},
+  ngOnInit(): void {
+    this.loadJobs();
+  }
 
-{
-id:8,
-jobId:'JOB-008',
-title:'Machine Learning Engineer',
-category:'Data Science',
-type:'Full Time',
-location:'Hyderabad',
-company:'Nvidia',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/nvidia.svg',
-description:'Develop machine learning models, optimize training pipelines, and deploy AI solutions into production systems.'
-},
+jobs: any[] = [];
+  page = 1;
+limit = 5;
+total = 0;
+filteredJobPosts: any[] = [];
+paginatedJobPosts: any[] = [];
+isFiltering = false;
 
-{
-id:9,
-jobId:'JOB-009',
-title:'Cloud Engineer',
-category:'Backend',
-type:'Full Time',
-location:'Bangalore',
-company:'Oracle',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/oracle.svg',
-description:'Design and manage scalable cloud infrastructure, configure networking services, and ensure system reliability.'
-},
 
-{
-id:10,
-jobId:'JOB-010',
-title:'Java Backend Developer',
-category:'Backend',
-type:'Internship',
-location:'Pune',
-company:'SAP',
-logo:'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/sap.svg',
-description:'Assist in developing backend APIs using Java and Spring Boot, support database integration, and maintain application services.'
+loadJobs() {
+  this.jobService.getAllJobPosts().subscribe({
+    next: (res: any) => {
+      this.jobs = res.jobs || [];
+      this.total = this.jobs.length;
+
+      this.markSavedJobs(); // pagination handled inside now
+    },
+    error: (err) => {
+      console.error("Error fetching jobs:", err);
+    }
+  });
 }
 
-];
+
+
+markSavedJobs() {
+  this.jobService.getSavedJobPosts().subscribe({
+    next: (res: any) => {
+
+      const savedIds = res.savedJobIds;
+
+      this.jobs = this.jobs.map(job => ({
+        ...job,
+        isSaved: savedIds.includes(job._id)
+      }));
+
+      // ✅ FIX: apply pagination AFTER marking
+      this.applyPagination();
+    },
+    error: (err) => console.error(err)
+  });
+}
+
+
+
+toggleSave(job: any) {
+
+  if (job.isSaved) {
+    // 🔴 UNSAVE
+    this.jobService.unsaveJobPost(job._id).subscribe({
+      next: () => {
+        job.isSaved = false;
+      },
+      error: (err) => console.error(err)
+    });
+
+  } else {
+    // 🟢 SAVE
+    this.jobService.saveJobPost(job._id).subscribe({
+      next: () => {
+        job.isSaved = true;
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+}
+
+
+
+applyFilters() {
+  let data = [...this.jobs];
+
+  if (this.searchText) {
+    data = data.filter(c =>
+      c.title?.toLowerCase().includes(this.searchText.toLowerCase())
+    );
+  }
+
+  if (this.selectedCategory) {
+    data = data.filter(c => c.category === this.selectedCategory);
+  }
+
+  if (this.selectedJobtype) {
+    data = data.filter(c => c.type === this.selectedJobtype);
+  }
+
+  if (this.selectedLocation) {
+    data = data.filter(c => c.location === this.selectedLocation);
+  }
+
+  this.filteredJobPosts = [...data]; // 🔥 FIX
+  this.isFiltering = true;
+
+  this.total = data.length;
+  this.page = 1;
+
+  this.applyPagination();
+}
+
+resetFilters() {
+  this.searchText = '';
+  this.selectedCategory = '';
+  this.selectedJobtype = '';
+  this.selectedLocation = '';
+
+  this.filteredJobPosts = [];
+  this.isFiltering = false; // ✅ important
+
+  this.total = this.jobs.length;
+  this.page = 1;
+
+  this.applyPagination();
+}
+
+
+getActiveFilters(): { key: string; label: string }[] {
+  const filters: { key: string; label: string }[] = [];
+
+  if (this.searchText) {
+    filters.push({ key: 'search', label: this.searchText });
+  }
+
+  if (this.selectedCategory ) {
+    filters.push({ key: 'category', label: this.selectedCategory  });
+  }
+
+  if (this.selectedJobtype) {
+    filters.push({ key: 'type', label: this.selectedJobtype });
+  }
+
+  if (this.selectedLocation) {
+    filters.push({ key: 'location', label: this.selectedLocation });
+  }
+
+  return filters;
+}
+
+removeFilter(key: string) {
+  if (key === 'search') this.searchText = '';
+  if (key === 'category') this.selectedCategory = '';
+  if (key === 'type') this.selectedJobtype = '';
+  if (key === 'location') this.selectedLocation = '';
+  this.applyFilters(); // re-run filtering
+}
+
+
+
+applyPagination() {
+  const source = this.isFiltering
+    ? this.filteredJobPosts
+    : this.jobs;
+
+  const start = (this.page - 1) * this.limit;
+  const end = start + this.limit;
+
+  this.paginatedJobPosts = source.slice(start, end).map((item, index) => ({
+    ...item,
+    sno: start + index + 1
+  }));
+}
+
+
+onPageChange(p: number) {
+  this.page = p;
+  this.applyPagination();
+}
+
+onLimitChange(l: number) {
+  this.limit = l;
+  this.page = 1;
+  this.applyPagination();
+}
 
 
 }

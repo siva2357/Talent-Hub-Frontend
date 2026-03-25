@@ -40,13 +40,13 @@ userMenu: SidebarItem[] = [
   { label: 'My Dashboard', icon: 'bi-grid', link: 'my-dashboard', role: 'recruiter' },
   { label: 'My Jobposts', icon: 'bi-briefcase', link: 'my-jobposts', role: 'recruiter' },
   { label: 'Manage Interviews', icon: 'bi-camera-video', link: 'manage-interviews', role: 'recruiter' },
+  { label: 'Manage Assessments', icon: 'bi-book', link: 'manage-assessments', role: 'recruiter' },
   { label: 'Talents', icon: 'bi-people', link: 'talents', role: 'recruiter' },
   { label: 'Saved Talents', icon: 'bi-person-check', link: 'saved-talents', role: 'recruiter' },
   { label:'Hired Talents', icon:"bi-person-check-fill", link:'hired-talents', role: 'recruiter' },
 
   // JOB SEEKER
   { label: 'Job Profiles', icon: 'bi-briefcase', link: 'jobprofile', role: 'jobSeeker' },
-  { label: 'Saved Jobposts', icon: 'bi-bookmark-heart', link: 'saved-jobposts', role: 'jobSeeker' },
   { label: 'Applied Jobposts', icon: 'bi-send', link: 'applied-jobposts', role: 'jobSeeker' },
   { label: 'Assessments', icon: 'bi-clipboard-check', link: 'assessments', role: 'jobSeeker' },
   { label: 'Interviews', icon: 'bi-camera-video', link: 'scheduled-meetings', role: 'jobSeeker' },

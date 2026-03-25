@@ -2,6 +2,8 @@ export interface CreateAssessmentDTO {
   jobPostId: string;
   jobSeekerId: string;
   assessmentLink: string;
+  dueDate:Date;
+  description:string;
 }
 
 

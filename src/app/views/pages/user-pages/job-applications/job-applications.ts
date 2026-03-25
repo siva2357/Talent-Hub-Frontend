@@ -1,115 +1,135 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ApplicationService } from '../../../../core/services/applications-service';
+import { Table } from "../../../components/table/table";
+import { Pagination } from "../../../components/pagination/pagination";
+import { Buttons } from "../../../components/buttons/buttons";
+import { AssessmentService } from '../../../../core/services/assessment-service';
+import { InterviewService } from '../../../../core/services/interview-service';
+import { CreateInterviewDTO } from '../../../../core/dtos/interview.dto';
 @Component({
   selector: 'app-job-applications',
   standalone: true,
-  imports: [CommonModule, RouterModule,ReactiveFormsModule,FormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, Table, Pagination, Buttons],
   templateUrl: './job-applications.html',
   styleUrl: './job-applications.css',
 })
 export class JobApplications {
+minDate = new Date().toISOString().split('T')[0];
   selectedApplicant: any = null;
+job: any = {};
+applicants: any[] = [];
+statusList: string[]  =["Pending", "InProcess", 'Assessment Assigned', 'Interview Scheduled', "Shortlisted", "Rejected"]
+columns: any[] = [];
+page = 1;
+limit = 5;
+total = 0;
+filteredApplicants: any[] = [];
+paginatedApplicants: any[] = [];
+isFiltering = false;
+
+  @ViewChild('actionsTemplate', { static: true })
+  public actionsTemplateRef!: TemplateRef<any>;
+
+
+
+    @ViewChild('statusTemplate', { static: true })
+  public statusTemplateRef!: TemplateRef<any>;
+
+  ngOnInit() {
+  this.route.paramMap.subscribe(params => {
+    const jobId = params.get('id');
+
+    if (jobId) {
+      console.log('Job ID from route:', jobId);
+      this.loadApplicants(jobId);
+    }
+
+    this.initForm();
+  });
+
+    this.columns = [
+  { name: 'S.No', prop: 'sno' }, // ✅ new
+  { name: 'Full Name', prop: 'name' },
+  { name: 'Email', prop: 'email' },
+  { name: 'Phone', prop: 'phone' },
+  { name: 'Applied Date', prop: 'appliedAt' },
+  { name: 'Status', template: this.statusTemplateRef },
+  { name: 'Action', template: this.actionsTemplateRef, center: true },
+];
+
+
+
+}
+
+
+constructor( private route: ActivatedRoute, private appService: ApplicationService, private assessmentService:AssessmentService, private interviewService:InterviewService, private fb: FormBuilder,) {}
+
+
+loadApplicants(jobId: string) {
+  this.appService.getApplicants(jobId).subscribe({
+    next: (res: any) => {
+      console.log('Full Response:', res);
+
+      this.loadJobData(res);
+      this.loadApplicantsData(res);
+
+      this.total = this.applicants.length;   // ✅ total count
+      this.applyPagination();                // ✅ apply after data load
+    },
+    error: (err) => {
+      console.error('Error:', err);
+    }
+  });
+}
+
+
+loadJobData(res: any) {
+  this.job = res.job || {};
+
+  console.log('Job Loaded:', this.job);
+}
+
+
+loadApplicantsData(res: any) {
+  this.applicants = res.job?.applicants || [];
+
+  console.log('Applicants Loaded:', this.applicants);
+}
+
+
+applyPagination() {
+  const source = this.isFiltering
+    ? this.filteredApplicants   // ✅ FIX
+    : this.applicants;          // ✅ FIX
+
+  const start = (this.page - 1) * this.limit;
+  const end = start + this.limit;
+
+  this.paginatedApplicants = source.slice(start, end).map((item, index) => ({
+    ...item,
+    sno: start + index + 1
+  }));
+}
+
+onPageChange(p: number) {
+  this.page = p;
+  this.applyPagination();
+}
+
+onLimitChange(l: number) {
+  this.limit = l;
+  this.page = 1;
+  this.applyPagination();
+}
+
 
   viewApplicant(applicant: any) {
     this.selectedApplicant = applicant;
   }
-
-  job = {
-    id: 1,
-    jobId: 'JOB-001',
-    title: 'Angular Developer',
-    category: 'Frontend',
-    type: 'Full Time',
-    location: 'Hyderabad',
-    applicants: 24,
-    status: 'Open',
-  };
-
-  applicants = [
-    {
-      id: 1,
-      name: 'Michael Wilson',
-      email: 'michael.wilson@email.com',
-      phone: '+91 9876543210',
-      appliedDate: '5 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=1',
-    },
-    {
-      id: 2,
-      name: 'Jennifer Miller',
-      email: 'jennifer.miller@email.com',
-      phone: '+91 9123456780',
-      appliedDate: '7 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=2',
-    },
-    {
-      id: 3,
-      name: 'William Anderson',
-      email: 'william.anderson@email.com',
-      phone: '+91 9012345678',
-      appliedDate: '7 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=3',
-    },
-    {
-      id: 4,
-      name: 'Sophia Martinez',
-      email: 'sophia.martinez@email.com',
-      phone: '+91 9988776655',
-      appliedDate: '9 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=4',
-    },
-    {
-      id: 5,
-      name: 'James Thompson',
-      email: 'james.thompson@email.com',
-      phone: '+91 9098765432',
-      appliedDate: '10 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=5',
-    },
-    {
-      id: 6,
-      name: 'Olivia Brown',
-      email: 'olivia.brown@email.com',
-      phone: '+91 9345678901',
-      appliedDate: '11 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=6',
-    },
-    {
-      id: 7,
-      name: 'Daniel Garcia',
-      email: 'daniel.garcia@email.com',
-      phone: '+91 9871203456',
-      appliedDate: '12 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=7',
-    },
-    {
-      id: 8,
-      name: 'Emma Rodriguez',
-      email: 'emma.rodriguez@email.com',
-      phone: '+91 9765432109',
-      appliedDate: '13 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=8',
-    },
-    {
-      id: 9,
-      name: 'Alexander Lee',
-      email: 'alexander.lee@email.com',
-      phone: '+91 9654321789',
-      appliedDate: '14 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=9',
-    },
-    {
-      id: 10,
-      name: 'Isabella Walker',
-      email: 'isabella.walker@email.com',
-      phone: '+91 9543219876',
-      appliedDate: '15 Jul 2025',
-      avatar: 'https://i.pravatar.cc/50?img=10',
-    },
-  ];
 
 selectedInterview:any = {
 jobTitle:'',
@@ -122,19 +142,219 @@ description:''
 };
 
 
-scheduleInterview(){
-this.selectedInterview = {
-jobTitle:'',
-candidateName:'',
-date:'',
-time:'',
-meetingLink:'',
-status:'Scheduled',
-description:''
-};
+scheduleInterview(job: any, applicant: any) {
+  this.interviewForm.patchValue({
+    jobPostId: job._id || job.id,
+    jobSeekerId: applicant.jobSeekerId,
+    interviewTitle:'',
+    date: '',
+    time: '',
+    meetingLink: '',
+    status: 'Scheduled',
+    description: ''
+  });
+}
+
+interviewForm!: FormGroup;
+
+initForm() {
+  this.interviewForm = this.fb.group({
+    jobPostId: [''],
+    jobSeekerId: [''],
+    interviewTitle:['',Validators.required],
+    date: ['', Validators.required],
+    time: ['', Validators.required],
+
+    meetingLink: ['', [Validators.required]],
+
+    status: ['Scheduled', Validators.required],
+
+    description: ['']
+  });
+}
+
+
+submitInterview() {
+
+  if (this.interviewForm.invalid) {
+    this.interviewForm.markAllAsTouched();
+    return;
+  }
+
+  const form = this.interviewForm.getRawValue();
+
+  const start = new Date(`${form.date}T${form.time}`);
+  const end = new Date(start.getTime() + 30 * 60000);
+
+  const payload: CreateInterviewDTO = {
+    interviewTitle:form.interviewTitle,
+    jobPostId: form.jobPostId,
+    jobSeekerId: form.jobSeekerId,
+    interviewDescription: form.description,
+    scheduledDate: new Date(form.date).toISOString(),
+    startTime: start.toISOString(),
+    endTime: end.toISOString(),
+
+    meetingJoinUrl: form.meetingLink
+  };
+
+  this.interviewService.createInterview(payload).subscribe({
+    next: () => {
+      console.log("Interview scheduled successfully");
+
+      const modal = document.getElementById('scheduleInterviewModal');
+      (window as any).bootstrap.Modal.getInstance(modal)?.hide();
+
+      this.interviewForm.reset();
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+}
+
+searchText = '';
+selectedStatus = '';
+
+
+
+applyFilters() {
+  let data = [...this.applicants];
+
+  if (this.searchText) {
+    data = data.filter(c =>
+      c.name.toLowerCase().includes(this.searchText.toLowerCase())
+    );
+  }
+
+  if (this.selectedStatus) {
+    data = data.filter(c => c.status === this.selectedStatus);
+  }
+
+  this.filteredApplicants = data;
+  this.isFiltering = true;   // ✅ important
+
+  this.total = data.length;
+  this.page = 1;
+
+  this.applyPagination();
+}
+
+resetFilters() {
+  this.searchText = '';
+  this.selectedStatus = '';
+
+  this.filteredApplicants = [];
+  this.isFiltering = false; // ✅ important
+
+  this.total = this.applicants.length;
+  this.page = 1;
+
+  this.applyPagination();
 }
 
 
 
+getActiveFilters(): { key: string; label: string }[] {
+  const filters: { key: string; label: string }[] = [];
+
+  if (this.searchText) {
+    filters.push({ key: 'search', label: this.searchText });
+  }
+
+  if (this.selectedStatus) {
+    filters.push({ key: 'status', label: this.selectedStatus });
+  }
+
+  return filters;
+}
+
+removeFilter(key: string) {
+  if (key === 'search') this.searchText = '';
+  if (key === 'status') this.selectedStatus = '';
+  this.applyFilters(); // re-run filtering
+}
+
+
+selectedAssessment: any = {
+  jobPostId: '',
+  jobSeekerId: '',
+  assessmentLink: '',
+  dueDate: '',
+  description: ''
+};
+
+openAssessmentModal(job: any, applicant: any) {
+
+  const jobId = job._id || job.id; // ✅ FIX
+
+  if (!jobId || !applicant?.jobSeekerId) {
+    console.error('Invalid data', job, applicant);
+    return;
+  }
+
+  this.selectedAssessment = {
+    jobPostId: jobId, // ✅ FIXED
+    jobSeekerId: applicant.jobSeekerId,
+    assessmentLink: '',
+    dueDate: '',
+    description: ''
+  };
+
+  const modal = new (window as any).bootstrap.Modal(
+    document.getElementById('assessmentModal')
+  );
+
+  modal.show();
+}
+
+
+submitAssessment() {
+
+  const payload = {
+    jobPostId: this.selectedAssessment.jobPostId,
+    jobSeekerId: this.selectedAssessment.jobSeekerId,
+    assessmentLink: this.selectedAssessment.assessmentLink,
+    dueDate: this.selectedAssessment.dueDate,
+    description: this.selectedAssessment.description
+  };
+
+  this.assessmentService.createAssessment(payload).subscribe({
+    next: () => {
+      console.log('Assessment assigned');
+
+      const modal = document.getElementById('assessmentModal');
+      (window as any).bootstrap.Modal.getInstance(modal)?.hide();
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+}
+
+hireApplicant(applicant: any) {
+  const jobId = this.job._id || this.job.id;
+
+  this.appService.hire(jobId, applicant.jobSeekerId).subscribe({
+    next: () => {
+      applicant.status = 'Shortlisted'; // or 'Hired' if backend sets it
+      console.log('Candidate hired');
+    },
+    error: (err) => console.error(err)
+  });
+}
+
+
+rejectApplicant(applicant: any) {
+  const jobId = this.job._id || this.job.id;
+
+  this.appService.reject(jobId, applicant.jobSeekerId).subscribe({
+    next: () => {
+      applicant.status = 'Rejected';
+      console.log('Candidate rejected');
+    },
+    error: (err) => console.error(err)
+  });
+}
 
 }

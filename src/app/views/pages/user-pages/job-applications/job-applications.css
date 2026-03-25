@@ -1,154 +1,3 @@
-/* ---------------------------
-   TABLE CARD
---------------------------- */
-
-.table-card{
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:8px;
-  padding:8px 0;
-}
-
-/* ---------------------------
-   TABLE BASE
---------------------------- */
-
-.clean-table{
-  width:100%;
-  min-width:1000px;
-  font-size:14px;
-  border-collapse:separate;
-  border-spacing:0;
-}
-
-/* ---------------------------
-   TABLE HEADER
---------------------------- */
-
-.clean-table thead{
-  background:#f9fafb;
-  border-bottom:1px solid #e5e7eb;
-}
-
-.clean-table th{
-  padding:12px 14px;
-  font-size:13px;
-  font-weight:600;
-  color:#6b7280;
-  letter-spacing:.3px;
-  white-space:nowrap;
-}
-
-/* ---------------------------
-   TABLE BODY
---------------------------- */
-
-.clean-table td{
-  padding:12px 14px;
-  font-size:14px;
-  color:#374151;
-  border-bottom:1px solid #f3f4f6;
-  white-space:nowrap;
-}
-
-/* Row Hover */
-
-.clean-table tbody tr:hover{
-  background:#f9fafb;
-  transition:background .15s ease;
-}
-
-/* ---------------------------
-   PROFILE IMAGE
---------------------------- */
-
-.company-logo{
-  width:36px;
-  height:36px;
-  object-fit:contain;
-  border-radius:6px;
-}
-/* ---------------------------
-   STATUS BADGES
---------------------------- */
-
-.badge{
-  font-size:14px;
-  padding:4px 10px;
-  border-radius:20px;
-  font-weight:400;
-}
-
-/* Badge Colors */
-
-.bg-success{
-  background:#e8f7ee !important;
-  color:#15803d !important;
-}
-
-.bg-info{
-  background:#eef6ff !important;
-  color:#0d6efd !important;
-  border-radius: 5px;
-}
-
-.bg-secondary{
-  background:#f1f5f9 !important;
-  color:#64748b !important;
-}
-
-.bg-warning{
-  background:#fff7ed !important;
-  color:#c2410c !important;
-}
-
-.bg-danger{
-  background:#fee2e2 !important;
-  color:#b91c1c !important;
-}
-
-/* ---------------------------
-   ACTION BUTTONS
---------------------------- */
-
-.clean-table td .btn{
-  font-size:11px;
-  padding:4px 8px;
-  border-radius:6px;
-}
-
-/* Button Colors */
-
-.clean-table .btn-primary{
-  background:#2563eb;
-  border:none;
-}
-
-.clean-table .btn-warning{
-  background:#f59e0b;
-  border:none;
-  color:#fff;
-}
-
-.clean-table .btn-success{
-  background:#16a34a;
-  border:none;
-}
-
-.clean-table .btn-danger{
-  background:#dc2626;
-  border:none;
-}
-
-/* ---------------------------
-   RESPONSIVE SCROLL
---------------------------- */
-
-.table-responsive{
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
-}
-
 
 
 
@@ -389,3 +238,52 @@ font-size:12px;
 
 
 
+
+
+
+.stepper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.step {
+  text-align: center;
+  flex: 1;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #6c757d; /* 🔘 default gray */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.label {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #6c757d;
+}
+
+/* ✅ GREEN */
+.step.completed .circle {
+  background: #28a745;
+}
+.step.completed .label {
+  color: #28a745;
+  font-weight: 500;
+}
+
+/* ❌ RED */
+.step.failed .circle {
+  background: #dc3545;
+}
+.step.failed .label {
+  color: #dc3545;
+  font-weight: 500;
+}

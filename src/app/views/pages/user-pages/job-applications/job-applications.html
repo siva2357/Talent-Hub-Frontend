@@ -1,8 +1,7 @@
 <div class="container-xxl mt-5 pt-5">
 
-
   <div class="d-flex  align-items-center mb-3">
-    <button class="btn btn-light me-2" [routerLink]="['/my-jobposts']">
+    <button class="btn btn-light me-2" [routerLink]="['/user/my-jobposts']">
       <i class="bi bi-arrow-left"></i>
     </button>
     <h5 class="fw-semibold mb-0">Applications Overview</h5>
@@ -10,38 +9,27 @@
 
   <div class="card-header p-3">
 
-    <!-- Top Row -->
     <div class="d-flex align-items-center gap-2">
-
-      <h5 class="mb-0 fw-semibold">
-        {{job.title}}
-      </h5>
-
+      <h5 class="mb-0 fw-semibold">{{job.title}}</h5>
       <span class="text-muted">-</span>
-
       <span class=" d-inline-flex align-items-center gap-1">
-        <i class="bi bi-people"></i>
-        {{applicants.length}} Applications
+        <i class="bi bi-people"></i> {{applicants.length}} Applications
       </span>
-
     </div>
 
     <!-- Meta Info -->
     <div class="d-flex flex-wrap gap-3 text-muted small mt-2">
 
       <div class="d-flex align-items-center gap-1">
-        <i class="bi bi-geo-alt"></i>
-        {{job.location}}
+        <i class="bi bi-geo-alt"></i>{{job.location}}
       </div>
 
       <div class="d-flex align-items-center gap-1">
-        <i class="bi bi-clock"></i>
-        {{job.type}}
+        <i class="bi bi-clock"></i> {{job.type}}
       </div>
 
       <div class="d-flex align-items-center gap-1">
-        <i class="bi bi-briefcase"></i>
-        {{job.category}}
+        <i class="bi bi-briefcase"></i> {{job.category}}
       </div>
 
     </div>
@@ -52,195 +40,58 @@
 
     <div class="row g-3 align-items-center">
 
-      <!-- Search -->
-      <div class="col-xl-3 col-lg-4 col-md-12">
-        <input type="text" class="form-control filter-input" placeholder="Search job title...">
+      <div class="col-xl-7 col-lg-7 col-md-6">
+        <input type="text" class="form-control filter-input" placeholder="Search applicant name..."[(ngModel)]="searchText">
       </div>
 
-      <!-- Category -->
-      <div class="col-xl-2 col-lg-3 col-md-6">
-        <select class="form-select filter-select">
-          <option selected>Category</option>
-          <option>Frontend</option>
-          <option>Backend</option>
-          <option>Full Stack</option>
-          <option>Data Science</option>
-          <option>DevOps</option>
-        </select>
-      </div>
-
-      <!-- Job Type -->
-      <div class="col-xl-2 col-lg-3 col-md-6">
-        <select class="form-select filter-select">
-          <option selected>Job Type</option>
-          <option>Full Time</option>
-          <option>Part Time</option>
-          <option>Contract</option>
-          <option>Internship</option>
-        </select>
-      </div>
-
-      <!-- Status -->
-      <div class="col-xl-2 col-lg-3 col-md-6">
-        <select class="form-select filter-select">
-          <option selected>Status</option>
-          <option>Open</option>
-          <option>Closed</option>
-          <option>Draft</option>
+      <div class="col-xl-2 col-lg-2 col-md-3">
+        <select class="form-select filter-select" [(ngModel)]="selectedStatus">
+          <option value="">Status</option>
+          @for (st of statusList; track st) {
+          <option [value]="st">{{ st }}</option>
+          }
         </select>
       </div>
 
       <!-- Buttons -->
-      <div class="col-xl-3 col-lg-4 col-md-12 d-flex gap-2">
+      <div class="col-xl-3 col-lg-3 col-md-3 d-flex gap-2">
 
-        <button class="btn btn-primary filter-btn w-100">
-          Apply
-        </button>
-
-        <button class="btn btn-outline-secondary filter-btn w-100">
-          Reset
-        </button>
+        <app-button variant="primary" label="Apply" size="md" class="w-100"   (click)="applyFilters()"></app-button>
+      <app-button variant="secondary" label="Reset" size="md" class="w-100" (click)="resetFilters()"></app-button>
 
       </div>
 
     </div>
 
+      @if (getActiveFilters().length > 0) {
+  <div class="d-flex flex-wrap gap-2 mt-3">
+
+    @for (f of getActiveFilters(); track f.key) {
+      <span class="badge badge-primary d-flex align-items-center gap-2 px-3 py-2">
+
+        {{ f.label }}
+
+        <i
+          class="bi bi-x-lg"
+          style="cursor:pointer; font-size:12px;"
+          (click)="removeFilter(f.key)">
+        </i>
+
+      </span>
+    }
+
   </div>
-
-
-
-  <div class="table-responsive table-card d-none d-lg-block">
-
-    <table class="table table-hover align-middle clean-table">
-
-      <thead class="table-light">
-        <tr>
-          <th>S.NO</th>
-          <th>Full Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Applied Date</th>
-          <th class="text-center">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        @for (applicant of applicants; track applicant.id; let i = $index) {
-
-        <tr>
-
-          <td>{{ i + 1 }}</td>
-
-          <td>
-            <div class="d-flex align-items-center gap-2">
-
-              <img [src]="applicant.avatar" class="rounded-circle" width="36" height="36">
-
-              <span>{{ applicant.name }}</span>
-
-            </div>
-          </td>
-
-          <td>{{ applicant.email }}</td>
-
-          <td>{{ applicant.phone }}</td>
-
-          <td>{{ applicant.appliedDate }}</td>
-
-
-          <td class="text-center">
-            <div class="dropdown">
-
-              <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
-
-              <ul class="dropdown-menu dropdown-menu-end" style="font-size:13px;">
-
-                <li>
-                  <button  class="dropdown-item" (click)="viewApplicant(applicant)" data-bs-toggle="modal"
-                    data-bs-target="#viewApplicantModal">
-
-                    View Profile
-                  </button>
-                </li>
-
-                <li>
-                  <button  class="dropdown-item" style="font-size:13px"
-                    data-bs-toggle="modal" data-bs-target="#scheduleInterviewModal" (click)="scheduleInterview()">
-                    Schedule Interview
-                  </button>
-                </li>
-
-                <li>
-                  <button  class="dropdown-item">
-                    Resume
-                  </button>
-                </li>
-
-
-
-              </ul>
-
-            </div>
-          </td>
-
-
-        </tr>
-
-        }
-
-      </tbody>
-
-    </table>
+}
 
   </div>
 
-
-  <div class="table-footer d-none d-lg-block mb-5">
-
-    <div class="footer-wrapper">
-
-      <small class="result-text">
-        Showing <strong>1–10</strong> of <strong>100</strong> recruiters
-      </small>
-
-      <nav>
-        <ul class="pagination pagination-sm custom-pagination mb-0">
-
-          <li class="page-item disabled">
-            <a class="page-link">
-              <i class="bi bi-chevron-left"></i>
-            </a>
-          </li>
-
-          <li class="page-item active">
-            <a class="page-link">1</a>
-          </li>
-
-          <li class="page-item">
-            <a class="page-link">2</a>
-          </li>
-
-          <li class="page-item">
-            <a class="page-link">
-              <i class="bi bi-chevron-right"></i>
-            </a>
-          </li>
-
-        </ul>
-      </nav>
-
-    </div>
-
-  </div>
+  <app-table [columns]="columns" [data]="paginatedApplicants" class="d-none d-lg-block mb-5"></app-table>
 
   <div class="d-lg-none">
 
     <div class="row g-3">
 
-      @for(applicant of applicants; track applicant.id){
+      @for(applicant of paginatedApplicants; track applicant.jobSeekerId){
 
       <div class="col-12">
 
@@ -248,7 +99,7 @@
 
           <div class="d-flex align-items-center gap-3 mb-2">
 
-            <img [src]="applicant.avatar" class="rounded-circle" width="45" height="45">
+            <img [src]="applicant.profileImage" class="rounded-circle" width="45" height="45">
 
             <div>
 
@@ -265,7 +116,7 @@
               </div>
 
               <div class="small text-muted">
-                Applied {{ applicant.appliedDate }}
+                Applied {{ applicant.appliedAt | date:"dd MM yyyy" }}
               </div>
 
             </div>
@@ -274,18 +125,38 @@
 
 
 
-          <div class="d-flex flex-nowrap gap-1">
+          <div class="d-flex flex-wrap gap-2">
 
-            <button class="btn btn-primary btn-sm" (click)="viewApplicant(applicant)" data-bs-toggle="modal"
-              data-bs-target="#viewApplicantModal">
-              View
-            </button>
+  <!-- View -->
+  <button class="btn btn-primary btn-sm"
+    (click)="viewApplicant(applicant)"
+    data-bs-toggle="modal"
+    data-bs-target="#viewApplicantModal">
+    View
+  </button>
 
-            <button class="btn btn-info btn-sm">
-              Resume
-            </button>
+  <!-- Assign Assessment -->
+  <button class="btn btn-warning btn-sm"
+    (click)="openAssessmentModal(job, applicant)"
+    data-bs-toggle="modal"
+    data-bs-target="#assessmentModal">
+    Assessment
+  </button>
 
-          </div>
+  <!-- Schedule Interview -->
+  <button class="btn btn-info btn-sm"
+    (click)="scheduleInterview(job, applicant)"
+    data-bs-toggle="modal"
+    data-bs-target="#scheduleInterviewModal">
+    Interview
+  </button>
+
+  <!-- Resume -->
+  <button class="btn btn-secondary btn-sm">
+    Resume
+  </button>
+
+</div>
 
 
         </li>
@@ -299,6 +170,7 @@
 
   </div>
 
+  <app-pagination [total]="total" [page]="page" [limit]="limit" (pageChange)="onPageChange($event)" (limitChange)="onLimitChange($event)"></app-pagination>
 
 </div>
 
@@ -312,59 +184,97 @@
         <h5 class="modal-title">Applicant Profile</h5>
         <button class="btn-close" data-bs-dismiss="modal"></button>
       </div>
+<div class="modal-body text-center">
 
-      <div class="modal-body text-center">
+  <!-- PROFILE -->
+  <img [src]="selectedApplicant?.profileImage" class="rounded-circle mb-3" width="80" height="80">
+  <h5 class="mb-1">{{selectedApplicant?.name}}</h5>
+  <p class="text-muted small mb-3">
+    Applied {{selectedApplicant?.appliedAt | date:"dd MM yyyy"}}
+  </p>
 
-        <img [src]="selectedApplicant?.avatar" class="rounded-circle mb-3" width="80" height="80">
+  <hr>
 
-        <h5 class="mb-1">{{selectedApplicant?.name}}</h5>
+  <div class="text-start">
+    <p><strong>Email:</strong><br>{{selectedApplicant?.email}}</p>
+    <p><strong>Phone:</strong><br>{{selectedApplicant?.phone}}</p>
+  </div>
 
-        <p class="text-muted small mb-3">
-          Applied {{selectedApplicant?.appliedDate}}
-        </p>
+  <hr>
 
-        <hr>
+  <!-- ✅ TRACKING STEPS -->
+  <div class="text-start mt-3">
+    <h6 class="fw-semibold mb-3">Hiring Progress</h6>
 
-        <div class="text-start">
+<div class="stepper">
 
-          <p>
-            <strong>Email:</strong><br>
-            {{selectedApplicant?.email}}
-          </p>
+  <!-- Applied (always green) -->
+  <div class="step completed">
+    <div class="circle">✔</div>
+    <div class="label">Applied</div>
+  </div>
 
-          <p>
-            <strong>Phone:</strong><br>
-            {{selectedApplicant?.phone}}
-          </p>
+  <!-- Assessment -->
+  <div class="step"
+    [ngClass]="{
+      'completed': selectedApplicant?.assessmentSubmitted,
+      'failed': !selectedApplicant?.assessmentSubmitted && selectedApplicant?.status === 'Rejected'
+    }">
+    <div class="circle">2</div>
+    <div class="label">Assessment</div>
+  </div>
 
-          <p>
-            <strong>Applied Date:</strong><br>
-            {{selectedApplicant?.appliedDate}}
-          </p>
+  <!-- Interview -->
+  <div class="step"
+    [ngClass]="{
+      'completed': selectedApplicant?.interviewCompleted,
+      'failed': !selectedApplicant?.interviewCompleted && selectedApplicant?.status === 'Rejected'
+    }">
+    <div class="circle">3</div>
+    <div class="label">Interview</div>
+  </div>
 
-        </div>
+  <!-- Shortlist -->
+  <div class="step"
+    [ngClass]="{
+      'completed': selectedApplicant?.status === 'Shortlisted',
+      'failed': selectedApplicant?.status === 'Rejected'
+    }">
+    <div class="circle">4</div>
+    <div class="label">Shortlist</div>
+  </div>
 
+  <!-- Offer -->
+  <div class="step"
+    [ngClass]="{
+      'completed': selectedApplicant?.offerLetter,
+      'failed': selectedApplicant?.status === 'Rejected'
+    }">
+    <div class="circle">5</div>
+    <div class="label">Offer</div>
+  </div>
+
+</div>
+
+    <!-- ❌ REJECT CASE -->
+    @if (selectedApplicant?.status === 'Rejected') {
+      <div class="text-danger mt-3 fw-semibold">
+        Candidate Rejected ❌
       </div>
+    }
+
+  </div>
+
+</div>
 
       <div class="modal-footer">
-
-        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
-          Close
-        </button>
-
-        <button class="btn btn-primary">
-          Download Resume
-        </button>
-
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal"> Close</button>
+        <button class="btn btn-primary"> Download Resume</button>
       </div>
 
     </div>
   </div>
 </div>
-
-
-
-
 
 <div class="modal fade" id="scheduleInterviewModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -376,81 +286,229 @@
       </div>
 
       <div class="modal-body">
-
-        <form>
-
+        <form [formGroup]="interviewForm">
           <div class="row g-3">
 
-            <!-- Job Title -->
+
             <div class="col-md-6">
-              <label class="form-label">Job Title</label>
-              <input type="text" class="form-control" [(ngModel)]="selectedInterview.jobTitle" name="jobTitle" readonly>
+              <label class="form-label">Interview Title</label>
+              <input type="text"
+                     class="form-control"
+                     placeholder="Paste Google Meet / Zoom link"
+                     formControlName="interviewTitle">
+
+              @if (interviewForm.get('interviewTitle')?.touched && interviewForm.get('interviewTitle')?.invalid) {
+                <div class="text-danger">Interview Title is required</div>
+              }
             </div>
 
-            <!-- Candidate Name -->
-            <div class="col-md-6">
-              <label class="form-label">Candidate</label>
-              <input type="text" class="form-control" [(ngModel)]="selectedInterview.candidateName"
-                name="candidateName">
-            </div>
 
             <!-- Date -->
             <div class="col-md-6">
               <label class="form-label">Interview Date</label>
-              <input type="date" class="form-control" [(ngModel)]="selectedInterview.date" name="date">
+              <input type="date" class="form-control" formControlName="date" [min]="minDate">
+
+              @if (interviewForm.get('date')?.touched && interviewForm.get('date')?.invalid) {
+                <div class="text-danger">Date is required</div>
+              }
             </div>
 
             <!-- Time -->
             <div class="col-md-6">
               <label class="form-label">Interview Time</label>
-              <input type="time" class="form-control" [(ngModel)]="selectedInterview.time" name="time">
+              <input type="time" class="form-control" formControlName="time">
+
+              @if (interviewForm.get('time')?.touched && interviewForm.get('time')?.invalid) {
+                <div class="text-danger">Time is required</div>
+              }
             </div>
 
             <!-- Meeting Link -->
             <div class="col-md-6">
               <label class="form-label">Meeting Link</label>
-              <input type="text" class="form-control" placeholder="Paste Google Meet / Zoom link"
-                [(ngModel)]="selectedInterview.meetingLink" name="meetingLink">
+              <input type="text"
+                     class="form-control"
+                     placeholder="Paste Google Meet / Zoom link"
+                     formControlName="meetingLink">
+
+              @if (interviewForm.get('meetingLink')?.touched && interviewForm.get('meetingLink')?.invalid) {
+                <div class="text-danger">Meeting link is required</div>
+              }
             </div>
 
             <!-- Status -->
             <div class="col-md-6">
               <label class="form-label">Status</label>
-              <select class="form-select" [(ngModel)]="selectedInterview.status" name="status">
-
+              <select class="form-select" formControlName="status">
                 <option value="Scheduled">Scheduled</option>
                 <option value="Completed">Completed</option>
-                <option value="Cancelled">Cancelled</option>
-
+                <option value="Not Completed">Not Completed</option>
               </select>
             </div>
 
             <!-- Description -->
             <div class="col-12">
               <label class="form-label">Interview Notes</label>
-              <textarea class="form-control" rows="3" placeholder="Add interview instructions or notes"
-                [(ngModel)]="selectedInterview.description" name="description">
-</textarea>
+              <textarea class="form-control"
+                        rows="3"
+                        placeholder="Add interview instructions or notes"
+                        formControlName="description"></textarea>
             </div>
 
           </div>
-
         </form>
-
       </div>
 
       <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
-        <button class="btn btn-secondary" data-bs-dismiss="modal">
-          Cancel
-        </button>
-
-        <button class="btn btn-primary">
+        <button
+          class="btn btn-primary"
+          [disabled]="interviewForm.invalid"
+          (click)="submitInterview()">
           Schedule Interview
         </button>
-
       </div>
 
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="assessmentModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Assign Assessment</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <form>
+          <div class="row g-3">
+
+            <!-- Assessment Link -->
+            <div class="col-12">
+              <label class="form-label">Assessment Link</label>
+              <input type="text"
+                class="form-control"
+                placeholder="Paste assessment link"
+                [(ngModel)]="selectedAssessment.assessmentLink"
+                name="assessmentLink">
+            </div>
+
+            <!-- ✅ Due Date -->
+            <div class="col-md-6">
+              <label class="form-label">Due Date</label>
+              <input type="date"
+                class="form-control"
+                [(ngModel)]="selectedAssessment.dueDate"
+                name="dueDate">
+            </div>
+
+            <!-- ✅ Description -->
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <textarea class="form-control"
+                rows="3"
+                placeholder="Instructions for candidate"
+                [(ngModel)]="selectedAssessment.description"
+                name="description">
+              </textarea>
+            </div>
+
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+
+        <button class="btn btn-primary"
+          (click)="submitAssessment()">
+          Assign Assessment
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #statusTemplate let-row>
+  <span class="badge" [ngClass]="{ 'badge-secondary': row.status === 'Pending', 'badge-primary': row.status === 'InProcess','badge-info': row.status === 'Interview Scheduled'|| row.status === 'Assessment Assigned', 'badge-success': row.status === 'Shortlisted'|| row.status === 'Assessment Completed' ||row.status ==='Interview Completed', 'badge-danger': row.status === 'Rejected'}">
+    {{ row.status || '--' }}
+  </span>
+</ng-template>
+
+
+<ng-template #actionsTemplate let-row>
+  <div class="d-flex justify-content-center">
+
+    <div class="dropdown ">
+
+      <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-boundary="viewport">
+        <i class="bi bi-three-dots-vertical"></i>
+      </button>
+
+      <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
+<li>
+  <button class="dropdown-item"
+    (click)="viewApplicant(row)"
+    data-bs-toggle="modal"
+    data-bs-target="#viewApplicantModal">
+    View Profile
+  </button>
+</li>
+        <li><button class="dropdown-item" style="font-size:13px" data-bs-toggle="modal" data-bs-target="#assessmentModal"  (click)="openAssessmentModal(job, row)" [disabled]="row.assessmentSubmitted"> {{ row.assessmentSubmitted ? 'Assessment Completed' : 'Assign Assessment' }}</button></li>
+        <li><button class="dropdown-item" style="font-size:13px" data-bs-toggle="modal" data-bs-target="#scheduleInterviewModal" (click)="scheduleInterview(job, row)" [disabled]="row.interviewCompleted">{{ row.interviewCompleted ? 'Interview Completed' : 'Schedule Interview' }}</button></li>
+        <li> <button class="dropdown-item">Resume</button> </li>
+@if (row.interviewCompleted) {
+
+  <!-- NOT DECIDED -->
+  @if (row.status !== 'Shortlisted' && row.status !== 'Rejected') {
+    <li>
+      <button class="dropdown-item text-success"
+        (click)="hireApplicant(row)">
+        Shortlist
+      </button>
+    </li>
+
+    <li>
+      <button class="dropdown-item text-danger"
+        (click)="rejectApplicant(row)">
+        Reject
+      </button>
+    </li>
+  }
+
+  <!-- SHORTLISTED -->
+  @if (row.status === 'Shortlisted') {
+    <li>
+      <button class="dropdown-item text-success" disabled>
+        Shortlisted
+      </button>
+    </li>
+  }
+
+  <!-- REJECTED -->
+  @if (row.status === 'Rejected') {
+    <li>
+      <button class="dropdown-item text-danger" disabled>
+        Rejected
+      </button>
+    </li>
+  }
+
+}
+      </ul>
+
+    </div>
+
+  </div>
+</ng-template>
+

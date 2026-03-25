@@ -72,7 +72,7 @@
 
 <div class="row g-4">
 
-@for(job of jobs; track job.id){
+@for(job of jobs; track job._id){
 
 <div class="col-12 col-md-6 col-xl-4">
 
@@ -120,15 +120,15 @@
 <!-- APPLICATION STATUS -->
 <div class="application-status mt-2">
 
-<span class="status-pill"
+<span class="badge"
 [ngClass]="{
-'status-progress': job.status === 'In Process',
-'status-interview': job.status === 'Interview Scheduled',
-'status-assessment': job.status === 'Assessment Assigned',
-'status-shortlisted': job.status === 'Shortlisted',
-'status-rejected': job.status === 'Rejected'
+'badge-secondary': job.applicationStatus === 'Pending',
+'badge-primary': job.applicationStatus === 'InProcess',
+'badge-info': job.applicationStatus === 'Interview Scheduled'|| job.applicationStatus === 'Assessment Assigned',
+'badge-success': job.applicationStatus === 'Shortlisted'|| job.applicationStatus === 'Assessment Completed' ||job.applicationStatus === 'Interview Completed',
+'badge-danger': job.applicationStatus === 'Rejected'
 }">
-{{job.status}}
+{{job.applicationStatus}}
 </span>
 
 </div>
@@ -138,8 +138,8 @@
 <div class="mt-auto pt-3 d-flex gap-2 flex-wrap">
 
 <button class="view-job-btn"
-[routerLink]="['/jobprofile', job.id, 'job-details']">
-View Job
+  [routerLink]="['/user/jobprofile', job._id, 'job-details']">
+  View Job
 </button>
 
 <button class="tracking-btn"
@@ -224,7 +224,7 @@ Withdraw
 
 <div class="timeline">
 
-@for(step of trackingSteps; track step.name){
+@for(step of getTrackingSteps(selectedJob); track step.name){
 
 <div class="timeline-step">
 

@@ -1,5 +1,6 @@
-import { Component} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AssessmentService } from '../../../../core/services/assessment-service';
 
 @Component({
   selector: 'app-assessments-room-page',
@@ -8,60 +9,47 @@ import { CommonModule } from '@angular/common';
   templateUrl: './assessments-room-page.html',
   styleUrl: './assessments-room-page.css'
 })
-export class AssessmentsRoomPage  {
+export class AssessmentsRoomPage implements OnInit {
 
-assessments = [
-{
-id:1,
-jobTitle:'Angular Developer',
-jobId:'JOB-001',
-assessmentLink:'https://assessment.platform.com/angular-test',
-description:'Technical assessment for Angular developer role.',
-date:'2026-03-20',
-time:'10:00 AM',
-status:'Not Started'
-},
-{
-id:2,
-jobTitle:'Node.js Backend Developer',
-jobId:'JOB-002',
-assessmentLink:'https://assessment.platform.com/nodejs-test',
-description:'Backend architecture and coding assessment.',
-date:'2026-03-22',
-time:'02:00 PM',
-status:'Completed'
-},
-{
-id:3,
-jobTitle:'Full Stack Developer',
-jobId:'JOB-003',
-assessmentLink:'https://assessment.platform.com/fullstack-test',
-description:'Full stack coding and problem solving assessment.',
-date:'2026-03-24',
-time:'11:30 AM',
-status:'Not Started'
-},
-{
-id:4,
-jobTitle:'AI Engineer',
-jobId:'JOB-004',
-assessmentLink:'https://assessment.platform.com/ai-test',
-description:'AI and machine learning technical assessment.',
-date:'2026-03-25',
-time:'04:00 PM',
-status:'Not Completed'
-},
-{
-id:5,
-jobTitle:'Frontend React Developer',
-jobId:'JOB-005',
-assessmentLink:'https://assessment.platform.com/react-test',
-description:'Frontend UI development coding assessment.',
-date:'2026-03-27',
-time:'09:30 AM',
-status:'Not Started'
+
+
+  ngOnInit() {
+  this.loadAssessments();
 }
-];
+
+assessments : any[] =[]
+constructor(private assessmentService: AssessmentService) {}
+
+
+loadAssessments() {
+  this.assessmentService.getMyAssessments().subscribe({
+    next: (res: any) => {
+      console.log('Assessments:', res);
+
+      // If your backend sends { total, assessments }
+      this.assessments = res.assessments || res;
+
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+}
+
+
+markAsCompleted(id: string) {
+  this.assessmentService.markCompleted(id).subscribe({
+    next: (res) => {
+      console.log(res);
+
+      // refresh list after update
+      this.loadAssessments();
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+}
 
 
 }

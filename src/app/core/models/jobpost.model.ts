@@ -32,7 +32,9 @@ export interface RecruiterJobsResponse {
   jobs: JobPost[];
 }
 
-
+export interface JobDetailResponse {
+  jobPost: JobPost;
+}
 
 
 export interface JobApplicant {

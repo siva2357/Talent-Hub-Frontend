@@ -1,7 +1,7 @@
 <div class="container-xxl job-page">
 
     <div class="d-flex  align-items-center mb-3">
-    <button class="btn btn-light me-2" [routerLink]="['/jobprofile']">
+    <button class="btn btn-light me-2" [routerLink]="['/user/jobprofile']">
       <i class="bi bi-arrow-left fs-5"></i>
     </button>
     <h5 class="fw-semibold mb-0">Job Overview</h5>
@@ -18,11 +18,11 @@
 <!-- HEADER -->
 <div class="job-header">
 
-<img [src]="job.logo" class="company-logo-lg">
+<img [src]="job.company.logo" class="company-logo-lg">
 
 <div>
-<h4 class="job-title">{{job.title}}</h4>
-<div class="company-name">{{job.company}} - <a class="company-link"
+<h4 class="job-title">{{job.jobTitle}}</h4>
+<div class="company-name">{{job.company.name}} - <a class="company-link"
    data-bs-toggle="modal"
    data-bs-target="#companyModal">
 View Company Information
@@ -37,12 +37,12 @@ View Company Information
 
 <span class="job-badge">
 <i class="bi bi-briefcase"></i>
-{{job.category}}
+{{job.jobCategory}}
 </span>
 
 <span class="job-badge">
 <i class="bi bi-clock"></i>
-{{job.type}}
+{{job.jobType}}
 </span>
 
 <span class="job-badge">
@@ -59,20 +59,20 @@ View Company Information
 <span class="overview-value">{{job.salary}}</span>
 </div>
 
-<div class="overview-item">
+<!-- <div class="overview-item">
 <span class="overview-label">Experience</span>
 <span class="overview-value">{{job.experience}}</span>
-</div>
+</div> -->
 
-<div class="overview-item">
+<!-- <div class="overview-item">
 <span class="overview-label">Job Level</span>
 <span class="overview-value">{{job.level}}</span>
-</div>
+</div> -->
 
-<div class="overview-item">
+<!-- <div class="overview-item">
 <span class="overview-label">Work Mode</span>
 <span class="overview-value">{{job.workMode}}</span>
-</div>
+</div> -->
 
 </div>
 
@@ -81,11 +81,11 @@ View Company Information
 <h6 class="section-title">Job Description</h6>
 
 <p class="job-text">
-{{job.description}}
+{{job.jobDescription}}
 </p>
 
-<!-- RESPONSIBILITIES -->
-<h6 class="section-title">Responsibilities</h6>
+
+<!-- <h6 class="section-title">Responsibilities</h6>
 
 <ul class="job-list">
 
@@ -100,8 +100,6 @@ View Company Information
 </ul>
 
 
-
-<!-- SKILLS -->
 <h6 class="section-title">Required Skills</h6>
 
 <div class="skills">
@@ -128,7 +126,7 @@ View Company Information
 
 }
 
-</ul>
+</ul> -->
 
 
 </div>
@@ -145,13 +143,23 @@ View Company Information
   <!-- APPLY + WITHDRAW -->
 <div class="apply-row">
 
-<button class="sidebar-apply-btn">
-Apply
-</button>
-
-<button class="withdraw-btn">
-Withdraw
-</button>
+@if (!isApplied) {
+  <app-button
+    label="Apply"
+    variant="primary"
+    class="w-100"
+    size="md"
+    (click)="applyJob()">
+  </app-button>
+} @else {
+  <app-button
+    label="Withdraw"
+    variant="danger"
+    class="w-100"
+    size="md"
+    (click)="withdrawJob()">
+  </app-button>
+}
 
 </div>
 
@@ -167,18 +175,18 @@ Withdraw
 
     <div class="info-row">
       <span class="info-label">Posted</span>
-      <span>3 days ago</span>
+      <span>{{job.createdAt | date:'dd MMM yyyy'}}</span>
     </div>
 
     <div class="info-row">
       <span class="info-label">Apply by</span>
-      <span>30 March 2026</span>
+      <span>{{job.applyByDate | date:'dd MMM yyyy'}}</span>
     </div>
 
-    <div class="info-row">
+    <!-- <div class="info-row">
       <span class="info-label">Applicants</span>
       <span>24</span>
-    </div>
+    </div> -->
 
   </div>
 

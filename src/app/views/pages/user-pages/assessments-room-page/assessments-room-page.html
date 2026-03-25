@@ -69,76 +69,108 @@
 
 
 <div class="row justify-content-center">
+  <div class="col-lg-8 col-12">
 
-<div class="col-lg-8 col-12">
+    @for (assessment of assessments; track assessment._id) {
 
-@for(assessment of assessments; track assessment.id){
+      <div class="meeting-card mb-4">
 
-<div class="meeting-card mb-4">
+        <!-- 🔹 HEADER -->
+        <div class="d-flex justify-content-between align-items-start">
 
-<div class="d-flex justify-content-between align-items-start">
+          <!-- LEFT SIDE -->
+          <div class="d-flex align-items-start gap-3">
 
-<div>
+            <!-- LOGO -->
+            <img
+              [src]="assessment.logo"
+              alt="logo"
+              style="width:40px; height:40px; border-radius:50%;" />
 
-<h6 class="meeting-title">
-{{assessment.jobTitle}} - <span class="badge bg-light text-dark">
-{{assessment.jobId}}
-</span>
-</h6>
+            <!-- COMPANY + JOB -->
+            <div>
+
+              <!-- COMPANY -->
+              <div class="text-muted small">
+                {{ assessment.company }}
+              </div>
+
+            </div>
+          </div>
+
+          <!-- STATUS -->
+          <span
+            class="status-badge"
+            [ngClass]="{
+              'status-upcoming': assessment.status === 'Assigned',
+              'status-completed': assessment.status === 'Completed'
+            }">
+            {{ assessment.status }}
+          </span>
+
+        </div>
+
+              <!-- JOB TITLE -->
+              <h6 class="meeting-title mb-1">
+                {{ assessment.jobTitle }} -              <!-- JOB ID -->
+              <span class="text-dark">
+                {{ assessment.jobId }}
+              </span>
+
+              </h6>
 
 
+        <!-- 🔹 DESCRIPTION -->
+        <p class="meeting-desc mt-2">
+          {{ assessment.description }}
+        </p>
 
-</div>
+        <!-- 🔹 INFO ROW -->
+        <div class="meeting-info d-flex gap-3 flex-wrap">
 
-<span
-class="status-badge"
-[ngClass]="{
-'status-upcoming': assessment.status === 'Not Started',
-'status-completed': assessment.status === 'Completed',
-'status-missed': assessment.status === 'Not Completed'
-}">
-{{assessment.status}}
-</span>
+          <!-- DATE -->
+          <span>
+            <i class="bi bi-calendar-event"></i>
+            {{ assessment.date | date:'mediumDate' }}
+          </span>
 
-</div>
+          <!-- LOCATION -->
+          <span>
+            <i class="bi bi-geo-alt"></i>
+            {{ assessment.location }}
+          </span>
 
-<p class="meeting-desc mt-2">
-{{assessment.description}}
-</p>
+        </div>
 
-<div class="meeting-info">
+        <!-- 🔹 ACTION -->
+        <div class="meeting-actions mt-3">
 
-<span>
-<i class="bi bi-calendar-event"></i>
-{{assessment.date}}
-</span>
+          <a
+            class="join-btn"
+            [target]="'_blank'"
+            [href]="assessment.assessmentLink"
+            [ngClass]="{ 'disabled': assessment.status === 'Completed' }">
 
-<span>
-<i class="bi bi-clock"></i>
-{{assessment.time}}
-</span>
+            {{ assessment.status === 'Completed' ? 'Completed' : 'Start Assessment' }}
 
-</div>
+          </a>
 
-<div class="meeting-actions mt-3">
+          <button
+  class="btn btn-success mt-2"
+  (click)="markAsCompleted(assessment._id)"
+  *ngIf="assessment.status !== 'Completed'">
 
-<a
-class="join-btn"
-[target]="'_blank'"
-[href]="assessment.assessmentLink">
+  Mark as Completed
 
-Start Assessment
+</button>
 
-</a>
+        </div>
 
-</div>
+      </div>
 
-</div>
+    }
 
-}
-
-</div>
-
+  </div>
 </div>
 
 <div class="table-footer  mb-5">
