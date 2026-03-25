@@ -97,11 +97,11 @@
 
 <td>{{interview.jobTitle}}</td>
 
-<td>{{interview.candidateName}}</td>
+<td>{{interview.jobSeekerName}}</td>
 
 <td>{{interview.email}}</td>
 
-<td>{{interview.interviewDate}}</td>
+<td>{{interview.scheduledDate}}</td>
 
 <td>
 <span
@@ -140,6 +140,16 @@ update
   </a>
 </li>
 
+  <!-- ✅ DELETE OPTION -->
+  <li>
+    <button
+      class="dropdown-item text-danger"
+      (click)="openDeleteModal(interview)"
+      data-bs-toggle="modal"
+      data-bs-target="#deleteInterviewModal">
+      Delete
+    </button>
+  </li>
 
 </ul>
 
@@ -257,11 +267,9 @@ update
 </button>
 
 <button
-class="btn btn-danger btn-sm"
-data-bs-toggle="modal"
-data-bs-target="#deleteInterviewModal"
-(click)="selectInterview(interview)">
-Delete
+  class="btn btn-danger"
+  (click)="confirmDelete()">
+  Delete
 </button>
 
 </div>
@@ -282,119 +290,117 @@ Delete
 
 
 <div class="modal fade" id="scheduleInterviewModal" tabindex="-1">
-<div class="modal-dialog modal-lg modal-dialog-centered">
-<div class="modal-content">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
 
-<div class="modal-header">
-<h5 class="modal-title">Schedule Interview</h5>
-<button class="btn-close" data-bs-dismiss="modal"></button>
-</div>
+      <!-- Header -->
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title">
+          {{ isEditMode ? '✏️ Update Interview' : '📅 Schedule Interview' }}
+        </h5>
+        <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
 
-<div class="modal-body">
+      <!-- Body -->
+      <div class="modal-body">
+        <form [formGroup]="interviewForm">
 
-<form>
+          <div class="row g-4">
 
-<div class="row g-3">
+            <!-- Job Title -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Job Title</label>
+              <input class="form-control bg-light" formControlName="jobTitle" readonly>
+            </div>
 
-<!-- Job Title -->
-<div class="col-md-6">
-<label class="form-label">Job Title</label>
-<input
-type="text"
-class="form-control"
-[(ngModel)]="selectedInterview.jobTitle"
-name="jobTitle"
-readonly>
-</div>
+            <!-- Candidate -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Candidate</label>
+              <input class="form-control" formControlName="candidateName">
 
-<!-- Candidate Name -->
-<div class="col-md-6">
-<label class="form-label">Candidate</label>
-<input
-type="text"
-class="form-control"
-[(ngModel)]="selectedInterview.candidateName"
-name="candidateName">
-</div>
+              @if (interviewForm.get('candidateName')?.touched && interviewForm.get('candidateName')?.invalid) {
+                <small class="text-danger">Candidate is required</small>
+              }
+            </div>
 
-<!-- Date -->
-<div class="col-md-6">
-<label class="form-label">Interview Date</label>
-<input
-type="date"
-class="form-control"
-[(ngModel)]="selectedInterview.date"
-name="date">
-</div>
 
-<!-- Time -->
-<div class="col-md-6">
-<label class="form-label">Interview Time</label>
-<input
-type="time"
-class="form-control"
-[(ngModel)]="selectedInterview.time"
-name="time">
-</div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Interview Title</label>
+              <input class="form-control bg-light" formControlName="interviewTitle" readonly>
+            </div>
 
-<!-- Meeting Link -->
-<div class="col-md-6">
-<label class="form-label">Meeting Link</label>
-<input
-type="text"
-class="form-control"
-placeholder="Paste Google Meet / Zoom link"
-[(ngModel)]="selectedInterview.meetingLink"
-name="meetingLink">
-</div>
 
-<!-- Status -->
-<div class="col-md-6">
-<label class="form-label">Status</label>
-<select
-class="form-select"
-[(ngModel)]="selectedInterview.status"
-name="status">
+            <!-- Date -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Interview Date</label>
+              <input type="date" class="form-control" formControlName="date" [min]="minDate">
 
-<option value="Scheduled">Scheduled</option>
-<option value="Completed">Completed</option>
-<option value="Cancelled">Cancelled</option>
+              @if (interviewForm.get('date')?.touched && interviewForm.get('date')?.invalid) {
+                <small class="text-danger">Date required</small>
+              }
+            </div>
 
-</select>
-</div>
+            <!-- Time -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Interview Time</label>
+              <input type="time" class="form-control" formControlName="time">
 
-<!-- Description -->
-<div class="col-12">
-<label class="form-label">Interview Notes</label>
-<textarea
-class="form-control"
-rows="3"
-placeholder="Add interview instructions or notes"
-[(ngModel)]="selectedInterview.description"
-name="description">
-</textarea>
-</div>
+              @if (interviewForm.get('time')?.touched && interviewForm.get('time')?.invalid) {
+                <small class="text-danger">Time required</small>
+              }
+            </div>
 
-</div>
+            <!-- Meeting Link -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Meeting Link</label>
+              <input class="form-control" formControlName="meetingLink" placeholder="https://meet...">
 
-</form>
+              @if (interviewForm.get('meetingLink')?.touched && interviewForm.get('meetingLink')?.invalid) {
+                <small class="text-danger">Meeting link required</small>
+              }
+            </div>
 
-</div>
+            <!-- Status -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Status</label>
+              <select class="form-select" formControlName="status">
+                <option value="Scheduled">Scheduled</option>
+                <option value="Completed">Completed</option>
+                <option value="Not Completed">Not Completed</option>
+              </select>
+            </div>
 
-<div class="modal-footer">
+            <!-- Description -->
+            <div class="col-12">
+              <label class="form-label fw-semibold">Notes</label>
+              <textarea class="form-control" rows="3" formControlName="description"></textarea>
+            </div>
 
-<button class="btn btn-secondary" data-bs-dismiss="modal">
-Cancel
-</button>
+          </div>
 
-<button class="btn btn-primary">
-Schedule Interview
-</button>
+        </form>
+      </div>
 
-</div>
+      <!-- Footer -->
+      <div class="modal-footer border-0">
 
-</div>
-</div>
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+
+        <button
+          class="btn btn-primary px-4"
+          [disabled]="interviewForm.invalid"data-bs-dismiss="modal"
+          (click)="saveInterview()">
+
+          {{ isEditMode ? 'Update' : 'Schedule' }}
+
+        </button>
+
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <div class="modal fade" id="deleteInterviewModal" tabindex="-1">

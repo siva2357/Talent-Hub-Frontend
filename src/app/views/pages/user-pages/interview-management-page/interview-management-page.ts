@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InterviewService } from '../../../../core/services/interview-service';
+import { UpdateInterviewDTO } from '../../../../core/dtos/interview.dto';
 
 
 @Component({
@@ -10,76 +12,166 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './interview-management-page.html',
   styleUrl: './interview-management-page.css',
 })
-export class InterviewManagementPage {
+export class InterviewManagementPage implements OnInit {
+
+constructor(  private fb: FormBuilder,private interviewService: InterviewService) {}
+
+interviewForm!: FormGroup;
+minDate = new Date().toISOString().split('T')[0];
+
+ngOnInit() {
+  this.loadInterviews();
+    this.initForm();
+}
+
+initForm() {
+this.interviewForm = this.fb.group({
+  _id: [''], // ✅ ADD THIS
+
+  jobPostId: [''],
+  jobSeekerId: [''],
+
+  jobTitle: [{ value: '', disabled: true }],
+  candidateName: ['', Validators.required],
+  interviewTitle:['',Validators.required],
+  date: ['', Validators.required],
+  time: ['', Validators.required],
+
+  meetingLink: ['', Validators.required],
+
+  status: ['Scheduled'],
+  description: ['']
+});
+}
+
+loadInterviews() {
+  this.loading = true;
+
+  this.interviewService.getAllRecruiterInterviews().subscribe({
+    next: (res) => {
+      this.interviews = res.meetings || [];
+      this.loading = false;
+    },
+    error: (err) => {
+      console.error(err);
+      this.loading = false;
+    }
+  });
+}
+
+selectInterview(interview: any) {
+  this.isEditMode = true;
+
+  const formatted = {
+    ...interview,
+    date: this.formatDate(interview.scheduledDate),
+    time: this.formatTime(interview.startTime)
+  };
+
+  this.selectedInterview = formatted;
+
+  // ✅ PATCH FORM HERE
+  this.interviewForm.patchValue({
+    _id: interview._id, // important
+    jobPostId: interview.jobPostId,
+    jobSeekerId: interview.jobSeekerId,
+    jobTitle: interview.jobTitle,
+    candidateName: interview.jobSeekerName,
+    interviewTitle: interview.interviewTitle,
+    date: formatted.date,
+    time: formatted.time,
+    meetingLink: interview.meetingJoinUrl,
+    status: interview.status,
+    description: interview.interviewDescription
+  });
+}
 
 
+formatDate(date: string) {
+  return new Date(date).toISOString().split('T')[0];
+}
 
-selectedInterview:any = {
-jobTitle:'',
-candidateName:'',
-date:'',
-time:'',
-meetingLink:'',
-status:'Scheduled',
-description:''
-};
+formatTime(date: string) {
+  return new Date(date).toTimeString().slice(0, 5);
+}
+
+selectedInterview:any
 isEditMode = false;
 
-selectInterview(interview:any){
-  this.isEditMode = true;
-  this.selectedInterview = { ...interview };
+
+
+interviews: any[] = [];
+loading = false;
+
+
+
+saveInterview() {
+
+  if (this.interviewForm.invalid) {
+    this.interviewForm.markAllAsTouched();
+    return;
+  }
+
+  const form = this.interviewForm.getRawValue();
+
+  const start = new Date(`${form.date}T${form.time}`);
+  const end = new Date(start.getTime() + 30 * 60000);
+
+  const payload: UpdateInterviewDTO = {
+    interviewTitle:form.interviewTitle,
+    interviewDescription: form.description,
+    scheduledDate: new Date(form.date).toISOString(),
+    startTime: start.toISOString(),
+    endTime: end.toISOString(),
+    meetingJoinUrl: form.meetingLink,
+    status: form.status
+  };
+
+  // ✅ FIXED UPDATE LOGIC
+  if (this.isEditMode && form._id) {
+    this.interviewService.updateInterview(form._id, payload).subscribe(() => {
+      this.loadInterviews();
+      this.resetForm();
+    });
+  }
 }
 
 
+resetForm() {
+  this.isEditMode = false;
+  this.interviewForm.reset({
+    status: 'Scheduled'
+  });
+}
 
-scheduleInterview(){
-this.selectedInterview = {
-jobTitle:'',
-candidateName:'',
-date:'',
-time:'',
-meetingLink:'',
-status:'Scheduled',
-description:''
-};
+openDeleteModal(interview: any) {
+  this.selectedInterview = interview;
+}
+
+confirmDelete() {
+  if (!this.selectedInterview?._id) return;
+
+  this.interviewService.deleteInterview(this.selectedInterview._id).subscribe({
+    next: (res) => {
+      console.log(res.message);
+
+      // ✅ Refresh list
+      this.loadInterviews();
+
+      // ✅ Close modal manually
+      const modal = document.getElementById('deleteInterviewModal');
+      if (modal) {
+        (window as any).bootstrap.Modal.getInstance(modal)?.hide();
+      }
+
+      // ✅ Reset selection
+      this.selectedInterview = null;
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
 }
 
 
-
-interviews = [
-
-{
-id:1,
-jobId:'JOB-001',
-jobTitle:'Angular Developer',
-candidateName:'Michael Wilson',
-email:'michael@email.com',
-interviewDate:'25 Jul 2025 - 10:00 AM',
-status:'Scheduled',
-meetingLink:'https://meet.google.com/demo'
-},
-
-{
-id:2,
-jobId:'JOB-002',
-jobTitle:'Node.js Developer',
-candidateName:'Jennifer Miller',
-email:'jennifer@email.com',
-interviewDate:'26 Jul 2025 - 2:00 PM',
-status:'Pending',
-meetingLink:'https://meet.google.com/demo'
-},
-
-{
-id:3,
-jobId:'JOB-003',
-jobTitle:'DevOps Engineer',
-candidateName:'William Anderson',
-email:'william@email.com',
-interviewDate:'27 Jul 2025 - 11:00 AM',
-status:'Completed',
-meetingLink:'https://meet.google.com/demo'
-}
-
-];
 }

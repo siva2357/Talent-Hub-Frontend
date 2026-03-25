@@ -238,3 +238,52 @@ font-size:12px;
 
 
 
+
+
+
+.stepper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.step {
+  text-align: center;
+  flex: 1;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #6c757d; /* 🔘 default gray */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.label {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #6c757d;
+}
+
+/* ✅ GREEN */
+.step.completed .circle {
+  background: #28a745;
+}
+.step.completed .label {
+  color: #28a745;
+  font-weight: 500;
+}
+
+/* ❌ RED */
+.step.failed .circle {
+  background: #dc3545;
+}
+.step.failed .label {
+  color: #dc3545;
+  font-weight: 500;
+}
