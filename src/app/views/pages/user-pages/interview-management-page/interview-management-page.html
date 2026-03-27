@@ -69,140 +69,8 @@
 </div>
 
 
-<div class="table-responsive table-card d-none d-lg-block">
-  <table class="table table-hover align-middle clean-table">
+<app-table [columns]="columns" [data]="paginatedInterviews" class="d-none d-lg-block mb-5"></app-table>
 
-<thead class="table-light">
-<tr>
-<th>S.NO</th>
-<th>Job ID</th>
-<th>Job Title</th>
-<th>Candidate</th>
-<th>Email</th>
-<th>Interview Date</th>
-<th>Status</th>
-<th class="text-center">Actions</th>
-</tr>
-</thead>
-
-<tbody>
-
-@for(interview of interviews; track interview.id; let i = $index){
-
-<tr>
-
-<td>{{i+1}}</td>
-
-<td>{{interview.jobId}}</td>
-
-<td>{{interview.jobTitle}}</td>
-
-<td>{{interview.jobSeekerName}}</td>
-
-<td>{{interview.email}}</td>
-
-<td>{{interview.scheduledDate}}</td>
-
-<td>
-<span
-class="badge"
-[ngClass]="interview.status === 'Open' ? 'bg-success' : 'bg-secondary'">
-{{ interview.status }}
-</span>
-</td>
-
-<td class="text-center">
-<div class="dropdown">
-
-<button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
-<i class="bi bi-three-dots-vertical"></i>
-</button>
-
-<ul class="dropdown-menu dropdown-menu-end" style="font-size:13px;">
-
-<li>
-<button class="dropdown-item"
-(click)="selectInterview(interview)"
-data-bs-toggle="modal"
-data-bs-target="#scheduleInterviewModal">
-update
-</button>
-</li>
-
-
-<li>
-  <a
-    class="dropdown-item"
-    [href]="interview.meetingLink"
-    target="_blank"
-  >
-    Join Meeting
-  </a>
-</li>
-
-  <!-- ✅ DELETE OPTION -->
-  <li>
-    <button
-      class="dropdown-item text-danger"
-      (click)="openDeleteModal(interview)"
-      data-bs-toggle="modal"
-      data-bs-target="#deleteInterviewModal">
-      Delete
-    </button>
-  </li>
-
-</ul>
-
-</div>
-</td>
-
-</tr>
-
-}
-
-</tbody>
-
-  </table>
-</div>
-
-
-<div class="table-footer d-none d-lg-block mb-5">
-
-  <div class="footer-wrapper">
-
-    <small class="result-text">
-      Showing <strong>1–10</strong> of <strong>100</strong> recruiters
-    </small>
-
-    <nav>
-      <ul class="pagination pagination-sm custom-pagination mb-0">
-
-        <li class="page-item disabled">
-          <a class="page-link">
-            <i class="bi bi-chevron-left"></i>
-          </a>
-        </li>
-
-        <li class="page-item active">
-          <a class="page-link">1</a>
-        </li>
-
-        <li class="page-item">
-          <a class="page-link">2</a>
-        </li>
-
-        <li class="page-item">
-          <a class="page-link">
-            <i class="bi bi-chevron-right"></i>
-          </a>
-        </li>
-
-      </ul>
-    </nav>
-
-  </div>
-
-</div>
 
 <div class="d-lg-none">
 
@@ -283,6 +151,9 @@ update
 </div>
 
 </div>
+
+
+<app-pagination [total]="total" [page]="page" [limit]="limit" (pageChange)="onPageChange($event)" (limitChange)="onLimitChange($event)"></app-pagination>
 
 
 </div>
@@ -434,3 +305,49 @@ Delete
 </div>
 </div>
 </div>
+
+
+<ng-template #statusTemplate let-row>
+  <span
+    class="badge"
+    [ngClass]="{
+      'badge-success': row.status === 'Completed',
+      'badge-danger': row.status === 'Not Completed',
+      'badge-secondary': row.status === 'Scheduled',
+      'badge-info': !row.status
+    }"
+  >
+    {{ row.status }}
+  </span>
+</ng-template>
+
+<ng-template #actionsTemplate let-row>
+  <div class="d-flex justify-content-center">
+
+
+    <div class="dropdown ">
+
+      <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" data-bs-display="static"
+        data-bs-boundary="viewport">
+        <i class="bi bi-three-dots-vertical"></i>
+      </button>
+
+      <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
+
+        <li>
+          <button class="dropdown-item" (click)="selectInterview(row)" data-bs-toggle="modal" data-bs-target="#scheduleInterviewModal"> Edit</button>
+        </li>
+
+        <li>
+          <a class="dropdown-item" [href]="row.meetingLink" target="_blank">Join Meeting</a>
+        </li>
+
+        <li>
+           <button class="dropdown-item text-danger" (click)="openDeleteModal(row)" data-bs-toggle="modal" data-bs-target="#deleteInterviewModal"> Delete</button>
+        </li>
+      </ul>
+
+    </div>
+
+  </div>
+</ng-template>

@@ -69,10 +69,10 @@ getTalentProfileById(id: string): Observable<any> {
 
 getShortlistedTalents(
   jobPostId: string
-): Observable<{ total: number; candidates: Talent[] }> {
+): Observable<{ total: number;  data: Talent[] }> {
 
   return this.http
-    .get<{ total: number; candidates: Talent[] }>(
+    .get<{ total: number;  data: Talent[] }>(
       `${this.baseUrl}/jobs/${jobPostId}/shortlisted-candidates`,
       { headers: this.getHeaders() }
     )

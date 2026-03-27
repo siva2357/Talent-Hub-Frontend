@@ -8,7 +8,6 @@ import { ResumeAnalytics } from './resume-analytics/resume-analytics';
 import { JobApplications } from './job-applications/job-applications';
 import { TalentProfilePage } from './talent-profile-page/talent-profile-page';
 import { Talents } from './talents/talents';
-import { HiredTalents } from './hired-talents/hired-talents';
 import { ScheduledMeetings } from './scheduled-meetings/scheduled-meetings';
 import { Dashboard } from './dashboard/dashboard';
 import { Recruiters } from './recruiters/recruiters';
@@ -22,7 +21,6 @@ import { JobProfilesPage } from './job-profiles-page/job-profiles-page';
 import { InterviewManagementPage } from './interview-management-page/interview-management-page';
 import { ResumeAtsReport } from './resume-ats-report/resume-ats-report';
 import { SavedTalents } from './saved-talents/saved-talents';
-import { RecruiterDashboard } from './recruiter-dashboard/recruiter-dashboard';
 import { ManageAssessments } from './manage-assessments/manage-assessments';
 import { JobDetailsPage } from './job-details-page/job-details-page';
 import { RoleGuard } from '../../../core/guards/role.guard';
@@ -44,7 +42,6 @@ export const USER_ROUTES: Routes = [
       { path: 'resume-analytics/:id/ats-report', component: ResumeAtsReport, canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
 
       // -------- RECRUITER --------
-      { path: 'my-dashboard', component: RecruiterDashboard,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
       { path: 'my-jobposts', component: ManageJobsPage,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
       { path: 'my-jobposts/:id/job-applications', component: JobApplications,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
       { path: 'manage-interviews', component: InterviewManagementPage,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
@@ -52,7 +49,6 @@ export const USER_ROUTES: Routes = [
       { path: 'talents', component: Talents,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
       { path: 'talents/:id/profile', component: TalentProfilePage,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
       { path: 'saved-talents', component: SavedTalents,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
-      { path: 'hired-talents', component: HiredTalents ,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' }},
 
       // -------- ADMIN --------
       { path: 'dashboard', component: Dashboard,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'admin' } },

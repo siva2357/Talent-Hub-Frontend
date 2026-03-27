@@ -76,46 +76,65 @@
 
 <div class="meeting-card mb-4">
 
-<div class="d-flex justify-content-between align-items-start">
 
-<div>
+        <!-- 🔹 HEADER -->
+        <div class="d-flex justify-content-between align-items-start mb-2">
 
-<h6 class="meeting-title">
-{{meeting.jobTitle}} - <span class="badge bg-light text-dark">
-{{meeting.jobId}}
-</span>
-</h6>
+          <!-- LEFT SIDE -->
+          <div class="d-flex align-items-center gap-3">
 
+            <!-- LOGO -->
+            <img
+              [src]="meeting.companyLogo"
+              alt="logo"
+              style="width:60px; height:40px;" />
 
+            <!-- COMPANY + JOB -->
+            <div>
 
-</div>
+              <!-- COMPANY -->
+              <div class="text-muted small">
+                {{ meeting.companyName }}
+              </div>
 
-<span
-class="status-badge"
-[ngClass]="{
-'status-upcoming': meeting.status === 'Not Started',
-'status-completed': meeting.status === 'Completed',
-'status-missed': meeting.status === 'Not Completed'
-}">
-{{meeting.status}}
-</span>
+            </div>
+          </div>
 
-</div>
+          <!-- STATUS -->
+          <span
+            class="status-badge"
+            [ngClass]="{
+              'status-upcoming': meeting.status === 'Assigned',
+              'status-completed': meeting.status === 'Completed'
+            }">
+            {{ meeting.status }}
+          </span>
+
+        </div>
+
+              <!-- JOB TITLE -->
+              <h6 class="meeting-title mb-1">
+                {{ meeting.jobTitle }} -              <!-- JOB ID -->
+              <span class="text-dark">
+                {{ meeting.jobId }}
+              </span>
+
+              </h6>
 
 <p class="meeting-desc mt-2">
-{{meeting.description}}
+{{meeting.interviewDescription}}
 </p>
 
 <div class="meeting-info">
 
 <span>
 <i class="bi bi-calendar-event"></i>
-{{meeting.date}}
+{{meeting.scheduledDate}}
 </span>
 
 <span>
 <i class="bi bi-clock"></i>
-{{meeting.time}}
+{{meeting.startTime}} - {{meeting.endTime}}
 </span>
 
 </div>
@@ -125,7 +144,7 @@ class="status-badge"
 <a
 class="join-btn"
 [target]="'_blank'"
-[href]="meeting.meetingLink">
+[href]="meeting.meetingJoinUrl">
 
 Join Meeting
 

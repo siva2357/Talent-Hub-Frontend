@@ -164,7 +164,7 @@
 
 </div>
 
-<app-button label="Add Language" variant="primary" (click)="addLanguage()"></app-button>
+<app-button label="Add Language" variant="primary"  (click)="addLanguage()"></app-button>
 
 }
 
@@ -384,14 +384,14 @@
 
 <div class="step-navigation">
 
-<app-button label="Previous" (click)="prevStep()"  [disabled]="step === 1" variant="secondary" ></app-button>
+<app-button label="Previous" (click)="prevStep()" size="md"  [disabled]="step === 1" variant="secondary" ></app-button>
 
 @if(step < totalSteps){
-<app-button label="Next" (click)="nextStep()" type="button" variant="primary" ></app-button>
+<app-button label="Next" (click)="nextStep()" type="button" size="md" variant="primary" ></app-button>
 }
 
 @if(step === totalSteps){
-<app-button label="Submit" type="submit"  variant="success"
+<app-button label="Submit" type="submit" size="md"  variant="success"
   [disabled]="activeForm.invalid"></app-button>
 
 }

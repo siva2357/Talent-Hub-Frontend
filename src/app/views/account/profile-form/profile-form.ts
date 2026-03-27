@@ -350,7 +350,7 @@ onSubmit() {
     this.recruiterService.createProfile(payload).subscribe({
       next: (res) => {
         console.log('Recruiter Profile Created:', res);
-        this.router.navigate(['/user/my-dashboard']);
+        this.router.navigate(['/user/my-jobposts']);
       },
       error: (err) => {
         console.error('Recruiter Error:', err);
