@@ -81,7 +81,7 @@
 
 <div class="row g-4">
 
-@for(talent of talents; track talent.email){
+@for(talent of talentData; track talent.email){
 
 <div class="col-12 col-md-6 col-xl-3">
 
@@ -89,37 +89,31 @@
 
 <!-- COVER -->
 <div class="talent-cover">
-
 <img src="https://res.cloudinary.com/dpp8aspqs/image/upload/v1735368347/pngtree-vibrant-pastel-texture-trendy-abstract-holographic-background-image_13893921_bzlbdr.png" class="cover-img">
-
-<button class="bookmark-btn">
-<i class="bi bi-bookmark"></i>
-</button>
-
 </div>
 
 <!-- AVATAR -->
 <div class="talent-avatar">
-<img [src]="talent.avatar">
+<img [src]="talent.profilePhoto">
 </div>
 
 <div class="talent-info">
 
 <div class="talent-status mb-3">
 
-@if(talent.status === 'Active'){
-<span class="badge bg-success">Active</span>
+@if(talent.status === 'active'){
+  <span class="badge bg-success">Active</span>
 }
 @else{
-<span class="badge bg-danger">Inactive</span>
+  <span class="badge bg-danger">Inactive</span>
 }
 
 </div>
 
-<h6 class="fw-semibold mb-1">{{talent.name}}</h6>
+<h6 class="fw-semibold mb-1">{{talent.firstName}}  {{talent.lastName}}</h6>
 
 <p class="talent-role">
-{{talent.role}}
+{{talent.bioDescription}}
 </p>
 
 <div class="talent-contact">
@@ -131,7 +125,7 @@
 
 <span>
 <i class="bi bi-telephone"></i>
-{{talent.phone}}
+{{talent.mobile}}
 </span>
 
 </div>
@@ -143,9 +137,19 @@
 
 </div>
 
-<div class="view-profile-btn">
-<button class="btn btn-primary btn-sm">
-View Profile
+<div class="view-profile-btn d-flex gap-2">
+  <button class="btn btn-primary btn-sm flex-fill w-50" (click)="viewProfile(talent)">
+    View Profile
+  </button>
+
+<button class="btn btn-sm flex-fill"
+  [ngClass]="talent.isSaved ? 'btn-success' : 'btn-outline-secondary'"
+  (click)="saveTalent(talent)">
+
+  <i class="bi"
+     [ngClass]="talent.isSaved ? 'bi-bookmark-fill' : 'bi-bookmark'"></i>
+
+  {{ talent.isSaved ? 'Saved' : 'Save' }}
 </button>
 </div>
 
@@ -201,3 +205,166 @@ View Profile
 </div>
 
 
+
+<div class="modal fade" id="talentModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ selectedTalent?.name || 'Talent Profile' }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+<div class="modal-body">
+
+@if(selectedTalent){
+
+  <!-- PROFILE HEADER -->
+  <div class="text-center mb-4">
+    <img
+      [src]="selectedTalent.profileDetails?.profilePhoto"
+      class="rounded-circle mb-2"
+      width="100"
+      height="100"
+    >
+
+    <h5>
+      {{ selectedTalent.profileDetails?.firstName }}
+      {{ selectedTalent.profileDetails?.lastName }}
+    </h5>
+
+    <p class="text-muted mb-1">
+      {{ selectedTalent.profileDetails?.currentExperience?.jobTitle || '—' }}
+    </p>
+
+    <span class="badge bg-success">
+      {{ selectedTalent.talentDetails?.status }}
+    </span>
+  </div>
+
+  <hr>
+
+  <!-- BASIC INFO -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <p><strong>Email:</strong> {{ selectedTalent.profileDetails?.email }}</p>
+      <p><strong>Phone:</strong> {{ selectedTalent.profileDetails?.mobile }}</p>
+    </div>
+    <div class="col-md-6">
+      <p><strong>Gender:</strong> {{ selectedTalent.profileDetails?.gender }}</p>
+      <p><strong>Joined:</strong> {{ selectedTalent.talentDetails?.createdAt | date }}</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- BIO -->
+  <div class="mb-3">
+    <h6>About</h6>
+    <p>{{ selectedTalent.profileDetails?.bioDescription }}</p>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="mb-3">
+    <h6>Skills</h6>
+    <div>
+      @for(skill of selectedTalent.profileDetails?.skills; track skill){
+        <span class="badge bg-secondary me-1 mb-1">{{ skill }}</span>
+      }
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- CURRENT EXPERIENCE -->
+  <div class="mb-3">
+    <h6>Current Experience</h6>
+    <p>
+      <strong>{{ selectedTalent.profileDetails?.currentExperience?.jobTitle }}</strong>
+      at {{ selectedTalent.profileDetails?.currentExperience?.company }}
+    </p>
+    <small class="text-muted">
+      {{ selectedTalent.profileDetails?.currentExperience?.duration }}
+    </small>
+    <p>{{ selectedTalent.profileDetails?.currentExperience?.description }}</p>
+  </div>
+
+  <!-- PAST EXPERIENCE -->
+  <div class="mb-3">
+    <h6>Experience</h6>
+
+    @for(exp of selectedTalent.profileDetails?.experiences; track exp){
+      <div class="mb-2">
+        <strong>{{ exp.jobTitle }}</strong> - {{ exp.company }}<br>
+        <small class="text-muted">{{ exp.duration }}</small>
+        <p class="mb-1">{{ exp.description }}</p>
+      </div>
+    }
+  </div>
+
+  <hr>
+
+  <!-- CERTIFICATIONS -->
+  <div class="mb-3">
+    <h6>Certifications</h6>
+
+    @for(cert of selectedTalent.profileDetails?.certifications; track cert){
+      <div class="mb-2">
+        <strong>{{ cert.name }}</strong> - {{ cert.issuedBy }}<br>
+        <small class="text-muted">{{ cert.issuedDate | date }}</small>
+      </div>
+    }
+  </div>
+
+  <!-- LANGUAGES -->
+  <div class="mb-3">
+    <h6>Languages</h6>
+
+    @for(lang of selectedTalent.profileDetails?.languages; track lang){
+      <span class="badge bg-info me-1">
+        {{ lang.language }} ({{ lang.proficiency }})
+      </span>
+    }
+  </div>
+
+  <hr>
+
+  <!-- SOCIAL LINKS -->
+  <div class="mb-3">
+    <h6>Social Profiles</h6>
+
+    @for(social of selectedTalent.profileDetails?.socialProfiles; track social){
+      <p class="mb-1">
+        <strong>{{ social.platform }}:</strong>
+        <a [href]="social.link" target="_blank">
+          {{ social.link }}
+        </a>
+      </p>
+    }
+  </div>
+
+  <hr>
+
+  <!-- PORTFOLIO -->
+  <div class="mb-3">
+    <h6>Portfolio ({{ selectedTalent.stats?.totalProjects }})</h6>
+
+    @if(selectedTalent.portfolio?.length === 0){
+      <p class="text-muted">No projects available</p>
+    }
+
+    @for(p of selectedTalent.portfolio; track p){
+      <div class="mb-2">
+        <strong>{{ p.title }}</strong>
+      </div>
+    }
+  </div>
+
+}
+</div>
+
+    </div>
+  </div>
+</div>

@@ -59,7 +59,7 @@ isFiltering = false;
 
 BucketKey = BucketKey;
 UploadSection = UploadSection;
-
+companySizes = ['Startup','Small','Medium','Large','Enterprise'];
 selectedDeleteCompanyId: string | null = null;
 
 constructor(private fb: FormBuilder, private companyService :CompanyService ) {
@@ -70,8 +70,8 @@ this.companyForm = this.fb.group({
   email: ['', [Validators.required, Validators.email]],
   phone: ['', [Validators.required, Validators.minLength(10)]],
   companyLocation: ['', Validators.required],
-  companySize: [null, Validators.required],
-  totalEmployees: [null, [Validators.required, Validators.min(1)]],
+  companySize: ['', Validators.required],
+  totalEmployees: ['', [Validators.required, Validators.min(1)]],
   companyFoundedDate: ['', Validators.required],
   companyDescription: ['', [Validators.required, Validators.minLength(10)]],
   companyLogo: [''] // optional for now

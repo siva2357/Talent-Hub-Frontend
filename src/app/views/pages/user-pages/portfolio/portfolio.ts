@@ -1,152 +1,143 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { PortfolioService } from '../../../../core/services/portfolio-service';
+import { InputFields } from "../../../components/input-fields/input-fields";
+import { FileUpload } from "../../../shared/file-upload/file-upload";
+import { FilePreview } from "../../../shared/file-preview/file-preview";
+import { UploadSection } from '../../../../core/enums/upload-section.constant';
+import { BucketKey } from '../../../../core/enums/bucket-key.constant';
 
 @Component({
   selector: 'app-portfolio',
-  imports: [RouterModule,CommonModule, FormsModule,ReactiveFormsModule],
+  standalone: true,
+  imports: [
+    RouterModule,
+    CommonModule,
+    ReactiveFormsModule,
+    InputFields,
+    FileUpload,
+    FilePreview
+  ],
   templateUrl: './portfolio.html',
   styleUrl: './portfolio.css',
-  standalone: true,
 })
-export class Portfolio  {
+export class Portfolio {
 
-  selectedProject:any = null;
-isEditMode = false;
+  BucketKey = BucketKey;
+  UploadSection = UploadSection;
 
+  constructor(
+    private portfolioService: PortfolioService,
+    private fb: FormBuilder
+  ) {}
 
-selectProject(project:any){
-  this.isEditMode = true;
-  this.selectedProject = { ...project };
-}
+  projects: any[] = [];
+  selectedProject: any = null;
+  isEditMode = false;
 
-addProject(){
-  this.isEditMode = false;
+  projectForm!: FormGroup;
 
-  this.selectedProject = {
-    title:'',
-    category:'',
-    type:'',
-    tags:[],
-    description:'',
-    image:''
-  };
-}
+  ngOnInit(): void {
+    this.initForm();
+    this.loadProjects();
+  }
 
-projects = [
-{
-id:1,
-title:'Talent Hub Platform',
-category:'Full Stack',
-type:'Web App',
-tags:['Angular','Node.js','PostgreSQL'],
-description:'Job portal platform connecting recruiters and developers.',
-image:'https://images.unsplash.com/photo-1555066931-4365d14bab8c'
-},
-{
-id:2,
-title:'AI Resume Analyzer',
-category:'AI Tool',
-type:'Web App',
-tags:['Python','LLM','RAG'],
-description:'AI powered resume ATS analyzer for job seekers.',
-image:'https://images.unsplash.com/photo-1518770660439-4636190af475'
-},
-{
-id:3,
-title:'Portfolio Builder',
-category:'Frontend',
-type:'Web App',
-tags:['Angular','Bootstrap'],
-description:'Drag and drop portfolio builder for developers.',
-image:'https://images.unsplash.com/photo-1498050108023-c5249f4df085'
-},
-{
-id:4,
-title:'E-Commerce Dashboard',
-category:'Frontend',
-type:'Dashboard',
-tags:['Angular','Chart.js','Bootstrap'],
-description:'Admin dashboard for monitoring orders, revenue and users.',
-image:'https://images.unsplash.com/photo-1551288049-bebda4e38f71'
-},
-{
-id:5,
-title:'Real Time Chat App',
-category:'Full Stack',
-type:'Web App',
-tags:['Node.js','Socket.io','Express'],
-description:'Real-time messaging application with private chat rooms.',
-image:'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4'
-},
-{
-id:6,
-title:'AI Image Generator',
-category:'AI Tool',
-type:'Web App',
-tags:['Python','Stable Diffusion','FastAPI'],
-description:'Generate AI images using prompt-based image generation models.',
-image:'https://images.unsplash.com/photo-1677442136019-21780ecad995'
-},
-{
-id:7,
-title:'Expense Tracker',
-category:'Frontend',
-type:'Web App',
-tags:['Angular','LocalStorage','Bootstrap'],
-description:'Track daily expenses and visualize spending patterns.',
-image:'https://images.unsplash.com/photo-1554224155-6726b3ff858f'
-},
-{
-id:8,
-title:'Weather Forecast App',
-category:'Frontend',
-type:'Web App',
-tags:['Angular','API','Bootstrap'],
-description:'Weather forecasting application using external APIs.',
-image:'https://images.unsplash.com/photo-1504608524841-42fe6f032b4b'
-},
-{
-id:9,
-title:'Task Management System',
-category:'Full Stack',
-type:'Web App',
-tags:['Node.js','Angular','MongoDB'],
-description:'Collaborative task management platform for teams.',
-image:'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b'
-},
-{
-id:10,
-title:'Stock Market Analyzer',
-category:'Data Science',
-type:'Analytics Tool',
-tags:['Python','Pandas','Visualization'],
-description:'Analyze stock trends and visualize market insights.',
-image:'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=80'
-},
-{
-id:11,
-title:'Fitness Tracking App',
-category:'Mobile App',
-type:'Health Tech',
-tags:['Flutter','Firebase','Health API'],
-description:'Mobile application to track workouts, calories, and health metrics.',
-image:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b'
-},
-{
-id:12,
-title:'Smart Home Dashboard',
-category:'IoT',
-type:'Web Dashboard',
-tags:['Angular','MQTT','Node.js'],
-description:'Dashboard for monitoring and controlling smart home devices.',
-image:'https://images.unsplash.com/photo-1558002038-1055907df827'
-}
-];
+  initForm() {
+    this.projectForm = this.fb.group({
+      projectTitle: [''],
+      projectType: [''],
+      projectDescription: [''],
+      softwares: [''],
+      tags: [''],
+      fileUrl: ['']
+    });
+  }
 
+  /* ================= LOAD ================= */
+  loadProjects() {
+    this.portfolioService.getProjects().subscribe({
+      next: (res) => this.projects = res.projects,
+      error: (err) => console.error(err)
+    });
+  }
 
+  /* ================= SELECT ================= */
+  selectProject(project: any) {
+    this.isEditMode = true;
+    this.selectedProject = project;
 
+    const details = project?.projectDetails || {};
 
+    this.projectForm.patchValue({
+      projectTitle: details.projectTitle || '',
+      projectType: details.projectType || '',
+      projectDescription: details.projectDescription || '',
+      softwares: details.softwares?.join(', ') || '',
+      tags: details.tags?.join(', ') || '',
+      fileUrl: details.files?.[0]?.url || ''
+    });
+  }
+
+  /* ================= ADD ================= */
+  addProject() {
+    this.isEditMode = false;
+    this.selectedProject = null;
+    this.projectForm.reset();
+  }
+
+  /* ================= FILE UPLOAD ================= */
+  onLogoUploaded(url: string) {
+    this.projectForm.patchValue({ fileUrl: url });
+  }
+
+  /* ================= SAVE ================= */
+  saveProject() {
+
+    const formValue = this.projectForm.value;
+
+    const payload = {
+      projectDetails: {
+        projectTitle: formValue.projectTitle,
+        projectType: formValue.projectType,
+        projectDescription: formValue.projectDescription,
+        softwares: formValue.softwares
+          ? formValue.softwares.split(',').map((s: string) => s.trim())
+          : [],
+        tags: formValue.tags
+          ? formValue.tags.split(',').map((t: string) => t.trim())
+          : [],
+        files: formValue.fileUrl
+          ? [{ fileName: 'project-file', url: formValue.fileUrl }]
+          : []
+      }
+    };
+
+    const request = this.isEditMode && this.selectedProject?._id
+      ? this.portfolioService.updateProjectById(this.selectedProject._id, payload)
+      : this.portfolioService.createProjectUpload(payload);
+
+    request.subscribe({
+      next: () => {
+        this.loadProjects();
+
+        // 🔥 auto close modal
+        const modalEl = document.getElementById('projectFormModal');
+        (window as any).bootstrap?.Modal.getInstance(modalEl)?.hide();
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+  /* ================= DELETE ================= */
+  deleteProject() {
+    if (!this.selectedProject?._id) return;
+
+    this.portfolioService.deleteProjectById(this.selectedProject._id)
+      .subscribe({
+        next: () => this.loadProjects(),
+        error: (err) => console.error(err)
+      });
+  }
 }

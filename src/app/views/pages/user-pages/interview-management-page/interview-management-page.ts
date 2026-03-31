@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InterviewService } from '../../../../core/services/interview-service';
 import { UpdateInterviewDTO } from '../../../../core/dtos/interview.dto';
+import { Pagination } from "../../../components/pagination/pagination";
+import { Table } from "../../../components/table/table";
 
 
 @Component({
   selector: 'app-interview-management-page',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, Pagination, Table],
   templateUrl: './interview-management-page.html',
   styleUrl: './interview-management-page.css',
 })
@@ -18,10 +20,39 @@ constructor(  private fb: FormBuilder,private interviewService: InterviewService
 
 interviewForm!: FormGroup;
 minDate = new Date().toISOString().split('T')[0];
+  columns: any[] = [];
+
+
+
+  @ViewChild('statusTemplate', { static: true })
+  public statusTemplateRef!: TemplateRef<any>;
+
+  @ViewChild('actionsTemplate', { static: true })
+  public actionsTemplateRef!: TemplateRef<any>;
+
+  page = 1;
+limit = 5;
+total = 0;
+paginatedInterviews: any[] = [];
+filteredInterviews: any[] = [];
+isFiltering = false;
+
 
 ngOnInit() {
+  this.columns = [
+  { name: 'S.NO', prop: 'sno' }, // ✅ new
+  { name: 'Job ID', prop:'jobId' },
+  { name: 'Job Title', prop: 'jobTitle' },
+  { name: 'Applicant Name', prop: 'jobSeekerName' },
+  { name: 'Email', prop: 'email' },
+  { name: 'Interview Date', prop: 'scheduledDate' },
+  { name: 'Status', template: this.statusTemplateRef},
+  { name: 'Actions', template: this.actionsTemplateRef, center: true },
+];
+
+
   this.loadInterviews();
-    this.initForm();
+  this.initForm();
 }
 
 initForm() {
@@ -50,6 +81,9 @@ loadInterviews() {
   this.interviewService.getAllRecruiterInterviews().subscribe({
     next: (res) => {
       this.interviews = res.meetings || [];
+      this.total = this.interviews.length;   // ✅ set total
+      this.applyPagination();
+
       this.loading = false;
     },
     error: (err) => {
@@ -58,6 +92,36 @@ loadInterviews() {
     }
   });
 }
+
+
+applyPagination() {
+  const source = this.filteredInterviews.length || this.isFiltering
+    ? this.filteredInterviews
+    : this.interviews;
+
+  const start = (this.page - 1) * this.limit;
+  const end = start + this.limit;
+
+  this.paginatedInterviews = source.slice(start, end).map((item, index) => ({
+    ...item,
+    sno: start + index + 1 // ✅ generates 1,2,3,4...
+  }));
+}
+
+
+onPageChange(p: number) {
+  this.page = p;
+  this.applyPagination();
+}
+
+onLimitChange(l: number) {
+  this.limit = l;
+  this.page = 1;
+  this.applyPagination();
+}
+
+
+
 
 selectInterview(interview: any) {
   this.isEditMode = true;

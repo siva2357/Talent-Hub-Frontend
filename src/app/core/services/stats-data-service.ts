@@ -24,14 +24,27 @@ export class StatsDataService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  getAdminStats(): Observable<AdminStatsResponse> {
-    return this.http.get<AdminStatsResponse>(
+  getAdminStats(): Observable<any> {
+    return this.http.get<any>(
       `${this.baseUrl}/admin/stats`,
       { headers: this.getHeaders() }
     ).pipe(
       catchError((error) => this.handleError(error))
     );
   }
+
+    getAdminTrends(): Observable<any> {
+    return this.http.get<any>(
+      `${this.baseUrl}/admin/trends`,
+      { headers: this.getHeaders() }
+    ).pipe(
+      catchError((error) => this.handleError(error))
+    );
+  }
+
+
+
+
 
     getRecruiterStats(): Observable<RecruiterStatsResponse> {
     return this.http.get<RecruiterStatsResponse>(
