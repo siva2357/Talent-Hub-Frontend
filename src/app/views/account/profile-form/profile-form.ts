@@ -15,10 +15,16 @@ import { Buttons } from "../../components/buttons/buttons";
 import { AuthService } from '../../../core/services/auth-service';
 import { SOCIAL_ICONS, SocialPlatform } from '../../../core/enums/socialMedia.enum';
 import { SOCIAL_URL_PATTERNS } from '../../../core/helpers/social-media.helper';
+import { CommonModule } from '@angular/common';
+import { Language, Proficiency } from '../../../core/enums/language.enum';
+import { SECTOR } from '../../../core/enums/sector.enum';
+import { DESIGNATION } from '../../../core/enums/designation.enum';
+import { SECTOR_DESIGNATION_MAP } from '../../../core/enums/sector-designation.map';
+import { CompanyService } from '../../../core/services/company-service';
 
 @Component({
   selector: 'app-profile-form',
-  imports: [RouterModule, ReactiveFormsModule, FormsModule, FilePreview, FileUpload, InputFields, Buttons],
+  imports: [RouterModule, ReactiveFormsModule, FormsModule, FilePreview, FileUpload, InputFields, Buttons,CommonModule],
   templateUrl: './profile-form.html',
   styleUrl: './profile-form.css',
 })
@@ -38,6 +44,26 @@ export class ProfileForm implements OnInit {
   activeForm!: FormGroup;
 recruiterForm!: FormGroup;
 jobSeekerForm!: FormGroup;
+languageOptions = Object.values(Language);
+proficiencyOptions = Object.values(Proficiency);
+skillInput = '';
+languageInput: any = '';
+proficiencyInput: any = '';
+platformInput = '';
+linkInput = '';
+
+
+
+sectorOptions = Object.values(SECTOR);
+designationOptions: DESIGNATION[] = [];
+
+
+
+
+companyOptions: string[] = [];
+
+
+
 
 
 
@@ -47,7 +73,8 @@ jobSeekerForm!: FormGroup;
     private fb: FormBuilder,
     private recruiterService: RecruiterProfileService,
     private seekerService: SeekerProfileService,
-    private authService:AuthService
+    private authService:AuthService,
+    private companyService: CompanyService
   ) {}
 
 ngOnInit() {
@@ -75,13 +102,11 @@ ngOnInit() {
     const names = user.fullName?.split(' ') || [];
 
     this.activeForm.patchValue({
-      firstName: names[0] || '',
-      lastName: names.slice(1).join(' ') || '',
+      fullName: user.fullName || '',
       email: user.email || ''
     });
 
-    this.activeForm.get('firstName')?.disable();
-    this.activeForm.get('lastName')?.disable();
+    this.activeForm.get('fullName')?.disable();
     this.activeForm.get('email')?.disable();
   }
 
@@ -90,15 +115,30 @@ ngOnInit() {
 this.addLanguage();
 this.addExperience();
 this.addSocialProfile();
-this.addCertification()
+this.addCertification();
+
+
+ this.activeForm.get('sector')?.valueChanges.subscribe((sector: SECTOR) => {
+
+    if (sector && SECTOR_DESIGNATION_MAP[sector]) {
+      this.designationOptions = [...SECTOR_DESIGNATION_MAP[sector]];
+    } else {
+      this.designationOptions = [];
+    }
+
+    this.activeForm.get('designation')?.setValue('');
+  });
+
+
+   this.loadCompanies();
+
 
 }
 
 
 createRecruiterForm() {
   return this.fb.group({
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
+    fullName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     mobile: ['', Validators.required],
     gender: ['', Validators.required],
@@ -117,10 +157,22 @@ createRecruiterForm() {
   });
 }
 
+
+onSectorChange() {
+  const selectedSector = this.activeForm.get('sector')?.value as SECTOR;
+
+  if (selectedSector && SECTOR_DESIGNATION_MAP[selectedSector]) {
+    this.designationOptions = SECTOR_DESIGNATION_MAP[selectedSector];
+  } else {
+    this.designationOptions = [];
+  }
+
+  this.activeForm.get('designation')?.setValue('');
+}
+
 createJobSeekerForm() {
   return this.fb.group({
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
+    fullName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     mobile: ['', Validators.required],
     gender: ['', Validators.required],
@@ -148,6 +200,17 @@ get currentExperienceGroup() {
   return this.activeForm.get('currentExperience') as FormGroup;
 }
 
+
+loadCompanies() {
+  this.companyService.getCompaniesDropdown().subscribe({
+    next: (res) => {
+      this.companyOptions = res.data.map(c => c.companyName);
+    },
+    error: (err) => {
+      console.error('Error loading companies', err);
+    }
+  });
+}
 
 
 nextStep() {
@@ -223,29 +286,35 @@ getSocialIcon(platform: SocialPlatform): string {
   return SOCIAL_ICONS[platform];
 }
 addSocialProfile() {
+  if (!this.platformInput || !this.linkInput) return;
+
   const group = this.fb.group({
-    platform: ['', Validators.required],
-    link: ['', Validators.required],
+    platform: [this.platformInput, Validators.required],
+    link: [this.linkInput, Validators.required],
   });
 
-group.get('platform')?.valueChanges.subscribe((platform) => {
-  const linkControl = group.get('link');
+  group.get('platform')?.valueChanges.subscribe((platform) => {
+    const linkControl = group.get('link');
 
-  const selectedPlatform = platform as SocialPlatform; // ✅ FIX
+    const selectedPlatform = platform as SocialPlatform;
 
-  if (selectedPlatform && SOCIAL_URL_PATTERNS[selectedPlatform]) {
-    linkControl?.setValidators([
-      Validators.required,
-      Validators.pattern(SOCIAL_URL_PATTERNS[selectedPlatform])
-    ]);
-  } else {
-    linkControl?.setValidators([Validators.required]);
-  }
+    if (selectedPlatform && SOCIAL_URL_PATTERNS[selectedPlatform]) {
+      linkControl?.setValidators([
+        Validators.required,
+        Validators.pattern(SOCIAL_URL_PATTERNS[selectedPlatform])
+      ]);
+    } else {
+      linkControl?.setValidators([Validators.required]);
+    }
 
-  linkControl?.updateValueAndValidity();
-});
+    linkControl?.updateValueAndValidity();
+  });
 
   this.socialProfiles.push(group);
+
+  // reset inputs
+  this.platformInput = '';
+  this.linkInput = '';
 }
 
 removeSocialProfile(index: number) {
@@ -254,11 +323,15 @@ removeSocialProfile(index: number) {
 
 
 addSkill() {
+  if (!this.skillInput.trim()) return;
+
   this.skills.push(
     this.fb.group({
-      value: ['', Validators.required]
+      value: this.skillInput
     })
   );
+
+  this.skillInput = '';
 }
 
 removeSkill(i: number) {
@@ -266,12 +339,17 @@ removeSkill(i: number) {
 }
 
 addLanguage() {
+  if (!this.languageInput || !this.proficiencyInput) return;
+
   this.languages.push(
     this.fb.group({
-      language: ['', Validators.required],
-      proficiency: ['', Validators.required],
+      language: this.languageInput,
+      proficiency: this.proficiencyInput
     })
   );
+
+  this.languageInput = '';
+  this.proficiencyInput = '';
 }
 
 removeLanguage(i: number) {

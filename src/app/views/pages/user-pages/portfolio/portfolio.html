@@ -206,6 +206,7 @@ Post Project
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
 
+      <!-- HEADER -->
       <div class="modal-header">
         <h5 class="modal-title">
           {{ isEditMode ? 'Edit Project' : 'Add Project' }}
@@ -213,85 +214,57 @@ Post Project
         <button class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
-      @if (selectedProject) {
-
-      <form (ngSubmit)="saveProject()">
+      <!-- FORM -->
+      <form [formGroup]="projectForm" (ngSubmit)="saveProject()">
 
         <div class="modal-body">
 
           <div class="row g-3">
 
-            <div class="col-md-6">
-              <label class="form-label">Project Title</label>
-              <input type="text" class="form-control"
-                [(ngModel)]="selectedProject.title" name="title">
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Category</label>
-              <select class="form-select"
-                [(ngModel)]="selectedProject.category" name="category">
-
-                <option value="Frontend">Frontend</option>
-                <option value="Backend">Backend</option>
-                <option value="Full Stack">Full Stack</option>
-                <option value="AI/ML">AI / ML</option>
-                <option value="Data Science">Data Science</option>
-
-              </select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Project Type</label>
-              <select class="form-select"
-                [(ngModel)]="selectedProject.type" name="type">
-
-                <option value="Web App">Web App</option>
-                <option value="Mobile App">Mobile App</option>
-                <option value="AI Tool">AI Tool</option>
-                <option value="Dashboard">Dashboard</option>
-                <option value="API">API</option>
-
-              </select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Project Tags</label>
-              <input type="text" class="form-control"
-                placeholder="Angular, Node.js, PostgreSQL"
-                [(ngModel)]="selectedProject.tags" name="tags">
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Project Image URL</label>
-              <input type="text" class="form-control"
-                [(ngModel)]="selectedProject.image" name="image">
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Live Demo URL</label>
-              <input type="text" class="form-control"
-                [(ngModel)]="selectedProject.demo" name="demo">
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">GitHub Repository</label>
-              <input type="text" class="form-control"
-                [(ngModel)]="selectedProject.github" name="github">
-            </div>
-
             <div class="col-12">
-              <label class="form-label">Project Description</label>
-              <textarea class="form-control" rows="4"
-                [(ngModel)]="selectedProject.description"
-                name="description">
-              </textarea>
+
+              @if (projectForm.get('fileUrl')?.value) {
+              <div class="mt-2">
+                <app-file-preview class="blog-media " [fileUrl]="projectForm.get('fileUrl')?.value"> </app-file-preview>
+              </div>
+              }
+              
+              <app-file-upload [bucketKey]="BucketKey.JOBSEEKER_DATA" [section]="UploadSection.PROJECT_FILES" accept="image/*" [replace]="true" (uploaded)="onLogoUploaded($event)"> </app-file-upload>
+            </div>
+
+
+            <!-- TITLE -->
+            <div class="col-md-6">
+              <app-input-fields [form]="projectForm" placeholder="Project Title" controlName="projectTitle"></app-input-fields>
+            </div>
+
+            <!-- TYPE -->
+            <div class="col-md-6">
+              <app-input-fields [form]="projectForm" controlName="projectType" placeholder="Project Type" [isSelect]="true"
+                [options]="['Web App', 'Mobile App', 'AI Tool']"> </app-input-fields>
+            </div>
+
+            <!-- SOFTWARES -->
+            <div class="col-md-6">
+              <app-input-fields [form]="projectForm" placeholder="Softwares" controlName="softwares"></app-input-fields>
+            </div>
+
+            <!-- TAGS -->
+            <div class="col-md-6">
+              <app-input-fields [form]="projectForm" placeholder="Tags" controlName="tags"></app-input-fields>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="col-12">
+              <app-input-fields [form]="projectForm" placeholder="Description" controlName="projectDescription"
+                [isTextarea]="true"></app-input-fields>
             </div>
 
           </div>
 
         </div>
 
+        <!-- FOOTER -->
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             Cancel
@@ -303,8 +276,6 @@ Post Project
         </div>
 
       </form>
-
-      }
 
     </div>
   </div>

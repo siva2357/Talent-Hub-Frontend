@@ -1,86 +1,93 @@
-  <div class="dropdown notif-dropdown mx-2">
+<div class="dropdown notif-dropdown mx-2">
 
-    <a class="header-icon position-relative" data-bs-toggle="dropdown">
-      <i class="bi bi-bell fs-5"></i>
-      <span class="notif-badge">3</span>
-    </a>
+  <a class="header-icon position-relative" data-bs-toggle="dropdown">
+    <i class="bi bi-bell fs-5"></i>
 
-<div class="dropdown-menu shadow notif-menu">
+    @if (unreadCount > 0) {
+      <span class="notif-badge">
+        {{ unreadCount }}
+      </span>
+    }
+  </a>
 
-      <div class="notif-header d-flex justify-content-between align-items-center px-2 py-2">
-        <strong>Notifications</strong>
+  <div class="dropdown-menu shadow notif-menu">
 
-        <div class="actions">
-          <button class="btn btn-sm btn-outline-primary me-2" style="font-size: 12px;">Mark all read</button>
-          <button class="btn btn-sm btn-outline-danger py-1" style="font-size: 12px;">Clear all</button>
-        </div>
+    <!-- Header -->
+    <div class="notif-header d-flex justify-content-between align-items-center px-2 py-2">
+      <strong>Notifications</strong>
+
+      <div class="actions">
+        <button class="btn btn-sm btn-outline-primary me-2"
+                (click)="markAllRead()">
+          Mark all read
+        </button>
+
+        <button class="btn btn-sm btn-outline-danger"
+                (click)="clearAll()">
+          Clear all
+        </button>
       </div>
+    </div>
 
-      <hr class="my-1">
+    <hr class="my-1">
 
-      <div class="notif-list list-group list-group-flush">
+    <div class="notif-list list-group list-group-flush">
 
-        <!-- Notification 1 -->
-        <div class="list-group-item notif-item unread">
+      <!-- Loading -->
+      @if (loading) {
+        <div class="text-center p-2">
+          Loading...
+        </div>
+      }
 
-          <span class="notif-dot"></span>
+      <!-- Empty -->
+      @if (!loading && notifications.length === 0) {
+        <div class="text-center p-2">
+          No notifications
+        </div>
+      }
 
-          <div class="notif-content">
-            <p class="mb-0 notif-text">New job application received</p>
-            <small class="notif-time">2 min ago</small>
+      <!-- List -->
+      @if (!loading && notifications.length > 0) {
+        @for (notif of notifications; track notif._id) {
+          <div class="list-group-item notif-item"
+               [class.unread]="!notif.read">
 
-            <div class="notif-actions">
-              <span class="notif-action small text-muted" style="cursor: pointer;">
-                Mark as read
-              </span>
+            @if (!notif.read) {
+              <span class="notif-dot"></span>
+            }
 
-              <span class="notif-action text-danger small" style="cursor: pointer;">
-                Delete
-              </span>
+            <div class="notif-content">
+              <p class="mb-0 notif-text">
+                {{ notif.message }}
+              </p>
+
+              <small class="notif-time">
+                {{ notif.createdAt | date:'short' }}
+              </small>
+
+              <div class="notif-actions">
+
+                @if (!notif.read) {
+                  <span class="notif-action small text-muted"
+                        (click)="markAsRead(notif._id)">
+                    Mark as read
+                  </span>
+                }
+
+                <span class="notif-action text-danger small"
+                      (click)="deleteNotification(notif._id)">
+                  Delete
+                </span>
+
+              </div>
             </div>
+
           </div>
-
-        </div>
-
-        <!-- Notification 2 -->
-        <div class="list-group-item notif-item">
-
-          <div class="notif-content">
-            <p class="mb-0 notif-text">Your job post was approved</p>
-            <small class="notif-time">10 min ago</small>
-
-            <div class="notif-actions">
-              <span class="notif-action text-danger small" style="cursor: pointer;">
-                Delete
-              </span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Notification 3 -->
-        <div class="list-group-item notif-item">
-
-          <div class="notif-content">
-            <p class="mb-0 notif-text">Profile updated successfully</p>
-            <small class="notif-time">1 hour ago</small>
-
-            <div class="notif-actions">
-              <span class="notif-action text-danger small" style="cursor: pointer;">
-                Delete
-              </span>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="text-center">
-          <button class="btn btn-link notif-view-btn">
-            View more
-          </button>
-        </div>
-
-      </div>
+        }
+      }
 
     </div>
+
   </div>
+</div>

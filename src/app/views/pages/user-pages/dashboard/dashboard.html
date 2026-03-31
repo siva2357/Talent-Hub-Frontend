@@ -3,7 +3,7 @@
 
 <div class="row g-3">
 
-@for (card of dashboardCards; track card.chartId) {
+@for (card of dashboardCards; track card.title) {
   <div class="col-12 col-md-6 col-xl-3">
 
     <div class="card border rounded-0 h-100">
@@ -11,22 +11,14 @@
 
         <div class="d-flex justify-content-between align-items-center">
           <h6 class="mb-0">{{ card.title }}</h6>
-
-          <select class="form-select form-select-sm bg-body-secondary w-auto small">
-            <option>Monthly</option>
-            <option>Yearly</option>
-          </select>
         </div>
 
+        <!-- ✅ correct value -->
         <h5 class="mt-2">{{ card.total }}</h5>
 
-        <p class="text-muted small mb-2">
+        <p class="text-muted small mb-0">
           {{ card.description }}
         </p>
-
-        <div class="mini-chart">
-          <canvas [id]="card.chartId"></canvas>
-        </div>
 
       </div>
     </div>
@@ -41,16 +33,10 @@
     <div class="card-body p-4">
 
       <!-- Header -->
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h6 style="margin:0; font-weight:600;">Job Platform Analytics</h6>
+<div class=" mb-4">
+  <h6 style="margin:0; font-weight:600;">Job Platform Analytics</h6>
 
-        <select class="form-select form-select-sm bg-body-secondary" style="width:170px;">
-          <option>Monthly</option>
-          <option>Quarterly</option>
-          <option>Half-Yearly</option>
-          <option>Annually</option>
-        </select>
-      </div>
+</div>
 
       <!-- Metrics -->
 <div class="row g-3 text-center mb-4">
@@ -93,118 +79,16 @@
 
 </div>
 
-      <!-- Chart -->
-      <div class="analytics-chart">
-        <canvas id="analyticsChart"></canvas>
-      </div>
+<app-table
+  [columns]="trendColumns"
+  [data]="trendData">
+</app-table>
+
 
     </div>
   </div>
 
 </div>
-
-
-<div class="row mt-3  g-3">
-  <div class="col-12 col-xl-6 mb-5">
-    <div class="card border  border-1 rounded-0" style="font-size:14px;">
-
-      <div class="card-body">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-          <h6 style="margin:0; font-weight:600;">Recruiters</h6>
-          <button type="button" class="btn btn-outline-light btn-sm bg-body-secondary text-dark"
-            style=" font-size:13px;" routerLink="/user/recruiters-list">See All <i class="bi bi-arrow-right"></i></button>
-        </div>
-
-        <app-table [columns]="columns" [data]="recruiters"  class="d-none d-lg-block"></app-table>
-
-        <div class="d-lg-none">
-
-          <ul class="list-group recruiter-list mb-3">
-
-            @for (r of recruiters; track r.id) {
-            <li class="list-group-item recruiter-card">
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="fw-semibold">{{ r.name }}</div>
-                <span class="badge" [ngClass]="r.status === 'Active' ? 'badge-success' : 'badge-danger'">
-                  {{ r.status }}
-                </span>
-              </div>
-
-              <div class="small text-muted mt-1">
-                {{ r.email }} | {{ r.phone }}
-              </div>
-
-              <div class="small mt-1">
-                Company Name : {{ r.company }}
-              </div>
-            </li>
-            }
-
-          </ul>
-
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-
-
-  <div class="col-12 col-xl-6 mb-5">
-    <div class="card border  border-1 rounded-0" style="font-size:14px;">
-
-      <div class="card-body">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-          <h6 style="margin:0; font-weight:600;">Job Seekers</h6>
-          <button type="button" class="btn btn-outline-light btn-sm bg-body-secondary text-dark"
-            style=" font-size:13px;" routerLink="/user/seekers-list">See All <i class="bi bi-arrow-right"></i></button>
-        </div>
-
-        <app-table [columns]="jobSeekercolumns" [data]="jobSeekers"  class="d-none d-lg-block"></app-table>
-
-        <div class="d-lg-none">
-
-          <ul class="list-group recruiter-list mb-3">
-
-            @for (r of jobSeekers; track r.id) {
-            <li class="list-group-item recruiter-card">
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="fw-semibold">{{ r.name }}</div>
-                <span class="badge" [ngClass]="r.status === 'Active' ? 'badge-success' : 'badge-danger'">
-                  {{ r.status }}
-                </span>
-              </div>
-
-              <div class="small text-muted mt-1">
-                {{ r.email }} | {{ r.phone }}
-              </div>
-
-              <div class="small mt-1">
-               Experience: {{ r.experience}}
-              </div>
-            </li>
-            }
-
-          </ul>
-
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-
-</div>
-
-
-
-<ng-template #statusTemplate let-row>
-  <span
-    class="badge"
-    [ngClass]="row.status === 'Active' ? 'badge-success' : 'badge-danger'">
-    {{ row.status || '--' }}
-  </span>
-</ng-template>
 
 
 </div>

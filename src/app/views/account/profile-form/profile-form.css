@@ -33,9 +33,16 @@
 .stepper {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 25px;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
 .step {
@@ -49,13 +56,52 @@
   font-weight: 600;
   font-size: 14px;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
+/* Upcoming */
+.step.upcoming {
+  background: #e5e7eb;
+  color: #9ca3af;
+  border: 2px solid #d1d5db;
+}
+
+/* Active */
 .step.active {
   background: linear-gradient(135deg, #2563eb, #3b82f6);
-  color: white;
+  color: #fff;
   transform: scale(1.1);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  border: none;
+}
+
+/* Completed */
+.step.completed {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+}
+
+.step.completed i {
+  font-size: 26px;
+}
+
+/* Labels */
+.step-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  text-align: center;
+}
+
+.step.active + .step-label {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.step.completed + .step-label {
+  color: #16a34a;
 }
 
 /* ===== SECTION HEADINGS ===== */
@@ -70,15 +116,15 @@ h5 {
   margin-bottom: 14px !important;
 }
 
-/* ===== FORM GROUP CARDS (ARRAY SECTIONS) ===== */
-.border {
+/* ===== FORM GROUP CARDS ===== */
+.profile-form-container .border {
   border: 1px solid #e5e7eb !important;
   border-radius: 10px !important;
   background: #f9fafb;
   transition: 0.2s;
 }
 
-.border:hover {
+.profile-form-container .border:hover {
   border-color: #2563eb !important;
 }
 
@@ -120,12 +166,8 @@ button.btn:hover {
   transform: translateY(-1px);
 }
 
-/* ===== ADD BUTTONS ===== */
-app-button[label="Add Skill"],
-app-button[label="Add Language"],
-app-button[label="Add Experience"],
-app-button[label="Add Certification"],
-app-button[label="Add Social Profile"] {
+/* ===== ADD BUTTONS (recommended: use class instead) */
+.add-btn {
   display: block;
   margin-top: 10px;
 }
@@ -137,7 +179,7 @@ button.btn-danger {
   padding: 0 10px;
 }
 
-/* ===== MOBILE RESPONSIVE ===== */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .profile-form-container {
     padding: 20px;
@@ -160,7 +202,6 @@ button.btn-danger {
   }
 }
 
-/* ===== SMALL MOBILE ===== */
 @media (max-width: 480px) {
   .step-navigation {
     flex-direction: row;
