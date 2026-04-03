@@ -1,199 +1,168 @@
 <div class="container-xxl mt-5 pt-5">
 
-  <div class="d-flex  align-items-center mb-3">
+  <!-- HEADER -->
+  <div class="d-flex align-items-center mb-3">
     <button class="btn btn-light me-2" [routerLink]="['/user/resume-analytics']">
       <i class="bi bi-arrow-left fs-5"></i>
     </button>
     <h5 class="fw-semibold mb-0">ATS Resume Report</h5>
   </div>
 
-<!-- SCORE SECTION -->
-<div class="row g-4 mb-4">
+  <!-- 🔥 LOADING FIRST PRIORITY -->
+@if (loading === true) {
+    <div class="text-center mt-5 py-5">
 
-<div class="col-lg-4">
+      <div class="spinner-border text-primary mb-3"></div>
 
-<div class="score-card text-center">
+      <h6 class="fw-semibold">Analyzing Resume...</h6>
+      <p class="text-muted">Please wait while we generate your ATS report</p>
 
-  <div class="score-chart-wrapper">
-    <canvas id="atsScoreChart"></canvas>
+    </div>
+  }
 
-    <div class="score-text">
-      <span>{{atsScore}}</span>
-      <small>/100</small>
+
+@else if (analysis && analysis.ats_score !== undefined) {
+
+  <!-- SCORE SECTION -->
+  <div class="row g-4 mb-4">
+
+    <!-- SCORE -->
+    <div class="col-lg-4">
+      <div class="score-card text-center">
+
+        <div class="score-chart-wrapper">
+          <canvas id="atsScoreChart"></canvas>
+
+          <div class="score-text">
+            <span>{{ atsScore }}</span>
+            <small>/100</small>
+          </div>
+        </div>
+
+        <p class="mt-3 mb-1 fw-semibold">ATS Score</p>
+
+        <span class="badge" [ngClass]="getBadgeClass(atsScore)">
+          {{ getMatchLabel(atsScore) }}
+        </span>
+
+      </div>
+    </div>
+
+    <!-- CANDIDATE INFO -->
+    <div class="col-lg-8">
+      <div class="info-card">
+
+        <h6 class="fw-semibold mb-3">Candidate Information</h6>
+
+        <div class="info-row">
+          <strong>Name:</strong>
+          <span>{{ analysis?.name }}</span>
+        </div>
+
+        <div class="info-row">
+          <strong>Email:</strong>
+          <span>Not Available</span>
+        </div>
+
+        <div class="info-row">
+          <strong>Phone:</strong>
+          <span>Not Available</span>
+        </div>
+
+        <div class="info-row">
+          <strong>Resume Score:</strong>
+          <span>{{ analysis?.resume_score }} / 100</span>
+        </div>
+
+        <div class="info-row">
+          <strong>Shortlist Chance:</strong>
+          <span class="fw-semibold text-success">
+            {{ analysis?.shortlist_probability }}
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SKILLS -->
+  <div class="report-card mb-4">
+    <h5 class="section-title">Skills Detected</h5>
+
+    <div class="skill-tags">
+      @for (skill of analysis?.skills_detected; track $index) {
+        <span class="skill">{{ skill }}</span>
+      }
     </div>
   </div>
 
-  <p class="mt-3 mb-1 fw-semibold">ATS Score</p>
-<span class="badge"
-      [ngClass]="getBadgeClass(atsScore)">
-  {{ getMatchLabel(atsScore) }}
-</span>
+  <!-- MISSING SKILLS -->
+  <div class="report-card mb-4">
+    <h5 class="section-title text-danger">Missing Core Skills</h5>
 
-</div>
-
-</div>
-
-<div class="col-lg-8">
-
-<div class="info-card">
-
-  <h6 class="fw-semibold mb-3">Candidate Information</h6>
-
-  <div class="info-row">
-    <strong>Name:</strong>
-    <span>SIVA PRASAD KURRA</span>
+    <ul class="report-list">
+      @for (skill of analysis?.missing_core_skills; track $index) {
+        <li>{{ skill }}</li>
+      }
+    </ul>
   </div>
 
-  <div class="info-row">
-    <strong>Email:</strong>
-    <span>sivaprasad@example.com</span>
+  <!-- STRENGTHS -->
+  <div class="report-card mb-4">
+    <h5 class="section-title text-success">Strengths</h5>
+
+    <ul class="report-list">
+      @for (item of analysis?.strengths; track $index) {
+        <li>{{ item }}</li>
+      }
+    </ul>
   </div>
 
-  <div class="info-row">
-    <strong>Phone:</strong>
-    <span>+91 9876543210</span>
+  <!-- WEAKNESSES -->
+  <div class="report-card mb-4">
+    <h5 class="section-title text-warning">Weaknesses</h5>
+
+    <ul class="report-list">
+      @for (item of analysis?.weaknesses; track $index) {
+        <li>{{ item }}</li>
+      }
+    </ul>
   </div>
 
-  <div class="info-row">
-    <strong>Location:</strong>
-    <span>Andhra Pradesh, India</span>
+  <!-- GRAMMAR -->
+  <div class="report-card mb-4">
+    <h5 class="section-title text-secondary">Grammar Issues</h5>
+
+    <ul class="report-list">
+      @for (item of analysis?.grammar_issues; track $index) {
+        <li>{{ item }}</li>
+      }
+    </ul>
   </div>
 
-  <div class="info-row">
-    <strong>Resume Score:</strong>
-    <span>{{atsScore}} / 100</span>
+  <!-- SUGGESTIONS -->
+  <div class="report-card">
+    <h5 class="section-title text-primary">Improvement Suggestions</h5>
+
+    <ul class="report-list">
+      @for (item of analysis?.suggestions; track $index) {
+        <li>{{ item }}</li>
+      }
+    </ul>
   </div>
 
-  <div class="info-row">
-    <strong>LinkedIn:</strong>
-    <a href="https://linkedin.com" target="_blank">
-      linkedin.com/in/siva
-    </a>
+  }
+
+  @else {
+
+  <!-- ❗ EMPTY / ERROR STATE -->
+  <div class="text-center mt-5 py-5">
+    <h6 class="text-danger">No Data Found</h6>
+    <p class="text-muted">Something went wrong while fetching resume analysis</p>
   </div>
 
-  <div class="info-row">
-    <strong>GitHub:</strong>
-    <a href="https://github.com" target="_blank">
-      github.com/sivaprasad
-    </a>
-  </div>
+}
 
-</div>
-
-</div>
-
-</div>
-
-
-<!-- SKILLS DETECTED -->
-<div class="report-card mb-4">
-
-<h5 class="section-title">Skills Detected</h5>
-
-<div class="skill-tags">
-
-<span class="skill">Angular</span>
-<span class="skill">Node.js</span>
-<span class="skill">Express.js</span>
-<span class="skill">PostgreSQL</span>
-<span class="skill">TypeScript</span>
-<span class="skill">Python</span>
-<span class="skill">LangChain</span>
-<span class="skill">RAG</span>
-<span class="skill">Prompt Engineering</span>
-<span class="skill">Bootstrap</span>
-<span class="skill">Git</span>
-<span class="skill">REST APIs</span>
-
-</div>
-
-</div>
-
-
-<!-- MISSING SKILLS -->
-<div class="report-card mb-4">
-
-<h5 class="section-title text-danger">Missing Core Skills</h5>
-
-<ul class="report-list">
-
-<li>Cloud Platforms (AWS, Azure, GCP)</li>
-<li>Testing Frameworks (Jest, Mocha, Karma)</li>
-<li>Containerization (Docker, Kubernetes)</li>
-<li>Advanced CI/CD tools</li>
-<li>NgRx State Management</li>
-
-</ul>
-
-</div>
-
-
-<!-- STRENGTHS -->
-<div class="report-card mb-4">
-
-<h5 class="section-title text-success">Strengths</h5>
-
-<ul class="report-list">
-
-<li>Strong full-stack development skills</li>
-<li>Experience with GenAI technologies</li>
-<li>Multiple professional certifications</li>
-<li>Well structured resume</li>
-<li>Active GitHub profile</li>
-
-</ul>
-
-</div>
-
-
-<!-- WEAKNESSES -->
-<div class="report-card mb-4">
-
-<h5 class="section-title text-warning">Weaknesses</h5>
-
-<ul class="report-list">
-
-<li>Limited quantifiable achievements</li>
-<li>Only one professional experience listed</li>
-<li>No cloud platform experience</li>
-<li>No containerization technologies</li>
-
-</ul>
-
-</div>
-
-
-<!-- GRAMMAR ISSUES -->
-<div class="report-card mb-4">
-
-<h5 class="section-title text-secondary">Grammar Issues</h5>
-
-<ul class="report-list">
-
-<li>Inconsistent punctuation</li>
-<li>Extra spaces before commas</li>
-<li>Formatting inconsistencies</li>
-
-</ul>
-
-</div>
-
-
-<!-- SUGGESTIONS -->
-<div class="report-card">
-
-<h5 class="section-title text-primary">Improvement Suggestions</h5>
-
-<ul class="report-list">
-
-<li>Add quantifiable achievements</li>
-<li>Expand CI/CD experience</li>
-<li>Add personal projects section</li>
-<li>Learn cloud platforms</li>
-<li>Improve punctuation consistency</li>
-
-</ul>
-
-</div>
 
 </div>

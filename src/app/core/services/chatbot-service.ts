@@ -13,16 +13,18 @@ export interface ChatResponse {
 })
 export class ChatbotService {
 
-  private apiUrl = environment.CHATBOT_API;
+  private apiUrl = environment.generativeAIUrl;
 
   constructor(private http: HttpClient) {}
 
   askQuestion(query: string, topK: number = 3): Observable<ChatResponse> {
-    return this.http.post<ChatResponse>(`${this.apiUrl}/chat`, {
+    return this.http.post<ChatResponse>(`${this.apiUrl}/rag/chat`, {
       query,
       top_k: topK
     });
   }
+
+
 
   healthCheck(): Observable<any> {
     return this.http.get(`${this.apiUrl}/health`);

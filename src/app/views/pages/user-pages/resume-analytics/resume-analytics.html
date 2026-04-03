@@ -3,18 +3,15 @@
   <h4 class="fw-semibold mb-4">Resume Analytics</h4>
 
   <!-- Upload Section -->
-<!-- Upload Section -->
-<div class="upload-box text-center mb-5">
+  <div class="upload-box text-center mb-5">
 
-  <!-- hidden file input -->
-  <input type="file" id="resumeUpload" hidden>
-
-  <!-- clickable upload icon -->
-  <label for="resumeUpload" class="upload-click">
-
-    <div class="upload-icon mb-3">
-      <i class="bi bi-cloud-arrow-up"></i>
-    </div>
+    <app-file-upload
+      [bucketKey]="BucketKey.JOBSEEKER_DATA"
+      [section]="UploadSection.RESUME"
+      accept="application/pdf"
+      [replace]="false"
+      (uploaded)="onLogoUploaded($event)">
+    </app-file-upload>
 
     <h5 class="fw-semibold mb-1">Upload Your Resume</h5>
 
@@ -22,60 +19,88 @@
       Click the icon to upload your resume
     </p>
 
-  </label>
+  </div>
 
-</div>
+  <!-- Resume List -->
+  @if (resumes.length > 0) {
+
+    <div class="row justify-content-center g-4">
+
+      @for (resume of resumes; track resume._id) {
+
+        <div class="col-12 col-lg-9">
+
+<div class="resume-card position-relative">
+
+                          <!-- ATS Score -->
+@if (resume.ats_score > 0) {
+  <div class="badge badge-success">
+    ATS: {{ resume.ats_score }}%
+  </div>
+}
 
 
-<div class="row justify-content-center g-4">
+            <div class="d-flex align-items-start gap-3">
 
-  <div class="col-12  col-lg-9">
+              <div class="resume-icon">
+                <i class="bi bi-file-earmark-text"></i>
+              </div>
 
-    <div class="resume-card">
+              <div class="resume-info flex-grow-1">
 
-      <div class="d-flex align-items-start gap-3">
+                <h6 class="resume-name">
+                  {{ getCleanFileName(resume.fileName) }}
+                </h6>
 
-        <div class="resume-icon">
-          <i class="bi bi-file-earmark-text"></i>
+                <small class="text-muted">
+                  Uploaded: {{ resume.createdAt | date:'mediumDate' }}
+                </small>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="resume-actions mt-4">
+
+              <a
+                class="ats-btn"
+                [routerLink]="['/user/resume-analytics/ats-report']"
+                [queryParams]="{ id: resume._id }">
+                Check Score
+              </a>
+
+              <a
+                class="download-btn"
+                [href]="resume.resumeUrl"
+                target="_blank">
+                <i class="bi bi-download me-1"></i>
+                Download
+              </a>
+
+              <button
+                class="delete-btn"
+                (click)="deleteResume(resume._id)">
+                Delete
+              </button>
+
+            </div>
+
+
+
+          </div>
+
         </div>
 
-        <div class="resume-info flex-grow-1">
-
-          <h6 class="resume-name">
-            frontend-developer-resume.pdf
-          </h6>
-
-          <small class="text-muted">
-            Uploaded on: Mar 14, 2026
-          </small>
-
-        </div>
-
-      </div>
-
-      <div class="resume-actions mt-4">
-
-        <a
-        class="ats-btn"
-        routerLink="/user/resume-analytics/1/ats-report">
-          Check Score
-        </a>
-
-        <button class="download-btn">
-          <i class="bi bi-download me-1"></i>
-          Download
-        </button>
-
-        <button class="delete-btn">
-          Delete
-        </button>
-
-      </div>
+      }
 
     </div>
 
-  </div>
+  } @else {
 
-</div>
+    <p class="text-center text-muted">No resumes uploaded yet</p>
+
+  }
 
 </div>

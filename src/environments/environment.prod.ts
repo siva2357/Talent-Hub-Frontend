@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   apiGatewayUrl: 'https://talent-hub-backend-51480553352.us-central1.run.app/api',
-  CHATBOT_API: 'http://localhost:8000/api',
+  generativeAIUrl: 'https://ai-intelligence-layer-51480553352.us-central1.run.app/api',
   firebase: {
     apiKey: 'AIzaSyCG05DLoF-NM9hj5Xdfv2OjXhSp9wpUbc0',
     authDomain: 'talent-hub-257d6.firebaseapp.com',
