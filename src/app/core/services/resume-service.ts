@@ -7,75 +7,90 @@ import { catchError, Observable, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class ResumeService {
-  private baseUrl: string = environment.apiGatewayUrl;
+
+  private baseUrl: string = `${environment.apiGatewayUrl}`;
+  private apiUrl: string = environment.generativeAIUrl;
+
+  constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
-  const token = localStorage.getItem('JWT_Token');
+    const token = localStorage.getItem('JWT_Token');
 
     if (!token) {
-      console.error("🚨 No token found in localStorage!");
-      return new HttpHeaders();
+      throw new Error('No auth token found');
     }
+
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
+  // 🔹 AI analyze
+  analyzeResume(url: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/resume/analyze`,
+      { url }
+    ).pipe(
+      catchError(error => this.handleError(error))
+    );
+  }
 
-  constructor(private http: HttpClient) { }
-
-  getMyResumes(): Observable<any> {
-  return this.http.get<any>(
-    `${this.baseUrl}/my-resumes`,
+// 🔹 CREATE resume
+saveResume(payload: any): Observable<any> {
+  return this.http.post(
+    `${this.baseUrl}/resume/create`,
+    payload,
     { headers: this.getHeaders() }
   ).pipe(
     catchError(error => this.handleError(error))
   );
 }
 
+updateAnalysis(id: string, payload: any) {
+  return this.http.put(
+    `${this.baseUrl}/resume/analysis/${id}`,
+    payload,
+    { headers: this.getHeaders() }
+  );
+}
 
-runResumeScoring(resumeId: string, force: boolean = false): Observable<any> {
-  return this.http.get<any>(
-    `${this.baseUrl}/resume/${resumeId}/score${force ? '?force=true' : ''}`,
+// 🔹 GET ALL resumes
+getResumes(): Observable<any> {
+  return this.http.get(
+    `${this.baseUrl}/resume/list`,
     { headers: this.getHeaders() }
   ).pipe(
     catchError(error => this.handleError(error))
   );
 }
 
-getResumeReport(resumeId: string): Observable<any> {
-  return this.http.get<any>(
-    `${this.baseUrl}/resume/${resumeId}/report`,
+// 🔹 GET ONE resume
+getResumeById(id: string): Observable<any> {
+  return this.http.get(
+    `${this.baseUrl}/resume/detail/${id}`,
     { headers: this.getHeaders() }
   ).pipe(
     catchError(error => this.handleError(error))
   );
 }
 
-
-deleteResume(resumeId: string): Observable<any> {
-  return this.http.delete<any>(
-    `${this.baseUrl}/resume/${resumeId}/delete`,
+// 🔹 DELETE resume
+deleteResume(id: string): Observable<any> {
+  return this.http.delete(
+    `${this.baseUrl}/resume/delete/${id}`,
     { headers: this.getHeaders() }
   ).pipe(
     catchError(error => this.handleError(error))
   );
 }
-
-
-  saveResumeUrl(resumeUrl: string): Observable<any> {
-  return this.http.put(`${this.baseUrl}/resume/resume-url`, { resumeUrl }, { headers: this.getHeaders() })
-  .pipe(catchError(error => this.handleError(error)));;
-}
-
-
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
+
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Error: ${error.error.message}`;
     } else {
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-    return throwError(errorMessage);
-  }
 
+    return throwError(() => errorMessage);
+  }
 }

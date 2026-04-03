@@ -18,20 +18,14 @@
 
             @for (col of columns; track col.name) {
               <td [class.text-center]="col.center">
-
-                <!-- S.NO -->
                 @if (col.type === 'index') {
                   {{ i + 1 }}
                 }
-
-                <!-- CUSTOM TEMPLATE -->
                 @else if (col.template) {
-                  <ng-container
-                    *ngTemplateOutlet="col.template; context: { $implicit: row }">
-                  </ng-container>
+                  <ng-container *ngTemplateOutlet="col.template; context: { $implicit: row }"> </ng-container>
                 }
 
-                <!-- DEFAULT -->
+
                 @else {
                   {{ row[col.prop] }}
                 }

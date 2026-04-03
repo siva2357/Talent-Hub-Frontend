@@ -69,8 +69,10 @@ sendMessage() {
   this.loading = true;
 
   this.chatbotService.askQuestion(userMessage).subscribe({
-    next: (res) => {
-      const formatted = this.formatAIResponse(res.answer);
+next: (res: any) => {
+  const answer = res.data?.answer || '';
+
+  const formatted = this.formatAIResponse(answer);
 
       this.messages.push({
         sender: 'ai',

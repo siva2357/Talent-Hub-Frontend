@@ -39,7 +39,7 @@ export const USER_ROUTES: Routes = [
       { path: 'my-portfolio', component: Portfolio, canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
       { path: 'project/:id/project-details', component: ProjectDetailsPage,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
       { path: 'resume-analytics', component: ResumeAnalytics, canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
-      { path: 'resume-analytics/:id/ats-report', component: ResumeAtsReport, canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
+      { path: 'resume-analytics/ats-report', component: ResumeAtsReport, canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'jobSeeker' } },
 
       // -------- RECRUITER --------
       { path: 'my-jobposts', component: ManageJobsPage,canActivate: [RoleGuard,AuthGuard], data: { expectedRole: 'recruiter' } },
