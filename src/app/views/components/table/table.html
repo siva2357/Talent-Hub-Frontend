@@ -6,7 +6,7 @@
       <thead>
         <tr>
           @for (col of columns; track col.name) {
-            <th>{{ col.name }}</th>
+            <th [class.text-center]="col.center">{{ col.name }}</th>
           }
         </tr>
       </thead>
