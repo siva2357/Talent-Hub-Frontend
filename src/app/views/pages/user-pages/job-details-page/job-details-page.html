@@ -193,41 +193,56 @@ View Company Information
   <!-- ATS BUTTON -->
 <div class="ats-section">
 
-<button class="ats-btn">
-Check ATS Compatibility
+<button class="ats-btn" (click)="checkATS()">
+  Check ATS Compatibility
 </button>
 
-<!-- ATS RESULT -->
-<div class="ats-result mt-3">
+@if (currentMatch) {
+  <div class="ats-result mt-3">
 
-<div class="ats-item">
-<span class="ats-label">Score</span>
-<span class="ats-value text-success">78%</span>
-</div>
+    <div class="ats-item">
+      <span class="ats-label">Score</span>
+      <span class="ats-value"
+            [ngClass]="{
+              'text-success': currentMatch.match_score > 70,
+              'text-warning': currentMatch.match_score > 40 && currentMatch.match_score <= 70,
+              'text-danger': currentMatch.match_score <= 40
+            }">
+        {{ currentMatch.match_score }}%
+      </span>
+    </div>
 
-<div class="ats-item">
-<span class="ats-label">Matching</span>
-<span class="ats-value">Good Match</span>
-</div>
+    <div class="ats-item">
+      <span class="ats-label">Matching</span>
+      <span class="ats-value">
+        {{ currentMatch.candidate_fit }}
+      </span>
+    </div>
 
-<div class="ats-item">
-<span class="ats-label">Matched Skills</span>
-<span class="ats-value">Angular, TypeScript, REST API</span>
-</div>
+    <div class="ats-item">
+      <span class="ats-label">Matched Skills</span>
+      <span class="ats-value">
+        @if (currentMatch.matched_skills?.length) {
+          {{ currentMatch.matched_skills.join(', ') }}
+        } @else {
+          No matched skills
+        }
+      </span>
+    </div>
 
-<div class="ats-item">
-<span class="ats-label">Missing Skills</span>
-<span class="ats-value text-danger">Docker, AWS</span>
-</div>
+    <div class="ats-item">
+      <span class="ats-label">Missing Skills</span>
+      <span class="ats-value text-danger">
+        @if (currentMatch.missing_skills?.length) {
+          {{ currentMatch.missing_skills.join(', ') }}
+        } @else {
+          No missing skills data
+        }
+      </span>
+    </div>
 
-<div class="ats-item">
-<span class="ats-label">Suggestions</span>
-<span class="ats-value">
-Add Docker and AWS experience to improve ATS score.
-</span>
-</div>
-
-</div>
+  </div>
+}
 
 </div>
 

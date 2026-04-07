@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { JobpostService } from '../../../../core/services/jobpost-service';
 import { Buttons } from "../../../components/buttons/buttons";
 import { ApplicationService } from '../../../../core/services/applications-service';
+import { ResumeService } from '../../../../core/services/resume-service';
 
 @Component({
   selector: 'app-job-details-page',
@@ -18,24 +19,69 @@ export class JobDetailsPage implements OnInit{
   job: any = null;
   loading = false;
   error = '';
-
+resumeId: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private jobService: JobpostService,
-    private applicationService:ApplicationService
+    private applicationService:ApplicationService,
+    private resumeService:ResumeService
   ) {}
 
-    ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      this.jobId = params.get('id');
+ngOnInit() {
+  this.route.paramMap.subscribe(params => {
+    this.jobId = params.get('id');
 
-      if (this.jobId) {
-        this.getJobDetails(this.jobId);
-         this.loadAllJobs(); // for recommendations
-      }
-    });
+    if (this.jobId) {
+      this.getJobDetails(this.jobId);
+      this.loadAllJobs();
+      this.loadResume();
+    }
+  });
+}
+
+checkATS() {
+  if (!this.resumeId) {
+    console.warn("No resume found");
+    return;
   }
+
+  this.runMatch();
+}
+
+
+loadResume() {
+  this.resumeService.getResumes().subscribe({
+    next: (res: any) => {
+      const resumes = res.data || [];
+
+      if (resumes.length) {
+        this.resumeId = resumes[0]._id;
+        // ❌ REMOVE this.runMatch();
+      }
+    },
+    error: (err) => console.error(err)
+  });
+}
+
+currentMatch: any = null;
+
+runMatch() {
+  if (!this.resumeId) return;
+
+  this.resumeService.matchJobs(this.resumeId).subscribe({
+    next: (res: any) => {
+      const match = res.data.find(
+        (m: any) => m.job_id === this.jobId
+      );
+
+      this.currentMatch = match; // ✅ store
+
+      console.log("Current Job Match:", match);
+    },
+    error: (err) => console.error(err)
+  });
+}
 
 
 getJobDetails(id: string) {
