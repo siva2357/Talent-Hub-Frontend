@@ -6,11 +6,12 @@ import { InterviewService } from '../../../../core/services/interview-service';
 import { UpdateInterviewDTO } from '../../../../core/dtos/interview.dto';
 import { Pagination } from "../../../components/pagination/pagination";
 import { Table } from "../../../components/table/table";
+import { Buttons } from "../../../components/buttons/buttons";
 
 
 @Component({
   selector: 'app-interview-management-page',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, Pagination, Table],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, Pagination, Table, Buttons],
   templateUrl: './interview-management-page.html',
   styleUrl: './interview-management-page.css',
 })

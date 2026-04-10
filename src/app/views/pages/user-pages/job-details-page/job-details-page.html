@@ -197,7 +197,13 @@ View Company Information
   Check ATS Compatibility
 </button>
 
-@if (currentMatch) {
+@if (isCheckingATS) {
+  <div class="text-center mt-3">
+    <div class="spinner-border text-primary"></div>
+    <div class="mt-2">Analyzing resume...</div>
+  </div>
+}
+@else if (currentMatch) {
   <div class="ats-result mt-3">
 
     <div class="ats-item">

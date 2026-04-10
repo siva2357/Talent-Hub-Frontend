@@ -17,6 +17,7 @@ export class UserProfile implements OnInit {
   profile: any = null;
   role: string | null = null;
   isLoading = false;
+profileData: any = null;
 
   constructor(
     private recruiterService: RecruiterProfileService,
@@ -53,6 +54,7 @@ export class UserProfile implements OnInit {
       this.recruiterService.getRecruiterProfile().subscribe({
         next: (res) => {
           this.profile = res.data;
+            this.profileData = res.data.profile; // ✅ CLEAN
           this.isLoading = false;
         },
         error: () => (this.isLoading = false),
@@ -61,6 +63,7 @@ export class UserProfile implements OnInit {
       this.jobSeekerService.getJobSeekerProfile().subscribe({
         next: (res) => {
           this.profile = res.data;
+            this.profileData = res.data.profile; // ✅ CLEAN
           this.isLoading = false;
         },
         error: () => (this.isLoading = false),

@@ -20,6 +20,7 @@ export class JobDetailsPage implements OnInit{
   loading = false;
   error = '';
 resumeId: string = '';
+isCheckingATS = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +47,7 @@ checkATS() {
     return;
   }
 
+  this.isCheckingATS = true; // ✅ start loader
   this.runMatch();
 }
 
@@ -75,11 +77,16 @@ runMatch() {
         (m: any) => m.job_id === this.jobId
       );
 
-      this.currentMatch = match; // ✅ store
+      this.currentMatch = match;
 
       console.log("Current Job Match:", match);
+
+      this.isCheckingATS = false; // ✅ stop loader
     },
-    error: (err) => console.error(err)
+    error: (err) => {
+      console.error(err);
+      this.isCheckingATS = false; // ✅ stop loader on error
+    }
   });
 }
 

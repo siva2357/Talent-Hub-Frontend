@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { HeaderLayout } from '../../../layouts/header-layout/header-layout';
 import { FooterLayout } from '../../../layouts/footer-layout/footer-layout';
+import { HeaderLayout } from '../../../layouts/header-layout/header-layout';
+
 @Component({
   selector: 'app-talent-marketplace-page',
   imports: [HeaderLayout,FooterLayout],
