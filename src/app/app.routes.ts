@@ -22,30 +22,31 @@ import { BlogPage } from './views/pages/public/blog-page/blog-page';
 import { ProfileForm } from './views/account/profile-form/profile-form';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
+import { BlogDetails } from './views/pages/public/blog-details/blog-details';
 
 
 export const routes: Routes = [
   //public
-  { path: 'home', component: LandingPage, title: 'Landing' },
+  { path: 'home', component: LandingPage, title: 'Home' },
   { path: 'talent-marketplace', component: TalentMarketplacePage, title: 'Talent marketplace' },
   { path: 'find-work', component: FindWorkPage, title: 'Find work' },
   { path: 'recruitment-process', component: RecruitmentPage, title: 'Recruitment' },
-  { path: 'resume-analyzer', component: ResumeBuilderPage, title: 'Resume builder' },
+  { path: 'resume-analyzer', component: ResumeBuilderPage, title: 'Resume analyzer' },
   { path: 'about', component: AboutPage, title: 'About' },
-  { path: 'blog', component: BlogPage, title: 'About' },
-
+  { path: 'blog', component: BlogPage, title: 'Blog' },
+  { path: 'blog/:id/details', component: BlogDetails, title: 'Blog-details' },
   //auth pages
-  { path: 'signup', component: SingupPage, title: 'Singup' },
-  { path: 'register', component: RegistrationPage, title: 'Register recruiter' },
+  { path: 'signup', component: SingupPage, title: 'Signup' },
+  { path: 'register', component: RegistrationPage, title: 'Register' },
   { path: 'register/otp-verification', component: OtpVerificationPage, title: 'OTP Verification' },
   { path: 'confirmation-page', component: ConfirmationPage, title: 'Confirmation' },
   { path: 'login', component: LoginPage, title: 'Login' },
 
 
   { path: 'profile-form', component: ProfileForm, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: ['jobSeeker', 'recruiter'] }},
-  { path: 'forgot-password', component: ForgotPasswordPage, title: 'OTP Verification' },
-  { path: 'reset-otp-verification', component: ResetOtpVerificationPage,title: 'OTP Verification'},
-  { path: 'reset-password', component: ResetPasswordPage, title: 'Reset password' },
+  { path: 'forgot-password', component: ForgotPasswordPage, title: 'Forgot Password' },
+  { path: 'reset-otp-verification', component: ResetOtpVerificationPage,title: 'Reset OTP Verification'},
+  { path: 'reset-password', component: ResetPasswordPage, title: 'Reset Password' },
 
   //extra pages
   { path: 'coming-soon', component: ComingSoonPage, title: 'Coming soon' },

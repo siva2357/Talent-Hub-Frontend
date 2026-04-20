@@ -11,6 +11,7 @@ import { FilePreview } from "../../../shared/file-preview/file-preview";
 import { FileUpload } from "../../../shared/file-upload/file-upload";
 import { BucketKey } from '../../../../core/enums/bucket-key.constant';
 import { UploadSection } from '../../../../core/enums/upload-section.constant';
+
 @Component({
   selector: 'app-companies',
   standalone: true,

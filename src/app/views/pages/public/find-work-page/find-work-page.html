@@ -1,5 +1,199 @@
 <app-header-layout></app-header-layout>
-<div class="container-xl mt-5 pt-5">
-  <p>Find Work page works!</p>
-</div>
+
+
+  <div class="container py-5 mb-5">
+
+
+    <!-- ================= HEADER ================= -->
+    <div class="mb-4 mt-5">
+      <h4 class="fw-bold">Find Your Next Job</h4>
+      <p class="text-muted">
+        Discover jobs that match your skills, experience, and career goals —
+        powered by AI-driven recommendations.
+      </p>
+    </div>
+
+    <!-- ================= HOW IT WORKS (JOB SEEKER) ================= -->
+
+    <div class="row  g-4 mb-5">
+
+      <div class="col-12 col-lg-4">
+        <div class="info-card h-100 text-center">
+          <i class="bi bi-bullseye info-icon"></i>
+          <h6 class="fw-semibold mt-3">Skill-Based Job Matching</h6>
+          <p class="text-muted small mb-0">
+            Jobs are matched based on your skills, experience,
+            and role preferences to ensure relevance.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <div class="info-card h-100 text-center">
+          <i class="bi bi-funnel-fill info-icon"></i>
+          <h6 class="fw-semibold mt-3">Smart Job Filtering</h6>
+          <p class="text-muted small mb-0">
+            Filters highlight suitable opportunities and remove
+            roles that do not align with your profile.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <div class="info-card h-100 text-center">
+          <i class="bi bi-clipboard-check info-icon"></i>
+          <h6 class="fw-semibold mt-3">Interview Readiness</h6>
+          <p class="text-muted small mb-0">
+            Guidance and preparation insights help you apply
+            with confidence and clarity.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+
+
+    <!-- ================= SEARCH HEADER ================= -->
+    <div class="mb-3 mt-5 ">
+      <h4 class="fw-bold mb-1">Recommended Jobs for You</h4>
+      <p class="text-muted small">
+        Jobs ranked based on your skills, experience, and profile strength.
+      </p>
+    </div>
+
+    <!-- ================= SEARCH ================= -->
+    <div class="row g-3 my-4">
+      <div class="col-md-5">
+        <input class="form-control form-control-sm" placeholder="Job title, skill, or keyword">
+      </div>
+
+      <div class="col-md-4">
+        <select class="form-select form-select-sm">
+          <option value="">All Categories</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <button class="btn btn-sm btn-primary ">
+          Search Jobs
+        </button>
+      </div>
+    </div>
+
+
+    <div class="mt-4">
+
+      @for (job of [
+      {
+      title: 'Frontend Developer',
+      meta: 'Remote • Full Time • 2–4 Years',
+      desc: 'Strong match for Angular and UI development experience.',
+      match: 'High'
+      },
+      {
+      title: 'UI / UX Designer',
+      meta: 'Hybrid • Contract • 3+ Years',
+      desc: 'Design systems and Figma skills align well with this role.',
+      match: 'Medium'
+      },
+      {
+      title: 'Full Stack Engineer',
+      meta: 'Onsite • Full Time • 4–6 Years',
+      desc: 'Backend + frontend experience required. Your profile is relevant.',
+      match: 'Low'
+      }
+      ]; track job.title) {
+
+      <div class="job-card mb-3 p-3">
+
+        <h6 class="fw-semibold mb-1">{{ job.title }}</h6>
+
+        <p class="text-muted small mb-2">
+          {{ job.meta }}
+        </p>
+
+        <p class="text-muted small mb-3">
+          Skills Match: @if (job.match === 'High') {
+  <strong class="text-success">{{ job.match }}</strong>
+}
+@else if (job.match === 'Medium') {
+  <strong class="text-warning">{{ job.match }}</strong>
+}
+@else if (job.match === 'Low') {
+  <strong class="text-danger">{{ job.match }}</strong>
+}
+ • {{ job.desc }}
+        </p>
+
+        <button class="btn btn-sm btn-outline-primary">
+          View Job Details
+        </button>
+
+      </div>
+      }
+    </div>
+
+
+  </div>
+
+
+
+
+
+<!-- ================= HIRING FLOW ================= -->
+  <div class="container mt-5 mb-5">
+
+    <h4 class="fw-bold mb-4 text-center">
+      How the Hiring Process Works
+    </h4>
+
+    <div class="row g-4">
+
+      <div class="col-md-6 col-lg-3">
+        <div class="hire-step">
+          <span class="hire-step-number">1</span>
+          <h6 class="fw-semibold mt-3">Complete Your Profile</h6>
+          <p class="text-muted small mb-0">
+            Add your skills, experience, role preferences, and availability.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="hire-step">
+          <span class="hire-step-number">2</span>
+          <h6 class="fw-semibold mt-3">Job Recommendations</h6>
+          <p class="text-muted small mb-0">
+            Jobs are recommended based on your skills, experience, and role preferences.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="hire-step">
+          <span class="hire-step-number">3</span>
+          <h6 class="fw-semibold mt-3">Apply with Confidence</h6>
+          <p class="text-muted small mb-0">
+            Apply to relevant jobs that closely match your profile.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="hire-step">
+          <span class="hire-step-number">4</span>
+          <h6 class="fw-semibold mt-3">Interview & Get Hired</h6>
+          <p class="text-muted small mb-0">
+            Recruiters review profiles, conduct interviews, and hire faster.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
 <app-footer-layout></app-footer-layout>
