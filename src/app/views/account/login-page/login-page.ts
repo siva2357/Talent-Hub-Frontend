@@ -74,7 +74,7 @@ next: (res) => {
 
   switch (role) {
     case 'recruiter':
-      this.router.navigate(['user/my-jobposts']);
+      this.router.navigate(['user/my-dashboard']);
       break;
     case 'jobSeeker':
       this.router.navigate(['user/jobprofile']);
