@@ -5,20 +5,13 @@ import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { errorInterceptor } from './core/interceptor/error.interceptor';
 import { authInterceptor } from './core/interceptor/auth.interceptor';
-import { providePrimeNG } from 'primeng/config';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import Lara from '@primeng/themes/lara';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideAnimations(),
-    providePrimeNG({
-      theme: {
-        preset: Lara,
-      },
-    }),
 
     provideHttpClient(
       withInterceptors([
