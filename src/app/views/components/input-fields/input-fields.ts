@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,6 +20,13 @@ export class InputFields {
 @Input() height: string = ''; // optional
 @Input() isTextarea: boolean = false;
 @Input() readonly = false;
+
+
+@Input() mode: 'form' | 'filter' = 'form';
+@Input() value: any = '';
+@Output() valueChange = new EventEmitter<any>();
+
+
   getControl() {
   return this.form.get(this.controlName);
 }
@@ -48,5 +55,12 @@ getErrorMessage(): string {
 
   return 'Invalid field';
 }
+
+
+onFilterChange(event: any) {
+  const val = event.target.value;
+  this.valueChange.emit(val);
+}
+
 
 }

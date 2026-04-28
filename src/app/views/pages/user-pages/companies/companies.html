@@ -1,3 +1,146 @@
-<div class="container-fluid mt-5 p-5">
-<p>companies works!</p>
+<div class="container-fluid mt-5 py-5 px-4">
+
+
+  <div class="page-header mb-4">
+    <h3 class="fw-bold mb-1">Companies</h3>
+    <p class="text-muted">
+      Manage companies, control access, and monitor organization details.
+    </p>
+  </div>
+
+
+  <div class="filter-card mb-4">
+
+    <div class="row g-3 align-items-end">
+
+      <div class="col-md-3">
+        <app-input-fields mode="filter" placeholder="Search company..." [(value)]="filters.name"> </app-input-fields>
+      </div>
+
+      <div class="col-md-3">
+        <app-input-fields mode="filter" placeholder="Location" [(value)]="filters.location"> </app-input-fields>
+      </div>
+
+      <div class="col-md-3">
+        <app-input-fields mode="filter" [isSelect]="true" placeholder="Status" [options]="statusOptions" [(value)]="filters.status"> </app-input-fields>
+      </div>
+
+      <div class="col-md-3 d-flex gap-2">
+        <app-button label="Apply" variant="primary" size="md" class="w-100" (click)="onApplyFilters()"></app-button>
+        <app-button label="Reset" variant="secondary" size="md" class="w-100" (click)="onResetFilters()"></app-button>
+      </div>
+
+    </div>
+
+
+    @if (appliedFilters.name || appliedFilters.location || appliedFilters.status) {
+
+    <div class="d-flex flex-wrap gap-2 mt-3">
+
+      @if (appliedFilters.name) {
+      <span class="chip">
+        Name: {{ appliedFilters.name }}
+        <i class="bi bi-x" (click)="removeFilter('name')"></i>
+      </span>
+      }
+
+      @if (appliedFilters.location) {
+      <span class="chip">
+        Location: {{ appliedFilters.location }}
+        <i class="bi bi-x" (click)="removeFilter('location')"></i>
+      </span>
+      }
+
+      @if (appliedFilters.status) {
+      <span class="chip">
+        Status: {{ appliedFilters.status }}
+        <i class="bi bi-x" (click)="removeFilter('status')"></i>
+      </span>
+      }
+
+    </div>
+
+    }
+
+  </div>
+
+  <app-table class="d-none d-lg-block" [columns]="columns" [data]="data" [page]="page" [limit]="limit"> </app-table>
+
+  <div class="d-block d-lg-none">
+
+    <div class="row g-3">
+
+      @for (row of data; track row._id) {
+      <div class="col-12">
+
+        <div class="company-card">
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <div class="d-flex align-items-center gap-3">
+              <img [src]="row.logo" class="rounded-circle" width="48" height="48" />
+
+              <div>
+                <h6 class="mb-0 fw-semibold">{{ row.companyName }}</h6>
+                <small class="text-muted">{{ row.location }}</small>
+              </div>
+
+            </div>
+
+            <span class="badge" [ngClass]="{ 'bg-success-subtle text-success': row.status === 'active', 'bg-danger-subtle text-danger': row.status === 'blocked'}">
+              {{ row.status }}
+            </span>
+
+          </div>
+
+          <div class="company-details mb-3">
+            <div class="detail-item"> <span>Founded</span> <strong>{{ row.foundedYear }}</strong> </div>
+            <div class="detail-item"> <span>Phone</span> <strong>{{ row.phone }}</strong> </div>
+            <div class="detail-item"> <span>Website</span> <a [href]="'https://' + row.website" target="_blank"> {{ row.website }} </a> </div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <button class="btn btn-sm btn-light d-flex align-items-center gap-1" (click)="viewCompany(row)"> View </button>
+            <button class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1" (click)="editCompany(row)"> Edit </button>
+            <button class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1" (click)="deleteCompany(row)"> Delete </button>
+            <button class="btn btn-sm btn-outline-warning d-flex align-items-center gap-1" (click)="blockCompany(row)"> Block </button>
+            <button class="btn btn-sm btn-outline-success d-flex align-items-center gap-1" (click)="unblockCompany(row)">Unblock </button>
+          </div>
+
+        </div>
+
+      </div>
+      }
+
+    </div>
+
+  </div>
+
+  <app-pagination [total]="total" [page]="page" [limit]="limit" (pageChange)="onPageChange($event)" (limitChange)="onLimitChange($event)"></app-pagination>
+
 </div>
+
+<!-- LOGO -->
+<ng-template #logoTpl let-row>
+  <img [src]="row.logo" width="35" height="35" class="rounded-circle" />
+</ng-template>
+
+<!-- STATUS -->
+<ng-template #statusTpl let-row>
+  <span class="badge" [ngClass]="{'badge-success': row.status === 'active','badge-danger': row.status === 'blocked'}">
+    {{ row.status }}
+  </span>
+</ng-template>
+
+<!-- ACTIONS -->
+<ng-template #actionTpl let-row>
+
+  <div class="d-flex gap-2 justify-content-center">
+    <button class="btn btn-sm btn-info" (click)="viewCompany(row)"> View</button>
+    <button class="btn btn-sm btn-primary" (click)="editCompany(row)">Edit</button>
+    <button class="btn btn-sm btn-danger" (click)="deleteCompany(row)">Delete</button>
+    <button class="btn btn-sm btn-warning" (click)="blockCompany(row)">Block</button>
+    <button class="btn btn-sm btn-success" (click)="unblockCompany(row)">Unblock</button>
+  </div>
+
+</ng-template>

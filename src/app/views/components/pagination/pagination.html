@@ -26,7 +26,7 @@
           </a>
         </li>
 
-        @for (p of totalPages; track p) {
+       @for (p of visiblePages; track p){
           <li class="page-item" [class.active]="p === page">
             <a class="page-link" (click)="changePage(p)">
               {{ p }}
