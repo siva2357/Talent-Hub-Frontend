@@ -7,11 +7,12 @@ import { inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-
+import { StorageService } from '../services/storage.service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toastr = inject(ToastrService);
   const router = inject(Router);
+  const storage = inject(StorageService);
 
   const isBackendApi = req.url.includes('/api/');
   const isLogout = req.url.includes('/auth/logout');
@@ -26,14 +27,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         typeof event.body === 'object' &&
         'message' in event.body
       ) {
-        // 🟢 Logout toast with slight delay so user sees it
         if (isLogout) {
           setTimeout(() => {
             toastr.success((event.body as any).message);
           }, 100);
-        }
-        // 🟢 Normal success toast (optional)
-        else {
+        } else {
           toastr.success((event.body as any).message);
         }
       }
@@ -45,8 +43,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         return throwError(() => error);
       }
 
-      // 🔕 Ignore ALL errors during logout
-      if (localStorage.getItem('isLoggingOut') === 'true') {
+      // ✅ SSR SAFE FIX
+      if (storage.get('isLoggingOut') === 'true') {
         return throwError(() => error);
       }
 
@@ -81,5 +79,3 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     })
   );
 };
-
-

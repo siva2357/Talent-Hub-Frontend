@@ -2,6 +2,7 @@ import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { UploadResponse } from '../models/upload-response.model';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,13 +11,18 @@ export class FileUploadService {
 
   private API = environment.apiGatewayUrl;
 
-  constructor(private http: HttpClient) {}
+
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService
+  ) {}
 
   /* ================= JWT HEADER ================= */
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('JWT_Token');
+    const token = this.storage.get('JWT_Token');
+
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`
+      Authorization: token ? `Bearer ${token}` : ''
     });
   }
 

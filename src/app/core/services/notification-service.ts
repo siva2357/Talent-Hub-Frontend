@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { jwtDecode } from 'jwt-decode';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { AppNotification } from '../models/notification.model';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,13 +12,17 @@ import { AppNotification } from '../models/notification.model';
 export class NotificationService {
     private baseUrl: string = `${environment.apiGatewayUrl}`; // Make sure this matches backend route
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService
+  ) {}
 
-
+  /* ================= HEADERS ================= */
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('JWT_Token');
+    const token = this.storage.get('JWT_Token');
+
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
+      Authorization: token ? `Bearer ${token}` : '',
     });
   }
 

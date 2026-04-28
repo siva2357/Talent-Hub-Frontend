@@ -6,6 +6,7 @@ import {
   HttpHeaders
 } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
+import { StorageService } from '../services/storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,16 +15,21 @@ export class ApplicationService {
 
   private baseUrl = environment.apiGatewayUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService
+  ) {}
 
+  /* ================= HEADERS ================= */
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('JWT_Token');
+    const token = this.storage.get('JWT_Token');
+
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
+      Authorization: token ? `Bearer ${token}` : '',
     });
   }
 
-  // ================= JOB SEEKER =================
+  /* ================= JOB SEEKER ================= */
 
   apply(jobPostId: string): Observable<any> {
     return this.http.post(
@@ -51,15 +57,14 @@ export class ApplicationService {
     ).pipe(catchError(this.handleError));
   }
 
+  getAppliedJobIds(): Observable<any> {
+    return this.http.get(
+      `${this.baseUrl}/applied-ids`,
+      { headers: this.getHeaders() }
+    ).pipe(catchError(this.handleError));
+  }
 
-getAppliedJobIds(): Observable<any> {
-  return this.http.get(
-    `${this.baseUrl}/applied-ids`, // ✅ correct route
-    { headers: this.getHeaders() }
-  ).pipe(catchError(this.handleError));
-}
-
-  // ================= RECRUITER =================
+  /* ================= RECRUITER ================= */
 
   getApplicants(jobPostId: string): Observable<any> {
     return this.http.get(
@@ -84,6 +89,7 @@ getAppliedJobIds(): Observable<any> {
     ).pipe(catchError(this.handleError));
   }
 
+  /* ================= ERROR ================= */
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'Something went wrong. Please try again later.';

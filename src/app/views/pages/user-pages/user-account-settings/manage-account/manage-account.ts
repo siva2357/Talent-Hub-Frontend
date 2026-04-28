@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { SeekerProfileService } from '../../../../../core/services/seeker-profile-service';
 import { RecruiterProfileService } from '../../../../../core/services/recruiter-profile-service';
 import { AuthService } from '../../../../../core/services/auth-service';
+import { StorageService } from '../../../../../core/services/storage.service';
 
 
 @Component({
@@ -18,19 +19,21 @@ export class ManageAccount implements OnInit {
   userDetails: any;
   role: string | null = null;
 
-  constructor(
-    private seekerService: SeekerProfileService,
-    private recruiterService: RecruiterProfileService,
-    private authService: AuthService,
-    private router: Router
-  ) {}
 
-  ngOnInit(): void {
-    this.role = this.authService.getRole();
+constructor(
+  private seekerService: SeekerProfileService,
+  private recruiterService: RecruiterProfileService,
+  private authService: AuthService,
+  private router: Router,
+  private storage: StorageService
+) {}
 
-    const storedUser = localStorage.getItem('userData');
-    this.userDetails = storedUser ? JSON.parse(storedUser) : null;
-  }
+ngOnInit(): void {
+  this.role = this.authService.getRole();
+
+  const storedUser = this.storage.get('userData');
+  this.userDetails = storedUser ? JSON.parse(storedUser) : null;
+}
 
   deleteAccount(): void {
     const confirmed = confirm(
@@ -55,13 +58,15 @@ export class ManageAccount implements OnInit {
     }
   }
 
-  private handleSuccess(message: string): void {
-    alert(message);
-    localStorage.clear();
-    sessionStorage.clear();
-    this.authService.logout?.();
-    this.router.navigate(['/login']);
-  }
+private handleSuccess(message: string): void {
+  alert(message);
+
+  this.storage.clear(); // ✅ replaces localStorage
+  sessionStorage.clear(); // ⚠️ optional (SSR safe since no-op on server)
+
+  this.authService.logout?.();
+  this.router.navigate(['/login']);
+}
 
   private handleError(err: any): void {
     console.error('Delete account failed:', err);

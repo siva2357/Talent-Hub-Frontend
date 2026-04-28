@@ -1,45 +1,67 @@
-import { Injectable } from '@angular/core';
-import { Observable, throwError, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {jwtDecode} from 'jwt-decode' ;
+import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../../environments/environment';
-
+import { StorageService } from '../services/storage.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminService {
+
   private baseUrl: string = `${environment.apiGatewayUrl}`;
-  constructor(private http: HttpClient) {}
+
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
+
+  /* ================= HEADERS ================= */
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('JWT_Token');
+    const token = this.storage.get('JWT_Token');
+
     if (token) {
-      const decodedToken: any = jwtDecode(token);
+      const decodedToken: any = jwtDecode(token); // optional use
     }
 
     if (!token) {
-      console.error('🚨 No token found in localStorage!');
       return new HttpHeaders();
     }
+
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
+  /* ================= AUTH ================= */
+
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    return !!this.storage.get('JWT_Token'); // 🔥 FIXED KEY ALSO
   }
+
+  /* ================= ERROR HANDLER ================= */
 
   private handleError(error: any): Observable<never> {
     console.error('🔥 API Error:', error);
+
     if (error.status === 401) {
       alert('❌ Unauthorized! Please log in again.');
-      localStorage.clear();
-      window.location.href = '/login';
+
+      this.storage.clear(); // ✅ SSR safe
+
+      // ✅ SSR SAFE redirect
+      if (isPlatformBrowser(this.platformId)) {
+        window.location.href = '/login';
+      }
     }
+
     return throwError(() => new Error(error.message || 'API Error'));
   }
+
+  /* ================= APIs ================= */
 
   getAllRecruiters(): Observable<any> {
     return this.http
@@ -65,11 +87,9 @@ export class AdminService {
       .pipe(catchError((error) => this.handleError(error)));
   }
 
- getAdminById(): Observable<any> {
+  getAdminById(): Observable<any> {
     return this.http
       .get(`${this.baseUrl}/admin/profile`, { headers: this.getHeaders() })
       .pipe(catchError((error) => this.handleError(error)));
   }
-
-
 }

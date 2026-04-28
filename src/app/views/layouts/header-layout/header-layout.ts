@@ -1,6 +1,9 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+
 
 @Component({
   selector: 'app-header-layout',
@@ -13,16 +16,21 @@ export class HeaderLayout implements OnInit {
 
   isMobile = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,  @Inject(PLATFORM_ID) private platformId: Object) {}
 
-  ngOnInit() {
+ngOnInit() {
+  if (isPlatformBrowser(this.platformId)) {
     this.updateView();
   }
+}
 
   @HostListener('window:resize')
-  updateView() {
-    this.isMobile = window.innerWidth < 1200; // XL breakpoint
+
+updateView() {
+  if (isPlatformBrowser(this.platformId)) {
+    this.isMobile = window.innerWidth < 1200;
   }
+}
 
 goToLogin() {
   this.router.navigate(['/login']);

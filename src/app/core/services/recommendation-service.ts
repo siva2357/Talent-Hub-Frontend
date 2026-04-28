@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { catchError, Observable, throwError } from 'rxjs';
 import { JobMatchResponse } from '../models/jobMatchReponse.model';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,18 +12,20 @@ export class RecommendationService {
 
   private baseUrl: string = environment.apiGatewayUrl;
 
-  private getHeaders(): HttpHeaders {
-  const token = localStorage.getItem('JWT_Token');
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService
+  ) {}
 
-    if (!token) {
-      console.error("🚨 No token found in localStorage!");
-      return new HttpHeaders();
-    }
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  /* ================= HEADERS ================= */
+  private getHeaders(): HttpHeaders {
+    const token = this.storage.get('JWT_Token');
+
+    return new HttpHeaders({
+      Authorization: token ? `Bearer ${token}` : '',
+    });
   }
 
-
-  constructor(private http: HttpClient) { }
 
 
  getJobResumeMatch(id: string): Observable<JobMatchResponse> {

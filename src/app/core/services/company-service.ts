@@ -8,6 +8,7 @@ import {
 import { catchError, Observable, throwError } from 'rxjs';
 import { CreateCompanyDTO, UpdateCompanyDTO } from '../dtos/company.dto';
 import { Company } from '../models/company.model';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,14 +16,19 @@ import { Company } from '../models/company.model';
 export class CompanyService {
     private baseUrl = environment.apiGatewayUrl;
 
-    constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService
+  ) {}
 
-    private getHeaders(): HttpHeaders {
-      const token = localStorage.getItem('JWT_Token');
-      return new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      });
-    }
+  /* ================= HEADERS ================= */
+  private getHeaders(): HttpHeaders {
+    const token = this.storage.get('JWT_Token');
+
+    return new HttpHeaders({
+      Authorization: token ? `Bearer ${token}` : '',
+    });
+  }
 
 
     createCompany(

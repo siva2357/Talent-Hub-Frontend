@@ -5,6 +5,7 @@ import { ApiResponse } from '../models/api-response.model';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { AdminStatsResponse, JobSeekerStatsResponse, RecruiterStatsResponse } from '../models/analytics.model';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,17 +13,18 @@ import { AdminStatsResponse, JobSeekerStatsResponse, RecruiterStatsResponse } fr
 export class StatsDataService {
 
     private baseUrl: string = environment.apiGatewayUrl;
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router,private storage: StorageService) { }
 
-    private getHeaders(): HttpHeaders {
-  const token = localStorage.getItem('JWT_Token');
 
-    if (!token) {
-      console.error("🚨 No token found in localStorage!");
-      return new HttpHeaders();
-    }
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  /* ================= HEADERS ================= */
+  private getHeaders(): HttpHeaders {
+    const token = this.storage.get('JWT_Token');
+
+    return new HttpHeaders({
+      Authorization: token ? `Bearer ${token}` : '',
+    });
   }
+
 
   getAdminStats(): Observable<any> {
     return this.http.get<any>(

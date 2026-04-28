@@ -22,6 +22,11 @@ import { DESIGNATION } from '../../../core/enums/designation.enum';
 import { SECTOR_DESIGNATION_MAP } from '../../../core/enums/sector-designation.map';
 import { CompanyService } from '../../../core/services/company-service';
 
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+
+
+
 @Component({
   selector: 'app-profile-form',
   imports: [RouterModule, ReactiveFormsModule, FormsModule, FilePreview, FileUpload, InputFields, Buttons,CommonModule],
@@ -74,7 +79,8 @@ companyOptions: string[] = [];
     private recruiterService: RecruiterProfileService,
     private seekerService: SeekerProfileService,
     private authService:AuthService,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+      @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
 ngOnInit() {
@@ -96,11 +102,10 @@ ngOnInit() {
     ? this.recruiterForm
     : this.jobSeekerForm;
 
-  // ✅ patch user data
+if (isPlatformBrowser(this.platformId)) {
   const user = this.authService.getUserData();
-  if (user) {
-    const names = user.fullName?.split(' ') || [];
 
+  if (user) {
     this.activeForm.patchValue({
       fullName: user.fullName || '',
       email: user.email || ''
@@ -109,6 +114,7 @@ ngOnInit() {
     this.activeForm.get('fullName')?.disable();
     this.activeForm.get('email')?.disable();
   }
+}
 
 
   this.addSkill();

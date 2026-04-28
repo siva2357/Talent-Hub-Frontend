@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ApiResponse } from '../models/api-response.model';
 import { CreateJobSeekerProfileDTO, UpdateJobSeekerBasicDTO, UpdateJobSeekerImageDTO, UpdateJobSeekerProfessionalDTO } from '../dtos/jobseeker-profile.dto';
 import { JobSeekerBasicProfile, JobSeekerImage, JobSeekerProfile, JobSeekerProfileResponse } from '../models/jobseeker-profile.model';
+import { StorageService } from './storage.service';
 
 
 
@@ -14,14 +15,17 @@ import { JobSeekerBasicProfile, JobSeekerImage, JobSeekerProfile, JobSeekerProfi
 export class SeekerProfileService {
   private readonly baseUrl = environment.apiGatewayUrl;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router,private storage: StorageService) {}
 
   /* ================= AUTH HEADER ================= */
 
+
+  /* ================= HEADERS ================= */
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('JWT_Token');
+    const token = this.storage.get('JWT_Token');
+
     return new HttpHeaders({
-      Authorization: `Bearer ${token ?? ''}`,
+      Authorization: token ? `Bearer ${token}` : '',
     });
   }
 

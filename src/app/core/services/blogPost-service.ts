@@ -8,6 +8,7 @@ import {
 import { catchError, Observable, throwError } from 'rxjs';
 import { CreateBlogDTO, UpdateBlogDTO } from '../dtos/blogPost.dto';
 import { Blog } from '../models/blog.model';
+import { StorageService } from './storage.service';
 
 
 
@@ -16,15 +17,19 @@ import { Blog } from '../models/blog.model';
 })
 export class BlogService {
     private baseUrl = environment.apiGatewayUrl;
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService
+  ) {}
 
-    constructor(private http: HttpClient) {}
+  /* ================= HEADERS ================= */
+  private getHeaders(): HttpHeaders {
+    const token = this.storage.get('JWT_Token');
 
-    private getHeaders(): HttpHeaders {
-      const token = localStorage.getItem('JWT_Token');
-      return new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      });
-    }
+    return new HttpHeaders({
+      Authorization: token ? `Bearer ${token}` : '',
+    });
+  }
 
 
   createBlog(

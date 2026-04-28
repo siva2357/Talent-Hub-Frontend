@@ -5,6 +5,7 @@ import { ApiResponse } from '../models/api-response.model';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { Talent } from '../models/talent.model';
+import { StorageService } from './storage.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -12,16 +13,14 @@ export class UserService {
  private baseUrl: string = environment.apiGatewayUrl;
 
   private getHeaders(): HttpHeaders {
-  const token = localStorage.getItem('JWT_Token');
+    const token = this.storage.get('JWT_Token');
 
-    if (!token) {
-      console.error("🚨 No token found in localStorage!");
-      return new HttpHeaders();
-    }
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return new HttpHeaders({
+      Authorization: token ? `Bearer ${token}` : '',
+    });
   }
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router,private storage: StorageService) { }
 
 
 getAllTalents(): Observable<{ success: boolean; data: Talent[] }> {

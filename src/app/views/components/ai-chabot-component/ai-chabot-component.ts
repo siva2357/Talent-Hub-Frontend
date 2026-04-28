@@ -2,7 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatbotService } from '../../../core/services/chatbot-service';
-
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { StorageService } from '../../../core/services/storage.service';
 
 interface ChatMessage {
   sender: 'user' | 'ai';
@@ -29,25 +31,35 @@ export class AiChabotComponent implements OnInit {
   showIntro = false;
   loading = false;
 
-  constructor(private chatbotService: ChatbotService) {}
+constructor(
+  private chatbotService: ChatbotService,
+  private storage: StorageService,
+  @Inject(PLATFORM_ID) private platformId: Object
+) {}
 
-  ngOnInit() {
-    const seen = localStorage.getItem('aiIntroSeen');
+ngOnInit() {
+  if (isPlatformBrowser(this.platformId)) {
+    const seen = this.storage.get('aiIntroSeen');
     if (!seen) {
       setTimeout(() => {
         this.showIntro = true;
       }, 700);
     }
   }
+}
+
 
   toggleChat() {
     this.isOpen = !this.isOpen;
   }
 
-  closeIntro() {
-    this.showIntro = false;
-    localStorage.setItem('aiIntroSeen', 'true');
+closeIntro() {
+  this.showIntro = false;
+
+  if (isPlatformBrowser(this.platformId)) {
+    this.storage.set('aiIntroSeen', 'true');
   }
+}
 
   openChatFromIntro() {
     this.closeIntro();
@@ -128,10 +140,12 @@ private formatAIResponse(text: string): { paragraph: string; points: string[] } 
 
 
 
-  private scrollToBottom() {
-    setTimeout(() => {
-      const el = document.querySelector('.ai-messages');
-      el?.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
-    });
-  }
+private scrollToBottom() {
+  if (!isPlatformBrowser(this.platformId)) return;
+
+  setTimeout(() => {
+    const el = document.querySelector('.ai-messages');
+    el?.scrollTo({ top: (el as any).scrollHeight, behavior: 'smooth' });
+  });
+}
 }

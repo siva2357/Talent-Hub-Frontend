@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ChangePassword } from '../models/password.model';
+import { StorageService } from './storage.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +14,21 @@ export class PasswordService {
 
   private baseUrl = environment.apiGatewayUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService,
+      @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
-  /* ================= JWT HEADER ================= */
+  /* ================= HEADERS ================= */
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('JWT_Token');
+    const token = this.storage.get('JWT_Token');
+
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`
+      Authorization: token ? `Bearer ${token}` : '',
     });
   }
+
 
   /* =====================================================
      🔐 CHANGE PASSWORD (LOGGED-IN USER)
@@ -62,14 +70,18 @@ export class PasswordService {
   }
 
   /* ================= ERROR HANDLER ================= */
-  private handleError(error: any) {
-    console.error('🔥 Password API Error:', error);
 
-    if (error.status === 401) {
-      localStorage.clear();
+private handleError(error: any) {
+  console.error('🔥 Password API Error:', error);
+
+  if (error.status === 401) {
+    this.storage.clear(); // ✅
+
+    if (isPlatformBrowser(this.platformId)) {
       window.location.href = '/login';
     }
-
-    return throwError(() => error?.error || error);
   }
+
+  return throwError(() => error?.error || error);
+}
 }

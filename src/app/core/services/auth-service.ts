@@ -12,6 +12,9 @@ import { VerifyOtpResponse } from '../models/otp-verify.model';
 import { ResendOtpRequestDto } from '../dtos/resend-otp.dto';
 import { LoginRequestDto } from '../dtos/auth.dto';
 
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,7 +22,7 @@ export class AuthService {
 
   private baseUrl = environment.apiGatewayUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   /* ================= AUTH ================= */
 
@@ -74,42 +77,52 @@ resendOtp(
 
   /* ================= TOKEN ================= */
 
-  getToken(): string | null {
+getToken(): string | null {
+  if (isPlatformBrowser(this.platformId)) {
     return localStorage.getItem('JWT_Token');
   }
+  return null;
+}
 
   isTokenExpired(token: string): boolean {
     const decoded: any = jwtDecode(token);
     return Date.now() > decoded.exp * 1000;
   }
 
-  isLoggedIn(): boolean {
-    const token = this.getToken();
-    return !!token && !this.isTokenExpired(token);
-  }
+isLoggedIn(): boolean {
+  const token = this.getToken();
+  return !!token && !this.isTokenExpired(token);
+}
 
   /* ================= STORAGE ================= */
 
-  private setUserData(user: LoginResponse): void {
+private setUserData(user: LoginResponse): void {
+  if (isPlatformBrowser(this.platformId)) {
     localStorage.setItem('JWT_Token', user.token);
     localStorage.setItem('userRole', user.role);
     localStorage.setItem('userId', user.userId);
     localStorage.setItem('userData', JSON.stringify(user));
   }
+}
 
-  clearAuthData(): void {
+clearAuthData(): void {
+  if (isPlatformBrowser(this.platformId)) {
     localStorage.removeItem('JWT_Token');
     localStorage.removeItem('userRole');
     localStorage.removeItem('userId');
     localStorage.removeItem('userData');
   }
+}
 
   /* ================= HELPERS ================= */
 
-  getUserData(): LoginResponse | null {
+getUserData(): LoginResponse | null {
+  if (isPlatformBrowser(this.platformId)) {
     const data = localStorage.getItem('userData');
     return data ? JSON.parse(data) : null;
   }
+  return null;
+}
 
   getRole(): string | null {
     return this.getUserData()?.role ?? null;

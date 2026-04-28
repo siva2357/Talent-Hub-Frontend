@@ -5,6 +5,8 @@ import { AuthService } from '../../../core/services/auth-service';
 import { InputFields } from "../../components/input-fields/input-fields";
 import { Buttons } from "../../components/buttons/buttons";
 import { LoginRequestDto } from '../../../core/dtos/auth.dto';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
 
 
 @Component({
@@ -23,7 +25,8 @@ export class LoginPage {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+      @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -38,11 +41,7 @@ onLogin() {
     return;
   }
 
-  // ✅ delay to next cycle
-  setTimeout(() => {
-    this.isLoading = true;
-  });
-
+  this.isLoading = true;
   this.errorMessage = '';
 
   const payload: LoginRequestDto = {
@@ -54,15 +53,13 @@ onLogin() {
 
     next: (res) => {
 
-      setTimeout(() => {
-        this.isLoading = false;
-      });
+      this.isLoading = false;
 
       const role = res.role;
       const isProfileCompleted = res.profileCompleted;
 
-      localStorage.setItem('token', res.token);
-      localStorage.setItem('role', role);
+      // ✅ NO localStorage here
+      // AuthService already handles token storage
 
       if (role === 'admin') {
         this.router.navigate(['user/dashboard']);
@@ -80,18 +77,20 @@ onLogin() {
         case 'recruiter':
           this.router.navigate(['user/my-dashboard']);
           break;
+
         case 'jobSeeker':
           this.router.navigate(['user/jobprofile']);
           break;
+
+        default:
+          this.router.navigate(['/home']);
       }
     },
 
     error: (err) => {
       console.error('Login error:', err);
 
-      setTimeout(() => {
-        this.isLoading = false;
-      });
+      this.isLoading = false;
 
       this.errorMessage =
         err?.error?.message ||

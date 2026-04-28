@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { catchError, Observable, throwError } from 'rxjs';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,16 +12,16 @@ export class ResumeService {
   private baseUrl: string = `${environment.apiGatewayUrl}`;
   private apiUrl: string = `${environment.generativeAIUrl}`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private storage: StorageService) {}
 
+
+  /* ================= HEADERS ================= */
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('JWT_Token');
+    const token = this.storage.get('JWT_Token');
 
-    if (!token) {
-      throw new Error('No auth token found');
-    }
-
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return new HttpHeaders({
+      Authorization: token ? `Bearer ${token}` : '',
+    });
   }
 
   // 🔹 AI analyze

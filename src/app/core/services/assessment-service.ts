@@ -4,6 +4,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CreateAssessmentDTO, UpdateAssessmentDTO } from '../dtos/assessment.dto';
 import { MyAssessment } from '../models/assessment.model';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,13 +13,15 @@ export class AssessmentService {
 
   private baseUrl = `${environment.apiGatewayUrl}/assessment`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService
+  ) {}
 
-  /* =========================
-     HEADERS
-  ========================= */
+  /* ================= HEADERS ================= */
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('JWT_Token');
+    const token = this.storage.get('JWT_Token');
+
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : '',
     });
