@@ -1,0 +1,264 @@
+<div class="container-fluid mt-5 p-5">
+
+  <!-- HEADER -->
+  <div class="mb-4">
+    <h2 class="fw-bold">Hiring Pipeline Management (Admin)</h2>
+    <p class="text-muted mb-0">
+      Monitor job categories, job postings, and candidate progress across all hiring stages.
+    </p>
+  </div>
+
+
+
+  <!-- =========================
+     STATS CARDS
+========================= -->
+<div class="row g-3 mb-4">
+
+  <!-- TOTAL CATEGORIES -->
+  <div class="col-6 col-md-4 col-lg-2">
+    <div class="stats-card categories">
+      <i class="bi bi-grid"></i>
+      <h4>{{ totalCategories }}</h4>
+      <p>Categories</p>
+    </div>
+  </div>
+
+  <!-- TOTAL JOBS -->
+  <div class="col-6 col-md-4 col-lg-2">
+    <div class="stats-card jobs">
+      <i class="bi bi-briefcase"></i>
+      <h4>{{ totalJobs }}</h4>
+      <p>Jobs</p>
+    </div>
+  </div>
+
+  <!-- TOTAL APPLICANTS -->
+  <div class="col-6 col-md-4 col-lg-2">
+    <div class="stats-card applicants">
+      <i class="bi bi-people"></i>
+      <h4>{{ totalApplicants }}</h4>
+      <p>Applicants</p>
+    </div>
+  </div>
+
+  <!-- SHORTLISTED -->
+  <div class="col-6 col-md-4 col-lg-2">
+    <div class="stats-card shortlisted">
+      <i class="bi bi-check-circle"></i>
+      <h4>{{ totalShortlisted }}</h4>
+      <p>Shortlisted</p>
+    </div>
+  </div>
+
+  <!-- HIRED -->
+  <div class="col-6 col-md-4 col-lg-2">
+    <div class="stats-card hired">
+      <i class="bi bi-award"></i>
+      <h4>{{ totalHired }}</h4>
+      <p>Hired</p>
+    </div>
+  </div>
+
+  <!-- REJECTED -->
+  <div class="col-6 col-md-4 col-lg-2">
+    <div class="stats-card rejected">
+      <i class="bi bi-x-circle"></i>
+      <h4>{{ totalRejected }}</h4>
+      <p>Rejected</p>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+  <div class="accordion" id="jobCategoryAccordion">
+
+    @for (category of jobCategories; track category.name; let i = $index) {
+
+      <div class="accordion-item mb-3 border-0 shadow-sm rounded-3">
+
+        <!-- CATEGORY HEADER -->
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-semibold"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#collapse' + i">
+
+            <i class="bi bi-briefcase me-2 text-primary"></i>
+            {{ category.name }}
+
+          </button>
+        </h2>
+
+        <!-- JOB LIST -->
+        <div [id]="'collapse' + i" class="accordion-collapse collapse">
+          <div class="accordion-body">
+
+            <!-- ✅ VERTICAL CARD LIST -->
+            <div class="d-flex flex-column gap-3">
+
+              @for (job of category.jobs; track job.id) {
+
+                <div class="job-card p-3">
+
+                  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                    <!-- LEFT -->
+<div>
+  <h5 class="mb-1 fw-semibold d-flex align-items-center">
+    <i class="bi bi-person-workspace text-primary me-2"></i>
+    {{ job.role }}
+  </h5>
+
+  <div class="text-muted small d-flex flex-wrap gap-3">
+    <span>
+      <i class="bi bi-hash me-1"></i> {{ job.id }}
+    </span>
+
+    <span>
+      <i class="bi bi-people me-1"></i> {{ job.applicants.length }} Applicants
+    </span>
+  </div>
+</div>
+
+                    <!-- RIGHT -->
+<div class="text-end d-flex flex-column align-items-end gap-2">
+
+  <span class="badge bg-success">
+    {{ job.status }}
+  </span>
+
+  <button class="btn btn-outline-primary btn-sm"
+          (click)="openPipeline(job)"
+          data-bs-toggle="modal"
+          data-bs-target="#pipelineModal">
+    View Pipeline
+  </button>
+
+</div>
+
+                  </div>
+
+                </div>
+
+              }
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    }
+
+  </div>
+</div>
+
+
+<!-- MODAL -->
+<div class="modal fade" id="pipelineModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title fw-semibold">
+          {{ selectedJob?.role }} - Hiring Pipeline
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        @if (selectedJob) {
+
+          <div class="row">
+
+            @for (applicant of selectedJob.applicants; track applicant.name) {
+
+              <div class="col-12 mb-4">
+
+                <div class="applicant-card p-3">
+
+                  <h6 class="fw-bold mb-3">
+                    <i class="bi bi-person-circle me-2"></i>
+                    {{ applicant.name }}
+                  </h6>
+
+                  <!-- ✅ RESPONSIVE TIMELINE -->
+                   <div class="pipeline">
+
+  <!-- STEP -->
+  <div class="step completed">
+    <div class="circle"><i class="bi bi-check"></i></div>
+    <div class="step-content">
+      <div class="label">Applied</div>
+      <small>{{ applicant.applied }}</small>
+    </div>
+  </div>
+
+  <div class="step completed">
+    <div class="circle"><i class="bi bi-check"></i></div>
+    <div class="step-content">
+      <div class="label">Shortlisted</div>
+      <small>{{ applicant.shortlisted }}</small>
+    </div>
+  </div>
+
+  <div class="step completed">
+    <div class="circle"><i class="bi bi-file-earmark-text"></i></div>
+    <div class="step-content">
+      <div class="label">Assessment</div>
+      <small>{{ applicant.assessmentCompleted }}</small>
+    </div>
+  </div>
+
+  <div class="step completed">
+    <div class="circle"><i class="bi bi-camera-video"></i></div>
+    <div class="step-content">
+      <div class="label">Interview</div>
+      <small>{{ applicant.interviewCompleted }}</small>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div class="step final"
+       [ngClass]="{
+         'success': applicant.finalStatus.includes('Selected'),
+         'rejected': applicant.finalStatus === 'Rejected'
+       }">
+
+    <div class="circle">
+      <i class="bi"
+         [ngClass]="{
+           'bi-check': applicant.finalStatus.includes('Selected'),
+           'bi-x': applicant.finalStatus === 'Rejected'
+         }">
+      </i>
+    </div>
+
+    <div class="step-content">
+      <div class="label">Final</div>
+      <small>{{ applicant.finalStatus }}</small>
+    </div>
+  </div>
+
+</div>
+
+                </div>
+
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+  </div>
+</div>

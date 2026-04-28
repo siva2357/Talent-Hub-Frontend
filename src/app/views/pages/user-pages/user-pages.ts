@@ -37,6 +37,7 @@ userMenu: SidebarItem[] = [
   { label: 'Blog', icon: 'bi-book', link: 'blog-list', role: 'admin' },
 
   // RECRUITER
+  { label: 'My Dashboard', icon: 'bi-grid', link: 'my-dashboard', role: 'recruiter' },
   { label: 'My Jobposts', icon: 'bi-briefcase', link: 'my-jobposts', role: 'recruiter' },
   { label: 'Manage Interviews', icon: 'bi-camera-video', link: 'manage-interviews', role: 'recruiter' },
   { label: 'Manage Assessments', icon: 'bi-book', link: 'manage-assessments', role: 'recruiter' },

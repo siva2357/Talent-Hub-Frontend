@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-pagination',
@@ -8,14 +8,23 @@ import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core
 })
 export class Pagination implements OnChanges {
 
-  @Input() total = 0;        // total records
-  @Input() page = 1;         // current page
-  @Input() limit = 10;       // items per page
+  @Input() total = 0;
+  @Input() page = 1;
+  @Input() limit = 10;
 
   @Output() pageChange = new EventEmitter<number>();
   @Output() limitChange = new EventEmitter<number>();
 
   totalPages: number[] = [];
+
+  // ✅ track screen width reactively
+  screenWidth = window.innerWidth;
+
+  // ✅ listen to resize
+  @HostListener('window:resize')
+  onResize() {
+    this.screenWidth = window.innerWidth;
+  }
 
   ngOnChanges() {
     this.calculatePages();
@@ -24,6 +33,36 @@ export class Pagination implements OnChanges {
   calculatePages() {
     const pages = Math.ceil(this.total / this.limit);
     this.totalPages = Array.from({ length: pages }, (_, i) => i + 1);
+  }
+
+  // ✅ responsive visible pages
+  get visiblePages(): number[] {
+    const total = this.totalPages.length;
+
+    let maxVisible = 5; // large
+
+    if (this.screenWidth < 576) {
+      maxVisible = 2; // small
+    } else if (this.screenWidth < 992) {
+      maxVisible = 3; // medium
+    }
+
+    const half = Math.floor(maxVisible / 2);
+
+    let start = this.page - half;
+    let end = this.page + half;
+
+    if (start < 1) {
+      start = 1;
+      end = Math.min(maxVisible, total);
+    }
+
+    if (end > total) {
+      end = total;
+      start = Math.max(1, total - maxVisible + 1);
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 
   changePage(p: number) {

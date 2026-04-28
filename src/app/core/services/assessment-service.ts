@@ -41,21 +41,28 @@ export class AssessmentService {
       .pipe(catchError(this.handleError));
   }
 
+/** Get all assessments created by recruiter */
+getRecruiterAssessments(): Observable<any[]> {
+  return this.http
+    .get<any[]>(
+      `${this.baseUrl}/recruiter`,
+      { headers: this.getHeaders() }
+    )
+    .pipe(catchError(this.handleError));
+}
+
   /** Update assessment (link / notes / status) */
   /** Update assessment link (ONLY link allowed) */
-  updateAssessment(
-    assessmentId: string,
-    payload: UpdateAssessmentDTO
-  ): Observable<{ message: string }> {
-    return this.http
-      .put<{ message: string }>(
-        `${this.baseUrl}/${assessmentId}`,
-        payload,
-        { headers: this.getHeaders() }
-      )
-      .pipe(catchError(this.handleError));
-  }
-
+updateAssessment(
+  assessmentId: string,
+  payload: any
+) {
+  return this.http.patch(
+    `${this.baseUrl}/${assessmentId}`, // ✅ MUST match route
+    payload,
+    { headers: this.getHeaders() }
+  );
+}
   /** Delete assessment */
   deleteAssessment(
     assessmentId: string

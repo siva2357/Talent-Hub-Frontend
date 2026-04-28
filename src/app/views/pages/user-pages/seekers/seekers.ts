@@ -1,202 +1,165 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Buttons } from '../../../components/buttons/buttons';
-import { Table } from "../../../components/table/table";
-import { Pagination } from "../../../components/pagination/pagination";
-import { AdminService } from '../../../../core/services/admin-service';
+import { Table } from '../../../components/table/table';
+import { Pagination } from '../../../components/pagination/pagination';
+import { InputFields } from "../../../components/input-fields/input-fields";
+import { Buttons } from "../../../components/buttons/buttons";
+
 
 @Component({
   selector: 'app-seekers',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, Buttons, Table, Pagination],
-
+  imports: [CommonModule, Table, Pagination, InputFields, Buttons],
   templateUrl: './seekers.html',
   styleUrl: './seekers.css',
 })
-export class Seekers implements OnInit{
+export class Seekers implements OnInit {
 
-  searchText = '';
-selectedExperience = '';
-selectedCategory = '';
-selectedStatus = '';
-
-filteredSeekers: any[] = [];
-isFiltering = false;
-
-experiences = ['0–1 Years', '1–2 Years', '2–3 Years', '3–5 Years', '5–8 Years', '8+ Years'];
-
-categories = ['Frontend Developer', 'Backend Developer', 'Full Stack Developer', 'Java Developer', 'Python Developer', 'Mobile Developer','DevOps Engineer','Data Analyst'];
-
-
-statuses = ['Active', 'Inactive', 'Blocked'];
-
-  @ViewChild('valueTemplate', { static: true })
-  public valueTemplateRef!: TemplateRef<any>;
-
-  @ViewChild('statusTemplate', { static: true })
-  public statusTemplateRef!: TemplateRef<any>;
-
-  @ViewChild('imageTemplate', { static: true })
-  public imageTemplateRef!: TemplateRef<any>;
-
-  @ViewChild('actionsTemplate', { static: true })
-  public actionsTemplateRef!: TemplateRef<any>;
+  @ViewChild('profileTpl', { static: true }) profileTpl!: TemplateRef<any>;
+  @ViewChild('statusTpl', { static: true }) statusTpl!: TemplateRef<any>;
+  @ViewChild('actionTpl', { static: true }) actionTpl!: TemplateRef<any>;
 
   columns: any[] = [];
-seekers:any[] =[]
 
+  // 🔥 FULL DATA
+  allData: any[] = [];
+
+  // 🔥 PAGINATED DATA (sent to table)
+  data: any[] = [];
+
+  // 🔥 PAGINATION STATE
   page = 1;
-limit = 5;
-total = 0;
+  limit = 5;
+  total = 0;
 
-paginatedJobSeekers: any[] = [];
-  constructor(private adminService:AdminService) {}
+
+
+filters = {
+  name: '',
+  role: '',
+  status: ''
+};
+
+appliedFilters = {
+  name: '',
+  role: '',
+  status: ''
+};
+
+jobRoleOptions = ['Frontend Developer', 'Backend Developer'];
+statusOptions = ['verified', 'pending'];
+
+
 
   ngOnInit() {
-    this.columns = [
-      { name: 'ID', prop: 'id' },
-      { name: 'Profile', template: this.imageTemplateRef },
-      { name: 'Full Name', prop: 'name' },
-      { name: 'Email', prop: 'email' },
-      { name: 'Phone', prop: 'phone' },
-       { name: 'Category', prop: 'category' },       // ✅ NEW
-  { name: 'Experience', prop: 'experience' },   // ✅ NEW
-      { name: 'Status', template: this.statusTemplateRef },
-      { name: 'Action', template: this.actionsTemplateRef, center: true },
-    ];
-          this.total = this.seekers.length;
-  this.applyPagination();
 
-    this.jobSeekerList()
+    // ✅ 20 DUMMY RECORDS
+    this.allData = Array.from({ length: 20 }, (_, i) => ({
+      _id: i + 1,
+      profile: `https://i.pravatar.cc/40?img=${i + 1}`,
+      fullName: `Job Seeker ${i + 1}`,
+      jobRole: i % 2 === 0 ? 'Frontend Developer' : 'Backend Developer',
+      experience: Math.floor(Math.random() * 5) + 1 + ' years',
+      status: i % 2 === 0 ? 'verified' : 'pending',
+      active: true,
+    }));
 
+    this.total = this.allData.length;
+
+this.columns = [
+  { name: 'S.No', type: 'index', center: true, width: '60px' },
+
+  { name: 'Profile', template: this.profileTpl, width: '80px' },
+
+  { name: 'Full Name', prop: 'fullName', width: '150px' },
+
+  { name: 'Job Role', prop: 'jobRole', width: '180px' },
+
+  { name: 'Experience', prop: 'experience', width: '80px' },
+
+  { name: 'Status', template: this.statusTpl, center: true, width: '100px' },
+
+  { name: 'Action', template: this.actionTpl, center: true, width: '300px' }
+];
+
+this.applyFilter();
   }
 
+applyFilter() {
 
-  jobSeekerList() {
-  this.adminService.getAllJobSeekers().subscribe({
-    next: (res: any) => {
-      this.seekers = res.jobSeekers; // ✅ important
-      this.total = res.total;
-      this.applyPagination();
-    },
-    error: (err) => console.error(err)
-  });
+  let filtered = this.allData;
+
+  // 🔍 NAME
+  if (this.appliedFilters.name) {
+    filtered = filtered.filter(r =>
+      r.fullName.toLowerCase().includes(this.appliedFilters.name.toLowerCase())
+    );
+  }
+
+  if (this.appliedFilters.role) {
+  filtered = filtered.filter(r =>
+    r.jobRole === this.appliedFilters.role
+  );
 }
 
-applyPagination() {
-  const source = this.isFiltering ? this.filteredSeekers : this.seekers;
+  // 📌 STATUS
+  if (this.appliedFilters.status) {
+    filtered = filtered.filter(r =>
+      r.status === this.appliedFilters.status
+    );
+  }
+
+  this.total = filtered.length;
 
   const start = (this.page - 1) * this.limit;
   const end = start + this.limit;
 
-  this.paginatedJobSeekers = source.slice(start, end);
+  this.data = filtered.slice(start, end);
 }
 
 
+onApplyFilters() {
+  this.appliedFilters = { ...this.filters }; // copy values
+  this.page = 1;
+  this.applyFilter();
+}
+onResetFilters() {
+  this.filters = { name: '', role: '', status: '' };
+  this.appliedFilters = { name: '', role: '', status: '' };
+  this.page = 1;
+  this.applyFilter();
+}
+
+removeFilter(type: 'name' | 'role' | 'status') {
+  this.appliedFilters[type] = '';
+  this.filters[type] = ''; // also reset input UI
+  this.page = 1;
+  this.applyFilter();
+}
+
+  // 🔥 PAGINATION LOGIC
+  updateTable() {
+    const start = (this.page - 1) * this.limit;
+    const end = start + this.limit;
+    this.data = this.allData.slice(start, end);
+  }
+
 onPageChange(p: number) {
   this.page = p;
-  this.applyPagination();
+  this.applyFilter();
 }
 
 onLimitChange(l: number) {
   this.limit = l;
   this.page = 1;
-  this.applyPagination();
+  this.applyFilter();
 }
 
-
-
-
-  onView(r: any) {
-    console.log('View', r);
-  }
-
-  onBlock(r: any) {
-    console.log('Block', r);
-  }
-
-  onUnblock(r: any) {
-    console.log('Unblock', r);
-  }
-
-  onDeactivate(r: any) {
-    console.log('Deactivate', r);
-  }
-
-
-applyFilters() {
-  let data = [...this.seekers];
-
-  if (this.searchText) {
-    data = data.filter(s =>
-      s.name.toLowerCase().includes(this.searchText.toLowerCase())
-    );
-  }
-
-  if (this.selectedCategory) {
-    data = data.filter(s => s.category === this.selectedCategory);
-  }
-
-  if (this.selectedExperience) {
-    data = data.filter(s => s.experience === this.selectedExperience);
-  }
-
-  if (this.selectedStatus) {
-    data = data.filter(s => s.status === this.selectedStatus);
-  }
-
-  this.filteredSeekers = data;
-  this.isFiltering = true;
-
-  this.total = data.length;
-  this.page = 1;
-
-  this.applyPagination();
+  // ACTIONS
+  viewProfile(row: any) { console.log(row); }
+  blockUser(row: any) { console.log(row); }
+  unblockUser(row: any) { console.log(row); }
+  deactivateUser(row: any) { console.log(row); }
+  activateUser(row: any) { console.log(row); }
 }
 
-mapExperience(position: string): string {
-  if (position.toLowerCase().includes('manager')) return '5–8 Years';
-  if (position.toLowerCase().includes('lead')) return '3–5 Years';
-  if (position.toLowerCase().includes('senior')) return '3–5 Years';
-  return '1–2 Years';
-}
-
-
-resetFilters() {
-  this.searchText = '';
-  this.selectedExperience = '';
-  this.selectedCategory = '';
-  this.selectedStatus = '';
-
-  this.filteredSeekers = [];
-  this.isFiltering = false;
-
-  this.total = this.seekers.length;
-  this.page = 1;
-
-  this.applyPagination();
-}
-
-
-getActiveFilters(): { key: string; label: string }[] {
-  const f: any[] = [];
-
-  if (this.searchText) f.push({ key: 'search', label: this.searchText });
-  if (this.selectedExperience) f.push({ key: 'experience', label: this.selectedExperience });
-  if (this.selectedCategory) f.push({ key: 'category', label: this.selectedCategory });
-  if (this.selectedStatus) f.push({ key: 'status', label: this.selectedStatus });
-
-  return f;
-}
-
-removeFilter(key: string) {
-  if (key === 'search') this.searchText = '';
-  if (key === 'experience') this.selectedExperience = '';
-  if (key === 'category') this.selectedCategory = '';
-  if (key === 'status') this.selectedStatus = '';
-
-  this.applyFilters();
-}
-
-}

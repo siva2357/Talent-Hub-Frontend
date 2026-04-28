@@ -12,5 +12,7 @@ export class Table {
 
   @Input() columns: any[] = [];
   @Input() data: any[] = [];
+  @Input() page: number = 1;
+@Input() limit: number = 10;
 
 }

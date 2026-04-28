@@ -14,4 +14,6 @@ export class Buttons {
   @Input() isLoading: boolean = false;
   @Input() disabled: boolean = false;
   @Input() size: 'sm' | 'md' | 'lg' = 'sm';
+
+  
 }

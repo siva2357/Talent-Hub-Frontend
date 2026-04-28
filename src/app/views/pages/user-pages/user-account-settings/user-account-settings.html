@@ -1,10 +1,73 @@
-<div class="container-fluid mt-5 pt-5">
-  <p>Account settings page</p>
+<div class="container-xxl mt-5 ">
 
-      <app-update-basic-details></app-update-basic-details>
-      <app-update-profile-details></app-update-profile-details>
-      <app-update-professional-details></app-update-professional-details>
-      <app-update-change-password></app-update-change-password>
-      <app-manage-account></app-manage-account>
+<div class="d-flex align-items-center mb-3">
+  <button class="btn btn-light me-2" (click)="goBack()">
+    <i class="bi bi-arrow-left"></i>
+  </button>
+  <h3 class="mb-0">Account Settings</h3>
+</div>
+
+  <!-- Tabs -->
+  <div class="d-flex flex-wrap gap-2 mb-4">
+
+    <button class="btn"
+      [ngClass]="activeTab === 'basic' ? 'btn-primary' : 'btn-outline-primary'"
+      (click)="setTab('basic')">
+      Basic Details
+    </button>
+
+    <button class="btn"
+      [ngClass]="activeTab === 'profile' ? 'btn-primary' : 'btn-outline-primary'"
+      (click)="setTab('profile')">
+      Profile Image
+    </button>
+
+    <button class="btn"
+      [ngClass]="activeTab === 'professional' ? 'btn-primary' : 'btn-outline-primary'"
+      (click)="setTab('professional')">
+      Professional
+    </button>
+
+    <button class="btn"
+      [ngClass]="activeTab === 'password' ? 'btn-primary' : 'btn-outline-primary'"
+      (click)="setTab('password')">
+      Change Password
+    </button>
+
+    <button class="btn"
+      [ngClass]="activeTab === 'manage' ? 'btn-danger' : 'btn-outline-danger'"
+      (click)="setTab('manage')">
+      Manage Account
+    </button>
+
+  </div>
+
+  <!-- Content -->
+  <div class="card p-4 shadow-sm">
+@switch (activeTab) {
+
+  @case ('basic') {
+    <app-update-basic-details></app-update-basic-details>
+  }
+
+  @case ('profile') {
+    <app-update-profile-details></app-update-profile-details>
+  }
+
+  @case ('professional') {
+    <app-update-professional-details></app-update-professional-details>
+  }
+
+  @case ('password') {
+    <app-update-change-password></app-update-change-password>
+  }
+
+  @case ('manage') {
+    <app-manage-account></app-manage-account>
+  }
+
+}
+
+  </div>
 
 </div>

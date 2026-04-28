@@ -6,7 +6,13 @@
       <thead>
         <tr>
           @for (col of columns; track col.name) {
-            <th>{{ col.name }}</th>
+            <th
+  [class.text-center]="col.center"
+  [style.width]="col.width"
+  [style.minWidth]="col.width"
+>
+  {{ col.name }}
+</th>
           }
         </tr>
       </thead>
@@ -19,7 +25,7 @@
             @for (col of columns; track col.name) {
               <td [class.text-center]="col.center">
                 @if (col.type === 'index') {
-                  {{ i + 1 }}
+                  {{ ((page - 1) * limit) + i + 1 }}
                 }
                 @else if (col.template) {
                   <ng-container *ngTemplateOutlet="col.template; context: { $implicit: row }"> </ng-container>

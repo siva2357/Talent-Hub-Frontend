@@ -33,14 +33,16 @@ export class LoginPage {
 
 onLogin() {
 
-  // ✅ Validate form properly
   if (this.loginForm.invalid) {
-    this.loginForm.markAllAsTouched(); // 🔥 show field errors
+    this.loginForm.markAllAsTouched();
     return;
   }
 
-  // ✅ Start loading
-  this.isLoading = true;
+  // ✅ delay to next cycle
+  setTimeout(() => {
+    this.isLoading = true;
+  });
+
   this.errorMessage = '';
 
   const payload: LoginRequestDto = {
@@ -50,45 +52,47 @@ onLogin() {
 
   this.authService.login(payload).subscribe({
 
-next: (res) => {
-  this.isLoading = false;
+    next: (res) => {
 
-  const role = res.role;
-  const isProfileCompleted = res.profileCompleted;
+      setTimeout(() => {
+        this.isLoading = false;
+      });
 
-  // ✅ STORE ROLE + TOKEN FIRST
-  localStorage.setItem('token', res.token);
-  localStorage.setItem('role', role);
+      const role = res.role;
+      const isProfileCompleted = res.profileCompleted;
 
-  if (role === 'admin') {
-    this.router.navigate(['user/dashboard']);
-    return;
-  }
+      localStorage.setItem('token', res.token);
+      localStorage.setItem('role', role);
 
-  if (!isProfileCompleted) {
-    this.router.navigate(['/profile-form'], {
-      queryParams: { role }
-    });
-    return;
-  }
+      if (role === 'admin') {
+        this.router.navigate(['user/dashboard']);
+        return;
+      }
 
-  switch (role) {
-    case 'recruiter':
-      this.router.navigate(['user/my-jobposts']);
-      break;
-    case 'jobSeeker':
-      this.router.navigate(['user/jobprofile']);
-      break;
-  }
-},
+      if (!isProfileCompleted) {
+        this.router.navigate(['/profile-form'], {
+          queryParams: { role }
+        });
+        return;
+      }
+
+      switch (role) {
+        case 'recruiter':
+          this.router.navigate(['user/my-dashboard']);
+          break;
+        case 'jobSeeker':
+          this.router.navigate(['user/jobprofile']);
+          break;
+      }
+    },
 
     error: (err) => {
       console.error('Login error:', err);
 
-      // ✅ Stop loading
-      this.isLoading = false;
+      setTimeout(() => {
+        this.isLoading = false;
+      });
 
-      // ✅ Clean error handling
       this.errorMessage =
         err?.error?.message ||
         err?.message ||
@@ -96,4 +100,5 @@ next: (res) => {
     }
   });
 }
+
 }

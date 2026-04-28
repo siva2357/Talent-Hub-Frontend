@@ -9,7 +9,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 export class ResumeService {
 
   private baseUrl: string = `${environment.apiGatewayUrl}`;
-  private apiUrl: string = environment.generativeAIUrl;
+  private apiUrl: string = `${environment.generativeAIUrl}`;
 
   constructor(private http: HttpClient) {}
 
@@ -81,6 +81,16 @@ deleteResume(id: string): Observable<any> {
     catchError(error => this.handleError(error))
   );
 }
+
+matchJobs(resumeId: string): Observable<any> {
+  return this.http.post<any>(
+    `${this.apiUrl}/jobs/match`,
+    { resume_id: resumeId }
+  ).pipe(
+    catchError(error => this.handleError(error))
+  );
+}
+
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';

@@ -4,9 +4,9 @@
     <i class="bi bi-bell fs-5"></i>
 
     @if (unreadCount > 0) {
-      <span class="notif-badge">
-        {{ unreadCount }}
-      </span>
+    <span class="notif-badge">
+      {{ unreadCount }}
+    </span>
     }
   </a>
 
@@ -16,16 +16,9 @@
     <div class="notif-header d-flex justify-content-between align-items-center px-2 py-2">
       <strong>Notifications</strong>
 
-      <div class="actions">
-        <button class="btn btn-sm btn-outline-primary me-2"
-                (click)="markAllRead()">
-          Mark all read
-        </button>
-
-        <button class="btn btn-sm btn-outline-danger"
-                (click)="clearAll()">
-          Clear all
-        </button>
+      <div class="actions d-flex gap-2">
+        <span class="notif-action-link text-primary" style="cursor: pointer; font-size: 13px;" (click)="markAllRead()"> Mark all as read</span>
+        <span class="notif-action-link text-danger" style="cursor: pointer; font-size: 13px;" (click)="clearAll()"> Clear all</span>
       </div>
     </div>
 
@@ -35,59 +28,57 @@
 
       <!-- Loading -->
       @if (loading) {
-        <div class="text-center p-2">
-          Loading...
-        </div>
+      <div class="text-center p-2">
+        Loading...
+      </div>
       }
 
       <!-- Empty -->
       @if (!loading && notifications.length === 0) {
-        <div class="text-center p-2">
-          No notifications
-        </div>
+      <div class="text-center p-2">
+        No notifications
+      </div>
       }
 
       <!-- List -->
       @if (!loading && notifications.length > 0) {
-        @for (notif of notifications; track notif._id) {
-          <div class="list-group-item notif-item"
-               [class.unread]="!notif.read">
+      @for (notif of notifications; track notif._id) {
+      <div class="list-group-item notif-item" [class.unread]="!notif.read">
+
+        @if (!notif.read) {
+        <span class="notif-dot"></span>
+        }
+
+        <div class="notif-content">
+          <p class="mb-0 notif-text">
+            {{ notif.message }}
+          </p>
+
+          <small class="notif-time">
+            {{ notif.createdAt | date:'short' }}
+          </small>
+
+          <div class="notif-actions">
 
             @if (!notif.read) {
-              <span class="notif-dot"></span>
+            <span class="notif-action small text-muted" (click)="markAsRead(notif._id)">
+              Mark as read
+            </span>
             }
 
-            <div class="notif-content">
-              <p class="mb-0 notif-text">
-                {{ notif.message }}
-              </p>
-
-              <small class="notif-time">
-                {{ notif.createdAt | date:'short' }}
-              </small>
-
-              <div class="notif-actions">
-
-                @if (!notif.read) {
-                  <span class="notif-action small text-muted"
-                        (click)="markAsRead(notif._id)">
-                    Mark as read
-                  </span>
-                }
-
-                <span class="notif-action text-danger small"
-                      (click)="deleteNotification(notif._id)">
-                  Delete
-                </span>
-
-              </div>
-            </div>
+            <span class="notif-action text-danger small" (click)="deleteNotification(notif._id)">
+              Delete
+            </span>
 
           </div>
-        }
+        </div>
+
+      </div>
+      }
       }
 
     </div>
 
   </div>
+
 </div>

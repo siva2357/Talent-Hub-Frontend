@@ -1,189 +1,162 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Table } from '../../../components/table/table';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Buttons } from '../../../components/buttons/buttons';
-import { Pagination } from "../../../components/pagination/pagination";
-import { AdminService } from '../../../../core/services/admin-service';
+import { Table } from '../../../components/table/table';
+import { Pagination } from '../../../components/pagination/pagination';
+import { InputFields } from "../../../components/input-fields/input-fields";
+import { Buttons } from "../../../components/buttons/buttons";
+
 
 @Component({
   selector: 'app-recruiters',
   standalone: true,
   templateUrl: './recruiters.html',
   styleUrl: './recruiters.css',
-  imports: [Table, FormsModule, ReactiveFormsModule, CommonModule, Buttons, Pagination],
+  imports: [CommonModule, Table, Pagination, InputFields, Buttons],
 })
 export class Recruiters implements OnInit {
 
-  searchText = '';
-selectedCompany = '';
-selectedPosition = '';
-selectedStatus = '';
-
-filteredRecruiters: any[] = [];
-isFiltering = false;
-
-companies = ['TechNova','GlobalHire','HireBridge'];
-positions = ['HR Manager','Recruiter','Hiring Manager'];
-statuses = ['Active', 'Inactive', 'Blocked'];
-recruiters:any[] =[]
-
-
-  @ViewChild('valueTemplate', { static: true })
-  public valueTemplateRef!: TemplateRef<any>;
-
-  @ViewChild('statusTemplate', { static: true })
-  public statusTemplateRef!: TemplateRef<any>;
-
-  @ViewChild('imageTemplate', { static: true })
-  public imageTemplateRef!: TemplateRef<any>;
-
-  @ViewChild('actionsTemplate', { static: true })
-  public actionsTemplateRef!: TemplateRef<any>;
+  @ViewChild('profileTpl', { static: true }) profileTpl!: TemplateRef<any>;
+  @ViewChild('statusTpl', { static: true }) statusTpl!: TemplateRef<any>;
+  @ViewChild('actionTpl', { static: true }) actionTpl!: TemplateRef<any>;
 
   columns: any[] = [];
-page = 1;
-limit = 5;
-total = 0;
 
-paginatedRecruiters: any[] = [];
+  // 🔥 FULL DATA
+  allData: any[] = [];
 
-  constructor(private adminService:AdminService) {}
+  // 🔥 PAGINATED DATA (sent to table)
+  data: any[] = [];
+
+  // 🔥 PAGINATION STATE
+  page = 1;
+  limit = 5;
+  total = 0;
+
+
+
+filters = {
+  name: '',
+  company: '',
+  status: ''
+};
+
+// ✅ NEW → applied filters
+appliedFilters = {
+  name: '',
+  company: '',
+  status: ''
+};
+
+companyOptions = ['TCS', 'Infosys'];
+statusOptions = ['verified', 'pending'];
+
+
 
   ngOnInit() {
-    this.columns = [
-      { name: 'ID', prop: 'id' },
-      { name: 'Profile', template: this.imageTemplateRef },
-      { name: 'Full Name', prop: 'name' },
-      { name: 'Email', prop: 'email' },
-      { name: 'Phone', prop: 'phone' },
-      { name: 'Company', prop: 'company' },
-      { name: 'Position', prop: 'position' },
-      { name: 'Status', template: this.statusTemplateRef },
-      { name: 'Action', template: this.actionsTemplateRef, center: true },
-    ];
 
-      this.total = this.recruiters.length;
-  this.applyPagination();
-  this.recruiterList()
+    // ✅ 20 DUMMY RECORDS
+    this.allData = Array.from({ length: 20 }, (_, i) => ({
+      _id: i + 1,
+      profile: `https://i.pravatar.cc/40?img=${i + 1}`,
+      fullName: `Recruiter ${i + 1}`,
+      company: i % 2 === 0 ? 'TCS' : 'Infosys',
+      designation: 'HR Manager',
+      joinedDate: '28-04-2026',
+      status: i % 2 === 0 ? 'verified' : 'pending',
+      active: true
+    }));
 
+    this.total = this.allData.length;
+
+this.columns = [
+  { name: 'S.No', type: 'index', center: true, width: '60px' },
+  { name: 'Profile', template: this.profileTpl, width: '80px' },
+  { name: 'Full Name', prop: 'fullName', width: '100px' },
+  { name: 'Company', prop: 'company', width: '100px' },
+  { name: 'Designation', prop: 'designation', width: '150px' },
+  { name: 'Joined Date', prop: 'joinedDate', width: '100px' },
+  { name: 'Status', template: this.statusTpl, center: true, width: '80px' },
+  { name: 'Action', template: this.actionTpl, center: true, width: '300px' }
+];
+
+this.applyFilter();
   }
 
-applyPagination() {
-  const source = this.isFiltering ? this.filteredRecruiters : this.recruiters;
+applyFilter() {
+
+  let filtered = this.allData;
+
+  // 🔍 NAME
+  if (this.appliedFilters.name) {
+    filtered = filtered.filter(r =>
+      r.fullName.toLowerCase().includes(this.appliedFilters.name.toLowerCase())
+    );
+  }
+
+  // 🏢 COMPANY
+  if (this.appliedFilters.company) {
+    filtered = filtered.filter(r =>
+      r.company === this.appliedFilters.company
+    );
+  }
+
+  // 📌 STATUS
+  if (this.appliedFilters.status) {
+    filtered = filtered.filter(r =>
+      r.status === this.appliedFilters.status
+    );
+  }
+
+  this.total = filtered.length;
 
   const start = (this.page - 1) * this.limit;
   const end = start + this.limit;
 
-  this.paginatedRecruiters = source.slice(start, end);
+  this.data = filtered.slice(start, end);
 }
+
+
+onApplyFilters() {
+  this.appliedFilters = { ...this.filters }; // copy values
+  this.page = 1;
+  this.applyFilter();
+}
+onResetFilters() {
+  this.filters = { name: '', company: '', status: '' };
+  this.appliedFilters = { name: '', company: '', status: '' };
+  this.page = 1;
+  this.applyFilter();
+}
+
+removeFilter(type: 'name' | 'company' | 'status') {
+  this.appliedFilters[type] = '';
+  this.filters[type] = ''; // also reset input UI
+  this.page = 1;
+  this.applyFilter();
+}
+
+  // 🔥 PAGINATION LOGIC
+  updateTable() {
+    const start = (this.page - 1) * this.limit;
+    const end = start + this.limit;
+    this.data = this.allData.slice(start, end);
+  }
+
 onPageChange(p: number) {
   this.page = p;
-  this.applyPagination();
+  this.applyFilter();
 }
 
 onLimitChange(l: number) {
   this.limit = l;
   this.page = 1;
-  this.applyPagination();
+  this.applyFilter();
 }
 
-
-recruiterList() {
-  this.adminService.getAllRecruiters().subscribe({
-    next: (res: any) => {
-      this.recruiters = res.recruiters; // ✅ important
-      this.total = res.total;
-      this.applyPagination();
-    },
-    error: (err) => console.error(err)
-  });
-}
-
-  onView(r: any) {
-    console.log('View', r);
-  }
-
-  onBlock(r: any) {
-    console.log('Block', r);
-  }
-
-  onUnblock(r: any) {
-    console.log('Unblock', r);
-  }
-
-  onDeactivate(r: any) {
-    console.log('Deactivate', r);
-  }
-
-  applyFilters() {
-  let data = [...this.recruiters];
-
-  if (this.searchText) {
-    data = data.filter(r =>
-      r.name.toLowerCase().includes(this.searchText.toLowerCase())
-    );
-  }
-
-  if (this.selectedCompany) {
-    data = data.filter(r => r.company === this.selectedCompany);
-  }
-
-  if (this.selectedPosition) {
-    data = data.filter(r => r.position === this.selectedPosition);
-  }
-
-  if (this.selectedStatus) {
-    data = data.filter(r => r.status === this.selectedStatus);
-  }
-
-  this.filteredRecruiters = data;
-  this.isFiltering = true;
-
-  this.total = data.length;
-  this.page = 1;
-
-  this.applyPagination();
-}
-
-
-resetFilters() {
-  this.searchText = '';
-  this.selectedCompany = '';
-  this.selectedPosition = '';
-  this.selectedStatus = '';
-
-  this.filteredRecruiters = [];
-  this.isFiltering = false;
-
-  this.total = this.recruiters.length;
-  this.page = 1;
-
-  this.applyPagination();
-}
-
-
-getActiveFilters(): { key: string; label: string }[] {
-  const f: any[] = [];
-
-  if (this.searchText) f.push({ key: 'search', label: this.searchText });
-  if (this.selectedCompany) f.push({ key: 'company', label: this.selectedCompany });
-  if (this.selectedPosition) f.push({ key: 'position', label: this.selectedPosition });
-  if (this.selectedStatus) f.push({ key: 'status', label: this.selectedStatus });
-
-  return f;
-}
-
-removeFilter(key: string) {
-  if (key === 'search') this.searchText = '';
-  if (key === 'company') this.selectedCompany = '';
-  if (key === 'position') this.selectedPosition = '';
-  if (key === 'status') this.selectedStatus = '';
-
-  this.applyFilters();
-}
-
-
-
-
+  // ACTIONS
+  viewProfile(row: any) { console.log(row); }
+  blockUser(row: any) { console.log(row); }
+  unblockUser(row: any) { console.log(row); }
+  deactivateUser(row: any) { console.log(row); }
+  activateUser(row: any) { console.log(row); }
 }

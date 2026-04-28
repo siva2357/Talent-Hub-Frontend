@@ -3,420 +3,394 @@
   <div class="profile-form-container">
 
     <h3 class="form-title">Create Profile</h3>
-<div class="stepper">
+    
+    <div class="stepper">
 
-  @for (item of stepsArray; track $index; let i = $index) {
+      @for (item of stepsArray; track $index; let i = $index) {
 
-    <div class="step-item">
+      <div class="step-item">
 
-      <div class="step"
-        [ngClass]="{
-          'completed': step > (i + 1),
-          'active': step === (i + 1),
-          'upcoming': step < (i + 1)
-        }">
+        <div class="step" [ngClass]="{ 'completed': step > (i + 1), 'active': step === (i + 1), 'upcoming': step < (i + 1)}">
 
-        @if(step > (i + 1)){
+          @if(step > (i + 1)){
           <i class="bi bi-check-circle-fill"></i>
-        }
+          }
 
-        @if(step <= (i + 1)){
-          {{ i + 1 }}
-        }
+          @if(step <= (i + 1)){ {{ i + 1 }} } </div>
 
-      </div>
+            <span class="step-label">Step {{ i + 1 }}</span>
 
-      <span class="step-label">Step {{ i + 1 }}</span>
+        </div>
 
-    </div>
-
-  }
-
-</div>
-
-
-    <form [formGroup]="activeForm" (ngSubmit)="onSubmit()">
-      <!-- STEP CONTENT -->
-
-@if(step === 1){
-
-  <h5>Basic Information</h5>
-
-  <div class="row g-3">
-
-    <div class="col-12 col-md-6">
-      <app-input-fields [form]="activeForm" controlName="fullName" [readonly]="true" placeholder="Full Name"> </app-input-fields>
-    </div>
-
-    <div class="col-12 col-md-6">
-      <app-input-fields [form]="activeForm" controlName="email" placeholder="Email" [readonly]="true" type="email"> </app-input-fields>
-    </div>
-
-    <div class="col-12 col-md-6">
-      <app-input-fields [form]="activeForm" controlName="mobile" placeholder="Mobile"></app-input-fields>
-    </div>
-
-    <div class="col-12 col-md-6">
-      <app-input-fields [form]="activeForm" controlName="gender" placeholder="Gender" [isSelect]="true" [options]="['Male', 'Female', 'Other']"> </app-input-fields>
-    </div>
-
-  </div>
-
-}
-
-      @if(step === 2){
-
-      <h5>Profile Photo Upload</h5>
-
-      <div class="text-center">
-
-        @if(activeForm.get('profilePhoto')?.value){
-        <app-file-preview [fileUrl]="activeForm.get('profilePhoto')?.value" class="profile-preview"> </app-file-preview>
-        }
-
-
-        <!-- ❌ Show placeholder if no image -->
-        @if(!activeForm.get('profilePhoto')?.value){
-        <img src="assets/images/default-profile.png" class="profile-preview">
-        }
-
-        <!-- ✅ Upload -->
-        <app-file-upload [bucketKey]="role === 'recruiter' ? bucket.RECRUITER_DATA : bucket.JOBSEEKER_DATA"
-          [section]="uploadSection.PROFILE_PHOTO" accept="image/*" [replace]="true"
-          (uploaded)="onUploadSuccess($event)">
-        </app-file-upload>
-
-        <!-- ✅ Validation error -->
-        @if(activeForm.get('profilePhoto')?.touched && !activeForm.get('profilePhoto')?.value){
-        <small class="text-danger d-block mt-2">
-          Profile photo is required
-        </small>
         }
 
       </div>
 
-      }
 
-@if(step === 3){
+      <form [formGroup]="activeForm" (ngSubmit)="onSubmit()">
+        <!-- STEP CONTENT -->
 
-<h5>Skills & Languages</h5>
+        @if(step === 1){
 
-<!-- ===== SKILLS ===== -->
-<div class="mb-3">
-  <div class="d-flex gap-2 align-items-center">
+        <h5>Basic Information</h5>
 
-    <input type="text"
-      class="form-control"
-      placeholder="Enter skills"  [(ngModel)]="skillInput"   [ngModelOptions]="{standalone: true}">
+        <div class="row g-3">
 
-    <button class="btn btn-outline-primary"
-      type="button"
-      (click)="addSkill()">
-      Add
-    </button>
+          <div class="col-12 col-md-6">
+            <app-input-fields [form]="activeForm" controlName="fullName" [readonly]="true" placeholder="Full Name">
+            </app-input-fields>
+          </div>
 
-  </div>
+          <div class="col-12 col-md-6">
+            <app-input-fields [form]="activeForm" controlName="email" placeholder="Email" [readonly]="true" type="email"> </app-input-fields>
+          </div>
 
-  <!-- Skill Chips -->
-  <div class="d-flex flex-wrap gap-2 mt-2">
+          <div class="col-12 col-md-6">
+            <app-input-fields [form]="activeForm" controlName="mobile" placeholder="Mobile"></app-input-fields>
+          </div>
 
-    @for (skill of skills.controls; track $index; let i = $index) {
+          <div class="col-12 col-md-6">
+            <app-input-fields [form]="activeForm" controlName="gender" placeholder="Gender" [isSelect]="true" [options]="['Male', 'Female', 'Other']"> </app-input-fields>
+          </div>
 
-      <span class="badge rounded-pill bg-light text-dark px-3 py-2 border">
+        </div>
 
-        {{ skill.value.value }}
-
-        <i class="bi bi-x ms-2 cursor-pointer"
-           (click)="removeSkill(i)"></i>
-
-      </span>
-
-    }
-
-  </div>
-</div>
-
-
-<!-- ===== LANGUAGES ===== -->
-<div class="mb-3">
-
-  <!-- Input Row -->
-  <div class="row g-2 align-items-center">
-
-<div class="col-md-5">
-<select class="form-control" [(ngModel)]="languageInput"   [ngModelOptions]="{standalone: true}">
-  <option value="">Select Language</option>
-
-  @for (lang of languageOptions; track $index) {
-    <option [ngValue]="lang">{{ lang }}</option>
-  }
-</select>
-</div>
-
-<div class="col-md-5">
-<select class="form-control" [(ngModel)]="proficiencyInput"   [ngModelOptions]="{standalone: true}">
-  <option value="">Select Proficiency</option>
-
-  @for (level of proficiencyOptions; track $index) {
-    <option [ngValue]="level">{{ level }}</option>
-  }
-</select>
-</div>
-    <div class="col-md-2">
-      <button class="btn btn-outline-primary w-100"
-        type="button"
-        (click)="addLanguage()">
-        Add
-      </button>
-    </div>
-
-  </div>
-
-  <!-- Language Chips -->
-  <div class="d-flex flex-column gap-2 mt-3">
-
-    @for (lang of languages.controls; track $index; let i = $index) {
-
-      <div class="d-flex justify-content-between align-items-center border rounded-pill px-3 py-2">
-
-        <span>
-          {{ lang.value.language }} - {{ lang.value.proficiency }}
-        </span>
-
-        <i class="bi bi-x cursor-pointer"
-           (click)="removeLanguage(i)"></i>
-
-      </div>
-
-    }
-
-  </div>
-
-</div>
-
-}
-
-@if(step === 4){
-
-<h5>Social Media Profiles</h5>
-
-<!-- ===== INPUT ROW ===== -->
-<div class="row g-2 align-items-center mb-3">
-
-  <div class="col-md-4">
-    <select
-      class="form-control"
-      [(ngModel)]="platformInput"
-      [ngModelOptions]="{standalone: true}">
-
-      <option value="">Select platform</option>
-
-      @for (p of socialPlatformOptions; track $index) {
-        <option [ngValue]="p">{{ p }}</option>
-      }
-
-    </select>
-  </div>
-
-  <div class="col-md-6">
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Paste the valid url"
-      [(ngModel)]="linkInput"
-      [ngModelOptions]="{standalone: true}">
-  </div>
-
-  <div class="col-md-2">
-    <button
-      class="btn btn-outline-primary w-100"
-      type="button"
-      (click)="addSocialProfile()">
-      Add
-    </button>
-  </div>
-
-</div>
-
-
-<!-- ===== LIST ===== -->
-<div class="d-flex flex-column gap-2">
-
-  @for (sp of socialProfiles.controls; track $index; let i = $index) {
-
-    <div class="d-flex justify-content-between align-items-center border rounded-pill px-3 py-2">
-
-      <div class="d-flex align-items-center gap-2">
-
-        @if(sp.value.platform){
-          <i [class]="getSocialIcon(sp.value.platform)"></i>
         }
 
-        <span>
-          {{ sp.value.platform }} - {{ sp.value.link }}
-        </span>
+        @if(step === 2){
 
-      </div>
+        <h5>Profile Photo Upload</h5>
 
-      <i class="bi bi-x cursor-pointer"
-         (click)="removeSocialProfile(i)"></i>
+        <div class="text-center">
 
-    </div>
+          @if(activeForm.get('profilePhoto')?.value){
+          <app-file-preview [fileUrl]="activeForm.get('profilePhoto')?.value" class="profile-preview"></app-file-preview>
+          }
 
-  }
+          @if(!activeForm.get('profilePhoto')?.value){
+          <img src="assets/images/default-profile.png" class="profile-preview">
+          }
 
-</div>
+          <app-file-upload [bucketKey]="role === 'recruiter' ? bucket.RECRUITER_DATA : bucket.JOBSEEKER_DATA"
+            [section]="uploadSection.PROFILE_PHOTO" accept="image/*" [replace]="true"
+            (uploaded)="onUploadSuccess($event)">
+          </app-file-upload>
 
-}
+          @if(activeForm.get('profilePhoto')?.touched && !activeForm.get('profilePhoto')?.value){
+          <small class="text-danger d-block mt-2">
+            Profile photo is required
+          </small>
+          }
+
+        </div>
+
+        }
+
+        @if(step === 3){
+
+        <h5>Skills & Languages</h5>
+
+        <!-- ===== SKILLS ===== -->
+        <div class="mb-3">
+          <div class="d-flex gap-2 align-items-center">
+
+            <input type="text" class="form-control" placeholder="Enter skills" [(ngModel)]="skillInput"
+              [ngModelOptions]="{standalone: true}">
+
+            <button class="btn btn-outline-primary" type="button" (click)="addSkill()">
+              Add
+            </button>
+
+          </div>
+
+          <!-- Skill Chips -->
+          <div class="d-flex flex-wrap gap-2 mt-2">
+
+            @for (skill of skills.controls; track $index; let i = $index) {
+
+            <span class="badge rounded-pill bg-light text-dark px-3 py-2 border">
+
+              {{ skill.value.value }}
+
+              <i class="bi bi-x ms-2 cursor-pointer" (click)="removeSkill(i)"></i>
+
+            </span>
+
+            }
+
+          </div>
+        </div>
 
 
-      @if(step === 5){
+        <!-- ===== LANGUAGES ===== -->
+        <div class="mb-3">
 
-      <!-- ✅ JOB SEEKER ONLY -->
-      @if(role === 'jobSeeker'){
+          <!-- Input Row -->
+          <div class="row g-2 align-items-center">
 
-      <div formGroupName="currentExperience">
+            <div class="col-md-5">
+              <select class="form-control" [(ngModel)]="languageInput" [ngModelOptions]="{standalone: true}">
+                <option value="">Select Language</option>
 
-        <app-input-fields [form]="currentExperienceGroup" controlName="jobTitle" placeholder="Job Title">
+                @for (lang of languageOptions; track $index) {
+                <option [ngValue]="lang">{{ lang }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="col-md-5">
+              <select class="form-control" [(ngModel)]="proficiencyInput" [ngModelOptions]="{standalone: true}">
+                <option value="">Select Proficiency</option>
+
+                @for (level of proficiencyOptions; track $index) {
+                <option [ngValue]="level">{{ level }}</option>
+                }
+              </select>
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-outline-primary w-100" type="button" (click)="addLanguage()">
+                Add
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Language Chips -->
+          <div class="d-flex flex-column gap-2 mt-3">
+
+            @for (lang of languages.controls; track $index; let i = $index) {
+
+            <div class="d-flex justify-content-between align-items-center border rounded-pill px-3 py-2">
+
+              <span>
+                {{ lang.value.language }} - {{ lang.value.proficiency }}
+              </span>
+
+              <i class="bi bi-x cursor-pointer" (click)="removeLanguage(i)"></i>
+
+            </div>
+
+            }
+
+          </div>
+
+        </div>
+
+        }
+
+        @if(step === 4){
+
+        <h5>Social Media Profiles</h5>
+
+        <!-- ===== INPUT ROW ===== -->
+        <div class="row g-2 align-items-center mb-3">
+
+          <div class="col-md-4">
+            <select class="form-control" [(ngModel)]="platformInput" [ngModelOptions]="{standalone: true}">
+
+              <option value="">Select platform</option>
+
+              @for (p of socialPlatformOptions; track $index) {
+              <option [ngValue]="p">{{ p }}</option>
+              }
+
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Paste the valid url" [(ngModel)]="linkInput"
+              [ngModelOptions]="{standalone: true}">
+          </div>
+
+          <div class="col-md-2">
+            <button class="btn btn-outline-primary w-100" type="button" (click)="addSocialProfile()">
+              Add
+            </button>
+          </div>
+
+        </div>
+
+
+        <!-- ===== LIST ===== -->
+        <div class="d-flex flex-column gap-2">
+
+          @for (sp of socialProfiles.controls; track $index; let i = $index) {
+
+          <div class="d-flex justify-content-between align-items-center border rounded-pill px-3 py-2">
+
+            <div class="d-flex align-items-center gap-2">
+
+              @if(sp.value.platform){
+              <i [class]="getSocialIcon(sp.value.platform)"></i>
+              }
+
+              <span>
+                {{ sp.value.platform }} - {{ sp.value.link }}
+              </span>
+
+            </div>
+
+            <i class="bi bi-x cursor-pointer" (click)="removeSocialProfile(i)"></i>
+
+          </div>
+
+          }
+
+        </div>
+
+        }
+
+
+        @if(step === 5){
+
+        <!-- ✅ JOB SEEKER ONLY -->
+        @if(role === 'jobSeeker'){
+
+        <div formGroupName="currentExperience">
+
+          <app-input-fields [form]="currentExperienceGroup" controlName="jobTitle" placeholder="Job Title">
+          </app-input-fields>
+
+
+          <app-input-fields [form]="currentExperienceGroup" controlName="company" placeholder="Company">
+          </app-input-fields>
+
+          <app-input-fields [form]="currentExperienceGroup" controlName="duration" placeholder="Duration">
+          </app-input-fields>
+
+          <app-input-fields [form]="currentExperienceGroup" controlName="description" placeholder="Description"
+            [isTextarea]="true">
+          </app-input-fields>
+
+        </div>
+
+        }
+
+        <!-- ✅ RECRUITER ONLY -->
+        @if(role === 'recruiter'){
+
+        <app-input-fields [form]="activeForm" controlName="companyName" [isSelect]="true" placeholder="Company Name"
+          [options]="companyOptions">
         </app-input-fields>
 
-
-        <app-input-fields [form]="currentExperienceGroup" controlName="company" placeholder="Company">
+        <app-input-fields [form]="activeForm" controlName="sector" [isSelect]="true" placeholder="Sector / Industry"
+          [options]="sectorOptions">
         </app-input-fields>
 
-        <app-input-fields [form]="currentExperienceGroup" controlName="duration" placeholder="Duration">
+        <app-input-fields [form]="activeForm" controlName="designation" [isSelect]="true" placeholder="Designation"
+          [options]="designationOptions">
         </app-input-fields>
 
-        <app-input-fields [form]="currentExperienceGroup" controlName="description" placeholder="Description"
+        <app-input-fields [form]="activeForm" controlName="yearsOfExperience" placeholder="Years of Experience"
+          type="number">
+        </app-input-fields>
+
+        }
+
+        }
+
+        @if(step === 6){
+
+        @if(role === 'jobSeeker'){
+
+        <h5>Previous Experience</h5>
+
+        <div formArrayName="experiences">
+          @for (exp of experiences.controls; track $index; let i = $index) {
+
+          <div [formGroupName]="i" class="border p-2 mb-3 rounded">
+
+            <app-input-fields [form]="exp" controlName="jobTitle" placeholder="Job Title"></app-input-fields>
+            <app-input-fields [form]="exp" controlName="company" placeholder="Company"></app-input-fields>
+            <app-input-fields [form]="exp" controlName="duration" placeholder="Duration"></app-input-fields>
+
+            <app-input-fields [form]="exp" controlName="description" placeholder="Description" [isTextarea]="true">
+            </app-input-fields>
+
+            <app-button label="Remove" variant="danger" (click)="removeExperience(i)"></app-button>
+
+          </div>
+
+          }
+        </div>
+
+        <app-button label="Add Experience" variant="primary" (click)="addExperience()"></app-button>
+
+        }
+
+        @if(role === 'recruiter'){
+
+        <h5>Profile Bio</h5>
+
+        <app-input-fields [form]="activeForm" controlName="bioDescription" placeholder="Description"
           [isTextarea]="true">
         </app-input-fields>
 
-      </div>
-
-      }
-
-      <!-- ✅ RECRUITER ONLY -->
-      @if(role === 'recruiter'){
-
-      <app-input-fields [form]="activeForm" controlName="companyName" [isSelect]="true"  placeholder="Company Name" [options]="companyOptions">
-      </app-input-fields>
-
-      <app-input-fields [form]="activeForm" controlName="sector"   [isSelect]="true" placeholder="Sector / Industry" [options]="sectorOptions">
-      </app-input-fields>
-
-      <app-input-fields [form]="activeForm" controlName="designation"  [isSelect]="true" placeholder="Designation" [options]="designationOptions">
-      </app-input-fields>
-
-      <app-input-fields [form]="activeForm" controlName="yearsOfExperience" placeholder="Years of Experience"
-        type="number">
-      </app-input-fields>
-
-      }
-
-      }
-
-      @if(step === 6){
-
-      @if(role === 'jobSeeker'){
-
-      <h5>Previous Experience</h5>
-
-      <div formArrayName="experiences">
-        @for (exp of experiences.controls; track $index; let i = $index) {
-
-        <div [formGroupName]="i" class="border p-2 mb-3 rounded">
-
-          <app-input-fields [form]="exp" controlName="jobTitle" placeholder="Job Title"></app-input-fields>
-          <app-input-fields [form]="exp" controlName="company" placeholder="Company"></app-input-fields>
-          <app-input-fields [form]="exp" controlName="duration" placeholder="Duration"></app-input-fields>
-
-          <app-input-fields [form]="exp" controlName="description" placeholder="Description" [isTextarea]="true">
-          </app-input-fields>
-
-          <app-button label="Remove" variant="danger" (click)="removeExperience(i)"></app-button>
-
-        </div>
-
         }
-      </div>
-
-      <app-button label="Add Experience" variant="primary" (click)="addExperience()"></app-button>
-
-      }
-
-      @if(role === 'recruiter'){
-
-      <h5>Profile Bio</h5>
-
-      <app-input-fields [form]="activeForm" controlName="bioDescription" placeholder="Description" [isTextarea]="true">
-      </app-input-fields>
-
-      }
-
-      }
-
-      @if(step === 7 && role === 'jobSeeker'){
-
-      <h5>Certifications</h5>
-
-      <div formArrayName="certifications">
-
-        @for (cert of certifications.controls; track $index; let i = $index) {
-
-        <div [formGroupName]="i" class="border p-2 mb-2">
-
-          <app-input-fields [form]="cert" controlName="name" placeholder="Certification Name"></app-input-fields>
-
-          <app-input-fields [form]="cert" controlName="issuedBy" placeholder="Issued By"></app-input-fields>
-
-          <app-input-fields [form]="cert" controlName="issuedDate" type="date" placeholder="Date"></app-input-fields>
-
-          <app-input-fields [form]="cert" controlName="certificateUrl" placeholder="URL"></app-input-fields>
-
-          <app-button label="Remove" variant="danger" (click)="removeCertification(i)"></app-button>
-
-        </div>
 
         }
 
-      </div>
+        @if(step === 7 && role === 'jobSeeker'){
 
-      <app-button label="Add Certification" (click)="addCertification()"></app-button>
+        <h5>Certifications</h5>
 
-      }
+        <div formArrayName="certifications">
 
-      @if(step === 8 && role === 'jobSeeker'){
-      <h5>Profile Bio</h5>
+          @for (cert of certifications.controls; track $index; let i = $index) {
 
-      <app-input-fields [form]="activeForm" controlName="bioDescription" placeholder="Description" [isTextarea]="true">
-      </app-input-fields>
-      }
+          <div [formGroupName]="i" class="border p-2 mb-2">
+
+            <app-input-fields [form]="cert" controlName="name" placeholder="Certification Name"></app-input-fields>
+
+            <app-input-fields [form]="cert" controlName="issuedBy" placeholder="Issued By"></app-input-fields>
+
+            <app-input-fields [form]="cert" controlName="issuedDate" type="date" placeholder="Date"></app-input-fields>
+
+            <app-input-fields [form]="cert" controlName="certificateUrl" placeholder="URL"></app-input-fields>
+
+            <app-button label="Remove" variant="danger" (click)="removeCertification(i)"></app-button>
+
+          </div>
+
+          }
+
+        </div>
+
+        <app-button label="Add Certification" (click)="addCertification()"></app-button>
+
+        }
+
+        @if(step === 8 && role === 'jobSeeker'){
+        <h5>Profile Bio</h5>
+
+        <app-input-fields [form]="activeForm" controlName="bioDescription" placeholder="Description"
+          [isTextarea]="true">
+        </app-input-fields>
+        }
 
 
-      <!-- NAVIGATION -->
+        <!-- NAVIGATION -->
 
-      <div class="step-navigation">
+        <div class="step-navigation">
 
-        @if(step > 1){
-  <app-button
-    label="Previous"
-    (click)="prevStep()"
-    size="md"
-    variant="secondary">
-  </app-button>
-}
-
-        @if(step < totalSteps){ <app-button label="Next" (click)="nextStep()" type="button" size="md" variant="primary">
+          @if(step > 1){
+          <app-button label="Previous" (click)="prevStep()" size="md" variant="secondary">
           </app-button>
           }
 
-          @if(step === totalSteps){
-          <app-button label="Submit" type="submit" size="md" variant="success"
-            [disabled]="activeForm.invalid"></app-button>
+          @if(step < totalSteps){ <app-button label="Next" (click)="nextStep()" type="button" size="md"
+            variant="primary">
+            </app-button>
+            }
 
-          }
+            @if(step === totalSteps){
+            <app-button label="Submit" type="submit" size="md" variant="success"
+              [disabled]="activeForm.invalid"></app-button>
 
-      </div>
-    </form>
+            }
+
+        </div>
+      </form>
+    </div>
+
   </div>
-</div>

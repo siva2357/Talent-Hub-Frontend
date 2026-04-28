@@ -9,73 +9,66 @@
     <div class="row g-3 align-items-center">
 
 
-          <div class="col-xl-3 col-lg-4 col-md-12">
-<input
-  type="text"
-  class="form-control filter-input"
-  placeholder="Search job title..."
-  [(ngModel)]="searchText">
-    </div>
+      <div class="col-xl-3 col-lg-4 col-md-12">
+        <input type="text" class="form-control filter-input" placeholder="Search job title..." [(ngModel)]="searchText">
+      </div>
 
 
-    <div class="col-xl-2 col-lg-3 col-md-6">
-<select class="form-select filter-select" [(ngModel)]="selectedCategory">
-  <option value="">Category</option>
+      <div class="col-xl-2 col-lg-3 col-md-6">
+        <select class="form-select filter-select" [(ngModel)]="selectedCategory">
+          <option value="">Category</option>
 
-  @for (cat of categories; track cat) {
-    <option [value]="cat ">{{ cat  }}</option>
-  }
-</select>
-    </div>
+          @for (cat of categories; track cat) {
+          <option [value]="cat ">{{ cat }}</option>
+          }
+        </select>
+      </div>
 
-        <div class="col-xl-2 col-lg-3 col-md-6">
-<select class="form-select filter-select" [(ngModel)]="selectedJobtype">
-  <option value="">Job Type</option>
+      <div class="col-xl-2 col-lg-3 col-md-6">
+        <select class="form-select filter-select" [(ngModel)]="selectedJobtype">
+          <option value="">Job Type</option>
 
-  @for (type of jobTypes; track type) {
-    <option [value]="type">{{ type  }}</option>
-  }
-</select>
-    </div>
+          @for (type of jobTypes; track type) {
+          <option [value]="type">{{ type }}</option>
+          }
+        </select>
+      </div>
 
 
-    <div class="col-xl-2 col-lg-3 col-md-6">
-<select class="form-select filter-select" [(ngModel)]="selectedStatus">
-  <option value="">Status</option>
+      <div class="col-xl-2 col-lg-3 col-md-6">
+        <select class="form-select filter-select" [(ngModel)]="selectedStatus">
+          <option value="">Status</option>
 
-  @for (st of statuses; track st) {
-    <option [value]="st">{{ st }}</option>
-  }
-</select>
-    </div>
+          @for (st of statuses; track st) {
+          <option [value]="st">{{ st }}</option>
+          }
+        </select>
+      </div>
 
-          <div class="col-xl-3 col-lg-4 col-md-12 d-flex gap-2">
-      <app-button variant="primary" label="Apply" size="md" class="w-100"   (click)="applyFilters()"></app-button>
-      <app-button variant="secondary" label="Reset" size="md" class="w-100" (click)="resetFilters()"></app-button>
+      <div class="col-xl-3 col-lg-4 col-md-12 d-flex gap-2">
+        <app-button variant="primary" label="Apply" size="md" class="w-100" (click)="applyFilters()"></app-button>
+        <app-button variant="secondary" label="Reset" size="md" class="w-100" (click)="resetFilters()"></app-button>
+
+      </div>
 
     </div>
 
-    </div>
+    @if (getActiveFilters().length > 0) {
+    <div class="d-flex flex-wrap gap-2 mt-3">
 
-      @if (getActiveFilters().length > 0) {
-  <div class="d-flex flex-wrap gap-2 mt-3">
-
-    @for (f of getActiveFilters(); track f.key) {
+      @for (f of getActiveFilters(); track f.key) {
       <span class="badge badge-primary d-flex align-items-center gap-2 px-3 py-2">
 
         {{ f.label }}
 
-        <i
-          class="bi bi-x-lg"
-          style="cursor:pointer; font-size:12px;"
-          (click)="removeFilter(f.key)">
+        <i class="bi bi-x-lg" style="cursor:pointer; font-size:12px;" (click)="removeFilter(f.key)">
         </i>
 
       </span>
-    }
+      }
 
-  </div>
-}
+    </div>
+    }
 
   </div>
 
@@ -181,7 +174,8 @@
 
 
 
-  <app-pagination [total]="total" [page]="page" [limit]="limit" (pageChange)="onPageChange($event)" (limitChange)="onLimitChange($event)"></app-pagination>
+  <app-pagination [total]="total" [page]="page" [limit]="limit" (pageChange)="onPageChange($event)"
+    (limitChange)="onLimitChange($event)"></app-pagination>
 
 </div>
 
@@ -205,35 +199,43 @@
           <div class="row g-3">
 
             <div class="col-md-6">
-              <app-input-fields [form]="jobForm" type="text" placeholder="Job ID" controlName="jobId"> </app-input-fields>
+              <app-input-fields [form]="jobForm" type="text" placeholder="Job ID" controlName="jobId">
+              </app-input-fields>
             </div>
 
             <div class="col-md-6">
-              <app-input-fields [form]="jobForm" type="text" placeholder="Job Title" controlName="jobTitle"> </app-input-fields>
+              <app-input-fields [form]="jobForm" type="text" placeholder="Job Title" controlName="jobTitle">
+              </app-input-fields>
             </div>
 
             <div class="col-md-6">
-               <app-input-fields  [form]="jobForm" [isSelect]="true" [options]="categories" placeholder="Category" controlName="jobCategory"></app-input-fields>
-           </div>
-
-           <div class="col-md-6">
-               <app-input-fields  [form]="jobForm" [isSelect]="true" [options]="jobTypes" placeholder="Job Type" controlName="jobType"></app-input-fields>
-           </div>
-
-            <div class="col-md-6">
-              <app-input-fields [form]="jobForm" type="text" placeholder="Location" controlName="location"> </app-input-fields>
+              <app-input-fields [form]="jobForm" [isSelect]="true" [options]="categories" placeholder="Category"
+                controlName="jobCategory"></app-input-fields>
             </div>
 
             <div class="col-md-6">
-              <app-input-fields [form]="jobForm" type="text" placeholder="Salary" controlName="salary"></app-input-fields>
+              <app-input-fields [form]="jobForm" [isSelect]="true" [options]="jobTypes" placeholder="Job Type"
+                controlName="jobType"></app-input-fields>
             </div>
 
             <div class="col-md-6">
-              <app-input-fields [form]="jobForm" type="date" placeholder="Apply By Date" controlName="applyByDate"></app-input-fields>
+              <app-input-fields [form]="jobForm" type="text" placeholder="Location" controlName="location">
+              </app-input-fields>
+            </div>
+
+            <div class="col-md-6">
+              <app-input-fields [form]="jobForm" type="text" placeholder="Salary"
+                controlName="salary"></app-input-fields>
+            </div>
+
+            <div class="col-md-6">
+              <app-input-fields [form]="jobForm" type="date" placeholder="Apply By Date"
+                controlName="applyByDate"></app-input-fields>
             </div>
 
             <div class="col-12">
-              <app-input-fields [form]="jobForm" placeholder="Job Description" controlName="jobDescription" [isTextarea]="true"></app-input-fields>
+              <app-input-fields [form]="jobForm" placeholder="Job Description" controlName="jobDescription"
+                [isTextarea]="true"></app-input-fields>
             </div>
 
           </div>
@@ -349,8 +351,7 @@
 
 
 <ng-template #statusTemplate let-row>
-  <span class="badge"
-    [ngClass]="{
+  <span class="badge" [ngClass]="{
       'badge-success': row.status === 'Open',
       'badge-danger': row.status === 'Closed'
     }">
@@ -360,24 +361,20 @@
 
 <ng-template #applicantsTemplate let-row>
   <span class="badge badge-info">
-<i class="bi bi-people me-1 fs-6"></i>
-<span style="font-size:13px;">{{ row.applicants }}</span>
-</span>
+    <i class="bi bi-people me-1 fs-6"></i>
+    <span style="font-size:13px;">{{ row.applicants }}</span>
+  </span>
 </ng-template>
 
 
 
 <ng-template #actionsTemplate let-row>
   <div class="d-flex justify-content-center">
-
-
     <div class="dropdown ">
-
       <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" data-bs-display="static"
         data-bs-boundary="viewport">
         <i class="bi bi-three-dots-vertical"></i>
       </button>
-
       <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
 
         <li>
@@ -385,20 +382,16 @@
         </li>
 
         <li>
-          <button
-  class="dropdown-item"
-  data-bs-toggle="modal"
-  data-bs-target="#jobFormModal"
-  (click)="selectJob(row)">
-  Edit
-</button>
+          <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#jobFormModal" (click)="selectJob(row)">
+            Edit
+          </button>
         </li>
 
-         @if(row.status === 'Open'){
+        @if(row.status === 'Open'){
         <li>
           <button class="dropdown-item" (click)="openActionModal(row, 'close')"> Close</button>
         </li>
-      }
+        }
 
         <li>
           <button class="dropdown-item" (click)="goToApplicants(row._id)">
@@ -406,14 +399,14 @@
           </button>
         </li>
 
-         @if(row.status === 'Closed'){
+        @if(row.status === 'Closed'){
         <li>
           <button class="dropdown-item" (click)="openActionModal(row, 'reopen')">Reopen</button>
         </li>
         <li>
           <button class="dropdown-item text-danger" (click)="openActionModal(row, 'reopen')"> Delete</button>
         </li>
-      }
+        }
       </ul>
 
     </div>

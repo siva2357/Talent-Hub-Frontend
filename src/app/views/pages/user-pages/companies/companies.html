@@ -1,450 +1,146 @@
-<div class="container-xxl mt-5 pt-5">
-
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h5 class="fw-semibold mb-0">Company List</h5>
-</div>
-
-<div class="filter-toolbar">
-
-  <div class="row g-3 align-items-center">
-
-    <div class="col-xl-3 col-lg-4 col-md-12">
-<input
-  type="text"
-  class="form-control filter-input"
-  placeholder="Search company name..."
-  [(ngModel)]="searchText">
-    </div>
-
-    <div class="col-xl-2 col-lg-3 col-md-6">
-<select class="form-select filter-select" [(ngModel)]="selectedLocation">
-  <option value="">Location</option>
-
-  @for (loc of locations; track loc) {
-    <option [value]="loc">{{ loc }}</option>
-  }
-</select>
-    </div>
-
-    <div class="col-xl-2 col-lg-3 col-md-6">
-<select class="form-select filter-select" [(ngModel)]="selectedIndustry">
-  <option value="">Industry</option>
-
-  @for (ind of industries; track ind) {
-    <option [value]="ind">{{ ind }}</option>
-  }
-</select>
-    </div>
-
-    <div class="col-xl-2 col-lg-3 col-md-6">
-<select class="form-select filter-select" [(ngModel)]="selectedStatus">
-  <option value="">Status</option>
-
-  @for (st of statuses; track st) {
-    <option [value]="st">{{ st }}</option>
-  }
-</select>
-    </div>
+<div class="container-fluid mt-5 py-5 px-4">
 
 
-    <div class="col-xl-3 col-lg-4 col-md-12 d-flex gap-2">
-      <app-button variant="primary" label="Apply" size="md" class="w-100"   (click)="applyFilters()"></app-button>
-      <app-button variant="secondary" label="Reset" size="md" class="w-100" (click)="resetFilters()"></app-button>
-    </div>
-
+  <div class="page-header mb-4">
+    <h3 class="fw-bold mb-1">Companies</h3>
+    <p class="text-muted">
+      Manage companies, control access, and monitor organization details.
+    </p>
   </div>
 
-  @if (getActiveFilters().length > 0) {
-  <div class="d-flex flex-wrap gap-2 mt-3">
 
-    @for (f of getActiveFilters(); track f.key) {
-      <span class="badge badge-primary d-flex align-items-center gap-2 px-3 py-2">
+  <div class="filter-card mb-4">
 
-        {{ f.label }}
+    <div class="row g-3 align-items-end">
 
-        <i
-          class="bi bi-x-lg"
-          style="cursor:pointer; font-size:12px;"
-          (click)="removeFilter(f.key)">
-        </i>
+      <div class="col-md-3">
+        <app-input-fields mode="filter" placeholder="Search company..." [(value)]="filters.name"> </app-input-fields>
+      </div>
 
+      <div class="col-md-3">
+        <app-input-fields mode="filter" placeholder="Location" [(value)]="filters.location"> </app-input-fields>
+      </div>
+
+      <div class="col-md-3">
+        <app-input-fields mode="filter" [isSelect]="true" placeholder="Status" [options]="statusOptions" [(value)]="filters.status"> </app-input-fields>
+      </div>
+
+      <div class="col-md-3 d-flex gap-2">
+        <app-button label="Apply" variant="primary" size="md" class="w-100" (click)="onApplyFilters()"></app-button>
+        <app-button label="Reset" variant="secondary" size="md" class="w-100" (click)="onResetFilters()"></app-button>
+      </div>
+
+    </div>
+
+
+    @if (appliedFilters.name || appliedFilters.location || appliedFilters.status) {
+
+    <div class="d-flex flex-wrap gap-2 mt-3">
+
+      @if (appliedFilters.name) {
+      <span class="chip">
+        Name: {{ appliedFilters.name }}
+        <i class="bi bi-x" (click)="removeFilter('name')"></i>
       </span>
+      }
+
+      @if (appliedFilters.location) {
+      <span class="chip">
+        Location: {{ appliedFilters.location }}
+        <i class="bi bi-x" (click)="removeFilter('location')"></i>
+      </span>
+      }
+
+      @if (appliedFilters.status) {
+      <span class="chip">
+        Status: {{ appliedFilters.status }}
+        <i class="bi bi-x" (click)="removeFilter('status')"></i>
+      </span>
+      }
+
+    </div>
+
     }
 
   </div>
-}
 
-</div>
+  <app-table class="d-none d-lg-block" [columns]="columns" [data]="data" [page]="page" [limit]="limit"> </app-table>
 
-<div class="d-flex justify-content-end mb-3">
+  <div class="d-block d-lg-none">
 
-<button
-  class="btn btn-sm btn-primary d-flex align-items-center gap-2"
-  (click)="openAddModal()"
-  data-bs-toggle="modal"
-  data-bs-target="#companyFormModal">
+    <div class="row g-3">
 
-  <i class="bi bi-plus-lg"></i>
-  Add Company
-</button>
+      @for (row of data; track row._id) {
+      <div class="col-12">
 
-</div>
+        <div class="company-card">
 
-<app-table [columns]="columns" [data]="paginatedCompanies"  class="d-none d-lg-block mb-5"></app-table>
+          <div class="d-flex justify-content-between align-items-center mb-3">
 
-<div class="d-lg-none">
+            <div class="d-flex align-items-center gap-3">
+              <img [src]="row.logo" class="rounded-circle" width="48" height="48" />
 
- <ol class="list-group recruiter-list">
-
-  @for (c of paginatedCompanies; track c.id) {
-    <li class="list-group-item recruiter-card">
-
-      <div class="d-flex align-items-center gap-3 mb-2">
-        <img [src]="c.companyLogo" style="height: 50px; width:80px">
-
-        <div class="flex-grow-1">
-          <div class="fw-semibold">{{ c.companyName }}</div>
-          <div class="small text-muted">
-            {{ c.industry }} • {{ c.companyLocation }}
-          </div>
-          <div class="small text-muted">{{ c.email }}</div>
-          <div class="small text-muted">📞 {{ c.phone }}</div>
-        </div>
-      </div>
-
-      <div class="d-flex flex-nowrap gap-1">
-        <button class="btn btn-primary btn-sm" (click)="openViewModal(c)"  data-bs-toggle="modal" data-bs-target="#viewCompanyModal">View</button>
-        <button class="btn btn-info btn-sm" (click)="openEditModal(c)" data-bs-toggle="modal" data-bs-target="#companyFormModal"> Edit </button>
-        <button class="btn btn-danger btn-sm"(click)="openDeleteModal(c)" data-bs-toggle="modal" data-bs-target="#deleteCompanyModal">Delete</button>
-      </div>
-
-    </li>
-  }
-
-</ol>
-
-</div>
-
-<app-pagination [total]="total" [page]="page" [limit]="limit" (pageChange)="onPageChange($event)" (limitChange)="onLimitChange($event)"></app-pagination>
-
-</div>
-
-<div class="modal fade" id="companyFormModal" tabindex="-1">
-<div class="modal-dialog modal-lg modal-dialog-centered">
-<div class="modal-content">
-
-<div class="modal-header">
-<h5 class="modal-title">
-  {{ isEditMode ? 'Edit Company' : 'Add Company' }}
-</h5>
-<button class="btn-close" data-bs-dismiss="modal"></button>
-</div>
-
-
-<form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
-<div class="modal-body">
-
-  <div class="row g-3">
-
-
-    <div class="col-12">
-
-  <label class="form-label">Company Logo</label>
-
-
-    <!-- Preview -->
-  @if (companyForm.get('companyLogo')?.value) {
-    <div class="mt-2">
-      <app-file-preview
-        [fileUrl]="companyForm.get('companyLogo')?.value">
-      </app-file-preview>
-    </div>
-  }
-
-
-  <!-- Upload -->
-<app-file-upload
-  [bucketKey]="BucketKey.ADMIN_COLLECTION"
-  [section]="UploadSection.COMPANY_LOGO"
-  accept="image/*"
-    [replace]="true"
-  (uploaded)="onLogoUploaded($event)">
-</app-file-upload>
-
-
-
-</div>
-
-    <!-- Company Name -->
-    <div class="col-md-6">
-      <app-input-fields
-        [form]="companyForm"
-        placeholder="Company Name"
-        controlName="companyName">
-      </app-input-fields>
-    </div>
-
-    <!-- Industry -->
-    <div class="col-md-6">
-      <app-input-fields
-        [form]="companyForm"
-        placeholder="Industry"
-        controlName="industry">
-      </app-input-fields>
-    </div>
-
-    <!-- Email -->
-    <div class="col-md-6">
-      <app-input-fields
-        [form]="companyForm"
-        type="email"
-        placeholder="Email"
-        controlName="email">
-      </app-input-fields>
-    </div>
-
-    <!-- Phone -->
-    <div class="col-md-6">
-      <app-input-fields
-        [form]="companyForm"
-        placeholder="Phone"
-        controlName="phone">
-      </app-input-fields>
-    </div>
-
-    <!-- Location -->
-    <div class="col-md-6">
-      <app-input-fields
-        [form]="companyForm"
-        placeholder="Location"
-        controlName="companyLocation">
-      </app-input-fields>
-    </div>
-
-    <!-- Company Size -->
-    <div class="col-md-6">
-      <app-input-fields
-        [form]="companyForm"
-        [isSelect]="true"
-       [options]="companySizes"
-        placeholder="Company Size"
-        controlName="companySize">
-      </app-input-fields>
-    </div>
-
-    <!-- Total Employees -->
-    <div class="col-md-6">
-      <app-input-fields
-        [form]="companyForm"
-        type="number"
-        placeholder="Total Employees"
-        controlName="totalEmployees">
-      </app-input-fields>
-    </div>
-
-    <!-- Founded Date -->
-    <div class="col-md-6">
-      <app-input-fields
-        [form]="companyForm"
-        type="date"
-        placeholder="Founded Date"
-        controlName="companyFoundedDate">
-      </app-input-fields>
-    </div>
-
-    <!-- Description (full width) -->
-    <div class="col-12">
-  <app-input-fields
-    [form]="companyForm"
-    placeholder="Description"
-    controlName="companyDescription"
-    [isTextarea]="true">
-  </app-input-fields>
-</div>
-
-  </div>
-
-
-</div>
-
-<div class="modal-footer">
-<app-button label="Cancel" variant="secondary" type="button" data-bs-dismiss="modal"></app-button>
-<app-button label="Save" variant="primary" type="submit"></app-button>
-</div>
-
-
-</form>
-
-
-</div>
-</div>
-</div>
-
-<div class="modal fade" id="viewCompanyModal" tabindex="-1">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content">
-
-      <!-- Header -->
-      <div class="modal-header border-0">
-        <h5 class="modal-title fw-semibold">Company Profile</h5>
-        <button class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-
-        @if (selectedCompany) {
-
-        <div class="row g-4">
-
-          <!-- LEFT SIDE (Logo + Name) -->
-          <div class="col-md-4 text-center border-end">
-
-            <img
-              [src]="selectedCompany.companyLogo"
-              class="img-fluid rounded mb-3"
-              style="max-height: 120px; object-fit: contain;"
-            >
-
-            <h5 class="fw-bold">
-              {{ selectedCompany.companyName }}
-            </h5>
-
-            <span class="badge bg-primary mt-2">
-              {{ selectedCompany.companySize }}
-            </span>
-
-          </div>
-
-
-          <!-- RIGHT SIDE (Details) -->
-          <div class="col-md-8">
-
-            <div class="row g-3">
-
-              <div class="col-md-6">
-                <label class="text-muted small">Email</label>
-                <div class="fw-medium">{{ selectedCompany.email }}</div>
-              </div>
-
-              <div class="col-md-6">
-                <label class="text-muted small">Phone</label>
-                <div class="fw-medium">{{ selectedCompany.phone }}</div>
-              </div>
-
-              <div class="col-md-6">
-                <label class="text-muted small">Location</label>
-                <div class="fw-medium">{{ selectedCompany.companyLocation }}</div>
-              </div>
-
-              <div class="col-md-6">
-                <label class="text-muted small">Industry</label>
-                <div class="fw-medium">{{ selectedCompany.industry }}</div>
-              </div>
-
-              <div class="col-md-6">
-                <label class="text-muted small">Employees</label>
-                <div class="fw-medium">{{ selectedCompany.totalEmployees }}</div>
-              </div>
-
-              <div class="col-md-6">
-                <label class="text-muted small">Founded</label>
-                <div class="fw-medium">
-                  {{ selectedCompany.companyFoundedDate | date:'mediumDate' }}
-                </div>
-              </div>
-
-              <!-- Description -->
-              <div class="col-12 mt-3">
-                <label class="text-muted small">About Company</label>
-                <div class="border rounded p-3 bg-light">
-                  {{ selectedCompany.companyDescription }}
-                </div>
+              <div>
+                <h6 class="mb-0 fw-semibold">{{ row.companyName }}</h6>
+                <small class="text-muted">{{ row.location }}</small>
               </div>
 
             </div>
 
+            <span class="badge" [ngClass]="{ 'bg-success-subtle text-success': row.status === 'active', 'bg-danger-subtle text-danger': row.status === 'blocked'}">
+              {{ row.status }}
+            </span>
+
+          </div>
+
+          <div class="company-details mb-3">
+            <div class="detail-item"> <span>Founded</span> <strong>{{ row.foundedYear }}</strong> </div>
+            <div class="detail-item"> <span>Phone</span> <strong>{{ row.phone }}</strong> </div>
+            <div class="detail-item"> <span>Website</span> <a [href]="'https://' + row.website" target="_blank"> {{ row.website }} </a> </div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <button class="btn btn-sm btn-light d-flex align-items-center gap-1" (click)="viewCompany(row)"> View </button>
+            <button class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1" (click)="editCompany(row)"> Edit </button>
+            <button class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1" (click)="deleteCompany(row)"> Delete </button>
+            <button class="btn btn-sm btn-outline-warning d-flex align-items-center gap-1" (click)="blockCompany(row)"> Block </button>
+            <button class="btn btn-sm btn-outline-success d-flex align-items-center gap-1" (click)="unblockCompany(row)">Unblock </button>
           </div>
 
         </div>
 
-        }
-
       </div>
+      }
 
     </div>
+
   </div>
-</div>
 
-<div class="modal fade" id="deleteCompanyModal" tabindex="-1">
-<div class="modal-dialog modal-dialog-centered">
-<div class="modal-content">
-
-<div class="modal-header">
-<h5 class="modal-title">Delete Company</h5>
-<button class="btn-close" data-bs-dismiss="modal"></button>
-</div>
-
-<div class="modal-body">
-  Are you sure you want to delete
-  <strong>{{ selectedCompany?.companyName }}</strong>?
-</div>
-
-<div class="modal-footer">
-<button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-<button class="btn btn-danger"  (click)="confirmDelete()">Delete</button>
-</div>
+  <app-pagination [total]="total" [page]="page" [limit]="limit" (pageChange)="onPageChange($event)" (limitChange)="onLimitChange($event)"></app-pagination>
 
 </div>
-</div>
-</div>
 
-
-
-
-<ng-template #imageTemplate let-row>
-  <div class="d-flex align-items-center gap-2">
-    <img
-      [src]="row.companyLogo"
-      width="60"
-      height="35"
-    />
-  </div>
+<!-- LOGO -->
+<ng-template #logoTpl let-row>
+  <img [src]="row.logo" width="35" height="35" class="rounded-circle" />
 </ng-template>
 
-<ng-template #actionsTemplate let-row>
-  <div class="d-flex justify-content-center">
+<!-- STATUS -->
+<ng-template #statusTpl let-row>
+  <span class="badge" [ngClass]="{'badge-success': row.status === 'active','badge-danger': row.status === 'blocked'}">
+    {{ row.status }}
+  </span>
+</ng-template>
 
+<!-- ACTIONS -->
+<ng-template #actionTpl let-row>
 
-    <div class="dropdown ">
-
-      <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" data-bs-display="static"
-        data-bs-boundary="viewport">
-        <i class="bi bi-three-dots-vertical"></i>
-      </button>
-
-      <ul class="dropdown-menu dropdown-menu-end" style="font-size: 13px;">
-
-        <li>
-          <button class="dropdown-item" (click)="openViewModal(row)" data-bs-toggle="modal"
-            data-bs-target="#viewCompanyModal">
-            View Details
-          </button>
-        </li>
-
-        <li>
-          <button class="dropdown-item" (click)="openEditModal(row)" data-bs-toggle="modal"
-            data-bs-target="#companyFormModal">Edit</button>
-
-        </li>
-
-        <li>
-          <button class="dropdown-item text-danger" (click)="openDeleteModal(row)" data-bs-toggle="modal" data-bs-target="#deleteCompanyModal">
-            Delete
-          </button>
-        </li>
-      </ul>
-
-    </div>
-
+  <div class="d-flex gap-2 justify-content-center">
+    <button class="btn btn-sm btn-info" (click)="viewCompany(row)"> View</button>
+    <button class="btn btn-sm btn-primary" (click)="editCompany(row)">Edit</button>
+    <button class="btn btn-sm btn-danger" (click)="deleteCompany(row)">Delete</button>
+    <button class="btn btn-sm btn-warning" (click)="blockCompany(row)">Block</button>
+    <button class="btn btn-sm btn-success" (click)="unblockCompany(row)">Unblock</button>
   </div>
+
 </ng-template>
