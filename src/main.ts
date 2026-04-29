@@ -1,9 +1,5 @@
 import 'zone.js';
-import {
-  bootstrapApplication,
-  provideClientHydration,
-  withEventReplay,
-} from '@angular/platform-browser';
+import { bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 import { App } from './app/app';
@@ -13,7 +9,6 @@ bootstrapApplication(App, {
   ...appConfig,
   providers: [
     ...(appConfig.providers ?? []),
-    provideAnimationsAsync(),
-    provideClientHydration(withEventReplay()),
+    provideAnimationsAsync()
   ],
 }).catch(console.error);

@@ -6,15 +6,12 @@ import { routes } from './app.routes';
 import { errorInterceptor } from './core/interceptor/error.interceptor';
 import { authInterceptor } from './core/interceptor/auth.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideClientHydration } from '@angular/platform-browser'; // ✅ ADD
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideAnimations(),
-
-    provideClientHydration(), // ✅ ADD THIS LINE
 
     provideHttpClient(
       withFetch(),
