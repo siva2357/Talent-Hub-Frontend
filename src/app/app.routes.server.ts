@@ -2,29 +2,19 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
 
-  // ✅ Dynamic routes → SSR (no prerender)
+  // ✅ Public dynamic content (good for SEO)
   {
-    path: 'user/jobprofile/:id/job-details',
-    renderMode: RenderMode.Server,
+    path: 'blog/:id/details',
+    renderMode: RenderMode.Server
   },
-  {
-    path: 'user/project/:id/project-details',
-    renderMode: RenderMode.Server,
-  },
-  {
-    path: 'user/my-jobposts/:id/job-applications',
-    renderMode: RenderMode.Server,
-  },
-  {
-    path: 'user/talents/:id/profile',
-    renderMode: RenderMode.Server,
-  },
-  {
-  path: 'blog/:id/details',
-  renderMode: RenderMode.Server
-},
 
-  // ✅ Static routes → prerender (optional)
+  // ❌ Protected pages → CLIENT ONLY
+  {
+    path: 'user/**',
+    renderMode: RenderMode.Client
+  },
+
+  // ✅ Static pages
   {
     path: 'home',
     renderMode: RenderMode.Prerender,
@@ -33,8 +23,10 @@ export const serverRoutes: ServerRoute[] = [
     path: 'about',
     renderMode: RenderMode.Prerender,
   },
+
+  // fallback
   {
     path: '**',
-    renderMode: RenderMode.Server, // 🔥 NOT Prerender
+    renderMode: RenderMode.Client
   },
 ];

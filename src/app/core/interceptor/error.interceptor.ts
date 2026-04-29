@@ -17,6 +17,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const isBackendApi = req.url.includes('/api/');
   const isLogout = req.url.includes('/auth/logout');
 
+
+const isBrowser = typeof window !== 'undefined';
+const token = storage.get('JWT_Token');
+
   return next(req).pipe(
 
     tap((event) => {
@@ -48,11 +52,15 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         return throwError(() => error);
       }
 
-      if (error.status === 401) {
-        toastr.error('Session expired. Please login again.');
-        router.navigate(['/login']);
-        return throwError(() => error);
-      }
+
+if (error.status === 401) {
+  // 🚫 Only logout if token actually exists (real session expiry)
+  if (isBrowser && token) {
+    toastr.error('Session expired. Please login again.');
+    router.navigate(['/login']);
+  }
+  return throwError(() => error);
+}
 
       if (error.status === 403) {
         toastr.warning(error.error?.message ?? 'Access denied');

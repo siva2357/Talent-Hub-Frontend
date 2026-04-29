@@ -78,16 +78,28 @@ resendOtp(
   /* ================= TOKEN ================= */
 
 getToken(): string | null {
-  if (isPlatformBrowser(this.platformId)) {
-    return localStorage.getItem('JWT_Token');
+  try {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('JWT_Token');
+    }
+    return null;
+  } catch {
+    return null;
   }
-  return null;
 }
 
-  isTokenExpired(token: string): boolean {
+isTokenExpired(token: string): boolean {
+  try {
     const decoded: any = jwtDecode(token);
+
+    // if no exp → don't force logout
+    if (!decoded.exp) return false;
+
     return Date.now() > decoded.exp * 1000;
+  } catch {
+    return true; // invalid token → treat as expired
   }
+}
 
 isLoggedIn(): boolean {
   const token = this.getToken();
@@ -124,9 +136,22 @@ getUserData(): LoginResponse | null {
   return null;
 }
 
-  getRole(): string | null {
-    return this.getUserData()?.role ?? null;
+getRole(): string | null {
+  const user = this.getUserData();
+  if (user?.role) return user.role;
+
+  const token = this.getToken();
+  if (token) {
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded.role || null;
+    } catch {
+      return null;
+    }
   }
+
+  return null;
+}
 
   getUserId(): string | null {
     return this.getUserData()?.userId ?? null;

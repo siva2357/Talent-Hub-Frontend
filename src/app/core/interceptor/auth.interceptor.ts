@@ -7,7 +7,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
 
 const storage = inject(StorageService);
-const token = storage.get('JWT_Token');
+
+const isBrowser = typeof window !== 'undefined';
+const token = isBrowser ? storage.get('JWT_Token') : null;
 
   // 🚫 Skip auth for public endpoints
   const isAuthEndpoint =

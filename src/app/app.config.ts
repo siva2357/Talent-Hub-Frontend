@@ -1,11 +1,12 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { errorInterceptor } from './core/interceptor/error.interceptor';
 import { authInterceptor } from './core/interceptor/auth.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideClientHydration } from '@angular/platform-browser'; // ✅ ADD
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,12 +14,16 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
 
+    provideClientHydration(), // ✅ ADD THIS LINE
+
     provideHttpClient(
+      withFetch(),
       withInterceptors([
-        authInterceptor, // 👈 FIRST (adds JWT)
-        errorInterceptor, // 👈 SECOND (handles errors)
+        authInterceptor,
+        errorInterceptor,
       ]),
     ),
+
     provideToastr({
       positionClass: 'toast-top-right',
       timeOut: 3000,

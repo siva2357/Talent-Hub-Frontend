@@ -1,5 +1,10 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { NgZone } from '@angular/core';
+
+
 
 Chart.register(...registerables);
 
@@ -10,7 +15,20 @@ Chart.register(...registerables);
 })
 export class AdminDashboard implements AfterViewInit {
 
+    @ViewChild('myChart') myChartRef!: ElementRef;
+  @ViewChild('categoryPieChart') pieRef!: ElementRef;
+  @ViewChild('categoryBarChart') barRef!: ElementRef;
+
+constructor(
+  @Inject(PLATFORM_ID) private platformId: any,
+  private ngZone: NgZone
+) {}
+
+
   chart: any;
+  pieChart: any;
+  barChart: any;
+
 
   options: any = {
     responsive: true,
@@ -27,14 +45,31 @@ export class AdminDashboard implements AfterViewInit {
     }
   };
 
-  ngAfterViewInit(): void {
-    this.createChart();
-    this.createCategoryPieChart();
-    this.createCategoryBarChart();
-  }
+ngAfterViewInit() {
+  console.log('AFTER VIEW INIT CALLED');
 
-  createChart() {
-    this.chart = new Chart('myChart', {
+  if (isPlatformBrowser(this.platformId)) {
+    console.log('IN BROWSER');
+
+    setTimeout(() => {
+      console.log('CHART INIT RUNNING');
+
+      this.createChart();
+      this.createCategoryPieChart();
+      this.createCategoryBarChart();
+    }, 100);
+  } else {
+    console.log('RUNNING ON SERVER');
+  }
+}
+
+createChart() {
+  if (this.chart) this.chart.destroy();
+
+  try {
+    const ctx = this.myChartRef.nativeElement.getContext('2d');
+
+    this.chart = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: [
@@ -61,56 +96,76 @@ export class AdminDashboard implements AfterViewInit {
       },
       options: this.options
     });
-  }
 
-  createCategoryPieChart() {
-  new Chart('categoryPieChart', {
-    type: 'doughnut',
-    data: {
-      labels: ['Frontend', 'Backend', 'Fullstack', 'AI/ML', 'DevOps'],
-      datasets: [{
-        data: [120, 90, 150, 80, 60],
-backgroundColor: [
-  'rgba(54, 162, 235, 0.6)',  // blue
-  'rgba(75, 192, 192, 0.6)',  // teal
-  'rgba(255, 206, 86, 0.6)',  // yellow
-  'rgba(153, 102, 255, 0.6)', // purple
-  'rgba(255, 99, 132, 0.6)'   // red
-]
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: 'bottom'
+  } catch (e) {
+    console.error('Chart error:', e);
+  }
+}
+createCategoryPieChart() {
+  if (this.pieChart) this.pieChart.destroy();
+
+  try {
+    const ctx = this.pieRef.nativeElement.getContext('2d');
+
+    this.pieChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Frontend', 'Backend', 'Fullstack', 'AI/ML', 'DevOps'],
+        datasets: [{
+          data: [120, 90, 150, 80, 60],
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(153, 102, 255, 0.6)',
+            'rgba(255, 99, 132, 0.6)'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
         }
       }
-    }
-  });
+    });
+
+  } catch (e) {
+    console.error('Pie chart error:', e);
+  }
 }
 
-
 createCategoryBarChart() {
-  new Chart('categoryBarChart', {
-    type: 'bar',
-    data: {
-      labels: ['Frontend', 'Backend', 'Fullstack', 'AI/ML', 'DevOps'],
-      datasets: [{
-        label: 'Applications',
-        data: [300, 250, 400, 180, 120],
-        backgroundColor: 'rgba(54, 162, 235, 0.6)'
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: { beginAtZero: true }
+  if (this.barChart) this.barChart.destroy();
+
+  try {
+    const ctx = this.barRef.nativeElement.getContext('2d');
+
+    this.barChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Frontend', 'Backend', 'Fullstack', 'AI/ML', 'DevOps'],
+        datasets: [{
+          label: 'Applications',
+          data: [300, 250, 400, 180, 120],
+          backgroundColor: 'rgba(54, 162, 235, 0.6)'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true }
+        }
       }
-    }
-  });
+    });
+
+  } catch (e) {
+    console.error('Bar chart error:', e);
+  }
 }
 
 
