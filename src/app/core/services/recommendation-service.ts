@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { catchError, Observable, throwError } from 'rxjs';
 import { JobMatchResponse } from '../models/jobMatchReponse.model';
-import { StorageService } from './storage.service';
+
 
 @Injectable({
   providedIn: 'root',
@@ -13,13 +13,12 @@ export class RecommendationService {
   private baseUrl: string = environment.apiGatewayUrl;
 
   constructor(
-    private http: HttpClient,
-    private storage: StorageService
+    private http: HttpClient
   ) {}
 
   /* ================= HEADERS ================= */
   private getHeaders(): HttpHeaders {
-    const token = this.storage.get('JWT_Token');
+    const token = localStorage.getItem('JWT_Token');
 
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : '',

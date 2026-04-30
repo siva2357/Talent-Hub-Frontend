@@ -10,24 +10,59 @@
 
   <!-- Loading -->
   @if (isLoading) {
-    <div class="text-center py-5">
-      <div class="spinner-border"></div>
-    </div>
+  <div class="text-center py-5">
+    <div class="spinner-border"></div>
+  </div>
   }
 
   <!-- Recruiter Profile -->
   @if (!isLoading && role === 'recruiter') {
-    <div>
-      <h4>Recruiter Profile</h4>
-    </div>
+  <div>
+    <h4>Recruiter Profile</h4>
+  </div>
 
   }
 
   <!-- Job Seeker Profile -->
   @else if (!isLoading && role === 'jobSeeker') {
-    <div>
-      <h4>Job Seeker Profile</h4>
-    </div>
+  <div>
+    <h4>Job Seeker Profile</h4>
+  </div>
   }
+
+  <!-- Admin Specific -->
+@else if (!isLoading && role === 'admin') {
+  <div class="d-flex justify-content-center mt-4">
+
+    <div class="card shadow-sm text-center p-4" style="width: 100%; max-width: 350px; border-radius: 16px;">
+
+      <!-- Profile Image -->
+      <div class="d-flex justify-content-center mb-3">
+        <img
+          [src]="profileData?.profilePicture?.url"
+          alt="Profile"
+          style="width: 110px; height: 110px; object-fit: cover; border-radius: 50%; border: 3px solid #eee;"
+        />
+      </div>
+
+      <!-- Full Name -->
+      <h5 class="fw-bold mb-1">
+        {{ profileData?.fullName || 'N/A' }}
+      </h5>
+
+      <!-- Email -->
+      <p class="text-muted mb-3" style="font-size: 14px;">
+        {{ profileData?.email || 'N/A' }}
+      </p>
+
+      <!-- Role Badge -->
+      <span class="badge badge-success px-3 py-2">
+        Admin
+      </span>
+
+    </div>
+
+  </div>
+}
 
 </div>

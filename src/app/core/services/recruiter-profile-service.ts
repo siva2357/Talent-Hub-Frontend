@@ -12,7 +12,6 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { CreateRecruiterProfileDTO, UpdateRecruiterBasicDTO, UpdateRecruiterImageDTO, UpdateRecruiterProfessionalDTO } from '../dtos/recruiter-profile.dto';
 import { RecruiterBasicProfile, RecruiterImage, RecruiterProfessionalProfile, RecruiterProfile, RecruiterProfileWithJobsResponse, UpdateRecruiterResponse } from '../models/recruiter-profile.model';
-import { StorageService } from './storage.service';
 
 
 
@@ -20,13 +19,13 @@ import { StorageService } from './storage.service';
 export class RecruiterProfileService {
   private readonly baseUrl = environment.apiGatewayUrl;
 
-  constructor(private http: HttpClient, private router: Router, private storage: StorageService) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   /* ================= AUTH HEADER ================= */
 
   /* ================= HEADERS ================= */
   private getHeaders(): HttpHeaders {
-    const token = this.storage.get('JWT_Token');
+    const token = localStorage.getItem('JWT_Token');
 
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : '',

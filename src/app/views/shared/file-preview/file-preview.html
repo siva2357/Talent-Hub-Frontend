@@ -1,4 +1,6 @@
-<div class="file-preview-wrapper">
+<div
+  class="file-preview-wrapper" [ngClass]="{ 'avatar-mode': mode === 'avatar' }"
+>
 
   @if (!fileUrl) {
     <div class="file-placeholder">

@@ -8,7 +8,6 @@ import {
 import { catchError, Observable, throwError } from 'rxjs';
 import { CreateJobPostDTO, UpdateJobPostDTO } from '../dtos/job-post.dto';
 import { JobDetailResponse, RecruiterJobsResponse } from '../models/jobpost.model';
-import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,13 +17,11 @@ export class JobpostService {
   private baseUrl = environment.apiGatewayUrl;
 
   constructor(
-    private http: HttpClient,
-    private storage: StorageService
-  ) {}
+    private http: HttpClient,) {}
 
   /* ================= HEADERS ================= */
   private getHeaders(): HttpHeaders {
-    const token = this.storage.get('JWT_Token');
+    const token = localStorage.getItem('JWT_Token');
 
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : '',

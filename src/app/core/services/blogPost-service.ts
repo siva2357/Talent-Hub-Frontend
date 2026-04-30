@@ -8,7 +8,6 @@ import {
 import { catchError, Observable, throwError } from 'rxjs';
 import { CreateBlogDTO, UpdateBlogDTO } from '../dtos/blogPost.dto';
 import { Blog } from '../models/blog.model';
-import { StorageService } from './storage.service';
 
 
 
@@ -19,12 +18,11 @@ export class BlogService {
     private baseUrl = environment.apiGatewayUrl;
   constructor(
     private http: HttpClient,
-    private storage: StorageService
   ) {}
 
   /* ================= HEADERS ================= */
   private getHeaders(): HttpHeaders {
-    const token = this.storage.get('JWT_Token');
+    const token = localStorage.getItem('JWT_Token');
 
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : '',

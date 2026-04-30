@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { SeekerProfileService } from '../../../../../core/services/seeker-profile-service';
 import { RecruiterProfileService } from '../../../../../core/services/recruiter-profile-service';
 import { AuthService } from '../../../../../core/services/auth-service';
-import { StorageService } from '../../../../../core/services/storage.service';
 
 
 @Component({
@@ -25,14 +24,13 @@ constructor(
   private recruiterService: RecruiterProfileService,
   private authService: AuthService,
   private router: Router,
-  private storage: StorageService
 ) {}
 
 ngOnInit(): void {
   this.role = this.authService.getRole();
 
-  const storedUser = this.storage.get('userData');
-  this.userDetails = storedUser ? JSON.parse(storedUser) : null;
+const storedUser = localStorage.getItem('userData');
+this.userDetails = storedUser ? JSON.parse(storedUser) : null;
 }
 
   deleteAccount(): void {
@@ -58,16 +56,15 @@ ngOnInit(): void {
     }
   }
 
-private handleSuccess(message: string): void {
-  alert(message);
+  private handleSuccess(message: string): void {
+    alert(message);
 
-  this.storage.clear(); // ✅ replaces localStorage
-  sessionStorage.clear(); // ⚠️ optional (SSR safe since no-op on server)
+    localStorage.clear();
+    sessionStorage.clear();
 
-  this.authService.logout?.();
-  this.router.navigate(['/login']);
-}
-
+    this.authService.logout?.();
+    this.router.navigate(['/login']);
+  }
   private handleError(err: any): void {
     console.error('Delete account failed:', err);
     this.errorMessage = 'Failed to delete account. Please try again.';

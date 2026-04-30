@@ -4,7 +4,6 @@ import { catchError } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../../environments/environment';
-import { StorageService } from '../services/storage.service';
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
@@ -16,14 +15,13 @@ export class AdminService {
 
   constructor(
     private http: HttpClient,
-    private storage: StorageService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   /* ================= HEADERS ================= */
 
   private getHeaders(): HttpHeaders {
-    const token = this.storage.get('JWT_Token');
+    const token = localStorage.getItem('JWT_Token');
 
     if (token) {
       const decodedToken: any = jwtDecode(token); // optional use
@@ -39,7 +37,7 @@ export class AdminService {
   /* ================= AUTH ================= */
 
   isLoggedIn(): boolean {
-    return !!this.storage.get('JWT_Token'); // 🔥 FIXED KEY ALSO
+    return !!localStorage.getItem('JWT_Token'); // 🔥 FIXED KEY ALSO
   }
 
   /* ================= ERROR HANDLER ================= */
@@ -50,7 +48,7 @@ export class AdminService {
     if (error.status === 401) {
       alert('❌ Unauthorized! Please log in again.');
 
-      this.storage.clear(); // ✅ SSR safe
+      localStorage.clear(); // ✅ SSR safe
 
       // ✅ SSR SAFE redirect
       if (isPlatformBrowser(this.platformId)) {

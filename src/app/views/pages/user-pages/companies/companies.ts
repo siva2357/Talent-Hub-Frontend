@@ -4,30 +4,33 @@ import { Table } from '../../../components/table/table';
 import { Pagination } from '../../../components/pagination/pagination';
 import { InputFields } from '../../../components/input-fields/input-fields';
 import { Buttons } from '../../../components/buttons/buttons';
-
-interface Company {
-  _id: number;
-  logo: string;
-  companyName: string;
-  location: string;
-  foundedYear: number;
-  phone: string;
-  website: string;
-  status: 'active' | 'blocked';
-}
+import { CompanyService } from '../../../../core/services/company-service';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Company } from '../../../../core/models/company.model';
+import { FileUpload } from '../../../shared/file-upload/file-upload';
+import { FilePreview } from '../../../shared/file-preview/file-preview';
+import { BucketKey } from '../../../../core/enums/bucket-key.constant';
+import { UploadSection } from '../../../../core/enums/upload-section.constant';
 
 @Component({
   selector: 'app-companies',
   standalone: true,
-  imports: [CommonModule, Table, Pagination, InputFields, Buttons],
+  imports: [ CommonModule, Table, Pagination, InputFields, Buttons, ReactiveFormsModule, FileUpload, FilePreview],
   templateUrl: './companies.html',
-  styleUrl: './companies.css',
+  styleUrls: ['./companies.css'],
+
 })
+
 export class Companies implements OnInit {
 
-  @ViewChild('logoTpl', { static: true }) logoTpl!: TemplateRef<any>;
-  @ViewChild('statusTpl', { static: true }) statusTpl!: TemplateRef<any>;
-  @ViewChild('actionTpl', { static: true }) actionTpl!: TemplateRef<any>;
+  @ViewChild('logoTpl', { static: true })
+  public logoTpl!: TemplateRef<any>;
+
+  @ViewChild('statusTpl', { static: true })
+  public statusTpl!: TemplateRef<any>;
+
+  @ViewChild('actionTpl', { static: true })
+  public actionTpl!: TemplateRef<any>;
 
   columns: any[] = [];
   allData: Company[] = [];
@@ -37,75 +40,227 @@ export class Companies implements OnInit {
   limit = 5;
   total = 0;
 
-  filters = { name: '', location: '', status: ''};
-  appliedFilters = { name: '', location: '', status: ''};
+  filters = { name: '', location: '', status: '' };
+  appliedFilters = { name: '', location: '', status: '' };
   statusOptions: ('active' | 'blocked')[] = ['active', 'blocked'];
 
-  ngOnInit() {
-    this.allData = Array.from({ length: 20 }, (_, i): Company => ({
-      _id: i + 1,
-      logo: `https://i.pravatar.cc/40?img=${i + 10}`,
-      companyName: `Company  ${i + 1}`,
-      location: i % 2 === 0 ? 'Hyderabad' : 'Bangalore',
-      foundedYear: 2000 + (i % 20),
-      phone: `98765${10000 + i}`,
-      website: `www.company${i + 1}.com`,
-      status: i % 2 === 0 ? 'active' : 'blocked'
-    }));
+  isModalOpen = false;
+  isEditMode = false;
+  selectedCompanyId: string | null = null;
 
-    this.total = this.allData.length;
+  isViewModalOpen = false;
+  selectedCompany: Company | null = null;
+  companyForm!: FormGroup;
+
+  BucketKey = BucketKey;
+  UploadSection = UploadSection;
+
+  companySizeOptions: string[] = ['Startup', 'Small', 'Medium', 'Large', 'Enterprise'];
+
+  constructor( private companyService: CompanyService, private fb: FormBuilder ) {}
+
+  ngOnInit() {
+
+    this.companyPostForm();
 
     this.columns = [
       { name: 'S.No', type: 'index', center: true, width: '60px' },
-      { name: 'Logo', template: this.logoTpl, width: '80px' },
-      { name: 'Company Name', prop: 'companyName', width: '180px' },
-      { name: 'Location', prop: 'location', width: '140px' },
-      { name: 'Founded', prop: 'foundedYear', width: '100px' },
-      { name: 'Phone', prop: 'phone', width: '140px' },
-      { name: 'Website', prop: 'website', width: '150px' },
-      { name: 'Status', template: this.statusTpl, center: true, width: '100px' },
-      { name: 'Actions', template: this.actionTpl, center: true, width: '320px' }
+      { name: 'Logo', template: this.logoTpl, width: '100px' },
+      { name: 'Company Name', prop: 'companyName',width: '250px' },
+      { name: 'Location', prop: 'companyLocation',width: '150px' },
+      { name: 'Phone', prop: 'phone',width:'120px' },
+      { name: 'Industry', prop: 'industry',width: '150px' },
+      { name: 'Status', template: this.statusTpl, width: '100px' },
+      { name: 'Actions', template: this.actionTpl, width: '300px' },
     ];
 
-    this.applyFilter();
+    this.fetchCompanies();
+  }
+
+  companyPostForm() {
+    this.companyForm = this.fb.group({
+      companyName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', Validators.required],
+      industry: ['', Validators.required],
+      companyLocation: ['', Validators.required],
+      companyDescription: ['', Validators.required],
+      companyLogo: ['', Validators.required],
+      companyFoundedDate: ['', Validators.required],
+      companySize: [null, Validators.required],
+      totalEmployees: [null, [Validators.required, Validators.min(1)]],
+      companyWebsite: ['', [Validators.required]],
+    });
+  }
+
+  fetchCompanies() {
+    this.companyService.getAllCompanies().subscribe({
+      next: (res: any) => {
+        console.log('API DATA:', res);
+        this.allData = res.data || [];
+        this.total = this.allData.length;
+        this.page = 1;
+        this.applyFilter();
+      },
+      error: (err) => {
+        console.error('Failed to load companies:', err);
+        this.allData = [];
+        this.data = [];
+        this.total = 0;
+      },
+    });
+  }
+
+  getFilteredData() {
+    const data = Array.isArray(this.allData) ? this.allData : [];
+
+    const nameVal = (this.appliedFilters.name || '').trim().toLowerCase();
+    const locationVal = (this.appliedFilters.location || '').trim().toLowerCase();
+    const statusVal = (this.appliedFilters.status || '').trim().toLowerCase();
+
+    return data.filter((c) => {
+      const companyName = (c.companyName || '').toLowerCase();
+      const companyLocation = (c.companyLocation || '').toLowerCase();
+      const companyStatus = (c.status || '').toLowerCase();
+
+      return (
+        (!nameVal || companyName.includes(nameVal)) &&
+        (!locationVal || companyLocation.includes(locationVal)) &&
+        (!statusVal || companyStatus === statusVal)
+      );
+    });
+  }
+
+  openAddModal() {
+    this.isModalOpen = true;
+    this.isEditMode = false;
+    this.selectedCompanyId = null;
+
+    this.companyForm.reset();
+  }
+
+editCompany(row: any) {
+  this.isModalOpen = true;
+  this.isEditMode = true;
+  this.selectedCompanyId = row._id;
+
+  const formattedDate = row.companyFoundedDate
+    ? new Date(row.companyFoundedDate).toISOString().split('T')[0]
+    : '';
+
+  this.companyForm.patchValue({
+    companyName: row.companyName,
+    email: row.email,
+    phone: row.phone,
+    industry: row.industry,
+    companyLocation: row.companyLocation,
+    companyDescription: row.companyDescription,
+    companyLogo: row.companyLogo,
+    companyFoundedDate: formattedDate, // ✅ FIX
+    companySize: row.companySize,
+    totalEmployees: row.totalEmployees,
+    companyWebsite: row.companyWebsite,
+  });
+}
+
+  viewCompany(row: any) {
+    this.companyService.getCompanyById(row._id).subscribe({
+      next: (res) => {
+        this.selectedCompany = res.data;
+        this.isViewModalOpen = true;
+      },
+    });
+  }
+
+  closeViewModal() {
+    this.isViewModalOpen = false;
+    this.selectedCompany = null;
+  }
+
+  onLogoUploaded(url: string) {
+    this.companyForm.patchValue({
+      companyLogo: url,
+    });
+
+    this.companyForm.get('companyLogo')?.markAsTouched();
+  }
+
+  submitCompany() {
+    if (this.companyForm.invalid) {
+      this.companyForm.markAllAsTouched();
+      return;
+    }
+
+    const payload = this.companyForm.value;
+
+    const request =
+      this.isEditMode && this.selectedCompanyId
+        ? this.companyService.updateCompany(this.selectedCompanyId, payload)
+        : this.companyService.createCompany(payload);
+
+    request.subscribe({
+      next: () => {
+        this.fetchCompanies();
+        this.closeModal(); // ✅ always after success
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.isEditMode = false;
+    this.selectedCompanyId = null;
+
+    this.companyForm.reset();
+
+    // reset dropdown default (important)
+    this.companyForm.patchValue({
+      companySize: null,
+    });
+  }
+
+  resetForm() {
+    this.companyForm.reset();
   }
 
   applyFilter() {
-    let filtered = [...this.allData];
+    const hasFilter =
+      this.appliedFilters.name?.trim() ||
+      this.appliedFilters.location?.trim() ||
+      this.appliedFilters.status?.trim();
 
-    // FILTERS
-    if (this.appliedFilters.name) {
-      filtered = filtered.filter(c =>
-        c.companyName.toLowerCase().includes(this.appliedFilters.name.toLowerCase())
-      );
-    }
+    // ✅ If no filters → use full data
+    const filtered = hasFilter ? this.getFilteredData() : [...this.allData];
 
-    if (this.appliedFilters.location) {
-      filtered = filtered.filter(c =>
-        c.location.toLowerCase().includes(this.appliedFilters.location.toLowerCase())
-      );
-    }
+    console.log('FILTERED:', filtered);
 
-    if (this.appliedFilters.status) {
-      filtered = filtered.filter(c =>
-        c.status === this.appliedFilters.status
-      );
-    }
-
-    // TOTAL UPDATE
     this.total = filtered.length;
 
-    // ✅ FIX: HANDLE PAGE OVERFLOW
     const maxPage = Math.ceil(this.total / this.limit) || 1;
     if (this.page > maxPage) {
       this.page = maxPage;
     }
 
-    // PAGINATION
     const start = (this.page - 1) * this.limit;
     const end = start + this.limit;
 
     this.data = filtered.slice(start, end);
+
+    console.log('FINAL DATA:', this.data);
+  }
+
+  applyPagination() {
+    this.total = this.allData.length;
+
+    const start = (this.page - 1) * this.limit;
+    const end = start + this.limit;
+
+    this.data = this.allData.slice(start, end);
+
+    console.log('PAGINATED DATA:', this.data);
   }
 
   onApplyFilters() {
@@ -139,28 +294,58 @@ export class Companies implements OnInit {
     this.applyFilter();
   }
 
-  viewCompany(row: Company) {
-    console.log('View', row);
-  }
-
-  editCompany(row: Company) {
-    console.log('Edit', row);
-  }
-
-  deleteCompany(row: Company) {
+  deleteCompany(row: any) {
     if (confirm(`Delete ${row.companyName}?`)) {
-      console.log('Delete', row);
+      this.companyService.deleteCompany(row._id).subscribe({
+        next: () => {
+          this.fetchCompanies();
+        },
+      });
     }
   }
 
   blockCompany(row: Company) {
-    row.status = 'blocked';
-    this.applyFilter();
+    this.companyService.blockCompany(row._id).subscribe({
+      next: (res) => {
+        row.status = res.data.status; // sync with backend
+        row.actions = res.data.actions; // ✅ FIX
+        this.applyFilter();
+      },
+      error: (err) => console.error(err),
+    });
   }
 
   unblockCompany(row: Company) {
-    row.status = 'active';
-    this.applyFilter();
+    this.companyService.unblockCompany(row._id).subscribe({
+      next: (res) => {
+        row.status = res.data.status;
+        row.actions = res.data.actions; // ✅ FIX
+        this.applyFilter();
+      },
+      error: (err) => console.error(err),
+    });
+  }
+
+  closeCompany(row: Company) {
+    this.companyService.closeCompany(row._id).subscribe({
+      next: (res) => {
+        row.status = res.data.status;
+        row.actions = res.data.actions; // ✅ FIX
+        this.applyFilter();
+      },
+      error: (err) => console.error(err),
+    });
+  }
+
+  reopenCompany(row: Company) {
+    this.companyService.reopenCompany(row._id).subscribe({
+      next: (res) => {
+        row.status = res.data.status;
+        row.actions = res.data.actions; // ✅ FIX
+        this.applyFilter();
+      },
+      error: (err) => console.error(err),
+    });
   }
 
 }

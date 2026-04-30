@@ -10,10 +10,13 @@
 
   <!-- LOGIN FORM -->
 <form class="form-area" [formGroup]="loginForm" (ngSubmit)="onLogin()">
-
+<div class="mb-3">
 <app-input-fields  [form]="loginForm" type="email" placeholder="Email Address" controlName="email" height="45px"></app-input-fields>
+</div>
+<div class="mb-3">
 <app-input-fields [form]="loginForm" type="password" placeholder="Password" controlName="password" height="45px"></app-input-fields>
-<app-button class="w-100 mt-3" label="Login" variant="primary" type="submit" size="lg" [isLoading]="isLoading" [disabled]="loginForm.invalid"></app-button>
+</div>
+<app-button class="w-100 " label="Login" variant="primary" type="submit" size="lg" [isLoading]="isLoading" [disabled]="loginForm.invalid"></app-button>
 
 
 </form>

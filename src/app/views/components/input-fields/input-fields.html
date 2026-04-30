@@ -20,7 +20,7 @@
       @else if (!isSelect) {
         <input
           [type]="type"
-          class="form-control mb-3"
+          class="form-control"
           [placeholder]="placeholder"
           [readonly]="readonly"
           [formControlName]="controlName"
@@ -31,19 +31,19 @@
 
       <!-- SELECT -->
       @else {
-        <select
-          class="form-select"
-          [formControlName]="controlName"
-          [ngClass]="{ 'is-invalid': isInvalid() }"
-        >
-          <option value="" disabled>
-            {{ placeholder || 'Select option' }}
-          </option>
+<select
+  class="form-select"
+  [formControlName]="controlName"
+  [ngClass]="{ 'is-invalid': isInvalid() }"
+>
+  <option [ngValue]="null">
+    {{ placeholder || 'Select option' }}
+  </option>
 
-          @for (opt of options; track opt) {
-            <option [value]="opt">{{ opt }}</option>
-          }
-        </select>
+  @for (opt of options; track opt) {
+    <option [ngValue]="opt">{{ opt }}</option>
+  }
+</select>
       }
 
       <!-- VALIDATION -->

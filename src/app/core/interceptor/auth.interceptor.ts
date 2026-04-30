@@ -1,15 +1,12 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { StorageService } from '../services/storage.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
 
-const storage = inject(StorageService);
-
 const isBrowser = typeof window !== 'undefined';
-const token = isBrowser ? storage.get('JWT_Token') : null;
+const token = isBrowser ? localStorage.getItem('JWT_Token') : null;
 
   // 🚫 Skip auth for public endpoints
   const isAuthEndpoint =

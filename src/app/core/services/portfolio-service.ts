@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { Projects, CreatePortfolioPayload, UpdatePortfolioPayload, PortfolioResponse, GetPortfoliosResponse } from '../models/portfolio.model';
-import { StorageService } from './storage.service';
+
 
 @Injectable({
   providedIn: 'root',
@@ -13,13 +13,11 @@ export class PortfolioService {
   private baseUrl = environment.apiGatewayUrl;
 
   constructor(
-    private http: HttpClient,
-    private storage: StorageService
-  ) {}
+    private http: HttpClient) {}
 
   /* ================= HEADERS ================= */
   private getHeaders(): HttpHeaders {
-    const token = this.storage.get('JWT_Token');
+    const token = localStorage.getItem('JWT_Token');
 
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : '',

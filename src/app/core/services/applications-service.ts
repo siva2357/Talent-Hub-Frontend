@@ -6,7 +6,6 @@ import {
   HttpHeaders
 } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
-import { StorageService } from '../services/storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,12 +16,12 @@ export class ApplicationService {
 
   constructor(
     private http: HttpClient,
-    private storage: StorageService
+
   ) {}
 
   /* ================= HEADERS ================= */
   private getHeaders(): HttpHeaders {
-    const token = this.storage.get('JWT_Token');
+    const token = localStorage.getItem('JWT_Token');
 
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : '',
