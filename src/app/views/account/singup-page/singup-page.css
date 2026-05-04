@@ -1,94 +1,173 @@
-.signup-container {
-  text-align: center;
-  padding: 20px;
-}
-
-/* Logo */
-.logo {
-  height: 80px;
-}
-
-@media (max-width: 480px) {
-  .logo {
-    height: 55px; /* smaller for mobiles */
-  }
-}
-
-/* Role boxes container */
-.role-row {
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  gap: 18px;
+.auth-wrapper {
+  min-height: 100vh;
   width: 100%;
-  max-width: 600px;
+  background: linear-gradient(135deg, #e8f3ff 0%, #d4e7ff 50%, #f0f7ff 100%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Fluid Shapes */
+.auth-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 50vw;
+  height: 50vw;
+  min-width: 400px;
+  min-height: 400px;
+  background: radial-gradient(circle, var(--th-primary) 0%, rgba(13, 110, 253, 0) 70%);
+  opacity: 0.25;
+  border-radius: 50%;
+  animation: float 10s infinite ease-in-out alternate;
+}
+
+.auth-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: -15%;
+  right: -5%;
+  width: 60vw;
+  height: 60vw;
+  min-width: 500px;
+  min-height: 500px;
+  background: radial-gradient(circle, #0dcaf0 0%, rgba(13, 202, 240, 0) 70%);
+  opacity: 0.35;
+  border-radius: 50%;
+  animation: float 12s infinite ease-in-out alternate-reverse;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(40px, -40px); }
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 550px; /* Slightly wider for the role boxes side-by-side */
+  background: #ffffff;
+  border-radius: 1rem;
+  z-index: 10;
+  border: 1px solid rgba(13, 110, 253, 0.2);
+  border-top: 5px solid var(--th-primary);
+  box-shadow: 0 15px 35px -5px rgba(0, 50, 150, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Elevate card content above illustrations */
+.auth-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Card inner illustration - Top Left Quarter Circle */
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90px;
+  height: 90px;
+  background-color: var(--th-primary);
+  border-bottom-right-radius: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Card inner illustration - Top Right Triangle */
+.auth-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 90px;
+  height: 90px;
+  background-color: var(--th-primary);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.logo-img {
+  height: 65px;
 }
 
 /* Role box */
 .role-box {
-  border: 1px solid #ddd;
-  border-radius: 14px;
-  padding: 16px 20px;
+  border: 2px solid rgba(13, 110, 253, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   cursor: pointer;
-  transition: all 0.25s ease-in-out;
-  background: #fff;
+  transition: all 0.2s ease-in-out;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.05);
+  flex: 1;
 }
 
 .role-box:hover {
-  border-color: #0d6efd;
-  background: #f4f8ff;
+  border-color: var(--th-primary);
+  background: var(--th-bg-blue-50);
+  transform: translateY(-2px);
 }
 
 .role-box.active {
-  border-color: #0d6efd;
-  background: #e7f1ff;
+  border-color: var(--th-primary);
+  background: var(--th-bg-blue-50);
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
 }
 
 /* Circle */
 .circle {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  border: 2px solid #aaa;
-  margin-bottom: 8px;
-  transition: 0.25s;
+  border: 2px solid #ccc;
+  margin-bottom: 12px;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .circle.active {
-  border-color: #0d6efd;
-  background: #0d6efd;
+  border-color: var(--th-primary);
+  background: var(--th-primary);
 }
 
-/* Text */
+.circle.active::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+}
+
 .role-title {
-  font-weight: 600;
-  font-size: 16px;
-  margin-bottom: 2px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+  color: var(--th-text-dark);
 }
 
 .role-desc {
   margin: 0;
   text-align: left;
+  line-height: 1.4;
 }
 
-/* Responsive stacking */
-@media (max-width: 768px) {
-  .role-row {
-    flex-direction: column;
-    max-width: 330px;
-    gap: 14px;
-    margin-top: 20px;
-  }
+.login-link {
+  text-decoration: none;
+  transition: 0.2s ease;
+}
 
-  .role-box {
-    width: 100%;
-    padding: 14px 16px;
-  }
-
-  .role-title {
-    font-size: 15px;
-  }
+.login-link:hover {
+  text-decoration: underline;
 }

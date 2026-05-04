@@ -1,117 +1,37 @@
-/* ================= HERO ================= */
-
-.hero-title {
-  font-size: 2.5rem;
-  line-height: 1.2;
+/* Helper classes for the new landing page UI */
+.min-vh-75 {
+  min-height: 75vh;
 }
 
-.hero-subtitle {
-  font-size: 1.05rem;
-  color: #6b7280;
-  max-width: 540px;
+.bg-blue-50 {
+  background-color: var(--th-bg-blue-50);
 }
 
-.hero-visual {
-  max-width: 100%;
-  height: auto;
-  border-radius: 18px;
-}
-
-/* ================= FEATURE CARDS ================= */
-
-.feature-card {
-  background: #ffffff;
-  border-radius: 18px;
-  border: 1px solid #000000;
-  padding: 32px 24px;
-}
-
-
-
-.feature-card i {
-  color: #0d6efd;
-}
-
-/* ================= STEP CARDS ================= */
-
-.step-card {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 28px 24px;
-  border: 1px solid #000000;
-  text-align: center;
-}
-
-
-.step {
-  width: 40px;
-  height: 40px;
+.icon-circle {
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  background: #0d6efd;
-  color: #ffffff;
-  font-weight: 600;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
 }
 
-/* ================= TOOL CARDS ================= */
-
-.tool-card {
-  background: #ffffff;
-  border-radius: 18px;
-  border: 1px solid #000000;
-  padding: 28px;
-}
-
-
-.tool-card i {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
-  background: rgba(13, 110, 253, 0.12);
-  color: #0d6efd;
-  display: inline-flex;
+.step-badge {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 44px;
+  background: var(--th-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 14px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  border: 4px solid var(--th-bg-white);
 }
 
-/* ================= CTA SECTION ================= */
 
-.container.text-center h2 {
-  letter-spacing: -0.5px;
-}
-
-.container.text-center p {
-  max-width: 600px;
-  margin: 0 auto;
-  color: #6b7280;
-}
-
-/* ================= RESPONSIVE ================= */
-
-@media (max-width: 992px) {
-  .hero-title {
-    font-size: 2.1rem;
-  }
-}
-
-@media (max-width: 768px) {
-
-  .hero-title {
-    font-size: 1.8rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1rem;
-  }
-
-  .feature-card,
-  .step-card,
-  .tool-card {
-    padding: 22px 18px;
-  }
-
-}
