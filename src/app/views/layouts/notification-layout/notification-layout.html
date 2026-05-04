@@ -1,8 +1,7 @@
-<div class="dropdown notif-dropdown mx-2">
+<div class="dropdown notif-dropdown">
 
-  <a class="header-icon position-relative" data-bs-toggle="dropdown">
-    <i class="bi bi-bell fs-5"></i>
-
+  <a class="header-icon" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="bi bi-bell"></i>
     @if (unreadCount > 0) {
     <span class="notif-badge">
       {{ unreadCount }}
@@ -10,70 +9,49 @@
     }
   </a>
 
-  <div class="dropdown-menu shadow notif-menu">
-
+  <div class="dropdown-menu dropdown-menu-end notif-menu">
+    
     <!-- Header -->
-    <div class="notif-header d-flex justify-content-between align-items-center px-2 py-2">
+    <div class="notif-header d-flex justify-content-between align-items-center">
       <strong>Notifications</strong>
-
-      <div class="actions d-flex gap-2">
-        <span class="notif-action-link text-primary" style="cursor: pointer; font-size: 13px;" (click)="markAllRead()">
-          Mark all as read</span>
-        <span class="notif-action-link text-danger" style="cursor: pointer; font-size: 13px;" (click)="clearAll()">
-          Clear all</span>
+      <div class="d-flex gap-3">
+        <a class="notif-action-link text-primary cursor-pointer" (click)="markAllRead()">Mark all as read</a>
+        <a class="notif-action-link text-danger cursor-pointer" (click)="clearAll()">Clear all</a>
       </div>
     </div>
 
-    <hr class="my-1">
-
-    <div class="notif-list list-group list-group-flush">
-
+    <!-- Notification List -->
+    <div class="notif-list">
       @if (loading) {
-      <div class="text-center p-3">
-        Loading...
-      </div>
-
-      } @else if (notifications.length === 0) {
-      <div class="text-center p-3 text-muted">
-        No notifications
-      </div>
-
-      } @else {
-      @for (notif of notifications; track notif._id) {
-      <div class="list-group-item notif-item" [class.unread]="!notif.read">
-
-        @if (!notif.read) {
-        <span class="notif-dot"></span>
-        }
-
-        <div class="notif-content">
-          <p class="mb-0 notif-text">
-            {{ notif.message }}
-          </p>
-
-          <small class="notif-time">
-            {{ notif.createdAt | date:'short' }}
-          </small>
-
-          <div class="notif-actions">
-
-            @if (!notif.read) {
-            <span class="notif-action small text-muted" (click)="markAsRead(notif._id)">
-              Mark as read
-            </span>
-            }
-
-            <span class="notif-action text-danger small" (click)="deleteNotification(notif._id)">
-              Delete
-            </span>
-
-          </div>
+        <div class="text-center p-4">
+          <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+          <p class="small text-muted mt-2 mb-0">Loading notifications...</p>
         </div>
-
-      </div>
+      } @else if (notifications.length === 0) {
+        <div class="text-center p-5">
+          <i class="bi bi-bell-slash fs-2 text-light-emphasis mb-3 d-block"></i>
+          <p class="small text-muted mb-0">No new notifications</p>
+        </div>
+      } @else {
+        @for (notif of notifications; track notif._id) {
+          <div class="notif-item" [class.unread]="!notif.read">
+            @if (!notif.read) {
+              <span class="notif-dot"></span>
+            }
+            <div class="notif-content">
+              <p class="notif-text mb-1">{{ notif.message }}</p>
+              <small class="notif-time">{{ notif.createdAt | date:'MMM d, h:mm a' }}</small>
+              
+              <div class="notif-actions">
+                @if (!notif.read) {
+                  <span class="notif-action text-primary" (click)="markAsRead(notif._id)">Mark as read</span>
+                }
+                <span class="notif-action text-danger" (click)="deleteNotification(notif._id)">Delete</span>
+              </div>
+            </div>
+          </div>
+        }
       }
-      }
-
     </div>
 
   </div>

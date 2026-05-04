@@ -1,4 +1,4 @@
-<div class="file-upload-wrapper text-center">
+<div class="file-upload-wrapper">
 
   <!-- Hidden file input -->
   <input type="file"  [accept]="accept" hidden #fileInput  (change)="onFileSelect($event)"/>
@@ -11,12 +11,13 @@
   <!-- Upload progress -->
   @if (uploading) {
     <div class="upload-progress mt-3">
-      <div class="progress">
-        <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" [style.width.%]="progress"> </div>
+      <div class="progress shadow-sm">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" [style.width.%]="progress"> </div>
       </div>
-      <small class="text-muted mt-1 d-block">
-        Uploading… {{ progress }}%
-      </small>
+      <div class="d-flex justify-content-between align-items-center mt-2">
+        <span class="text-muted small fw-bold">Uploading...</span>
+        <span class="text-primary small fw-bold">{{ progress }}%</span>
+      </div>
     </div>
   }
 

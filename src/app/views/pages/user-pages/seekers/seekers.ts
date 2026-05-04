@@ -20,6 +20,7 @@ export class Seekers implements OnInit {
   @ViewChild('actionTpl', { static: true }) actionTpl!: TemplateRef<any>;
 
   columns: any[] = [];
+  tableActions: any[] = [];
 
   // 🔥 FULL DATA
   allData: any[] = [];
@@ -68,18 +69,19 @@ statusOptions = ['verified', 'pending'];
 
 this.columns = [
   { name: 'S.No', type: 'index', center: true, width: '60px' },
-
   { name: 'Profile', template: this.profileTpl, width: '80px' },
-
   { name: 'Full Name', prop: 'fullName', width: '150px' },
-
   { name: 'Job Role', prop: 'jobRole', width: '180px' },
-
   { name: 'Experience', prop: 'experience', width: '80px' },
+  { name: 'Status', template: this.statusTpl, center: true, width: '100px' }
+];
 
-  { name: 'Status', template: this.statusTpl, center: true, width: '100px' },
-
-  { name: 'Action', template: this.actionTpl, center: true, width: '300px' }
+this.tableActions = [
+  { label: 'View Profile', icon: 'bi-person', callback: (row: any) => this.viewProfile(row) },
+  { label: 'Block User', icon: 'bi-lock', variant: 'danger', callback: (row: any) => this.blockUser(row) },
+  { label: 'Unblock User', icon: 'bi-unlock', callback: (row: any) => this.unblockUser(row) },
+  { label: 'Deactivate', icon: 'bi-power', variant: 'danger', callback: (row: any) => this.deactivateUser(row) },
+  { label: 'Activate', icon: 'bi-check-circle', callback: (row: any) => this.activateUser(row) }
 ];
 
 this.applyFilter();

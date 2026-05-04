@@ -1,68 +1,120 @@
-<div class="container-xxl mt-5">
+<div class="container-fluid py-5 px-4">
 
-  <!-- Header -->
-  <div class="d-flex align-items-center mb-4">
-    <button class="btn btn-light me-2" (click)="goBack()">
-      <i class="bi bi-arrow-left"></i>
-    </button>
-    <h3 class="mb-0">My Profile</h3>
-  </div>
+  <div class="profile-container">
 
-  <!-- Loading -->
-  @if (isLoading) {
-  <div class="text-center py-5">
-    <div class="spinner-border"></div>
-  </div>
-  }
-
-  <!-- Recruiter Profile -->
-  @if (!isLoading && role === 'recruiter') {
-  <div>
-    <h4>Recruiter Profile</h4>
-  </div>
-
-  }
-
-  <!-- Job Seeker Profile -->
-  @else if (!isLoading && role === 'jobSeeker') {
-  <div>
-    <h4>Job Seeker Profile</h4>
-  </div>
-  }
-
-  <!-- Admin Specific -->
-@else if (!isLoading && role === 'admin') {
-  <div class="d-flex justify-content-center mt-4">
-
-    <div class="card shadow-sm text-center p-4" style="width: 100%; max-width: 350px; border-radius: 16px;">
-
-      <!-- Profile Image -->
-      <div class="d-flex justify-content-center mb-3">
-        <img
-          [src]="profileData?.profilePicture?.url"
-          alt="Profile"
-          style="width: 110px; height: 110px; object-fit: cover; border-radius: 50%; border: 3px solid #eee;"
-        />
-      </div>
-
-      <!-- Full Name -->
-      <h5 class="fw-bold mb-1">
-        {{ profileData?.fullName || 'N/A' }}
-      </h5>
-
-      <!-- Email -->
-      <p class="text-muted mb-3" style="font-size: 14px;">
-        {{ profileData?.email || 'N/A' }}
-      </p>
-
-      <!-- Role Badge -->
-      <span class="badge badge-success px-3 py-2">
-        Admin
-      </span>
-
+    <!-- HEADER & BACK BUTTON -->
+    <div class="d-flex align-items-center mb-4 gap-3">
+      <button class="btn btn-white border shadow-sm rounded-circle p-2" (click)="goBack()" style="width: 40px; height: 40px;">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <h4 class="mb-0 fw-bold">Admin Profile</h4>
     </div>
 
-  </div>
-}
+    <!-- LOADING STATE -->
+    @if (isLoading) {
+      <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+    }
 
+    <!-- ADMIN PROFILE VIEW -->
+    @if (!isLoading && role === 'admin') {
+      
+      <!-- TOP CARD: Identity -->
+      <div class="profile-header-card">
+        <div class="cover-bg"></div>
+        <div class="profile-main-info">
+          <div class="profile-img-wrapper">
+            <img [src]="profileData?.profilePicture?.url || 'https://i.pravatar.cc/150?u=admin'" class="profile-img" alt="Profile">
+          </div>
+          <div class="profile-title-area">
+            <h1 class="profile-name">
+              {{ profileData?.fullName }}
+              @if (profileData?.verified) {
+                <i class="bi bi-patch-check-fill verified-badge" title="Verified Account"></i>
+              }
+            </h1>
+            <div class="d-flex align-items-center gap-3">
+              <span class="profile-username">@{{ profileData?.userName }}</span>
+              <span class="role-badge">System Administrator</span>
+            </div>
+          </div>
+          <div class="ms-auto d-none d-lg-block pb-3">
+            <div class="status-indicator">
+              <span class="dot active"></span>
+              <span class="text-success">Active Session</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAILS GRID -->
+      <div class="row g-4">
+        
+        <!-- Account Details -->
+        <div class="col-12 col-md-6">
+          <div class="info-card">
+            <h5 class="section-title">
+              <i class="bi bi-person-badge"></i>
+              Account Information
+            </h5>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Full Name</span>
+                <span class="info-value">{{ profileData?.fullName }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Email Address</span>
+                <span class="info-value">{{ profileData?.email }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Username</span>
+                <span class="info-value">@{{ profileData?.userName }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Details -->
+        <div class="col-12 col-md-6">
+          <div class="info-card">
+            <h5 class="section-title">
+              <i class="bi bi-shield-check"></i>
+              System Access
+            </h5>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Global Access Level</span>
+                <span class="info-value">Full Permissions (Root)</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Member Since</span>
+                <span class="info-value">{{ profile.createdAt | date:'mediumDate' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Last Login Activity</span>
+                <span class="info-value">{{ profile.lastLoginAt | date:'medium' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    }
+
+    <!-- Fallback for other roles (Optional placeholders) -->
+    @if (!isLoading && role !== 'admin') {
+      <div class="alert alert-info rounded-4 border-0 shadow-sm p-4 mt-4">
+        <div class="d-flex align-items-center gap-3">
+          <i class="bi bi-info-circle-fill fs-4"></i>
+          <div>
+            <h6 class="mb-1 fw-bold">Viewing {{ role }} Profile</h6>
+            <p class="mb-0 opacity-75">Detailed profile view for {{ role }} is currently being modernized.</p>
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
 </div>

@@ -28,7 +28,7 @@ ngOnInit() {
 
 updateView() {
   if (isPlatformBrowser(this.platformId)) {
-    this.isMobile = window.innerWidth < 1200;
+    this.isMobile = window.innerWidth < 992;
   }
 }
 

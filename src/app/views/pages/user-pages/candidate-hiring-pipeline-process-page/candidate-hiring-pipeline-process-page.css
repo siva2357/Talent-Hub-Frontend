@@ -1,294 +1,242 @@
 /* =========================
-   ACCORDION CARD (CATEGORY)
+   STATS CARDS (MINI)
 ========================= */
-.accordion-item {
+.mini-stat-card {
   background: #ffffff;
+  padding: 16px;
   border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid #e6ebf1;
-  transition: all 0.25s ease;
-}
-
-.accordion-item:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-}
-
-/* HEADER */
-.accordion-button {
-  background: #f8fafc;
-  border-radius: 16px !important;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 16px 20px;
-  transition: all 0.25s ease;
-}
-
-.accordion-button:not(.collapsed) {
-  background: linear-gradient(90deg, #eef4ff, #f5f8ff);
-  color: #0d6efd;
-}
-
-.accordion-button:focus {
-  box-shadow: none;
-}
-
-
-/* =========================
-   JOB CARD
-========================= */
-.job-card {
-  border-radius: 16px;
-  background: #ffffff;
-  border: 1px solid #edf1f5;
-  padding: 18px;
-  transition: all 0.25s ease;
-  position: relative;
-}
-
-.job-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-}
-
-/* TITLE */
-.job-card h5 {
-  font-size: 16px;
-  margin-bottom: 4px;
-}
-
-/* SUB INFO */
-.job-card .text-muted {
-  font-size: 13px;
-}
-
-/* BADGE */
-.job-card .badge {
-  font-size: 11px;
-  padding: 6px 10px;
-  border-radius: 20px;
-}
-
-/* BUTTON */
-.job-card .btn {
-  border-radius: 20px;
-  font-size: 12px;
-  padding: 4px 12px;
-}
-
-
-/* =========================
-   APPLICANT CARD
-========================= */
-.applicant-card {
-  border-radius: 14px;
-  border: 1px solid #eef1f5;
-  background: #fafafa;
-  transition: 0.2s ease;
-}
-
-.applicant-card:hover {
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
-}
-
-
-/* =========================
-   PIPELINE (DESKTOP)
-========================= */
-.pipeline {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  margin-top: 15px;
-}
-
-/* LINE */
-.pipeline::before {
-  content: '';
-  position: absolute;
-  top: 18px;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: #e9ecef;
-  z-index: 0;
-}
-
-/* STEP */
-.step {
-  position: relative;
-  text-align: center;
-  flex: 1;
-  z-index: 1;
-}
-
-/* CIRCLE */
-.circle {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: #dee2e6;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 0 auto 8px;
-  font-size: 14px;
+  gap: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.08);
+  box-shadow: var(--th-shadow-sm);
   transition: all 0.3s ease;
 }
 
-/* LABEL */
-.label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #495057;
+.mini-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--th-shadow-md);
 }
 
-/* DATE TEXT */
-.step small {
-  display: block;
-  font-size: 11px;
-  color: #6c757d;
+.mini-stat-card .stat-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
 }
 
-/* COMPLETED STEP */
-.step.completed .circle {
-  background: #0d6efd;
-  color: #fff;
+.mini-stat-card h4 {
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--th-text-dark);
 }
 
-/* FINAL SUCCESS */
-.step.final.success .circle {
-  background: #198754;
-  color: #fff;
+/* Colors */
+.mini-stat-card.primary .stat-icon {
+  background: var(--th-bg-blue-100);
+  color: var(--th-primary);
 }
 
-/* FINAL REJECTED */
-.step.final.rejected .circle {
-  background: #dc3545;
-  color: #fff;
+.mini-stat-card.info .stat-icon {
+  background: rgba(14, 165, 233, 0.1);
+  color: #0ea5e9;
 }
 
-/* HOVER */
-.step:hover .circle {
-  transform: scale(1.1);
+.mini-stat-card.warning .stat-icon {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
 }
 
+.mini-stat-card.success .stat-icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.mini-stat-card.success-alt .stat-icon {
+  background: rgba(5, 150, 105, 0.1);
+  color: #059669;
+}
+
+.mini-stat-card.danger .stat-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
 
 /* =========================
-   HEADER SECTION
+   ACCORDION & CATEGORIES
 ========================= */
-.container-fluid h2 {
-  font-size: 24px;
-  font-weight: 700;
-}
-
-.container-fluid p {
-  font-size: 14px;
-  color: #6c757d;
-}
-
-
-/* =========================
-   MOBILE (VERTICAL PIPELINE)
-========================= */
-@media (max-width: 768px) {
-
-  .accordion-button {
-    font-size: 14px;
-    padding: 14px;
-  }
-
-  .job-card {
-    padding: 14px;
-  }
-
-  .job-card h5 {
-    font-size: 14px;
-  }
-
-  .pipeline {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 22px;
-    padding-left: 10px;
-  }
-
-  /* VERTICAL LINE */
-  .pipeline::before {
-    left: 19px;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-  }
-
-  .step {
-    display: flex;
-    align-items: flex-start;
-  }
-
-  .circle {
-    margin-right: 14px;
-    min-width: 38px;
-  }
-
-  .step-content {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .label {
-    font-size: 14px;
-  }
-
-  .step small {
-    font-size: 12px;
-  }
-}
-
-
-
-
-
-/* =========================
-   STATS CARDS
-========================= */
-.stats-card {
+.pipeline-accordion .accordion-item {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 16px;
-  text-align: center;
-  border: 1px solid #000000;
+  border-radius: 20px !important;
+  box-shadow: var(--th-shadow-sm);
+  overflow: hidden;
+}
+
+.pipeline-accordion .accordion-button {
+  padding: 24px;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.category-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--th-bg-blue-50);
+  color: var(--th-primary);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+/* =========================
+   JOB PIPELINE CARD
+========================= */
+.job-pipeline-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  overflow: hidden;
   transition: all 0.25s ease;
 }
 
-.stats-card i {
-  font-size: 20px;
-  margin-bottom: 8px;
-  display: inline-block;
+.job-pipeline-card:hover {
+  border-color: var(--th-primary);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.1);
 }
 
-.stats-card h4 {
-  font-size: 20px;
+.job-title {
   font-weight: 700;
-  margin: 0;
+  color: var(--th-text-dark);
 }
 
-.stats-card p {
-  font-size: 12px;
-  color: #6c757d;
-  margin: 0;
+.job-id {
+  font-size: 11px;
+  color: var(--th-text-muted);
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
-/* Hover */
-.stats-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  align-self: flex-start;
+  white-space: nowrap;
 }
 
-/* Color Variants */
-.stats-card.categories i { color: #6f42c1; }
-.stats-card.jobs i { color: #0d6efd; }
-.stats-card.applicants i { color: #20c997; }
-.stats-card.shortlisted i { color: #ffc107; }
-.stats-card.hired i { color: #198754; }
-.stats-card.rejected i { color: #dc3545; }
+.status-badge.open {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+/* =========================
+   APPLICANT FLOW & TRACKER
+========================= */
+.applicant-avatar {
+  width: 48px;
+  height: 48px;
+  background: var(--th-bg-blue-100);
+  color: var(--th-primary);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 20px;
+}
+
+.hiring-tracker {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  position: relative;
+}
+
+.tracker-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.step-marker {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.step-line {
+  position: absolute;
+  top: 20px;
+  left: -50%;
+  width: 100%;
+  height: 2px;
+  background: #e2e8f0;
+  z-index: 1;
+}
+
+/* Step States */
+.tracker-step.completed .step-marker {
+  border-color: var(--th-primary);
+  color: var(--th-primary);
+  background: var(--th-bg-blue-50);
+}
+
+.tracker-step.completed .step-line {
+  background: var(--th-primary);
+}
+
+.tracker-step.current .step-marker {
+  border-color: var(--th-primary);
+  color: #fff;
+  background: var(--th-primary);
+  box-shadow: 0 0 0 4px var(--th-bg-blue-100);
+}
+
+.tracker-step.success .step-marker {
+  border-color: #10b981;
+  color: #fff;
+  background: #10b981;
+}
+
+.tracker-step.success .step-line {
+  background: #10b981;
+}
+
+.tracker-step.danger .step-marker {
+  border-color: #ef4444;
+  color: #fff;
+  background: #ef4444;
+}
+
+.tracker-step.danger .step-line {
+  background: #10b981;
+}
+
+/* Connected to last completed */
+
+.step-label {
+  font-size: 10px;
+  margin-top: 8px;
+}
+
+.step-date {
+  font-size: 10px;
+}
