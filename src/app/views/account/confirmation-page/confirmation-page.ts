@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { Buttons } from "../../components/buttons/buttons";
 
 @Component({
   selector: 'app-confirmation-page',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, Buttons],
   templateUrl: './confirmation-page.html',
   styleUrl: './confirmation-page.css'
 })
