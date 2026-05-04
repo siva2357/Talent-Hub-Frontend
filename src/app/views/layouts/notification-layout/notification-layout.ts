@@ -22,28 +22,23 @@ export class NotificationLayout implements OnInit {
     this.loadNotifications();
   }
 
-loadNotifications() {
-  this.loading = true;
+  loadNotifications() {
+    this.loading = true;
 
-  this.notificationService.getUserNotifications().subscribe({
-    next: (data) => {
-
-      setTimeout(() => {
-        this.notifications = data;
-        this.unreadCount = data.filter(n => !n.read).length;
+    this.notificationService.getUserNotifications().subscribe({
+      next: (data) => {
+        this.notifications = Array.isArray(data) ? data : [];
+        this.unreadCount = this.notifications.filter(n => !n.read).length;
         this.loading = false;
-      });
-
-    },
-    error: (err) => {
-      console.error(err);
-
-      setTimeout(() => {
+      },
+      error: (err) => {
+        console.error('Failed to load notifications:', err);
+        this.notifications = [];
+        this.unreadCount = 0;
         this.loading = false;
-      });
-    }
-  });
-}
+      }
+    });
+  }
 
   markAsRead(id: string) {
     this.notificationService.markAsRead(id).subscribe(() => {

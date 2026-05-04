@@ -33,6 +33,7 @@ export class Companies implements OnInit {
   public actionTpl!: TemplateRef<any>;
 
   columns: any[] = [];
+  tableActions: any[] = [];
   allData: Company[] = [];
   data: Company[] = [];
 
@@ -70,8 +71,15 @@ export class Companies implements OnInit {
       { name: 'Location', prop: 'companyLocation',width: '150px' },
       { name: 'Phone', prop: 'phone',width:'120px' },
       { name: 'Industry', prop: 'industry',width: '150px' },
-      { name: 'Status', template: this.statusTpl, width: '100px' },
-      { name: 'Actions', template: this.actionTpl, width: '300px' },
+      { name: 'Status', template: this.statusTpl, width: '100px' }
+    ];
+
+    this.tableActions = [
+      { label: 'View Profile', icon: 'bi-eye', callback: (row: any) => this.viewCompany(row) },
+      { label: 'Edit Details', icon: 'bi-pencil', callback: (row: any) => this.editCompany(row) },
+      { label: 'Block Company', icon: 'bi-slash-circle', variant: 'danger', callback: (row: any) => this.blockCompany(row) },
+      { label: 'Unblock Company', icon: 'bi-check-circle', callback: (row: any) => this.unblockCompany(row) },
+      { label: 'Delete Company', icon: 'bi-trash', variant: 'danger', callback: (row: any) => this.deleteCompany(row) }
     ];
 
     this.fetchCompanies();

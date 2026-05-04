@@ -1,34 +1,30 @@
 .sidebar {
-  width: 80px;
-  height: calc(100vh - 60px); /* account for top navbar */
+  width: 90px;
+  height: calc(100vh - 70px);
   background: #ffffff;
-  border-right: 2px solid #e5e7eb;
+  border-right: 1px solid rgba(59, 130, 246, 0.1);
   position: fixed;
   left: 0;
-  top: 60px;
+  top: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  backdrop-filter: blur(10px);
+  z-index: 1000;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.02);
 }
 
 nav {
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 12px;
+  padding: 1rem 0;
   overflow-y: auto;
-  overflow-x: hidden;
   scrollbar-width: none;
-  -ms-overflow-style: none;
 }
-
 
 nav::-webkit-scrollbar {
   display: none;
 }
-
-
 
 .menu-item {
   position: relative;
@@ -36,44 +32,55 @@ nav::-webkit-scrollbar {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 15px 12px;
-
+  padding: 12px 10px;
+  margin: 4px 10px;
   text-decoration: none;
-  color: #000000;
-  border-radius: 0px;
-  transition: all 0.25s ease;
+  color: var(--th-text-muted);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .menu-item i {
-  font-size: 20px;
-  margin-bottom: 5px;
+  font-size: 22px;
+  margin-bottom: 6px;
+  transition: transform 0.3s ease;
 }
 
 .menu-item span {
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 500;
   text-align: center;
   line-height: 1.2;
 }
 
 .menu-item:hover {
-  backdrop-filter: blur(6px);
-  color: #00a6ff;
+  background: var(--th-bg-blue-50);
+  color: var(--th-primary);
+}
+
+.menu-item:hover i {
+  transform: translateY(-2px);
 }
 
 .menu-item.active {
-  color: #00a6ff;
-  font-weight: 500;
-  background-color: #ffffff;
+  background: var(--th-bg-blue-50);
+  color: var(--th-primary);
+  font-weight: 600;
 }
 
-.menu-item.active::before {
+.menu-item.active i {
+  color: var(--th-primary);
+}
+
+/* Active indicator dot */
+.menu-item.active::after {
   content: "";
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
   width: 4px;
-  background: #00a6ff;
-  border-radius: 0px;
-
+  height: 20px;
+  background: var(--th-primary);
+  border-radius: 0 4px 4px 0;
 }

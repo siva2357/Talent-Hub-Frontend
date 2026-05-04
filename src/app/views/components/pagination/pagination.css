@@ -2,9 +2,12 @@
 TABLE FOOTER
 ============================ */
 .table-footer {
-  margin-top: 18px;
-  padding-top: 12px;
-  border-top: 1px solid #e5e7eb;
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  box-shadow: var(--th-shadow-sm);
 }
 
 /* ============================
@@ -14,8 +17,8 @@ MAIN WRAPPER
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  flex-wrap: nowrap;
+  gap: 12px;
+  flex-wrap: wrap;
   width: 100%;
 }
 
@@ -25,9 +28,9 @@ LEFT SIDE
 .left-section {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex: 1;
-  min-width: 0; /* allows shrink */
+  min-width: 0;
 }
 
 /* ============================
@@ -43,20 +46,21 @@ TEXT
 ============================ */
 .result-text {
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 12px;
-  color: #6b7280;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--th-text-muted);
 }
 
 /* ============================
 LIMIT DROPDOWN
 ============================ */
 .limit-dropdown {
-  width: 60px;
-  min-width: 60px;
-  font-size: 12px;
-  flex-shrink: 0;
+  width: 70px;
+  min-width: 70px;
+  font-size: 13px;
+  font-weight: 600;
+  border-color: rgba(59, 130, 246, 0.1);
+  background-color: var(--th-bg-blue-50);
 }
 
 /* ============================
@@ -64,7 +68,7 @@ PAGINATION BASE
 ============================ */
 .custom-pagination {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: nowrap;
 }
 
@@ -75,54 +79,46 @@ PAGE LINK
   display: flex;
   align-items: center;
   justify-content: center;
-
-  min-width: 30px;
-  height: 30px;
-
-  font-size: 12px;
-  font-weight: 500;
-
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  min-width: 36px;
+  height: 36px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 1px solid rgba(59, 130, 246, 0.1);
   background: #fff;
-  color: #374151;
-
-  transition: all 0.2s ease;
+  color: var(--th-text-muted);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
 /* HOVER */
 .custom-pagination .page-link:hover {
-  background: #f3f4f6;
-  transform: translateY(-1px);
+  background: var(--th-bg-blue-50);
+  color: var(--th-primary);
+  border-color: var(--th-primary);
+  transform: translateY(-2px);
 }
 
 /* ACTIVE */
 .custom-pagination .page-item.active .page-link {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: var(--th-primary);
+  border-color: var(--th-primary);
   color: #fff;
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
 /* DISABLED */
 .custom-pagination .page-item.disabled .page-link {
-  background: #f9fafb;
-  color: #9ca3af;
+  background: var(--th-bg-light);
+  color: var(--th-text-light);
+  border-color: #e2e8f0;
   cursor: not-allowed;
   pointer-events: none;
 }
 
 /* CLICK EFFECT */
 .custom-pagination .page-link:active {
-  transform: scale(0.95);
-}
-
-/* ICON ALIGN */
-.page-link i {
-  font-size: 12px;
-  display: flex;
-  align-items: center;
+  transform: scale(0.9);
 }
 
 

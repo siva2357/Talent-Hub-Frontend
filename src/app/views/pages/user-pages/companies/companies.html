@@ -1,4 +1,4 @@
-<div class="container-fluid mt-5 py-5 px-4">
+<div class="container-fluid mt-5  px-4">
 
 
   <div class="page-header mb-4">
@@ -71,15 +71,19 @@
 
 
 
-<div class="d-none d-lg-block">
+  <div class="d-none d-lg-block">
 
-  <app-table
-    [columns]="columns"
-    [data]="data"
-    [page]="page"
-    [limit]="limit">
+    <app-table 
+    class="d-none d-lg-block" 
+    [columns]="columns" 
+    [data]="data" 
+    [page]="page" 
+    [limit]="limit"
+    [selectable]="true"
+    [actions]="tableActions"
+  >
   </app-table>
-</div>
+  </div>
 
 
   <div class="d-block d-lg-none">
@@ -94,7 +98,7 @@
           <div class="d-flex justify-content-between align-items-center mb-3">
 
             <div class="d-flex align-items-center gap-3">
-              <img [src]="row.companyLogo" width="80" height="50" class="rounded"  />
+              <img [src]="row.companyLogo" width="80" height="50" class="rounded" />
 
               <div>
                 <h6 class="mb-0 fw-semibold">{{ row.companyName }}</h6>
@@ -103,70 +107,64 @@
 
             </div>
 
-              <span class="badge"
-        [ngClass]="{
+            <span class="badge" [ngClass]="{
           'badge-success': row.status.toLowerCase() === 'active',
           'badge-danger': row.status.toLowerCase() === 'blocked',
           'badge-secondary': row.status.toLowerCase() === 'closed'
         }">
-    {{ row.status }}
-  </span>
+              {{ row.status }}
+            </span>
 
           </div>
 
           <div class="company-details mb-3">
-            <div class="detail-item"> <span>Founded</span> <strong>{{ row.companyFoundedDate | date:'yyyy' }}</strong> </div>
+            <div class="detail-item"> <span>Founded</span> <strong>{{ row.companyFoundedDate | date:'yyyy' }}</strong>
+            </div>
             <div class="detail-item"> <span>Phone</span> <strong>{{ row.phone }}</strong> </div>
-            <div class="detail-item"> <span>Website</span> <a [href]="row.companyWebsite" target="_blank"> {{ row.companyWebsite }} </a> </div>
+            <div class="detail-item"> <span>Website</span> <a [href]="row.companyWebsite" target="_blank"> {{
+                row.companyWebsite }} </a> </div>
           </div>
 
-<div class="d-flex flex-wrap gap-2 mt-2">
+          <div class="d-flex flex-wrap gap-2 mt-2">
 
-  <button class="btn btn-sm btn-light"
-          (click)="viewCompany(row)">
-    View
-  </button>
+            <button class="btn btn-sm btn-light" (click)="viewCompany(row)">
+              View
+            </button>
 
-  <button class="btn btn-sm btn-primary"
-          (click)="editCompany(row)">
-    Edit
-  </button>
+            <button class="btn btn-sm btn-primary" (click)="editCompany(row)">
+              Edit
+            </button>
 
-@if (row.actions?.canDelete) {
-  <button class="btn btn-sm btn-danger"
-          (click)="deleteCompany(row)">
-    Delete
-  </button>
-}
-  @if (row.actions?.canBlock) {
-    <button class="btn btn-sm btn-warning"
-            (click)="blockCompany(row)">
-      Block
-    </button>
-  }
+            @if (row.actions?.canDelete) {
+            <button class="btn btn-sm btn-danger" (click)="deleteCompany(row)">
+              Delete
+            </button>
+            }
+            @if (row.actions?.canBlock) {
+            <button class="btn btn-sm btn-warning" (click)="blockCompany(row)">
+              Block
+            </button>
+            }
 
-  @if (row.actions?.canUnblock) {
-    <button class="btn btn-sm btn-success"
-            (click)="unblockCompany(row)">
-      Unblock
-    </button>
-  }
+            @if (row.actions?.canUnblock) {
+            <button class="btn btn-sm btn-success" (click)="unblockCompany(row)">
+              Unblock
+            </button>
+            }
 
-  @if (row.actions?.canClose) {
-    <button class="btn btn-sm btn-secondary"
-            (click)="closeCompany(row)">
-      Close
-    </button>
-  }
+            @if (row.actions?.canClose) {
+            <button class="btn btn-sm btn-secondary" (click)="closeCompany(row)">
+              Close
+            </button>
+            }
 
-  @if (row.actions?.canReopen) {
-    <button class="btn btn-sm btn-dark"
-            (click)="reopenCompany(row)">
-      Reopen
-    </button>
-  }
+            @if (row.actions?.canReopen) {
+            <button class="btn btn-sm btn-dark" (click)="reopenCompany(row)">
+              Reopen
+            </button>
+            }
 
-</div>
+          </div>
 
         </div>
 
@@ -193,8 +191,7 @@
 
 
 <ng-template #statusTpl let-row>
-  <span class="badge"
-        [ngClass]="{
+  <span class="badge" [ngClass]="{
           'badge-success': row.status?.toLowerCase() === 'active',
           'badge-danger': row.status?.toLowerCase() === 'blocked',
           'badge-secondary': row.status?.toLowerCase() === 'closed'
@@ -258,73 +255,66 @@
     <div class="modal-content">
 
       <!-- HEADER -->
-<div class="modal-header form-modal-header">
-  <div class="d-flex flex-column">
-    <h5 class="modal-title mb-0">
-      {{ isEditMode ? 'Edit Company' : 'Add Company' }}
-    </h5>
-    <small class="text-light opacity-75">
-      {{ isEditMode ? 'Update company details' : 'Create a new company profile' }}
-    </small>
-  </div>
+      <div class="modal-header form-modal-header">
+        <div class="d-flex flex-column">
+          <h5 class="modal-title mb-0">
+            {{ isEditMode ? 'Edit Company' : 'Add Company' }}
+          </h5>
+          <small class="text-light opacity-75">
+            {{ isEditMode ? 'Update company details' : 'Create a new company profile' }}
+          </small>
+        </div>
 
-  <button type="button"
-          class="btn-close btn-close-white"
-          (click)="closeModal()">
-  </button>
-</div>
+        <button type="button" class="btn-close btn-close-white" (click)="closeModal()">
+        </button>
+      </div>
 
       <form [formGroup]="companyForm" (ngSubmit)="submitCompany()">
 
         <!-- BODY -->
         <div class="modal-body">
 
-          <!-- LOGO -->
-          <div class="mb-4 text-center">
-            <label class="form-label fw-semibold d-block mb-2">
-              Company Logo
-            </label>
-
-<div class="d-flex flex-column align-items-center gap-3">
-
-  <!-- Preview -->
-  <div class="logo-preview-box">
-    @if (companyForm.get('companyLogo')?.value) {
-      <app-file-preview
-        [fileUrl]="companyForm.get('companyLogo')?.value">
-      </app-file-preview>
-    }
-    @else {
-      <div class="logo-placeholder">
-        <i class="bi bi-building"></i>
-      </div>
-    }
-  </div>
-
-  <!-- Upload -->
-  <app-file-upload
-    [bucketKey]="BucketKey.ADMIN_COLLECTION"
-    [section]="UploadSection.COMPANY_LOGO"
-    accept="image/*"
-    (uploaded)="onLogoUploaded($event)">
-  </app-file-upload>
-
-</div>
-
-            @if (companyForm.get('companyLogo')?.touched && companyForm.get('companyLogo')?.invalid) {
-            <small class="text-danger">Company Logo is required</small>
-            }
+          <!-- LOGO SECTION -->
+          <div class="modal-section mb-4 p-4 rounded-4 bg-light-subtle border border-light">
+            <div class="row align-items-center">
+              <div class="col-md-auto text-center mb-3 mb-md-0">
+                <div class="logo-preview-box shadow-sm">
+                  @if (companyForm.get('companyLogo')?.value) {
+                    <app-file-preview [fileUrl]="companyForm.get('companyLogo')?.value" mode="avatar"></app-file-preview>
+                  } @else {
+                    <div class="logo-placeholder">
+                      <i class="bi bi-building"></i>
+                    </div>
+                  }
+                </div>
+              </div>
+              <div class="col">
+                <h6 class="fw-bold mb-1">Company Logo</h6>
+                <p class="text-muted small mb-3">Upload a high-quality logo for the company profile.</p>
+                <app-file-upload 
+                  [bucketKey]="BucketKey.ADMIN_COLLECTION" 
+                  [section]="UploadSection.COMPANY_LOGO"
+                  accept="image/*" 
+                  (uploaded)="onLogoUploaded($event)">
+                </app-file-upload>
+                @if (companyForm.get('companyLogo')?.touched && companyForm.get('companyLogo')?.invalid) {
+                  <small class="text-danger d-block mt-2">Company Logo is required</small>
+                }
+              </div>
+            </div>
           </div>
 
           <!-- GRID -->
           <div class="row g-3">
 
             <div class="col-md-6">
-              <app-input-fields [form]="companyForm" controlName="companyName" placeholder="Company Name"></app-input-fields>
+              <app-input-fields [form]="companyForm" controlName="companyName"
+                placeholder="Company Name"></app-input-fields>
             </div>
 
             <div class="col-md-6">
-              <app-input-fields [form]="companyForm" controlName="email" type="email" placeholder="Email"></app-input-fields>
+              <app-input-fields [form]="companyForm" controlName="email" type="email"
+                placeholder="Email"></app-input-fields>
             </div>
 
             <div class="col-md-6">
@@ -336,7 +326,8 @@
             </div>
 
             <div class="col-md-6">
-              <app-input-fields [form]="companyForm" controlName="companyLocation" placeholder="Location"></app-input-fields>
+              <app-input-fields [form]="companyForm" controlName="companyLocation"
+                placeholder="Location"></app-input-fields>
             </div>
 
             <div class="col-md-6">
@@ -345,12 +336,13 @@
             </div>
 
             <div class="col-md-6">
-              <app-input-fields [form]="companyForm" controlName="companyWebsite" type="text" placeholder="Company Website (https://...)"></app-input-fields>
+              <app-input-fields [form]="companyForm" controlName="companyWebsite" type="text"
+                placeholder="Company Website (https://...)"></app-input-fields>
             </div>
 
             <div class="col-md-6">
-              <app-input-fields [form]="companyForm" controlName="companySize" [isSelect]="true" [options]="companySizeOptions"
-                placeholder="Company Size"></app-input-fields>
+              <app-input-fields [form]="companyForm" controlName="companySize" [isSelect]="true"
+                [options]="companySizeOptions" placeholder="Company Size"></app-input-fields>
             </div>
 
             <div class="col-md-6">
@@ -369,37 +361,28 @@
         </div>
 
         <!-- FOOTER -->
-<div class="modal-footer form-modal-footer">
+        <div class="modal-footer form-modal-footer">
 
-  <div class="d-flex justify-content-between w-100 align-items-center">
+          <div class="d-flex justify-content-between w-100 align-items-center">
 
-    <!-- Left: hint -->
-    <small class="text-muted">
-      All fields are required
-    </small>
+            <!-- Left: hint -->
+            <small class="text-muted">
+              All fields are required
+            </small>
 
-    <!-- Right: actions -->
-    <div class="d-flex gap-2">
-      <app-button
-        type="button"
-        size="md"
-        variant="secondary"
-        label="Cancel"
-        (click)="closeModal()">
-      </app-button>
+            <!-- Right: actions -->
+            <div class="d-flex gap-2">
+              <app-button type="button" size="md" variant="secondary" label="Cancel" (click)="closeModal()">
+              </app-button>
 
-      <app-button
-        type="submit"
-        size="md"
-        variant="primary"
-        [disabled]="companyForm.invalid"
-        [label]="isEditMode ? 'Update' : 'Create'">
-      </app-button>
-    </div>
+              <app-button type="submit" size="md" variant="primary" [disabled]="companyForm.invalid"
+                [label]="isEditMode ? 'Update' : 'Create'">
+              </app-button>
+            </div>
 
-  </div>
+          </div>
 
-</div>
+        </div>
 
       </form>
 
@@ -464,69 +447,94 @@
 
         <hr class="my-3" />
 
-        <!-- DETAILS -->
+        <!-- DETAILS GRID -->
         <div class="row g-4">
-
           <div class="col-md-6">
-            <div class="info-box">
-              <label>Email</label>
-              <p>{{ selectedCompany.email }}</p>
+            <div class="info-card-modern">
+              <div class="info-header-modern">
+                <label class="info-label-modern">Email Address</label>
+              </div>
+              <div class="info-body-modern">
+                <div class="info-value-modern">{{ selectedCompany.email }}</div>
+              </div>
             </div>
           </div>
-
           <div class="col-md-6">
-            <div class="info-box">
-              <label>Phone</label>
-              <p>{{ selectedCompany.phone }}</p>
+            <div class="info-card-modern">
+              <div class="info-header-modern">
+                <label class="info-label-modern">Phone Number</label>
+              </div>
+              <div class="info-body-modern">
+                <div class="info-value-modern">{{ selectedCompany.phone }}</div>
+              </div>
             </div>
           </div>
-
           <div class="col-md-6">
-            <div class="info-box">
-              <label>Industry</label>
-              <p>{{ selectedCompany.industry }}</p>
+            <div class="info-card-modern">
+              <div class="info-header-modern">
+                <label class="info-label-modern">Industry</label>
+              </div>
+              <div class="info-body-modern">
+                <div class="info-value-modern">{{ selectedCompany.industry }}</div>
+              </div>
             </div>
           </div>
-
           <div class="col-md-6">
-            <div class="info-box">
-              <label>Company Size</label>
-              <p>{{ selectedCompany.companySize }}</p>
+            <div class="info-card-modern">
+              <div class="info-header-modern">
+                <label class="info-label-modern">Company Size</label>
+              </div>
+              <div class="info-body-modern">
+                <div class="info-value-modern">{{ selectedCompany.companySize }}</div>
+              </div>
             </div>
           </div>
-
           <div class="col-md-6">
-            <div class="info-box">
-              <label>Founded</label>
-              <p>{{ selectedCompany.companyFoundedDate | date:'mediumDate' }}</p>
+            <div class="info-card-modern">
+              <div class="info-header-modern">
+                <label class="info-label-modern">Founded Date</label>
+              </div>
+              <div class="info-body-modern">
+                <div class="info-value-modern">{{ selectedCompany.companyFoundedDate | date:'mediumDate' }}</div>
+              </div>
             </div>
           </div>
-
           <div class="col-md-6">
-            <div class="info-box">
-              <label>Employees</label>
-              <p>{{ selectedCompany.totalEmployees | number }}</p>
+            <div class="info-card-modern">
+              <div class="info-header-modern">
+                <label class="info-label-modern">Total Employees</label>
+              </div>
+              <div class="info-body-modern">
+                <div class="info-value-modern">{{ selectedCompany.totalEmployees | number }}</div>
+              </div>
             </div>
           </div>
-
-          <div class="col-md-6">
-            <div class="info-box">
-              <label>Website</label>
-              <a [href]="selectedCompany.companyWebsite" target="_blank" class="link-primary">
-                Visit Website
-              </a>
+          <div class="col-md-12">
+            <div class="info-card-modern">
+              <div class="info-header-modern">
+                <label class="info-label-modern">Official Website</label>
+              </div>
+              <div class="info-body-modern">
+                <div class="info-value-modern">
+                  <a [href]="selectedCompany.companyWebsite" target="_blank" class="text-primary text-decoration-none fw-bold">
+                    {{ selectedCompany.companyWebsite }} <i class="bi bi-box-arrow-up-right ms-1"></i>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
-
           <div class="col-12">
-            <div class="info-box">
-              <label>Description</label>
-              <p class="mb-0 text-muted">
-                {{ selectedCompany.companyDescription }}
-              </p>
+            <div class="info-card-modern">
+              <div class="info-header-modern">
+                <label class="info-label-modern">About Company</label>
+              </div>
+              <div class="info-body-modern">
+                <p class="info-value-modern text-muted mb-0 lh-base">
+                  {{ selectedCompany.companyDescription }}
+                </p>
+              </div>
             </div>
           </div>
-
         </div>
 
       </div>

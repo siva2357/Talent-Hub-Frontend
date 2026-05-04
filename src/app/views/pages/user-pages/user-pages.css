@@ -1,28 +1,29 @@
+/* Modern Layout */
+.user-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--th-bg-light);
+}
+
+.user-main {
+  flex: 1;
+  width: 100%;
+  padding-top: 70px; /* Navbar height */
+  transition: all 0.3s ease;
+}
+
 /* Mobile first */
-
-.user-container .user-main{
-  margin-left:0;
+@media (max-width: 991px) {
+  .user-main {
+    margin-left: 0;
+    padding-bottom: 80px; /* Bottom nav height */
+  }
 }
-
-
-/* Mobile bottom nav spacing */
-
-@media (max-width:991px){
-
-.user-container .user-main{
-  padding-bottom:90px;
-}
-
-}
-
 
 /* Desktop sidebar layout */
-
-@media (min-width:992px){
-
-.user-container .user-main{
-  margin-left:80px;
-  padding-bottom:0;
-}
-
+@media (min-width: 992px) {
+  .user-main {
+    margin-left: 90px; /* Sidebar width */
+    padding-bottom: 0;
+  }
 }

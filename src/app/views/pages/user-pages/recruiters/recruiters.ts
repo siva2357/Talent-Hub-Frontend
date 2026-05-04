@@ -20,6 +20,7 @@ export class Recruiters implements OnInit {
   @ViewChild('actionTpl', { static: true }) actionTpl!: TemplateRef<any>;
 
   columns: any[] = [];
+  tableActions: any[] = [];
 
   // 🔥 FULL DATA
   allData: any[] = [];
@@ -75,8 +76,15 @@ this.columns = [
   { name: 'Company', prop: 'company', width: '100px' },
   { name: 'Designation', prop: 'designation', width: '150px' },
   { name: 'Joined Date', prop: 'joinedDate', width: '100px' },
-  { name: 'Status', template: this.statusTpl, center: true, width: '80px' },
-  { name: 'Action', template: this.actionTpl, center: true, width: '300px' }
+  { name: 'Status', template: this.statusTpl, center: true, width: '80px' }
+];
+
+this.tableActions = [
+  { label: 'View Profile', icon: 'bi-person', callback: (row: any) => this.viewProfile(row) },
+  { label: 'Block User', icon: 'bi-lock', variant: 'danger', callback: (row: any) => this.blockUser(row) },
+  { label: 'Unblock User', icon: 'bi-unlock', callback: (row: any) => this.unblockUser(row) },
+  { label: 'Deactivate', icon: 'bi-power', variant: 'danger', callback: (row: any) => this.deactivateUser(row) },
+  { label: 'Activate', icon: 'bi-check-circle', callback: (row: any) => this.activateUser(row) }
 ];
 
 this.applyFilter();

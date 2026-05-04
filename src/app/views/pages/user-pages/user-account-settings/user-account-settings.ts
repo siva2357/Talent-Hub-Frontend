@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Router, RouterModule } from '@angular/router';
 import { UpdateBasicDetails } from './update-basic-details/update-basic-details';
@@ -18,30 +18,32 @@ import { AuthService } from '../../../../core/services/auth-service';
   styleUrl: './user-account-settings.css',
     standalone: true,
 })
-export class UserAccountSettings {
+export class UserAccountSettings implements OnInit {
+  role: string | null = null;
+  activeTab: string = 'basic';
 
-    constructor(
+  constructor(
     private router: Router,
     private authService: AuthService
   ) {}
 
-
-   activeTab: string = 'basic';
+  ngOnInit(): void {
+    this.role = this.authService.getRole();
+  }
 
   setTab(tab: string) {
     this.activeTab = tab;
   }
 
-    goBack(): void {
-    const role = this.authService.getRole();
-
-    if (role === 'recruiter') {
+  goBack(): void {
+    if (this.role === 'recruiter') {
       this.router.navigate(['/user/my-jobposts']);
-    } else if (role === 'jobSeeker') {
+    } else if (this.role === 'jobSeeker') {
       this.router.navigate(['/user/jobprofile']);
+    } else if (this.role === 'admin') {
+      this.router.navigate(['/user/admin-dashboard']);
     } else {
-      this.router.navigate(['/']); // fallback
+      this.router.navigate(['/']);
     }
   }
-
 }

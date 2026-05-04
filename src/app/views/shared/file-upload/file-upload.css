@@ -1,50 +1,55 @@
 /* ================= WRAPPER ================= */
 .file-upload-wrapper {
   padding: 10px;
-  border-radius: 12px;
 }
 
 /* ================= BUTTON ================= */
 .upload-btn {
-  border-radius: 15px;
-  font-weight: 600;
-  transition: all 0.25s ease;
+  border-radius: 12px;
+  font-weight: 700;
+  padding: 10px 24px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid var(--th-primary);
+  color: var(--th-primary);
+  background: transparent;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .upload-btn:hover {
-  background-color: #0d6efd;
-  color: #fff;
+  background: var(--th-bg-blue-50);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.upload-btn:active {
+  transform: translateY(0);
 }
 
 /* ================= PROGRESS ================= */
 .upload-progress {
-  max-width: 320px;
+  width: 100%;
+  max-width: 400px;
   margin: 0 auto;
 }
 
 .progress {
-  height: 14px;
-  border-radius: 20px;
-  background-color: #e9ecef;
+  height: 8px;
+  border-radius: 10px;
+  background-color: var(--th-bg-blue-100);
   overflow: hidden;
+  border: none;
 }
 
 .progress-bar {
-  background: linear-gradient(
-    90deg,
-    #0d6efd,
-    #4f9cff
-  );
-  transition: width 0.4s ease;
+  background: var(--th-gradient-primary);
+  border-radius: 10px;
 }
 
 /* ================= MOBILE ================= */
 @media (max-width: 576px) {
   .upload-btn {
-    width: 50%;
-  }
-
-  .upload-progress {
-    max-width: 100%;
+    width: 100%;
   }
 }

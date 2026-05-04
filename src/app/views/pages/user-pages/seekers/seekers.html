@@ -1,156 +1,165 @@
-<div class="container-fluid mt-5 py-5 px-4">
-
-<div class="page-header mb-4">
-<h3 class="fw-bold mb-1">Job Seekers</h3>
-<p class="text-muted">
-  Manage job seekers, review profiles, and control platform access.
-</p>
-</div>
+<div class="container-fluid mt-5  px-4">
 
 
-<div class="filter-card mb-4">
 
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h5 class="mb-0 fw-semibold">Filter JobSeekers</h5>
-  </div>
-
-  <div class="row g-3 align-items-end">
-
-    <div class="col-12 col-md-3">
-      <app-input-fields mode="filter" placeholder="Search recruiter..." [(value)]="filters.name"> </app-input-fields>
-    </div>
-
-    <div class="col-12 col-md-3">
-      <app-input-fields  mode="filter" [isSelect]="true" placeholder="Select Role" [options]="jobRoleOptions" [(value)]="filters.role"></app-input-fields>
-    </div>
-
-    <div class="col-12 col-md-3">
-      <app-input-fields mode="filter" [isSelect]="true" placeholder="Select Status" [options]="statusOptions" [(value)]="filters.status"></app-input-fields>
-    </div>
-
-    <div class="col-12 col-md-3 d-flex gap-2">
-      <app-button label="Apply" variant="primary" size="md" class="w-100" (click)="onApplyFilters()"></app-button>
-      <app-button label="Reset" variant="secondary" size="md" class="w-100"  (click)="onResetFilters()"></app-button>
-    </div>
-
+  <div class="page-header mb-4">
+    <h3 class="fw-bold mb-1">Job Seekers</h3>
+    <p class="text-muted">
+      Manage job seekers, review profiles, and control platform access.
+    </p>
   </div>
 
 
-@if (appliedFilters.name || appliedFilters.role || appliedFilters.status) {
+  <div class="filter-card mb-4">
 
-  <div class="d-flex flex-wrap gap-2  mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="mb-0 fw-semibold">Filter JobSeekers</h5>
+    </div>
 
-    @if (appliedFilters.name) {
+    <div class="row g-3 align-items-end">
+
+      <div class="col-12 col-md-3">
+        <app-input-fields mode="filter" placeholder="Search recruiter..." [(value)]="filters.name"> </app-input-fields>
+      </div>
+
+      <div class="col-12 col-md-3">
+        <app-input-fields mode="filter" [isSelect]="true" placeholder="Select Role" [options]="jobRoleOptions"
+          [(value)]="filters.role"></app-input-fields>
+      </div>
+
+      <div class="col-12 col-md-3">
+        <app-input-fields mode="filter" [isSelect]="true" placeholder="Select Status" [options]="statusOptions"
+          [(value)]="filters.status"></app-input-fields>
+      </div>
+
+      <div class="col-12 col-md-3 d-flex gap-2">
+        <app-button label="Apply" variant="primary" size="md" class="w-100" (click)="onApplyFilters()"></app-button>
+        <app-button label="Reset" variant="secondary" size="md" class="w-100" (click)="onResetFilters()"></app-button>
+      </div>
+
+    </div>
+
+
+    @if (appliedFilters.name || appliedFilters.role || appliedFilters.status) {
+
+    <div class="d-flex flex-wrap gap-2 mt-3">
+
+      @if (appliedFilters.name) {
       <span class="chip">
         Name: {{ appliedFilters.name }}
         <i class="bi bi-x" (click)="removeFilter('name')"></i>
       </span>
-    }
+      }
 
-    @if (appliedFilters.role) {
+      @if (appliedFilters.role) {
       <span class="chip">
         Role: {{ appliedFilters.role }}
         <i class="bi bi-x" (click)="removeFilter('role')"></i>
       </span>
-    }
+      }
 
-    @if (appliedFilters.status) {
+      @if (appliedFilters.status) {
       <span class="chip">
         Status: {{ appliedFilters.status }}
         <i class="bi bi-x" (click)="removeFilter('status')"></i>
       </span>
+      }
+
+    </div>
+
     }
 
   </div>
 
-}
-
-</div>
 
 
 
 
+  <app-table 
+    class="d-none d-lg-block" 
+    [columns]="columns" 
+    [data]="data" 
+    [page]="page" 
+    [limit]="limit"
+    [selectable]="true"
+    [actions]="tableActions"
+  >
+  </app-table>
 
-  <app-table class="d-none d-lg-block" [columns]="columns"  [data]="data" [page]="page" [limit]="limit"></app-table>
 
+  <div class="d-block d-lg-none">
 
-<div class="d-block d-lg-none">
+    <div class="row g-3">
 
-  <div class="row g-3">
+      @for (row of data; track row._id) {
+      <div class="col-12">
 
-    @for (row of data; track row._id) {
-    <div class="col-12">
+        <div class="recruiter-card">
 
-      <div class="recruiter-card">
+          <!-- HEADER (FIXED) -->
+          <div class="d-flex justify-content-between align-items-start mb-2">
 
-        <!-- HEADER (FIXED) -->
-        <div class="d-flex justify-content-between align-items-start mb-2">
-
-          <!-- LEFT -->
-          <div class="d-flex align-items-center gap-3">
-            <img [src]="row.profile" class="rounded-circle" width="45" height="45" />
-            <div>
-              <h6 class="mb-0 fw-semibold">{{ row.fullName }}</h6>
-              <small class="text-muted">{{ row.designation }}</small>
+            <!-- LEFT -->
+            <div class="d-flex align-items-center gap-3">
+              <img [src]="row.profile" class="rounded-circle" width="45" height="45" />
+              <div>
+                <h6 class="mb-0 fw-semibold">{{ row.fullName }}</h6>
+                <small class="text-muted">{{ row.designation }}</small>
+              </div>
             </div>
-          </div>
 
-          <!-- RIGHT (STATUS) -->
-          <span class="badge" [ngClass]="{
+            <!-- RIGHT (STATUS) -->
+            <span class="badge" [ngClass]="{
                 'badge-success': row.status === 'verified',
                 'badge-warning': row.status === 'pending'
               }">
-            {{ row.status }}
-          </span>
+              {{ row.status }}
+            </span>
 
-        </div>
+          </div>
 
-        <!-- DETAILS -->
-        <div class="mb-2 small text-muted">
-          <div><strong>Role:</strong> {{ row.jobRole }}</div>
-          <div><strong>Experience:</strong> {{ row.experience }}</div>
-        </div>
+          <!-- DETAILS -->
+          <div class="mb-2 small text-muted">
+            <div><strong>Role:</strong> {{ row.jobRole }}</div>
+            <div><strong>Experience:</strong> {{ row.experience }}</div>
+          </div>
 
-        <!-- ACTIONS -->
-        <div class="d-flex flex-wrap gap-2">
+          <!-- ACTIONS -->
+          <div class="d-flex flex-wrap gap-2">
 
-          <button class="btn btn-sm btn-light" (click)="viewProfile(row)">
-            <i class="bi bi-person me-1"></i> View Profile
-          </button>
+            <button class="btn btn-sm btn-light" (click)="viewProfile(row)">
+              <i class="bi bi-person me-1"></i> View Profile
+            </button>
 
-          <button class="btn btn-sm btn-danger" (click)="blockUser(row)">
-            <i class="bi bi-lock me-1"></i> Block
-          </button>
+            <button class="btn btn-sm btn-danger" (click)="blockUser(row)">
+              <i class="bi bi-lock me-1"></i> Block
+            </button>
 
-          <button class="btn btn-sm btn-success" (click)="unblockUser(row)">
-            <i class="bi bi-unlock me-1"></i> Unblock
-          </button>
+            <button class="btn btn-sm btn-success" (click)="unblockUser(row)">
+              <i class="bi bi-unlock me-1"></i> Unblock
+            </button>
 
-          <button class="btn btn-sm btn-warning" (click)="deactivateUser(row)">
-            <i class="bi bi-power me-1"></i> Deactivate
-          </button>
+            <button class="btn btn-sm btn-warning" (click)="deactivateUser(row)">
+              <i class="bi bi-power me-1"></i> Deactivate
+            </button>
 
-          <button class="btn btn-sm btn-primary" (click)="activateUser(row)">
-            <i class="bi bi-check-circle me-1"></i> Activate
-          </button>
+            <button class="btn btn-sm btn-primary" (click)="activateUser(row)">
+              <i class="bi bi-check-circle me-1"></i> Activate
+            </button>
+
+          </div>
 
         </div>
 
       </div>
+      }
 
     </div>
-    }
 
   </div>
 
-</div>
-
   <!-- 🔥 PAGINATION -->
-  <app-pagination
-    [total]="total"
-    [page]="page"
-    [limit]="limit"
-    (pageChange)="onPageChange($event)"
+  <app-pagination [total]="total" [page]="page" [limit]="limit" (pageChange)="onPageChange($event)"
     (limitChange)="onLimitChange($event)">
   </app-pagination>
 
@@ -171,11 +180,9 @@
    STATUS TEMPLATE
 ========================= -->
 <ng-template #statusTpl let-row>
-  <span
-    class="badge"
-    [ngClass]="{
+  <span class="badge" [ngClass]="{
       'badge-success': row.status === 'verified',
-      'badge-warning ': row.status === 'pending'
+    'badge-warning': row.status === 'pending'
     }">
     {{ row.status }}
   </span>

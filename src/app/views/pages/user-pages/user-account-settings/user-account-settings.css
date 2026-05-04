@@ -1,0 +1,87 @@
+/* =========================
+   SIDE NAVIGATION
+========================= */
+.settings-nav-card {
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid rgba(59, 130, 246, 0.08);
+  overflow: hidden;
+}
+
+.nav-item-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border: none;
+  background: transparent;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--th-text-muted);
+  transition: all 0.25s ease;
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+.nav-item-btn:hover {
+  background: var(--th-bg-blue-50);
+  color: var(--th-primary);
+}
+
+.nav-item-btn.active {
+  background: var(--th-bg-blue-100);
+  color: var(--th-primary);
+}
+
+.nav-item-btn i {
+  font-size: 18px;
+}
+
+.nav-item-btn.danger {
+  color: #ef4444;
+}
+
+.nav-item-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.nav-item-btn.danger.active {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* =========================
+   CONTENT AREA
+========================= */
+.settings-content-card {
+  background: #fff;
+  border-radius: 24px;
+  border: 1px solid rgba(59, 130, 246, 0.08);
+  min-height: 500px;
+}
+
+.tab-header h5 {
+  color: var(--th-text-dark);
+  letter-spacing: -0.3px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+  .settings-nav-card {
+    margin-bottom: 20px;
+  }
+  
+  .list-group {
+    flex-direction: row;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  
+  .nav-item-btn {
+    white-space: nowrap;
+    width: auto;
+    padding: 10px 16px;
+  }
+}

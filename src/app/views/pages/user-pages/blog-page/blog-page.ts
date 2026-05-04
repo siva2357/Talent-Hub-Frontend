@@ -28,6 +28,7 @@ export class BlogPage implements OnInit {
   @ViewChild('actionTpl', { static: true }) actionTpl!: TemplateRef<any>;
 
   columns: any[] = [];
+  tableActions: any[] = [];
   allData: Blog[] = [];
   data: Blog[] = [];
 
@@ -59,8 +60,13 @@ export class BlogPage implements OnInit {
       { name: 'Title', prop: 'title', width: '200px' },
       { name: 'Category', prop: 'category', width: '150px' },
       { name: 'Tags', template: this.tagsTpl, width: '200px' },
-      { name: 'Posted Date', prop: 'postedDate', width: '150px' },
-      { name: 'Actions', template: this.actionTpl, center: true, width: '220px' }
+      { name: 'Posted Date', prop: 'postedDate', width: '150px' }
+    ];
+
+    this.tableActions = [
+      { label: 'View Post', icon: 'bi-eye', callback: (row: Blog) => this.viewBlog(row) },
+      { label: 'Edit Post', icon: 'bi-pencil', callback: (row: Blog) => this.editBlog(row) },
+      { label: 'Delete Post', icon: 'bi-trash', variant: 'danger', callback: (row: Blog) => this.deleteBlog(row) }
     ];
 
     this.applyFilter();
