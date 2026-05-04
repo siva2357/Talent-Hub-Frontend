@@ -2,8 +2,6 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { catchError, Observable, throwError } from 'rxjs';
-import { StorageService } from './storage.service';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -12,12 +10,12 @@ export class ResumeService {
   private baseUrl: string = `${environment.apiGatewayUrl}`;
   private apiUrl: string = `${environment.generativeAIUrl}`;
 
-  constructor(private http: HttpClient,private storage: StorageService) {}
+  constructor(private http: HttpClient,) {}
 
 
   /* ================= HEADERS ================= */
   private getHeaders(): HttpHeaders {
-    const token = this.storage.get('JWT_Token');
+    const token = localStorage.getItem('JWT_Token');
 
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : '',

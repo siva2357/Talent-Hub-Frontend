@@ -4,7 +4,6 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ChangePassword } from '../models/password.model';
-import { StorageService } from './storage.service';
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
@@ -16,13 +15,12 @@ export class PasswordService {
 
   constructor(
     private http: HttpClient,
-    private storage: StorageService,
       @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   /* ================= HEADERS ================= */
   private getAuthHeaders(): HttpHeaders {
-    const token = this.storage.get('JWT_Token');
+    const token = localStorage.getItem('JWT_Token');
 
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : '',
@@ -75,7 +73,7 @@ private handleError(error: any) {
   console.error('🔥 Password API Error:', error);
 
   if (error.status === 401) {
-    this.storage.clear(); // ✅
+    localStorage.clear(); // ✅
 
     if (isPlatformBrowser(this.platformId)) {
       window.location.href = '/login';

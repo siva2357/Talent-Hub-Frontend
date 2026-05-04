@@ -17,8 +17,10 @@
       <strong>Notifications</strong>
 
       <div class="actions d-flex gap-2">
-        <span class="notif-action-link text-primary" style="cursor: pointer; font-size: 13px;" (click)="markAllRead()"> Mark all as read</span>
-        <span class="notif-action-link text-danger" style="cursor: pointer; font-size: 13px;" (click)="clearAll()"> Clear all</span>
+        <span class="notif-action-link text-primary" style="cursor: pointer; font-size: 13px;" (click)="markAllRead()">
+          Mark all as read</span>
+        <span class="notif-action-link text-danger" style="cursor: pointer; font-size: 13px;" (click)="clearAll()">
+          Clear all</span>
       </div>
     </div>
 
@@ -26,22 +28,17 @@
 
     <div class="notif-list list-group list-group-flush">
 
-      <!-- Loading -->
       @if (loading) {
-      <div class="text-center p-2">
+      <div class="text-center p-3">
         Loading...
       </div>
-      }
 
-      <!-- Empty -->
-      @if (!loading && notifications.length === 0) {
-      <div class="text-center p-2">
+      } @else if (notifications.length === 0) {
+      <div class="text-center p-3 text-muted">
         No notifications
       </div>
-      }
 
-      <!-- List -->
-      @if (!loading && notifications.length > 0) {
+      } @else {
       @for (notif of notifications; track notif._id) {
       <div class="list-group-item notif-item" [class.unread]="!notif.read">
 

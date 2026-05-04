@@ -1,15 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-file-preview',
   templateUrl: './file-preview.html',
   styleUrl: './file-preview.css',
+  imports: [CommonModule],
   standalone: true
 })
 export class FilePreview {
 
   @Input() fileUrl!: string;
+@Input() mode: 'full' | 'avatar' = 'full';
 
   constructor(private sanitizer: DomSanitizer) {}
 

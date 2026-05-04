@@ -5,7 +5,6 @@ import { ApiResponse } from '../models/api-response.model';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { AdminStatsResponse, JobSeekerStatsResponse, RecruiterStatsResponse } from '../models/analytics.model';
-import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,12 +12,12 @@ import { StorageService } from './storage.service';
 export class StatsDataService {
 
     private baseUrl: string = environment.apiGatewayUrl;
-  constructor(private http: HttpClient, private router: Router,private storage: StorageService) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
 
   /* ================= HEADERS ================= */
   private getHeaders(): HttpHeaders {
-    const token = this.storage.get('JWT_Token');
+    const token = localStorage.getItem('JWT_Token');
 
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : '',

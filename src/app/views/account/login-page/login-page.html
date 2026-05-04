@@ -1,27 +1,33 @@
-<div class="login-wrapper d-flex flex-column justify-content-center align-items-center vh-100">
+<div class="auth-wrapper">
+  <div class="auth-card p-4 p-sm-5 text-center">
+    <!-- Logo -->
+    <img src="/assets/logo/website-logo.png" alt="Talent Hub" class="logo-img mb-4" />
 
-  <!-- Logo -->
-  <img src="/assets/logo/website-logo.png" alt="Talent Hub" class="logo-img mb-3" />
+    <h4 class="fw-bold mb-2">Welcome Back</h4>
+    <p class="text-muted small mb-4">Log in to your Talent Hub account</p>
 
-  <h4 class="fw-bold text-center mb-1">Welcome Back</h4>
-  <p class="text-center text-muted small mb-4">
-    Log in to your Talent Hub account
-  </p>
+    <!-- LOGIN FORM -->
+    <form class="text-start" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <div class="mb-3">
+        <label class="form-label small fw-semibold text-dark mb-1">Email Address</label>
+        <app-input-fields [form]="loginForm" type="email" placeholder="Enter your email" controlName="email" height="48px"></app-input-fields>
+      </div>
+      
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <label class="form-label small fw-semibold text-dark mb-0">Password</label>
+          <a href="/forgot-password" class="small text-primary text-decoration-none fw-medium">Forgot Password?</a>
+        </div>
+        <app-input-fields [form]="loginForm" type="password" placeholder="Enter your password" controlName="password" height="48px"></app-input-fields>
+      </div>
 
-  <!-- LOGIN FORM -->
-<form class="form-area" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <app-button class="d-block w-100" label="Login" variant="primary" type="submit" size="lg" [isLoading]="isLoading" [disabled]="loginForm.invalid"></app-button>
+    </form>
 
-<app-input-fields  [form]="loginForm" type="email" placeholder="Email Address" controlName="email" height="45px"></app-input-fields>
-<app-input-fields [form]="loginForm" type="password" placeholder="Password" controlName="password" height="45px"></app-input-fields>
-<app-button class="w-100 mt-3" label="Login" variant="primary" type="submit" size="lg" [isLoading]="isLoading" [disabled]="loginForm.invalid"></app-button>
-
-
-</form>
-
-  <!-- SIGNUP -->
-  <p class="text-center text-muted mt-3 small">
-    Don’t have an account?
-    <a href="/signup" class="fw-semibold login-link">Sign up</a>
-  </p>
-
+    <!-- SIGNUP -->
+    <p class="text-center text-muted mt-4 mb-0 small">
+      Don’t have an account?
+      <a href="/signup" class="fw-semibold text-primary login-link ms-1">Sign up</a>
+    </p>
+  </div>
 </div>

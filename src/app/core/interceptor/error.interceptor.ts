@@ -7,19 +7,17 @@ import { inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { StorageService } from '../services/storage.service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toastr = inject(ToastrService);
   const router = inject(Router);
-  const storage = inject(StorageService);
 
   const isBackendApi = req.url.includes('/api/');
   const isLogout = req.url.includes('/auth/logout');
 
 
 const isBrowser = typeof window !== 'undefined';
-const token = storage.get('JWT_Token');
+const token = localStorage.getItem('JWT_Token');
 
   return next(req).pipe(
 
@@ -48,7 +46,7 @@ const token = storage.get('JWT_Token');
       }
 
       // ✅ SSR SAFE FIX
-      if (storage.get('isLoggingOut') === 'true') {
+      if (localStorage.getItem('isLoggingOut') === 'true') {
         return throwError(() => error);
       }
 

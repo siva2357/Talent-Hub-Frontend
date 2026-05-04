@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { ChatbotService } from '../../../core/services/chatbot-service';
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { StorageService } from '../../../core/services/storage.service';
 
 interface ChatMessage {
   sender: 'user' | 'ai';
@@ -33,13 +32,12 @@ export class AiChabotComponent implements OnInit {
 
 constructor(
   private chatbotService: ChatbotService,
-  private storage: StorageService,
   @Inject(PLATFORM_ID) private platformId: Object
 ) {}
 
 ngOnInit() {
   if (isPlatformBrowser(this.platformId)) {
-    const seen = this.storage.get('aiIntroSeen');
+    const seen = localStorage.getItem('aiIntroSeen');
     if (!seen) {
       setTimeout(() => {
         this.showIntro = true;
@@ -57,7 +55,7 @@ closeIntro() {
   this.showIntro = false;
 
   if (isPlatformBrowser(this.platformId)) {
-    this.storage.set('aiIntroSeen', 'true');
+    localStorage.setItem('aiIntroSeen', 'true');
   }
 }
 

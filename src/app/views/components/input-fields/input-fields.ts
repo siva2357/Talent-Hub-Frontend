@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class InputFields {
   @Input() form!: FormGroup;   // ✅ ADD THIS
-  @Input() type: string = 'text';
+  @Input() type: 'text' | 'email' | 'number' | 'date'|'password' = 'text';
   @Input() placeholder: string = '';
   @Input() controlName!: string;
   @Input() isSelect: boolean = false;
