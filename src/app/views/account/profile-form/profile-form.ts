@@ -117,11 +117,7 @@ if (isPlatformBrowser(this.platformId)) {
 }
 
 
-  this.addSkill();
-this.addLanguage();
-this.addExperience();
-this.addSocialProfile();
-this.addCertification();
+  // Removed empty add calls that were failing due to input checks
 
 
  this.activeForm.get('sector')?.valueChanges.subscribe((sector: SECTOR) => {
@@ -220,6 +216,14 @@ loadCompanies() {
 
 
 nextStep() {
+  // ✅ Auto-add if user forgot to click "Add" button
+  if (this.step === 4 && this.platformInput && this.linkInput) {
+    this.addSocialProfile();
+  }
+  if (this.step === 3 && this.skillInput.trim()) {
+    this.addSkill();
+  }
+
   if (!this.isCurrentStepValid()) return;
   if (this.step < this.totalSteps) this.step++;
 }
@@ -294,25 +298,23 @@ getSocialIcon(platform: SocialPlatform): string {
 addSocialProfile() {
   if (!this.platformInput || !this.linkInput) return;
 
+  const platform = this.platformInput as SocialPlatform;
+  const pattern = SOCIAL_URL_PATTERNS[platform];
+
   const group = this.fb.group({
-    platform: [this.platformInput, Validators.required],
-    link: [this.linkInput, Validators.required],
+    platform: [platform, Validators.required],
+    link: [this.linkInput, [Validators.required, ...(pattern ? [Validators.pattern(pattern)] : [])]],
   });
 
-  group.get('platform')?.valueChanges.subscribe((platform) => {
+  // Also listen for changes if they edit it later (though not currently exposed in UI)
+  group.get('platform')?.valueChanges.subscribe((newPlatform) => {
     const linkControl = group.get('link');
-
-    const selectedPlatform = platform as SocialPlatform;
-
-    if (selectedPlatform && SOCIAL_URL_PATTERNS[selectedPlatform]) {
-      linkControl?.setValidators([
-        Validators.required,
-        Validators.pattern(SOCIAL_URL_PATTERNS[selectedPlatform])
-      ]);
+    const newPattern = SOCIAL_URL_PATTERNS[newPlatform as SocialPlatform];
+    if (newPattern) {
+      linkControl?.setValidators([Validators.required, Validators.pattern(newPattern)]);
     } else {
       linkControl?.setValidators([Validators.required]);
     }
-
     linkControl?.updateValueAndValidity();
   });
 

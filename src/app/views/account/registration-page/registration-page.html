@@ -1,60 +1,61 @@
-<div class="signup-wrapper d-flex flex-column justify-content-center align-items-center vh-100 bg-light">
+<div class="auth-wrapper">
+  <div class="auth-card text-center">
+    <!-- Logo -->
+    <img src="/assets/logo/website-logo.png" alt="Talent Hub" class="logo-img" />
 
-  <!-- Logo -->
-  <img src="/assets/logo/website-logo.png" class="logo-img mb-3" alt="Talent Hub" />
+    <h4 class="fw-bold mb-2">Create {{ role === 'recruiter' ? 'Recruiter' : 'Job Seeker' }} Account</h4>
+    <p class="text-muted small mb-4">Join Talent Hub to start your journey</p>
 
-  <h4 class="fw-bold mb-1 text-center">
-    Create {{ role === 'recruiter' ? 'Recruiter' : 'Job Seeker' }} Account
-  </h4>
+    <!-- FORM -->
+    <form class="text-start" [formGroup]="form" (ngSubmit)="onSubmit()">
+      
+      <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        <app-input-fields
+          [form]="form"
+          controlName="fullName"
+          height="50px"
+          placeholder="Enter your full name">
+        </app-input-fields>
+      </div>
 
-  <p class="text-muted small text-center mb-3">
-    Join Talent Hub as a {{ role === 'recruiter' ? 'Recruiter' : 'Job Seeker' }}
-  </p>
+      <div class="mb-3">
+        <label class="form-label">Email Address</label>
+        <app-input-fields
+          [form]="form"
+          controlName="email"
+          type="email"
+          height="50px"
+          placeholder="Enter your email">
+        </app-input-fields>
+      </div>
 
-  <form class="form-area"   [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="mb-4">
+        <label class="form-label">Password</label>
+        <app-input-fields
+          [form]="form"
+          controlName="password"
+          type="password"
+          height="50px"
+          placeholder="Create a secure password">
+        </app-input-fields>
+      </div>
 
- <app-input-fields
-      [form]="form"
-      controlName="fullName"
-      height="45px"
-      placeholder="Full Name">
-    </app-input-fields>
+      <app-button
+        label="Create Account"
+        variant="primary"
+        type="submit"
+        size="lg"
+        [isLoading]="isLoading"
+        [disabled]="form.invalid"
+        class="d-block w-100">
+      </app-button>
+    </form>
 
-    <!-- EMAIL -->
-    <app-input-fields
-      [form]="form"
-      controlName="email"
-      type="email"
-      height="45px"
-      placeholder="Email">
-    </app-input-fields>
-
-    <!-- PASSWORD -->
-    <app-input-fields
-      [form]="form"
-      controlName="password"
-      type="password"
-      height="45px"
-      placeholder="Password">
-    </app-input-fields>
-
-
-
-<app-button
-  label="Create Account"
-  variant="primary"
-  type="submit"
-  size="lg"
-  [isLoading]="isLoading"
-  [disabled]="form.invalid"
-  class="w-100">
-</app-button>
-
-  </form>
-
-  <p class="small text-muted mt-3">
-    Already have an account?
-    <a href="/login" class="fw-semibold login-link">Log in</a>
-  </p>
-
+    <!-- LOGIN LINK -->
+    <p class="text-center text-muted mt-4 mb-0 small">
+      Already have an account?
+      <a href="/login" class="login-link ms-1">Log in</a>
+    </p>
+  </div>
 </div>

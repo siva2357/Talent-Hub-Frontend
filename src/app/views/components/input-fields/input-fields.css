@@ -1,12 +1,41 @@
+/* Standard Form Control Reset */
+.form-control, .form-select {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #1e293b;
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  outline: none;
+}
+
+/* Fix Select Alignment with custom height */
+.form-select {
+  padding-top: 0;
+  padding-bottom: 0;
+  display: flex;
+  align-items: center;
+}
+
 /* Error state */
 .is-invalid {
-  border-color: #dc2626 !important;
+  border-color: #ef4444 !important;
+}
+
+.is-invalid:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
 }
 
 /* Error text */
 .error-text {
-  color: #dc2626;
+  color: #ef4444;
   font-size: 12px;
-  margin-top: 4px;
+  font-weight: 600;
+  margin-top: 6px;
   display: block;
 }

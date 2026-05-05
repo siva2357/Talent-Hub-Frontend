@@ -1,87 +1,107 @@
-/* =========================
-   SIDE NAVIGATION
-========================= */
-.settings-nav-card {
-  background: #fff;
-  border-radius: 20px;
-  border: 1px solid rgba(59, 130, 246, 0.08);
-  overflow: hidden;
+.settings-page {
+  background: #f8fafc;
+  min-height: 100vh;
 }
 
-.nav-item-btn {
-  width: 100%;
+.back-btn {
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 18px;
-  border: none;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background: #f1f5f9;
+  transform: translateX(-3px);
+}
+
+/* ===== SIDEBAR ===== */
+.settings-sidebar {
+  border-radius: 20px;
+  position: sticky;
+  top: 100px;
+}
+
+.nav-link-custom {
   background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 12px 16px;
   border-radius: 12px;
   font-size: 14px;
   font-weight: 600;
-  color: var(--th-text-muted);
-  transition: all 0.25s ease;
-  margin-bottom: 4px;
-  text-align: left;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
 }
 
-.nav-item-btn:hover {
-  background: var(--th-bg-blue-50);
-  color: var(--th-primary);
-}
-
-.nav-item-btn.active {
-  background: var(--th-bg-blue-100);
-  color: var(--th-primary);
-}
-
-.nav-item-btn i {
+.nav-link-custom i {
   font-size: 18px;
 }
 
-.nav-item-btn.danger {
+.nav-link-custom:hover {
+  background: #f1f5f9;
+  color: #3b82f6;
+}
+
+.nav-link-custom.active {
+  background: #eff6ff;
+  color: #3b82f6;
+}
+
+.nav-link-custom.danger:hover {
+  background: #fef2f2;
   color: #ef4444;
 }
 
-.nav-item-btn.danger:hover {
-  background: rgba(239, 68, 68, 0.08);
-}
-
-.nav-item-btn.danger.active {
-  background: rgba(239, 68, 68, 0.1);
+.nav-link-custom.danger.active {
+  background: #fef2f2;
   color: #ef4444;
 }
 
-/* =========================
-   CONTENT AREA
-========================= */
+/* ===== CONTENT CARD ===== */
 .settings-content-card {
-  background: #fff;
   border-radius: 24px;
-  border: 1px solid rgba(59, 130, 246, 0.08);
-  min-height: 500px;
+  min-height: 600px;
 }
 
-.tab-header h5 {
-  color: var(--th-text-dark);
-  letter-spacing: -0.3px;
+/* ===== GLOBAL SETTINGS UI ELEMENTS ===== */
+:host ::ng-deep h5.form-section-title {
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-/* Responsive Adjustments */
+:host ::ng-deep .settings-footer {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* ANIMATION */
+.settings-content-card > * {
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
 @media (max-width: 991px) {
-  .settings-nav-card {
-    margin-bottom: 20px;
-  }
-  
-  .list-group {
-    flex-direction: row;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-  }
-  
-  .nav-item-btn {
-    white-space: nowrap;
-    width: auto;
-    padding: 10px 16px;
+  .settings-sidebar {
+    position: static;
+    margin-bottom: 24px;
   }
 }

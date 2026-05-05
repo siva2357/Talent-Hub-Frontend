@@ -1,24 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
 import { AuthService } from '../../../../../core/services/auth-service';
 import { SeekerProfileService } from '../../../../../core/services/seeker-profile-service';
 import { RecruiterProfileService } from '../../../../../core/services/recruiter-profile-service';
-
+import { FilePreview } from '../../../../shared/file-preview/file-preview';
+import { FileUpload } from '../../../../shared/file-upload/file-upload';
+import { BucketKey } from '../../../../../core/enums/bucket-key.constant';
+import { UploadSection } from '../../../../../core/enums/upload-section.constant';
 
 @Component({
   selector: 'app-update-profile-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FilePreview, FileUpload],
   templateUrl: './update-profile-details.html',
   styleUrl: './update-profile-details.css'
 })
 export class UpdateProfileDetails implements OnInit {
-
   role: string | null = null;
   imageUrl: string = '';
-  selectedFile!: File;
   isLoading = false;
-  isUploading = false;
+  
+  bucket = BucketKey;
+  uploadSection = UploadSection;
 
   constructor(
     private authService: AuthService,
@@ -33,57 +37,31 @@ export class UpdateProfileDetails implements OnInit {
 
   loadProfileImage(): void {
     this.isLoading = true;
+    const obs = (this.role === 'jobSeeker' 
+      ? this.seekerService.getJobSeekerProfilePicture() 
+      : this.recruiterService.getRecruiterProfilePicture()) as Observable<any>;
 
-    if (this.role === 'jobSeeker') {
-      this.seekerService.getJobSeekerProfilePicture().subscribe({
-        next: (res) => {
-          this.imageUrl = res.data?.profilePhoto;
-          this.isLoading = false;
-        },
-        error: () => (this.isLoading = false),
-      });
-    } else if (this.role === 'recruiter') {
-      this.recruiterService.getRecruiterProfilePicture().subscribe({
-        next: (res) => {
-          this.imageUrl = res.data?.profilePhoto;
-          this.isLoading = false;
-        },
-        error: () => (this.isLoading = false),
-      });
-    }
+    obs.subscribe({
+      next: (res: any) => {
+        this.imageUrl = res.data?.profilePhoto;
+        this.isLoading = false;
+      },
+      error: () => (this.isLoading = false),
+    });
   }
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-    }
-  }
-
-  uploadImage(): void {
-    if (!this.selectedFile) return;
-
-    const formData = new FormData();
-    formData.append('image', this.selectedFile);
-
-    this.isUploading = true;
-
-    if (this.role === 'jobSeeker') {
-      this.seekerService.updateJobSeekerProfilePicture(formData as any).subscribe({
-        next: () => {
-          this.isUploading = false;
-          this.loadProfileImage();
-        },
-        error: () => (this.isUploading = false),
-      });
-    } else if (this.role === 'recruiter') {
-      this.recruiterService.updateRecruiterProfilePicture(formData as any).subscribe({
-        next: () => {
-          this.isUploading = false;
-          this.loadProfileImage();
-        },
-        error: () => (this.isUploading = false),
-      });
-    }
+  onUploadSuccess(url: string) {
+    this.imageUrl = url;
+    
+    const payload = { profilePhoto: url };
+    const obs = (this.role === 'jobSeeker'
+      ? this.seekerService.updateJobSeekerProfilePicture(payload as any)
+      : this.recruiterService.updateRecruiterProfilePicture(payload as any)) as Observable<any>;
+      
+    obs.subscribe({
+      next: () => {
+        console.log('Profile photo updated in database');
+      }
+    });
   }
 }
