@@ -4,7 +4,7 @@
   @if (mode === 'form') {
     <div [formGroup]="form">
 
-      <!-- TEXTAREA (ONLY FORM) -->
+      <!-- TEXTAREA -->
       @if (isTextarea) {
         <textarea
           class="form-control"
@@ -12,6 +12,7 @@
           [readonly]="readonly"
           [formControlName]="controlName"
           [ngClass]="{ 'is-invalid': isInvalid() }"
+          [ngStyle]="height ? { height: height } : null"
           rows="4">
         </textarea>
       }
@@ -31,19 +32,20 @@
 
       <!-- SELECT -->
       @else {
-<select
-  class="form-select"
-  [formControlName]="controlName"
-  [ngClass]="{ 'is-invalid': isInvalid() }"
->
-  <option [ngValue]="null">
-    {{ placeholder || 'Select option' }}
-  </option>
+        <select
+          class="form-select"
+          [formControlName]="controlName"
+          [ngClass]="{ 'is-invalid': isInvalid() }"
+          [ngStyle]="height ? { height: height } : null"
+        >
+          <option [ngValue]="''" disabled selected hidden>
+            {{ placeholder || 'Select option' }}
+          </option>
 
-  @for (opt of options; track opt) {
-    <option [ngValue]="opt">{{ opt }}</option>
-  }
-</select>
+          @for (opt of options; track opt) {
+            <option [ngValue]="opt">{{ opt }}</option>
+          }
+        </select>
       }
 
       <!-- VALIDATION -->
@@ -67,6 +69,7 @@
         [placeholder]="placeholder"
         [value]="value"
         (input)="onFilterChange($event)"
+        [ngStyle]="height ? { height: height } : null"
       />
     }
 
@@ -76,6 +79,7 @@
         class="form-select"
         [value]="value"
         (change)="onFilterChange($event)"
+        [ngStyle]="height ? { height: height } : null"
       >
         <option value="">
           {{ placeholder || 'Select option' }}

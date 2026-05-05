@@ -1,3 +1,4 @@
+@import 'quill/dist/quill.snow.css';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
@@ -109,7 +110,7 @@ body::-webkit-scrollbar {
 }
 
 .btn-secondary {
-  background: #f1f5f9;
+  background: #e4e4e4;
   color: #475569;
 }
 
@@ -147,7 +148,6 @@ body::-webkit-scrollbar {
 /* HOVER STATES */
 .btn-primary:hover {
   background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-  transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
   color: #fff;
 }
@@ -334,8 +334,25 @@ body::-webkit-scrollbar {
 .filter-card {
   background: #ffffff;
   border: 1px solid rgba(59, 130, 246, 0.08);
-  border-radius: 20px;
-  padding: 24px;
+  border-radius: 16px;
+  padding: 16px;
   box-shadow: var(--th-shadow-md);
   margin-bottom: 24px;
+}
+/* ================= PREMIUM MODAL SYSTEM ================= */
+.modal-content {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  border: none !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.modal-header, .modal-header-premium {
+  border-top-left-radius: 20px !important;
+  border-top-right-radius: 20px !important;
+}
+
+.modal-footer {
+  border-bottom-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
 }

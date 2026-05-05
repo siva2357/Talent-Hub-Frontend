@@ -14,9 +14,11 @@ interface ChatMessage {
 }
 
 
+import { Buttons } from '../buttons/buttons';
+
 @Component({
   selector: 'app-ai-chabot-component',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Buttons],
   templateUrl: './ai-chabot-component.html',
   styleUrl: './ai-chabot-component.css',
   standalone: true,
@@ -30,120 +32,120 @@ export class AiChabotComponent implements OnInit {
   showIntro = false;
   loading = false;
 
-constructor(
-  private chatbotService: ChatbotService,
-  @Inject(PLATFORM_ID) private platformId: Object
-) {}
+  constructor(
+    private chatbotService: ChatbotService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
-ngOnInit() {
-  if (isPlatformBrowser(this.platformId)) {
-    const seen = localStorage.getItem('aiIntroSeen');
-    if (!seen) {
-      setTimeout(() => {
-        this.showIntro = true;
-      }, 700);
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const seen = localStorage.getItem('aiIntroSeen');
+      if (!seen) {
+        setTimeout(() => {
+          this.showIntro = true;
+        }, 700);
+      }
     }
   }
-}
 
 
   toggleChat() {
     this.isOpen = !this.isOpen;
   }
 
-closeIntro() {
-  this.showIntro = false;
+  closeIntro() {
+    this.showIntro = false;
 
-  if (isPlatformBrowser(this.platformId)) {
-    localStorage.setItem('aiIntroSeen', 'true');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('aiIntroSeen', 'true');
+    }
   }
-}
 
   openChatFromIntro() {
     this.closeIntro();
     this.isOpen = true;
   }
 
-sendMessage() {
-  if (!this.input.trim() || this.loading) return;
+  sendMessage() {
+    if (!this.input.trim() || this.loading) return;
 
-  const userMessage = this.input;
+    const userMessage = this.input;
 
-  // push user message
-  this.messages.push({
-    sender: 'user',
-    text: userMessage
-  });
+    // push user message
+    this.messages.push({
+      sender: 'user',
+      text: userMessage
+    });
 
-  this.input = '';
-  this.loading = true;
+    this.input = '';
+    this.loading = true;
 
-  this.chatbotService.askQuestion(userMessage).subscribe({
-next: (res: any) => {
-  const answer = res.data?.answer || '';
+    this.chatbotService.askQuestion(userMessage).subscribe({
+      next: (res: any) => {
+        const answer = res.data?.answer || '';
 
-  const formatted = this.formatAIResponse(answer);
+        const formatted = this.formatAIResponse(answer);
 
-      this.messages.push({
-        sender: 'ai',
-        paragraph: formatted.paragraph,
-        points: formatted.points,
-        raw: res.answer
-      });
+        this.messages.push({
+          sender: 'ai',
+          paragraph: formatted.paragraph,
+          points: formatted.points,
+          raw: res.answer
+        });
 
-      this.loading = false;
-      this.scrollToBottom();
-    },
-    error: () => {
-      this.messages.push({
-        sender: 'ai',
-        paragraph: 'Sorry, something went wrong. Please try again.',
-        points: []
-      });
-      this.loading = false;
-    }
-  });
-}
-
-
-
-
-private formatAIResponse(text: string): { paragraph: string; points: string[] } {
-  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-
-  const paragraphLines: string[] = [];
-  const points: string[] = [];
-
-  for (let line of lines) {
-    // remove markdown bold/italic markers
-    line = line.replace(/\*\*/g, '').replace(/__/g, '').replace(/\*/g, '');
-
-    if (
-      line.startsWith('-') ||
-      line.startsWith('•') ||
-      /^\d+\./.test(line)
-    ) {
-      points.push(line.replace(/^(-|•|\d+\.)\s*/, ''));
-    } else if (!line.toLowerCase().includes('key aspects')) {
-      paragraphLines.push(line);
-    }
+        this.loading = false;
+        this.scrollToBottom();
+      },
+      error: () => {
+        this.messages.push({
+          sender: 'ai',
+          paragraph: 'Sorry, something went wrong. Please try again.',
+          points: []
+        });
+        this.loading = false;
+      }
+    });
   }
 
-  return {
-    paragraph: paragraphLines.join(' '),
-    points
-  };
-}
+
+
+
+  private formatAIResponse(text: string): { paragraph: string; points: string[] } {
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+
+    const paragraphLines: string[] = [];
+    const points: string[] = [];
+
+    for (let line of lines) {
+      // remove markdown bold/italic markers
+      line = line.replace(/\*\*/g, '').replace(/__/g, '').replace(/\*/g, '');
+
+      if (
+        line.startsWith('-') ||
+        line.startsWith('•') ||
+        /^\d+\./.test(line)
+      ) {
+        points.push(line.replace(/^(-|•|\d+\.)\s*/, ''));
+      } else if (!line.toLowerCase().includes('key aspects')) {
+        paragraphLines.push(line);
+      }
+    }
+
+    return {
+      paragraph: paragraphLines.join(' '),
+      points
+    };
+  }
 
 
 
 
-private scrollToBottom() {
-  if (!isPlatformBrowser(this.platformId)) return;
+  private scrollToBottom() {
+    if (!isPlatformBrowser(this.platformId)) return;
 
-  setTimeout(() => {
-    const el = document.querySelector('.ai-messages');
-    el?.scrollTo({ top: (el as any).scrollHeight, behavior: 'smooth' });
-  });
-}
+    setTimeout(() => {
+      const el = document.querySelector('.ai-messages');
+      el?.scrollTo({ top: (el as any).scrollHeight, behavior: 'smooth' });
+    });
+  }
 }

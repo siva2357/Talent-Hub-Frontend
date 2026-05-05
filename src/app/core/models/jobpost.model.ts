@@ -12,19 +12,29 @@ export interface JobCompany {
 export interface JobPost {
   _id: string;
   jobId: string;
-  jobTitle: string;
-  jobType: string;
-  jobCategory: string;
-  experience: string;
-  qualification: string;
-  jobDescription: string;
+  
+  // Prefixed versions (Legacy/JobSeeker)
+  jobTitle?: string;
+  jobType?: string;
+  jobCategory?: string;
+  jobDescription?: string;
+
+  // Non-prefixed versions (Recruiter API)
+  title?: string;
+  type?: string;
+  category?: string;
+  description?: string;
+
+  experience?: string;
+  qualification?: string;
   salary: string;
-  vacancy: string;
+  vacancy?: string;
   location: string;
   applyByDate: string;
-  postedOn: string;
+  postedOn?: string;
   status: 'Open' | 'Closed' | 'Rejected';
-  company: JobCompany;
+  company?: JobCompany;
+  applicants?: number;
 }
 
 export interface RecruiterJobsResponse {

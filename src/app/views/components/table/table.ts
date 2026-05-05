@@ -14,7 +14,8 @@ export class Table {
   @Input() page: number = 1;
   @Input() limit: number = 10;
   @Input() selectable: boolean = false;
-  @Input() actions: any[] = []; // [{ label: string, icon: string, callback: (row) => void }]
+  @Input() actions: any[] = [];
+  @Input() isLoading: boolean = false;
 
   @Output() selectionChange = new EventEmitter<any[]>();
 

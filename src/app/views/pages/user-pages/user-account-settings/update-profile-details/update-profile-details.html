@@ -1,3 +1,39 @@
-<div class="container mt-5 pt-5">
-  <p>Profile details page</p>
+<h5 class="form-section-title"><i class="bi bi-camera-fill text-primary"></i>Profile Visuals</h5>
+
+<div class="card border-0 bg-white rounded-4 p-5 shadow-sm text-center mb-4">
+  <div class="d-flex flex-column align-items-center">
+    <div class="position-relative mb-5">
+      <div class="avatar-container">
+        @if(imageUrl) {
+          <app-file-preview [fileUrl]="imageUrl" mode="avatar"></app-file-preview>
+        } @else {
+          <div class="avatar-placeholder rounded-circle bg-light border d-flex align-items-center justify-content-center shadow-inner" style="width: 180px; height: 180px;">
+            <i class="bi bi-person-circle text-muted" style="font-size: 80px;"></i>
+          </div>
+        }
+      </div>
+      <div class="avatar-badge bg-primary text-white rounded-circle shadow-sm">
+        <i class="bi bi-pencil-fill"></i>
+      </div>
+    </div>
+
+    <div class="upload-zone w-100" style="max-width: 450px;">
+      <h6 class="fw-bold text-dark mb-3">Upload New Photo</h6>
+      <app-file-upload 
+        [bucketKey]="role === 'recruiter' ? bucket.RECRUITER_DATA : bucket.JOBSEEKER_DATA"
+        [section]="uploadSection.PROFILE_PHOTO" 
+        accept="image/*" 
+        [replace]="true"
+        (uploaded)="onUploadSuccess($event)">
+      </app-file-upload>
+      
+      <div class="mt-4 p-3 bg-light rounded-4 d-inline-flex align-items-center gap-3 border">
+        <i class="bi bi-info-circle-fill text-primary"></i>
+        <span class="text-muted smallest text-start">
+          Recommended: Square image, 500x500px minimum. <br>
+          Files up to 5MB supported.
+        </span>
+      </div>
+    </div>
+  </div>
 </div>

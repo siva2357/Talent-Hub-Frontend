@@ -1,5 +1,50 @@
-.professional-details-container {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+.border-dashed {
+  border-style: dashed !important;
+  border-width: 2px !important;
+  border-color: #e2e8f0 !important;
 }
 
+.smallest {
+  font-size: 11px;
+}
+
+.card {
+  animation: fadeIn 0.4s ease-out;
+  transition: all 0.2s ease;
+  border: 1px solid #f1f5f9 !important;
+}
+
+.card:hover {
+  border-color: #e2e8f0 !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.settings-footer {
+  box-shadow: 0 -10px 15px -3px rgba(0, 0, 0, 0.05);
+  margin-left: -24px;
+  margin-right: -24px;
+  padding-left: 24px;
+  padding-right: 24px;
+  z-index: 10;
+  border-top: 1px solid #f1f5f9 !important;
+}
+
+/* Ensure inputs in templates have proper borders if not using app-input-fields */
+.form-control, .form-select {
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}

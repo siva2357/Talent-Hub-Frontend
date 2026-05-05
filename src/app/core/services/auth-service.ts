@@ -55,6 +55,13 @@ register(data: SignupRequestDto): Observable<SignupResponse> {
 
   /* ================= OTP ================= */
 
+  changePassword(payload: any): Observable<any> {
+    return this.http.patch<any>(`${this.baseUrl}/auth/change-password`, payload, {
+      headers: { Authorization: `Bearer ${this.getToken()}` }
+    });
+  }
+
+
 verifyOtp(
   payload: VerifyOtpRequestDto
 ): Observable<VerifyOtpResponse> {

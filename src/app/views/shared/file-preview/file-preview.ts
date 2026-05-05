@@ -26,7 +26,7 @@ export class FilePreview {
 
     const cleanUrl = this.fileUrl.split('?')[0].toLowerCase();
 
-    if (cleanUrl.match(/\.(png|jpg|jpeg|webp|gif)$/)) return 'image';
+    if (cleanUrl.match(/\.(png|jpg|jpeg|webp|gif|svg)$/)) return 'image';
     if (cleanUrl.match(/\.(mp4|webm|ogg)$/)) return 'video';
     if (cleanUrl.endsWith('.pdf')) return 'pdf';
 

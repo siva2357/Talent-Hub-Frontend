@@ -16,6 +16,8 @@ import { AdminService } from '../../../../core/services/admin-service';
 export class UserProfile implements OnInit {
   profile: any = null;
   profileData: any = null;
+  jobs: any[] = [];
+  portfolios: any[] = [];
   role: string | null = null;
   isLoading = true;
 
@@ -79,7 +81,18 @@ export class UserProfile implements OnInit {
   handleResponse(res: any) {
     this.profile = res.data;
     this.profileData = res.data.profile;
+    this.jobs = res.data.jobs || []; // ✅ Capture jobs for recruiters
+    this.portfolios = res.data.portfolios || []; // ✅ Capture portfolios for seekers
     this.isLoading = false;
     this.cd.detectChanges(); // ✅ ensures UI updates safely
+  }
+
+  getSocialIcon(platform: string): string {
+    const p = platform.toLowerCase();
+    if (p.includes('linkedin')) return 'bi-linkedin';
+    if (p.includes('github')) return 'bi-github';
+    if (p.includes('twitter') || p.includes('x')) return 'bi-twitter-x';
+    if (p.includes('portfolio') || p.includes('website')) return 'bi-globe';
+    return 'bi-link-45deg';
   }
 }
