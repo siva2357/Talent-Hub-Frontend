@@ -1,282 +1,247 @@
-.job-card{
-background:white;
-border-radius:12px;
-border:1px solid #eee;
-transition:0.25s;
-height:100%;
-box-shadow:0 10px 25px rgba(0,0,0,0.08);
-
+.page-container {
+  background-color: #f8fafc;
+  padding-bottom: 2rem;
+  min-height: 100vh;
 }
 
-
-.company-logo{
-width:42px;
-height:42px;
-padding:6px;
-border-radius:8px;
-background:#f5f5f5;
-object-fit:contain;
+/* Glass Card Architecture for Light Theme */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 2px solid rgba(59, 130, 246, 0.3) !important;
+  border-radius: 20px;
 }
 
-.job-title{
-font-size:15px;
+/* Job Card Executive Light Design */
+.job-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px;
+  border: 2px solid rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
 }
 
-.bookmark-icon{
-font-size:18px;
-cursor:pointer;
-color:#888;
+.job-card:hover {
+  box-shadow: 0 20px 40px -12px rgba(59, 130, 246, 0.12) !important;
+  border-color: rgba(59, 130, 246, 0.5) !important;
 }
 
-.bookmark-icon:hover{
-color:#000;
+.logo-wrapper {
+  transition: transform 0.3s ease;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
-.job-meta{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin-top:6px;
+.job-card:hover .logo-wrapper {
+  transform: scale(1.02);
 }
 
-.job-badge{
-font-size:11px;
-padding:3px 8px;
-border-radius:8px;
-border:1px solid var(--bs-secondary);
-color:#343a40;
-background:#f8f9fa;
-font-weight:500;
+.job-title {
+  font-size: 1.1rem;
+  color: #0f172a;
+  letter-spacing: -0.01em;
 }
 
-
-
-.job-desc{
-font-size:12.5px;
-color:#6c757d;
-margin-top:4px;
-margin-bottom:0;
-
-display:-webkit-box;
--webkit-line-clamp:2;
-line-clamp: 2;
--webkit-box-orient:vertical;
-overflow:hidden;
+.text-secondary {
+  color: #64748b !important;
 }
 
-
-
-.view-job-btn{
-padding:4px 10px;
-font-size:12px;
-border-radius:5px;
-border:1px solid var(--bs-primary);
-background:white;
-color:var(--bs-primary);
-font-weight:500;
-cursor:pointer;
-transition:0.2s;
+.job-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #64748b;
+  height: 39px;
+  /* Exactly 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  /* Handle long strings */
+  word-break: break-word;
 }
 
-.view-job-btn:hover{
-background:var(--bs-primary);
-color:white;
+.job-desc * {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  line-height: inherit;
 }
 
-.apply-btn{
-padding:4px 10px;
-font-size:12px;
-border-radius:5px;
-border:none;
-background:var(--bs-primary);
-color:white;
-font-weight:500;
-cursor:pointer;
-transition:0.2s;
+/* Bookmark Circle Interaction */
+.btn-bookmark-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  border: none;
+  transition: all 0.2s ease;
+  padding: 0;
 }
 
-.apply-btn:hover{
-opacity:0.9;
+.btn-bookmark-circle:hover {
+  background: #e2e8f0;
+  transform: scale(1.05);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* FILTER TOOLBAR */
-
-.filter-toolbar{
-background:#ffffff;
-border:1px solid #e5e7eb;
-border-radius:8px;
-padding:14px;
-margin-bottom:18px;
+.btn-bookmark-circle i {
+  font-size: 1.1rem;
 }
 
-/* Inputs */
-
-.filter-input,
-.filter-select{
-height:36px;
-font-size:13px;
-border:1px solid #e5e7eb;
-border-radius:6px;
+/* Precision Truncation */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Focus style */
-
-.filter-input:focus,
-.filter-select:focus{
-border-color:#2563eb;
-box-shadow:0 0 0 2px rgba(37,99,235,0.08);
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Buttons container */
-
-.filter-buttons{
-display:flex;
-gap:10px;
+/* Executive Blue Divider */
+.divider {
+  height: 1.5px;
+  background: rgba(59, 130, 246, 0.15);
+  /* Authoritative Blue Accent */
+  width: 100%;
 }
 
-/* Buttons */
-
-.filter-btn{
-height:35px;
-font-size:13px;
-padding:0 20px;
-border-radius:6px;
+/* Pill Button Customization for Light Theme */
+::ng-deep .pill-btn button {
+  border-radius: 30px !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  font-weight: 600 !important;
+  background-color: #3b82f6 !important;
+  /* Executive Blue Accent */
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3) !important;
 }
 
-/* Apply */
-
-.filter-btn.btn-primary{
-background:#2563eb;
-border:none;
+::ng-deep .pill-btn button:hover {
+  background-color: #2563eb !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
 }
 
-/* Reset */
-
-.filter-btn.btn-outline-secondary{
-border:1px solid #e5e7eb;
+/* Meta Footer High-Fidelity */
+.meta-item i {
+  font-size: 16px;
+  color: #94a3b8;
 }
 
-/* Responsive */
-
-
-@media (max-width:768px){
-
-.filter-buttons{
-display:flex;
-width:100%;
-gap:10px;
+.meta-item span {
+  font-size: 13px;
+  color: #475569;
+  letter-spacing: 0.01em;
 }
 
-.filter-btn{
-flex:1;          /* buttons take equal width */
-width:100%;
+/* Floating Bookmark */
+.btn-icon-abs {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: none;
 }
 
-.filter-input,
-.filter-select{
-width:100%;
+.job-card:hover .btn-icon-abs {
+  display: block;
 }
 
+.btn-icon-abs i {
+  font-size: 1.25rem;
+  transition: all 0.2s ease;
 }
 
-.applicants-btn{
-font-size:13px;
-padding:4px 10px;
-border-radius:10px;
-background:#eef6ff;
-color:#0d6efd;
-border:none;
+.btn-icon-abs:hover i {
+  transform: scale(1.2);
 }
 
-
-/* FOOTER */
-
-.table-footer{
-margin-top:18px;
-padding-top:12px;
-border-top:1px solid #e5e7eb;
+/* Skeleton Loaders Light Theme */
+.skeleton-card {
+  background: #ffffff !important;
+  border-color: #f1f5f9 !important;
 }
 
-/* layout */
-
-.footer-wrapper{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-flex-wrap:nowrap;   /* prevent wrapping */
+.skeleton-logo,
+.skeleton-line,
+.skeleton-button {
+  background: #f1f5f9 !important;
 }
 
-/* text */
-
-.result-text{
-font-size:13px;
-color:#6b7280;
-white-space:nowrap;
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }
 
-/* PAGINATION */
-
-.custom-pagination{
-display:flex;
-gap:6px;
-flex-wrap:nowrap;
+.skeleton-logo::after,
+.skeleton-line::after,
+.skeleton-button::after {
+  background-image: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0.4) 20%,
+      rgba(255, 255, 255, 0.6) 60%,
+      rgba(255, 255, 255, 0));
 }
 
-.custom-pagination .page-link{
-font-size:13px;
-padding:6px 10px;
-border-radius:6px;
-border:1px solid #e5e7eb;
-color:#374151;
-background:#fff;
-transition:all .15s ease;
+/* Grid Calibration */
+@media (max-width: 768px) {
+  .job-card {
+    padding: 1.25rem !important;
+  }
+
+  .job-meta-footer {
+    gap: 1.5rem !important;
+  }
 }
 
-.custom-pagination .page-link:hover{
-background:#f3f4f6;
+.chip {
+  background: #f1f5f9;
+  padding: 4px 12px;
+  border-radius: 6px !important;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--th-transition-smooth);
 }
 
-/* active */
-
-.custom-pagination .page-item.active .page-link{
-background:#2563eb;
-border-color:#2563eb;
-color:#fff;
+.chip i {
+  cursor: pointer;
+  font-size: 16px;
 }
 
-/* disabled */
-
-.custom-pagination .page-item.disabled .page-link{
-color:#9ca3af;
-background:#f9fafb;
-}
-
-/* small screens */
-
-@media (max-width:768px){
-
-.result-text{
-font-size:12px;
-}
-
-.custom-pagination .page-link{
-padding:5px 8px;
-font-size:12px;
-}
-
+.chip:hover {
+  background: #e2e8f0;
+  color: #0f172a;
 }
