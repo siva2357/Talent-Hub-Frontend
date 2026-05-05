@@ -6,10 +6,16 @@ import { JobpostService } from '../../../../core/services/jobpost-service';
 import { Buttons } from '../../../components/buttons/buttons';
 import { InputFields } from "../../../components/input-fields/input-fields";
 import { JobPost } from '../../../../core/models/jobpost.model';
+import { QuillModule } from 'ngx-quill';
+import Quill from 'quill';
+
+const Size = Quill.import('attributors/style/size');
+(Size as any).whitelist = ['10px', '12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px', '48px'];
+Quill.register(Size as any, true);
 
 @Component({
   selector: 'app-manage-jobs-page',
-  imports: [RouterModule, CommonModule, FormsModule, ReactiveFormsModule, Buttons, InputFields],
+  imports: [RouterModule, CommonModule, FormsModule, ReactiveFormsModule, Buttons, InputFields, QuillModule],
   templateUrl: './manage-jobs-page.html',
   styleUrl: './manage-jobs-page.css',
 })
@@ -155,13 +161,13 @@ export class ManageJobsPage implements OnInit {
         const formattedDate = fullJob.applyByDate ? new Date(fullJob.applyByDate).toISOString().split('T')[0] : '';
         this.jobForm.patchValue({
           jobId: fullJob.jobId || '',
-          jobTitle: fullJob.title || '',
-          jobCategory: fullJob.category || '',
-          jobType: fullJob.type || '',
+          jobTitle: fullJob.jobTitle || '',
+          jobCategory: fullJob.jobCategory || '',
+          jobType: fullJob.jobType || '',
           location: fullJob.location || '',
           salary: fullJob.salary || '',
           status: fullJob.status || 'Open',
-          jobDescription: fullJob.description || '',
+          jobDescription: fullJob.jobDescription || '',
           applyByDate: formattedDate
         });
       },
@@ -174,13 +180,13 @@ export class ManageJobsPage implements OnInit {
     const form = this.jobForm.value;
     const payload = {
       jobId: form.jobId,
-      title: form.jobTitle,
-      category: form.jobCategory,
-      type: form.jobType,
+      jobTitle: form.jobTitle,
+      jobCategory: form.jobCategory,
+      jobType: form.jobType,
       location: form.location,
       salary: form.salary,
       status: form.status,
-      description: form.jobDescription,
+      jobDescription: form.jobDescription,
       applyByDate: form.applyByDate
     };
 
