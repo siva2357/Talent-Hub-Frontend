@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-blog',
   standalone: true,
   imports: [ButtonComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  templateUrl: './blog.component.html',
+  styleUrl: './blog.component.css',
 })
-export class HomeComponent {}
+export class BlogComponent {}
