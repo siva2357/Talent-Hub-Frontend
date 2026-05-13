@@ -17,24 +17,24 @@
           <div class="row g-4 mb-5 justify-content-center">
             <div class="col-md-3">
               <div class="vivid-icon-sm mb-3 mx-auto">
-                <i class="bi bi-person-plus text-blue-400"></i>
+                <i class="bi bi-person-plus"></i>
               </div>
-              <div class="fw-bold text-sm">Talent</div>
-              <div class="text-xs text-secondary">Matching</div>
+              <div class="fw-bold text-md mb-1">Talent</div>
+              <div class="text-sm text-secondary">Matching</div>
             </div>
             <div class="col-md-3">
               <div class="vivid-icon-sm mb-3 mx-auto">
-                <i class="bi bi-shield-check text-blue-400"></i>
+                <i class="bi bi-shield-check"></i>
               </div>
-              <div class="fw-bold text-sm">Secure</div>
-              <div class="text-xs text-secondary">Escrow</div>
+              <div class="fw-bold text-md mb-1">Secure</div>
+              <div class="text-sm text-secondary">Escrow</div>
             </div>
             <div class="col-md-3">
               <div class="vivid-icon-sm mb-3 mx-auto">
-                <i class="bi bi-kanban text-blue-400"></i>
+                <i class="bi bi-kanban"></i>
               </div>
-              <div class="fw-bold text-sm">Project</div>
-              <div class="text-xs text-secondary">Workflows</div>
+              <div class="fw-bold text-md mb-1">Project</div>
+              <div class="text-sm text-secondary">Workflows</div>
             </div>
           </div>
           
@@ -54,101 +54,22 @@
       </div>
 
       <div class="row g-4">
-        <!-- Video Meetings & Team Collaboration -->
-        <div class="col-lg-4">
-          <div class="gallery-card glass p-0 rounded-5 overflow-hidden h-100 d-flex flex-column position-relative">
-            <div class="gallery-image-box">
-              <img src="/assets/images/blog/talent_hub_services_blog.png" alt="Video Meetings" class="img-fluid h-100 w-100 object-fit-cover">
-            </div>
-            <div class="p-4 flex-grow-1 pt-5">
-              <div class="card-icon-badge bg-blue-glow">
-                <i class="bi bi-camera-video"></i>
+        @for (service of services; track service.title) {
+          <div class="col-lg-4">
+            <div class="gallery-card glass p-0 rounded-5 overflow-hidden h-100 d-flex flex-column position-relative">
+              <div class="gallery-image-box">
+                <img [src]="service.image" [alt]="service.title" class="img-fluid h-100 w-100 object-fit-cover">
               </div>
-              <h4 class="fw-bold mb-3 h5">Video Meetings & Team Collaboration</h4>
-              <p class="text-sm text-secondary mb-0">Conduct one-to-one meetings, team discussions, and project collaboration sessions through integrated real-time video communication tools.</p>
+              <div class="p-4 flex-grow-1 pt-5">
+                <div class="card-icon-badge" [class]="service.glow">
+                  <i class="bi" [class]="service.icon"></i>
+                </div>
+                <h4 class="fw-bold mb-3 h5">{{ service.title }}</h4>
+                <p class="text-sm text-secondary mb-0">{{ service.description }}</p>
+              </div>
             </div>
           </div>
-        </div>
-
-        <!-- Smart Attendance System -->
-        <div class="col-lg-4">
-          <div class="gallery-card glass p-0 rounded-5 overflow-hidden h-100 d-flex flex-column position-relative">
-            <div class="gallery-image-box">
-              <img src="/assets/images/features/activity_schedule.png" alt="Smart Attendance" class="img-fluid h-100 w-100 object-fit-cover">
-            </div>
-            <div class="p-4 flex-grow-1 pt-5">
-              <div class="card-icon-badge bg-green-glow">
-                <i class="bi bi-person-check"></i>
-              </div>
-              <h4 class="fw-bold mb-3 h5">Smart Attendance System</h4>
-              <p class="text-sm text-secondary mb-0">Track freelancer attendance and active work sessions using live face-detection verification and intelligent attendance monitoring systems.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Project Tracking & File Management -->
-        <div class="col-lg-4">
-          <div class="gallery-card glass p-0 rounded-5 overflow-hidden h-100 d-flex flex-column position-relative">
-            <div class="gallery-image-box">
-              <img src="/assets/images/features/project_management.png" alt="Project Tracking" class="img-fluid h-100 w-100 object-fit-cover">
-            </div>
-            <div class="p-4 flex-grow-1 pt-5">
-              <div class="card-icon-badge bg-purple-glow">
-                <i class="bi bi-folder2-open"></i>
-              </div>
-              <h4 class="fw-bold mb-3 h5">Project Tracking & File Management</h4>
-              <p class="text-sm text-secondary mb-0">Monitor project progress, milestones, task updates, and daily productivity through real-time dashboards and workflow tracking systems.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Secure Milestone Payments -->
-        <div class="col-lg-4">
-          <div class="gallery-card glass p-0 rounded-5 overflow-hidden h-100 d-flex flex-column position-relative">
-            <div class="gallery-image-box">
-              <img src="/assets/images/blog/secure_payments_blog.png" alt="Milestone Payments" class="img-fluid h-100 w-100 object-fit-cover">
-            </div>
-            <div class="p-4 flex-grow-1 pt-5">
-              <div class="card-icon-badge bg-orange-glow">
-                <i class="bi bi-wallet2"></i>
-              </div>
-              <h4 class="fw-bold mb-3 h5">Secure Milestone Payments</h4>
-              <p class="text-sm text-secondary mb-0">Receive and process payments securely based on verified project progress and approved milestone completion with transparent workflows.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Legally Protected Contracts -->
-        <div class="col-lg-4">
-          <div class="gallery-card glass p-0 rounded-5 overflow-hidden h-100 d-flex flex-column position-relative">
-            <div class="gallery-image-box">
-              <img src="/assets/images/blog/how_we_work_blog.png" alt="Protected Contracts" class="img-fluid h-100 w-100 object-fit-cover">
-            </div>
-            <div class="p-4 flex-grow-1 pt-5">
-              <div class="card-icon-badge bg-blue-dark-glow">
-                <i class="bi bi-file-earmark-lock"></i>
-              </div>
-              <h4 class="fw-bold mb-3 h5">Legally Protected Contracts</h4>
-              <p class="text-sm text-secondary mb-0">Create secure digital contracts with milestone agreements, transparent deliverables, and legally protected workflows to reduce disputes.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Verified Clients & Trusted Talent -->
-        <div class="col-lg-4">
-          <div class="gallery-card glass p-0 rounded-5 overflow-hidden h-100 d-flex flex-column position-relative">
-            <div class="gallery-image-box">
-              <img src="/assets/images/blog/talent_match_blog.png" alt="Trusted Talent" class="img-fluid h-100 w-100 object-fit-cover">
-            </div>
-            <div class="p-4 flex-grow-1 pt-5">
-              <div class="card-icon-badge bg-brand-glow">
-                <i class="bi bi-patch-check"></i>
-              </div>
-              <h4 class="fw-bold mb-3 h5">Verified Clients & Trusted Talent</h4>
-              <p class="text-sm text-secondary mb-0">Work confidently with fully verified freelancers and clients through profile verification, work-history validation, and project reviews.</p>
-            </div>
-          </div>
-        </div>
+        }
       </div>
     </div>
   </section>
