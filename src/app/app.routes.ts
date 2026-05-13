@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { PublicLayoutComponent } from './core/layouts/public-layout.component';
+import { PublicLayoutComponent } from './core/layouts/public-layout/public-layout.component';
 import { HomeComponent } from './features/public/home/home.component';
 import { HireTalentComponent } from './features/public/hire-talent/hire-talent.component';
 import { FindWorkComponent } from './features/public/find-work/find-work.component';
