@@ -1,0 +1,267 @@
+<main class="bg-black text-white">
+
+
+  <!-- PRODUCTIVITY & COLLABORATION (TESTIMONIAL STYLE) -->
+  <section class="productivity-section section-padding bg-dark-soft">
+    <div class="container">
+      <h2 class="text-4xl fw-bold mb-5">Every great hire starts with the right connection</h2>
+      <div class="testimonial-card glass p-0 rounded-5 overflow-hidden position-relative mb-5">
+        <img src="assets/images/Talent Matching.jpg" alt="Team Collaboration" class="img-fluid">
+        <div class="testimonial-content text-center w-75 mx-auto">
+          <h3 class="fw-medium lh-base">“Talent Hub helps businesses discover the right talent through AI-powered
+            matching, verified profiles, transparent contract history, and real-time collaboration tools — making hiring
+            faster, smarter, and more reliable.”</h3>
+        </div>
+      </div>
+      <div class="row g-4 pt-4 border-top border-secondary border-opacity-10">
+        <div class="col-lg-4">
+          <h4 class="fw-bold mb-3">Profile Review & Verification</h4>
+          <p class="text-sm text-secondary">Review freelancer profiles, portfolios, ratings, work history, and
+            performance scores to confidently verify skills, experience, and reliability before hiring.</p>
+        </div>
+        <div class="col-lg-4">
+          <h4 class="fw-bold mb-3">Contract & Work History</h4>
+          <p class="text-sm text-secondary">Track contracts, milestones, payment records, completed projects, and
+            collaboration history with complete transparency and secure workflow management.</p>
+        </div>
+        <div class="col-lg-4">
+          <h4 class="fw-bold mb-3">Meet & Collaborate with Talent</h4>
+          <p class="text-sm text-secondary">Connect through chat, meetings, and real-time discussions to align project
+            goals, timelines, budgets, and expectations while building productive working relationships.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- INFO SECTION 2 (ISOMETRIC WORKSPACE) -->
+  <section class="info-section section-padding">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="workspace-image-wrapper p-3 glass rounded-5 overflow-hidden shadow-lg border-primary">
+            <img src="assets/images/Talent profile.png" alt="Workspace View" class="img-fluid rounded-4">
+          </div>
+        </div>
+        <div class="col-lg-5 offset-lg-1 mt-5 mt-lg-0">
+          <h6 class="text-brand text-sm fw-bold mb-3">Talent Hub starts here</h6>
+          <h2 class="text-4xl fw-bold mb-4">AI-powered intelligence for smarter talent matching.</h2>
+          <p class="text-lg text-secondary mb-4">
+            Our intelligent matching system analyzes project requirements, technical skills, experience levels, budgets,
+            and workflow preferences to recommend the most suitable talent profiles in real time.
+          </p>
+          <p class="text-lg text-secondary mb-4">
+            Improve hiring accuracy with AI-driven profile insights, skill verification, performance analysis, and
+            risk-status evaluation designed to help teams make confident hiring decisions faster.
+          </p>
+          <ul class="list-unstyled d-grid gap-3 mb-5">
+            <li class="d-flex gap-3 align-items-center text-secondary">
+              <i class="bi bi-check2 text-brand fs-4"></i>
+              <span>AI-based talent matching using project requirements</span>
+            </li>
+            <li class="d-flex gap-3 align-items-center text-secondary">
+              <i class="bi bi-check2 text-brand fs-4"></i>
+              <span>Verified profiles with trust and risk-status insights</span>
+            </li>
+            <li class="d-flex gap-3 align-items-center text-secondary">
+              <i class="bi bi-check2 text-brand fs-4"></i>
+              <span>Faster shortlisting with intelligent recommendations</span>
+            </li>
+          </ul>
+          <app-button variant="dark">Start Hiring Talents</app-button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FEATURE GRID SECTION -->
+  <section class="feature-grid-section section-padding bg-dark-soft">
+    <div class="container">
+      <div class="mb-5 text-center text-lg-start">
+        <h2 class="display-4 fw-bold mb-3">A smarter way to <span class="text-brand">hire talent.</span></h2>
+        <p class="text-lg text-secondary" style="max-width: 800px;">
+          Everything you need to find the right talent, collaborate seamlessly, and deliver exceptional results.
+        </p>
+      </div>
+
+      <div class="row g-4 mt-2">
+        @for (feature of features; track feature.id) {
+        <div class="col-lg-3 col-md-6">
+          <div class="feature-card glass p-4 rounded-4 h-100">
+            <i class="bi {{feature.icon}} text-brand fs-2 mb-3 d-block"></i>
+            <h6 class="text-brand text-xs fw-bold mb-2 uppercase tracking-wider">{{feature.subtitle}}</h6>
+            <h4 class="fw-bold mb-3">{{feature.title}}</h4>
+            <p class="text-sm text-secondary">{{feature.description}}</p>
+          </div>
+        </div>
+        }
+      </div>
+
+
+    </div>
+  </section>
+
+
+  <!-- GET TO KNOW YOUR TALENTS SECTION -->
+  <section class="profiles-section section-padding bg-dark-soft">
+    <div class="container">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-4">
+        <div>
+          <h2 class="display-5 fw-bold mb-3">Get to know your Talents</h2>
+          <p class="text-secondary text-lg mb-0">Discover skilled professionals and find the perfect match for your
+            projects.</p>
+        </div>
+        <div class="d-flex gap-4 profile-legend">
+          <div class="d-flex align-items-center gap-2">
+            <span class="dot bg-danger"></span>
+            <span class="text-xs text-secondary">Low (25-45)</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="dot bg-warning"></span>
+            <span class="text-xs text-secondary">Medium (55-75)</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="dot bg-success"></span>
+            <span class="text-xs text-secondary">High (75-100)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        @for (talent of talents; track talent.id) {
+        <div class="col-lg-4 col-md-6">
+          <div class="profile-card glass p-4 rounded-4 h-100 border-opacity-10 border-white">
+            <!-- Top Info -->
+            <div class="d-flex justify-content-between align-items-start mb-4">
+              <div class="d-flex align-items-center gap-3">
+                <div class="avatar-wrapper position-relative">
+                  <img [src]="talent.avatar" [alt]="talent.name" class="rounded-circle border border-2 border-dark"
+                    style="width: 64px; height: 64px; object-fit: cover;">
+                  <span class="status-indicator position-absolute" [ngClass]="{
+                        'bg-success': talent.performanceTier === 'High',
+                        'bg-warning': talent.performanceTier === 'Medium',
+                        'bg-danger': talent.performanceTier === 'Low'
+                      }"></span>
+                </div>
+                <div>
+                  <h5 class="fw-bold mb-1">{{talent.name}}</h5>
+                  <div class="d-flex align-items-center gap-1 text-secondary text-xs">
+                    <i class="bi bi-geo-alt"></i>
+                    <span>{{talent.location}}</span>
+                  </div>
+                  <p class="text-xs text-secondary mt-1 mb-0">{{talent.role}}</p>
+                </div>
+              </div>
+              <div class="performance-ring text-center">
+                <div class="ring-wrapper mb-1" [ngClass]="talent.performanceTier.toLowerCase()">
+                  <span class="percent">{{talent.performance}}%</span>
+                </div>
+                <div class="fw-bold text-xs" [ngClass]="{
+                      'text-success': talent.performanceTier === 'High',
+                      'text-warning': talent.performanceTier === 'Medium',
+                      'text-danger': talent.performanceTier === 'Low'
+                    }">{{talent.performanceTier}}</div>
+                <div class="text-secondary text-xxs">Performance</div>
+              </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="mb-4">
+              <h6 class="text-brand text-xs fw-bold mb-3">Skills</h6>
+              <div class="d-flex flex-wrap gap-2">
+                @for (skill of talent.skills; track skill) {
+                <span class="badge-skill">{{skill}}</span>
+                }
+              </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="row g-2 mb-4 py-3 border-top border-bottom border-white border-opacity-10">
+              <div class="col-3 text-center border-end border-white border-opacity-10">
+                <div class="text-white fw-bold text-sm">${{talent.hourlyRate}}/hr</div>
+                <div class="text-secondary text-xxs">Rate</div>
+              </div>
+              <div class="col-3 text-center border-end border-white border-opacity-10">
+                <div class="text-white fw-bold text-sm">{{talent.projectsCount}}</div>
+                <div class="text-secondary text-xxs">Projects</div>
+              </div>
+              <div class="col-3 text-center border-end border-white border-opacity-10">
+                <div class="text-white fw-bold text-sm">{{talent.rating}}</div>
+                <div class="text-secondary text-xxs">Rating</div>
+              </div>
+              <div class="col-3 text-center">
+                <div class="text-white fw-bold text-sm">{{talent.totalHours | number}}</div>
+                <div class="text-secondary text-xxs">Hours</div>
+              </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="d-flex align-items-center justify-content-between mt-auto">
+              <div class="d-flex align-items-center gap-2">
+                <span class="dot" [ngClass]="{
+                      'bg-success': talent.performanceTier === 'High',
+                      'bg-warning': talent.performanceTier === 'Medium',
+                      'bg-danger': talent.performanceTier === 'Low'
+                    }"></span>
+                <span class="text-xs text-secondary">{{talent.isAvailable ? 'Available' : 'Busy'}}</span>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm rounded-3 px-2 border-opacity-25">
+                  <i class="bi bi-bookmark text-white"></i>
+                </button>
+                <app-button variant="brand" size="sm" customClass="px-3">View Profile &rarr;</app-button>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GETTING STARTED -->
+  <section class="steps-section section-padding">
+    <div class="container">
+      <h2 class="text-4xl fw-bold mb-5">Hiring talents in easy way</h2>
+      <div class="row g-5">
+        <div class="col-lg-4">
+          <div class="step-item">
+            <div class="step-number mb-4">1</div>
+            <h4 class="fw-bold mb-3">Discover AI-Matched Talent</h4>
+            <p class="text-secondary text-sm">Browse verified freelancers recommended using AI-powered skill matching
+              based on your project requirements, technologies, experience level, and business goals.</p>
+            <p class="text-secondary text-sm mt-3">Find the right professionals faster with smart talent
+              recommendations, performance insights, portfolios, and availability status.</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="step-item">
+            <div class="step-number mb-4">2</div>
+            <h4 class="fw-bold mb-3">Connect & Discuss Project Details</h4>
+            <p class="text-secondary text-sm">Chat directly with shortlisted talent to discuss project scope, budget,
+              timeline, technical requirements, milestones, and collaboration expectations.</p>
+            <p class="text-secondary text-sm mt-3">Review profiles, compare expertise, negotiate pricing, and finalize
+              the best fit for your project.</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="step-item">
+            <div class="step-number mb-4">3</div>
+            <h4 class="fw-bold mb-3">Interview, Hire & Start Working</h4>
+            <p class="text-secondary text-sm">Conduct interviews, evaluate communication and technical skills, complete
+              secure onboarding, and hire with confidence.</p>
+            <p class="text-secondary text-sm mt-3">Start collaborating immediately using integrated workspace tools,
+              project tracking, messaging, meetings, and workflow management features.</p>
+          </div>
+        </div>
+      </div>
+      <app-button variant="white" size="lg" customClass="mt-5">Get started</app-button>
+    </div>
+  </section>
+
+
+
+
+</main>

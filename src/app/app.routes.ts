@@ -1,20 +1,21 @@
 import { Routes } from '@angular/router';
-import { PublicLayoutComponent } from './core/layouts/public-layout';
+import { PublicLayoutComponent } from './core/layouts/public-layout/public-layout.component';
 import { HomeComponent } from './features/public/home/home.component';
-import { HireTalentComponent } from './features/public/hire-talent/hire-talent';
-import { FindWorkComponent } from './features/public/find-work/find-work';
-import { WhyTalenthubComponent } from './features/public/why-talenthub/why-talenthub';
-import { ServicesComponent } from './features/public/services/services';
-import { AboutUsComponent } from './features/public/about-us/about-us';
-import { BlogComponent } from './features/public/blog/blog';
+import { HireTalentComponent } from './features/public/hire-talent/hire-talent.component';
+import { FindWorkComponent } from './features/public/find-work/find-work.component';
+import { WhyTalenthubComponent } from './features/public/why-talenthub/why-talenthub.component';
+import { ServicesComponent } from './features/public/services/services.component';
+import { AboutUsComponent } from './features/public/about-us/about-us.component';
+import { BlogComponent } from './features/public/blog/blog.component';
+import { BlogDetailsComponent } from './features/public/blog-details/blog-details.component';
 
 // Account Components
-import { SigninComponent } from './features/account/signin/signin';
-import { SignupComponent } from './features/account/signup/signup';
-import { ForgotPasswordComponent } from './features/account/forgot-password/forgot-password';
-import { OtpVerificationComponent } from './features/account/otp-verification/otp-verification';
-import { ConfirmationComponent } from './features/account/confirmation/confirmation';
-import { ResetPasswordComponent } from './features/account/reset-password/reset-password';
+import { SigninComponent } from './features/account/signin/signin.component';
+import { SignupComponent } from './features/account/signup/signup.component';
+import { ForgotPasswordComponent } from './features/account/forgot-password/forgot-password.component';
+import { OtpVerificationComponent } from './features/account/otp-verification/otp-verification.component';
+import { ConfirmationComponent } from './features/account/confirmation/confirmation.component';
+import { ResetPasswordComponent } from './features/account/reset-password/reset-password.component';
 
 export const routes: Routes = [
   // Public Routes (With Navbar and Footer)
@@ -29,6 +30,7 @@ export const routes: Routes = [
       { path: 'services', component: ServicesComponent },
       { path: 'about-us', component: AboutUsComponent },
       { path: 'blog', component: BlogComponent },
+      { path: 'blog-details/:slug', component: BlogDetailsComponent },
     ]
   },
 

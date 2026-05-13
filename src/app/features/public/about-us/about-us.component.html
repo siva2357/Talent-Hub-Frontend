@@ -1,0 +1,189 @@
+<main class="bg-black text-white">
+  <!-- HERO SECTION -->
+  <section class="about-hero section-padding position-relative overflow-hidden">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="label-pill mb-4">ABOUT US</div>
+          <h1 class="display-3 fw-bold mb-4">Building a better way <br> to <span class="text-gradient">work
+              together.</span></h1>
+          <p class="text-lg text-secondary mb-4 leading-relaxed pe-lg-5">
+            Talent Hub is an enterprise freelance and workforce management platform designed to help businesses
+            hire with confidence, freelancers work with security, and teams collaborate with transparency.
+          </p>
+          <p class="text-md text-secondary mb-5 opacity-75 pe-lg-5">
+            We combine technology, AI, and secure workflows to create a trust-driven ecosystem where projects
+            are managed efficiently and relationships are built to last.
+          </p>
+
+          <div class="row g-4 pt-2">
+            <div class="col-3 stat-item">
+              <div class="stat-value text-brand">10K+</div>
+              <div class="stat-label">Trusted Clients</div>
+            </div>
+            <div class="col-3 stat-item">
+              <div class="stat-value text-brand">50K+</div>
+              <div class="stat-label">Talented Freelancers</div>
+            </div>
+            <div class="col-3 stat-item">
+              <div class="stat-value text-brand">200K+</div>
+              <div class="stat-label">Projects Completed</div>
+            </div>
+            <div class="col-3 stat-item">
+              <div class="stat-value text-brand">120+</div>
+              <div class="stat-label">Countries</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="hero-media-wrapper position-relative ps-lg-5 mt-5 mt-lg-0">
+            <div class="image-container rounded-5 overflow-hidden shadow-2xl border border-white border-opacity-10">
+              <img src="/assets/images/blog/talent_match_blog.png" alt="Team Collaboration"
+                class="img-fluid w-100 object-fit-cover" style="height: 500px;">
+
+              <!-- Floating Badges -->
+              <div class="floating-badge pos-1">
+                <div class="badge-icon"><i class="bi bi-shield-check"></i></div>
+                <div class="badge-text">
+                  <h6>Secure</h6>
+                  <p>Enterprise-grade security</p>
+                </div>
+              </div>
+              <div class="floating-badge pos-2">
+                <div class="badge-icon"><i class="bi bi-cpu"></i></div>
+                <div class="badge-text">
+                  <h6>AI-Powered</h6>
+                  <p>Smart matching & insights</p>
+                </div>
+              </div>
+              <div class="floating-badge pos-3">
+                <div class="badge-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                <div class="badge-text">
+                  <h6>Transparent</h6>
+                  <p>Clear workflows & tracking</p>
+                </div>
+              </div>
+              <div class="floating-badge pos-4">
+                <div class="badge-icon"><i class="bi bi-patch-check"></i></div>
+                <div class="badge-text">
+                  <h6>Trusted</h6>
+                  <p>Verified clients & talent</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR PURPOSE SECTION -->
+  <section class="purpose-section section-padding bg-dark-soft">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-5">
+          <div class="label-pill mb-4">OUR PURPOSE</div>
+          <h2 class="display-4 fw-bold mb-4">Empower people. <br> Simplify work. <br> Deliver <span
+              class="text-gradient">results.</span></h2>
+        </div>
+        <div class="col-lg-7">
+          <p class="text-xl text-secondary mb-5 leading-relaxed">
+            Our purpose is to eliminate the barriers in remote work by providing secure contracts,
+            reliable payments, productivity tools, and intelligent collaboration systems that help
+            businesses and freelancers grow together.
+          </p>
+          <div class="row g-4">
+            <div class="col-md-3">
+              <div class="purpose-icon-box"><i class="bi bi-person"></i></div>
+              <div class="fw-bold text-sm">Empower</div>
+              <div class="text-xs text-secondary">individuals</div>
+            </div>
+            <div class="col-md-3">
+              <div class="purpose-icon-box"><i class="bi bi-house-door"></i></div>
+              <div class="fw-bold text-sm">Enable</div>
+              <div class="text-xs text-secondary">business growth</div>
+            </div>
+            <div class="col-md-3">
+              <div class="purpose-icon-box"><i class="bi bi-shield-lock"></i></div>
+              <div class="fw-bold text-sm">Build trust</div>
+              <div class="text-xs text-secondary">through transparency</div>
+            </div>
+            <div class="col-md-3">
+              <div class="purpose-icon-box"><i class="bi bi-lightbulb"></i></div>
+              <div class="fw-bold text-sm">Innovate for a</div>
+              <div class="text-xs text-secondary">better future</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEMS SECTION -->
+  <section class="problems-section section-padding">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="text-4xl fw-bold">The problems we identified</h2>
+      </div>
+      <div class="row g-4">
+        @for (problem of problems; track problem.title) {
+          <div class="col-lg-4 col-md-6">
+            <div class="problem-card glass p-4 rounded-5 h-100">
+              <div class="icon-box-red"><i class="bi" [class]="problem.icon"></i></div>
+              <h5 class="fw-bold mb-3">{{ problem.title }}</h5>
+              <p class="text-sm text-secondary mb-0">{{ problem.description }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTIONS GALLERY -->
+  <section class="gallery-section section-padding bg-dark-soft">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="text-4xl fw-bold">How Talent Hub solves these challenges</h2>
+      </div>
+      <div class="row g-4">
+        @for (solution of solutions; track solution.title) {
+          <div class="col-lg-4">
+            <div class="gallery-card glass p-0 rounded-5 overflow-hidden h-100 d-flex flex-column position-relative">
+              <div class="gallery-image-box">
+                <img [src]="solution.image" [alt]="solution.title" class="img-fluid h-100 w-100 object-fit-cover">
+              </div>
+              <div class="p-4 flex-grow-1 pt-5">
+                <div class="card-icon-badge" [class]="solution.glow">
+                  <i class="bi" [class]="solution.icon"></i>
+                </div>
+                <h4 class="fw-bold mb-3 h5">{{ solution.title }}</h4>
+                <p class="text-sm text-secondary mb-0">{{ solution.description }}</p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR VALUES SECTION -->
+  <section class="values-section section-padding">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="text-4xl fw-bold">Our Values</h2>
+      </div>
+      <div class="row g-4 justify-content-center row-cols-1 row-cols-md-3 row-cols-lg-5">
+        @for (value of values; track value.title) {
+          <div class="col">
+            <div class="value-item">
+              <div class="value-icon"><i class="bi" [class]="value.icon"></i></div>
+              <h5 class="fw-bold text-sm">{{ value.title }}</h5>
+              <p class="text-xxs text-secondary">{{ value.description }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+</main>
