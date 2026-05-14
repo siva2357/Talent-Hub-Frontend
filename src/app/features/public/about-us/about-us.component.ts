@@ -43,42 +43,42 @@ export class AboutUsComponent {
 
   solutions = [
     {
-      image: '/assets/images/blog/talent_match_blog.png',
+      image: '/assets/images/solutions/ai_talent_matching.png',
       icon: 'bi-stars',
       glow: 'bg-blue-glow',
       title: 'AI-Powered Talent Matching',
       description: 'Our AI engine matches the right talent based on skills, experience, and project requirements.'
     },
     {
-      image: '/assets/images/blog/how_we_work_blog.png',
+      image: '/assets/images/solutions/secure_payments.png',
       icon: 'bi-file-earmark-lock',
       glow: 'bg-green-glow',
       title: 'Secure Contracts & Payments',
       description: 'Milestone-based payments, secure escrow, and verified approvals protect both clients and freelancers.'
     },
     {
-      image: '/assets/images/features/activity_schedule.png',
+      image: '/assets/images/solutions/productivity.png',
       icon: 'bi-lightning-charge',
       glow: 'bg-purple-glow',
       title: 'Smart Productivity & Attendance',
       description: 'Live face-detection attendance, activity monitoring, and productivity insights ensure transparency.'
     },
     {
-      image: '/assets/images/blog/talent_hub_services_blog.png',
+      image: '/assets/images/solutions/collaboration.png',
       icon: 'bi-chat-square-text',
       glow: 'bg-orange-glow',
       title: 'Centralized Collaboration',
       description: 'Video meetings, chat, file sharing, and task management — all in one unified workspace.'
     },
     {
-      image: '/assets/images/features/project_management.png',
+      image: '/assets/images/solutions/tracking_insights.png',
       icon: 'bi-graph-up',
       glow: 'bg-blue-dark-glow',
       title: 'Real-Time Tracking & Insights',
       description: 'Track progress, monitor performance, and get actionable insights with powerful dashboards.'
     },
     {
-      image: '/assets/images/features/user_growth.png',
+      image: '/assets/images/solutions/verified_talent.png',
       icon: 'bi-patch-check',
       glow: 'bg-brand-glow',
       title: 'Verified Clients & Trusted Talent',

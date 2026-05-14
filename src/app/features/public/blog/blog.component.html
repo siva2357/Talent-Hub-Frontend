@@ -16,12 +16,25 @@
   <section class="blog-grid-section pb-5">
     <div class="container">
       <!-- Categories Filter -->
-      <div class="d-flex flex-wrap gap-2 justify-content-center mb-5">
+      <!-- Desktop Chips (Visible on Tablet/Desktop) -->
+      <div class="d-none d-md-flex flex-wrap gap-2 justify-content-center mb-5">
         @for (category of categories; track category) {
         <button class="filter-chip" [class.active]="selectedCategory === category" (click)="selectCategory(category)">
           {{category}}
         </button>
         }
+      </div>
+
+      <!-- Mobile Dropdown (Visible on Mobile only) -->
+      <div class="d-block d-md-none mb-5 px-3">
+        <div class="filter-dropdown-wrapper">
+          <label class="text-xs text-secondary mb-2 opacity-75">Explore Categories</label>
+          <select class="form-select glass-select py-3" [value]="selectedCategory" (change)="onCategoryChange($event)">
+            @for (category of categories; track category) {
+            <option [value]="category">{{category}}</option>
+            }
+          </select>
+        </div>
       </div>
 
       <div class="row g-4">
