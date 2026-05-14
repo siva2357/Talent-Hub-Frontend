@@ -61,8 +61,14 @@
     }
 
     @default {
-    <input [type]="type" class="form-control glass" [class.ps-5]="icon" [placeholder]="placeholder"
+    <input [type]="inputType" class="form-control glass" [class.ps-5]="icon" [class.pe-5]="showPasswordToggle" [placeholder]="placeholder"
       [disabled]="disabled" [value]="value" (input)="handleInput($event)" (blur)="onTouched()">
+    
+    @if (type === 'password' && showPasswordToggle) {
+    <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword" 
+       (click)="togglePasswordVisibility()"
+       class="bi position-absolute end-0 top-50 translate-middle-y me-3 cursor-pointer opacity-50 hover-opacity-100"></i>
+    }
     }
     }
   </div>

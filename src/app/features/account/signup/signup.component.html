@@ -1,1 +1,69 @@
-<p>signup works!</p>
+<div class="auth-container">
+  <!-- BACKGROUND BLOBS -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="auth-card-wrapper selection-layout">
+    <!-- LOGO -->
+    <div class="logo-container text-center mb-5">
+      <img src="assets/logo/website-logo.png" alt="Talent Hub" class="auth-logo">
+    </div>
+
+    <div class="auth-header text-center mb-5">
+      <h1 class="text-3xl fw-bold mb-2 text-white">Get Started</h1>
+      <p class="text-md opacity-60">Select an option below to continue with registration</p>
+    </div>
+
+    <div class="role-selection-grid mb-5">
+      <!-- FREELANCER -->
+      <div class="role-card glass" [class.selected]="selectedRole === 'freelancer'" (click)="selectRole('freelancer')">
+        <div class="role-icon">
+          <i class="bi bi-people"></i>
+        </div>
+        <div class="role-info">
+          <h3 class="text-xl fw-bold mb-1">Freelancer</h3>
+          <p class="text-sm opacity-60">I am looking for work</p>
+        </div>
+        <div class="role-radio">
+          <div class="radio-circle"></div>
+        </div>
+      </div>
+
+      <!-- CLIENT -->
+      <div class="role-card glass" [class.selected]="selectedRole === 'client'" (click)="selectRole('client')">
+        <div class="role-icon">
+          <i class="bi bi-person"></i>
+        </div>
+        <div class="role-info">
+          <h3 class="text-xl fw-bold mb-1">Client</h3>
+          <p class="text-sm opacity-60">I want to hire talent</p>
+        </div>
+        <div class="role-radio">
+          <div class="radio-circle"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-action text-center">
+      <app-button variant="primary" size="md" (click)="onStartRegistration()" customClass="px-5 py-2 d-inline-flex align-items-center justify-content-center gap-3">
+        <i class="bi bi-arrow-right-circle text-xl"></i>
+        <span class="text-lg">Start Registration</span>
+      </app-button>
+    </div>
+
+    <!-- BACK TO LOGIN -->
+    <div class="auth-footer mt-5 text-center">
+      <p class="text-sm opacity-70 mb-3">
+        Already have an account? 
+        <a routerLink="/account/signin" class="text-brand fw-semibold text-decoration-none">Login</a>
+      </p>
+
+      <!-- BACK TO HOME -->
+      <div class="back-home mt-3">
+        <a routerLink="/" class="text-sm opacity-50 hover-opacity-100 text-decoration-none d-flex align-items-center justify-content-center gap-2 text-white">
+          <i class="bi bi-arrow-left"></i> Back to home
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

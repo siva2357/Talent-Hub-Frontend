@@ -1,1 +1,54 @@
-<p>registration works!</p>
+<div class="auth-container">
+  <!-- BACKGROUND BLOBS -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="auth-card-wrapper">
+    <div class="auth-card glass">
+      <!-- LOGO -->
+      <div class="logo-container">
+        <img src="assets/logo/website-logo.png" alt="Talent Hub" class="auth-logo">
+      </div>
+
+      <div class="auth-header">
+        <h1 class="text-3xl fw-bold mb-1">Create Account</h1>
+        <p class="text-xs opacity-60">Please fill in the details to get started</p>
+      </div>
+
+      <form class="auth-form">
+        <!-- FULL NAME -->
+        <app-input type="text" placeholder="Enter your full name" icon="bi-person">
+        </app-input>
+
+        <!-- EMAIL -->
+        <app-input type="email" placeholder="Enter your email" icon="bi-envelope">
+        </app-input>
+
+        <!-- PASSWORD -->
+        <app-input type="password" placeholder="Enter your password" icon="bi-lock" [showPasswordToggle]="true">
+        </app-input>
+
+        <div class="auth-action mt-4">
+          <app-button variant="primary" size="md" customClass="w-100" (click)=" onRegister()">
+            Register
+          </app-button>
+        </div>
+      </form>
+
+      <div class="auth-footer mt-4 text-center">
+        <p class="text-xs opacity-70 mb-3">
+          Already have an account?
+          <a routerLink="/account/signin" class="text-brand fw-semibold text-decoration-none">Login</a>
+        </p>
+
+        <!-- BACK TO HOME (INSIDE CARD) -->
+        <div class="back-home mt-3">
+          <a routerLink="/"
+            class="text-sm opacity-50 hover-opacity-100 text-decoration-none d-flex align-items-center justify-content-center gap-2 text-white">
+            <i class="bi bi-arrow-left"></i> Back to home
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

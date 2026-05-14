@@ -27,8 +27,10 @@ export class InputComponent implements ControlValueAccessor {
   @Input() customClass: string = '';
   @Input() required: boolean = false;
   @Input() disabled: boolean = false;
+  @Input() showPasswordToggle: boolean = false;
 
   value: any = '';
+  showPassword: boolean = false;
   onChange: any = () => {};
   onTouched: any = () => {};
 
@@ -76,5 +78,16 @@ export class InputComponent implements ControlValueAccessor {
       return this.value.includes(optionValue);
     }
     return this.value === optionValue;
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  get inputType(): string {
+    if (this.type === 'password' && this.showPassword) {
+      return 'text';
+    }
+    return this.type;
   }
 }
