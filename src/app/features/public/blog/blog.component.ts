@@ -84,4 +84,9 @@ export class BlogComponent {
   selectCategory(category: string) {
     this.selectedCategory = category;
   }
+
+  onCategoryChange(event: any) {
+    const category = event.target.value;
+    this.selectCategory(category);
+  }
 }
