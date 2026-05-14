@@ -1,0 +1,19 @@
+<div class="editor-wrapper" [class.has-error]="error" [class.disabled]="disabled">
+  @if (label) {
+  <label class="form-label text-xs fw-bold mb-2 d-block">
+    {{ label }} @if (required) { <span class="text-danger">*</span> }
+  </label>
+  }
+
+  <div class="quill-container glass rounded-3 overflow-hidden">
+    <quill-editor [modules]="quillConfig" [placeholder]="placeholder" [readOnly]="disabled" [(ngModel)]="value"
+      (onContentChanged)="onContentChanged($event)" (onBlur)="onTouched()" theme="snow" class="premium-editor">
+    </quill-editor>
+  </div>
+
+  @if (error) {
+  <div class="error-message text-danger text-xxs mt-1 ps-1">
+    <i class="bi bi-exclamation-circle me-1"></i> {{ error }}
+  </div>
+  }
+</div>

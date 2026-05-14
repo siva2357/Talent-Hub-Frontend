@@ -1,0 +1,76 @@
+<div class="input-wrapper" [class.filter-mode]="mode === 'filter'" [class.has-error]="error" [class.has-label]="label">
+  <!-- LABEL -->
+  @if (label) {
+  <label class="form-label text-xs fw-bold mb-2 d-block">
+    {{ label }} @if (required) { <span class="text-danger">*</span> }
+  </label>
+  }
+
+  <!-- INPUT CONTAINER -->
+  <div class="field-container position-relative">
+    <!-- ICON -->
+    @if (icon) {
+    <i class="bi {{ icon }} field-icon position-absolute start-0 top-50 translate-middle-y ms-3 opacity-50"></i>
+    }
+
+    <!-- INPUT TYPES -->
+    @switch (type) {
+    @case ('select') {
+    <select class="form-select glass" [class.ps-5]="icon" [disabled]="disabled" (change)="handleInput($event)"
+      (blur)="onTouched()">
+      @if (placeholder) {
+      <option value="" disabled selected hidden>{{ placeholder }}</option>
+      }
+      @for (opt of options; track opt.value) {
+      <option [value]="opt.value" [selected]="value === opt.value" class="bg-dark text-white">{{ opt.label }}</option>
+      }
+    </select>
+    }
+
+    @case ('multiselect') {
+    <div class="multiselect-container glass p-2 rounded-3" [class.ps-5]="icon">
+      <div class="selected-tags d-flex flex-wrap gap-2">
+        @for (opt of options; track opt.value) {
+        @if (isSelected(opt.value)) {
+        <span class="tag badge bg-brand-500 text-white d-flex align-items-center gap-2 px-2 py-1 rounded-2">
+          {{ opt.label }}
+          <i class="bi bi-x-circle cursor-pointer" (click)="toggleOption(opt.value)"></i>
+        </span>
+        }
+        }
+        @if (!value || value.length === 0) {
+        <span class="placeholder opacity-50 text-sm">{{ placeholder || 'Select multiple...' }}</span>
+        }
+      </div>
+      <!-- Simple Dropdown for multiselect -->
+      <div class="multiselect-dropdown mt-2 p-2 border-top border-white border-opacity-10">
+        @for (opt of options; track opt.value) {
+        <div class="option-item d-flex align-items-center gap-2 p-1 rounded hover-bg-white-opacity"
+          (click)="toggleOption(opt.value)">
+          <input type="checkbox" [checked]="isSelected(opt.value)" class="form-check-input mt-0">
+          <span class="text-xs">{{ opt.label }}</span>
+        </div>
+        }
+      </div>
+    </div>
+    }
+
+    @case ('textarea') {
+    <textarea class="form-control glass" [class.ps-5]="icon" [placeholder]="placeholder" [disabled]="disabled"
+      [value]="value" (input)="handleInput($event)" (blur)="onTouched()" rows="4"></textarea>
+    }
+
+    @default {
+    <input [type]="type" class="form-control glass" [class.ps-5]="icon" [placeholder]="placeholder"
+      [disabled]="disabled" [value]="value" (input)="handleInput($event)" (blur)="onTouched()">
+    }
+    }
+  </div>
+
+  <!-- ERROR MESSAGE -->
+  @if (error && mode === 'form') {
+  <div class="error-message text-danger text-xxs mt-1 ps-1">
+    <i class="bi bi-exclamation-circle me-1"></i> {{ error }}
+  </div>
+  }
+</div>

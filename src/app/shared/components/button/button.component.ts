@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './button.component.css'
 })
 export class ButtonComponent {
-  @Input() variant: 'white' | 'dark' | 'outline' | 'brand' = 'white';
+  @Input() variant: 'white' | 'dark' | 'outline' | 'brand' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' = 'white';
   @Input() size: 'sm' | 'md' | 'lg' = 'md';
   @Input() type: 'button' | 'submit' = 'button';
   @Input() customClass: string = '';
