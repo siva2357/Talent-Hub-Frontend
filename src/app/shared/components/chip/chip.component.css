@@ -1,0 +1,77 @@
+.chip-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  animation: chipAppear 0.3s ease-out;
+  cursor: default;
+}
+
+@keyframes chipAppear {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.chip-label {
+  letter-spacing: 0.3px;
+}
+
+.chip-remove-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  opacity: 0.5;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+  margin-left: 2px;
+}
+
+.chip-remove-btn:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* VARIANTS */
+.variant-primary {
+  background: rgba(42, 128, 255, 0.1);
+  color: #2a80ff;
+  border: 1px solid rgba(42, 128, 255, 0.2);
+}
+
+.variant-primary:hover {
+  background: rgba(42, 128, 255, 0.15);
+  border-color: rgba(42, 128, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(42, 128, 255, 0.1);
+}
+
+.variant-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.variant-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.variant-outline {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.variant-outline:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.4);
+}

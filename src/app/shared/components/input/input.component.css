@@ -31,12 +31,13 @@ input::placeholder, textarea::placeholder {
 .form-label {
   color: rgba(255, 255, 255, 0.7);
   letter-spacing: 0.5px;
+  font-size: 14px !important;
 }
 
 .form-control, .form-select {
   border-radius: 12px;
   padding: 10px 16px;
-  font-size: 14px;
+  font-size: 14px !important;
 }
 
 /* Filter Mode Tweaks */
@@ -45,7 +46,7 @@ input::placeholder, textarea::placeholder {
 .filter-mode .multiselect-container {
   border-radius: 8px;
   padding: 8px 12px;
-  font-size: 13px;
+  font-size: 14px !important;
   background: rgba(255, 255, 255, 0.02) !important;
 }
 
@@ -57,47 +58,101 @@ input::placeholder, textarea::placeholder {
   opacity: 0.8 !important;
 }
 
-/* Multi-select Styles */
+/* Multi-select Styles - REAL DROPDOWN */
 .multiselect-container {
-  min-height: 42px;
-  cursor: pointer;
+  position: relative;
+  min-height: 44px;
+  width: 100%;
 }
 
-.tag {
-  font-size: 11px;
-  font-weight: 600;
-  background: var(--brand-500) !important;
-  color: white !important;
-  box-shadow: 0 2px 5px rgba(42, 128, 255, 0.3);
+.selection-trigger {
+  width: 100%;
+  min-height: 44px;
+  border-radius: 12px;
+  padding: 0 16px;
+  transition: all 0.3s ease;
 }
 
-.placeholder {
-  color: rgba(255, 255, 255, 0.4);
+.dropdown-active .selection-trigger {
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
-.hover-bg-white-opacity:hover {
-  background: rgba(255, 255, 255, 0.08);
+.dropdown-arrow {
+  color: var(--brand-400);
+  transition: transform 0.3s ease;
+  font-size: 14px;
 }
 
-.multiselect-dropdown {
-  max-height: 150px;
+.dropdown-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+.multiselect-dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 998;
+}
+
+.multiselect-container.dropdown-active {
+  z-index: 9999;
+}
+
+.multiselect-dropdown-list {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 100%;
+  max-height: 300px;
   overflow-y: auto;
+  z-index: 10000;
+  border-radius: 12px;
+  background: #111827 !important; /* Solid TailWind Gray-900 */
+  border: 1px solid rgba(42, 128, 255, 0.4) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9) !important;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .option-item {
-  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.option-item:hover {
+.custom-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  color: transparent;
+  flex-shrink: 0;
   background: rgba(255, 255, 255, 0.05);
 }
 
-.cursor-pointer {
-  cursor: pointer;
+.custom-checkbox.checked {
+  background: var(--brand-500);
+  border-color: var(--brand-500);
+  color: white;
+  box-shadow: 0 0 10px rgba(42, 128, 255, 0.4);
 }
 
-.text-xxs {
-  font-size: 10px;
+.custom-checkbox i {
+  font-size: 12px;
+}
+
+.option-item:hover .custom-checkbox:not(.checked) {
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 /* Error States */

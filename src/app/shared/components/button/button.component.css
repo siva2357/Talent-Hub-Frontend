@@ -1,5 +1,7 @@
 .btn {
-  border-radius: 50px;
+  height: 48px; /* Default height for md */
+  padding: 0 24px;
+  border-radius: 12px;
   border: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
@@ -7,6 +9,9 @@
   justify-content: center;
   gap: 8px;
   white-space: nowrap;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 .btn:hover {
@@ -17,50 +22,69 @@
   transform: translateY(0);
 }
 
+/* SIZES */
+.btn-sm {
+  height: 38px;
+  padding: 0 16px;
+  font-size: 13px;
+}
+
+.btn-md {
+  height: 48px;
+  padding: 0 24px;
+  font-size: 14px;
+}
+
+.btn-lg {
+  height: 56px;
+  padding: 0 32px;
+  font-size: 17px;
+}
+
 /* WHITE VARIANT */
-.btn-pill-white {
+.btn-white {
   background: #fff;
   color: #000;
 }
 
-.btn-pill-white:hover {
+.btn-white:hover {
   background: #f0f0f0;
   box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
 }
 
 /* DARK VARIANT */
-.btn-pill-dark {
+.btn-dark {
   background: #15181e;
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.btn-pill-dark:hover {
+.btn-dark:hover {
   background: #1c2128;
   border-color: rgba(255, 255, 255, 0.2);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
 /* OUTLINE VARIANT */
-.btn-pill-outline {
-  background: rgba(255, 255, 255, 0.05);
+.btn-outline {
+  background: transparent;
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.btn-pill-outline:hover {
-  background: rgba(255, 255, 255, 0.1);
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.05);
   border-color: #fff;
 }
 
 /* BRAND VARIANT */
-.btn-pill-brand {
+.btn-brand {
   background: var(--brand-500);
   color: #fff;
   box-shadow: 0 8px 16px rgba(42, 128, 255, 0.2);
 }
 
-.btn-pill-brand:hover {
+.btn-brand:hover {
   background: var(--brand-400);
   box-shadow: 0 12px 24px rgba(42, 128, 255, 0.4);
 }
@@ -70,23 +94,23 @@
 }
 
 /* BOOTSTRAP VARIANTS (Matched to styles.css) */
-.btn-pill-primary { background: #3b82f6; color: #fff; }
-.btn-pill-primary:hover { background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4); color: #fff; }
+.btn-primary { background: #3b82f6; color: #fff; }
+.btn-primary:hover { background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4); color: #fff; }
 
-.btn-pill-secondary { background: #e4e4e4; color: #475569; }
-.btn-pill-secondary:hover { background: #e2e8f0; color: #475569; }
+.btn-secondary { background: #e4e4e4; color: #475569; }
+.btn-secondary:hover { background: #e2e8f0; color: #475569; }
 
-.btn-pill-success { background: #10b981; color: #fff; }
-.btn-pill-success:hover { background: #059669; box-shadow: 0 8px 16px rgba(16, 185, 129, 0.3); }
+.btn-success { background: #10b981; color: #fff; }
+.btn-success:hover { background: #059669; box-shadow: 0 8px 16px rgba(16, 185, 129, 0.3); }
 
-.btn-pill-danger { background: #ef4444; color: #fff; }
-.btn-pill-danger:hover { background: #dc2626; box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3); }
+.btn-danger { background: #ef4444; color: #fff; }
+.btn-danger:hover { background: #dc2626; box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3); }
 
-.btn-pill-warning { background: #f59e0b; color: #fff; }
-.btn-pill-warning:hover { background: #d97706; box-shadow: 0 8px 16px rgba(245, 158, 11, 0.3); }
+.btn-warning { background: #f59e0b; color: #fff; }
+.btn-warning:hover { background: #d97706; box-shadow: 0 8px 16px rgba(245, 158, 11, 0.3); }
 
-.btn-pill-info { background: #0ea5e9; color: #fff; }
-.btn-pill-info:hover { background: #0284c7; box-shadow: 0 8px 16px rgba(14, 165, 233, 0.3); }
+.btn-info { background: #0ea5e9; color: #fff; }
+.btn-info:hover { background: #0284c7; box-shadow: 0 8px 16px rgba(14, 165, 233, 0.3); }
 
-.btn-pill-light { background: #ffffff; color: #334155; border: 1px solid #e2e8f0; }
-.btn-pill-light:hover { background: #f8fafc; border-color: #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+.btn-light { background: #ffffff; color: #334155; border: 1px solid #e2e8f0; }
+.btn-light:hover { background: #f8fafc; border-color: #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }

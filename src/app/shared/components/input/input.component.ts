@@ -1,6 +1,7 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule, FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-input',
@@ -28,11 +29,14 @@ export class InputComponent implements ControlValueAccessor {
   @Input() required: boolean = false;
   @Input() disabled: boolean = false;
   @Input() showPasswordToggle: boolean = false;
+  @Input() value: any = '';
 
-  value: any = '';
+  @Output() dropdownStateChange = new EventEmitter<boolean>();
+
   showPassword: boolean = false;
-  onChange: any = () => {};
-  onTouched: any = () => {};
+  dropdownOpen: boolean = false;
+  onChange: any = () => { };
+  onTouched: any = () => { };
 
   writeValue(value: any): void {
     this.value = value;
@@ -56,9 +60,16 @@ export class InputComponent implements ControlValueAccessor {
     this.onChange(val);
   }
 
+  toggleDropdown(): void {
+    if (!this.disabled) {
+      this.dropdownOpen = !this.dropdownOpen;
+      this.dropdownStateChange.emit(this.dropdownOpen);
+    }
+  }
+
   toggleOption(optionValue: any): void {
     if (this.type !== 'multiselect') return;
-    
+
     if (!Array.isArray(this.value)) {
       this.value = [];
     }
@@ -69,7 +80,7 @@ export class InputComponent implements ControlValueAccessor {
     } else {
       this.value.push(optionValue);
     }
-    
+
     this.onChange([...this.value]);
   }
 

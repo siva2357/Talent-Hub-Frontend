@@ -1,11 +1,4 @@
 <div class="profile-container">
-  <!-- TEMPORARY ROLE TOGGLE -->
-  <div class="role-preview-toggle">
-    <button (click)="toggleRole()" class="btn btn-sm btn-outline-light">
-      Switch to {{ userRole === 'freelancer' ? 'Client' : 'Freelancer' }} View
-    </button>
-  </div>
-
   <div class="profile-layout">
     <!-- SIDEBAR NAVIGATION -->
     <aside class="profile-sidebar glass">
@@ -17,17 +10,15 @@
 
       <nav class="sidebar-nav">
         @for (section of currentSections; track section.id; let i = $index) {
-          <div class="nav-item" 
-               [class.active]="activeSection === section.id"
-               (click)="scrollToSection(section.id)">
-            <div class="nav-icon-wrapper">
-              <i [class]="'bi ' + section.icon"></i>
-            </div>
-            <div class="nav-text">
-              <span class="nav-label">{{ section.label }}</span>
-              <span class="nav-sub">{{ section.sub }}</span>
-            </div>
+        <div class="nav-item" [class.active]="activeSection === section.id" (click)="scrollToSection(section.id)">
+          <div class="nav-icon-wrapper">
+            <i [class]="'bi ' + section.icon"></i>
           </div>
+          <div class="nav-text">
+            <span class="nav-label">{{ section.label }}</span>
+            <span class="nav-sub">{{ section.sub }}</span>
+          </div>
+        </div>
         }
       </nav>
     </aside>
@@ -36,13 +27,21 @@
     <main class="profile-content">
       <!-- CONTENT HEADER -->
       <header class="content-header mb-5">
-        <div class="header-main">
-          <h1 class="text-4xl fw-bold text-white mb-2">{{ userRole | titlecase }} Profile</h1>
-          <p class="text-md opacity-60">
+        <div class="header-main w-100 mt-4">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-2">
+            <h4 class="text-3xl fw-bold text-white mb-0">{{ userRole | titlecase }} Profile</h4>
+            <div class="role-switch-container">
+              <app-button (click)="toggleRole()" variant="outline" size="sm">
+                Switch to {{ userRole === 'freelancer' ? 'Client' : 'Freelancer' }}
+              </app-button>
+            </div>
+          </div>
+
+          <p class="text-md opacity-60 mb-0">
             @if (userRole === 'freelancer') {
-              Complete your profile to showcase your skills and get discovered by clients.
+            Complete your profile to showcase your skills and get discovered by clients.
             } @else {
-              Complete your profile to get the best experience and start hiring top talent.
+            Complete your profile to get the best experience and start hiring top talent.
             }
           </p>
         </div>
@@ -60,456 +59,284 @@
           </div>
           <div class="progress-info">
             <span class="progress-label">Profile Progress</span>
-            <span class="progress-desc">Complete all sections to improve your visibility</span>
+            <span class="progress-desc">Complete all sections</span>
           </div>
         </div>
       </header>
 
       <!-- FORM SECTIONS -->
       <div class="form-sections-container">
-        <!-- FREELANCER SECTIONS -->
+        <!-- 1. PERSONAL INFORMATION (COMMON) -->
+        <section id="basic" class="form-section glass mb-4 p-4">
+          <div class="section-header d-flex align-items-center gap-3 mb-4">
+            <div class="section-number">1</div>
+            <h2 class="text-2xl fw-bold text-white mb-0">Personal Information</h2>
+          </div>
+
+          <div class="row g-4">
+            <div class="col-lg-4 text-center">
+              <div class="profile-pic-upload">
+                <div class="position-relative">
+                  <div class="pic-placeholder" (click)="triggerFileUpload()">
+                    <i class="bi bi-person" style="font-size: 5rem;"></i>
+                  </div>
+                  <div class="camera-btn-abs" (click)="triggerFileUpload()">
+                    <i class="bi bi-camera-fill"></i>
+                  </div>
+                </div>
+                <input type="file" id="profilePicInput" class="d-none" (change)="onFileSelected($event)"
+                  accept="image/*">
+                <p class="text-xs opacity-50 mt-3">JPG, PNG up to 5MB</p>
+              </div>
+            </div>
+            <div class="col-lg-8">
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <app-input label="Full Name" [value]="prefilledData.fullName" [disabled]="true"
+                    [required]="true"></app-input>
+                </div>
+                <div class="col-sm-6">
+                  <app-input label="Email" [value]="prefilledData.email" [disabled]="true" [required]="true"
+                    icon="bi-envelope"></app-input>
+                </div>
+                <div class="col-sm-6">
+                  <app-input label="Username" placeholder="Enter username" [required]="true"></app-input>
+                </div>
+                <div class="col-sm-6">
+                  <app-input type="select" label="Gender" [options]="genderOptions" placeholder="Select"
+                    [required]="true" [(ngModel)]="gender"></app-input>
+                </div>
+
+                @if (userRole === 'freelancer') {
+                <div class="col-12">
+                  <app-input label="Professional Headline" placeholder="Example: Angular Developer, UI/UX Designer"
+                    [required]="true"></app-input>
+                </div>
+                }
+
+                <div class="col-12">
+                  <app-input type="textarea" label="Short Bio" placeholder="Tell us about yourself..."
+                    [required]="true"></app-input>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. PROFESSIONAL DETAILS (ROLE-BASED) -->
+        <section id="professional" class="form-section glass mb-4 p-4" [class.high-z]="isProfessionalDropdownOpen">
+          <div class="section-header d-flex align-items-center gap-3 mb-4">
+            <div class="section-number">2</div>
+            <h2 class="text-2xl fw-bold text-white mb-0">Professional Details</h2>
+          </div>
+
+          @if (userRole === 'freelancer') {
+          <div class="row g-4">
+            <div class="col-12">
+              <app-input type="multiselect" label="Categories" [options]="categoryOptions"
+                placeholder="Select Categories" [(ngModel)]="selectedCategories" icon="bi-grid"
+                (dropdownStateChange)="isProfessionalDropdownOpen = $event"></app-input>
+              <div class="chips-display d-flex flex-wrap gap-2 mt-3">
+                @for (catValue of selectedCategories; track catValue) {
+                <app-chip [label]="getCategoryLabel(catValue)" (remove)="removeCategoryByValue(catValue)"></app-chip>
+                }
+              </div>
+            </div>
+            <div class="col-12">
+              <app-input label="Skills" placeholder="Type a skill and press Enter" [(ngModel)]="currentSkill"
+                (keydown.enter)="addSkill(currentSkill)" icon="bi-lightning-charge"></app-input>
+              <div class="chips-display d-flex flex-wrap gap-2 mt-3">
+                @for (skill of skills; track $index) {
+                <app-chip [label]="skill" variant="secondary" (remove)="removeSkill($index)"></app-chip>
+                }
+              </div>
+            </div>
+          </div>
+          } @else {
+          <div class="mb-4">
+            <label class="form-label text-white opacity-80 mb-3">Client Type</label>
+            <div class="row g-3">
+              @for (type of ['individual', 'startup', 'agency', 'business']; track type) {
+              <div class="col-6 col-md-3">
+                <div class="radio-card role-card-v" [class.active]="clientType === type"
+                  (click)="setSelection('clientType', type)">
+                  <div class="radio-check position-absolute top-2 end-2"></div>
+                  <div class="role-icon-box mb-2">
+                    <i class="bi"
+                      [class]="type === 'individual' ? 'bi-person' : type === 'startup' ? 'bi-rocket' : type === 'agency' ? 'bi-briefcase' : 'bi-buildings'"></i>
+                  </div>
+                  <h4 class="text-sm fw-bold text-white mb-0">{{ type | titlecase }}</h4>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+          <div class="row g-4">
+            <div class="col-md-6">
+              <app-input label="Website" placeholder="https://..." icon="bi-globe"></app-input>
+            </div>
+            <div class="col-md-6">
+              <app-input type="select" label="Industry" [options]="industryOptions"
+                placeholder="Select industry"></app-input>
+            </div>
+          </div>
+          }
+        </section>
+
+        <!-- 3. LOCATION (COMMON) -->
+        <section id="location" class="form-section glass mb-4 p-4">
+          <div class="section-header d-flex align-items-center gap-3 mb-4">
+            <div class="section-number">3</div>
+            <h2 class="text-2xl fw-bold text-white mb-0">Location</h2>
+          </div>
+          <div class="row g-4">
+            <div class="col-sm-4">
+              <app-input type="select" label="Country" [options]="countryOptions" placeholder="Select"></app-input>
+            </div>
+            <div class="col-sm-4">
+              <app-input label="City" placeholder="City"></app-input>
+            </div>
+            <div class="col-sm-4">
+              <app-input type="select" label="Timezone" [options]="timezoneOptions" placeholder="Select"></app-input>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. AVAILABILITY (FREELANCER ONLY) -->
         @if (userRole === 'freelancer') {
-          <!-- 1. BASIC IDENTITY -->
-          <section id="basic" class="form-section glass mb-4 p-4">
-            <div class="section-header d-flex align-items-center gap-3 mb-4">
-              <div class="section-number">1</div>
-              <h2 class="text-2xl fw-bold text-white mb-0">Basic Identity</h2>
-            </div>
-            
-            <div class="row g-4">
-              <div class="col-md-4 text-center">
-                <div class="profile-pic-upload">
-                  <div class="pic-placeholder">
-                    <i class="bi bi-camera"></i>
-                    <span>Upload Photo</span>
-                  </div>
-                  <p class="text-xs opacity-50 mt-2">JPG, PNG up to 5MB</p>
+        <section id="availability" class="form-section glass mb-4 p-4">
+          <div class="section-header d-flex align-items-center gap-3 mb-4">
+            <div class="section-number">4</div>
+            <h2 class="text-2xl fw-bold text-white mb-0">Availability</h2>
+          </div>
+            <div class="col-12">
+              <label class="form-label text-white opacity-80 mb-3">Available For Work</label>
+              <div class="availability-toggle-group d-flex flex-nowrap gap-2">
+                @for (opt of availabilityOptions; track opt.value) {
+                <div class="availability-btn" [class.active]="availabilityType === opt.value"
+                  (click)="setSelection('availability', opt.value)">
+                  <span class="btn-label">{{ opt.label }}</span>
                 </div>
+                }
               </div>
-              <div class="col-md-8">
-                <div class="row g-3">
-                  <div class="col-md-6">
-                    <app-input label="Full Name" placeholder="Enter your full name" [required]="true"></app-input>
-                  </div>
-                  <div class="col-md-6">
-                    <app-input label="Username" placeholder="Enter a unique username" [required]="true"></app-input>
-                  </div>
-                  <div class="col-12">
-                    <app-input label="Professional Headline" placeholder="Example: Angular Developer, UI/UX Designer" [required]="true"></app-input>
-                  </div>
-                  <div class="col-12">
-                    <app-input type="textarea" label="Short Bio" placeholder="Tell clients about yourself, your experience, and what you do best..." [required]="true"></app-input>
-                  </div>
-                </div>
-              </div>
-              <!-- ADDRESS INFO -->
-              <div class="col-md-3">
-                <app-input type="select" label="Country" placeholder="Select country" [required]="true"></app-input>
-              </div>
-              <div class="col-md-3">
-                <app-input label="City" placeholder="Enter your city" [required]="true"></app-input>
-              </div>
-              <div class="col-md-3">
-                <app-input type="select" label="Timezone" placeholder="Select timezone" [required]="true"></app-input>
-              </div>
-              <div class="col-md-3">
-                <app-input type="select" label="Languages Known" placeholder="Select languages" [required]="true"></app-input>
-              </div>
+            @if (availabilityType === 'other') {
+            <div class="mt-3">
+              <app-input label="Specify Availability" placeholder="e.g. Weekends only" icon="bi-clock"></app-input>
             </div>
-          </section>
-
-          <!-- 2. PROFESSIONAL DETAILS -->
-          <section id="professional" class="form-section glass mb-4 p-4">
-            <div class="section-header d-flex align-items-center gap-3 mb-4">
-              <div class="section-number">2</div>
-              <h2 class="text-2xl fw-bold text-white mb-0">Professional Details</h2>
-            </div>
-            
-            <div class="row g-4">
-              <div class="col-md-6">
-                <app-input type="select" label="Primary Category" placeholder="Select primary category" [required]="true"></app-input>
-              </div>
-              <div class="col-md-6">
-                <app-input label="Skills" placeholder="Add your skills" [required]="true"></app-input>
-                <div class="skills-tags mt-2 d-flex flex-wrap gap-2">
-                  <span class="skill-tag">Angular <i class="bi bi-x"></i></span>
-                  <span class="skill-tag">TypeScript <i class="bi bi-x"></i></span>
-                  <span class="skill-tag">HTML <i class="bi bi-x"></i></span>
-                  <span class="skill-tag">CSS <i class="bi bi-x"></i></span>
-                  <span class="skill-tag">UI/UX Design <i class="bi bi-x"></i></span>
-                  <span class="skill-tag">Figma <i class="bi bi-x"></i></span>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label text-white opacity-80 mb-3">Experience Level</label>
-                <div class="radio-card-group d-flex gap-3">
-                  <div class="radio-card active">
-                    <div class="radio-check"></div>
-                    <span>Beginner</span>
-                  </div>
-                  <div class="radio-card">
-                    <div class="radio-check"></div>
-                    <span>Intermediate</span>
-                  </div>
-                  <div class="radio-card">
-                    <div class="radio-check"></div>
-                    <span>Expert</span>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <app-input type="select" label="Years of Experience" placeholder="Select years of experience" [required]="true"></app-input>
-              </div>
-            </div>
-          </section>
-
-          <!-- 3. AVAILABILITY -->
-          <section id="availability" class="form-section glass mb-4 p-4">
-            <div class="section-header d-flex align-items-center gap-3 mb-4">
-              <div class="section-number">3</div>
-              <h2 class="text-2xl fw-bold text-white mb-0">Availability</h2>
-            </div>
-            
-            <div class="row g-4">
-              <div class="col-md-6">
-                <label class="form-label text-white opacity-80 mb-3">Available For Work</label>
-                <div class="availability-toggle-group d-flex gap-3">
-                  <div class="availability-btn active">
-                    <span class="btn-label">Full Time</span>
-                    <span class="btn-sub">30+ hrs / week</span>
-                  </div>
-                  <div class="availability-btn">
-                    <span class="btn-label">Part Time</span>
-                    <span class="btn-sub">Up to 30 hrs / week</span>
-                  </div>
-                  <div class="availability-btn">
-                    <span class="btn-label">Freelance</span>
-                    <span class="btn-sub">Project based</span>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <app-input label="Hourly Rate (USD)" placeholder="Enter your hourly rate" icon="bi-currency-dollar"></app-input>
-                <p class="text-xs opacity-40 mt-1">Optional</p>
-              </div>
-              <div class="col-md-3">
-                <app-input type="select" label="Weekly Availability" placeholder="Select your weekly availability"></app-input>
-                <p class="text-xs opacity-40 mt-1">Example: 10-20 hrs</p>
-              </div>
-            </div>
-          </section>
-
-          <!-- 4. SOCIAL & LINKS -->
-          <section id="social" class="form-section glass mb-4 p-4">
-            <div class="section-header d-flex align-items-center gap-3 mb-4">
-              <div class="section-number">4</div>
-              <h2 class="text-2xl fw-bold text-white mb-0">Social & Professional Links</h2>
-            </div>
-            
-            <div class="row g-4">
-              <div class="col-md-6">
-                <app-input label="Portfolio" placeholder="https://yourwebsite.com" icon="bi-link-45deg"></app-input>
-              </div>
-              <div class="col-md-6">
-                <app-input label="GitHub" placeholder="https://github.com/username" icon="bi-github"></app-input>
-              </div>
-              <div class="col-md-6">
-                <app-input label="LinkedIn" placeholder="https://linkedin.com/in/username" icon="bi-linkedin"></app-input>
-              </div>
-              <div class="col-md-6">
-                <app-input label="Behance" placeholder="https://behance.net/username" icon="bi-behance"></app-input>
-              </div>
-              <div class="col-md-6">
-                <app-input label="Dribbble" placeholder="https://dribbble.com/username" icon="bi-dribbble"></app-input>
-              </div>
-            </div>
-          </section>
-
-          <!-- 5. VERIFICATION -->
-          <section id="verification" class="form-section glass mb-4 p-4">
-            <div class="section-header d-flex align-items-center gap-3 mb-4">
-              <div class="section-number">5</div>
-              <h2 class="text-2xl fw-bold text-white mb-0">Verification</h2>
-            </div>
-            
-            <div class="row g-4 align-items-end">
-              <div class="col-md-6">
-                <div class="verification-item glass p-3 d-flex align-items-center justify-content-between">
-                  <div class="d-flex align-items-center gap-3">
-                    <div class="mail-icon-bg">
-                      <i class="bi bi-envelope text-xl"></i>
-                    </div>
-                    <div>
-                      <p class="text-xs opacity-50 mb-0">Email Verified</p>
-                      <p class="text-sm fw-medium mb-0">joh****n@gmail.com</p>
-                    </div>
-                  </div>
-                  <span class="badge rounded-pill bg-success-subtle text-success px-3">
-                    <i class="bi bi-check-circle-fill me-1"></i> Verified
-                  </span>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label text-white opacity-80 mb-2">Phone Number</label>
-                <div class="d-flex gap-2">
-                  <div class="country-select glass d-flex align-items-center px-2 gap-1" style="height: 50px; min-width: 80px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-                    <img src="https://flagcdn.com/w20/us.png" width="20" alt="US">
-                    <span class="text-sm">+1</span>
-                    <i class="bi bi-chevron-down opacity-50"></i>
-                  </div>
-                  <div class="flex-grow-1">
-                    <app-input placeholder="Enter your phone number"></app-input>
-                  </div>
-                  <button class="btn btn-primary px-3 fw-medium" style="height: 50px; border-radius: 12px; white-space: nowrap;">Send OTP</button>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- 6. PREFERENCES -->
-          <section id="preferences" class="form-section glass mb-4 p-4">
-            <div class="section-header d-flex align-items-center gap-3 mb-4">
-              <div class="section-number">6</div>
-              <h2 class="text-2xl fw-bold text-white mb-0">Preferences</h2>
-            </div>
-            
-            <div class="row g-4">
-              <div class="col-md-6">
-                <app-input type="select" label="Interested Categories" placeholder="Select categories you're interested in"></app-input>
-              </div>
-              <div class="col-md-3">
-                <label class="form-label text-white opacity-80 mb-3">Remote Only?</label>
-                <div class="d-flex gap-3">
-                  <div class="radio-card compact active">
-                    <div class="radio-check"></div>
-                    <span>Yes</span>
-                  </div>
-                  <div class="radio-card compact">
-                    <div class="radio-check"></div>
-                    <span>No</span>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <app-input type="select" label="Preferred Project Types" placeholder="Select project types"></app-input>
-              </div>
-            </div>
-          </section>
+            }
+          </div>
+        </section>
         }
 
-        <!-- CLIENT SECTIONS -->
-        @if (userRole === 'client') {
-          <!-- 1. BASIC INFORMATION -->
-          <section id="basic" class="form-section glass mb-4 p-4">
-            <div class="section-header d-flex align-items-center gap-3 mb-4">
-              <div class="section-number">1</div>
-              <h2 class="text-2xl fw-bold text-white mb-0">Basic Information</h2>
-            </div>
-            
-            <div class="row g-4">
-              <div class="col-md-4 text-center">
-                <div class="profile-pic-upload">
-                  <div class="pic-placeholder">
-                    <i class="bi bi-person"></i>
-                  </div>
-                  <button class="btn btn-icon-sm position-absolute" style="bottom: 0; right: 0; background: var(--brand-500); border-radius: 50%; width: 32px; height: 32px; color: white;">
-                    <i class="bi bi-camera"></i>
-                  </button>
-                  <p class="text-xs opacity-50 mt-3">JPG, PNG up to 5MB</p>
-                </div>
-              </div>
-              <div class="col-md-8">
-                <div class="row g-3">
-                  <div class="col-md-6">
-                    <app-input label="Full Name" placeholder="Enter your full name" [required]="true"></app-input>
-                  </div>
-                  <div class="col-md-6">
-                    <app-input label="Username" placeholder="Enter a unique username" [required]="true"></app-input>
-                  </div>
-                  <div class="col-12">
-                    <app-input type="textarea" label="Short Bio" placeholder="Tell us about yourself..." [required]="true"></app-input>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- 2. CLIENT TYPE -->
-          <section id="type" class="form-section glass mb-4 p-4">
-            <div class="section-header d-flex align-items-center gap-3 mb-4">
-              <div class="section-number">2</div>
-              <h2 class="text-2xl fw-bold text-white mb-0">Client Type</h2>
-            </div>
-            <p class="text-sm opacity-60 mb-4">Select the type that best describes you</p>
-            <div class="row g-3">
-              <div class="col-md-3">
-                <div class="radio-card role-card-v active">
-                  <div class="radio-check position-absolute top-2 end-2"></div>
-                  <div class="role-icon-box mb-3"><i class="bi bi-person"></i></div>
-                  <h4 class="text-md fw-bold text-white mb-1">Individual</h4>
-                  <p class="text-xs opacity-50 mb-0">I am hiring for personal needs</p>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="radio-card role-card-v">
-                  <div class="radio-check position-absolute top-2 end-2"></div>
-                  <div class="role-icon-box mb-3"><i class="bi bi-rocket-takeoff"></i></div>
-                  <h4 class="text-md fw-bold text-white mb-1">Startup</h4>
-                  <p class="text-xs opacity-50 mb-0">I represent a startup</p>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="radio-card role-card-v">
-                  <div class="radio-check position-absolute top-2 end-2"></div>
-                  <div class="role-icon-box mb-3"><i class="bi bi-briefcase"></i></div>
-                  <h4 class="text-md fw-bold text-white mb-1">Agency</h4>
-                  <p class="text-xs opacity-50 mb-0">I run an agency</p>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="radio-card role-card-v">
-                  <div class="radio-check position-absolute top-2 end-2"></div>
-                  <div class="role-icon-box mb-3"><i class="bi bi-buildings"></i></div>
-                  <h4 class="text-md fw-bold text-white mb-1">Business</h4>
-                  <p class="text-xs opacity-50 mb-0">I represent an established business</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- 3. PROFESSIONAL DETAILS (CLIENT) -->
-          <section id="professional" class="form-section glass mb-4 p-4">
-            <div class="section-header d-flex align-items-center gap-3 mb-4">
-              <div class="section-number">3</div>
-              <h2 class="text-2xl fw-bold text-white mb-0">Professional Details <span class="opacity-30 fw-normal">(Optional)</span></h2>
-            </div>
-            <p class="text-sm opacity-60 mb-4">Optional information to help freelancers understand you better</p>
-            <div class="row g-4">
-              <div class="col-md-6">
-                <app-input label="Website" placeholder="https://yourwebsite.com" icon="bi-globe"></app-input>
-              </div>
-              <div class="col-md-6">
-                <app-input type="select" label="Industry" placeholder="Select your industry"></app-input>
-              </div>
-            </div>
-          </section>
-
-          <!-- 4. HIRING PREFERENCES -->
-          <section id="hiring" class="form-section glass mb-4 p-4">
-            <div class="section-header d-flex align-items-center gap-3 mb-4">
-              <div class="section-number">4</div>
-              <h2 class="text-2xl fw-bold text-white mb-0">Hiring Preferences</h2>
-            </div>
-            <p class="text-sm opacity-60 mb-4">Tell us about your hiring preferences</p>
-            <div class="row g-4">
-              <div class="col-md-6">
-                <app-input type="select" label="Interested Categories" placeholder="Select categories"></app-input>
-              </div>
-              <div class="col-12">
-                <label class="form-label text-white opacity-80 mb-3">Hiring Type</label>
-                <div class="row g-3">
-                  @for (type of [{l: 'One-time', s: 'Short term task', i: 'bi-calendar-event'}, {l: 'Long-term', s: 'Ongoing work', i: 'bi-calendar-check'}, {l: 'Hourly', s: 'Pay by the hour', i: 'bi-clock-history'}, {l: 'Fixed Project', s: 'Fixed price', i: 'bi-currency-dollar'}]; track type.l) {
-                    <div class="col-md-3">
-                      <div class="radio-card h-100 p-3" [class.active]="type.l === 'Long-term'">
-                        <div class="radio-icon-sm me-2"><i [class]="'bi ' + type.i"></i></div>
-                        <div>
-                          <p class="text-sm fw-bold mb-0">{{ type.l }}</p>
-                          <p class="text-xs opacity-50 mb-0">{{ type.s }}</p>
-                        </div>
-                      </div>
+        <!-- 5. VERIFICATION (COMMON) -->
+        <section id="verification" class="form-section glass mb-4 p-4">
+          <div class="section-header d-flex align-items-center gap-3 mb-4">
+            <div class="section-number">{{ userRole === 'freelancer' ? '5' : '4' }}</div>
+            <h2 class="text-2xl fw-bold text-white mb-0">Verification</h2>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="verification-card p-3">
+                <div class="d-flex gap-3">
+                  <div class="mail-icon-box"><i class="bi bi-envelope"></i></div>
+                  <div>
+                    <span class="verify-label-lg d-block opacity-50 mb-1">Email Address</span>
+                    <p class="email-value-text mb-2">{{ prefilledData.email }}</p>
+                    <div class="verified-badge d-inline-flex py-1 px-3" style="font-size: 12px;">
+                      <i class="bi bi-check-circle-fill me-2"></i> Verified
                     </div>
-                  }
+                  </div>
                 </div>
               </div>
             </div>
-          </section>
-
-          <!-- 5. LOCATION -->
-          <section id="location" class="form-section glass mb-4 p-4">
-            <div class="section-header d-flex align-items-center gap-3 mb-4">
-              <div class="section-number">5</div>
-              <h2 class="text-2xl fw-bold text-white mb-0">Location</h2>
-            </div>
-            <p class="text-sm opacity-60 mb-4">Where are you based?</p>
-            <div class="row g-4">
-              <div class="col-md-4">
-                <app-input type="select" label="Country" placeholder="Select country"></app-input>
-              </div>
-              <div class="col-md-4">
-                <app-input label="City" placeholder="Enter your city"></app-input>
-              </div>
-              <div class="col-md-4">
-                <app-input type="select" label="Timezone" placeholder="Select timezone"></app-input>
-              </div>
-            </div>
-          </section>
-
-          <!-- 6. VERIFICATION (CLIENT) -->
-          <section id="verification" class="form-section glass mb-4 p-4">
-            <div class="section-header d-flex align-items-center gap-3 mb-4">
-              <div class="section-number">6</div>
-              <h2 class="text-2xl fw-bold text-white mb-0">Verification</h2>
-            </div>
-            <p class="text-sm opacity-60 mb-4">Verify your contact details</p>
-            <div class="row g-4">
-              <div class="col-md-6">
-                <label class="form-label text-white opacity-80 mb-2">Phone Number</label>
-                <div class="d-flex gap-2">
-                  <div class="country-select glass d-flex align-items-center px-2 gap-1" style="height: 50px; min-width: 80px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-                    <img src="https://flagcdn.com/w20/us.png" width="20" alt="US">
-                    <span class="text-sm">+1</span>
-                    <i class="bi bi-chevron-down opacity-50"></i>
+            <div class="col-md-6">
+              <div class="verification-card p-3">
+                <span class="phone-label-box mb-3 d-block opacity-50">Phone Number</span>
+                <div class="phone-input-container d-flex align-items-center gap-2 mb-3">
+                  <div class="country-code-pill flex-shrink-0">
+                    <img src="https://flagcdn.com/w20/in.png" width="20" alt="IN">
+                    <span class="text-sm ms-2">+91</span>
                   </div>
                   <div class="flex-grow-1">
-                    <app-input placeholder="Enter your phone number"></app-input>
+                    <app-input placeholder="Enter Phone" icon="bi-phone"></app-input>
                   </div>
-                  <button class="btn btn-outline-primary px-3 text-sm fw-medium" style="height: 50px; border-radius: 12px; white-space: nowrap;">Send OTP</button>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label text-white opacity-80 mb-2">Email Address</label>
-                <div class="d-flex gap-2">
-                  <div class="flex-grow-1">
-                    <app-input placeholder="Enter your email address" icon="bi-envelope"></app-input>
-                  </div>
-                  <button class="btn btn-outline-primary px-3 text-sm fw-medium" style="height: 50px; border-radius: 12px; white-space: nowrap;">Send OTP</button>
-                </div>
+                <app-button variant="outline" size="sm">Send OTP</app-button>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- 7. SOCIAL LINKS (CLIENT) -->
-          <section id="social" class="form-section glass mb-4 p-4">
-            <div class="section-header d-flex align-items-center gap-3 mb-4">
-              <div class="section-number">7</div>
-              <h2 class="text-2xl fw-bold text-white mb-0">Social Links <span class="opacity-30 fw-normal">(Optional)</span></h2>
-            </div>
-            <p class="text-sm opacity-60 mb-4">Add your social profiles</p>
-            <div class="row g-4">
-              <div class="col-md-6">
-                <app-input label="LinkedIn" placeholder="https://linkedin.com/in/username" icon="bi-linkedin"></app-input>
+        <!-- 6. SOCIAL LINKS (COMMON) -->
+        <section id="social" class="form-section glass mb-4 p-4">
+          <div class="section-header d-flex align-items-center gap-3 mb-4">
+            <div class="section-number">{{ userRole === 'freelancer' ? '6' : '5' }}</div>
+            <h2 class="text-2xl fw-bold text-white mb-0">Social Links</h2>
+          </div>
+          @if (savedSocialLinks.length < 5) { <div class="social-link-row mt-3">
+            <div class="row g-3 align-items-end">
+              <div class="col-sm-3">
+                <app-input type="select" label="Platform" [options]="platformOptions" [(ngModel)]="currentLink.platform"
+                  placeholder="Select"></app-input>
               </div>
-              <div class="col-md-6">
-                <app-input label="Twitter / X" placeholder="https://twitter.com/username" icon="bi-twitter-x"></app-input>
+              <div class="col-sm-7">
+                <app-input label="Profile URL" [(ngModel)]="currentLink.url" placeholder="https://..."
+                  icon="bi-link"></app-input>
+              </div>
+              <div class="col-sm-2">
+                <app-button (click)="saveSocialLink()" variant="primary" size="md"
+                  [disabled]="!currentLink.url || !currentLink.platform" class="w-100">Add</app-button>
               </div>
             </div>
-          </section>
+      </div>
+      }
+      <div class="connected-links-area mt-4">
+        @for (link of savedSocialLinks; track $index) {
+        <div class="connected-card mb-2">
+          <div class="d-flex align-items-center gap-3 w-100 flex-wrap">
+            <div class="social-icon-box"><i [class]="'bi ' + getPlatformIcon(link.platform)"></i></div>
+            <div class="flex-grow-1">
+              <h6 class="text-white mb-0">{{ link.platform | titlecase }}</h6>
+              <p class="text-xs opacity-50 mb-0 text-truncate" style="max-width: 200px;">{{ link.url }}</p>
+            </div>
+            <div class="d-flex gap-2">
+              <div class="action-btn-box edit" (click)="openEditModal($index)"><i class="bi bi-pencil"></i></div>
+              <div class="action-btn-box delete" (click)="removeSocialLink($index)"><i class="bi bi-trash"></i></div>
+            </div>
+          </div>
+        </div>
         }
       </div>
-
-      <!-- FOOTER ACTIONS -->
-      <footer class="form-footer d-flex flex-column align-items-center mt-5">
-        <div class="d-flex justify-content-between w-100 align-items-center mb-4">
-          <button class="btn btn-outline-light px-5 py-2 opacity-50 hover-opacity-100">Cancel</button>
-          <app-button variant="primary" size="md" (click)="onSaveAndContinue()" 
-                      customClass="px-5 py-2 d-inline-flex align-items-center gap-2">
-            Save & Continue <i class="bi bi-arrow-right"></i>
-          </app-button>
-        </div>
-        <div class="security-note opacity-30 text-xs d-flex align-items-center gap-2">
-          <i class="bi bi-lock-fill"></i> Your information is secure and will not be shared
-        </div>
-      </footer>
-    </main>
+      </section>
   </div>
+
+  <!-- FOOTER -->
+  <footer class="form-footer mt-5 pb-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <app-button variant="outline" size="md">Cancel</app-button>
+      <app-button variant="primary" (click)="onSaveAndContinue()" size="md" customClass="btn-save-continue">Save &
+        Continue</app-button>
+    </div>
+  </footer>
+  </main>
+</div>
+
+<!-- MODAL -->
+@if (isEditModalOpen) {
+<div class="edit-modal-overlay">
+  <div class="edit-modal-content glass">
+    <div class="d-flex justify-content-between mb-4">
+      <h4 class="text-white mb-0">Edit Link</h4>
+      <button (click)="closeEditModal()" class="btn-close btn-close-white"></button>
+    </div>
+    <div class="mb-4">
+      <app-input label="URL" [(ngModel)]="editingLinkData.url" placeholder="https://..." [required]="true"></app-input>
+    </div>
+    <div class="d-flex gap-3">
+      <app-button (click)="closeEditModal()" variant="outline" class="flex-grow-1">Cancel</app-button>
+      <app-button (click)="updateSocialLink()" variant="primary" class="flex-grow-1">Update</app-button>
+    </div>
+  </div>
+</div>
+}
 </div>

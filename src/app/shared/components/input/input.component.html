@@ -1,7 +1,7 @@
 <div class="input-wrapper" [class.filter-mode]="mode === 'filter'" [class.has-error]="error" [class.has-label]="label">
   <!-- LABEL -->
   @if (label) {
-  <label class="form-label text-xs fw-bold mb-2 d-block">
+  <label class="form-label fw-bold mb-2 d-block">
     {{ label }} @if (required) { <span class="text-danger">*</span> }
   </label>
   }
@@ -28,30 +28,31 @@
     }
 
     @case ('multiselect') {
-    <div class="multiselect-container glass p-2 rounded-3" [class.ps-5]="icon">
-      <div class="selected-tags d-flex flex-wrap gap-2">
-        @for (opt of options; track opt.value) {
-        @if (isSelected(opt.value)) {
-        <span class="tag badge bg-brand-500 text-white d-flex align-items-center gap-2 px-2 py-1 rounded-2">
-          {{ opt.label }}
-          <i class="bi bi-x-circle cursor-pointer" (click)="toggleOption(opt.value)"></i>
-        </span>
-        }
-        }
-        @if (!value || value.length === 0) {
-        <span class="placeholder opacity-50 text-sm">{{ placeholder || 'Select multiple...' }}</span>
-        }
+    <div class="multiselect-container glass rounded-3" [class.ps-5]="icon" [class.dropdown-active]="dropdownOpen">
+      <div class="selection-trigger d-flex align-items-center justify-content-between cursor-pointer" (click)="toggleDropdown()">
+        <div class="selected-text">
+          <span class="placeholder opacity-50 text-sm">{{ placeholder || 'Select Categories' }}</span>
+        </div>
+        <i class="bi bi-chevron-down dropdown-arrow" [class.rotated]="dropdownOpen"></i>
       </div>
-      <!-- Simple Dropdown for multiselect -->
-      <div class="multiselect-dropdown mt-2 p-2 border-top border-white border-opacity-10">
+
+      <!-- Real Floating Dropdown -->
+      @if (dropdownOpen) {
+      <div class="multiselect-dropdown-overlay" (click)="toggleDropdown()"></div>
+      <div class="multiselect-dropdown-list p-2 shadow-lg">
         @for (opt of options; track opt.value) {
-        <div class="option-item d-flex align-items-center gap-2 p-1 rounded hover-bg-white-opacity"
-          (click)="toggleOption(opt.value)">
-          <input type="checkbox" [checked]="isSelected(opt.value)" class="form-check-input mt-0">
-          <span class="text-xs">{{ opt.label }}</span>
+        <div class="option-item d-flex align-items-center gap-3 p-2 rounded hover-bg-white-opacity cursor-pointer"
+          (click)="toggleOption(opt.value); $event.stopPropagation()">
+          <div class="custom-checkbox" [class.checked]="isSelected(opt.value)">
+            @if (isSelected(opt.value)) {
+              <i class="bi bi-check-lg"></i>
+            }
+          </div>
+          <span class="text-sm">{{ opt.label }}</span>
         </div>
         }
       </div>
+      }
     </div>
     }
 
