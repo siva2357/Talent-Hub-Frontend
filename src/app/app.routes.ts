@@ -23,14 +23,30 @@ import { RegistrationComponent } from './features/account/registration/registrat
 import { UserLayoutComponent } from './core/layouts/user-layout/user-layout.component';
 import { AdminComponent } from './features/user/admin/admin.component';
 import { ClientComponent } from './features/user/client/client.component';
-import { FreelancerComponent } from './features/user/freelancer/freelancer.component';
+
 import { UserProfileComponent } from './shared/pages/user-profile/user-profile.component';
 import { AccountSettingsComponent } from './shared/pages/account-settings/account-settings.component';
 import { ChatComponent } from './shared/pages/chat/chat.component';
 
+// Freelancer Pages
+import { FreelancerDashboardComponent } from './features/user/freelancer/pages/freelancer-dashboard/freelancer-dashboard.component';
+import { ProposalsComponent } from './features/user/freelancer/pages/proposals/proposals.component';
+import { OffersComponent } from './features/user/freelancer/pages/offers/offers.component';
+import { ActiveContractsComponent } from './features/user/freelancer/pages/active-contracts/active-contracts.component';
+import { ContractDiaryComponent } from './features/user/freelancer/pages/contract-diary/contract-diary.component';
+import { HourlyWorkDiaryComponent } from './features/user/freelancer/pages/hourly-work-diary/hourly-work-diary.component';
+import { AttendanceOverviewComponent } from './features/user/freelancer/pages/attendance-overview/attendance-overview.component';
+import { MarkAttendanceComponent } from './features/user/freelancer/pages/mark-attendance/mark-attendance.component';
+import { FinanceOverviewComponent } from './features/user/freelancer/pages/finance-overview/finance-overview.component';
+import { FinanceReportComponent } from './features/user/freelancer/pages/finance-report/finance-report.component';
+import { FinanceManagementComponent } from './features/user/freelancer/pages/finance-management/finance-management.component';
+
 // Error/Utility Components
 import { AccessDeniedComponent } from './shared/pages/access-denied/access-denied.component';
 import { NotFoundComponent } from './shared/pages/not-found/not-found.component';
+import { FindContractsComponent } from './features/user/freelancer/pages/find-contracts/find-contracts.component';
+import { SavedContractsComponent } from './features/user/freelancer/pages/saved-contracts/saved-contracts.component';
+import { ContactSupportComponent } from './shared/pages/contact-support/contact-support.component';
 
 export const routes: Routes = [
   // Public Routes (With Navbar and Footer)
@@ -46,6 +62,7 @@ export const routes: Routes = [
       { path: 'about-us', component: AboutUsComponent },
       { path: 'blog', component: BlogComponent },
       { path: 'blog-details/:slug', component: BlogDetailsComponent },
+
     ]
   },
 
@@ -72,7 +89,22 @@ export const routes: Routes = [
       { path: '', redirectTo: '/account/signin', pathMatch: 'full' },
       { path: 'admin', component: AdminComponent },
       { path: 'client', component: ClientComponent },
-      { path: 'freelancer', component: FreelancerComponent },
+
+
+      // Freelancer Pages
+      { path: 'my-dashboard', component: FreelancerDashboardComponent },
+      { path: 'find-contracts', component: FindContractsComponent },
+      { path: 'saved-contracts', component: SavedContractsComponent },
+      { path: 'proposals', component: ProposalsComponent },
+      { path: 'offers', component: OffersComponent },
+      { path: 'active-contracts', component: ActiveContractsComponent },
+      { path: 'contract-diary', component: ContractDiaryComponent },
+      { path: 'hourly-work-diary', component: HourlyWorkDiaryComponent },
+      { path: 'attendance-overview', component: AttendanceOverviewComponent },
+      { path: 'mark-attendance', component: MarkAttendanceComponent },
+      { path: 'finance-overview', component: FinanceOverviewComponent },
+      { path: 'finance-report', component: FinanceReportComponent },
+      { path: 'finance-management', component: FinanceManagementComponent },
     ]
   },
 
@@ -83,6 +115,7 @@ export const routes: Routes = [
       { path: 'profile', component: UserProfileComponent },
       { path: 'settings', component: AccountSettingsComponent },
       { path: 'chat', component: ChatComponent },
+      { path: 'contact-support', component: ContactSupportComponent },
     ]
   },
 

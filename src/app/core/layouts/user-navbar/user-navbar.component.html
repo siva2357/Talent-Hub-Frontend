@@ -11,7 +11,7 @@
             </button>
 
             <!-- Logo -->
-            <a class="navbar-brand d-flex align-items-center" routerLink="/">
+            <a class="navbar-brand d-flex align-items-center" [routerLink]="dashboardLink">
                 <img src="assets/logo/website-logo.png" alt="Talent Hub" height="55" class="logo-glow main-logo">
             </a>
 
@@ -28,10 +28,169 @@
                 <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Projects</a></li>
                 <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Payments</a></li>
                 } @else if (userRole === 'freelancer') {
-                <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">My Work</a></li>
-                <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Find Work</a></li>
-                <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Proposals</a></li>
-                <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Wallet</a></li>
+                <!-- Find Work Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white fw-medium px-2 px-xl-3 no-caret" href="#"
+                        data-bs-toggle="dropdown"
+                        [class.active-module]="isModuleActive(['find-contracts', 'saved-contracts', 'proposals', 'offers'])">
+                        Find Contracts <i class="bi bi-chevron-down smaller ms-1 opacity-50"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark shadow border-0 mt-2">
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/find-contracts"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-search"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Find Contracts</h6>
+                                    <p class="menu-desc">Browse available jobs and opportunities posted by clients.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/saved-contracts"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-bookmark-star"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Saved Contracts</h6>
+                                    <p class="menu-desc">Manage bookmarked or saved job opportunities.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/proposals"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-file-earmark-text"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Proposals</h6>
+                                    <p class="menu-desc">Track all submitted proposals and applications.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/offers"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-gift"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Offers</h6>
+                                    <p class="menu-desc">Manage offers received from clients.</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Contract Management Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white fw-medium px-2 px-xl-3 no-caret" href="#"
+                        data-bs-toggle="dropdown"
+                        [class.active-module]="isModuleActive(['active-contracts', 'contract-diary', 'hourly-work-diary'])">
+                        Contract Management <i class="bi bi-chevron-down smaller ms-1 opacity-50"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark shadow border-0 mt-2">
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/active-contracts"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-briefcase"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Your Active Contracts</h6>
+                                    <p class="menu-desc">View and manage ongoing contracts.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/contract-diary"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-journal-text"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Contract Diary</h6>
+                                    <p class="menu-desc">Maintain daily work records and activity logs.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/hourly-work-diary"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-clock-history"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Hourly Work Diary</h6>
+                                    <p class="menu-desc">Upload and manage daily work progress.</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Attendance Management Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white fw-medium px-2 px-xl-3 no-caret" href="#"
+                        data-bs-toggle="dropdown"
+                        [class.active-module]="isModuleActive(['attendance-overview', 'mark-attendance'])">
+                        Attendance Management <i class="bi bi-chevron-down smaller ms-1 opacity-50"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark shadow border-0 mt-2">
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/attendance-overview"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-calendar-check"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Attendance Overview</h6>
+                                    <p class="menu-desc">View attendance records and activity summaries.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/mark-attendance"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-patch-check"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Mark Attendance</h6>
+                                    <p class="menu-desc">Allow freelancers to mark daily attendance.</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Financial Management Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white fw-medium px-2 px-xl-3 no-caret" href="#"
+                        data-bs-toggle="dropdown"
+                        [class.active-module]="isModuleActive(['finance-overview', 'finance-report', 'finance-management'])">
+                        Financial Management <i class="bi bi-chevron-down smaller ms-1 opacity-50"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark shadow border-0 mt-2">
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/finance-overview"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-wallet2"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Finance Overview</h6>
+                                    <p class="menu-desc">Display financial summaries and account info.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/finance-report"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-file-earmark-bar-graph"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Your Report</h6>
+                                    <p class="menu-desc">Generate and view financial reports.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/finance-management"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-cash-stack"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Earnings and Withdraw</h6>
+                                    <p class="menu-desc">Manage freelancer earnings and withdrawal requests.</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 } @else {
                 <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Hire Talent</a></li>
                 <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Find Work</a></li>
@@ -53,7 +212,7 @@
                     <app-button [variant]="clientActive.isActive ? 'white' : 'outline'"
                         customClass="px-3">C</app-button>
                 </a>
-                <a routerLink="/user/freelancer" routerLinkActive #freelancerActive="routerLinkActive"
+                <a routerLink="/user/my-dashboard" routerLinkActive #freelancerActive="routerLinkActive"
                     class="text-decoration-none">
                     <app-button [variant]="freelancerActive.isActive ? 'white' : 'outline'"
                         customClass="px-3">F</app-button>
@@ -73,10 +232,73 @@
                         <span class="icon-badge">3</span>
                     </button>
                 </a>
-                <button class="btn btn-link icon-btn shadow-none">
-                    <i class="bi bi-bell fs-4"></i>
-                    <span class="icon-badge">9</span>
-                </button>
+                <!-- Notifications Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-link icon-btn shadow-none no-caret" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-bell fs-4"></i>
+                        @if (notifications.length > 0) {
+                        <span class="icon-badge">{{ notifications.length }}</span>
+                        }
+                    </button>
+                    <ul
+                        class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-0 mt-2 notification-dropdown">
+                        <li
+                            class="px-3 py-3 border-bottom border-white border-opacity-10 d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-2">
+                                <h6 class="mb-0 text-white fw-bold">Notifications</h6>
+                                @if (notifications.length > 0) {
+                                <span class="badge bg-primary rounded-pill"
+                                    style="font-size: 10px; padding: 4px 8px;">{{ notifications.length }}</span>
+                                }
+                            </div>
+                            @if (notifications.length > 0) {
+                            <button class="btn btn-link text-primary p-0 text-decoration-none smaller fw-bold"
+                                (click)="markAllAsRead($event)">
+                                Mark all read
+                            </button>
+                            }
+                        </li>
+                        <div class="notification-list" style="max-height: 380px; overflow-y: auto;">
+                            @if (notifications.length === 0) {
+                            <div class="text-center py-4 px-3">
+                                <div class="mb-2">
+                                    <i class="bi bi-bell-slash fs-2 text-secondary opacity-25"></i>
+                                </div>
+                                <h6 class="text-white fw-bold mb-1" style="font-size: 0.95rem;">No Notifications
+                                    Received</h6>
+                                <p class="text-secondary smaller mb-0 px-2" style="font-size: 0.75rem;">We'll notify you
+                                    when something important happens.</p>
+                            </div>
+                            } @else {
+                            @for (notif of visibleNotifications; track notif.id) {
+                            <li>
+                                <a class="dropdown-item p-3 border-bottom border-white border-opacity-5"
+                                    href="javascript:void(0)">
+                                    <div class="d-flex gap-3">
+                                        <div class="notif-icon-box" [class]="notif.type">
+                                            <i [class]="notif.icon"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <p class="text-white small mb-1 fw-medium">{{ notif.title }}</p>
+                                            <p class="text-secondary smaller mb-0">{{ notif.time }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            }
+                            }
+                        </div>
+                        @if (notifications.length > 4) {
+                        <li class="p-1 text-center">
+                            <button class="btn btn-link text-primary text-decoration-none smaller fw-bold py-2 w-100"
+                                (click)="toggleShowAll($event)">
+                                {{ showAllNotifications ? 'View Less' : 'View More' }}
+                            </button>
+                        </li>
+                        }
+                    </ul>
+                </div>
             </div>
 
             <!-- User Profile Avatar -->
@@ -89,16 +311,17 @@
                             alt="User Profile">
                     </div>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-0 mt-2">
+                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-0 mt-2 profile-dropdown">
                     <li class="px-3 py-2 border-bottom border-white border-opacity-10 mb-2">
-                        <p class="mb-0 fw-bold text-white small">John Doe</p>
-                        <p class="mb-0 text-secondary smaller text-truncate" style="max-width: 150px;">
-                            john.doe@example.com</p>
+                        <p class="mb-0 fw-bold text-white fs-6">John Doe</p>
+                        <p class="mb-0 text-secondary smaller text-truncate">john.doe@example.com</p>
                     </li>
                     <li><a class="dropdown-item" routerLink="/user/profile"><i class="bi bi-person me-2"></i> My
                             Profile</a></li>
                     <li><a class="dropdown-item" routerLink="/user/settings"><i class="bi bi-gear me-2"></i>
                             Settings</a></li>
+                    <li><a class="dropdown-item" routerLink="/user/contact-support"><i class="bi bi-headset me-2"></i>
+                            Contact Support</a></li>
                     <li>
                         <hr class="dropdown-divider border-white border-opacity-10">
                     </li>
