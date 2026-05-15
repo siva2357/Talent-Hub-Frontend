@@ -1,1 +1,51 @@
-<p>otp-verification works!</p>
+<div class="auth-container">
+  <!-- BACKGROUND BLOBS -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="auth-card-wrapper otp-layout">
+    <!-- LOGO -->
+    <div class="logo-container text-center mb-5">
+      <img src="assets/logo/website-logo.png" alt="Talent Hub" class="auth-logo">
+    </div>
+
+    <div class="auth-header text-center mb-5">
+      <h1 class="text-3xl fw-bold mb-3 text-white">OTP Verification</h1>
+      <p class="text-md opacity-70 max-w-400 mx-auto">
+        An OTP has been sent to your email <span class="text-brand fw-semibold">****@gmail.com</span>. 
+        Please enter it to verify your identity.
+      </p>
+    </div>
+
+    <div class="otp-input-container d-flex justify-content-center gap-3 mb-5">
+      @for (box of otp; track $index) {
+      <div class="otp-box glass">
+        <input type="text" maxlength="1" class="otp-field">
+      </div>
+      }
+    </div>
+
+    <div class="resend-container text-center mb-5">
+      <p class="text-sm opacity-70">
+        Didn’t receive the code?
+        <a class="text-brand fw-semibold text-decoration-none cursor-pointer">Resend OTP</a>
+      </p>
+    </div>
+
+    <div class="auth-action text-center">
+      <app-button variant="primary" size="md" (click)="onVerify()"
+        customClass="px-5 py-2 d-inline-flex align-items-center justify-content-center gap-3">
+        <i class="bi bi-shield-check text-xl"></i>
+        <span class="text-lg">Verify</span>
+      </app-button>
+    </div>
+
+    <!-- BACK TO HOME -->
+    <div class="back-home mt-4 text-center">
+      <a routerLink="/account/registration"
+        class="text-sm opacity-50 hover-opacity-100 text-decoration-none d-flex align-items-center justify-content-center gap-2 text-white">
+        <i class="bi bi-arrow-left"></i> Back to registration
+      </a>
+    </div>
+  </div>
+</div>

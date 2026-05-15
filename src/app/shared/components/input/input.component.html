@@ -1,0 +1,83 @@
+<div class="input-wrapper" [class.filter-mode]="mode === 'filter'" [class.has-error]="error" [class.has-label]="label">
+  <!-- LABEL -->
+  @if (label) {
+  <label class="form-label fw-bold mb-2 d-block">
+    {{ label }} @if (required) { <span class="text-danger">*</span> }
+  </label>
+  }
+
+  <!-- INPUT CONTAINER -->
+  <div class="field-container position-relative">
+    <!-- ICON -->
+    @if (icon) {
+    <i class="bi {{ icon }} field-icon position-absolute start-0 top-50 translate-middle-y ms-3 opacity-50"></i>
+    }
+
+    <!-- INPUT TYPES -->
+    @switch (type) {
+    @case ('select') {
+    <select class="form-select glass" [class.ps-5]="icon" [disabled]="disabled" (change)="handleInput($event)"
+      (blur)="onTouched()">
+      @if (placeholder) {
+      <option value="" disabled selected hidden>{{ placeholder }}</option>
+      }
+      @for (opt of options; track opt.value) {
+      <option [value]="opt.value" [selected]="value === opt.value" class="bg-dark text-white">{{ opt.label }}</option>
+      }
+    </select>
+    }
+
+    @case ('multiselect') {
+    <div class="multiselect-container glass rounded-3" [class.ps-5]="icon" [class.dropdown-active]="dropdownOpen">
+      <div class="selection-trigger d-flex align-items-center justify-content-between cursor-pointer" (click)="toggleDropdown()">
+        <div class="selected-text">
+          <span class="placeholder opacity-50 text-sm">{{ placeholder || 'Select Categories' }}</span>
+        </div>
+        <i class="bi bi-chevron-down dropdown-arrow" [class.rotated]="dropdownOpen"></i>
+      </div>
+
+      <!-- Real Floating Dropdown -->
+      @if (dropdownOpen) {
+      <div class="multiselect-dropdown-overlay" (click)="toggleDropdown()"></div>
+      <div class="multiselect-dropdown-list p-2 shadow-lg">
+        @for (opt of options; track opt.value) {
+        <div class="option-item d-flex align-items-center gap-3 p-2 rounded hover-bg-white-opacity cursor-pointer"
+          (click)="toggleOption(opt.value); $event.stopPropagation()">
+          <div class="custom-checkbox" [class.checked]="isSelected(opt.value)">
+            @if (isSelected(opt.value)) {
+              <i class="bi bi-check-lg"></i>
+            }
+          </div>
+          <span class="text-sm">{{ opt.label }}</span>
+        </div>
+        }
+      </div>
+      }
+    </div>
+    }
+
+    @case ('textarea') {
+    <textarea class="form-control glass" [class.ps-5]="icon" [placeholder]="placeholder" [disabled]="disabled"
+      [value]="value" (input)="handleInput($event)" (blur)="onTouched()" rows="4"></textarea>
+    }
+
+    @default {
+    <input [type]="inputType" class="form-control glass" [class.ps-5]="icon" [class.pe-5]="showPasswordToggle" [placeholder]="placeholder"
+      [disabled]="disabled" [value]="value" (input)="handleInput($event)" (blur)="onTouched()">
+    
+    @if (type === 'password' && showPasswordToggle) {
+    <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword" 
+       (click)="togglePasswordVisibility()"
+       class="bi position-absolute end-0 top-50 translate-middle-y me-3 cursor-pointer opacity-50 hover-opacity-100"></i>
+    }
+    }
+    }
+  </div>
+
+  <!-- ERROR MESSAGE -->
+  @if (error && mode === 'form') {
+  <div class="error-message text-danger text-xxs mt-1 ps-1">
+    <i class="bi bi-exclamation-circle me-1"></i> {{ error }}
+  </div>
+  }
+</div>

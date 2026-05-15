@@ -1,1 +1,59 @@
-<p>signin works!</p>
+<div class="auth-container">
+  <!-- BACKGROUND BLOBS -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="auth-card-wrapper">
+    <div class="auth-card glass">
+      <!-- LOGO -->
+      <div class="logo-container">
+        <img src="assets/logo/website-logo.png" alt="Talent Hub" class="auth-logo">
+      </div>
+
+      <div class="auth-header">
+        <h1 class="text-3xl fw-bold mb-1">Welcome Back</h1>
+      </div>
+
+      <form class="auth-form">
+        <!-- EMAIL -->
+        <app-input 
+          type="email" 
+          placeholder="Enter your email" 
+          icon="bi-envelope">
+        </app-input>
+
+        <!-- PASSWORD -->
+        <app-input 
+          type="password" 
+          placeholder="Enter your password" 
+          icon="bi-lock"
+          [showPasswordToggle]="true">
+        </app-input>
+
+        <div class="forgot-password text-end mt-2">
+          <a routerLink="/account/forgot-password" class="text-xs text-brand fw-semibold text-decoration-none">Forgot password?</a>
+        </div>
+
+        <div class="auth-action mt-4">
+          <app-button variant="primary" size="md" customClass="w-100">
+            Login
+          </app-button>
+        </div>
+      </form>
+
+      <div class="auth-footer mt-4 text-center">
+        <p class="text-xs opacity-70 mb-3">
+          Don’t have an account? 
+          <a routerLink="/account/signup" class="text-brand fw-semibold text-decoration-none">Sign up</a>
+        </p>
+        
+        <!-- BACK TO HOME (INSIDE CARD) -->
+        <div class="back-home mt-3">
+          <a routerLink="/" class="text-sm opacity-50 hover-opacity-100 text-decoration-none d-flex align-items-center justify-content-center gap-2 text-white">
+            <i class="bi bi-arrow-left"></i> Back to home
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

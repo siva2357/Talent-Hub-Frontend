@@ -16,6 +16,12 @@ import { ForgotPasswordComponent } from './features/account/forgot-password/forg
 import { OtpVerificationComponent } from './features/account/otp-verification/otp-verification.component';
 import { ConfirmationComponent } from './features/account/confirmation/confirmation.component';
 import { ResetPasswordComponent } from './features/account/reset-password/reset-password.component';
+import { ProfileFormComponent } from './features/account/profile-form/profile-form.component';
+import { RegistrationComponent } from './features/account/registration/registration.component';
+
+// Error/Utility Components
+import { AccessDeniedComponent } from './shared/pages/access-denied/access-denied.component';
+import { NotFoundComponent } from './shared/pages/not-found/not-found.component';
 
 export const routes: Routes = [
   // Public Routes (With Navbar and Footer)
@@ -44,8 +50,12 @@ export const routes: Routes = [
       { path: 'otp-verification', component: OtpVerificationComponent },
       { path: 'confirmation', component: ConfirmationComponent },
       { path: 'reset-password', component: ResetPasswordComponent },
+      { path: 'profile-form', component: ProfileFormComponent },
+      { path: 'registration', component: RegistrationComponent },
+      { path: 'access-denied', component: AccessDeniedComponent },
     ]
   },
 
-  { path: '**', redirectTo: '' }
+  { path: 'not-found', component: NotFoundComponent },
+  { path: '**', redirectTo: 'not-found' }
 ];

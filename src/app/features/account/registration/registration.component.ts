@@ -6,21 +6,16 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
 import { inject } from '@angular/core';
 
 @Component({
-  selector: 'app-signup',
+  selector: 'app-registration',
   standalone: true,
-  imports: [CommonModule, RouterLink, ButtonComponent],
-  templateUrl: './signup.component.html',
-  styleUrl: './signup.component.css',
+  imports: [CommonModule, RouterLink, InputComponent, ButtonComponent],
+  templateUrl: './registration.component.html',
+  styleUrl: './registration.component.css',
 })
-export class SignupComponent {
+export class RegistrationComponent {
   private router = inject(Router);
-  selectedRole: 'freelancer' | 'client' | null = 'freelancer';
 
-  selectRole(role: 'freelancer' | 'client'): void {
-    this.selectedRole = role;
-  }
-
-  onStartRegistration(): void {
-    this.router.navigate(['/account/registration']);
+  onRegister(): void {
+    this.router.navigate(['/account/otp-verification'], { queryParams: { mode: 'register' } });
   }
 }

@@ -1,1 +1,113 @@
-<p>confirmation works!</p>
+<div class="status-toggle position-fixed top-0 end-0 p-3" style="z-index: 1000;">
+    <button (click)="toggleRole()" class="btn btn-sm btn-outline-light opacity-30 hover-opacity-100">
+        Switch to {{ role === 'freelancer' ? 'Client' : 'Freelancer' }} Preview
+    </button>
+</div>
+
+<section class="full-page-section success-bg">
+    <!-- BACKGROUND BLOBS -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="content-container">
+        <!-- LOGO -->
+        <div class="logo-container mb-5">
+            <img src="assets/logo/website-logo.png" alt="Talent Hub" class="auth-logo">
+        </div>
+
+        <!-- MAIN STATUS -->
+        <div class="status-icon-wrapper mb-3">
+            <div class="status-icon success-icon">
+                <i class="bi bi-check2"></i>
+            </div>
+        </div>
+
+        <div class="status-content mb-4">
+            <h1 class="text-4xl fw-bold mb-1 text-white">Email Verified!</h1>
+            <p class="text-md opacity-60">Your email has been successfully verified.</p>
+        </div>
+
+        <!-- SUBTLE DIVIDER -->
+        <div class="section-divider mb-4"></div>
+
+        <!-- SECONDARY INFO -->
+        <div class="secondary-info mb-4 mt-5">
+            <div class="user-active-icon mb-3 mx-auto">
+                @if (role === 'freelancer') {
+                <i class="bi bi-people"></i>
+                } @else {
+                <i class="bi bi-person"></i>
+                }
+                <div class="verified-badge">
+                    <i class="bi bi-check-lg"></i>
+                </div>
+            </div>
+            <h2 class="text-2xl fw-bold mb-1 text-white">Your {{ role | titlecase }} Account is Activated!</h2>
+            <p class="text-sm opacity-60">You can now log in and start exploring all the features.</p>
+        </div>
+
+        <div class="auth-action">
+            <app-button variant="primary" size="md" routerLink="/account/signin"
+                customClass="px-5 py-2 d-inline-flex align-items-center justify-content-center gap-3 max-w-400 mx-auto">
+                <i class="bi bi-box-arrow-in-right text-xl"></i>
+                <span class="text-lg">Go to Login</span>
+            </app-button>
+        </div>
+    </div>
+</section>
+
+<!-- ERROR STATE SECTION -->
+<section class="full-page-section error-bg">
+    <!-- BACKGROUND BLOBS -->
+    <div class="blob blob-3"></div>
+
+    <div class="content-container">
+        <!-- LOGO -->
+        <div class="logo-container mb-5">
+            <img src="assets/logo/website-logo.png" alt="Talent Hub" class="auth-logo">
+        </div>
+
+        <div class="status-icon-wrapper mb-3">
+            <div class="status-icon error-icon">
+                <i class="bi bi-x-lg"></i>
+            </div>
+        </div>
+
+        <div class="status-content mb-5">
+            <h4 class="text-4xl fw-bold mb-1 text-white">Email Verification Failed</h4>
+            <p class="text-md opacity-60">
+                We couldn’t verify your email address.
+            </p>
+        </div>
+
+        <div class="email-info-box glass p-3 mb-3 text-start mx-auto">
+            <div class="d-flex align-items-center gap-3">
+                <div class="mail-icon">
+                    <i class="bi bi-envelope text-danger"></i>
+                </div>
+                <div>
+                    <p class="text-xs opacity-50 mb-0">Email Address</p>
+                    <p class="text-md fw-medium mb-0">joh****n@gmaicpems</p>
+                </div>
+            </div>
+        </div>
+
+        <p class="text-sm opacity-70 mb-5">
+            Don’t worry! You can request a new verification link.
+        </p>
+
+        <div class="auth-action d-flex align-items-center justify-content-center gap-3">
+            <app-button variant="outline" size="md" routerLink="/account/otp-verification"
+                customClass="px-4 py-2 d-inline-flex align-items-center justify-content-center gap-2 border-white border-opacity-10 text-white">
+                <i class="bi bi-arrow-clockwise text-xl"></i>
+                <span class="text-lg">Resend Email</span>
+            </app-button>
+
+            <app-button variant="primary" size="md" routerLink="/account/signin"
+                customClass="px-4 py-2 d-inline-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-box-arrow-in-right text-xl"></i>
+                <span class="text-lg">Back to Login</span>
+            </app-button>
+        </div>
+    </div>
+</section>
