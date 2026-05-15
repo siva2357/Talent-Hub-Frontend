@@ -1,1 +1,46 @@
-<p>access-denied works!</p>
+<div class="error-page-container">
+  <!-- DECORATIVE BLOBS -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="error-content-wrapper">
+
+    <!-- ILLUSTRATION AREA -->
+    <div class="illustration-box mb-4">
+      <div class="shield-lock-wrapper">
+        <div class="shield-outline"></div>
+        <div class="lock-icon">
+          <i class="bi bi-shield-exclamation" style="font-size: 5rem;"></i>
+        </div>
+        <!-- PARTICLE DECORATIONS -->
+        <div class="particle p1"></div>
+        <div class="particle p2"></div>
+        <div class="particle p3"></div>
+      </div>
+    </div>
+
+    <!-- TEXT AREA -->
+    <div class="text-center mb-5">
+      <h1 class="error-title mb-2">Access Denied</h1>
+      <p class="error-desc opacity-60">
+        You don't have permission to access this page.<br>
+        If you believe this is a mistake, please contact support.
+      </p>
+    </div>
+
+    <!-- ACTION AREA -->
+    <div class="action-buttons d-flex flex-column align-items-center gap-4">
+      <app-button variant="primary" size="lg" routerLink="/" customClass="w-100">
+        <div class="d-flex align-items-center justify-content-center gap-2">
+          <i class="bi bi-house-door"></i>
+          Back to Home
+        </div>
+      </app-button>
+
+      <a routerLink="/support" class="support-link">
+        <i class="bi bi-envelope me-2"></i>
+        Need help? <span class="text-brand">Contact Support</span>
+      </a>
+    </div>
+  </div>
+</div>
