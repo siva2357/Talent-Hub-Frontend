@@ -1,1 +1,154 @@
-<p>active-contracts works!</p>
+<div class="active-contracts-page pb-5">
+    <div class="container py-4">
+        <!-- Header Section -->
+        <div class="mb-5 text-center">
+            <h2 class="text-white fw-bold mb-1">Active <span class="text-primary">Contracts</span></h2>
+            <p class="text-secondary mb-0">Manage your ongoing projects and track your performance.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <!-- In Progress Contract -->
+                <div class="contract-card glass p-4 rounded-4 mb-4">
+                    <div class="row g-4">
+                        <!-- Left Info -->
+                        <div class="col-md-8">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="client-avatar">TF</div>
+                                <div>
+                                    <h5 class="text-white fw-bold mb-0">Senior Frontend Developer - Angular Expert</h5>
+                                    <p class="text-secondary small mb-0">TechFlow Solutions</p>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2 mb-3">
+                                <span class="badge-type fixed">Fixed Price</span>
+                                <span class="badge-level">3 Months</span>
+                                <span class="status-badge in-progress">In Progress</span>
+                            </div>
+
+                            <p class="text-sm text-secondary mb-4">
+                                Developing a high-performance enterprise dashboard with real-time data visualization and
+                                complex state management using RxJS.
+                            </p>
+
+                            <div class="d-flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag">Angular</span>
+                                <span class="tech-tag">TypeScript</span>
+                                <span class="tech-tag">RxJS</span>
+                                <span class="tech-tag">D3.js</span>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <a [routerLink]="['/user/contract-diary']" class="text-decoration-none">
+                                    <app-button variant="brand" size="sm">
+                                        Open Work Diary
+                                    </app-button>
+                                </a>
+                                <app-button variant="outline" size="sm">
+                                    Message Client
+                                </app-button>
+                            </div>
+                        </div>
+
+                        <!-- Right Info & Actions -->
+                        <div class="col-md-4 d-flex flex-column border-start border-white border-opacity-10 ps-md-4">
+                            <div class="mb-auto">
+                                <div class="contract-stat mb-3">
+                                    <div class="text-white fw-bold h4 mb-0">$4,500</div>
+                                    <div class="text-xxs text-secondary">Total Budget</div>
+                                </div>
+
+                                <div class="start-info p-3 rounded-3 mb-4 started">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <i class="bi bi-play-circle-fill"></i>
+                                        <span class="small fw-bold">Start Date</span>
+                                    </div>
+                                    <div class="small">May 10, 2026</div>
+                                    <div class="text-xxs mt-2 opacity-75">Contract is currently active.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Contract (Frozen) -->
+                <div class="contract-card glass p-4 rounded-4 mb-4 frozen">
+                    <div class="row g-4">
+                        <!-- Left Info -->
+                        <div class="col-md-8">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="client-avatar">GR</div>
+                                <div>
+                                    <h5 class="text-white fw-bold mb-0">Full Stack Developer for E-commerce Platform
+                                    </h5>
+                                    <p class="text-secondary small mb-0">Global Retailers</p>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2 mb-3">
+                                <span class="badge-type hourly">Hourly</span>
+                                <span class="badge-level">6 Months</span>
+                                <span class="status-badge upcoming">Upcoming</span>
+                            </div>
+
+                            <p class="text-sm text-secondary mb-4">
+                                Building a scalable e-commerce platform with Node.js backend and Angular frontend. Focus
+                                on performance and security.
+                            </p>
+
+                            <div class="d-flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag">Node.js</span>
+                                <span class="tech-tag">Angular</span>
+                                <span class="tech-tag">MongoDB</span>
+                                <span class="tech-tag">AWS</span>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <a [routerLink]="['/user/contract-diary']" class="text-decoration-none">
+                                    <app-button variant="brand" [disabled]="true" size="sm">
+                                        Open Work Diary
+                                    </app-button>
+                                </a>
+                                <app-button variant="outline" size="sm">
+                                    Message Client
+                                </app-button>
+                            </div>
+                        </div>
+
+                        <!-- Right Info & Actions -->
+                        <div class="col-md-4 d-flex flex-column border-start border-white border-opacity-10 ps-md-4">
+                            <div class="mb-auto">
+                                <div class="contract-stat mb-3">
+                                    <div class="text-white fw-bold h4 mb-0">$65/hr</div>
+                                    <div class="text-xxs text-secondary">Hourly Rate</div>
+                                </div>
+
+                                <div class="start-info p-3 rounded-3 mb-4 not-started">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <i class="bi bi-lock-fill"></i>
+                                        <span class="small fw-bold">Start Date</span>
+                                    </div>
+                                    <div class="small">June 1, 2026</div>
+                                    <div class="text-xxs mt-2 opacity-75">Work will unlock on the start date.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State Demo -->
+                <div class="text-center py-5 mt-5">
+                    <div class="empty-state glass p-5 rounded-5 border-dashed">
+                        <i class="bi bi-briefcase fs-1 text-secondary opacity-25 mb-3 d-block"></i>
+                        <h4 class="text-white fw-bold">There are no active contracts</h4>
+                        <p class="text-secondary mb-4">Accept a contract to see it listed here.</p>
+                        <a routerLink="/user/find-contracts">
+                            <app-button variant="brand">Browse Opportunities</app-button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
