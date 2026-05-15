@@ -27,6 +27,10 @@ import { ClientComponent } from './features/user/client/client.component';
 import { UserProfileComponent } from './shared/pages/user-profile/user-profile.component';
 import { AccountSettingsComponent } from './shared/pages/account-settings/account-settings.component';
 import { ChatComponent } from './shared/pages/chat/chat.component';
+import { ContactSupportComponent } from './shared/pages/contact-support/contact-support.component';
+import { InterviewSetupComponent } from './shared/pages/interview-setup/interview-setup.component';
+import { InterviewRoomComponent } from './shared/pages/interview-room/interview-room.component';
+import { NotFoundComponent } from './shared/pages/not-found/not-found.component';
 
 // Freelancer Pages
 import { FreelancerDashboardComponent } from './features/user/freelancer/pages/freelancer-dashboard/freelancer-dashboard.component';
@@ -43,10 +47,10 @@ import { FinanceManagementComponent } from './features/user/freelancer/pages/fin
 
 // Error/Utility Components
 import { AccessDeniedComponent } from './shared/pages/access-denied/access-denied.component';
-import { NotFoundComponent } from './shared/pages/not-found/not-found.component';
 import { FindContractsComponent } from './features/user/freelancer/pages/find-contracts/find-contracts.component';
 import { SavedContractsComponent } from './features/user/freelancer/pages/saved-contracts/saved-contracts.component';
-import { ContactSupportComponent } from './shared/pages/contact-support/contact-support.component';
+import { ContractDetailsComponent } from './features/user/freelancer/pages/contract-details/contract-details.component';
+import { LegalContractComponent } from './features/user/freelancer/pages/legal-contract/legal-contract.component';
 
 export const routes: Routes = [
   // Public Routes (With Navbar and Footer)
@@ -94,6 +98,7 @@ export const routes: Routes = [
       // Freelancer Pages
       { path: 'my-dashboard', component: FreelancerDashboardComponent },
       { path: 'find-contracts', component: FindContractsComponent },
+      { path: 'contract-details/:id', component: ContractDetailsComponent },
       { path: 'saved-contracts', component: SavedContractsComponent },
       { path: 'proposals', component: ProposalsComponent },
       { path: 'offers', component: OffersComponent },
@@ -105,6 +110,7 @@ export const routes: Routes = [
       { path: 'finance-overview', component: FinanceOverviewComponent },
       { path: 'finance-report', component: FinanceReportComponent },
       { path: 'finance-management', component: FinanceManagementComponent },
+
     ]
   },
 
@@ -116,6 +122,9 @@ export const routes: Routes = [
       { path: 'settings', component: AccountSettingsComponent },
       { path: 'chat', component: ChatComponent },
       { path: 'contact-support', component: ContactSupportComponent },
+      { path: 'interview-setup', component: InterviewSetupComponent },
+      { path: 'interview-room', component: InterviewRoomComponent },
+      { path: 'legal-contract/:id', component: LegalContractComponent },
     ]
   },
 

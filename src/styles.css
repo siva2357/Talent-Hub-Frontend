@@ -35,7 +35,7 @@
   --bg-tertiary: var(--neutral-800);
   --bg-brand: var(--brand-950);
   --bg-brand-solid: var(--brand-500);
-  
+
   --text-primary: var(--neutral-100);
   --text-secondary: var(--neutral-400);
   --text-subtle: var(--neutral-600);
@@ -90,19 +90,62 @@ section {
 }
 
 /* TYPOGRAPHY CLASSES */
-.text-xs { font-size: 12px; line-height: 16px; }
-.text-sm { font-size: 14px; line-height: 20px; }
-.text-md { font-size: 16px; line-height: 24px; }
-.text-lg { font-size: 18px; line-height: 32px; }
-.text-xl { font-size: 20px; line-height: 28px; }
-.text-2xl { font-size: var(--2xl-font-size); line-height: var(--2xl-line-height); }
-.text-3xl { font-size: var(--3xl-font-size); line-height: var(--3xl-line-height); }
-.text-4xl { font-size: var(--4xl-font-size); line-height: var(--4xl-line-height); }
-.text-5xl { font-size: var(--5xl-font-size); line-height: var(--5xl-line-height); }
+.text-xs {
+  font-size: 12px;
+  line-height: 16px;
+}
 
-.fw-semibold { font-weight: 600; }
-.fw-bold { font-weight: 700; }
-.fw-extrabold { font-weight: 800; }
+.text-sm {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.text-md {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.text-lg {
+  font-size: 18px;
+  line-height: 32px;
+}
+
+.text-xl {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.text-2xl {
+  font-size: var(--2xl-font-size);
+  line-height: var(--2xl-line-height);
+}
+
+.text-3xl {
+  font-size: var(--3xl-font-size);
+  line-height: var(--3xl-line-height);
+}
+
+.text-4xl {
+  font-size: var(--4xl-font-size);
+  line-height: var(--4xl-line-height);
+}
+
+.text-5xl {
+  font-size: var(--5xl-font-size);
+  line-height: var(--5xl-line-height);
+}
+
+.fw-semibold {
+  font-weight: 600;
+}
+
+.fw-bold {
+  font-weight: 700;
+}
+
+.fw-extrabold {
+  font-weight: 800;
+}
 
 /* UTILITIES */
 .glass {
@@ -363,6 +406,7 @@ section {
   box-shadow: var(--th-shadow-md);
   margin-bottom: 24px;
 }
+
 /* ================= PREMIUM MODAL SYSTEM ================= */
 .modal-content {
   border-radius: 20px !important;
@@ -371,7 +415,8 @@ section {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
 }
 
-.modal-header, .modal-header-premium {
+.modal-header,
+.modal-header-premium {
   border-top-left-radius: 20px !important;
   border-top-right-radius: 20px !important;
 }
@@ -379,4 +424,42 @@ section {
 .modal-footer {
   border-bottom-left-radius: 20px !important;
   border-bottom-right-radius: 20px !important;
+}
+
+
+
+
+
+.app-layout-wrapper {
+  min-height: 100vh;
+  background: #050505;
+  /* Deep cinematic black */
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Background Glowing Orbs for that Premium Feel */
+.app-layout-wrapper::before,
+.app-layout-wrapper::after {
+  content: '';
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.app-layout-wrapper::before {
+  top: -100px;
+  right: -100px;
+  background: radial-gradient(circle, var(--brand-500), transparent);
+}
+
+.app-layout-wrapper::after {
+  bottom: -100px;
+  left: -100px;
+  background: radial-gradient(circle, #3b82f6, transparent);
 }

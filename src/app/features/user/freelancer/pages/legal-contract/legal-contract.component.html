@@ -1,0 +1,98 @@
+<div class="legal-contract-page pb-5">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-8">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <div>
+                        <h2 class="text-white fw-bold mb-1">Service <span class="text-primary">Agreement</span></h2>
+                        <p class="text-secondary mb-0">Contract ID: #{{offerId || 'PENDING'}}</p>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-3 fw-bold">UNISIGNED DOCUMENT</span>
+                    </div>
+                </div>
+
+                <!-- Document Container -->
+                <div class="document-container glass p-5 rounded-5 border border-white border-opacity-10 shadow-lg mb-5">
+                    <div class="document-inner">
+                        <h4 class="text-white fw-bold mb-4 text-center">INDEPENDENT CONTRACTOR AGREEMENT</h4>
+                        
+                        <div class="document-section mb-4">
+                            <h6 class="text-primary fw-bold mb-2">1. PARTIES</h6>
+                            <p class="text-secondary small">This agreement is entered into on this <strong>{{currentDate}}</strong>, by and between <strong>Talent-Hub</strong> (the "Platform") and the <strong>Freelancer</strong> (the "Service Provider").</p>
+                        </div>
+
+                        <div class="document-section mb-4">
+                            <h6 class="text-primary fw-bold mb-2">2. SCOPE OF WORK</h6>
+                            <p class="text-secondary small">The Service Provider agrees to perform the services as described in the associated job post and proposal. The Platform facilitates the engagement and manages payment distribution.</p>
+                        </div>
+
+                        <div class="document-section mb-4">
+                            <h6 class="text-primary fw-bold mb-2">3. PAYMENT TERMS</h6>
+                            <p class="text-secondary small">Payment shall be made as per the agreed budget (Fixed Price or Hourly). Funds are held in escrow and released upon milestone completion or approved timesheets.</p>
+                        </div>
+
+                        <div class="document-section mb-4">
+                            <h6 class="text-primary fw-bold mb-2">4. INTELLECTUAL PROPERTY</h6>
+                            <p class="text-secondary small">Upon full payment, all intellectual property rights for the work performed shall be transferred to the Client. The Freelancer retains no rights unless explicitly stated otherwise.</p>
+                        </div>
+
+                        <div class="document-section mb-4">
+                            <h6 class="text-primary fw-bold mb-2">5. CONFIDENTIALITY</h6>
+                            <p class="text-secondary small">Both parties agree to maintain strict confidentiality regarding all proprietary information, trade secrets, and business processes encountered during the engagement.</p>
+                        </div>
+
+                        <div class="document-signature-preview mt-5 pt-5 border-top border-white border-opacity-5">
+                            <div class="row align-items-end">
+                                <div class="col-6">
+                                    <p class="text-secondary smaller mb-1">Contracted Party Signature</p>
+                                    
+                                    <!-- Signature Upload Area -->
+                                    <input type="file" #signatureInput class="d-none" (change)="onSignatureFileSelected($event)" accept="image/*">
+                                    <div class="signature-line position-relative cursor-pointer py-2 border-bottom border-white border-opacity-20" 
+                                         (click)="triggerSignatureUpload(signatureInput)">
+                                        @if (signatureImage) {
+                                            <img [src]="signatureImage" alt="Signature" class="signature-img">
+                                        } @else {
+                                            <div class="signature-placeholder d-flex align-items-center gap-2 text-secondary opacity-50 small">
+                                                <i class="bi bi-cloud-upload"></i>
+                                                <span>Click to upload signature</span>
+                                            </div>
+                                        }
+                                    </div>
+                                    <p class="text-secondary smaller mt-2">Freelancer: Siva Prasad</p>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <p class="text-secondary smaller mb-1">Authorized Seal</p>
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=verified-contract" alt="QR Seal" class="opacity-50">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Actions -->
+                <div class="glass p-4 rounded-5 border border-white border-opacity-10 shadow-lg">
+                    <div class="d-flex align-items-center gap-4 mb-4">
+                        <div class="form-check custom-checkbox">
+                            <input class="form-check-input" type="checkbox" id="termsCheck" [(ngModel)]="hasAgreed">
+                            <label class="form-check-label text-white small" for="termsCheck">
+                                I have read and agree to the <a href="#" class="text-primary text-decoration-none">Standard Service Terms</a> and <a href="#" class="text-primary text-decoration-none">Payment Policy</a>.
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <app-button variant="brand" (click)="signContract()" [disabled]="!hasAgreed || isSigning || !signatureImage">
+                            {{ isSigning ? 'Executing Contract...' : 'Accept & Sign Contract' }}
+                        </app-button>
+                        <app-button variant="outline" routerLink="/user/freelancer/offers">
+                            Back to Offers
+                        </app-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,185 @@
+<div class="contract-details-page pb-5">
+  <div class="container py-4">
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/user/find-contracts"
+            class="text-secondary text-decoration-none  small">Find Contracts</a></li>
+        <li class="breadcrumb-item active small text-white" aria-current="page">Contract Details</li>
+      </ol>
+    </nav>
+
+    <div class="row g-4">
+      <!-- Main Content -->
+      <div class="col-lg-8">
+        <div class="details-card glass p-4 p-md-5 rounded-5 mb-4">
+          <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+              <h1 class="text-white fw-bold mb-3 h2">{{contract.title}}</h1>
+              <div class="d-flex flex-wrap gap-2 mb-3">
+                <span class="badge-type"
+                  [ngClass]="contract.type === 'Fixed Price' ? 'fixed' : 'hourly'">{{contract.type}}</span>
+                <span class="badge-level">{{contract.level}}</span>
+                <span class="badge-schedule">{{contract.workSchedule}}</span>
+                <span class="text-secondary small ms-2 mt-1"><i class="bi bi-clock me-1"></i> Posted
+                  {{contract.postedDate}}</span>
+              </div>
+            </div>
+            <button class="btn-save-large"><i class="bi bi-bookmark"></i></button>
+          </div>
+
+          <hr class="border-white border-opacity-10 my-4">
+
+          <!-- Description Section -->
+          <div class="section mb-5">
+            <h5 class="text-white fw-bold mb-3">Description</h5>
+            <p class="text-secondary lead-sm">{{contract.description}}</p>
+          </div>
+
+          <!-- Responsibilities Section -->
+          <div class="section mb-5">
+            <h5 class="text-white fw-bold mb-3">Responsibilities</h5>
+            <ul class="text-secondary custom-list">
+              @for (resp of contract.responsibilities; track resp) {
+              <li class="mb-2">{{resp}}</li>
+              }
+            </ul>
+          </div>
+
+          <!-- Hiring Preferences Section -->
+          <div class="section mb-5 p-4 rounded-4"
+            style="background: rgba(42, 128, 255, 0.03); border: 1px solid rgba(42, 128, 255, 0.1);">
+            <h5 class="text-primary fw-bold mb-3"><i class="bi bi-person-check me-2"></i> Hiring Preferences</h5>
+            <ul class="text-secondary smaller mb-0 custom-list-check">
+              @for (pref of contract.hiringPreferences; track pref) {
+              <li class="mb-2">{{pref}}</li>
+              }
+            </ul>
+          </div>
+
+          <!-- Skills Section -->
+          <div class="section mb-5">
+            <h5 class="text-white fw-bold mb-3">Required Skills</h5>
+            <div class="d-flex flex-wrap gap-2">
+              @for (skill of contract.skills; track skill) {
+              <span class="skill-pill">{{skill}}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Project Details Section -->
+          <div class="section">
+            <h5 class="text-white fw-bold mb-4">Project & Budget Details</h5>
+            <div class="row g-4">
+              <div class="col-sm-6">
+                <div class="detail-item glass p-3 rounded-4">
+                  <div class="text-secondary smaller mb-1">Contract Type</div>
+                  <div class="text-white fw-bold">{{contract.type}}</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="detail-item glass p-3 rounded-4">
+                  <div class="text-secondary smaller mb-1">Budget / Rate</div>
+                  <div class="text-white fw-bold">{{contract.budget}}</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="detail-item glass p-3 rounded-4">
+                  <div class="text-secondary smaller mb-1">Duration</div>
+                  <div class="text-white fw-bold">{{contract.duration}}</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="detail-item glass p-3 rounded-4">
+                  <div class="text-secondary smaller mb-1">Experience</div>
+                  <div class="text-white fw-bold">{{contract.experience}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Similar Contracts Suggestions (Mock) -->
+        <div class="mt-5">
+          <h5 class="text-white fw-bold mb-4">Similar Contracts</h5>
+          <div class="row g-3">
+            <div class="col-md-6" *ngFor="let i of [1,2]">
+              <div class="glass p-3 rounded-4 border border-white border-opacity-5">
+                <h6 class="text-white mb-1">Frontend Developer (Angular)</h6>
+                <p class="text-secondary smaller mb-2">Build a dashboard for a fintech app...</p>
+                <div class="d-flex justify-content-between">
+                  <span class="text-primary smaller fw-bold">$3,000</span>
+                  <span class="text-secondary smaller">Posted 5h ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar: Client Info & Actions -->
+      <aside class="col-lg-4">
+        <div class="sticky-top" style="top: 100px;">
+          <!-- Action Card -->
+          <div class="action-card glass p-4 rounded-5 mb-4 border border-primary border-opacity-20 shadow-lg">
+            <h5 class="text-white fw-bold mb-4 text-center">Ready to apply?</h5>
+            <button class="btn btn-primary w-100 py-3 rounded-4 fw-bold mb-3 shadow-glow">
+              Submit Proposal
+            </button>
+            <button class="btn btn-outline-white w-100 py-3 rounded-4 fw-bold border-opacity-20">
+              Save for Later
+            </button>
+            <p class="text-secondary smaller text-center mt-3 mb-0">You have 50 connects available</p>
+          </div>
+
+          <!-- Client Card -->
+          <div class="client-card glass p-4 rounded-5">
+            <h6 class="text-secondary small mb-4 fw-bold text-uppercase">About the Client</h6>
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <div class="client-logo-large">{{contract.client.name.charAt(0)}}</div>
+              <div>
+                <h6 class="text-white fw-bold mb-1">{{contract.client.name}}</h6>
+                <div class="text-warning small">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-half"></i>
+                  <span class="text-white ms-2">{{contract.client.rating}}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="client-info-list d-grid gap-3">
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-geo-alt text-primary"></i>
+                <div>
+                  <div class="text-secondary smaller">Location</div>
+                  <div class="text-white small fw-medium">{{contract.client.location}}</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-cash-stack text-success"></i>
+                <div>
+                  <div class="text-secondary smaller">Total Spent</div>
+                  <div class="text-white small fw-medium">{{contract.client.totalSpent}}</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-calendar3 text-info"></i>
+                <div>
+                  <div class="text-secondary smaller">History</div>
+                  <div class="text-white small fw-medium">{{contract.client.history}}</div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="border-white border-opacity-10 my-4">
+            <button class="btn btn-link text-primary text-decoration-none p-0 small fw-bold">View Client
+              Profile</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+.interview-room {
+  background-color: #0a0a0a;
+}
+
+.avatar-large {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, var(--brand-500), var(--brand-700));
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
+}
+
+.tool-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tool-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.tool-btn.active {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.tool-btn.end-call {
+  background: #ef4444;
+  width: 65px;
+  border-radius: 20px;
+}
+
+.tool-btn.end-call:hover {
+  background: #dc2626;
+  box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+}
+
+.pip-container {
+  z-index: 100;
+  cursor: grab;
+}
+
+.toolbar-container {
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+}
+
+.smaller { font-size: 0.75rem; }
+.text-xxs { font-size: 10px; }
