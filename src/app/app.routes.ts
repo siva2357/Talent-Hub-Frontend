@@ -19,6 +19,15 @@ import { ResetPasswordComponent } from './features/account/reset-password/reset-
 import { ProfileFormComponent } from './features/account/profile-form/profile-form.component';
 import { RegistrationComponent } from './features/account/registration/registration.component';
 
+// User Layout & Features
+import { UserLayoutComponent } from './core/layouts/user-layout/user-layout.component';
+import { AdminComponent } from './features/user/admin/admin.component';
+import { ClientComponent } from './features/user/client/client.component';
+import { FreelancerComponent } from './features/user/freelancer/freelancer.component';
+import { UserProfileComponent } from './shared/pages/user-profile/user-profile.component';
+import { AccountSettingsComponent } from './shared/pages/account-settings/account-settings.component';
+import { ChatComponent } from './shared/pages/chat/chat.component';
+
 // Error/Utility Components
 import { AccessDeniedComponent } from './shared/pages/access-denied/access-denied.component';
 import { NotFoundComponent } from './shared/pages/not-found/not-found.component';
@@ -53,6 +62,27 @@ export const routes: Routes = [
       { path: 'profile-form', component: ProfileFormComponent },
       { path: 'registration', component: RegistrationComponent },
       { path: 'access-denied', component: AccessDeniedComponent },
+    ]
+  },
+
+  // User Dashboard Routes (With User Navbar)
+  {
+    path: 'user', component: UserLayoutComponent,
+    children: [
+      { path: '', redirectTo: '/account/signin', pathMatch: 'full' },
+      { path: 'admin', component: AdminComponent },
+      { path: 'client', component: ClientComponent },
+      { path: 'freelancer', component: FreelancerComponent },
+    ]
+  },
+
+  // Independent User Utility Routes (Without User Navbar)
+  {
+    path: 'user',
+    children: [
+      { path: 'profile', component: UserProfileComponent },
+      { path: 'settings', component: AccountSettingsComponent },
+      { path: 'chat', component: ChatComponent },
     ]
   },
 
