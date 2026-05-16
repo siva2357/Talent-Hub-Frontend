@@ -1,0 +1,163 @@
+:host {
+    display: block;
+    position: relative;
+    z-index: 1050; /* Ensure this is higher than the navbar */
+}
+
+.attendance-overview-page {
+    min-height: 100vh;
+    padding-bottom: 5rem;
+}
+
+.attendance-accordion {
+    transition: all 0.3s ease;
+}
+
+.accordion-header {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+}
+
+.accordion-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.contract-icon {
+    background: rgba(42, 128, 255, 0.1);
+    border: 1px solid rgba(42, 128, 255, 0.2);
+}
+
+
+.sessions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.session-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.session-divider {
+    opacity: 0.3;
+}
+
+.session-duration {
+    font-size: 11px;
+    color: var(--text-brand);
+    font-weight: 600;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+.attendance-table th {
+    padding: 12px 20px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.attendance-table td {
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.attendance-table tr td:first-child {
+    border-left: 1px solid rgba(255, 255, 255, 0.03);
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.attendance-table tr td:last-child {
+    border-right: 1px solid rgba(255, 255, 255, 0.03);
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
+.face-capture-container {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.capture-badge {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(16, 185, 129, 0.9);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    text-align: center;
+    padding: 4px;
+    letter-spacing: 1px;
+}
+
+.location-info {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.location-icon {
+    background: rgba(42, 128, 255, 0.1);
+    border: 1px solid rgba(42, 128, 255, 0.2);
+}
+
+.x-small {
+    font-size: 11px;
+}
+
+.text-brand {
+    color: var(--brand-400);
+}
+
+/* Custom Scrollbar for Modal Body */
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.transition-transform {
+    transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .attendance-table {
+        display: block;
+        overflow-x: auto;
+    }
+}

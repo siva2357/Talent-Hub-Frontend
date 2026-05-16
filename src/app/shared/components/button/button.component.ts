@@ -14,6 +14,7 @@ export class ButtonComponent {
   @Input() type: 'button' | 'submit' = 'button';
   @Input() customClass: string = '';
   @Input() disabled: boolean = false;
+  @Input() loading: boolean = false;
   @Input() fontSize: string = '14px';
 
   get buttonClasses(): string {

@@ -1,4 +1,5 @@
-<button [type]="type" [class]="buttonClasses" [disabled]="disabled" [style.fontSize]="fontSize"
-  class="btn transition-all">
-  <ng-content></ng-content>
+<button [type]="type" [class]="buttonClasses" [disabled]="disabled || loading" [style.fontSize]="fontSize"
+  class="btn transition-all d-inline-flex align-items-center justify-content-center gap-2">
+  <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  <ng-content *ngIf="!loading"></ng-content>
 </button>

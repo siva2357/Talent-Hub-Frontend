@@ -1,1 +1,155 @@
-<p>mark-attendance works!</p>
+<div class="mark-attendance-page container-fluid py-4 px-md-5">
+    <!-- Header Section -->
+    <div class="row mb-4 align-items-end">
+        <div class="col">
+            <h2 class="text-white fw-bold mb-1">Daily Work Diary</h2>
+            <p class="text-secondary mb-0">Record your attendance and verify sessions for today</p>
+        </div>
+        <div class="col-auto text-end">
+            <div class="badge badge-dark p-2 px-3 border border-white border-opacity-10">
+                <i class="bi bi-calendar3 me-2 text-primary"></i>
+                <span class="fw-bold">{{ currentDate | date:'MMMM dd, yyyy' }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7 mx-auto">
+            <!-- Main Control Card -->
+            <div class="attendance-control-card glass-dark rounded-4 p-4 border border-white border-opacity-5 mb-4 shadow-xl overflow-hidden position-relative">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div>
+                        <h5 class="text-white fw-bold mb-0">Attendance Center</h5>
+                        <span class="text-secondary x-small text-uppercase fw-bold opacity-40 letter-spacing-1">Daily Status</span>
+                    </div>
+                    @if (isCheckedIn) {
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="text-success text-xxs fw-bold text-uppercase">Active</span>
+                            <div class="status-orb pulse-green"></div>
+                        </div>
+                    } @else {
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="text-secondary text-xxs fw-bold text-uppercase opacity-40">Offline</span>
+                            <div class="status-orb bg-secondary opacity-25"></div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Status Summary -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <div class="status-stat-box rounded-3 p-3 border border-white border-opacity-10 shadow-sm" style="background: rgba(255, 255, 255, 0.02);">
+                            <div class="text-secondary text-xxs fw-bold opacity-50 mb-1 text-uppercase letter-spacing-1">Logged Today</div>
+                            <div class="d-flex align-items-baseline justify-content-center">
+                                <span class="text-white fw-extrabold h2 mb-0">{{ totalLoggedToday }}</span>
+                                <span class="text-primary fw-bold ms-1" style="font-size: 13px;">h</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="status-stat-box rounded-3 p-3 border border-white border-opacity-10 shadow-sm" style="background: rgba(255, 255, 255, 0.02);">
+                            <div class="text-secondary text-xxs fw-bold opacity-50 mb-1 text-uppercase letter-spacing-1">Sessions</div>
+                            <div class="text-white fw-extrabold h2 mb-0">{{ todaySessions.length }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="row g-3 pt-1">
+                    <div class="col-6">
+                        <app-button variant="brand" size="md" customClass="w-100 py-2.5 shadow-glow rounded-3" 
+                                    [disabled]="isCheckedIn" (click)="punchIn()">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>
+                            Punch In
+                        </app-button>
+                    </div>
+                    <div class="col-6">
+                        <app-button variant="danger" size="md" customClass="w-100 py-2.5 rounded-3 shadow-sm" 
+                                    [disabled]="!isCheckedIn" (click)="punchOut()">
+                            <i class="bi bi-box-arrow-right me-2"></i>
+                            Punch Out
+                        </app-button>
+                    </div>
+                </div>
+
+                <!-- Active Session Status (Conditional) -->
+                @if (isCheckedIn) {
+                    <div class="mt-4 bg-primary bg-opacity-5 rounded-3 p-3 border border-primary border-opacity-10 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="session-timer-icon bg-primary rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 36px; height: 36px;">
+                                <i class="bi bi-stopwatch-fill fs-6"></i>
+                            </div>
+                            <div class="text-start">
+                                <div class="text-primary fw-bold text-xxs text-uppercase">Active Session</div>
+                                <div class="text-white fw-bold small mb-0">Since {{ currentSessionStart }}</div>
+                            </div>
+                        </div>
+                        <div class="badge badge-primary pulse-blue px-2 py-1" style="font-size: 9px;">LIVE</div>
+                    </div>
+                }
+
+                <!-- System Info -->
+                <div class="mt-4 pt-3 border-top border-white border-opacity-5">
+                    <div class="d-flex align-items-center justify-content-center gap-2 text-secondary text-xxs opacity-40">
+                        <i class="bi bi-shield-check text-success"></i>
+                        <span>AI Face & Location Verification Active</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Session History Timeline (Below) -->
+            <div class="glass-dark rounded-4 p-4 border border-white border-opacity-5 shadow-xl">
+                <div
+                    class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-white border-opacity-5">
+                    <h5 class="text-white fw-bold mb-0">Today's Activity Log</h5>
+                    <span class="badge badge-dark opacity-75" style="font-size: 10px;">{{ todaySessions.length }}
+                        Sessions Recorded</span>
+                </div>
+
+                <div class="sessions-timeline ps-3 position-relative">
+                    <div class="timeline-line"></div>
+
+                    @if (todaySessions.length === 0) {
+                    <div class="text-center py-5 opacity-25">
+                        <i class="bi bi-journal-x fs-1 mb-3 d-block"></i>
+                        <p class="mb-0">No sessions recorded yet for today</p>
+                    </div>
+                    }
+
+                    @for (session of todaySessions; track session.id) {
+                    <div class="timeline-item position-relative pb-4 ms-3">
+                        <div class="timeline-dot bg-primary"></div>
+                        <div class="timeline-card glass-light rounded-3 p-3 border border-white border-opacity-5">
+                            <div class="row align-items-center g-3">
+                                <div class="col-auto">
+                                    <div class="session-thumb rounded-2 border border-primary border-opacity-20 overflow-hidden shadow-sm"
+                                        style="width: 50px; height: 50px;">
+                                        <img [src]="session.image" class="w-100 h-100 object-fit-cover">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="text-white fw-bold" style="font-size: 14px;">{{ session.checkIn
+                                                }} - {{ session.checkOut }}</div>
+                                            <div
+                                                class="d-flex align-items-center gap-2 text-secondary text-xxs mt-1 opacity-75">
+                                                <i class="bi bi-geo-alt-fill text-primary"></i>
+                                                {{ session.location }}
+                                            </div>
+                                        </div>
+                                        <div class="badge badge-primary bg-opacity-10 text-primary border border-primary border-opacity-10"
+                                            style="font-size: 10px;">
+                                            {{ session.duration }}h
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

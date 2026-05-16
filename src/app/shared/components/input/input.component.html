@@ -16,15 +16,27 @@
     <!-- INPUT TYPES -->
     @switch (type) {
     @case ('select') {
-    <select class="form-select glass" [class.ps-5]="icon" [disabled]="disabled" (change)="handleInput($event)"
-      (blur)="onTouched()">
-      @if (placeholder) {
-      <option value="" disabled selected hidden>{{ placeholder }}</option>
+    <div class="multiselect-container glass rounded-3" [class.ps-5]="icon" [class.dropdown-active]="dropdownOpen">
+      <div class="selection-trigger d-flex align-items-center justify-content-between cursor-pointer" (click)="toggleDropdown()">
+        <div class="selected-text">
+          <span [class.opacity-50]="!value" class="text-sm">{{ getSelectedLabel() }}</span>
+        </div>
+        <i class="bi bi-chevron-down dropdown-arrow" [class.rotated]="dropdownOpen"></i>
+      </div>
+
+      @if (dropdownOpen) {
+      <div class="multiselect-dropdown-overlay" (click)="toggleDropdown()"></div>
+      <div class="multiselect-dropdown-list p-2 shadow-lg">
+        @for (opt of options; track opt.value) {
+        <div class="option-item d-flex align-items-center gap-3 p-2 rounded hover-bg-white-opacity cursor-pointer"
+          [class.selected-option]="isSelected(opt.value)"
+          (click)="selectOption(opt.value); $event.stopPropagation()">
+          <span class="text-sm" [class.text-primary]="isSelected(opt.value)">{{ opt.label }}</span>
+        </div>
+        }
+      </div>
       }
-      @for (opt of options; track opt.value) {
-      <option [value]="opt.value" [selected]="value === opt.value" class="bg-dark text-white">{{ opt.label }}</option>
-      }
-    </select>
+    </div>
     }
 
     @case ('multiselect') {

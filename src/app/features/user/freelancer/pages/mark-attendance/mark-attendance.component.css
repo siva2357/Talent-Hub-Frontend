@@ -1,0 +1,139 @@
+.mark-attendance-page {
+    min-height: 100vh;
+    padding-bottom: 5rem;
+}
+
+.glass-dark {
+    background: #11141b;
+}
+
+.glass-light {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.status-orb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.pulse-green {
+    background: #10b981;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    animation: pulse-green 2s infinite;
+}
+
+.pulse-blue {
+    background: var(--brand-500);
+    box-shadow: 0 0 0 0 rgba(42, 128, 255, 0.7);
+    animation: pulse-blue 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+@keyframes pulse-blue {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(42, 128, 255, 0.7); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(42, 128, 255, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(42, 128, 255, 0); }
+}
+
+.shadow-glow {
+    box-shadow: 0 0 20px rgba(42, 128, 255, 0.3);
+}
+
+/* Timeline Styles */
+.sessions-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(42, 128, 255, 0.1);
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -20px;
+    top: 20px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    z-index: 1;
+    border: 2px solid #11141b;
+}
+
+.timeline-card {
+    transition: all 0.3s ease;
+}
+
+.timeline-card:hover {
+    background: rgba(255, 255, 255, 0.04);
+    transform: translateX(5px);
+}
+
+/* Camera Simulation Styles */
+.camera-container {
+    aspect-ratio: 4/3;
+}
+
+.face-tracking-box {
+    position: absolute;
+    top: 25%;
+    left: 30%;
+    width: 40%;
+    height: 50%;
+    border: 1px dashed rgba(42, 128, 255, 0.5);
+    pointer-events: none;
+    animation: track-face 4s infinite ease-in-out;
+}
+
+@keyframes track-face {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(5px, -5px); }
+    50% { transform: translate(-5px, 10px); }
+    75% { transform: translate(10px, 5px); }
+}
+
+.corner {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border: 2px solid var(--brand-400);
+}
+
+.top-left { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+.top-right { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+.bottom-left { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+.bottom-right { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+.scanning-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to bottom, transparent, var(--brand-400));
+    box-shadow: 0 0 10px var(--brand-400);
+    animation: scan 3s infinite linear;
+    z-index: 2;
+}
+
+@keyframes scan {
+    0% { top: 0; }
+    100% { top: 100%; }
+}
+
+.verification-badges .glass {
+    background: rgba(12, 15, 22, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.x-small { font-size: 11px; }
+.text-xxs { font-size: 10px; }
+.letter-spacing-1 { letter-spacing: 1px; }

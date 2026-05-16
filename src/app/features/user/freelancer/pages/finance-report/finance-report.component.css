@@ -1,0 +1,131 @@
+.finance-report-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Summary Cards */
+.report-summary-card {
+    transition: all 0.3s ease;
+}
+
+.report-summary-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.glow-success {
+    box-shadow: 0 0 25px rgba(25, 135, 84, 0.15);
+    border: 2px solid rgba(25, 135, 84, 0.4) !important;
+}
+
+.glow-info {
+    box-shadow: 0 0 25px rgba(13, 202, 240, 0.15);
+    border: 2px solid rgba(13, 202, 240, 0.4) !important;
+}
+
+/* Table Styles */
+.report-table-section {
+    background: rgba(0, 0, 0, 0.6) !important; /* Deeper, more transparent black */
+    backdrop-filter: blur(20px);
+    border-radius: 0 !important; /* Sharp corners as requested */
+    border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.report-table-section .table {
+    min-width: 1200px; /* Ensure columns don't squish on small screens */
+}
+
+.table thead th {
+    white-space: nowrap;
+    background: rgba(42, 128, 255, 0.2) !important;
+    color: white !important;
+    font-weight: 700 !important;
+    text-transform: none !important; /* Normal case instead of uppercase */
+    letter-spacing: 0.5px;
+    border: none !important;
+}
+
+.table-dark * {
+    font-size: 14px !important; /* Force all nested elements to 14px */
+}
+
+.table tbody tr {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.table tbody tr:last-child {
+    border-bottom: none !important;
+}
+
+/* Utilities */
+.ls-1 { letter-spacing: 1px; }
+
+.hover-white:hover {
+    color: white !important;
+}
+
+.hover-brand:hover {
+    color: var(--brand-500) !important;
+}
+
+.transition-all {
+    transition: all 0.2s ease;
+}
+
+/* Progress Bar */
+.progress-bar {
+    transition: width 0.6s ease;
+}
+
+.dropdown-menu {
+    min-width: 180px;
+    z-index: 1100;
+    background: rgba(13, 17, 23, 0.95) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dropdown-item {
+    transition: all 0.2s;
+    font-size: 14px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    background: transparent !important;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: white !important;
+}
+
+.dropdown-item i {
+    font-size: 16px;
+}
+
+/* Pagination Control */
+.pagination-container {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.page-link-custom {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #6c757d;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 12px; /* Reduced font size */
+}
+
+.page-link-custom:hover, .page-link-custom.active {
+    background: var(--brand-500);
+    color: white;
+}

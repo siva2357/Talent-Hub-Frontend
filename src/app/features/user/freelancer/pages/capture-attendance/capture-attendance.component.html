@@ -1,0 +1,76 @@
+<div class="capture-attendance-page min-vh-100 d-flex flex-column pt-0 ">
+    <!-- Main Content Area -->
+    <main class="flex-grow-1 d-flex flex-column align-items-center text-center pt-5">
+        @if (!captureSuccess) {
+        <!-- Centered Header Info -->
+        <div class="mb-3">
+            <h4 class="text-white fw-bold mb-1">Identity Verification</h4>
+            <p class="text-secondary opacity-50 small">AI Face Recognition & GPS Validation</p>
+        </div>
+
+        <!-- Floating Camera Card -->
+        <div class="container mb-4">
+            <div
+                class="camera-preview-wrapper rounded-4 overflow-hidden position-relative border border-primary border-opacity-30 shadow-2xl mx-auto">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=1200"
+                    class="w-100 h-100 object-fit-cover opacity-80" [class.scanning]="isVerifying">
+
+                <!-- AI Overlays -->
+                <div class="face-tracking-box">
+                    <div class="corner top-left"></div>
+                    <div class="corner top-right"></div>
+                    <div class="corner bottom-left"></div>
+                    <div class="corner bottom-right"></div>
+                </div>
+
+                @if (isVerifying) {
+                <div class="scanning-line"></div>
+                }
+            </div>
+        </div>
+
+        <!-- Evidence Info & Action -->
+        <div class="action-section mx-auto" style="max-width: 450px;">
+            <div class="mb-4">
+                <p class="text-secondary  opacity-75">Position your face within the frame for verification.</p>
+            </div>
+
+            <div class="row g-3 justify-content-center">
+                <div class="col-6 col-md-5">
+                    <app-button variant="secondary" size="md" customClass="w-100 py-2.5 rounded-3" (click)="cancel()">
+                        Cancel
+                    </app-button>
+                </div>
+                <div class="col-6 col-md-5">
+                    <app-button variant="brand" size="md" customClass="w-100 py-2.5 shadow-glow rounded-3"
+                        [loading]="isVerifying" (click)="capture()">
+                        <i class="bi bi-camera-fill me-2"></i>
+                        Capture
+                    </app-button>
+                </div>
+            </div>
+        </div>
+        } @else {
+        <!-- Success Full Page -->
+        <div class="success-page py-5 animate-in">
+            <div class="success-icon-wrapper mb-4">
+                <div class="success-ring"></div>
+                <i class="bi bi-check-all text-success display-1"></i>
+            </div>
+            <h1 class="text-white fw-extrabold mb-3">Verification Successful!</h1>
+            <p class="text-secondary h5 opacity-75 mb-5">Your attendance has been recorded. Redirecting to your diary...
+            </p>
+            <div class="spinner-grow text-primary" role="status"></div>
+        </div>
+        }
+    </main>
+
+    <!-- Secure Footer -->
+    <footer class="mt-5 py-4 border-top border-white border-opacity-5 text-center ">
+        <div class="d-flex align-items-center justify-content-center gap-3 text-secondary x-small opacity-40">
+            <i class="bi bi-shield-lock-fill text-success fs-6"></i>
+            <span class="letter-spacing-1 text-uppercase fw-bold">End-to-End Encrypted Identity Verification
+                Active</span>
+        </div>
+    </footer>
+</div>

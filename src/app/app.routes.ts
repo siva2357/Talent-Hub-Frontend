@@ -41,6 +41,7 @@ import { ContractDiaryComponent } from './features/user/freelancer/pages/contrac
 import { HourlyWorkDiaryComponent } from './features/user/freelancer/pages/hourly-work-diary/hourly-work-diary.component';
 import { AttendanceOverviewComponent } from './features/user/freelancer/pages/attendance-overview/attendance-overview.component';
 import { MarkAttendanceComponent } from './features/user/freelancer/pages/mark-attendance/mark-attendance.component';
+import { CaptureAttendanceComponent } from './features/user/freelancer/pages/capture-attendance/capture-attendance.component';
 import { FinanceOverviewComponent } from './features/user/freelancer/pages/finance-overview/finance-overview.component';
 import { FinanceReportComponent } from './features/user/freelancer/pages/finance-report/finance-report.component';
 import { FinanceManagementComponent } from './features/user/freelancer/pages/finance-management/finance-management.component';
@@ -107,6 +108,7 @@ export const routes: Routes = [
       { path: 'hourly-work-diary', component: HourlyWorkDiaryComponent },
       { path: 'attendance-overview', component: AttendanceOverviewComponent },
       { path: 'mark-attendance', component: MarkAttendanceComponent },
+      { path: 'capture-attendance', component: CaptureAttendanceComponent },
       { path: 'finance-overview', component: FinanceOverviewComponent },
       { path: 'finance-report', component: FinanceReportComponent },
       { path: 'finance-management', component: FinanceManagementComponent },

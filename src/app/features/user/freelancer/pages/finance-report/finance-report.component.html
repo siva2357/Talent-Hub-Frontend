@@ -1,1 +1,181 @@
-<p>finance-report works!</p>
+<div class="finance-report-container p-4">
+    <!-- Header Section -->
+    <div class="mb-5">
+        <h2 class="text-white fw-bold mb-1">Financial Report</h2>
+        <p class="text-secondary mb-0">Detailed breakdown of contract earnings and budgets</p>
+    </div>
+
+    <!-- Summary Overview Row -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div
+                class="report-summary-card glass-dark px-3 py-3 rounded-4 border border-success border-opacity-20 glow-success">
+                <span class="text-success text-uppercase fw-bold ls-1" style="font-size: 9px;">Amount Received</span>
+                <h4 class="text-white fw-bold mt-2 mb-0" style="font-size: 1.1rem;">${{ amountReceived | number:'1.2-2'
+                    }}</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div
+                class="report-summary-card glass-dark px-3 py-3 rounded-4 border border-info border-opacity-20 glow-info">
+                <span class="text-info text-uppercase fw-bold ls-1" style="font-size: 9px;">Yet to be Received</span>
+                <h4 class="text-white fw-bold mt-2 mb-0" style="font-size: 1.1rem;">${{ amountPending | number:'1.2-2'
+                    }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section glass-dark p-4 rounded-4 border border-primary border-opacity-30 mb-4"
+        [formGroup]="filterForm">
+        <div class="row g-3 align-items-end">
+            <div class="col">
+                <app-input type="select" label="Contract Status" [options]="contractStatusOptions"
+                    formControlName="contractStatus" mode="filter" icon="bi-filter-circle"
+                    placeholder="Select Status"></app-input>
+            </div>
+            <div class="col">
+                <app-input type="select" label="Payment Status" [options]="paymentStatusOptions"
+                    formControlName="paymentStatus" mode="filter" icon="bi-cash-coin"
+                    placeholder="Select Payment"></app-input>
+            </div>
+            <div class="col">
+                <app-input type="select" label="Contract Type" [options]="contractTypeOptions"
+                    formControlName="contractType" mode="filter" icon="bi-briefcase"
+                    placeholder="Select Type"></app-input>
+            </div>
+            <div class="col">
+                <app-button (click)="applyFilters()" variant="brand" customClass="w-100">
+                    Apply
+                </app-button>
+            </div>
+            <div class="col">
+                <app-button (click)="resetFilters()" variant="outline" customClass="w-100">
+                    Reset
+                </app-button>
+            </div>
+        </div>
+
+        <!-- Active Filter Chips -->
+        <div class="active-chips mt-3 d-flex flex-wrap gap-2" *ngIf="activeFilters.length > 0">
+            <span class="text-secondary small align-self-center me-2">Active Filters:</span>
+            <app-chip *ngFor="let filter of activeFilters" [label]="filter.label" [removable]="true" variant="outline"
+                (remove)="removeChip(filter)"></app-chip>
+        </div>
+    </div>
+
+    <!-- Main Report Table -->
+    <div class="report-table-section glass-dark overflow-hidden border border-white border-opacity-5">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover mb-0 align-middle">
+                <thead>
+                    <tr>
+                        <th class="ps-4 py-4">Contract Details</th>
+                        <th class="py-4">Contract Status</th>
+                        <th class="py-4">Contract Type</th>
+                        <th class="py-4">Start Date</th>
+                        <th class="py-4">End Date</th>
+                        <th class="py-4">Completion</th>
+                        <th class="py-4">Budget</th>
+                        <th class="py-4 text-success">Total Earned</th>
+                        <th class="py-4 text-center">Payment Status</th>
+                        <th class="py-4 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of filteredData; track item.title) {
+                    <tr class="border-white border-opacity-5 transition-all">
+                        <td class="ps-4 py-4">
+                            <h6 class="text-white fw-bold mb-1">{{ item.title }}</h6>
+                            <span class="text-secondary small">Client: {{ item.client }}</span>
+                        </td>
+                        <td class="py-4">
+                            <span class="badge px-2 border"
+                                [ngClass]="item.status === 'In Progress' ? 'bg-primary bg-opacity-10 text-primary border-primary border-opacity-10' : 'bg-success bg-opacity-10 text-success border-success border-opacity-10'">
+                                {{ item.status }}
+                            </span>
+                        </td>
+                        <td class="py-4">
+                            <span
+                                class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-10 px-2">{{
+                                item.type }}</span>
+                        </td>
+                        <td class="py-4 text-white small fw-bold">
+                            {{ item.startDate | date:'MMM d, y' }}
+                        </td>
+                        <td class="py-4 fw-bold"
+                            [ngClass]="item.status === 'Completed' ? 'text-success' : 'text-secondary'">
+                            {{ item.endDate | date:'MMM d, y' }}
+                        </td>
+                        <td class="py-4">
+                            <div class="d-flex flex-column">
+                                <span class="text-white small mb-1">{{ item.completion }}%</span>
+                                <div class="progress"
+                                    style="height: 4px; width: 60px; background: rgba(255,255,255,0.05);">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        [style.width.%]="item.completion">
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-4 fw-bold text-white">
+                            ${{ item.budget | number:'1.2-2' }}
+                        </td>
+                        <td class="py-4">
+                            <div class="text-success fw-bold">${{ item.earned | number:'1.2-2' }}</div>
+                        </td>
+                        <td class="py-4 text-center">
+                            <span class="badge rounded-pill px-3 py-1.5"
+                                [ngClass]="item.completion === 100 ? 'bg-success bg-opacity-10 text-success border border-success border-opacity-10' : 'bg-warning bg-opacity-10 text-warning border border-warning border-opacity-10'">
+                                {{ item.completion === 100 ? 'Received' : 'On Hold' }}
+                            </span>
+                        </td>
+                        <td class="py-4 text-center">
+                            <div class="dropdown">
+                                <button class="btn btn-link text-secondary p-0 border-0" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical fs-5"></i>
+                                </button>
+                                <ul
+                                    class="dropdown-menu dropdown-menu-end glass-dark border border-white border-opacity-10 shadow-lg py-2">
+                                    <li>
+                                        <button class="dropdown-item text-white d-flex align-items-center gap-2 py-2"
+                                            (click)="downloadReport('Invoice')">
+                                            <i class="bi bi-file-earmark-arrow-down text-primary"></i>
+                                            <span>Download Invoice</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-white d-flex align-items-center gap-2 py-2"
+                                            (click)="contactSupport()">
+                                            <i class="bi bi-headset text-secondary"></i>
+                                            <span>Contact Support</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination Footer -->
+    <div class="pagination-container d-flex justify-content-between align-items-center">
+        <p class="text-secondary small mb-0">Showing 1 to {{ reportData.length }} of {{ reportData.length }} contracts
+        </p>
+        <div class="d-flex align-items-center gap-2">
+            <a href="javascript:void(0)" class="page-link-custom">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+            <a href="javascript:void(0)" class="page-link-custom active">1</a>
+            <a href="javascript:void(0)" class="page-link-custom">2</a>
+            <a href="javascript:void(0)" class="page-link-custom">3</a>
+            <a href="javascript:void(0)" class="page-link-custom">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+</div>

@@ -84,6 +84,27 @@ export class InputComponent implements ControlValueAccessor {
     this.onChange([...this.value]);
   }
 
+  selectOption(optionValue: any): void {
+    if (this.type !== 'select') return;
+    this.value = optionValue;
+    this.onChange(this.value);
+    this.dropdownOpen = false;
+    this.dropdownStateChange.emit(false);
+  }
+
+  getSelectedLabel(): string {
+    if (this.type === 'multiselect') {
+      if (!Array.isArray(this.value) || this.value.length === 0) return this.placeholder || 'Select Categories';
+      if (this.value.length === 1) {
+        return this.options.find(opt => opt.value === this.value[0])?.label || this.value[0];
+      }
+      return `${this.value.length} Selected`;
+    } else {
+      if (!this.value) return this.placeholder || 'Select Option';
+      return this.options.find(opt => opt.value === this.value)?.label || this.value;
+    }
+  }
+
   isSelected(optionValue: any): boolean {
     if (this.type === 'multiselect' && Array.isArray(this.value)) {
       return this.value.includes(optionValue);

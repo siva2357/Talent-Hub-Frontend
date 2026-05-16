@@ -1,1 +1,184 @@
-<p>finance-overview works!</p>
+<div class="finance-overview-container p-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="text-white fw-bold mb-1">Financial Overview</h2>
+            <p class="text-secondary mb-0">Track your earnings, payments, and withdrawals</p>
+        </div>
+        <div class="d-flex gap-3">
+            <app-button variant="secondary" size="md" customClass="px-4 py-2 rounded-3 border border-white border-opacity-10" (click)="viewStatements()">
+                <i class="bi bi-file-earmark-bar-graph me-2"></i>
+                Statements
+            </app-button>
+            <app-button variant="brand" size="md" customClass="px-4 py-2 rounded-3 shadow-glow" (click)="withdraw()">
+                <i class="bi bi-wallet2 me-2"></i>
+                Withdraw Funds
+            </app-button>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="row g-4 mb-5">
+        <!-- Total Earnings -->
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card glass-dark p-4 rounded-4 border-accent-blue position-relative overflow-hidden">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="stat-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        <i class="bi bi-currency-dollar fs-4"></i>
+                    </div>
+                    <div class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10">+12%</div>
+                </div>
+                <h6 class="text-secondary text-uppercase fw-bold mb-2 ls-1" style="font-size: 11px;">Total Earnings</h6>
+                <h3 class="text-white fw-bold mb-0">${{ totalEarnings | number:'1.2-2' }}</h3>
+                <div class="card-glow-blue"></div>
+            </div>
+        </div>
+
+        <!-- Payments Received -->
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card glass-dark p-4 rounded-4 border-accent-green position-relative overflow-hidden">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="stat-icon bg-success bg-opacity-10 text-success rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        <i class="bi bi-check2-circle fs-4"></i>
+                    </div>
+                    <div class="text-secondary small">Cleared</div>
+                </div>
+                <h6 class="text-secondary text-uppercase fw-bold mb-2 ls-1" style="font-size: 11px;">Payments Received</h6>
+                <h3 class="text-white fw-bold mb-0">${{ paymentsReceived | number:'1.2-2' }}</h3>
+                <div class="card-glow-green"></div>
+            </div>
+        </div>
+
+        <!-- Amount Withdrawn -->
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card glass-dark p-4 rounded-4 border-accent-purple position-relative overflow-hidden">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="stat-icon bg-purple text-purple rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        <i class="bi bi-cash-stack fs-4"></i>
+                    </div>
+                    <div class="text-secondary small">Direct Deposit</div>
+                </div>
+                <h6 class="text-secondary text-uppercase fw-bold mb-2 ls-1" style="font-size: 11px;">Amount Withdrawn</h6>
+                <h3 class="text-white fw-bold mb-0">${{ amountWithdrawn | number:'1.2-2' }}</h3>
+                <div class="card-glow-purple"></div>
+            </div>
+        </div>
+
+        <!-- Balance Left -->
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card glass-dark p-4 rounded-4 border-accent-gold position-relative overflow-hidden">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="stat-icon bg-warning bg-opacity-10 text-warning rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        <i class="bi bi-piggy-bank fs-4"></i>
+                    </div>
+                    <div class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10 px-2" style="font-size: 10px;">AVAILABLE</div>
+                </div>
+                <h6 class="text-secondary text-uppercase fw-bold mb-2 ls-1" style="font-size: 11px;">Balance in Account</h6>
+                <h3 class="text-white fw-bold mb-0">${{ balanceLeft | number:'1.2-2' }}</h3>
+                <div class="card-glow-gold"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contract List Section -->
+    <div class="finance-list-section glass-dark rounded-4 overflow-hidden border border-white border-opacity-5">
+        <div class="p-4 border-bottom border-white border-opacity-5 d-flex justify-content-between align-items-center bg-primary bg-opacity-5">
+            <h5 class="text-white fw-bold mb-0">Contract Earning History</h5>
+            <div class="search-box glass-light rounded-3 px-3 py-1 d-flex align-items-center">
+                <i class="bi bi-search text-secondary small me-2"></i>
+                <input type="text" placeholder="Filter contracts..." class="bg-transparent border-0 text-white small outline-none" style="width: 150px;">
+            </div>
+        </div>
+
+        <div class="list-container">
+            @for (contract of contracts; track contract.title) {
+                <div class="list-item-wrapper border-bottom border-white border-opacity-5">
+                    <div class="list-item p-4 hover-bg-light transition-all cursor-pointer" 
+                         [class.active-item]="selectedContract === contract"
+                         (click)="toggleContractDetails(contract)">
+                        <div class="row align-items-center">
+                            <div class="col-lg-5 col-md-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <i class="bi" [ngClass]="selectedContract === contract ? 'bi-chevron-down text-primary' : 'bi-chevron-right text-secondary'"></i>
+                                    <div>
+                                        <h6 class="text-white fw-bold mb-1">{{ contract.title }}</h6>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="text-secondary small">{{ contract.client }}</span>
+                                            <span class="badge bg-primary bg-opacity-10 text-primary px-2" style="font-size: 9px;">{{ contract.type }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <div class="text-secondary text-xxs text-uppercase mb-1">Total Earned</div>
+                                <div class="text-white fw-bold">${{ contract.totalEarned | number:'1.2-2' }}</div>
+                            </div>
+                            <div class="col-lg-2 col-md-3">
+                                <div class="text-secondary text-xxs text-uppercase mb-1">Last Payment</div>
+                                <div class="text-white small">{{ contract.lastPaymentDate !== '-' ? (contract.lastPaymentDate | date:'mediumDate') : 'Pending' }}</div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 text-end">
+                                <span class="badge rounded-pill px-3 py-1.5" 
+                                      [ngClass]="contract.status === 'Completed' ? 'bg-success bg-opacity-10 text-success border border-success border-opacity-10' : 'bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10'">
+                                    {{ contract.status }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase Breakdown (Conditional) -->
+                    @if (selectedContract === contract) {
+                        <div class="phase-breakdown px-5 py-4 border-top border-white border-opacity-5 animate-in">
+                            <div class="mb-4 d-flex align-items-center gap-2">
+                                <div class="h-px bg-primary opacity-50" style="width: 20px;"></div>
+                                <span class="text-primary text-uppercase fw-bold text-xxs ls-1">Payment Phase Breakdown</span>
+                            </div>
+                            
+                            <div class="phase-list px-3">
+                                <!-- Table Header -->
+                                <div class="row pb-3 mb-2 border-bottom border-white border-opacity-5 text-secondary text-uppercase fw-bold" style="font-size: 10px; letter-spacing: 1px;">
+                                    <div class="col-5">Phase Description</div>
+                                    <div class="col-3">Release Date</div>
+                                    <div class="col-2">Status</div>
+                                    <div class="col-2 text-end">Amount</div>
+                                </div>
+
+                                <!-- Table Body (Rows) -->
+                                @for (phase of contract.phases; track phase.name) {
+                                    <div class="row py-3 align-items-center border-bottom border-white border-opacity-5">
+                                        <div class="col-5">
+                                            <span class="text-white fw-medium">{{ phase.name }}</span>
+                                        </div>
+                                        <div class="col-3">
+                                            <span class="text-secondary small">{{ phase.date }}</span>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="status-dot" [ngClass]="{
+                                                    'bg-success': phase.status === 'Paid',
+                                                    'bg-warning': phase.status === 'In Review',
+                                                    'bg-primary': phase.status === 'Pending'
+                                                }"></div>
+                                                <span class="text-secondary small">{{ phase.status }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-2 text-end">
+                                            <span class="text-success fw-bold">${{ phase.amount | number:'1.2-2' }}</span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="p-3 text-center bg-black bg-opacity-20">
+            <app-button variant="secondary" size="sm" customClass="text-secondary hover-white" (click)="viewAllTransactions()">
+                View All Transactions
+                <i class="bi bi-arrow-right ms-2"></i>
+            </app-button>
+        </div>
+    </div>
+</div>
