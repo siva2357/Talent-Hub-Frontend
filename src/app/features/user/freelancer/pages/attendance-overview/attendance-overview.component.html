@@ -25,7 +25,7 @@
                                 <div>
                                     <div class="d-flex align-items-center gap-3">
                                         <h5 class="text-white fw-bold mb-0">{{ item.contractTitle }}</h5>
-                                        <span class="badge" [ngClass]="getBadgeClass(item.status)">{{
+                                        <span class="badge " [ngClass]="getBadgeClass(item.status)">{{
                                             item.status
                                             }}</span>
                                     </div>
@@ -118,57 +118,63 @@
 
     <!-- Attendance Evidence Modal -->
     @if (isEvidenceModalOpen && selectedLog) {
-    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true" style="z-index: 1000001;">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
-            style="z-index: 1000002; max-width: 450px;">
-            <div class="modal-content border border-primary border-opacity-20 shadow-2xl rounded-4"
-                style="background: #11141b;">
+    <!-- Backdrop completely separate -->
+    <div class="modal-backdrop fade show"
+        style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(4, 7, 12, 0.95); backdrop-filter: blur(8px); z-index: 10500;">
+    </div>
+
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10505; overflow-x: hidden; overflow-y: auto;">
+
+        <div class="modal-dialog modal-dialog-centered"
+            style="max-width: 450px; margin: 1.75rem auto; min-height: calc(100% - 3.5rem); display: flex; align-items: center;">
+            <div class="modal-content border border-primary border-opacity-20 shadow-2xl rounded-4 w-100"
+                style="background: #11141b; max-height: 90vh; display: flex; flex-direction: column;">
                 <!-- Modal Header -->
                 <div
-                    class="modal-header border-bottom border-white border-opacity-5 p-3 px-4 d-flex justify-content-between align-items-center">
+                    class="modal-header border-bottom border-white border-opacity-10 p-4 d-flex justify-content-between align-items-center flex-shrink-0">
                     <div class="d-flex align-items-center gap-3">
-                        <h6 class="text-white fw-bold mb-0" style="font-size: 15px;">{{ selectedLog.date }}</h6>
-                        <div class="badge badge-primary px-3 py-1 rounded-pill d-inline-flex align-items-center"
-                            style="font-size: 10px;">
+                        <h5 class="text-white fw-bold mb-0" style="font-size: 18px;">{{ selectedLog.date }}</h5>
+                        <div class="badge px-3 py-1 rounded-pill d-inline-flex align-items-center"
+                            style="font-size: 12px; background-color: #1A73E8; color: white;">
                             <span class="fw-bold">{{ selectedLog.totalHours }}h Logged</span>
                         </div>
                     </div>
-                    <button type="button" class="btn-close btn-close-white opacity-50" style="font-size: 9px;"
-                        (click)="closeModal()"></button>
+                    <button type="button" class="btn-close btn-close-white" (click)="closeModal()"></button>
                 </div>
 
-                <!-- Modal Body -->
-                <div class="modal-body p-3">
-                    <label class="text-secondary text-xxs fw-bold mb-3 d-block opacity-40 text-uppercase"
-                        style="letter-spacing: 0.5px;">Evidence Logs</label>
+                <!-- Modal Body (Scrollable) -->
+                <div class="modal-body p-4" style="overflow-y: auto; flex: 1 1 auto;">
+                    <label class="fw-bold mb-3 d-block text-uppercase"
+                        style="letter-spacing: 0.5px; color: #64748B; font-size: 13px;">Evidence Logs</label>
                     <div class="d-flex flex-column gap-3">
                         @for (session of selectedLog.sessions; track $index) {
-                        <div class="session-evidence-card p-3 rounded-3 border border-primary border-opacity-10 shadow-sm"
-                            style="background: #1a1d26;">
+                        <div class="session-evidence-card p-3 rounded-3"
+                            style="background: #1E232E; border: 1px solid rgba(255,255,255,0.02);">
                             <div class="row align-items-center g-3">
                                 <div class="col-2">
-                                    <div
-                                        class="face-capture-container rounded-2 overflow-hidden position-relative border border-primary border-opacity-10">
+                                    <div class="face-capture-container rounded-2 overflow-hidden position-relative">
                                         <img [src]="session.faceImage" class="w-100 h-100 object-fit-cover"
                                             style="aspect-ratio: 1/1; opacity: 0.9;">
-                                        <div class="capture-badge bg-primary bg-opacity-75"
-                                            style="font-size: 5px; padding: 1px;">VERIFIED</div>
+                                        <div class="capture-badge text-white fw-bold"
+                                            style="background: #1A73E8; font-size: 8px; padding: 2px; position: absolute; bottom: 0; width: 100%; text-align: center; letter-spacing: 0.5px;">
+                                            VERIFIED</div>
                                     </div>
                                 </div>
                                 <div class="col-10">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <span class="text-primary fw-bold text-xxs opacity-75">SESSION {{ $index + 1
-                                                }}</span>
-                                            <span class="text-white fw-bold ms-2" style="font-size: 12px;">{{
+                                            <span class="fw-bold text-uppercase"
+                                                style="color: #1A73E8; font-size: 13px;">SESSION {{ $index + 1 }}</span>
+                                            <span class="text-white fw-bold ms-2" style="font-size: 13px;">{{
                                                 session.checkIn }} - {{ session.checkOut }}</span>
                                         </div>
-                                        <span class="text-white opacity-50 fw-bold" style="font-size: 11px;">{{
-                                            session.hours }}h</span>
+                                        <span class="fw-bold" style="font-size: 12px; color: #64748B;">{{ session.hours
+                                            }}h</span>
                                     </div>
                                     <div class="d-flex align-items-center gap-2 mt-2 opacity-75">
-                                        <i class="bi bi-geo-alt-fill text-primary" style="font-size: 11px;"></i>
-                                        <span class="text-white text-xxs text-truncate" style="max-width: 280px;">{{
+                                        <i class="bi bi-geo-alt-fill" style="color: #1A73E8; font-size: 12px;"></i>
+                                        <span class="text-white" style="font-size: 13px; max-width: 280px;">{{
                                             session.location }}</span>
                                     </div>
                                 </div>
@@ -179,7 +185,8 @@
                 </div>
 
                 <!-- Modal Footer -->
-                <div class="modal-footer border-top border-white border-opacity-5 p-3 px-4 d-flex justify-content-end">
+                <div
+                    class="modal-footer border-top border-white border-opacity-10 p-4 d-flex justify-content-end flex-shrink-0">
                     <app-button variant="brand" size="sm" customClass="px-4 shadow-sm" fontSize="12px"
                         (click)="closeModal()">
                         Close Review
@@ -188,7 +195,5 @@
             </div>
         </div>
     </div>
-    <div class="modal-backdrop fade show"
-        style="background: rgba(4, 7, 12, 0.95); backdrop-filter: blur(8px); z-index: 1000000;"></div>
     }
 </div>
