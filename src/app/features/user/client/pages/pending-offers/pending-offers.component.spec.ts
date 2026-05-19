@@ -1,17 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ClientComponent } from './client.component';
 
-describe('ClientComponent', () => {
-  let component: ClientComponent;
-  let fixture: ComponentFixture<ClientComponent>;
+import { PendingOffersComponent } from './pending-offers.component';
+
+describe('PendingOffersComponent', () => {
+  let component: PendingOffersComponent;
+  let fixture: ComponentFixture<PendingOffersComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ClientComponent]
+      imports: [PendingOffersComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ClientComponent);
+    fixture = TestBed.createComponent(PendingOffersComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

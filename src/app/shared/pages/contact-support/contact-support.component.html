@@ -1,1 +1,236 @@
-<p>contact-support works!</p>
+<div class="support-container animate-fade-in text-start position-relative">
+  <!-- Cinematic Ambient Background Glows -->
+  <div class="support-orb orb-1 position-absolute"></div>
+  <div class="support-orb orb-2 position-absolute"></div>
+  <div class="support-grid-overlay position-absolute w-100 h-100 top-0 start-0"></div>
+
+  <div class="support-wrapper position-relative z-3">
+    <!-- TOP CINEMATIC HEADER -->
+    <header class="support-header d-flex align-items-center gap-3 mb-5">
+      <!-- Floating Navigation Back Arrow -->
+      <a [routerLink]="userMode === 'freelancer' ? '/user/my-dashboard' : '/user/client-dashboard'" class="btn-back-nav rounded-circle d-flex align-items-center justify-content-center" title="Back to Dashboard">
+        <i class="bi bi-arrow-left"></i>
+      </a>
+      <div>
+        <h1 class="support-title fw-bold mb-1 text-white">System & Escalation Support</h1>
+        <p class="text-sm opacity-60 mb-0">Open an official verification ticket directly to the Talent-Hub admin operations core.</p>
+      </div>
+    </header>
+
+    <!-- SPLIT LAYOUT -->
+    <div class="row g-5 align-items-start">
+      <!-- LEFT SIDEBAR: SLA & SUPPORT STATISTICS -->
+      <aside class="col-12 col-lg-4 col-xl-3.5">
+        <div class="sidebar-panel rounded-4 border-glass bg-card-dark">
+          <!-- Live Service Analytics -->
+          <div class="support-stats-box text-start">
+            <span class="text-xs fw-bold uppercase-label text-secondary d-block mb-3">Service Statistics</span>
+            
+            <div class="d-flex flex-column gap-3">
+              <div class="stat-row p-3 rounded-3 border-glass bg-black-20 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-clock-history text-primary-light"></i>
+                  <span class="text-xs text-white-50">SLA Response Speed</span>
+                </div>
+                <span class="font-monospace text-xs fw-bold text-success-light">&lt; 15 mins</span>
+              </div>
+
+              <div class="stat-row p-3 rounded-3 border-glass bg-black-20 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-activity text-success-light"></i>
+                  <span class="text-xs text-white-50">Platform Status</span>
+                </div>
+                <span class="font-monospace text-xs fw-bold text-success-light">99.98% Online</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Help Lines & Direct Escalations -->
+          <div class="escalations-block text-start border-top-glass pt-4">
+            <span class="text-xs fw-bold uppercase-label text-secondary d-block mb-3">Operational Policies</span>
+            <div class="policy-card p-3 rounded-3 border-glass bg-black-20 mb-3 text-xs lh-relaxed text-white-50">
+              <i class="bi bi-shield-fill-check text-primary-light me-1"></i>
+              All ticket issues are processed under strict escrow agreement guidelines and logged directly on our admin database.
+            </div>
+            
+            <!-- Quick Link buttons -->
+            <div class="d-flex flex-column gap-2">
+              <a href="mailto:escalations@talenthub.io" class="btn-escalation p-2.5 rounded-3 text-center text-xs fw-semibold text-decoration-none border-glass bg-black-20 text-white-50 hover-white">
+                <i class="bi bi-envelope-at me-2"></i> Email Corporate Support
+              </a>
+              <a routerLink="/user/chat" class="btn-escalation p-2.5 rounded-3 text-center text-xs fw-semibold text-decoration-none border-glass bg-black-20 text-white-50 hover-white">
+                <i class="bi bi-chat-left-dots me-2"></i> Speak with Live Moderator
+              </a>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- RIGHT PANEL: TICKET INITIATION WIZARD -->
+      <main class="col-12 col-lg-8 col-xl-8.5">
+        <div class="support-content-card p-4 p-md-5 rounded-4 border-glass bg-card-dark position-relative overflow-hidden">
+          <div class="card-neon-top-bar position-absolute top-0 start-0 w-100 header-neon-bar"></div>
+
+          <div class="ticket-form-wizard d-flex flex-column gap-4.5">
+            <!-- STEP 1: SELECT CORE MODULE CATEGORY -->
+            <section class="wizard-step">
+              <div class="section-title-box d-flex align-items-center gap-2 mb-3.5">
+                <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">1</div>
+                <h2 class="text-lg fw-bold text-white mb-0">Select Impacted Platform Phase</h2>
+              </div>
+
+              <!-- GRID OF CATEGORY CARDS -->
+              <div class="row g-4">
+                @for (cat of categories; track cat.id) {
+                <div class="col-12 col-sm-6 col-md-4">
+                  <div class="category-card border-glass text-start cursor-pointer h-100"
+                       [class.active]="selectedCategoryId === cat.id"
+                       (click)="selectCategory(cat.id)">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="category-icon-bullet rounded-3 d-flex align-items-center justify-content-center">
+                        <i [class]="'bi ' + cat.icon"></i>
+                      </div>
+                      <div class="selection-indicator-ring"></div>
+                    </div>
+                    <div class="mt-auto">
+                      <h4 class="text-sm fw-bold text-white mb-2">{{ cat.label }}</h4>
+                      <p class="text-xs opacity-50 mb-0 lh-relaxed">{{ cat.description }}</p>
+                    </div>
+                  </div>
+                </div>
+                }
+              </div>
+            </section>
+
+            <!-- STEP 2: DYNAMIC SUBCATEGORY SELECTOR (CONDITIONAL) -->
+            @if (selectedCategoryId) {
+            <section class="wizard-step animate-fade-in pt-3 border-top-glass">
+              <div class="section-title-box d-flex align-items-center gap-2 mb-3.5">
+                <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">2</div>
+                <h2 class="text-lg fw-bold text-white mb-0">Specify the Nature of Your Dispute</h2>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-12 col-md-8 text-start">
+                  <label class="form-label text-white opacity-80 text-xs uppercase-label mb-2">Detailed Issue Subcategory</label>
+                  <div class="custom-dropdown-capsule position-relative">
+                    <select class="form-select custom-select-box p-3 rounded-3 border-glass bg-black-20 text-sm text-white" 
+                            [(ngModel)]="selectedSubcategoryValue" 
+                            id="issueSubcategorySelect">
+                      <option value="" disabled selected>-- Select specific subcategory issue --</option>
+                      @for (sub of activeCategory?.subcategories; track sub.value) {
+                      <option [value]="sub.value">{{ sub.label }}</option>
+                      }
+                    </select>
+                    <i class="bi bi-chevron-down select-arrow-abs text-white position-absolute pointer-events-none"></i>
+                  </div>
+                </div>
+              </div>
+            </section>
+            }
+
+            <!-- STEP 3: DETAILED DESCRIPTION -->
+            <section class="wizard-step pt-3 border-top-glass">
+              <div class="section-title-box d-flex align-items-center gap-2 mb-3.5">
+                <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">3</div>
+                <h2 class="text-lg fw-bold text-white mb-0">Describe the Issue Context</h2>
+              </div>
+
+              <div class="row">
+                <div class="col-12">
+                  <app-input type="textarea" 
+                             label="Issue Description (Minimum 10 characters)" 
+                             [(ngModel)]="issueDescription" 
+                             placeholder="Provide step-by-step actions that caused the error, transaction IDs, or contract reference codes..." 
+                             [required]="true"></app-input>
+                </div>
+              </div>
+            </section>
+
+            <!-- STEP 4: SCREENSHOT REFERENCE VERIFICATIONS -->
+            <section class="wizard-step pt-3 border-top-glass">
+              <div class="section-title-box d-flex align-items-center gap-2 mb-3.5">
+                <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">4</div>
+                <h2 class="text-lg fw-bold text-white mb-0">Attach Verification Screenshots (Optional)</h2>
+              </div>
+
+              <!-- FILE ATTACHMENT DRAG & DROP BOX -->
+              <div class="file-uploader-dropzone p-5 rounded-4 text-center cursor-pointer d-flex flex-column align-items-center justify-content-center gap-2"
+                   (click)="triggerFileInput()">
+                <input type="file" id="screenshotUpload" class="d-none" (change)="onFileSelected($event)" accept="image/*" multiple>
+                <div class="upload-icon-circle rounded-circle d-flex align-items-center justify-content-center mb-1 text-primary-light">
+                  <i class="bi bi-cloud-arrow-up fs-3 animate-bounce"></i>
+                </div>
+                <span class="text-sm fw-semibold text-white">Click to upload screenshot references</span>
+                <span class="text-xs opacity-40">JPG, PNG format only. You can attach multiple files.</span>
+              </div>
+
+              <!-- SCREENSHOT PREVIEW DECK -->
+              @if (uploadedScreenshots.length > 0) {
+              <div class="screenshot-deck-grid d-flex flex-wrap gap-3.5 mt-4 text-start">
+                @for (shot of uploadedScreenshots; track $index; let i = $index) {
+                <div class="screenshot-thumbnail-box position-relative p-2 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3">
+                  <div class="screenshot-img-ring rounded overflow-hidden">
+                    <img [src]="shot.url" [alt]="shot.name" class="img-fluid w-100 h-100 object-fit-cover">
+                  </div>
+                  <div class="d-flex flex-column text-start" style="max-width: 140px;">
+                    <span class="text-xs fw-bold text-white truncate-text">{{ shot.name }}</span>
+                    <span class="text-xs opacity-50 font-monospace">{{ shot.size }}</span>
+                  </div>
+                  <!-- Delete button badge -->
+                  <button (click)="removeScreenshot(i)" class="remove-shot-btn rounded-circle border-0 d-flex align-items-center justify-content-center position-absolute top-2 end-2">
+                    <i class="bi bi-x"></i>
+                  </button>
+                </div>
+                }
+              </div>
+              }
+            </section>
+
+            <!-- SUBMIT FOOTER BAR -->
+            <footer class="wizard-footer border-top-glass pt-4 mt-3 pb-2 d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <a [routerLink]="userMode === 'freelancer' ? '/user/my-dashboard' : '/user/client-dashboard'" class="text-decoration-none text-secondary-light hover-white">
+                <i class="bi bi-arrow-left me-1"></i> Return to Dashboard
+              </a>
+              <app-button variant="primary" 
+                          (click)="submitTicket()" 
+                          size="md" 
+                          [disabled]="!isFormValid"
+                          customClass="btn-save-continue">
+                Submit Escalation Ticket
+              </app-button>
+            </footer>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- CONNECTED SUCCESS CONFIRMATION MODAL OVERLAY -->
+@if (isSuccessModalOpen) {
+<div class="success-modal-overlay d-flex align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100 z-5">
+  <div class="success-modal-content p-5 rounded-4 border-glass bg-card-dark text-center animate-fade-in" style="width: 100%; max-width: 480px;">
+    <!-- Large Glowing success icon -->
+    <div class="success-shield-pulse rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4 text-success-light">
+      <i class="bi bi-shield-fill-check fs-2"></i>
+    </div>
+    
+    <h3 class="text-white fw-bold mb-2">Dispute Ticket Logged</h3>
+    <p class="text-sm opacity-60 mb-4 px-2">Your escalation request was logged on our central database. Support operations has been alerted and will respond in under 15 minutes.</p>
+    
+    <!-- Ticket ID display capsule -->
+    <div class="ticket-id-capsule p-3 rounded-3 border-glass bg-black-20 mb-4.5 d-flex flex-column gap-1">
+      <span class="text-secondary text-xs uppercase-label">Assigned Support Ticket ID</span>
+      <span class="font-monospace text-lg fw-extrabold text-primary-light">{{ generatedTicketId }}</span>
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex gap-3">
+      <app-button (click)="closeSuccessModal()" variant="primary" class="w-100">
+        Ack & File Another Ticket
+      </app-button>
+    </div>
+  </div>
+</div>
+}

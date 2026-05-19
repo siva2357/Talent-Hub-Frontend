@@ -1,1 +1,480 @@
+/* Account Settings - Ultra Premium Design CSS */
 
+.settings-container {
+    min-height: 100vh;
+    width: 100%;
+    background-color: var(--bg-primary);
+    color: white;
+    padding: 60px 40px;
+    overflow: hidden;
+}
+
+/* ================= CINEMATIC BACKGROUND GLOWS ================= */
+.settings-orb {
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    z-index: 1;
+    pointer-events: none;
+}
+.orb-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--brand-500), transparent 70%);
+    top: -100px;
+    right: -100px;
+    animation: floatingOrbOne 14s infinite alternate ease-in-out;
+}
+.orb-2 {
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, #06b6d4, transparent 70%);
+    bottom: -150px;
+    left: -150px;
+    animation: floatingOrbTwo 18s infinite alternate ease-in-out;
+}
+
+@keyframes floatingOrbOne {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-30px, 30px) scale(1.08); }
+}
+@keyframes floatingOrbTwo {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(40px, -40px) scale(1.05); }
+}
+
+.settings-grid-overlay {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%);
+    -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%);
+    opacity: 0.75;
+    z-index: 2;
+}
+
+/* ================= HEADER BACK NAVIGATION ================= */
+.settings-title {
+    background: linear-gradient(90deg, #ffffff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-back-nav {
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.03) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 18px;
+    text-decoration: none;
+}
+.btn-back-nav:hover {
+    color: #ffffff !important;
+    background: rgba(42, 128, 255, 0.2) !important;
+    border-color: rgba(42, 128, 255, 0.3) !important;
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 8px 20px rgba(42, 128, 255, 0.25);
+}
+
+/* ================= SEGMENTED ROLE TOGGLER ================= */
+.bg-black-40 {
+    background: rgba(0, 0, 0, 0.35) !important;
+}
+.role-toggle-capsule {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 50px;
+    padding: 3px;
+}
+.btn-toggle-capsule {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+    outline: none;
+}
+.btn-toggle-capsule.active {
+    background: var(--brand-500) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(42, 128, 255, 0.3);
+}
+
+/* ================= PANEL LAYOUT GLASSMORPHISM ================= */
+.border-glass {
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.bg-card-dark {
+    background: rgba(13, 17, 24, 0.45) !important;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+}
+
+.sidebar-panel {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+}
+
+.uppercase-label {
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+/* ================= SIDEBAR TABS ================= */
+.btn-sidebar-tab {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+}
+.btn-sidebar-tab i {
+    font-size: 21px;
+    transition: transform 0.3s ease;
+}
+.btn-sidebar-tab:hover {
+    background: rgba(255, 255, 255, 0.02) !important;
+    color: rgba(255, 255, 255, 0.85);
+}
+.btn-sidebar-tab:hover i {
+    transform: scale(1.1);
+}
+.btn-sidebar-tab.active {
+    background: rgba(42, 128, 255, 0.08) !important;
+    border: 1px solid rgba(42, 128, 255, 0.15) !important;
+    color: var(--brand-400) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ================= RIGHT VIEWPORT ================= */
+.settings-content-card {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+}
+.header-neon-bar {
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #06b6d4, #3b82f6);
+    background-size: 200% auto;
+    animation: neonBarMove 6s linear infinite;
+}
+@keyframes neonBarMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+/* ================= SECTION HEADINGS ================= */
+.section-icon-bullet {
+    width: 24px;
+    height: 24px;
+    background: rgba(42, 128, 255, 0.15);
+    border: 1px solid rgba(42, 128, 255, 0.25);
+    color: var(--brand-400);
+    border-radius: 50%;
+    font-weight: 700;
+}
+.border-top-glass {
+    border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* ================= PROFILE PICTURE UPLOADER ================= */
+.pic-uploader-ring {
+    width: 110px;
+    height: 110px;
+}
+.pic-placeholder-box {
+    width: 100%;
+    height: 100%;
+    background: rgba(42, 128, 255, 0.04);
+    border: 2px solid rgba(42, 128, 255, 0.2);
+    box-shadow: 0 0 15px rgba(42, 128, 255, 0.15);
+    transition: all 0.3s ease;
+}
+.pic-uploader-ring:hover .pic-placeholder-box {
+    background: rgba(42, 128, 255, 0.08);
+    border-color: var(--brand-400);
+    transform: scale(1.03);
+}
+.camera-btn-abs {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 32px;
+    height: 32px;
+    background: var(--brand-500);
+    border: 2px solid rgba(13, 17, 24, 0.9);
+    color: white;
+    font-size: 14px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    transition: all 0.25s ease;
+}
+.pic-uploader-ring:hover .camera-btn-abs {
+    background: var(--brand-400);
+    transform: scale(1.08);
+}
+
+/* ================= RADIO TYPE CARDS (CLIENT) ================= */
+.radio-card {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+.radio-card:hover {
+    background: rgba(255, 255, 255, 0.035);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+.radio-card.active {
+    background: rgba(42, 128, 255, 0.06) !important;
+    border-color: var(--brand-500) !important;
+    box-shadow: 0 4px 16px rgba(42, 128, 255, 0.12);
+}
+.role-icon-box {
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+.radio-card.active .role-icon-box {
+    background: var(--brand-500);
+    color: white;
+}
+.radio-check {
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+.radio-card.active .radio-check {
+    border-color: var(--brand-500);
+    background: var(--brand-500);
+    box-shadow: inset 0 0 0 2px var(--bg-primary);
+}
+
+/* ================= COMMITMENT PILLS ================= */
+.availability-btn {
+    background: rgba(255, 255, 255, 0.015);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.availability-btn:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+.availability-btn.active {
+    background: rgba(42, 128, 255, 0.08) !important;
+    border-color: var(--brand-500) !important;
+    box-shadow: 0 4px 15px rgba(42, 128, 255, 0.15);
+}
+.availability-btn.active .btn-label {
+    color: var(--brand-400);
+}
+
+/* ================= VERIFICATION CARDS ================= */
+.bg-black-20 {
+    background: rgba(0, 0, 0, 0.2) !important;
+}
+.verification-card {
+    transition: all 0.3s ease;
+}
+.verification-card:hover {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+.mail-icon-box {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 20px;
+}
+.verified-badge {
+    background: rgba(16, 185, 129, 0.06);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+.country-code-pill {
+    height: 48px;
+    padding: 0 14px;
+}
+
+/* ================= SOCIAL CONNECT CARDS ================= */
+.social-link-row {
+    transition: all 0.3s ease;
+}
+.connected-card {
+    transition: all 0.3s ease;
+}
+.connected-card:hover {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    transform: translateX(3px);
+}
+.social-icon-box {
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 18px;
+}
+.action-btn-box {
+    width: 34px;
+    height: 34px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+.action-btn-box:hover {
+    color: white;
+    transform: scale(1.08);
+}
+.action-btn-box.edit:hover {
+    border-color: var(--brand-500);
+    color: var(--brand-400);
+}
+.action-btn-box.delete:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.hover-white:hover {
+    color: white !important;
+    opacity: 0.8 !important;
+}
+
+/* ================= SECURITY & NOTIFICATIONS ================= */
+.security-note {
+    border: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+/* Custom switch design variables */
+.custom-check .form-check-input {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(255, 255, 255, 0.25)'/%3e%3c/svg%3e");
+    transition: all 0.25s ease;
+}
+.custom-check .form-check-input:focus {
+    box-shadow: none;
+    border-color: rgba(42, 128, 255, 0.3);
+}
+.custom-check .form-check-input:checked {
+    background-color: var(--brand-500) !important;
+    border-color: var(--brand-500) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+    box-shadow: 0 0 10px rgba(42, 128, 255, 0.4);
+}
+
+/* Modal overlay styling */
+.edit-modal-overlay {
+    background: rgba(8, 10, 15, 0.75);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    z-index: 1040;
+}
+.edit-modal-content {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+}
+
+/* Submit Gradient Button */
+::ng-deep .btn-save-continue {
+    background: linear-gradient(135deg, #2a80ff 0%, #7000ff 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    color: white !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 6px 15px rgba(42, 128, 255, 0.2) !important;
+}
+::ng-deep .btn-save-continue:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 25px rgba(42, 128, 255, 0.3) !important;
+}
+
+/* ================= ANIMATION OVERRIDES ================= */
+.animate-fade-in {
+    animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Scaling */
+@media (max-width: 768px) {
+    .settings-container {
+        padding: 40px 20px;
+    }
+    .btn-back-nav {
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+    }
+}
+
+/* ================= MANAGE ACCOUNT & DANGER ZONE ================= */
+.border-danger {
+    border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+
+.bg-danger-glow {
+    background: rgba(239, 68, 68, 0.04) !important;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+}
+
+.text-danger-light {
+    color: #fca5a5 !important;
+}
+
+/* Glowing Danger Sidebar Tab when active */
+.btn-sidebar-tab.active.text-danger {
+    background: rgba(239, 68, 68, 0.08) !important;
+    border: 1px solid rgba(239, 68, 68, 0.15) !important;
+    color: #ef4444 !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Danger Button Gradients */
+::ng-deep .btn-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    color: white !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 6px 15px rgba(239, 68, 68, 0.2) !important;
+}
+
+::ng-deep .btn-danger:hover:not([disabled]) {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3) !important;
+}
+
+.animate-pulse {
+    animation: dangerPulse 2s infinite;
+}
+
+@keyframes dangerPulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.55; }
+    100% { opacity: 1; }
+}

@@ -15,20 +15,30 @@ export class UserNavbarComponent {
   get userRole(): 'admin' | 'client' | 'freelancer' | '' {
     const url = this.router.url;
     if (url.includes('/user/admin')) return 'admin';
-    if (url.includes('/user/client')) return 'client';
-    
+
+    // Check for client specific paths
+    const clientPaths = ['client-dashboard', 'your-contracts', 'contract-proposals',
+      'contract-progress', 'contract-timesheet', 'search-talent',
+      'talent-profile', 'saved-talent', 'pending-offers', 'hired-talent',
+      'financial-summary', 'transaction-history', 'spending-activities', 'contract-form', 'project-details/:id'
+    ];
+
+    if (clientPaths.some(path => url.includes('/user/' + path))) {
+      return 'client';
+    }
+
     // Check for freelancer specific paths
     const freelancerPaths = [
       'my-dashboard', 'find-contracts', 'saved-contracts', 'proposals',
       'offers', 'active-contracts', 'contract-diary', 'hourly-work-diary',
-      'attendance-overview', 'mark-attendance', 'finance-overview',
+      'attendance-overview', 'mark-attendance', 'capture-attendance', 'finance-overview',
       'finance-report', 'finance-management'
     ];
-    
+
     if (freelancerPaths.some(path => url.includes('/user/' + path))) {
       return 'freelancer';
     }
-    
+
     return '';
   }
 
@@ -39,8 +49,8 @@ export class UserNavbarComponent {
 
   get dashboardLink(): string {
     switch (this.userRole) {
-      case 'admin': return '/user/admin';
-      case 'client': return '/user/client';
+      case 'admin': return '/user/admin/client-management';
+      case 'client': return '/user/client-dashboard';
       case 'freelancer': return '/user/my-dashboard';
       default: return '/';
     }

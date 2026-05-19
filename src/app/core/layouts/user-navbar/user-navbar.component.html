@@ -22,11 +22,150 @@
                 <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Users</a></li>
                 <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Analytics</a></li>
                 <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Settings</a></li>
-                } @else if (userRole === 'client') {
-                <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Post Contract</a></li>
-                <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Projects</a></li>
-                <li class="nav-item"><a class="nav-link text-white fw-medium px-2 px-xl-3">Payments</a></li>
+                }
+                @else if (userRole === 'client') {
+                <!-- Manage Contract Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white fw-medium px-2 px-xl-3 no-caret" href="#"
+                        data-bs-toggle="dropdown"
+                        [class.active-module]="isModuleActive(['your-contracts', 'contract-proposals', 'contract-progress', 'contract-timesheet'])">
+                        Manage Contract <i class="bi bi-chevron-down smaller ms-1 opacity-50"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark shadow border-0 mt-2">
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/your-contracts"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-briefcase"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Your Contracts</h6>
+                                    <p class="menu-desc">View and manage all your active client contracts.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/contract-proposals"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-file-earmark-text"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Proposals</h6>
+                                    <p class="menu-desc">Review proposals submitted by freelancers.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/contract-progress"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-graph-up"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Contract Progress</h6>
+                                    <p class="menu-desc">Track milestones and deliverables for your projects.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/contract-timesheet"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-clock-history"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Contract Timesheet</h6>
+                                    <p class="menu-desc">Review and approve freelancer hourly timesheets.</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Hire Talent Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white fw-medium px-2 px-xl-3 no-caret" href="#"
+                        data-bs-toggle="dropdown"
+                        [class.active-module]="isModuleActive(['search-talent', 'saved-talent', 'pending-offers', 'hired-talent', 'talent-profile'])">
+                        Hire Talent <i class="bi bi-chevron-down smaller ms-1 opacity-50"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark shadow border-0 mt-2">
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/search-talent"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-search"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Search Talent</h6>
+                                    <p class="menu-desc">Discover top-rated freelancers for your projects.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/saved-talent"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-bookmark-heart"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Saved Talent</h6>
+                                    <p class="menu-desc">Manage your bookmarked freelancer profiles.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/pending-offers"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-envelope-paper"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Pending Offers</h6>
+                                    <p class="menu-desc">Track contract offers sent to freelancers.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/hired-talent"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-people"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Hired Talent</h6>
+                                    <p class="menu-desc">View and manage freelancers currently working for you.</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Financial Management Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white fw-medium px-2 px-xl-3 no-caret" href="#"
+                        data-bs-toggle="dropdown"
+                        [class.active-module]="isModuleActive(['financial-summary', 'transaction-history', 'spending-activities'])">
+                        Financial Management <i class="bi bi-chevron-down smaller ms-1 opacity-50"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark shadow border-0 mt-2">
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/financial-summary"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-pie-chart"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Financial Summary</h6>
+                                    <p class="menu-desc">Overview of your spending, invoices, and billing.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/transaction-history"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-receipt"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Transaction History</h6>
+                                    <p class="menu-desc">Detailed logs of all payments and transfers.</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item mega-menu-item" routerLink="/user/spending-activities"
+                                routerLinkActive="active-link">
+                                <div class="menu-icon-box"><i class="bi bi-bar-chart-steps"></i></div>
+                                <div class="menu-content">
+                                    <h6 class="menu-title">Spending by Activities</h6>
+                                    <p class="menu-desc">Analyze your budget distribution across projects.</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 } @else if (userRole === 'freelancer') {
                 <!-- Find Work Dropdown -->
                 <li class="nav-item dropdown">
@@ -207,7 +346,7 @@
                     class="text-decoration-none">
                     <app-button [variant]="adminActive.isActive ? 'white' : 'outline'" customClass="px-3">A</app-button>
                 </a>
-                <a routerLink="/user/client" routerLinkActive #clientActive="routerLinkActive"
+                <a routerLink="/user/client-dashboard" routerLinkActive #clientActive="routerLinkActive"
                     class="text-decoration-none">
                     <app-button [variant]="clientActive.isActive ? 'white' : 'outline'"
                         customClass="px-3">C</app-button>
@@ -351,10 +490,12 @@
             <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas">Analytics</a></li>
             <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas">Settings</a></li>
             } @else if (userRole === 'client') {
-            <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas">Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas">Post Contract</a></li>
-            <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas">Projects</a></li>
-            <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas">Payments</a></li>
+            <li class="nav-item"><a class="nav-link text-white" routerLink="/user/your-contracts"
+                    data-bs-dismiss="offcanvas">Manage Contract</a></li>
+            <li class="nav-item"><a class="nav-link text-white" routerLink="/user/search-talent"
+                    data-bs-dismiss="offcanvas">Hire Talent</a></li>
+            <li class="nav-item"><a class="nav-link text-white" routerLink="/user/financial-summary"
+                    data-bs-dismiss="offcanvas">Financial Management</a></li>
             } @else if (userRole === 'freelancer') {
             <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas">My Work</a></li>
             <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas">Find Work</a></li>

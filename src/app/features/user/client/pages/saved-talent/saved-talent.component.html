@@ -1,0 +1,104 @@
+<div class="saved-talent-page p-3 p-md-4 p-xl-5">
+  <div class="container-fluid max-w-7xl mx-auto">
+
+    <div class="mb-5 text-center text-md-start">
+      <h3 class="text-white fw-bold mb-3 h4">Saved Talent</h3>
+      <p class="text-secondary mb-0">Freelancers you have bookmarked for future projects.</p>
+    </div>
+
+    @if (savedTalents.length === 0) {
+    <div class="glass p-5 rounded-4 text-center">
+      <i class="bi bi-bookmark-heart text-secondary opacity-25 fs-1 mb-3"></i>
+      <h4 class="text-white fw-bold">No saved talent yet</h4>
+      <p class="text-secondary">Browse the marketplace and bookmark freelancers you like.</p>
+      <button class="btn btn-primary mt-3 px-4" routerLink="/user/search-talent">Find Talent</button>
+    </div>
+    } @else {
+    <div class="row g-4">
+      @for (talent of savedTalents; track talent.id) {
+      <div class="col-lg-4 col-md-6">
+        <div class="profile-card glass p-4 rounded-4 h-100 border-opacity-10 border-white d-flex flex-column">
+          <!-- Top Info -->
+          <div class="d-flex justify-content-between align-items-start mb-4">
+            <div class="d-flex align-items-center gap-3">
+              <div class="avatar-wrapper position-relative">
+                <img [src]="talent.avatar" [alt]="talent.name" class="rounded-circle border border-2 border-dark"
+                  style="width: 64px; height: 64px; object-fit: cover;">
+                <span class="status-indicator position-absolute" [ngClass]="{
+                        'bg-success': talent.performanceTier === 'High',
+                        'bg-warning': talent.performanceTier === 'Medium',
+                        'bg-danger': talent.performanceTier === 'Low'
+                      }"></span>
+              </div>
+              <div>
+                <h5 class="text-white fw-bold mb-1">{{talent.name}}</h5>
+                <div class="d-flex align-items-center gap-1 text-secondary text-xs">
+                  <i class="bi bi-geo-alt"></i>
+                  <span>{{talent.location}}</span>
+                </div>
+                <p class="text-xs text-secondary mt-1 mb-0">{{talent.role}}</p>
+              </div>
+            </div>
+            <div class="performance-ring text-start">
+              <div class="ring-wrapper ms-0 mb-1" [ngClass]="talent.performanceTier.toLowerCase()">
+                <span class="percent text-white">{{talent.performance}}%</span>
+              </div>
+              <div class="fw-bold text-xs" [ngClass]="{
+                      'text-success': talent.performanceTier === 'High',
+                      'text-warning': talent.performanceTier === 'Medium',
+                      'text-danger': talent.performanceTier === 'Low'
+                    }">{{talent.performanceTier}}</div>
+              <div class="text-secondary text-xxs">Performance</div>
+            </div>
+          </div>
+
+          <!-- Skills -->
+          <div class="mb-4">
+            <h6 class="text-primary text-xs fw-bold mb-3">Skills</h6>
+            <div class="d-flex flex-wrap gap-2">
+              @for (skill of talent.skills; track skill) {
+              <span class="badge-skill">{{skill}}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="row g-2 mb-4 py-3 border-top border-bottom border-white border-opacity-10">
+            <div class="col-3 text-start border-end border-white border-opacity-10">
+              <div class="text-white fw-bold text-sm">${{talent.hourlyRate}}/hr</div>
+              <div class="text-secondary text-xxs">Rate</div>
+            </div>
+            <div class="col-3 text-start border-end border-white border-opacity-10">
+              <div class="text-white fw-bold text-sm">{{talent.projectsCount}}</div>
+              <div class="text-secondary text-xxs">Projects</div>
+            </div>
+            <div class="col-3 text-start border-end border-white border-opacity-10">
+              <div class="text-white fw-bold text-sm">{{talent.rating}}</div>
+              <div class="text-secondary text-xxs">Rating</div>
+            </div>
+            <div class="col-3 text-start">
+              <div class="text-white fw-bold text-sm">{{talent.totalHours | number}}</div>
+              <div class="text-secondary text-xxs">Hours</div>
+            </div>
+          </div>
+
+          <!-- Footer Actions -->
+          <div class="d-flex align-items-center justify-content-between mt-auto">
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-secondary text-xs">Saved {{talent.dateSaved}}</span>
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-primary btn-sm rounded-3 px-2 border-opacity-25 border-primary">
+                <i class="bi bi-bookmark-fill text-primary"></i>
+              </button>
+              <button class="btn btn-primary btn-sm px-3 rounded-3" routerLink="/user/talent-profile">View Profile
+                &rarr;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+  </div>
+</div>

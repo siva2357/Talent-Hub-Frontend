@@ -1,0 +1,88 @@
+<div class="hired-talent-page p-3 p-md-4 p-xl-5">
+  <div class="container-fluid max-w-7xl mx-auto">
+
+    <div class="mb-5 text-center text-md-start">
+      <h3 class="text-white fw-bold mb-3 h4">Hired Talent</h3>
+      <p class="text-secondary mb-0">Manage your active team members and track their performance.</p>
+    </div>
+
+    <div class="row g-4">
+      @for (talent of hiredTalent; track talent.id) {
+      <div class="col-lg-4 col-md-6">
+        <div class="profile-card glass p-4 rounded-4 h-100 border-opacity-10 border-white d-flex flex-column">
+          <!-- Top Info -->
+          <div class="d-flex justify-content-between align-items-start mb-4">
+            <div class="d-flex align-items-center gap-3">
+              <div class="avatar-wrapper position-relative">
+                <img [src]="talent.avatar" [alt]="talent.name" class="rounded-circle border border-2 border-dark"
+                  style="width: 64px; height: 64px; object-fit: cover;">
+                <span class="status-indicator position-absolute bg-success"></span>
+              </div>
+              <div>
+                <h5 class="text-white fw-bold mb-1">{{talent.name}}</h5>
+                <div class="d-flex align-items-center gap-1 text-secondary text-xs">
+                  <i class="bi bi-geo-alt"></i>
+                  <span>{{talent.location}}</span>
+                </div>
+                <p class="text-xs text-secondary mt-1 mb-0">{{talent.role}}</p>
+              </div>
+            </div>
+            <div class="performance-ring text-start">
+              <div class="ring-wrapper ms-0 mb-1" [ngClass]="talent.performanceTier.toLowerCase()">
+                <span class="percent text-white">{{talent.performance}}%</span>
+              </div>
+              <div class="fw-bold text-xs" [ngClass]="{
+                    'text-success': talent.performanceTier === 'High',
+                    'text-warning': talent.performanceTier === 'Medium',
+                    'text-danger': talent.performanceTier === 'Low'
+                  }">{{talent.performanceTier}}</div>
+              <div class="text-secondary text-xxs">Performance</div>
+            </div>
+          </div>
+
+          <!-- Active Contract Info -->
+          <div class="glass bg-white bg-opacity-5 p-3 rounded-3 mb-4 d-flex justify-content-between align-items-center">
+            <div>
+              <span class="text-secondary text-xxs text-uppercase d-block mb-1">Contract Status</span>
+              <span
+                class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{talent.contractStatus}}</span>
+            </div>
+            <div class="text-end">
+              <span class="text-secondary text-xxs text-uppercase d-block mb-1">Hours Logged</span>
+              <span class="text-white fw-bold">{{talent.hoursLogged}}</span>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="row g-2 mb-4 py-3 border-top border-bottom border-white border-opacity-10">
+            <div class="col-3 text-start border-end border-white border-opacity-10">
+              <div class="text-white fw-bold text-sm">${{talent.hourlyRate}}/hr</div>
+              <div class="text-secondary text-xxs">Rate</div>
+            </div>
+            <div class="col-3 text-start border-end border-white border-opacity-10">
+              <div class="text-white fw-bold text-sm">{{talent.projectsCount}}</div>
+              <div class="text-secondary text-xxs">Projects</div>
+            </div>
+            <div class="col-3 text-start border-end border-white border-opacity-10">
+              <div class="text-white fw-bold text-sm">{{talent.rating}}</div>
+              <div class="text-secondary text-xxs">Rating</div>
+            </div>
+            <div class="col-3 text-start">
+              <div class="text-white fw-bold text-sm">{{talent.totalHours | number}}</div>
+              <div class="text-secondary text-xxs">Hours</div>
+            </div>
+          </div>
+
+          <!-- Footer Actions -->
+          <div class="d-flex gap-2 mt-auto">
+            <button class="btn btn-dark text-white rounded-3 px-3 border-white border-opacity-10 w-100"
+              routerLink="/user/contract-view-details/1">View Details</button>
+            <button class="btn btn-primary rounded-3 px-3 fw-bold w-100"
+              routerLink="/user/contract-timesheet">Timesheets</button>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

@@ -1,1 +1,566 @@
-<p>account-settings works!</p>
+<div class="settings-container animate-fade-in text-start position-relative">
+  <!-- Glowing Cinematic Orbs -->
+  <div class="settings-orb orb-1 position-absolute"></div>
+  <div class="settings-orb orb-2 position-absolute"></div>
+  <div class="settings-grid-overlay position-absolute w-100 h-100 top-0 start-0"></div>
+
+  <div class="settings-wrapper position-relative z-3">
+    <!-- TOP CINEMATIC HEADER -->
+    <header class="settings-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-5">
+      <div class="d-flex align-items-center gap-3">
+        <!-- Floating Navigation Back Arrow -->
+        <a [routerLink]="userMode === 'freelancer' ? '/user/my-dashboard' : '/user/client-dashboard'" class="btn-back-nav rounded-circle d-flex align-items-center justify-content-center">
+          <i class="bi bi-arrow-left"></i>
+        </a>
+        <div>
+          <h1 class="settings-title fw-bold mb-1 text-white">Account Settings</h1>
+          <p class="text-sm opacity-60 mb-0">Manage your profile, login credentials, and notification settings.</p>
+        </div>
+      </div>
+
+      <!-- Segmented Role Switch Toggle inside Header -->
+      <div class="d-flex align-items-center gap-2 bg-black-40 p-1.5 rounded-pill border-glass">
+        <span class="text-xs fw-semibold px-2 text-secondary-light">Viewing Form Mode:</span>
+        <div class="role-toggle-capsule d-flex">
+          <button (click)="userMode = 'freelancer'"
+                  class="btn-toggle-capsule py-1 px-3 text-xs fw-bold rounded-pill"
+                  [class.active]="userMode === 'freelancer'">
+            Freelancer
+          </button>
+          <button (click)="userMode = 'client'"
+                  class="btn-toggle-capsule py-1 px-3 text-xs fw-bold rounded-pill"
+                  [class.active]="userMode === 'client'">
+            Client
+          </button>
+        </div>
+      </div>
+    </header>
+    <!-- SPLIT DASHBOARD LAYOUT -->
+    <div class="row g-5 align-items-start">
+      <!-- LEFT NAVIGATION SIDEBAR -->
+      <aside class="col-12 col-md-4 col-lg-3">
+        <div class="sidebar-panel p-4.5 rounded-4 border-glass bg-card-dark flex-column d-flex gap-3">
+          <div class="sidebar-label text-xs fw-bold uppercase-label text-secondary mb-2">Settings Console</div>
+          
+          <button (click)="activeTab = 'profile'" 
+                  class="btn-sidebar-tab d-flex align-items-center gap-3 w-100 p-3 rounded-3 border-0 text-start"
+                  [class.active]="activeTab === 'profile'">
+            <i class="bi bi-person-gear"></i>
+            <div class="d-flex flex-column">
+              <span class="tab-label fw-semibold">Profile Details</span>
+              <span class="tab-sub text-xs opacity-50">Identity & profession</span>
+            </div>
+          </button>
+
+          <button (click)="activeTab = 'security'" 
+                  class="btn-sidebar-tab d-flex align-items-center gap-3 w-100 p-3 rounded-3 border-0 text-start"
+                  [class.active]="activeTab === 'security'">
+            <i class="bi bi-shield-lock"></i>
+            <div class="d-flex flex-column">
+              <span class="tab-label fw-semibold">Security & Password</span>
+              <span class="tab-sub text-xs opacity-50">Credentials & 2FA</span>
+            </div>
+          </button>
+
+          <button (click)="activeTab = 'notifications'" 
+                  class="btn-sidebar-tab d-flex align-items-center gap-3 w-100 p-3 rounded-3 border-0 text-start"
+                  [class.active]="activeTab === 'notifications'">
+            <i class="bi bi-bell"></i>
+            <div class="d-flex flex-column">
+              <span class="tab-label fw-semibold">Notifications</span>
+              <span class="tab-sub text-xs opacity-50">Preferences & alerts</span>
+            </div>
+          </button>
+
+          <button (click)="activeTab = 'manage'" 
+                  class="btn-sidebar-tab d-flex align-items-center gap-3 w-100 p-3 rounded-3 border-0 text-start text-danger"
+                  [class.active]="activeTab === 'manage'">
+            <i class="bi bi-shield-x"></i>
+            <div class="d-flex flex-column">
+              <span class="tab-label fw-semibold">Manage Account</span>
+              <span class="tab-sub text-xs opacity-50">Delete or close account</span>
+            </div>
+          </button>
+        </div>
+      </aside>
+
+      <!-- RIGHT SETTINGS CONTENT VIEWPORT -->
+      <main class="col-12 col-md-8 col-lg-9">
+        <div class="settings-content-card p-4 p-md-5 rounded-4 border-glass bg-card-dark position-relative overflow-hidden">
+          <div class="card-neon-top-bar position-absolute top-0 start-0 w-100 header-neon-bar"></div>
+
+          <!-- TAB 1: INTEGRATED PROFILE DETAILS FORM -->
+          @if (activeTab === 'profile') {
+          <div class="tab-view-profile animate-fade-in d-flex flex-column gap-5">
+            <!-- SECTION A: PERSONAL IDENTITY -->
+            <section class="form-section">
+              <div class="section-title-box d-flex align-items-center gap-2 mb-4">
+                <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">A</div>
+                <h2 class="text-xl fw-bold text-white mb-0">Personal Identity</h2>
+              </div>
+
+              <div class="row g-4">
+                <!-- Profile Pic Circle -->
+                <div class="col-lg-3 d-flex flex-column align-items-center text-center">
+                  <div class="pic-uploader-ring position-relative mb-2">
+                    <div (click)="triggerFileUpload()" class="pic-placeholder-box rounded-circle d-flex align-items-center justify-content-center cursor-pointer">
+                      <i class="bi bi-person text-secondary" style="font-size: 3.5rem;"></i>
+                    </div>
+                    <div (click)="triggerFileUpload()" class="camera-btn-abs rounded-circle d-flex align-items-center justify-content-center cursor-pointer">
+                      <i class="bi bi-camera-fill"></i>
+                    </div>
+                  </div>
+                  <input type="file" id="profilePicInput" class="d-none" (change)="onFileSelected($event)" accept="image/*">
+                  <span class="text-xs opacity-40">JPG, PNG up to 5MB</span>
+                </div>
+
+                <!-- Input Fields Grid -->
+                <div class="col-lg-9">
+                  <div class="row g-3">
+                    <div class="col-sm-6">
+                      <app-input label="Full Name" [value]="prefilledData.fullName" [disabled]="true" [required]="true"></app-input>
+                    </div>
+                    <div class="col-sm-6">
+                      <app-input label="Email Address" [value]="prefilledData.email" [disabled]="true" [required]="true" icon="bi-envelope"></app-input>
+                    </div>
+                    <div class="col-sm-6">
+                      <app-input label="Username" [(ngModel)]="prefilledData.username" placeholder="Enter username" [required]="true" icon="bi-person"></app-input>
+                    </div>
+                    <div class="col-sm-6">
+                      <app-input type="select" label="Gender" [options]="genderOptions" [(ngModel)]="gender" [required]="true"></app-input>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 mt-2">
+                  <app-input type="textarea" label="Short Professional Bio" [(ngModel)]="prefilledData.bio" placeholder="Tell the Talent-Hub community about your passion..." [required]="true"></app-input>
+                </div>
+              </div>
+            </section>
+
+            <!-- SECTION B: PROFESSIONAL DETAILS (DYNAMIC BY ROLE) -->
+            <section class="form-section pt-4 border-top-glass">
+              <div class="section-title-box d-flex align-items-center gap-2 mb-4">
+                <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">B</div>
+                <h2 class="text-xl fw-bold text-white mb-0">Professional Details</h2>
+              </div>
+
+              <!-- FREELANCER FORM VIEW -->
+              @if (userMode === 'freelancer') {
+              <div class="freelancer-professional-fields d-flex flex-column gap-4">
+                <div class="row g-3">
+                  <div class="col-12">
+                    <app-input label="Professional Headline" [(ngModel)]="professionalHeadline" placeholder="Example: Senior Angular Developer" [required]="true" icon="bi-lightning-charge"></app-input>
+                  </div>
+                  <div class="col-sm-6">
+                    <app-input type="select" label="Skills Categories (Select)" [options]="categoryOptions" [(ngModel)]="selectedCategoryInput" (ngModelChange)="addCategory(selectedCategoryInput)" placeholder="Add Category" icon="bi-grid"></app-input>
+                    <div class="chips-display d-flex flex-wrap gap-2 mt-3">
+                      @for (cat of selectedCategories; track cat) {
+                      <app-chip [label]="cat" (remove)="removeCategoryByValue(cat)"></app-chip>
+                      }
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <app-input label="Skills Inventory (Press Enter)" [(ngModel)]="currentSkill" (keydown.enter)="addSkill(currentSkill)" placeholder="Type a skill and press Enter" icon="bi-lightning"></app-input>
+                    <div class="chips-display d-flex flex-wrap gap-2 mt-3">
+                      @for (skill of skills; track skill; let i = $index) {
+                      <app-chip [label]="skill" variant="secondary" (remove)="removeSkill(i)"></app-chip>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+              }
+
+              <!-- CLIENT FORM VIEW -->
+              @if (userMode === 'client') {
+              <div class="client-professional-fields d-flex flex-column gap-4">
+                <div class="client-type-block">
+                  <label class="form-label text-white opacity-80 text-xs uppercase-label mb-3">Client Hiring Profile Type</label>
+                  <div class="row g-3">
+                    @for (type of ['individual', 'startup', 'agency', 'business']; track type) {
+                    <div class="col-6 col-sm-3">
+                      <div class="radio-card role-card-v rounded-3 position-relative" [class.active]="clientType === type" (click)="setSelection('clientType', type)">
+                        <div class="radio-check position-absolute top-3 end-3"></div>
+                        <div class="role-icon-box mb-2">
+                          <i class="bi" [class]="type === 'individual' ? 'bi-person' : type === 'startup' ? 'bi-rocket' : type === 'agency' ? 'bi-briefcase' : 'bi-buildings'"></i>
+                        </div>
+                        <h4 class="text-xs fw-bold text-white mb-0">{{ type | titlecase }}</h4>
+                      </div>
+                    </div>
+                    }
+                  </div>
+                </div>
+
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <app-input label="Corporate Website Link" [(ngModel)]="websiteUrl" placeholder="https://..." icon="bi-globe"></app-input>
+                  </div>
+                  <div class="col-sm-6">
+                    <app-input type="select" label="Industry Sector" [options]="industryOptions" [(ngModel)]="industry" icon="bi-briefcase"></app-input>
+                  </div>
+                </div>
+              </div>
+              }
+            </section>
+
+            <!-- SECTION C: LOCATION DETAILS -->
+            <section class="form-section pt-4 border-top-glass">
+              <div class="section-title-box d-flex align-items-center gap-2 mb-4">
+                <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">C</div>
+                <h2 class="text-xl fw-bold text-white mb-0">Location & Localization</h2>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-sm-4">
+                  <app-input type="select" label="Country" [options]="countryOptions" [(ngModel)]="country" icon="bi-geo"></app-input>
+                </div>
+                <div class="col-sm-4">
+                  <app-input label="City" [(ngModel)]="city" placeholder="City" icon="bi-geo-alt"></app-input>
+                </div>
+                <div class="col-sm-4">
+                  <app-input type="select" label="Preferred Timezone" [options]="timezoneOptions" [(ngModel)]="timezone" icon="bi-clock"></app-input>
+                </div>
+              </div>
+            </section>
+
+            <!-- SECTION D: AVAILABILITY & VERIFICATIONS -->
+            <section class="form-section pt-4 border-top-glass">
+              <div class="section-title-box d-flex align-items-center gap-2 mb-4">
+                <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">D</div>
+                <h2 class="text-xl fw-bold text-white mb-0">Availability & Secure Verification</h2>
+              </div>
+
+              <div class="row g-4">
+                <!-- Freelancer Availability toggler -->
+                @if (userMode === 'freelancer') {
+                <div class="col-12">
+                  <label class="form-label text-white opacity-80 text-xs uppercase-label mb-3">Available Commitment for Contracts</label>
+                  <div class="availability-toggle-group d-flex flex-wrap gap-2">
+                    @for (opt of availabilityOptions; track opt.value) {
+                    <div class="availability-btn py-3 px-4 rounded-3 border-glass bg-black-20 text-center cursor-pointer flex-grow-1"
+                         [class.active]="availabilityType === opt.value"
+                         (click)="setSelection('availability', opt.value)">
+                      <span class="btn-label font-monospace fw-bold text-sm">{{ opt.label }}</span>
+                    </div>
+                    }
+                  </div>
+                </div>
+                }
+
+                <!-- Verification Pills cards -->
+                <div class="col-sm-6">
+                  <div class="verification-card p-4 rounded-3 border-glass bg-black-20 d-flex gap-3 align-items-center">
+                    <div class="mail-icon-box rounded-3 d-flex align-items-center justify-content-center text-primary-light">
+                      <i class="bi bi-envelope"></i>
+                    </div>
+                    <div>
+                      <span class="verify-label-lg d-block opacity-50 mb-1">Email Address</span>
+                      <p class="email-value-text mb-2 font-monospace">{{ prefilledData.email }}</p>
+                      <div class="verified-badge d-inline-flex py-1 px-3 rounded-2 text-xs font-semibold">
+                        <i class="bi bi-check-circle-fill me-2"></i> Verified
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <div class="verification-card p-4 rounded-3 border-glass bg-black-20 d-flex flex-column justify-content-center gap-2">
+                    <span class="phone-label-box text-xs uppercase-label opacity-60">OTP Mobile Verification</span>
+                    <div class="phone-input-container d-flex align-items-center gap-2">
+                      <div class="country-code-pill rounded-3 border-glass bg-black-20 d-flex align-items-center gap-2 flex-shrink-0">
+                        <img src="https://flagcdn.com/w20/in.png" width="20" alt="IN">
+                        <span class="text-sm fw-semibold">+91</span>
+                      </div>
+                      <div class="flex-grow-1">
+                        <app-input placeholder="Enter Phone" icon="bi-phone"></app-input>
+                      </div>
+                    </div>
+                    <app-button variant="outline" size="sm" class="align-self-start mt-1">Send OTP</app-button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- SECTION E: CONNECTED SOCIAL LINKS -->
+            <section class="form-section pt-4 border-top-glass">
+              <div class="section-title-box d-flex align-items-center gap-2 mb-4">
+                <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">E</div>
+                <h2 class="text-xl fw-bold text-white mb-0">Connected Social Profiles</h2>
+              </div>
+
+              <!-- Add Profile Row -->
+              @if (savedSocialLinks.length < 5) {
+              <div class="social-link-row p-3.5 rounded-3 border-glass bg-black-20 mb-3">
+                <div class="row g-3 align-items-end">
+                  <div class="col-sm-4 col-md-3">
+                    <app-input type="select" label="Platform" [options]="platformOptions" [(ngModel)]="currentLink.platform" placeholder="Select"></app-input>
+                  </div>
+                  <div class="col-sm-6 col-md-7">
+                    <app-input label="Profile URL" [(ngModel)]="currentLink.url" placeholder="https://..." icon="bi-link"></app-input>
+                  </div>
+                  <div class="col-sm-2">
+                    <app-button (click)="saveSocialLink()" variant="primary" size="md" [disabled]="!currentLink.url || !currentLink.platform" class="w-100">Add Link</app-button>
+                  </div>
+                </div>
+              </div>
+              }
+
+              <!-- Saved Profiles deck -->
+              <div class="connected-links-area d-flex flex-column gap-2 mt-3">
+                @for (link of savedSocialLinks; track $index; let i = $index) {
+                <div class="connected-card p-3 rounded-3 border-glass bg-black-20 d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="social-icon-box rounded-3 d-flex align-items-center justify-content-center text-primary-light">
+                      <i [class]="'bi ' + getPlatformIcon(link.platform)"></i>
+                    </div>
+                    <div>
+                      <h6 class="text-white mb-0 text-capitalize">{{ link.platform }}</h6>
+                      <a [href]="link.url" target="_blank" class="text-xs opacity-50 text-decoration-none hover-white">{{ link.url }}</a>
+                    </div>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button (click)="openEditModal(i)" class="action-btn-box edit rounded-3 d-flex align-items-center justify-content-center border-0">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button (click)="removeSocialLink(i)" class="action-btn-box delete rounded-3 d-flex align-items-center justify-content-center border-0">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                }
+              </div>
+            </section>
+
+            <!-- SUBMIT FOOTER BAR -->
+            <footer class="form-footer border-top-glass pt-4 mt-2 pb-2 d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <app-button variant="outline" (click)="discardChanges()" size="md">Discard Changes</app-button>
+              <app-button variant="primary" (click)="saveSettings()" size="md" customClass="btn-save-continue">
+                Update Changes
+              </app-button>
+            </footer>
+          </div>
+          }
+
+          <!-- TAB 2: SECURITY & PASSWORDS -->
+          @if (activeTab === 'security') {
+          <div class="tab-view-security animate-fade-in d-flex flex-column gap-4">
+            <div class="section-title-box d-flex align-items-center gap-2 mb-3">
+              <i class="bi bi-shield-lock text-primary-light text-xl"></i>
+              <h2 class="text-xl fw-bold text-white mb-0">Credentials & Security Credentials</h2>
+            </div>
+
+            <!-- Password Form Grid -->
+            <div class="row g-3">
+              <div class="col-12">
+                <app-input type="password" label="Current Secure Password" [(ngModel)]="securityData.currentPassword" placeholder="••••••••••••" icon="bi-key"></app-input>
+              </div>
+              <div class="col-sm-6">
+                <app-input type="password" label="New Secure Password" [(ngModel)]="securityData.newPassword" placeholder="••••••••••••" icon="bi-shield-check"></app-input>
+              </div>
+              <div class="col-sm-6">
+                <app-input type="password" label="Confirm New Password" [(ngModel)]="securityData.confirmPassword" placeholder="••••••••••••" icon="bi-shield-check"></app-input>
+              </div>
+            </div>
+
+            <!-- Two-Factor Authentication box -->
+            <div class="security-note p-4 rounded-4 border-glass bg-black-20 d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
+              <div class="d-flex align-items-start gap-3">
+                <div class="mail-icon-box rounded-3 d-flex align-items-center justify-content-center text-success-light">
+                  <i class="bi bi-shield-fill-check"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm fw-bold text-white mb-1">Two-Factor Authentication (2FA)</h4>
+                  <p class="text-xs opacity-50 mb-0 max-w-xl">Require an OTP code from an authenticator app (Google Authenticator) every time you login to keep your account totally locked.</p>
+                </div>
+              </div>
+              <!-- Toggle switch check -->
+              <div class="form-check form-switch custom-check mb-0">
+                <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="securityData.twoFactorEnabled" style="width: 2.8em; height: 1.5em;">
+              </div>
+            </div>
+
+            <!-- SUBMIT FOOTER BAR -->
+            <footer class="form-footer border-top-glass pt-4 mt-3 pb-2 d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <app-button variant="outline" (click)="discardChanges()" size="md">Discard Changes</app-button>
+              <app-button variant="primary" (click)="saveSettings()" size="md" customClass="btn-save-continue">
+                Update Changes
+              </app-button>
+            </footer>
+          </div>
+          }
+
+          <!-- TAB 3: NOTIFICATION PREFERENCES -->
+          @if (activeTab === 'notifications') {
+          <div class="tab-view-notifications animate-fade-in d-flex flex-column gap-4">
+            <div class="section-title-box d-flex align-items-center gap-2 mb-3">
+              <i class="bi bi-bell text-primary-light text-xl"></i>
+              <h2 class="text-xl fw-bold text-white mb-0">Custom Notifications & Communications</h2>
+            </div>
+
+            <!-- Switches list -->
+            <div class="notification-switch-deck d-flex flex-column gap-3">
+              <!-- Switch 1 -->
+              <div class="connected-card p-3.5 rounded-3 border-glass bg-black-20 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="social-icon-box rounded-3 d-flex align-items-center justify-content-center text-primary-light">
+                    <i class="bi bi-envelope-check"></i>
+                  </div>
+                  <div>
+                    <h6 class="text-white mb-1">Email Contract Alerts</h6>
+                    <span class="text-xs opacity-50">Receive immediate pings when contracts are initiated, edited, or scope delivered.</span>
+                  </div>
+                </div>
+                <div class="form-check form-switch custom-check">
+                  <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="notificationPreferences.emailAlerts" style="width: 2.5em; height: 1.3em;">
+                </div>
+              </div>
+
+              <!-- Switch 2 -->
+              <div class="connected-card p-3.5 rounded-3 border-glass bg-black-20 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="social-icon-box rounded-3 d-flex align-items-center justify-content-center text-primary-light">
+                    <i class="bi bi-chat-dots"></i>
+                  </div>
+                  <div>
+                    <h6 class="text-white mb-1">Instant Message Browser Popups</h6>
+                    <span class="text-xs opacity-50">Sound alarms and trigger browser overlays when other specialists message you.</span>
+                  </div>
+                </div>
+                <div class="form-check form-switch custom-check">
+                  <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="notificationPreferences.browserPings" style="width: 2.5em; height: 1.3em;">
+                </div>
+              </div>
+
+              <!-- Switch 3 -->
+              <div class="connected-card p-3.5 rounded-3 border-glass bg-black-20 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="social-icon-box rounded-3 d-flex align-items-center justify-content-center text-primary-light">
+                    <i class="bi bi-phone-vibrate"></i>
+                  </div>
+                  <div>
+                    <h6 class="text-white mb-1">SMS Receipt Logs</h6>
+                    <span class="text-xs opacity-50">Send text messages for critical invoice transfers and security logins.</span>
+                  </div>
+                </div>
+                <div class="form-check form-switch custom-check">
+                  <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="notificationPreferences.smsReceipts" style="width: 2.5em; height: 1.3em;">
+                </div>
+              </div>
+
+              <!-- Switch 4 -->
+              <div class="connected-card p-3.5 rounded-3 border-glass bg-black-20 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="social-icon-box rounded-3 d-flex align-items-center justify-content-center text-primary-light">
+                    <i class="bi bi-percent"></i>
+                  </div>
+                  <div>
+                    <h6 class="text-white mb-1">Promotional and Marketing Digests</h6>
+                    <span class="text-xs opacity-50">Receive curated newsletters and active community highlight digests.</span>
+                  </div>
+                </div>
+                <div class="form-check form-switch custom-check">
+                  <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="notificationPreferences.marketingEmails" style="width: 2.5em; height: 1.3em;">
+                </div>
+              </div>
+            </div>
+
+            <!-- SUBMIT FOOTER BAR -->
+            <footer class="form-footer border-top-glass pt-4 mt-3 pb-2 d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <app-button variant="outline" (click)="discardChanges()" size="md">Discard Changes</app-button>
+              <app-button variant="primary" (click)="saveSettings()" size="md" customClass="btn-save-continue">
+                Update Changes
+              </app-button>
+            </footer>
+          </div>
+          }
+
+          <!-- TAB 4: SECURE ACCOUNT DELETION (DANGER ZONE) -->
+          @if (activeTab === 'manage') {
+          <div class="tab-view-manage animate-fade-in d-flex flex-column gap-4">
+            <div class="section-title-box d-flex align-items-center gap-2 mb-3">
+              <i class="bi bi-exclamation-triangle-fill text-danger text-xl animate-pulse"></i>
+              <h2 class="text-xl fw-bold text-white mb-0">Manage Account</h2>
+            </div>
+
+            <!-- Warning Card -->
+            <div class="danger-zone-card p-4 rounded-4 border-danger bg-danger-glow position-relative overflow-hidden mb-2">
+              <div class="card-glow bg-danger-glow position-absolute w-100 h-100 top-0 start-0 opacity-10"></div>
+              <h4 class="text-md fw-bold text-danger mb-2 d-flex align-items-center gap-2 position-relative z-2">
+                <i class="bi bi-trash-fill"></i>
+                Delete Account Permanently
+              </h4>
+              <p class="text-sm opacity-80 text-white-50 mb-3 position-relative z-2">
+                Deleting your account is a permanent action. You will lose access to all your registered portfolios, completed contract logs, hourly work history, earnings, and active client connections on Talent-Hub. This action cannot be reversed.
+              </p>
+              
+              <div class="alert-bullets d-flex flex-column gap-2 text-xs opacity-75 mb-0 position-relative z-2">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-x-circle-fill text-danger"></i>
+                  <span>All escrow contracts and pending transfers will be paused or forfeited.</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-x-circle-fill text-danger"></i>
+                  <span>Your public profile and searchable freelancer/client details will be erased.</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-x-circle-fill text-danger"></i>
+                  <span>Historical messages, work evidence files, and logs will be deleted permanently.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Confirmation Checkbox & Verification -->
+            <div class="p-4 rounded-4 border-glass bg-black-20 d-flex flex-column gap-4">
+              <!-- Confirmation Check -->
+              <div class="form-check custom-check text-start">
+                <input class="form-check-input cursor-pointer" type="checkbox" id="confirmDeleteCheck" [(ngModel)]="confirmDelete" style="width: 1.5em; height: 1.5em;">
+                <label class="form-check-label text-sm text-white-50 ms-2 cursor-pointer" for="confirmDeleteCheck">
+                  I explicitly understand the consequences and wish to proceed with deleting my account.
+                </label>
+              </div>
+
+              <!-- Password verification field to authenticate -->
+              <div class="password-auth-box">
+                <app-input type="password" label="Confirm Your Password to Delete" [(ngModel)]="deleteConfirmPassword" placeholder="Enter your current password" icon="bi-key-fill"></app-input>
+              </div>
+            </div>
+
+            <!-- SUBMIT FOOTER BAR -->
+            <footer class="form-footer border-top-glass pt-4 mt-3 pb-2 d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <span class="text-xs opacity-50 text-danger-light">Warning: This action is irreversible.</span>
+              <div class="d-flex gap-3">
+                <app-button variant="outline" (click)="activeTab = 'profile'" size="md">Keep Account</app-button>
+                <app-button variant="danger" (click)="deleteAccount()" size="md" [disabled]="!confirmDelete || !deleteConfirmPassword">
+                  Delete My Account Completely
+                </app-button>
+              </div>
+            </footer>
+          </div>
+          }
+
+        </div>
+      </main>
+    </div>
+
+  </div>
+</div>
+
+<!-- CONNECTED PROFILE SOCIAL LINKS EDITING MODAL Overlay -->
+@if (isEditModalOpen) {
+<div class="edit-modal-overlay d-flex align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100">
+  <div class="edit-modal-content p-4 rounded-4 border-glass bg-card-dark text-start animate-fade-in" style="width: 100%; max-width: 480px; z-index: 1050;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="text-white fw-bold mb-0 text-capitalize">Edit {{ editingLinkData.platform }} Link</h4>
+      <button (click)="closeEditModal()" class="btn-close btn-close-white shadow-none"></button>
+    </div>
+    <div class="mb-4">
+      <app-input label="Profile URL Address" [(ngModel)]="editingLinkData.url" placeholder="https://..." [required]="true"></app-input>
+    </div>
+    <div class="d-flex gap-3">
+      <app-button (click)="closeEditModal()" variant="outline" class="flex-grow-1">Cancel</app-button>
+      <app-button (click)="updateSocialLink()" variant="primary" class="flex-grow-1">Save Link</app-button>
+    </div>
+  </div>
+</div>
+}

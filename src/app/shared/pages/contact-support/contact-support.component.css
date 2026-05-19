@@ -1,1 +1,395 @@
-/* contact-support styles */
+/* Contract & Platform Support - Ultra Premium Glassmorphism Theme CSS */
+
+.support-container {
+    min-height: 100vh;
+    width: 100%;
+    background-color: var(--bg-primary);
+    color: white;
+    padding: 60px 40px;
+    overflow: hidden;
+}
+
+/* ================= CINEMATIC BACKGROUND GLOWS ================= */
+.support-orb {
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.13;
+    z-index: 1;
+    pointer-events: none;
+}
+.orb-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--brand-500), transparent 70%);
+    top: -80px;
+    right: -80px;
+    animation: floatingSupportOrbOne 15s infinite alternate ease-in-out;
+}
+.orb-2 {
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, #8b5cf6, transparent 70%);
+    bottom: -150px;
+    left: -100px;
+    animation: floatingSupportOrbTwo 19s infinite alternate ease-in-out;
+}
+
+@keyframes floatingSupportOrbOne {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-40px, 30px) scale(1.08); }
+}
+@keyframes floatingSupportOrbTwo {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(30px, -50px) scale(1.05); }
+}
+
+.support-grid-overlay {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+    -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+    opacity: 0.8;
+    z-index: 2;
+}
+
+/* ================= TOP CINEMATIC HEADER ================= */
+.support-title {
+    background: linear-gradient(90deg, #ffffff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-back-nav {
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.03) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 18px;
+    text-decoration: none;
+}
+.btn-back-nav:hover {
+    color: #ffffff !important;
+    background: rgba(42, 128, 255, 0.2) !important;
+    border-color: rgba(42, 128, 255, 0.3) !important;
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 8px 20px rgba(42, 128, 255, 0.25);
+}
+
+/* ================= SIDEBAR LAYOUT GLASSMORPHISM ================= */
+.border-glass {
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.bg-card-dark {
+    background: rgba(13, 17, 24, 0.45) !important;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+}
+
+.sidebar-panel {
+    padding: 32px !important;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 32px !important;
+}
+
+.uppercase-label {
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.9;
+    font-size: 11px !important;
+}
+
+.bg-black-20 {
+    background: rgba(0, 0, 0, 0.2) !important;
+}
+
+/* SLA Stats & Policy Link buttons */
+.stat-row {
+    padding: 18px 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 10px !important;
+}
+.btn-escalation {
+    padding: 14px 20px !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 10px !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.btn-escalation:hover {
+    background: rgba(42, 128, 255, 0.1) !important;
+    border-color: rgba(42, 128, 255, 0.25) !important;
+    transform: translateY(-2px);
+}
+
+/* ================= RIGHT WIZARD CARD ================= */
+.support-content-card {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+}
+.header-neon-bar {
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+    background-size: 200% auto;
+    animation: neonBarMove 6s linear infinite;
+}
+@keyframes neonBarMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+.section-icon-bullet {
+    width: 24px;
+    height: 24px;
+    background: rgba(42, 128, 255, 0.15);
+    border: 1px solid rgba(42, 128, 255, 0.25);
+    color: var(--brand-400);
+    border-radius: 50%;
+    font-weight: 700;
+}
+.border-top-glass {
+    border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.gap-4\.5 {
+    gap: 1.8rem !important;
+}
+
+/* ================= WIZARD CATEGORY CARDS ================= */
+.category-card {
+    padding: 26px !important;
+    background: rgba(255, 255, 255, 0.015);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 14px !important;
+}
+.category-card:hover {
+    background: rgba(255, 255, 255, 0.035);
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    transform: translateY(-4px);
+}
+.category-icon-bullet {
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 20px;
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
+}
+.selection-indicator-ring {
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+/* Selected Active States */
+.category-card.active {
+    background: rgba(42, 128, 255, 0.06) !important;
+    border-color: var(--brand-500) !important;
+    box-shadow: 0 4px 16px rgba(42, 128, 255, 0.12);
+}
+.category-card.active .category-icon-bullet {
+    background: var(--brand-500);
+    color: white;
+}
+.category-card.active .selection-indicator-ring {
+    border-color: var(--brand-500);
+    background: var(--brand-500);
+    box-shadow: inset 0 0 0 2px var(--bg-primary);
+}
+
+/* ================= DYNAMIC DROP-DOWN STYLING ================= */
+.custom-select-box {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    transition: border-color 0.25s ease;
+}
+.custom-select-box:focus {
+    outline: none;
+    border-color: var(--brand-500) !important;
+    box-shadow: 0 0 8px rgba(42, 128, 255, 0.3);
+}
+.custom-select-box option {
+    background-color: #0b0f19;
+    color: white;
+}
+.select-arrow-abs {
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    opacity: 0.6;
+}
+
+/* ================= SCREENSHOT DRAG & DROP ZONE ================= */
+.file-uploader-dropzone {
+    border: 1.5px dashed rgba(255, 255, 255, 0.12) !important;
+    background: rgba(255, 255, 255, 0.01);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.file-uploader-dropzone:hover {
+    border-color: var(--brand-500) !important;
+    background: rgba(42, 128, 255, 0.03);
+    transform: scale(1.01);
+}
+.upload-icon-circle {
+    width: 60px;
+    height: 60px;
+    background: rgba(42, 128, 255, 0.06);
+    border: 1px solid rgba(42, 128, 255, 0.12);
+}
+.file-uploader-dropzone:hover .upload-icon-circle {
+    background: var(--brand-500);
+    color: white !important;
+    border-color: var(--brand-500);
+}
+.animate-bounce {
+    animation: dropzoneBounce 1.5s infinite alternate ease-in-out;
+}
+@keyframes dropzoneBounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-4px); }
+}
+
+/* Thumbnail preview display */
+.screenshot-thumbnail-box {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    height: 72px;
+    min-width: 250px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.screenshot-img-ring {
+    width: 56px;
+    height: 56px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0,0,0,0.3);
+}
+.truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+    display: inline-block;
+}
+.remove-shot-btn {
+    width: 20px;
+    height: 20px;
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    font-size: 12px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+.remove-shot-btn:hover {
+    background: #ef4444;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* ================= GRADIENT BUTTON SYSTEM ================= */
+::ng-deep .btn-save-continue {
+    background: linear-gradient(135deg, #2a80ff 0%, #7000ff 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    color: white !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 6px 15px rgba(42, 128, 255, 0.2) !important;
+}
+::ng-deep .btn-save-continue:hover:not([disabled]) {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 25px rgba(42, 128, 255, 0.3) !important;
+}
+
+/* ================= TICKET SUCCESS MODAL ================= */
+.success-modal-overlay {
+    background: rgba(8, 10, 15, 0.8);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+}
+.success-modal-content {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.55);
+}
+.success-shield-pulse {
+    width: 64px;
+    height: 64px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 2px solid rgba(16, 185, 129, 0.25);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+    animation: shieldGlow 2.5s infinite alternate ease-in-out;
+}
+@keyframes shieldGlow {
+    0% { transform: scale(1); box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
+    100% { transform: scale(1.06); box-shadow: 0 0 35px rgba(16, 185, 129, 0.45); }
+}
+
+.ticket-id-capsule {
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.animate-pulse {
+    animation: supportPulse 2s infinite;
+}
+@keyframes supportPulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.55; }
+    100% { opacity: 1; }
+}
+
+.hover-white:hover {
+    color: white !important;
+    opacity: 0.8 !important;
+}
+
+/* ================= ANIMATION OVERRIDES ================= */
+.animate-fade-in {
+    animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Scaling */
+@media (max-width: 991px) {
+    .support-container {
+        padding: 40px 20px;
+    }
+    .btn-back-nav {
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+    }
+}

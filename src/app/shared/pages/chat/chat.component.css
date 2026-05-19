@@ -1,1 +1,237 @@
+.chat-page {
+    background: transparent;
+    height: 100vh;
+    padding: 0 !important;
+}
 
+.max-w-7xl {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Glassmorphism Wrapper */
+.glass-dark {
+    background: rgba(10, 13, 18, 0.4) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.main-chat-wrapper {
+    height: 100% !important;
+    min-height: 0 !important;
+    border-radius: 0 !important;
+}
+
+.sidebar-panel {
+    background: rgba(10, 13, 18, 0.15);
+    height: 100%;
+}
+
+.chat-console-panel {
+    height: 100%;
+    background: rgba(10, 13, 18, 0.45) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Scrollbars styling */
+.contact-list-scroll::-webkit-scrollbar,
+.message-stream-scroll::-webkit-scrollbar {
+    width: 5px;
+}
+
+.contact-list-scroll::-webkit-scrollbar-track,
+.message-stream-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.contact-list-scroll::-webkit-scrollbar-thumb,
+.message-stream-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+}
+
+.contact-list-scroll::-webkit-scrollbar-thumb:hover,
+.message-stream-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Tab Button Filters */
+.tab-btn {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.25s ease;
+}
+
+.tab-btn:hover {
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+}
+
+.tab-btn.active {
+    background: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Contact Cards */
+.contact-card {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+}
+
+.contact-card:hover {
+    background: rgba(255, 255, 255, 0.03) !important;
+    transform: translateY(-1px);
+}
+
+.contact-card.active {
+    background: rgba(59, 130, 246, 0.08) !important;
+    border-color: rgba(59, 130, 246, 0.15) !important;
+    box-shadow: inset 3.5px 0 0 #3b82f6;
+}
+
+/* Chat Header and Footers */
+.chat-header {
+    background: rgba(10, 13, 18, 0.1);
+}
+
+.chat-footer-area {
+    background: rgba(10, 13, 18, 0.15);
+}
+
+/* Chat Input Pill */
+.chat-pill-input {
+    transition: all 0.25s ease;
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.chat-pill-input:focus {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.15) !important;
+    color: #ffffff !important;
+}
+
+/* Search Box Override */
+.search-box input {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.25s ease;
+}
+
+.search-box input:focus {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.15) !important;
+    color: #ffffff !important;
+}
+
+/* Message Bubbles */
+.message-bubble {
+    word-break: break-word;
+}
+
+.msg-me {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+    border-bottom-left-radius: 16px !important;
+    border-bottom-right-radius: 4px !important;
+    box-shadow: 0 4px 15px rgba(29, 78, 216, 0.2);
+}
+
+.msg-them {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.02) !important;
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+    border-bottom-right-radius: 16px !important;
+    border-bottom-left-radius: 4px !important;
+}
+
+.max-w-70 {
+    max-width: 70%;
+}
+
+.attachment-box {
+    transition: all 0.2s ease;
+}
+
+.attachment-box:hover {
+    background: rgba(0, 0, 0, 0.35) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Secondary Typography and Gradients */
+.text-white-85 {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.text-secondary-light {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.bg-primary {
+    background: #3b82f6 !important;
+}
+
+.bg-info {
+    background: #06b6d4 !important;
+}
+
+.text-primary-light {
+    color: #60a5fa !important;
+}
+
+.shadow-glow {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+    transition: all 0.25s ease;
+}
+
+.shadow-glow:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+}
+
+.shadow-glow:disabled {
+    opacity: 0.5;
+    box-shadow: none;
+    transform: none;
+}
+
+.btn-icon {
+    transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+}
+
+/* Explicit Custom Spacing and Padding Overrides */
+.message-stream-scroll {
+    padding: 2.25rem 2.5rem !important;
+}
+
+.message-bubble {
+    padding: 0.9rem 1.25rem !important;
+    line-height: 1.5 !important;
+}

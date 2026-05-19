@@ -1,0 +1,211 @@
+<div class="progress-page p-3 p-md-4 p-xl-5">
+    <div class="container-fluid max-w-7xl mx-auto">
+
+        <div class="mb-5 d-flex justify-content-between align-items-center">
+            <div>
+                <h3 class="text-white fw-bold mb-3 h4">Contract Timesheets</h3>
+                <p class="text-secondary mb-0">Review and approve weekly attendance logs and hours submitted by your
+                    freelancers.</p>
+            </div>
+        </div>
+
+        <div class="contracts-accordion">
+            @for (contract of contracts; track contract.id) {
+            <div class="contract-card glass mb-4 rounded-4 overflow-hidden transition-all duration-300"
+                [class.expanded]="expandedContractId === contract.id"
+                [class.border-primary]="expandedContractId === contract.id">
+
+                <!-- Accordion Header / Trigger -->
+                <div class="contract-header p-4 cursor-pointer" (click)="toggleContract(contract.id)">
+                    <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
+                        <div>
+                            <div class="d-flex align-items-center gap-3 mb-2">
+                                <h4 class="text-white fw-bold mb-0">{{contract.title}}</h4>
+                                <span class="badge rounded-pill px-3 py-1 fw-medium"
+                                    [ngClass]="contract.status === 'Completed' ? 'badge-success-soft' : 'badge-primary-soft'">
+                                    {{contract.status}}
+                                </span>
+                            </div>
+                            <p class="text-secondary mb-0">Freelancer: <span
+                                    class="text-white">{{contract.freelancer}}</span></p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="expand-icon d-flex align-items-center justify-content-center rounded-circle"
+                                [class.rotate-180]="expandedContractId === contract.id">
+                                <i class="bi bi-chevron-down text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metadata Grid -->
+                    <div class="row g-3">
+                        <div class="col-6 col-md-2">
+                            <p class="text-secondary small text-uppercase mb-1">Budget</p>
+                            <h5 class="text-white fw-bold mb-0">${{contract.budget | number}}</h5>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <p class="text-secondary small text-uppercase mb-1">Spent</p>
+                            <h5 class="text-primary fw-bold mb-0">${{contract.spent | number}}</h5>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <p class="text-secondary small text-uppercase mb-1">Remaining</p>
+                            <h5 class="text-success fw-bold mb-0">${{contract.remaining | number}}</h5>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <p class="text-secondary small text-uppercase mb-1">Start Date</p>
+                            <p class="text-white fw-medium mb-0">{{contract.startDate}}</p>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <p class="text-secondary small text-uppercase mb-1">End Date</p>
+                            <p class="text-white fw-medium mb-0">{{contract.endDate}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Body: Weekly Timesheets -->
+                <div class="contract-body collapse-transition"
+                    [style.maxHeight]="expandedContractId === contract.id ? '2500px' : '0px'"
+                    [style.opacity]="expandedContractId === contract.id ? '1' : '0'">
+                    <div class="p-4 p-md-5 border-top border-white border-opacity-10 bg-dark bg-opacity-25">
+
+                        <div
+                            class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+                            <h5 class="text-white fw-bold mb-0">Weekly Attendance Logs</h5>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-filter text-secondary"></i>
+                                <select
+                                    class="form-select form-select-sm bg-dark text-white border-secondary border-opacity-50"
+                                    (change)="onMonthChange($event)" [value]="selectedMonth" style="width: 150px;">
+                                    @for (month of availableMonths; track month) {
+                                    <option [value]="month">{{month}}</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="timesheet-list">
+                            @for (sheet of getFilteredTimesheets(contract.timesheets); track sheet.id) {
+                            <div class="timesheet-card glass p-4 rounded-4 mb-4">
+                                <div
+                                    class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary border-opacity-25 pb-3">
+                                    <h6 class="text-white mb-0 fw-bold d-flex align-items-center gap-2">
+                                        <i class="bi bi-calendar-week text-primary"></i>
+                                        Week of {{sheet.week}}
+                                    </h6>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="badge rounded-pill px-3 py-1 fw-medium"
+                                            [ngClass]="sheet.status === 'Approved' ? 'badge-success-soft' : 'badge-warning-soft'">
+                                            {{sheet.status}}
+                                        </span>
+                                        @if(sheet.status === 'Pending Approval') {
+                                        <button
+                                            class="btn btn-sm btn-primary rounded-pill px-3 fw-medium action-btn">Approve</button>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Days Grid -->
+                                <div class="row g-2 g-xl-3 text-center">
+                                    <!-- Template snippet for each day -->
+                                    <ng-template #dayBlock let-dayName="dayName" let-dayData="dayData">
+                                        <div class="col">
+                                            <div class="day-block p-2 p-md-3 rounded-3 d-flex flex-column h-100"
+                                                [class.active-day]="dayData.hours > 0"
+                                                [class.na-day]="dayData.attendance === 'N/A'">
+                                                <p class="small text-uppercase mb-0 fw-bold"
+                                                    [class.text-white]="dayData.hours > 0"
+                                                    [class.text-secondary]="dayData.hours === 0 || dayData.attendance === 'N/A'">
+                                                    {{dayName}}</p>
+                                                <span class="d-block text-secondary mb-2"
+                                                    style="font-size: 10px !important; font-weight: 500; opacity: 0.8;">{{dayData.date}}</span>
+
+                                                @if(dayData.attendance === 'N/A') {
+                                                <h5 class="mb-2 fw-bold text-secondary text-opacity-50">-</h5>
+                                                <div class="mt-auto d-flex flex-column gap-2">
+                                                    <span class="badge w-100 small badge-attendance-na">N/A</span>
+                                                    <div style="height: 48px;"></div> <!-- Placeholder -->
+                                                </div>
+                                                } @else {
+                                                <h5 class="mb-2 fw-bold" [class.text-white]="dayData.hours > 0"
+                                                    [class.text-secondary]="dayData.hours === 0">{{dayData.hours}}h</h5>
+
+                                                <div class="mt-auto d-flex flex-column gap-2">
+                                                    <span class="badge w-100 small" [ngClass]="{
+                                                                      'badge-attendance-present': dayData.attendance === 'Present',
+                                                                      'badge-attendance-partial': dayData.attendance === 'Partial',
+                                                                      'badge-attendance-absent': dayData.attendance === 'Absent',
+                                                                      'badge-attendance-pending': dayData.attendance === 'Pending'
+                                                                  }">
+                                                        {{dayData.attendance}}
+                                                    </span>
+
+                                                    @if(dayData.attendance !== 'Absent' && dayData.attendance !==
+                                                    'Pending') {
+                                                    <div class="d-flex flex-column align-items-center justify-content-center gap-1 mt-1"
+                                                        [class.text-success]="dayData.faceMatch"
+                                                        [class.text-danger]="!dayData.faceMatch">
+                                                        <span class="text-secondary" style="font-size: 14px;">Face
+                                                            match:</span>
+                                                        <div class="d-flex align-items-center gap-1 fw-bold"
+                                                            style="font-size: 14px;">
+                                                            <i class="bi"
+                                                                [class.bi-person-check-fill]="dayData.faceMatch"
+                                                                [class.bi-person-x-fill]="!dayData.faceMatch"></i>
+                                                            <span>{{dayData.faceMatch ? 'Verified' : 'Not
+                                                                verified'}}</span>
+                                                        </div>
+                                                    </div>
+                                                    } @else {
+                                                    <div style="height: 48px;"></div>
+                                                    <!-- Placeholder to maintain alignment -->
+                                                    }
+                                                </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </ng-template>
+
+                                    <!-- Rendering days -->
+                                    <ng-container
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Mon', dayData: sheet.mon }"></ng-container>
+                                    <ng-container
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Tue', dayData: sheet.tue }"></ng-container>
+                                    <ng-container
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Wed', dayData: sheet.wed }"></ng-container>
+                                    <ng-container
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Thu', dayData: sheet.thu }"></ng-container>
+                                    <ng-container
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Fri', dayData: sheet.fri }"></ng-container>
+                                    <ng-container
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Sat', dayData: sheet.sat }"></ng-container>
+                                    <ng-container
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Sun', dayData: sheet.sun }"></ng-container>
+
+                                    <!-- Total -->
+                                    <div class="col-12 col-xl-auto mt-3 mt-xl-0 d-flex">
+                                        <div
+                                            class="total-block p-3 rounded-3 bg-primary bg-opacity-10 border border-primary border-opacity-25 w-100 d-flex flex-row flex-xl-column justify-content-between align-items-center justify-content-xl-center">
+                                            <p class="text-primary small text-uppercase fw-bold mb-0 mb-xl-2">Total</p>
+                                            <h3 class="text-white fw-bold mb-0">{{sheet.total}}h</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                            @if(getFilteredTimesheets(contract.timesheets).length === 0) {
+                            <div class="text-center p-5 border border-white border-opacity-10 rounded-4 glass">
+                                <i class="bi bi-calendar-x text-secondary fs-1 mb-3"></i>
+                                <p class="text-secondary mb-0">No timesheets found for {{selectedMonth}}.</p>
+                            </div>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            }
+        </div>
+
+    </div>
+</div>

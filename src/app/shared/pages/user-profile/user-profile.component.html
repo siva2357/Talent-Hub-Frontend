@@ -1,1 +1,782 @@
-<p>user-profile works!</p>
+<div class="profile-page pb-5">
+
+    <!-- Cinematic Header Cover Banner -->
+    <div class="profile-cover-banner position-relative overflow-hidden d-flex align-items-end">
+        <!-- Grid Pattern Overlay -->
+        <div class="banner-grid-overlay position-absolute w-100 h-100"></div>
+        <!-- Colorful Glowing Radial Orbs -->
+        <div class="banner-orb orb-1 position-absolute"></div>
+        <div class="banner-orb orb-2 position-absolute"></div>
+        <div class="banner-gradient-fade position-absolute w-100 h-100"></div>
+
+        <!-- Floating Back Arrow Navigation -->
+        <a routerLink="/user/client-dashboard"
+            class="btn-back-nav rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 start-0 m-4 shadow-lg z-3"
+            title="Back to Dashboard">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+    </div>
+
+    <!-- Main Profile Container -->
+    <div class="container max-w-6xl mx-auto profile-content-overlap px-3 px-md-4">
+
+        <!-- Profile Header Panel -->
+        <div class="glass-dark p-4 p-md-5 rounded-4 border-glass mb-5 shadow-lg position-relative overflow-hidden">
+            <!-- Top Premium Neon Line -->
+            <div class="header-neon-bar position-absolute top-0 start-0 w-100"></div>
+
+            <div class="row align-items-center g-4 position-relative z-2">
+
+                <!-- Avatar with glowing background -->
+                <div class="col-12 col-md-auto text-center text-md-start">
+                    <div class="profile-avatar-container position-relative mx-auto">
+                        <div class="profile-avatar-glow position-absolute w-100 h-100 rounded-circle"></div>
+                        <div
+                            class="profile-avatar rounded-circle d-flex align-items-center justify-content-center fw-bold text-white position-relative z-2">
+                            {{ user.avatar }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Info Details -->
+                <div class="col-12 col-md flex-grow-1 text-center text-md-start">
+                    <div class="d-flex flex-column">
+                        <div
+                            class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 flex-wrap mb-1">
+                            <h2 class="text-white fw-extrabold mb-0 profile-name">{{ user.name }}</h2>
+                            <span class="badge-verified d-inline-flex align-items-center justify-content-center"
+                                title="Verified Specialist">
+                                <i class="bi bi-patch-check-fill"></i>
+                            </span>
+                        </div>
+
+                        <div
+                            class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-start gap-3 mt-2 text-secondary-light font-sm">
+                            <span class="d-flex align-items-center gap-2 info-chip">
+                                <i class="bi bi-geo-alt-fill text-primary-light"></i>
+                                <span>{{ user.location }}</span>
+                            </span>
+                            <span class="d-flex align-items-center gap-2 info-chip">
+                                <i class="bi bi-envelope-fill text-primary-light"></i>
+                                <span>{{ user.email }}</span>
+                            </span>
+                            <span class="d-flex align-items-center gap-2 info-chip">
+                                <i class="bi bi-calendar3-event text-primary-light"></i>
+                                <span>{{ user.joinedDate }}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dual-Mode View Switcher (Mockup Toggle Switch) -->
+                <div class="col-12 col-md-auto text-center">
+                    <div class="toggle-pill-switch p-1 rounded-pill border-glass d-inline-flex gap-1 shadow-sm">
+                        <button
+                            class="btn toggle-pill-btn rounded-pill px-4 py-2.5 fw-semibold d-flex align-items-center gap-2"
+                            [class.active]="viewMode === 'freelancer'" (click)="toggleView('freelancer')">
+                            <i class="bi bi-briefcase-fill"></i>
+                            <span>Freelancer</span>
+                        </button>
+                        <button
+                            class="btn toggle-pill-btn rounded-pill px-4 py-2.5 fw-semibold d-flex align-items-center gap-2"
+                            [class.active]="viewMode === 'client'" (click)="toggleView('client')">
+                            <i class="bi bi-building-fill"></i>
+                            <span>Client</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= FREELANCER VIEW ================= -->
+        @if (viewMode === 'freelancer') {
+        <div class="animate-fade-in row g-4">
+
+            <!-- Left Sidebar: Professional Summary & Skills -->
+            <div class="col-12 col-lg-8">
+                <!-- About Summary -->
+                <div
+                    class="glass-dark p-4 p-md-5 rounded-4 border-glass mb-4 shadow-sm position-relative overflow-hidden">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+                        <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{ freelancerProfile.title }}</h4>
+                        <div
+                            class="hourly-rate-capsule px-3.5 py-2 rounded-3 border-glass d-flex align-items-center gap-2 bg-success-glow">
+                            <i class="bi bi-cash text-success-light fs-5"></i>
+                            <span class="text-success-light fw-extrabold font-monospace text-lg">
+                                ${{ freelancerProfile.hourlyRate | number:'1.2-2' }}/hr
+                            </span>
+                        </div>
+                    </div>
+                    <p class="text-secondary lh-lg mb-0 font-sm profile-description">
+                        {{ freelancerProfile.summary }}
+                    </p>
+                </div>
+
+                <!-- Work Portfolio Grid -->
+                <div class="glass-dark p-4 p-md-5 rounded-4 border-glass shadow-sm mb-4">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="section-indicator rounded-pill"></div>
+                        <h4 class="text-white fw-bold mb-0 text-lg font-headline">Featured Project Portfolio</h4>
+                    </div>
+
+                    <div class="row g-4">
+                        @for (item of freelancerProfile.portfolio; track item.title) {
+                        <div class="col-12">
+                            <div
+                                class="portfolio-card p-4 rounded-4 border-glass position-relative overflow-hidden transition-all">
+                                <div class="portfolio-card-glow position-absolute"></div>
+                                <div
+                                    class="position-relative z-2 d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-4 text-start">
+                                    <div class="d-flex flex-column text-start">
+                                        <div>
+                                            <span
+                                                class="badge-category py-1.5 px-3 rounded-3 d-inline-block align-self-start mb-3 font-monospace text-xs">
+                                                {{ item.category }}
+                                            </span>
+                                        </div>
+                                        <h5 class="text-white fw-bold mb-2 portfolio-title">{{ item.title }}</h5>
+                                        <p class="text-secondary font-sm mb-0 lh-relaxed max-w-xl">{{ item.desc }}</p>
+                                    </div>
+                                    <div class="ms-md-auto text-start text-md-end">
+                                        <div
+                                            class="d-flex align-items-center gap-1.5 text-primary-light pointer mt-2 mt-md-0 position-relative z-2 portfolio-link font-sm fw-semibold text-nowrap">
+                                            <span>Explore Project</span>
+                                            <i class="bi bi-arrow-right-short fs-5 transition-transform"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- My Contract Diary -->
+                <div class="glass-dark p-4 p-md-5 rounded-4 border-glass shadow-sm">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="section-indicator rounded-pill"></div>
+                            <h4 class="text-white fw-bold mb-0 text-lg font-headline">My Contract Diary</h4>
+                        </div>
+                        <span class="badge badge-completed-count py-1.5 px-3 rounded-pill text-xs font-semibold">
+                            {{ freelancerProfile.contracts.length }} Completed Contracts
+                        </span>
+                    </div>
+
+                    <div class="d-flex flex-column gap-3.5">
+                        @for (contract of freelancerProfile.contracts; track contract.id) {
+                        <div
+                            class="contract-ledger-row p-4 rounded-4 border-glass position-relative overflow-hidden bg-card-dark text-start d-flex flex-column gap-3 mb-4">
+                            <div class="contract-status-bar position-absolute h-100 bg-success"></div>
+
+                            <div
+                                class="d-flex align-items-start align-items-md-center justify-content-between flex-wrap gap-3 position-relative z-2">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div
+                                        class="avatar-circle rounded-circle bg-primary-glow text-primary-light d-flex align-items-center justify-content-center">
+                                        {{ contract.avatar }}
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <h5
+                                            class="text-white fw-bold font-sm mb-1 d-flex align-items-center gap-2 flex-wrap">
+                                            <span>{{ contract.title }}</span>
+                                            <span
+                                                class="badge badge-contract-id font-monospace font-xs px-2 py-0.5 rounded">
+                                                {{ contract.id }}
+                                            </span>
+                                        </h5>
+                                        <span class="text-secondary-light font-xs">
+                                            Client: <strong class="text-white-50">{{ contract.client }}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-4 ms-md-auto text-md-end">
+                                    <div class="d-flex flex-column text-start text-md-end">
+                                        <span class="text-secondary-light font-xs text-uppercase ls-1">Client
+                                            Feedback</span>
+                                        <div class="d-flex align-items-center gap-1 justify-content-md-end mt-0.5 text-warning"
+                                            style="font-size: 13.5px;">
+                                            @for (star of getStarsArray(contract.rating); track $index) {
+                                            <i class="bi" [class]="star"></i>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <span class="text-secondary-light font-xs text-uppercase ls-1">Earnings</span>
+                                        <span class="text-success-light fw-extrabold font-monospace font-sm mt-0.5">
+                                            ${{ contract.budget | number:'1.2-2' }}
+                                        </span>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <span class="text-secondary-light font-xs text-uppercase ls-1">Completed</span>
+                                        <span class="text-white fw-semibold font-monospace font-xs mt-1">
+                                            {{ contract.completedDate }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Deliverables Completed items -->
+                            <div class="p-3 rounded-3 border-glass text-start position-relative z-2 mt-1"
+                                style="background: rgba(0,0,0,0.15);">
+                                <div
+                                    class="d-flex align-items-center gap-2 mb-1.5 text-secondary-light font-xs fw-semibold">
+                                    <i class="bi bi-check2-circle text-success-light"></i>
+                                    <span>Completed Deliverables</span>
+                                </div>
+                                <p class="text-secondary font-sm mb-0 lh-relaxed">{{ contract.deliverables }}</p>
+                            </div>
+
+                            <!-- Attendance & Time Logs -->
+                            <div class="row g-2 mt-1 position-relative z-2">
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div
+                                        class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
+                                        <i class="bi bi-clock-fill text-primary-light"></i>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-secondary-light font-xs uppercase-label">Hours Tracked</span>
+                                            <span class="text-white fw-bold font-sm font-monospace">{{
+                                                contract.attendance.hoursTracked }} hrs</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div
+                                        class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
+                                        <i class="bi bi-calendar-range text-primary-light"></i>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-secondary-light font-xs uppercase-label">Timeline Period</span>
+                                            <span class="text-white fw-bold font-xs font-monospace text-nowrap">{{
+                                                contract.attendance.startDate }} - {{ contract.attendance.endDate
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div
+                                        class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
+                                        <i class="bi bi-bar-chart-fill text-primary-light"></i>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-secondary-light font-xs uppercase-label">Weekly Average</span>
+                                            <span class="text-white fw-bold font-sm font-monospace">{{
+                                                contract.attendance.weeklyAverage }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <div
+                                        class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
+                                        <i class="bi bi-person-check-fill text-success-light"></i>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-secondary-light font-xs uppercase-label">Attendance Rate</span>
+                                            <span class="text-success-light fw-bold font-sm font-monospace">{{
+                                                contract.attendance.avgAttendanceRate }}%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Client Feedback Review Card -->
+                            <div class="p-4 ps-4.5 rounded-3 border-glass text-start position-relative z-2 mt-4 bg-warning-glow"
+                                style="border-left: 4px solid var(--bs-warning) !important; padding-left: 1.5rem !important;">
+                                <div class="d-flex align-items-center gap-2 mb-2 text-warning font-xs fw-semibold">
+                                    <i class="bi bi-chat-left-quote-fill"></i>
+                                    <span>Client Review Feedback</span>
+                                </div>
+                                <p class="text-white font-sm mb-0 lh-relaxed italic-quote">"{{ contract.review }}"</p>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar: Stats & Core Skills -->
+            <div class="col-12 col-lg-4">
+                <!-- Professional Statistics Cards -->
+                <div class="glass-dark p-4 rounded-4 border-glass mb-4 shadow-sm position-relative overflow-hidden">
+                    <div class="sidebar-glow sidebar-glow-top position-absolute"></div>
+                    <div class="position-relative z-2">
+                        <h4 class="text-white fw-bold mb-4 text-md font-headline">Professional Metrics</h4>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div
+                                    class="stat-badge-box p-3.5 rounded-4 border-glass text-center bg-card-dark position-relative overflow-hidden">
+                                    <div
+                                        class="stat-glow bg-success-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
+                                    </div>
+                                    <h3 class="text-success-light fw-extrabold mb-1.5 font-monospace text-2xl">{{
+                                        freelancerProfile.successRate }}%</h3>
+                                    <span class="text-secondary-light font-xs text-uppercase ls-1">Success Rate</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div
+                                    class="stat-badge-box p-3.5 rounded-4 border-glass text-center bg-card-dark position-relative overflow-hidden">
+                                    <div
+                                        class="stat-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
+                                    </div>
+                                    <h3
+                                        class="text-white fw-extrabold mb-1.5 font-monospace text-2xl d-flex align-items-center justify-content-center gap-1">
+                                        <i class="bi bi-star-fill text-warning fs-5"></i>
+                                        <span>{{ freelancerProfile.rating }}</span>
+                                    </h3>
+                                    <span class="text-secondary-light font-xs text-uppercase ls-1">Client Rating</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills List -->
+                <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden mb-4">
+                    <div class="sidebar-glow sidebar-glow-bottom position-absolute"></div>
+                    <div class="position-relative z-2">
+                        <h4 class="text-white fw-bold mb-4 text-md font-headline">Core Capabilities</h4>
+                        <div class="d-flex flex-wrap gap-2">
+                            @for (skill of freelancerProfile.skills; track skill) {
+                            <span class="badge skill-badge py-2 px-3 rounded-pill text-white transition-all">
+                                {{ skill }}
+                            </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Social Media Connections Card -->
+                <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden">
+                    <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
+                    </div>
+                    <div class="position-relative z-2">
+                        <h4 class="text-white fw-bold mb-4 text-md font-headline">Online Presence</h4>
+                        <div class="d-flex flex-column gap-3">
+
+                            <!-- GitHub Detailed Card -->
+                            <a [href]="user.github" target="_blank"
+                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div
+                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-white bg-dark-glow">
+                                        <i class="bi bi-github fs-5"></i>
+                                    </div>
+                                    <div class="d-flex flex-column text-start">
+                                        <span class="text-white fw-bold font-sm">GitHub</span>
+                                        <span
+                                            class="text-secondary-light font-xs font-monospace">github.com/sarahconnor</span>
+                                    </div>
+                                </div>
+                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
+                            </a>
+
+                            <!-- LinkedIn Detailed Card -->
+                            <a [href]="user.linkedin" target="_blank"
+                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div
+                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-info bg-info-glow">
+                                        <i class="bi bi-linkedin fs-5"></i>
+                                    </div>
+                                    <div class="d-flex flex-column text-start">
+                                        <span class="text-white fw-bold font-sm">LinkedIn</span>
+                                        <span
+                                            class="text-secondary-light font-xs font-monospace">linkedin.com/in/sarahconnor</span>
+                                    </div>
+                                </div>
+                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
+                            </a>
+
+                            <!-- Twitter/X Detailed Card -->
+                            <a [href]="user.twitter" target="_blank"
+                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div
+                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-white bg-dark-glow">
+                                        <i class="bi bi-twitter-x fs-5"></i>
+                                    </div>
+                                    <div class="d-flex flex-column text-start">
+                                        <span class="text-white fw-bold font-sm">Twitter / X</span>
+                                        <span
+                                            class="text-secondary-light font-xs font-monospace">twitter.com/sarahconnor</span>
+                                    </div>
+                                </div>
+                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
+                            </a>
+
+                            <!-- Dribbble Detailed Card -->
+                            <a [href]="user.dribbble" target="_blank"
+                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div
+                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-danger bg-danger-glow">
+                                        <i class="bi bi-dribbble fs-5"></i>
+                                    </div>
+                                    <div class="d-flex flex-column text-start">
+                                        <span class="text-white fw-bold font-sm">Dribbble</span>
+                                        <span
+                                            class="text-secondary-light font-xs font-monospace">dribbble.com/sarahconnor</span>
+                                    </div>
+                                </div>
+                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Languages Card -->
+                <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden mt-4">
+                    <div class="sidebar-glow bg-success-glow position-absolute w-100 h-100 top-0 start-0 opacity-10"></div>
+                    <div class="position-relative z-2">
+                        <h4 class="text-white fw-bold mb-4 text-md font-headline d-flex align-items-center gap-2">
+                            <i class="bi bi-translate text-success-light"></i>
+                            <span>Languages Spoken</span>
+                        </h4>
+                        <div class="d-flex flex-column gap-3">
+                            
+                            <!-- English -->
+                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                                <span class="text-white fw-bold font-sm">English</span>
+                                <span class="badge bg-success-glow text-success-light px-2.5 py-1 rounded font-xs fw-semibold">Professional</span>
+                            </div>
+
+                            <!-- German -->
+                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                                <span class="text-white fw-bold font-sm">German</span>
+                                <span class="badge bg-primary-glow text-primary-light px-2.5 py-1 rounded font-xs fw-semibold">Intermediate</span>
+                            </div>
+
+                            <!-- Spanish -->
+                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                                <span class="text-white fw-bold font-sm">Spanish</span>
+                                <span class="badge bg-secondary-glow text-secondary-light px-2.5 py-1 rounded font-xs fw-semibold">Beginner</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        }
+
+        <!-- ================= CLIENT VIEW ================= -->
+        @if (viewMode === 'client') {
+        <div class="animate-fade-in row g-4">
+
+            <!-- Left Sidebar: Corporate profile & Completed Logs -->
+            <div class="col-12 col-lg-8">
+                <!-- Company Profile Summary -->
+                <div
+                    class="glass-dark p-4 p-md-5 rounded-4 border-glass mb-4 shadow-sm position-relative overflow-hidden">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+                        <div class="d-flex align-items-center gap-2.5">
+                            <div
+                                class="corporate-badge rounded-3 d-flex align-items-center justify-content-center text-primary-light">
+                                <i class="bi bi-building fs-4"></i>
+                            </div>
+                            <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{ clientProfile.company }}</h4>
+                        </div>
+
+                        <a [href]="clientProfile.website" target="_blank"
+                            class="btn-corporate-web px-3.5 py-2 rounded-3 border-glass d-flex align-items-center gap-2 text-decoration-none">
+                            <i class="bi bi-globe2 text-primary-light"></i>
+                            <span class="text-primary-light fw-bold font-sm">Visit Website</span>
+                            <i class="bi bi-box-arrow-up-right text-primary-light font-xs ms-0.5"></i>
+                        </a>
+                    </div>
+
+                    <p class="text-secondary lh-lg mb-0 font-sm profile-description">
+                        {{ clientProfile.summary }}
+                    </p>
+                </div>
+
+                <!-- Client Contract Ledger Logs -->
+                <div class="glass-dark p-4 p-md-5 rounded-4 border-glass shadow-sm">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="section-indicator rounded-pill"></div>
+                            <h4 class="text-white fw-bold mb-0 text-lg font-headline">My Contract</h4>
+                        </div>
+                        <span class="badge-completed-count font-monospace font-xs px-2.5 py-1 rounded-2">
+                            {{ clientProfile.completedContracts.length }} Contracts
+                        </span>
+                    </div>
+
+                    <!-- High Fidelity Contract Cards Grid (Responsive Alternative to plain tables) -->
+                    <div class="d-flex flex-column gap-4">
+                        @for (c of clientProfile.completedContracts; track c.id) {
+                        <div
+                            class="contract-ledger-row p-4 rounded-4 border-glass position-relative overflow-hidden bg-card-dark text-start d-flex flex-column gap-3 mb-4">
+                            <div class="contract-status-bar position-absolute h-100 bg-success"></div>
+
+                            <div
+                                class="d-flex align-items-start align-items-md-center justify-content-between flex-wrap gap-3 position-relative z-2">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div
+                                        class="avatar-circle rounded-circle bg-primary-glow text-primary-light d-flex align-items-center justify-content-center fw-bold">
+                                        {{ c.avatar }}
+                                    </div>
+                                    <div class="d-flex flex-column text-start">
+                                        <h5
+                                            class="text-white fw-bold font-sm mb-1 d-flex align-items-center gap-2 flex-wrap">
+                                            <span>{{ c.title }}</span>
+                                            <span
+                                                class="badge badge-contract-id font-monospace font-xs px-2 py-0.5 rounded">
+                                                {{ c.id }}
+                                            </span>
+                                        </h5>
+                                        <span class="text-secondary-light font-xs">
+                                            Freelancer Specialist: <strong class="text-white-50">{{ c.freelancer }}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-4 ms-md-auto text-md-end">
+                                    <div class="d-flex flex-column">
+                                        <span class="text-secondary-light font-xs text-uppercase ls-1">Expenditure</span>
+                                        <span class="text-success-light fw-extrabold font-monospace font-sm mt-0.5">
+                                            ${{ c.budget | number:'1.2-2' }}
+                                        </span>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <span class="text-secondary-light font-xs text-uppercase ls-1">Finished</span>
+                                        <span class="text-white fw-semibold font-monospace font-xs mt-1">
+                                            {{ c.date }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Deliverables Completed items -->
+                            <div class="p-3 rounded-3 border-glass text-start position-relative z-2 mt-1"
+                                style="background: rgba(0,0,0,0.15);">
+                                <div
+                                    class="d-flex align-items-center gap-2 mb-1.5 text-secondary-light font-xs fw-semibold">
+                                    <i class="bi bi-check2-circle text-success-light"></i>
+                                    <span>Delivered Scope of Work</span>
+                                </div>
+                                <p class="text-secondary font-sm mb-0 lh-relaxed">{{ c.deliverables }}</p>
+                            </div>
+
+                            <!-- Attendance & Time Logs -->
+                            <div class="row g-3 mt-1 position-relative z-2 justify-content-start">
+                                <div class="col-12 col-sm-6">
+                                    <div
+                                        class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
+                                        <i class="bi bi-clock-fill text-primary-light"></i>
+                                        <div class="d-flex flex-column text-start">
+                                            <span class="text-secondary-light font-xs uppercase-label">Hours Tracked</span>
+                                            <span class="text-white fw-bold font-sm font-monospace">{{
+                                                c.attendance.hoursTracked }} hrs</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div
+                                        class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
+                                        <i class="bi bi-calendar-range text-primary-light"></i>
+                                        <div class="d-flex flex-column text-start">
+                                            <span class="text-secondary-light font-xs uppercase-label">Timeline Period</span>
+                                            <span class="text-white fw-bold font-sm font-monospace text-nowrap">{{
+                                                c.attendance.startDate }} - {{ c.attendance.endDate }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar: Client Stats & Verification badge -->
+            <div class="col-12 col-lg-4">
+                <!-- Client Activity Cards -->
+                <div class="glass-dark p-4 rounded-4 border-glass mb-4 shadow-sm position-relative overflow-hidden">
+                    <div class="sidebar-glow sidebar-glow-top position-absolute"></div>
+                    <div class="position-relative z-2">
+                        <h4 class="text-white fw-bold mb-4 text-md font-headline">Platform Analytics</h4>
+                        <div class="row g-3 mb-4">
+                            <div class="col-6">
+                                <div
+                                    class="stat-badge-box p-3.5 rounded-4 border-glass text-center bg-card-dark position-relative overflow-hidden">
+                                    <div
+                                        class="stat-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
+                                    </div>
+                                    <h3 class="text-white fw-extrabold mb-1.5 font-monospace text-2xl">{{
+                                        clientProfile.jobsPosted }}</h3>
+                                    <span class="text-secondary-light font-xs text-uppercase ls-1">Jobs Posted</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div
+                                    class="stat-badge-box p-3.5 rounded-4 border-glass text-center bg-card-dark position-relative overflow-hidden">
+                                    <div
+                                        class="stat-glow bg-success-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
+                                    </div>
+                                    <h3 class="text-success-light fw-extrabold mb-1.5 font-monospace text-2xl">{{
+                                        clientProfile.hireRate }}%</h3>
+                                    <span class="text-secondary-light font-xs text-uppercase ls-1">Hire Rate</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Spending spent -->
+                        <div
+                            class="expenditure-banner p-3.5 rounded-4 border-glass d-flex align-items-center justify-content-between position-relative overflow-hidden bg-card-dark">
+                            <div
+                                class="stat-glow bg-success-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
+                            </div>
+                            <div class="d-flex align-items-center gap-3 position-relative z-2">
+                                <div
+                                    class="expenditure-icon rounded-3 d-flex align-items-center justify-content-center text-success-light">
+                                    <i class="bi bi-wallet2 fs-5"></i>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <span class="text-secondary-light font-xs text-uppercase ls-1">Total
+                                        Investments</span>
+                                    <h4 class="text-success-light fw-extrabold mb-0 font-monospace text-lg mt-0.5">
+                                        ${{ clientProfile.totalSpent | number:'1.2-2' }}
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Client Verification Card -->
+                <div
+                    class="glass-dark p-5 rounded-4 border-glass shadow-sm text-center position-relative overflow-hidden mb-4">
+                    <div class="sidebar-glow sidebar-glow-bottom position-absolute"></div>
+                    <div class="position-relative z-2">
+                        <div
+                            class="verification-badge-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4 bg-primary-glow border-primary">
+                            <i class="bi bi-shield-lock-fill fs-3 text-primary-light"></i>
+                        </div>
+                        <h5 class="text-white fw-bold mb-2 text-md font-headline">Verified Corporate Account</h5>
+                        <p class="text-secondary font-sm mb-0 lh-relaxed px-1">
+                            Escrow payment instruments fully verified and linked to institutional banking lines. Fully
+                            authorized for commercial engagement.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Detailed Social Media Connections Card -->
+                <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden">
+                    <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
+                    </div>
+                    <div class="position-relative z-2">
+                        <h4 class="text-white fw-bold mb-4 text-md font-headline">Online Presence</h4>
+                        <div class="d-flex flex-column gap-3">
+
+                            <!-- GitHub Detailed Card -->
+                            <a [href]="user.github" target="_blank"
+                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div
+                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-white bg-dark-glow">
+                                        <i class="bi bi-github fs-5"></i>
+                                    </div>
+                                    <div class="d-flex flex-column text-start">
+                                        <span class="text-white fw-bold font-sm">GitHub</span>
+                                        <span
+                                            class="text-secondary-light font-xs font-monospace">github.com/sarahconnor</span>
+                                    </div>
+                                </div>
+                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
+                            </a>
+
+                            <!-- LinkedIn Detailed Card -->
+                            <a [href]="user.linkedin" target="_blank"
+                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div
+                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-info bg-info-glow">
+                                        <i class="bi bi-linkedin fs-5"></i>
+                                    </div>
+                                    <div class="d-flex flex-column text-start">
+                                        <span class="text-white fw-bold font-sm">LinkedIn</span>
+                                        <span
+                                            class="text-secondary-light font-xs font-monospace">linkedin.com/in/sarahconnor</span>
+                                    </div>
+                                </div>
+                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
+                            </a>
+
+                            <!-- Twitter/X Detailed Card -->
+                            <a [href]="user.twitter" target="_blank"
+                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div
+                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-white bg-dark-glow">
+                                        <i class="bi bi-twitter-x fs-5"></i>
+                                    </div>
+                                    <div class="d-flex flex-column text-start">
+                                        <span class="text-white fw-bold font-sm">Twitter / X</span>
+                                        <span
+                                            class="text-secondary-light font-xs font-monospace">twitter.com/sarahconnor</span>
+                                    </div>
+                                </div>
+                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
+                            </a>
+
+                            <!-- Dribbble Detailed Card -->
+                            <a [href]="user.dribbble" target="_blank"
+                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div
+                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-danger bg-danger-glow">
+                                        <i class="bi bi-dribbble fs-5"></i>
+                                    </div>
+                                    <div class="d-flex flex-column text-start">
+                                        <span class="text-white fw-bold font-sm">Dribbble</span>
+                                        <span
+                                            class="text-secondary-light font-xs font-monospace">dribbble.com/sarahconnor</span>
+                                    </div>
+                                </div>
+                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Languages Card -->
+                <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden mt-4">
+                    <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10"></div>
+                    <div class="position-relative z-2">
+                        <h4 class="text-white fw-bold mb-4 text-md font-headline d-flex align-items-center gap-2">
+                            <i class="bi bi-translate text-primary-light"></i>
+                            <span>Languages Supported</span>
+                        </h4>
+                        <div class="d-flex flex-column gap-3">
+                            
+                            <!-- English -->
+                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                                <span class="text-white fw-bold font-sm">English</span>
+                                <span class="badge bg-primary-glow text-primary-light px-2.5 py-1 rounded font-xs fw-semibold">Professional</span>
+                            </div>
+
+                            <!-- Spanish -->
+                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                                <span class="text-white fw-bold font-sm">Spanish</span>
+                                <span class="badge bg-success-glow text-success-light px-2.5 py-1 rounded font-xs fw-semibold">Professional</span>
+                            </div>
+
+                            <!-- French -->
+                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                                <span class="text-white fw-bold font-sm">French</span>
+                                <span class="badge bg-secondary-glow text-secondary-light px-2.5 py-1 rounded font-xs fw-semibold">Intermediate</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        }
+
+    </div>
+</div>

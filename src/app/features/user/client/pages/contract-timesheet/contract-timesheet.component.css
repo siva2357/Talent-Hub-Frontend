@@ -1,0 +1,161 @@
+.progress-page { 
+    background: transparent; 
+    min-height: 100vh; 
+  }
+  .max-w-7xl { 
+    max-width: 1440px; 
+  }
+  
+  /* Glassmorphism System */
+  .glass { 
+    background: rgba(255, 255, 255, 0.02); 
+    border: 1px solid rgba(255, 255, 255, 0.05); 
+    backdrop-filter: blur(20px); 
+    -webkit-backdrop-filter: blur(20px);
+  }
+  
+  /* Transitions & Interactions */
+  .transition-all { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .duration-300 { transition-duration: 300ms; }
+  .cursor-pointer { cursor: pointer; }
+  
+  /* Contract Card & Accordion */
+  .contract-card:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .contract-card.expanded {
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  }
+  
+  .contract-body {
+    overflow: hidden;
+    transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Expand Icon */
+  .expand-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .contract-card:hover .expand-icon {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .rotate-180 {
+    transform: rotate(180deg);
+  }
+  
+  /* Custom Soft Badges */
+  .badge-success-soft {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    color: #34d399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  }
+  
+  .badge-primary-soft {
+    background-color: rgba(26, 115, 232, 0.15) !important;
+    color: #60a5fa !important;
+    border: 1px solid rgba(26, 115, 232, 0.3) !important;
+  }
+  
+  .badge-secondary-soft {
+    background-color: rgba(108, 117, 125, 0.15) !important;
+    color: #9ca3af !important;
+    border: 1px solid rgba(108, 117, 125, 0.3) !important;
+  }
+
+  .badge-warning-soft {
+    background-color: rgba(245, 158, 11, 0.15) !important;
+    color: #fbbf24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.3) !important;
+  }
+
+  /* Attendance specific badges to ensure text visibility */
+  .badge-attendance-present {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    color: #34d399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  }
+  .badge-attendance-partial {
+    background-color: rgba(245, 158, 11, 0.15) !important;
+    color: #fbbf24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.3) !important;
+  }
+  .badge-attendance-absent {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+  }
+  .badge-attendance-pending {
+    background-color: rgba(108, 117, 125, 0.15) !important;
+    color: #9ca3af !important;
+    border: 1px solid rgba(108, 117, 125, 0.3) !important;
+  }
+  .badge-attendance-na {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+  .day-block.na-day {
+    background: rgba(255, 255, 255, 0.01) !important;
+    border-color: rgba(255, 255, 255, 0.03) !important;
+    opacity: 0.4;
+  }
+  
+  /* Typography Overrides */
+  .contract-header, 
+  .contract-header h4, 
+  .contract-header h5, 
+  .contract-header p, 
+  .contract-header span {
+    font-size: 16px !important;
+  }
+  
+  .contract-body, 
+  .contract-body h1, 
+  .contract-body h2, 
+  .contract-body h3, 
+  .contract-body h4, 
+  .contract-body h5, 
+  .contract-body h6, 
+  .contract-body p, 
+  .contract-body span, 
+  .contract-body button,
+  .contract-body div {
+    font-size: 14px !important;
+  }
+
+  /* Timesheet specific */
+  .timesheet-card {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.2);
+  }
+  .day-block {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.2s ease;
+  }
+  .day-block.active-day {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+  }
+  .action-btn {
+      transition: all 0.2s ease;
+  }
+  .action-btn:hover {
+      box-shadow: 0 0 12px rgba(26, 115, 232, 0.6);
+      transform: translateY(-1px);
+  }
+
+  /* Filter Dropdown */
+  .form-select.bg-dark {
+      background-color: rgba(0, 0, 0, 0.5) !important;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+  }
+  .form-select.bg-dark:focus {
+      border-color: rgba(26, 115, 232, 0.5);
+      box-shadow: 0 0 0 0.25rem rgba(26, 115, 232, 0.25);
+  }

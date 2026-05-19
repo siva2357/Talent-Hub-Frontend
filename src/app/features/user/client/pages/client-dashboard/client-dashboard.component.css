@@ -1,0 +1,98 @@
+.dashboard-page {
+  background: transparent;
+  min-height: 100vh;
+}
+
+.max-w-7xl {
+  max-width: 1440px;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(20px);
+}
+
+.bg-glass {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.bg-glass:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.tracking-wide {
+  letter-spacing: 0.05em;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
+.stat-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.icon-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Custom Subtles because bootstrap's might be too bright in dark mode */
+.bg-primary-subtle { background: rgba(13, 110, 253, 0.15) !important; }
+.bg-success-subtle { background: rgba(25, 135, 84, 0.15) !important; }
+.bg-warning-subtle { background: rgba(255, 193, 7, 0.15) !important; }
+.text-primary { color: #3b82f6 !important; }
+.text-success { color: #10b981 !important; }
+.text-warning { color: #f59e0b !important; }
+
+/* Activity Feed */
+.activity-item:last-child {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+}
+
+.activity-icon.proposal { background: rgba(13, 110, 253, 0.1); color: #3b82f6; }
+.activity-icon.time { background: rgba(255, 193, 7, 0.1); color: #f59e0b; }
+.activity-icon.milestone { background: rgba(25, 135, 84, 0.1); color: #10b981; }
+.activity-icon.message { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+
+/* Shortcuts */
+.shortcut-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+}
+
+.shortcut-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.shortcut-icon {
+  width: 48px;
+  height: 48px;
+}

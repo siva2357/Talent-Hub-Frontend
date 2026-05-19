@@ -1,0 +1,197 @@
+.transaction-history-page {
+    background: transparent;
+    min-height: 100vh;
+}
+
+.max-w-7xl {
+    max-width: 1440px;
+}
+
+/* Glassmorphism Dark Theme Panel */
+.glass-dark {
+    background: rgba(10, 13, 18, 0.4) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Premium Inputs */
+.custom-input {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.25s ease;
+}
+
+.custom-input:focus {
+    border-color: #2A80FF !important;
+    box-shadow: 0 0 15px rgba(42, 128, 255, 0.25) !important;
+}
+
+/* Accordion Wrapper Card */
+.accordion-item-wrapper {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.accordion-item-wrapper:hover {
+    border-color: rgba(42, 128, 255, 0.2) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.active-accordion {
+    border-left: 3.5px solid #2A80FF !important;
+    border-color: rgba(42, 128, 255, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(42, 128, 255, 0.05) !important;
+}
+
+/* Accordion Header Card */
+.accordion-header-card {
+    background: transparent;
+}
+
+.accordion-header-card:hover {
+    background: rgba(255, 255, 255, 0.01);
+}
+
+/* Chevron Rotation */
+.chevron-icon {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
+/* Accordion Body Panel styling */
+.accordion-body-panel {
+    animation: slideDown 0.3s ease-out forwards;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Flat Milestone List Items */
+.milestones-flat-list {
+    transition: all 0.3s ease;
+}
+
+.milestone-flat-item {
+    background: rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    padding: 1.15rem 1.25rem !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.milestone-flat-item:hover {
+    background: rgba(255, 255, 255, 0.01) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    transform: translateX(4px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Status-colored visual border lines */
+.completed-item {
+    border-left: 3.5px solid #198754 !important;
+}
+
+.inprogress-item {
+    border-left: 3.5px solid #0d6efd !important;
+}
+
+.review-item {
+    border-left: 3.5px solid #ffc107 !important;
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.05) !important;
+}
+
+.pending-item {
+    border-left: 3.5px solid rgba(255, 255, 255, 0.15) !important;
+    opacity: 0.55;
+}
+
+.rejected-item {
+    border-left: 3.5px solid #dc3545 !important;
+}
+
+/* Freelancer Avatar */
+.freelancer-avatar {
+    text-shadow: 0 0 10px rgba(42, 128, 255, 0.4);
+}
+
+/* Glowing Status Badges */
+.badge-status-funded {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.badge-status-inprogress {
+    background: rgba(13, 110, 253, 0.1) !important;
+    color: #0d6efd !important;
+    border: 1.5px solid rgba(13, 110, 253, 0.25) !important;
+    box-shadow: 0 0 15px rgba(13, 110, 253, 0.15) !important;
+}
+
+.badge-status-review {
+    background: rgba(255, 193, 7, 0.1) !important;
+    color: #ffc107 !important;
+    border: 1.5px solid rgba(255, 193, 7, 0.25) !important;
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.15) !important;
+}
+
+.badge-status-completed {
+    background: rgba(25, 135, 84, 0.1) !important;
+    color: #198754 !important;
+    border: 1.5px solid rgba(25, 135, 84, 0.25) !important;
+    box-shadow: 0 0 15px rgba(25, 135, 84, 0.15) !important;
+}
+
+.badge-status-failed {
+    background: rgba(220, 53, 69, 0.1) !important;
+    color: #dc3545 !important;
+    border: 1.5px solid rgba(220, 53, 69, 0.25) !important;
+    box-shadow: 0 0 15px rgba(220, 53, 69, 0.15) !important;
+}
+
+/* Download Action Button styling */
+.download-action-btn {
+    transition: all 0.25s ease;
+    border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.download-action-btn:hover {
+    background: rgba(42, 128, 255, 0.1) !important;
+    border-color: #2A80FF !important;
+    color: #FFFFFF !important;
+    transform: scale(1.03);
+}
+
+.action-start-payment {
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.2);
+}
+
+.action-start-payment:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 20px rgba(25, 135, 84, 0.4);
+}
+
+.text-secondary-light {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.font-monospace {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+}
+
+.contract-title {
+    letter-spacing: 0.25px;
+}

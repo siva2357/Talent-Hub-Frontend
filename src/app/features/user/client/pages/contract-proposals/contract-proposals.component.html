@@ -1,0 +1,335 @@
+<div class="contract-proposals-page p-3 p-md-4 p-xl-5">
+    <div class="container-fluid max-w-7xl mx-auto">
+
+        <!-- Header -->
+        <div class="mb-5 d-flex justify-content-between align-items-center">
+            <div>
+                <h3 class="text-white fw-bold mb-3 h4">Contract Proposals</h3>
+                <p class="text-secondary mb-0">Manage incoming bids, conduct assessments, schedule interviews, and
+                    finalize your project hires.</p>
+            </div>
+        </div>
+
+        <!-- Filters Bar -->
+        <div class="glass p-3 rounded-4 mb-5">
+            <div class="row g-3 align-items-center">
+                <div class="col-12 col-md-8">
+                    <div class="d-flex align-items-center gap-3 px-2">
+                        <i class="bi bi-search text-secondary"></i>
+                        <input type="text"
+                            class="form-control bg-transparent border-0 text-white shadow-none search-input"
+                            placeholder="Search applicants by name, role, or specific skills..."
+                            [(ngModel)]="searchQuery">
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 text-md-end text-center">
+                    <span class="text-secondary small fw-medium">Filtering bids across all active contracts</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accordion Group -->
+        <div class="contracts-accordion">
+            @for (contract of contracts; track contract.id) {
+            <div class="contract-card glass mb-4 rounded-4 overflow-hidden transition-all duration-300"
+                [class.expanded]="expandedContractId === contract.id"
+                [class.border-primary]="expandedContractId === contract.id">
+
+                <!-- Accordion Trigger Header -->
+                <div class="contract-header p-4 cursor-pointer" (click)="toggleContract(contract.id)">
+                    <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
+                        <div>
+                            <div class="d-flex align-items-center gap-3 mb-2">
+                                <h4 class="text-white fw-bold mb-0 h5">{{contract.title}}</h4>
+                                <span class="badge rounded-pill px-3 py-1 fw-medium badge-primary-soft">
+                                    {{contract.proposals.length}} Applications
+                                </span>
+                            </div>
+                            <p class="text-secondary mb-0">Project Stage: <span class="text-white">Hiring &
+                                    Sourcing</span></p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="expand-icon d-flex align-items-center justify-content-center rounded-circle"
+                                [class.rotate-180]="expandedContractId === contract.id">
+                                <i class="bi bi-chevron-down text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metadata Grid -->
+                    <div class="row g-3">
+                        <div class="col-6 col-md-2">
+                            <p class="text-secondary small text-uppercase mb-1"
+                                style="font-size: 10px; letter-spacing: 0.5px;">Budget Limit</p>
+                            <h5 class="text-white fw-bold mb-0">${{contract.budget | number}}</h5>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <p class="text-secondary small text-uppercase mb-1"
+                                style="font-size: 10px; letter-spacing: 0.5px;">Sourced Spent</p>
+                            <h5 class="text-primary fw-bold mb-0">${{contract.spent | number}}</h5>
+                        </div>
+                        <div class="col-6 col-md-2">
+                            <p class="text-secondary small text-uppercase mb-1"
+                                style="font-size: 10px; letter-spacing: 0.5px;">Available Fund</p>
+                            <h5 class="text-success fw-bold mb-0">${{contract.remaining | number}}</h5>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <p class="text-secondary small text-uppercase mb-1"
+                                style="font-size: 10px; letter-spacing: 0.5px;">Est. Start Date</p>
+                            <p class="text-white fw-medium mb-0">{{contract.startDate}}</p>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <p class="text-secondary small text-uppercase mb-1"
+                                style="font-size: 10px; letter-spacing: 0.5px;">Target End Date</p>
+                            <p class="text-white fw-medium mb-0">{{contract.endDate}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Body: Proposal Cards Grid -->
+                <div class="contract-body collapse-transition"
+                    [style.maxHeight]="expandedContractId === contract.id ? '2500px' : '0px'"
+                    [style.opacity]="expandedContractId === contract.id ? '1' : '0'">
+                    <div class="p-4 p-md-5 border-top border-white border-opacity-10 bg-dark bg-opacity-25">
+
+                        <div class="row g-4">
+                            @for (proposal of getFilteredProposals(contract.proposals); track proposal.id) {
+                            <div class="col-xl-4 col-md-6">
+                                <div class="proposal-card glass p-4 rounded-4 h-100 border-white border-opacity-10 d-flex flex-column transition-all duration-300"
+                                    [class.accepted-card]="proposal.status === 'Hired'"
+                                    [class.declined-card]="proposal.status === 'Rejected'">
+
+                                    <!-- Candidate Info Header -->
+                                    <div class="d-flex justify-content-between align-items-start mb-4 gap-3">
+                                        <div class="d-flex align-items-center gap-3 flex-grow-1 min-width-0"
+                                            style="min-width: 0;">
+                                            <div class="avatar-wrapper position-relative flex-shrink-0">
+                                                <img [src]="proposal.avatar" [alt]="proposal.name"
+                                                    class="rounded-circle border border-2 border-dark"
+                                                    style="width: 56px; height: 56px; object-fit: cover;">
+                                                <span class="status-indicator position-absolute"
+                                                    [class.bg-success]="proposal.isAvailable"
+                                                    [class.bg-secondary]="!proposal.isAvailable"></span>
+                                            </div>
+                                            <div class="min-width-0 flex-grow-1"
+                                                style="min-width: 0; overflow: hidden;">
+                                                <h5 class="text-white fw-bold mb-1 h6 text-truncate">{{proposal.name}}
+                                                </h5>
+                                                <div
+                                                    class="d-flex align-items-center gap-1 text-secondary small text-truncate">
+                                                    <i class="bi bi-geo-alt"></i>
+                                                    <span style="font-size: 11px;">{{proposal.location}}</span>
+                                                </div>
+                                                <p class="text-primary small mt-1 mb-0 fw-semibold text-truncate"
+                                                    style="font-size: 13px;">{{proposal.role}}</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Match Rating Ring -->
+                                        <div class="performance-ring text-end flex-shrink-0">
+                                            <div class="ring-wrapper ms-auto mb-1"
+                                                [ngClass]="proposal.matchTier.toLowerCase()">
+                                                <span class="percent text-white fw-bold">{{proposal.matchScore}}%</span>
+                                            </div>
+                                            <div class="fw-bold small" style="font-size: 11px;" [ngClass]="{
+                                'text-success': proposal.matchTier === 'High',
+                                'text-warning': proposal.matchTier === 'Medium',
+                                'text-danger': proposal.matchTier === 'Low'
+                              }">{{proposal.matchTier}} Match</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Cover Letter Pitch -->
+                                    <div class="mb-4">
+                                        <p class="text-secondary small pitch-text mb-0 italic">
+                                            "{{proposal.coverLetter}}"
+                                        </p>
+                                    </div>
+
+                                    <!-- Skills Badge -->
+                                    <div class="mb-4 mt-auto">
+                                        <div class="d-flex flex-wrap gap-2">
+                                            @for (skill of proposal.skills; track skill) {
+                                            <span class="badge-skill">{{skill}}</span>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <!-- Bid Specifications -->
+                                    <div
+                                        class="row g-2 mb-4 py-3 border-top border-bottom border-white border-opacity-10 text-center">
+                                        <div class="col-3 text-start border-end border-white border-opacity-10">
+                                            <div class="text-white fw-bold h6 mb-1">${{proposal.hourlyRate}}</div>
+                                            <div class="text-secondary text-uppercase fw-bold"
+                                                style="font-size: 9px; letter-spacing: 0.5px;">Bid Rate</div>
+                                        </div>
+                                        <div class="col-3 text-start border-end border-white border-opacity-10">
+                                            <div class="text-white fw-bold h6 mb-1">{{proposal.duration}}</div>
+                                            <div class="text-secondary text-uppercase fw-bold"
+                                                style="font-size: 9px; letter-spacing: 0.5px;">Est. Time</div>
+                                        </div>
+                                        <div class="col-3 text-start border-end border-white border-opacity-10">
+                                            <div class="text-white fw-bold h6 mb-1">{{proposal.successRate}}%</div>
+                                            <div class="text-secondary text-uppercase fw-bold"
+                                                style="font-size: 9px; letter-spacing: 0.5px;">Success</div>
+                                        </div>
+                                        <div class="col-3 text-start">
+                                            <div
+                                                class="text-white fw-bold h6 mb-1 d-flex align-items-center justify-content-start gap-1">
+                                                {{proposal.rating}} <i class="bi bi-star-fill text-warning small"></i>
+                                            </div>
+                                            <div class="text-secondary text-uppercase fw-bold"
+                                                style="font-size: 9px; letter-spacing: 0.5px;">Rating</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hiring Workflow Stepper Timeline -->
+                                    <div class="hiring-stepper mb-2">
+                                        <p class="text-secondary small fw-bold text-uppercase mb-2 text-start"
+                                            style="font-size: 10px; letter-spacing: 0.5px;">Recruitment Stage</p>
+
+                                        <div class="stepper-track d-flex justify-content-between position-relative">
+                                            <div class="stepper-line position-absolute start-0" [ngClass]="{
+                                                 'progress-20': proposal.status === 'Shortlisted',
+                                                 'progress-40': proposal.status === 'Assessment Scheduled',
+                                                 'progress-60': proposal.status === 'Interview Scheduled',
+                                                 'progress-80': proposal.status === 'Hired',
+                                                 'progress-100': proposal.status === 'Rejected'
+                                               }"></div>
+
+                                            <!-- Step 1: Applied -->
+                                            <div class="step-node d-flex flex-column align-items-center position-relative z-3"
+                                                [class.completed]="proposal.status !== 'Applied'"
+                                                [class.active]="proposal.status === 'Applied'">
+                                                <div
+                                                    class="node-dot d-flex align-items-center justify-content-center rounded-circle">
+                                                    <i class="bi bi-check-lg text-white"></i>
+                                                </div>
+                                                <span class="step-label mt-1 text-secondary"
+                                                    style="font-size: 9px;">Applied</span>
+                                            </div>
+
+                                            <!-- Step 2: Shortlisted -->
+                                            <div class="step-node d-flex flex-column align-items-center position-relative z-3"
+                                                [class.completed]="proposal.status !== 'Applied' && proposal.status !== 'Shortlisted'"
+                                                [class.active]="proposal.status === 'Shortlisted'">
+                                                <div
+                                                    class="node-dot d-flex align-items-center justify-content-center rounded-circle">
+                                                    <i class="bi bi-check-lg text-white"></i>
+                                                </div>
+                                                <span class="step-label mt-1 text-secondary"
+                                                    style="font-size: 9px;">Shortlist</span>
+                                            </div>
+
+                                            <!-- Step 3: Assessment -->
+                                            <div class="step-node d-flex flex-column align-items-center position-relative z-3"
+                                                [class.completed]="proposal.status === 'Interview Scheduled' || proposal.status === 'Hired' || proposal.status === 'Rejected'"
+                                                [class.active]="proposal.status === 'Assessment Scheduled'">
+                                                <div
+                                                    class="node-dot d-flex align-items-center justify-content-center rounded-circle">
+                                                    <i class="bi bi-check-lg text-white"></i>
+                                                </div>
+                                                <span class="step-label mt-1 text-secondary"
+                                                    style="font-size: 9px;">Assess</span>
+                                            </div>
+
+                                            <!-- Step 4: Interview -->
+                                            <div class="step-node d-flex flex-column align-items-center position-relative z-3"
+                                                [class.completed]="proposal.status === 'Hired' || proposal.status === 'Rejected'"
+                                                [class.active]="proposal.status === 'Interview Scheduled'">
+                                                <div
+                                                    class="node-dot d-flex align-items-center justify-content-center rounded-circle">
+                                                    <i class="bi bi-check-lg text-white"></i>
+                                                </div>
+                                                <span class="step-label mt-1 text-secondary"
+                                                    style="font-size: 9px;">Interview</span>
+                                            </div>
+
+                                            <!-- Step 5: Hired -->
+                                            <div class="step-node d-flex flex-column align-items-center position-relative z-3"
+                                                [class.completed]="proposal.status === 'Rejected'"
+                                                [class.active]="proposal.status === 'Hired'">
+                                                <div
+                                                    class="node-dot d-flex align-items-center justify-content-center rounded-circle">
+                                                    <i class="bi bi-trophy-fill text-white"></i>
+                                                </div>
+                                                <span class="step-label mt-1 text-secondary"
+                                                    style="font-size: 9px;">Hired</span>
+                                            </div>
+
+                                            <!-- Step 6: Rejected -->
+                                            <div class="step-node d-flex flex-column align-items-center position-relative z-3 rejected-node"
+                                                [class.active]="proposal.status === 'Rejected'">
+                                                <div
+                                                    class="node-dot node-dot-rejected d-flex align-items-center justify-content-center rounded-circle">
+                                                    <i class="bi bi-x-lg text-white"></i>
+                                                </div>
+                                                <span class="step-label mt-1 text-secondary"
+                                                    style="font-size: 9px;">Rejected</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Status Badge (Aligned Left Start below Timeline) -->
+                                    <div class="text-start mt-4 mb-4">
+                                        <span class="badge px-3 py-2 fw-medium badge-status"
+                                            [class.badge-status-applied]="proposal.status === 'Applied'"
+                                            [class.badge-status-shortlisted]="proposal.status === 'Shortlisted'"
+                                            [class.badge-status-assessment]="proposal.status === 'Assessment Scheduled'"
+                                            [class.badge-status-interview]="proposal.status === 'Interview Scheduled'"
+                                            [class.badge-status-hired]="proposal.status === 'Hired'"
+                                            [class.badge-status-rejected]="proposal.status === 'Rejected'">
+                                            Current Status: {{ getStatusLabel(proposal.status) }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Interactive Recruitment Phase Controls -->
+                                    <div class="row g-2 w-100 m-0 pt-3 border-top border-white border-opacity-5">
+                                        <!-- View Profile Button (col-5) -->
+                                        <div class="col-5 ps-0 pe-1">
+                                            <button
+                                                class="btn btn-outline-secondary btn-sm rounded-3 w-100 fw-medium text-white border-white border-opacity-25 transition-all duration-300"
+                                                style="font-size: 13px; height: 38px;">
+                                                View Profile
+                                            </button>
+                                        </div>
+
+                                        <!-- Update Phase Button (col-7) -->
+                                        <div class="col-7 pe-0 ps-1">
+                                            <button
+                                                class="btn btn-outline-primary btn-sm rounded-3 w-100 fw-medium update-phase-btn"
+                                                (click)="advanceStatus(contract.id, proposal.id)"
+                                                [disabled]="proposal.status === 'Rejected'"
+                                                style="height: 38px; font-size: 13px; white-space: nowrap;">
+                                                Update Recruitment Phase
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            } @empty {
+                            <div class="col-12 text-center py-5">
+                                <div class="glass p-5 rounded-4 d-inline-block">
+                                    <i class="bi bi-file-earmark-x text-secondary fs-1 mb-3"></i>
+                                    <p class="text-secondary mb-0">No applicant proposals match your current criteria.
+                                    </p>
+                                </div>
+                            </div>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            } @empty {
+            <div class="text-center p-5 border border-white border-opacity-10 rounded-4 glass">
+                <i class="bi bi-folder-x text-secondary fs-1 mb-3"></i>
+                <p class="text-secondary mb-0">No active contracts sourcing candidates.</p>
+            </div>
+            }
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,78 @@
+<div class="contract-form-page p-3 p-md-4 p-xl-5">
+  <div class="container max-w-4xl mx-auto">
+    
+    <div class="mb-5 text-center text-md-start">
+      <h2 class="text-white fw-bold mb-2">Post a New Contract</h2>
+      <p class="text-secondary mb-0">Provide details about your project to attract top talent.</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="glass p-4 p-md-5 rounded-4 shadow-lg">
+      <div class="row g-4">
+        <!-- Title -->
+        <div class="col-12">
+          <label class="form-label text-white fw-medium mb-2">Project Title</label>
+          <input type="text" class="form-control bg-dark-subtle border-white border-opacity-10 text-white p-3 rounded-3" 
+                 placeholder="e.g. Frontend Redesign with Angular" [(ngModel)]="contractData.title" name="title" required>
+        </div>
+
+        <!-- Description -->
+        <div class="col-12">
+          <label class="form-label text-white fw-medium mb-2">Detailed Description</label>
+          <textarea class="form-control bg-dark-subtle border-white border-opacity-10 text-white p-3 rounded-3" 
+                    rows="5" placeholder="Explain your project goals and requirements..." 
+                    [(ngModel)]="contractData.description" name="description" required></textarea>
+        </div>
+
+        <!-- Category -->
+        <div class="col-12 col-md-6">
+          <label class="form-label text-white fw-medium mb-2">Category</label>
+          <select class="form-select bg-dark-subtle border-white border-opacity-10 text-white p-3 rounded-3" 
+                  [(ngModel)]="contractData.category" name="category">
+            <option value="Development">Development</option>
+            <option value="Design">Design</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Writing">Writing</option>
+          </select>
+        </div>
+
+        <!-- Budget Type -->
+        <div class="col-12 col-md-6">
+          <label class="form-label text-white fw-medium mb-2">Budget Type</label>
+          <div class="d-flex gap-3 mt-1">
+            <div class="form-check custom-check p-3 rounded-3 flex-grow-1" [class.active]="contractData.budgetType === 'fixed'" (click)="contractData.budgetType = 'fixed'">
+              <input class="form-check-input d-none" type="radio" name="budgetType" id="fixed" value="fixed" [(ngModel)]="contractData.budgetType">
+              <label class="form-check-label text-white w-100 cursor-pointer" for="fixed">
+                <i class="bi bi-tag-fill me-2"></i> Fixed Price
+              </label>
+            </div>
+            <div class="form-check custom-check p-3 rounded-3 flex-grow-1" [class.active]="contractData.budgetType === 'hourly'" (click)="contractData.budgetType = 'hourly'">
+              <input class="form-check-input d-none" type="radio" name="budgetType" id="hourly" value="hourly" [(ngModel)]="contractData.budgetType">
+              <label class="form-check-label text-white w-100 cursor-pointer" for="hourly">
+                <i class="bi bi-clock-fill me-2"></i> Hourly Rate
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Amount -->
+        <div class="col-12 col-md-6">
+          <label class="form-label text-white fw-medium mb-2">Estimated Budget ($)</label>
+          <input type="number" class="form-control bg-dark-subtle border-white border-opacity-10 text-white p-3 rounded-3" 
+                 placeholder="0.00" [(ngModel)]="contractData.budgetAmount" name="amount" required>
+        </div>
+
+        <!-- Deadline -->
+        <div class="col-12 col-md-6">
+          <label class="form-label text-white fw-medium mb-2">Expected Deadline</label>
+          <input type="date" class="form-control bg-dark-subtle border-white border-opacity-10 text-white p-3 rounded-3" 
+                 [(ngModel)]="contractData.deadline" name="deadline">
+        </div>
+
+        <!-- Submit -->
+        <div class="col-12 mt-5">
+          <button type="submit" class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow-lg">Post Contract Now</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

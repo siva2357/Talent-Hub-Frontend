@@ -1,0 +1,144 @@
+.talent-profile-page { background: transparent; min-height: 100vh; }
+.max-w-5xl { max-width: 1100px; }
+.z-index-top { z-index: 1000 !important; }
+
+.profile-cover {
+  height: 280px;
+  width: 100%;
+}
+
+.cover-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.6) 100%);
+}
+
+.profile-container-overlap {
+  margin-top: -100px;
+  position: relative;
+  z-index: 10;
+}
+
+.back-link-floating {
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.back-link-floating:hover { transform: translateX(-5px); opacity: 0.8; }
+
+.glass { background: rgba(255, 255, 255, 0.02) !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; backdrop-filter: blur(20px); }
+.glass-vivid { background: rgba(0, 0, 0, 0.4) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; backdrop-filter: blur(10px); }
+
+.text-xxs { font-size: 10px; }
+.smaller { font-size: 12px; }
+
+.status-indicator-lg {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 4px solid #000;
+  bottom: 8px;
+  right: 8px;
+}
+
+.pill-badge {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ring-wrapper-lg {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 8px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ring-wrapper-lg.high { border-top-color: #198754; border-right-color: #198754; border-left-color: #198754; }
+
+.stat-icon { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+
+.skill-badge-lg {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+.skill-badge-lg:hover { background: rgba(26, 115, 232, 0.1); border-color: #1A73E8; }
+
+.timeline-icon-box { width: 48px; height: 48px; }
+.bg-purple { background: #9333ea !important; }
+
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+/* Performance Bar */
+.performance-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 100px;
+  display: flex;
+  position: relative;
+  overflow: visible;
+}
+.bar-segment { height: 100%; flex-grow: 1; }
+.bar-segment.low { background: #dc3545; border-top-left-radius: 100px; border-bottom-left-radius: 100px; opacity: 0.3; }
+.bar-segment.medium { background: #ffc107; opacity: 0.3; }
+.bar-segment.high { background: #198754; border-top-right-radius: 100px; border-bottom-right-radius: 100px; opacity: 0.3; }
+
+.bar-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  background: white;
+  border: 2px solid #198754;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(25, 135, 84, 0.5);
+  z-index: 2;
+}
+
+.calendar-icon-box { background: rgba(26, 115, 232, 0.1); }
+.language-pill { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
+
+/* Social Links */
+.social-link { transition: all 0.3s ease; }
+.social-link:hover { background: rgba(255, 255, 255, 0.05) !important; border-color: #1A73E8 !important; transform: translateX(5px); }
+.social-icon-box { width: 32px; height: 32px; }
+
+.bg-linkedin { background: #0077b5 !important; }
+.bg-behance { background: #053eff !important; }
+.bg-dribbble { background: #ea4c89 !important; }
+.bg-twitter { background: #000000 !important; } /* X / Twitter */
+
+/* Portfolio */
+.portfolio-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+.portfolio-card:hover { transform: translateY(-10px); border-color: #1A73E8 !important; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+
+.portfolio-image-wrapper { height: 200px; position: relative; overflow: hidden; }
+.portfolio-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+.portfolio-card:hover .portfolio-overlay { opacity: 1; }
+
+@media (min-width: 768px) {
+  .border-end-md { border-right: 1px solid rgba(255, 255, 255, 0.1) !important; }
+}
