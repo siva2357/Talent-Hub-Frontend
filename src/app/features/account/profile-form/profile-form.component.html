@@ -29,12 +29,7 @@
       <header class="content-header mb-5">
         <div class="header-main w-100 mt-4">
           <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-2">
-            <h4 class="text-3xl fw-bold text-white mb-0">{{ userRole | titlecase }} Profile</h4>
-            <div class="role-switch-container">
-              <app-button (click)="toggleRole()" variant="outline" size="sm">
-                Switch to {{ userRole === 'freelancer' ? 'Client' : 'Freelancer' }}
-              </app-button>
-            </div>
+            <h4 class="text-3xl fw-bold text-white mb-0">{{ userRole | titlecase }} Profile Form</h4>
           </div>
 
           <p class="text-md opacity-60 mb-0">
@@ -64,6 +59,14 @@
         </div>
       </header>
 
+      <!-- SUBMIT ERROR ALERT -->
+      @if (submitError) {
+        <div class="alert alert-danger py-2 px-3 mb-4 text-sm d-flex align-items-center gap-2">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span>{{ submitError }}</span>
+        </div>
+      }
+
       <!-- FORM SECTIONS -->
       <div class="form-sections-container">
         <!-- 1. PERSONAL INFORMATION (COMMON) -->
@@ -77,10 +80,14 @@
             <div class="col-lg-4 text-center">
               <div class="profile-pic-upload">
                 <div class="position-relative">
-                  <div class="pic-placeholder" (click)="triggerFileUpload()">
-                    <i class="bi bi-person" style="font-size: 5rem;"></i>
+                  <div class="pic-placeholder d-flex align-items-center justify-content-center overflow-hidden" (click)="triggerFileUpload()" style="cursor: pointer; width: 120px; height: 120px; border-radius: 50%; border: 2px dashed rgba(255,255,255,0.2); margin: 0 auto; background: rgba(255,255,255,0.03);">
+                    @if (profilePhotoPreview) {
+                      <img [src]="profilePhotoPreview" alt="Profile Preview" style="width: 100%; height: 100%; object-fit: cover;">
+                    } @else {
+                      <i class="bi bi-person" style="font-size: 3.5rem; color: rgba(255,255,255,0.3);"></i>
+                    }
                   </div>
-                  <div class="camera-btn-abs" (click)="triggerFileUpload()">
+                  <div class="camera-btn-abs" (click)="triggerFileUpload()" style="cursor: pointer;">
                     <i class="bi bi-camera-fill"></i>
                   </div>
                 </div>
@@ -100,7 +107,7 @@
                     icon="bi-envelope"></app-input>
                 </div>
                 <div class="col-sm-6">
-                  <app-input label="Username" placeholder="Enter username" [required]="true"></app-input>
+                  <app-input label="Username" placeholder="Enter username" [required]="true" [(ngModel)]="username"></app-input>
                 </div>
                 <div class="col-sm-6">
                   <app-input type="select" label="Gender" [options]="genderOptions" placeholder="Select"
@@ -110,13 +117,13 @@
                 @if (userRole === 'freelancer') {
                 <div class="col-12">
                   <app-input label="Professional Headline" placeholder="Example: Angular Developer, UI/UX Designer"
-                    [required]="true"></app-input>
+                    [required]="true" [(ngModel)]="professionalHeadline"></app-input>
                 </div>
                 }
 
                 <div class="col-12">
                   <app-input type="textarea" label="Short Bio" placeholder="Tell us about yourself..."
-                    [required]="true"></app-input>
+                    [required]="true" [(ngModel)]="shortBio"></app-input>
                 </div>
               </div>
             </div>
@@ -158,7 +165,7 @@
             <div class="row g-3">
               @for (type of ['individual', 'startup', 'agency', 'business']; track type) {
               <div class="col-6 col-md-3">
-                <div class="radio-card role-card-v" [class.active]="clientType === type"
+                <div class="radio-card role-card-v" [class.active]="clientType.toLowerCase() === type"
                   (click)="setSelection('clientType', type)">
                   <div class="radio-check position-absolute top-2 end-2"></div>
                   <div class="role-icon-box mb-2">
@@ -173,11 +180,11 @@
           </div>
           <div class="row g-4">
             <div class="col-md-6">
-              <app-input label="Website" placeholder="https://..." icon="bi-globe"></app-input>
+              <app-input label="Website" placeholder="https://..." icon="bi-globe" [(ngModel)]="website"></app-input>
             </div>
             <div class="col-md-6">
               <app-input type="select" label="Industry" [options]="industryOptions"
-                placeholder="Select industry"></app-input>
+                placeholder="Select industry" [(ngModel)]="industry"></app-input>
             </div>
           </div>
           }
@@ -191,13 +198,13 @@
           </div>
           <div class="row g-4">
             <div class="col-sm-4">
-              <app-input type="select" label="Country" [options]="countryOptions" placeholder="Select"></app-input>
+              <app-input type="select" label="Country" [options]="countryOptions" placeholder="Select" [(ngModel)]="country"></app-input>
             </div>
             <div class="col-sm-4">
-              <app-input label="City" placeholder="City"></app-input>
+              <app-input label="City" placeholder="City" [(ngModel)]="city"></app-input>
             </div>
             <div class="col-sm-4">
-              <app-input type="select" label="Timezone" [options]="timezoneOptions" placeholder="Select"></app-input>
+              <app-input type="select" label="Timezone" [options]="timezoneOptions" placeholder="Select" [(ngModel)]="timezone"></app-input>
             </div>
           </div>
         </section>
@@ -209,21 +216,16 @@
             <div class="section-number">4</div>
             <h2 class="text-2xl fw-bold text-white mb-0">Availability</h2>
           </div>
-            <div class="col-12">
-              <label class="form-label text-white opacity-80 mb-3">Available For Work</label>
-              <div class="availability-toggle-group d-flex flex-nowrap gap-2">
-                @for (opt of availabilityOptions; track opt.value) {
-                <div class="availability-btn" [class.active]="availabilityType === opt.value"
-                  (click)="setSelection('availability', opt.value)">
-                  <span class="btn-label">{{ opt.label }}</span>
-                </div>
-                }
+          <div class="col-12">
+            <label class="form-label text-white opacity-80 mb-3">Available For Work</label>
+            <div class="availability-toggle-group d-flex flex-nowrap gap-2">
+              @for (opt of availabilityOptions; track opt.value) {
+              <div class="availability-btn" [class.active]="availabilityType === opt.value"
+                (click)="setSelection('availability', opt.value)">
+                <span class="btn-label">{{ opt.label }}</span>
               </div>
-            @if (availabilityType === 'other') {
-            <div class="mt-3">
-              <app-input label="Specify Availability" placeholder="e.g. Weekends only" icon="bi-clock"></app-input>
+              }
             </div>
-            }
           </div>
         </section>
         }
@@ -258,10 +260,38 @@
                     <span class="text-sm ms-2">+91</span>
                   </div>
                   <div class="flex-grow-1">
-                    <app-input placeholder="Enter Phone" icon="bi-phone"></app-input>
+                    <app-input placeholder="Enter Phone" icon="bi-phone" [(ngModel)]="phoneNumber" [disabled]="isPhoneVerified"></app-input>
                   </div>
                 </div>
-                <app-button variant="outline" size="sm">Send OTP</app-button>
+
+                @if (isPhoneVerified) {
+                  <div class="verified-badge d-inline-flex py-1 px-3" style="font-size: 12px; background: rgba(34, 197, 94, 0.1); color: #22c55e; border-radius: 4px; border: 1px solid rgba(34, 197, 94, 0.2);">
+                    <i class="bi bi-check-circle-fill me-2"></i> Verified
+                  </div>
+                } @else {
+                  @if (showPhoneOtpInput) {
+                    <div class="phone-otp-verification mt-3 mb-3">
+                      <app-input placeholder="Enter 6-digit SMS OTP" icon="bi-shield-lock" [(ngModel)]="phoneOtpCode"></app-input>
+                      @if (phoneOtpError) {
+                        <p class="text-danger text-xs mt-1 mb-0">{{ phoneOtpError }}</p>
+                      }
+                      @if (phoneOtpSuccessMessage) {
+                        <p class="text-success text-xs mt-1 mb-0">{{ phoneOtpSuccessMessage }}</p>
+                      }
+                      <div class="d-flex gap-2 mt-2">
+                        <app-button variant="primary" size="sm" (click)="verifyPhoneOTP()" [disabled]="isVerifyingPhone">Verify Code</app-button>
+                        <app-button variant="outline" size="sm" (click)="sendPhoneOTP()" [disabled]="isSendingPhoneOtp">Resend</app-button>
+                      </div>
+                    </div>
+                  } @else {
+                    @if (phoneOtpError) {
+                      <p class="text-danger text-xs mb-2">{{ phoneOtpError }}</p>
+                    }
+                    <app-button variant="outline" size="sm" (click)="sendPhoneOTP()" [disabled]="isSendingPhoneOtp || !phoneNumber">
+                      @if (isSendingPhoneOtp) { Sending... } @else { Send OTP }
+                    </app-button>
+                  }
+                }
               </div>
             </div>
           </div>
@@ -273,7 +303,8 @@
             <div class="section-number">{{ userRole === 'freelancer' ? '6' : '5' }}</div>
             <h2 class="text-2xl fw-bold text-white mb-0">Social Links</h2>
           </div>
-          @if (savedSocialLinks.length < 5) { <div class="social-link-row mt-3">
+          @if (savedSocialLinks.length < 5) { 
+          <div class="social-link-row mt-3">
             <div class="row g-3 align-items-end">
               <div class="col-sm-3">
                 <app-input type="select" label="Platform" [options]="platformOptions" [(ngModel)]="currentLink.platform"
@@ -288,55 +319,54 @@
                   [disabled]="!currentLink.url || !currentLink.platform" class="w-100">Add</app-button>
               </div>
             </div>
-      </div>
-      }
-      <div class="connected-links-area mt-4">
-        @for (link of savedSocialLinks; track $index) {
-        <div class="connected-card mb-2">
-          <div class="d-flex align-items-center gap-3 w-100 flex-wrap">
-            <div class="social-icon-box"><i [class]="'bi ' + getPlatformIcon(link.platform)"></i></div>
-            <div class="flex-grow-1">
-              <h6 class="text-white mb-0">{{ link.platform | titlecase }}</h6>
-              <p class="text-xs opacity-50 mb-0 text-truncate" style="max-width: 200px;">{{ link.url }}</p>
-            </div>
-            <div class="d-flex gap-2">
-              <div class="action-btn-box edit" (click)="openEditModal($index)"><i class="bi bi-pencil"></i></div>
-              <div class="action-btn-box delete" (click)="removeSocialLink($index)"><i class="bi bi-trash"></i></div>
-            </div>
           </div>
-        </div>
-        }
+          }
+          <div class="connected-links-area mt-4">
+            @for (link of savedSocialLinks; track $index) {
+            <div class="connected-card mb-2">
+              <div class="d-flex align-items-center gap-3 w-100 flex-wrap">
+                <div class="social-icon-box"><i [class]="'bi ' + getPlatformIcon(link.platform)"></i></div>
+                <div class="flex-grow-1">
+                  <h6 class="text-white mb-0">{{ link.platform | titlecase }}</h6>
+                  <p class="text-xs opacity-50 mb-0 text-truncate" style="max-width: 200px;">{{ link.url }}</p>
+                </div>
+                <div class="d-flex gap-2">
+                  <div class="action-btn-box edit" (click)="openEditModal($index)"><i class="bi bi-pencil"></i></div>
+                  <div class="action-btn-box delete" (click)="removeSocialLink($index)"><i class="bi bi-trash"></i></div>
+                </div>
+              </div>
+            </div>
+            }
+          </div>
+        </section>
       </div>
-      </section>
+
+      <!-- FOOTER -->
+      <footer class="form-footer mt-5 pb-5">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <app-button variant="outline" size="md">Cancel</app-button>
+          <app-button variant="primary" (click)="onSaveAndContinue()" size="md" [disabled]="isLoading" [loading]="isLoading" customClass="btn-save-continue">Save & Continue</app-button>
+        </div>
+      </footer>
+    </main>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="form-footer mt-5 pb-5">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-      <app-button variant="outline" size="md">Cancel</app-button>
-      <app-button variant="primary" (click)="onSaveAndContinue()" size="md" customClass="btn-save-continue">Save &
-        Continue</app-button>
-    </div>
-  </footer>
-  </main>
-</div>
-
-<!-- MODAL -->
-@if (isEditModalOpen) {
-<div class="edit-modal-overlay">
-  <div class="edit-modal-content glass">
-    <div class="d-flex justify-content-between mb-4">
-      <h4 class="text-white mb-0">Edit Link</h4>
-      <button (click)="closeEditModal()" class="btn-close btn-close-white"></button>
-    </div>
-    <div class="mb-4">
-      <app-input label="URL" [(ngModel)]="editingLinkData.url" placeholder="https://..." [required]="true"></app-input>
-    </div>
-    <div class="d-flex gap-3">
-      <app-button (click)="closeEditModal()" variant="outline" class="flex-grow-1">Cancel</app-button>
-      <app-button (click)="updateSocialLink()" variant="primary" class="flex-grow-1">Update</app-button>
+  <!-- MODAL -->
+  @if (isEditModalOpen) {
+  <div class="edit-modal-overlay">
+    <div class="edit-modal-content glass">
+      <div class="d-flex justify-content-between mb-4">
+        <h4 class="text-white mb-0">Edit Link</h4>
+        <button (click)="closeEditModal()" class="btn-close btn-close-white"></button>
+      </div>
+      <div class="mb-4">
+        <app-input label="URL" [(ngModel)]="editingLinkData.url" placeholder="https://..." [required]="true"></app-input>
+      </div>
+      <div class="d-flex gap-3">
+        <app-button (click)="closeEditModal()" variant="outline" class="flex-grow-1">Cancel</app-button>
+        <app-button (click)="updateSocialLink()" variant="primary" class="flex-grow-1">Update</app-button>
+      </div>
     </div>
   </div>
-</div>
-}
+  }
 </div>

@@ -10,11 +10,21 @@
         <div class="banner-gradient-fade position-absolute w-100 h-100"></div>
 
         <!-- Floating Back Arrow Navigation -->
-        <a routerLink="/user/client-dashboard"
-            class="btn-back-nav rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 start-0 m-4 shadow-lg z-3"
-            title="Back to Dashboard">
-            <i class="bi bi-arrow-left"></i>
-        </a>
+<!-- Floating Back Arrow Navigation -->
+<a
+    [routerLink]="
+        isClient()
+            ? '/user/client-dashboard'
+            : isFreelancer()
+                ? '/user/my-dashboard'
+                : '/user/admin'
+    "
+    class="btn-back-nav rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 start-0 m-4 shadow-lg z-3"
+    title="Back to Dashboard">
+
+    <i class="bi bi-arrow-left"></i>
+
+</a>
     </div>
 
     <!-- Main Profile Container -->
@@ -28,22 +38,35 @@
             <div class="row align-items-center g-4 position-relative z-2">
 
                 <!-- Avatar with glowing background -->
-                <div class="col-12 col-md-auto text-center text-md-start">
-                    <div class="profile-avatar-container position-relative mx-auto">
-                        <div class="profile-avatar-glow position-absolute w-100 h-100 rounded-circle"></div>
-                        <div
-                            class="profile-avatar rounded-circle d-flex align-items-center justify-content-center fw-bold text-white position-relative z-2">
-                            {{ user.avatar }}
-                        </div>
-                    </div>
-                </div>
+                <!-- Avatar with glowing background -->
+<div class="col-12 col-md-auto text-center text-md-start">
+    <div class="profile-avatar-container position-relative mx-auto">
+        <div class="profile-avatar-glow position-absolute w-100 h-100 rounded-circle"></div>
+
+        <div
+            class="profile-avatar rounded-circle overflow-hidden d-flex align-items-center justify-content-center fw-bold text-white position-relative z-2">
+
+            @if (profile?.basicInformation?.profilePhoto) {
+            <img
+                [src]="profile?.basicInformation?.profilePhoto"
+                alt="Profile"
+                class="w-100 h-100 object-fit-cover">
+            }
+
+            @else {
+            {{ user?.fullName?.charAt(0) || 'U' }}
+            }
+
+        </div>
+    </div>
+</div>
 
                 <!-- Personal Info Details -->
                 <div class="col-12 col-md flex-grow-1 text-center text-md-start">
                     <div class="d-flex flex-column">
                         <div
                             class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 flex-wrap mb-1">
-                            <h2 class="text-white fw-extrabold mb-0 profile-name">{{ user.name }}</h2>
+                            <h2 class="text-white fw-extrabold mb-0 profile-name">{{ profile?.basicInformation?.fullName || 'No Data' }}</h2>
                             <span class="badge-verified d-inline-flex align-items-center justify-content-center"
                                 title="Verified Specialist">
                                 <i class="bi bi-patch-check-fill"></i>
@@ -54,43 +77,27 @@
                             class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-start gap-3 mt-2 text-secondary-light font-sm">
                             <span class="d-flex align-items-center gap-2 info-chip">
                                 <i class="bi bi-geo-alt-fill text-primary-light"></i>
-                                <span>{{ user.location }}</span>
+                                <span>{{ profile?.basicInformation?.location || 'No Data' }}</span>
                             </span>
                             <span class="d-flex align-items-center gap-2 info-chip">
                                 <i class="bi bi-envelope-fill text-primary-light"></i>
-                                <span>{{ user.email }}</span>
+                                <span>{{ profile?.basicInformation?.email || 'No Data' }}</span>
                             </span>
                             <span class="d-flex align-items-center gap-2 info-chip">
                                 <i class="bi bi-calendar3-event text-primary-light"></i>
-                                <span>{{ user.joinedDate }}</span>
+                                <span>{{ profile?.basicInformation?.joinedDate || 'No Data' }}</span>
                             </span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Dual-Mode View Switcher (Mockup Toggle Switch) -->
-                <div class="col-12 col-md-auto text-center">
-                    <div class="toggle-pill-switch p-1 rounded-pill border-glass d-inline-flex gap-1 shadow-sm">
-                        <button
-                            class="btn toggle-pill-btn rounded-pill px-4 py-2.5 fw-semibold d-flex align-items-center gap-2"
-                            [class.active]="viewMode === 'freelancer'" (click)="toggleView('freelancer')">
-                            <i class="bi bi-briefcase-fill"></i>
-                            <span>Freelancer</span>
-                        </button>
-                        <button
-                            class="btn toggle-pill-btn rounded-pill px-4 py-2.5 fw-semibold d-flex align-items-center gap-2"
-                            [class.active]="viewMode === 'client'" (click)="toggleView('client')">
-                            <i class="bi bi-building-fill"></i>
-                            <span>Client</span>
-                        </button>
-                    </div>
-                </div>
+
 
             </div>
         </div>
 
         <!-- ================= FREELANCER VIEW ================= -->
-        @if (viewMode === 'freelancer') {
+        @if (isFreelancer()) {
         <div class="animate-fade-in row g-4">
 
             <!-- Left Sidebar: Professional Summary & Skills -->
@@ -99,17 +106,17 @@
                 <div
                     class="glass-dark p-4 p-md-5 rounded-4 border-glass mb-4 shadow-sm position-relative overflow-hidden">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
-                        <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{ freelancerProfile.title }}</h4>
+                        <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{ profile?.professionalDetails?.title || 'No Data' }}</h4>
                         <div
                             class="hourly-rate-capsule px-3.5 py-2 rounded-3 border-glass d-flex align-items-center gap-2 bg-success-glow">
                             <i class="bi bi-cash text-success-light fs-5"></i>
                             <span class="text-success-light fw-extrabold font-monospace text-lg">
-                                ${{ freelancerProfile.hourlyRate | number:'1.2-2' }}/hr
+                                ${{ profile?.professionalDetails?.hourlyRate | number:'1.2-2' }}/hr
                             </span>
                         </div>
                     </div>
                     <p class="text-secondary lh-lg mb-0 font-sm profile-description">
-                        {{ freelancerProfile.summary }}
+                        {{ profile?.professionalDetails?.summary || 'No data available' }}
                     </p>
                 </div>
 
@@ -121,7 +128,7 @@
                     </div>
 
                     <div class="row g-4">
-                        @for (item of freelancerProfile.portfolio; track item.title) {
+                        @for (item of profile?.professionalDetails?.portfolio; track item.title) {
                         <div class="col-12">
                             <div
                                 class="portfolio-card p-4 rounded-4 border-glass position-relative overflow-hidden transition-all">
@@ -160,12 +167,12 @@
                             <h4 class="text-white fw-bold mb-0 text-lg font-headline">My Contract Diary</h4>
                         </div>
                         <span class="badge badge-completed-count py-1.5 px-3 rounded-pill text-xs font-semibold">
-                            {{ freelancerProfile.contracts.length }} Completed Contracts
+                            {{ profile?.professionalDetails?.contracts.length }} Completed Contracts
                         </span>
                     </div>
 
                     <div class="d-flex flex-column gap-3.5">
-                        @for (contract of freelancerProfile.contracts; track contract.id) {
+                        @for (contract of profile?.professionalDetails?.contracts; track contract.id) {
                         <div
                             class="contract-ledger-row p-4 rounded-4 border-glass position-relative overflow-hidden bg-card-dark text-start d-flex flex-column gap-3 mb-4">
                             <div class="contract-status-bar position-absolute h-100 bg-success"></div>
@@ -307,7 +314,7 @@
                                         class="stat-glow bg-success-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
                                     </div>
                                     <h3 class="text-success-light fw-extrabold mb-1.5 font-monospace text-2xl">{{
-                                        freelancerProfile.successRate }}%</h3>
+                                        profile?.professionalDetails?.successRate }}%</h3>
                                     <span class="text-secondary-light font-xs text-uppercase ls-1">Success Rate</span>
                                 </div>
                             </div>
@@ -320,7 +327,7 @@
                                     <h3
                                         class="text-white fw-extrabold mb-1.5 font-monospace text-2xl d-flex align-items-center justify-content-center gap-1">
                                         <i class="bi bi-star-fill text-warning fs-5"></i>
-                                        <span>{{ freelancerProfile.rating }}</span>
+                                        <span>{{ profile?.professionalDetails?.rating }}</span>
                                     </h3>
                                     <span class="text-secondary-light font-xs text-uppercase ls-1">Client Rating</span>
                                 </div>
@@ -335,7 +342,7 @@
                     <div class="position-relative z-2">
                         <h4 class="text-white fw-bold mb-4 text-md font-headline">Core Capabilities</h4>
                         <div class="d-flex flex-wrap gap-2">
-                            @for (skill of freelancerProfile.skills; track skill) {
+                            @for (skill of profile?.professionalDetails?.skills; track skill) {
                             <span class="badge skill-badge py-2 px-3 rounded-pill text-white transition-all">
                                 {{ skill }}
                             </span>
@@ -461,7 +468,7 @@
         }
 
         <!-- ================= CLIENT VIEW ================= -->
-        @if (viewMode === 'client') {
+        @if (isClient()) {
         <div class="animate-fade-in row g-4">
 
             <!-- Left Sidebar: Corporate profile & Completed Logs -->
@@ -475,10 +482,10 @@
                                 class="corporate-badge rounded-3 d-flex align-items-center justify-content-center text-primary-light">
                                 <i class="bi bi-building fs-4"></i>
                             </div>
-                            <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{ clientProfile.company }}</h4>
+                            <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{ profile?.professionalDetails?.company }}</h4>
                         </div>
 
-                        <a [href]="clientProfile.website" target="_blank"
+                        <a [href]="profile?.professionalDetails?.website" target="_blank"
                             class="btn-corporate-web px-3.5 py-2 rounded-3 border-glass d-flex align-items-center gap-2 text-decoration-none">
                             <i class="bi bi-globe2 text-primary-light"></i>
                             <span class="text-primary-light fw-bold font-sm">Visit Website</span>
@@ -487,7 +494,7 @@
                     </div>
 
                     <p class="text-secondary lh-lg mb-0 font-sm profile-description">
-                        {{ clientProfile.summary }}
+                        {{ profile?.professionalDetails?.summary || 'No data available' }}
                     </p>
                 </div>
 
@@ -499,13 +506,13 @@
                             <h4 class="text-white fw-bold mb-0 text-lg font-headline">My Contract</h4>
                         </div>
                         <span class="badge-completed-count font-monospace font-xs px-2.5 py-1 rounded-2">
-                            {{ clientProfile.completedContracts.length }} Contracts
+                            {{ (profile?.professionalDetails?.completedContracts || []).length }} Contracts
                         </span>
                     </div>
 
                     <!-- High Fidelity Contract Cards Grid (Responsive Alternative to plain tables) -->
                     <div class="d-flex flex-column gap-4">
-                        @for (c of clientProfile.completedContracts; track c.id) {
+                        @for (c of (profile?.professionalDetails?.completedContracts || []); track c){
                         <div
                             class="contract-ledger-row p-4 rounded-4 border-glass position-relative overflow-hidden bg-card-dark text-start d-flex flex-column gap-3 mb-4">
                             <div class="contract-status-bar position-absolute h-100 bg-success"></div>
@@ -587,6 +594,7 @@
                         </div>
                         }
                     </div>
+
                 </div>
             </div>
 
@@ -604,8 +612,7 @@
                                     <div
                                         class="stat-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
                                     </div>
-                                    <h3 class="text-white fw-extrabold mb-1.5 font-monospace text-2xl">{{
-                                        clientProfile.jobsPosted }}</h3>
+                                    <h3 class="text-white fw-extrabold mb-1.5 font-monospace text-2xl">{{ profile?.professionalDetails?.jobsPosted || 0 }}</h3>
                                     <span class="text-secondary-light font-xs text-uppercase ls-1">Jobs Posted</span>
                                 </div>
                             </div>
@@ -615,8 +622,7 @@
                                     <div
                                         class="stat-glow bg-success-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
                                     </div>
-                                    <h3 class="text-success-light fw-extrabold mb-1.5 font-monospace text-2xl">{{
-                                        clientProfile.hireRate }}%</h3>
+                                    <h3 class="text-success-light fw-extrabold mb-1.5 font-monospace text-2xl">{{ profile?.professionalDetails?.hireRate || 0 }}%</h3>
                                     <span class="text-secondary-light font-xs text-uppercase ls-1">Hire Rate</span>
                                 </div>
                             </div>
@@ -637,7 +643,7 @@
                                     <span class="text-secondary-light font-xs text-uppercase ls-1">Total
                                         Investments</span>
                                     <h4 class="text-success-light fw-extrabold mb-0 font-monospace text-lg mt-0.5">
-                                        ${{ clientProfile.totalSpent | number:'1.2-2' }}
+                                        ${{ profile?.professionalDetails?.totalSpent || 0 }}
                                     </h4>
                                 </div>
                             </div>
@@ -663,85 +669,72 @@
                 </div>
 
                 <!-- Detailed Social Media Connections Card -->
-                <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden">
-                    <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
+   <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden">
+    <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
+    </div>
+
+    <div class="position-relative z-2">
+        <h4 class="text-white fw-bold mb-4 text-md font-headline">
+            Online Presence
+        </h4>
+
+        @if (profile?.socialLinks?.length) {
+
+        <div class="d-flex flex-column gap-3">
+
+            @for (social of profile?.socialLinks; track social) {
+
+            <a
+                [href]="social?.url || '#'"
+                target="_blank"
+                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div
+                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-white bg-dark-glow">
+
+                        <i class="bi bi-globe"></i>
+
                     </div>
-                    <div class="position-relative z-2">
-                        <h4 class="text-white fw-bold mb-4 text-md font-headline">Online Presence</h4>
-                        <div class="d-flex flex-column gap-3">
 
-                            <!-- GitHub Detailed Card -->
-                            <a [href]="user.github" target="_blank"
-                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div
-                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-white bg-dark-glow">
-                                        <i class="bi bi-github fs-5"></i>
-                                    </div>
-                                    <div class="d-flex flex-column text-start">
-                                        <span class="text-white fw-bold font-sm">GitHub</span>
-                                        <span
-                                            class="text-secondary-light font-xs font-monospace">github.com/sarahconnor</span>
-                                    </div>
-                                </div>
-                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
-                            </a>
+                    <div class="d-flex flex-column text-start">
 
-                            <!-- LinkedIn Detailed Card -->
-                            <a [href]="user.linkedin" target="_blank"
-                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div
-                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-info bg-info-glow">
-                                        <i class="bi bi-linkedin fs-5"></i>
-                                    </div>
-                                    <div class="d-flex flex-column text-start">
-                                        <span class="text-white fw-bold font-sm">LinkedIn</span>
-                                        <span
-                                            class="text-secondary-light font-xs font-monospace">linkedin.com/in/sarahconnor</span>
-                                    </div>
-                                </div>
-                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
-                            </a>
+                        <span class="text-white fw-bold font-sm">
+                            {{ social?.platform || 'Social Link' }}
+                        </span>
 
-                            <!-- Twitter/X Detailed Card -->
-                            <a [href]="user.twitter" target="_blank"
-                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div
-                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-white bg-dark-glow">
-                                        <i class="bi bi-twitter-x fs-5"></i>
-                                    </div>
-                                    <div class="d-flex flex-column text-start">
-                                        <span class="text-white fw-bold font-sm">Twitter / X</span>
-                                        <span
-                                            class="text-secondary-light font-xs font-monospace">twitter.com/sarahconnor</span>
-                                    </div>
-                                </div>
-                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
-                            </a>
+                        <span class="text-secondary-light font-xs font-monospace">
+                            {{ social?.url || 'No URL' }}
+                        </span>
 
-                            <!-- Dribbble Detailed Card -->
-                            <a [href]="user.dribbble" target="_blank"
-                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div
-                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-danger bg-danger-glow">
-                                        <i class="bi bi-dribbble fs-5"></i>
-                                    </div>
-                                    <div class="d-flex flex-column text-start">
-                                        <span class="text-white fw-bold font-sm">Dribbble</span>
-                                        <span
-                                            class="text-secondary-light font-xs font-monospace">dribbble.com/sarahconnor</span>
-                                    </div>
-                                </div>
-                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
-                            </a>
-
-                        </div>
                     </div>
+
                 </div>
 
+                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
+
+            </a>
+
+            }
+
+        </div>
+
+        }
+
+        @else {
+
+        <div
+            class="rounded-4 border-glass p-4 text-center text-secondary-light font-sm bg-black-20">
+
+            No Social Links Added
+
+        </div>
+
+        }
+
+    </div>
+</div>
                 <!-- Languages Card -->
                 <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden mt-4">
                     <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10"></div>
@@ -750,27 +743,39 @@
                             <i class="bi bi-translate text-primary-light"></i>
                             <span>Languages Supported</span>
                         </h4>
-                        <div class="d-flex flex-column gap-3">
-                            
-                            <!-- English -->
-                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
-                                <span class="text-white fw-bold font-sm">English</span>
-                                <span class="badge bg-primary-glow text-primary-light px-2.5 py-1 rounded font-xs fw-semibold">Professional</span>
-                            </div>
+                       <div class="d-flex flex-column gap-3">
 
-                            <!-- Spanish -->
-                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
-                                <span class="text-white fw-bold font-sm">Spanish</span>
-                                <span class="badge bg-success-glow text-success-light px-2.5 py-1 rounded font-xs fw-semibold">Professional</span>
-                            </div>
+    @if (profile?.languages?.length) {
 
-                            <!-- French -->
-                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
-                                <span class="text-white fw-bold font-sm">French</span>
-                                <span class="badge bg-secondary-glow text-secondary-light px-2.5 py-1 rounded font-xs fw-semibold">Intermediate</span>
-                            </div>
+        @for (language of profile?.languages; track language) {
 
-                        </div>
+        <div
+            class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+
+            <span class="text-white fw-bold font-sm">
+                {{ language?.name || 'No Data' }}
+            </span>
+
+            <span
+                class="badge bg-primary-glow text-primary-light px-2.5 py-1 rounded font-xs fw-semibold">
+                {{ language?.level || 'No Data' }}
+            </span>
+
+        </div>
+
+        }
+
+    }
+
+    @else {
+
+    <div class="text-secondary-light font-sm">
+        No Languages Added
+    </div>
+
+    }
+
+</div>
                     </div>
                 </div>
             </div>
