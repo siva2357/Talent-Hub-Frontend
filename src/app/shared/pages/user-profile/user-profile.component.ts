@@ -22,7 +22,7 @@ export class UserProfileComponent implements OnInit {
 
   user: any = null;
   profile: any = null;
-
+contracts: any[] = [];
   isLoading = true;
 
   isFreelancer = computed(() =>
@@ -43,6 +43,7 @@ export class UserProfileComponent implements OnInit {
       next: (res) => {
         this.user = res.user;
         this.profile = res.profile;
+        this.contracts = res.contracts || [];
         this.isLoading = false;
       },
       error: (err) => {

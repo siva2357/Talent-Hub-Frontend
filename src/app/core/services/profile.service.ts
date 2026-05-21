@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 import { FreelancerProfile, ClientProfile } from '../model/user.model';
+import { Contract } from '../model/contract.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,8 +33,8 @@ export class ProfileService {
   /**
    * Retrieves the current user's profile and user status.
    */
-  getMyProfile(): Observable<{ success: boolean; user: any; profile: FreelancerProfile | ClientProfile | null }> {
-    return this.http.get<{ success: boolean; user: any; profile: FreelancerProfile | ClientProfile | null }>(`${this.baseUrl}/profile/me`);
+  getMyProfile(): Observable<{ success: boolean; user: any; profile: FreelancerProfile | ClientProfile | null;contracts: Contract[]; }> {
+    return this.http.get<{ success: boolean; user: any; profile: FreelancerProfile | ClientProfile | null;contracts: Contract[]; }>(`${this.baseUrl}/profile/me`);
   }
 
   /**

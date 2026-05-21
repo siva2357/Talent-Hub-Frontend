@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+
+import { ContractService } from '../../../../../core/services/contract.service';
+
+import { Contract } from '../../../../../core/model/contract.model';
 
 @Component({
   selector: 'app-contract-view-details',
@@ -8,19 +13,65 @@ import { CommonModule } from '@angular/common';
   templateUrl: './contract-view-details.component.html',
   styleUrl: './contract-view-details.component.css'
 })
-export class ContractViewDetailsComponent {
-  contract = {
-    id: 'CON-10024',
-    title: 'Enterprise CRM Redesign',
-    freelancer: 'Alex Johnson',
-    status: 'In Progress',
-    startDate: 'Oct 01, 2023',
-    totalBudget: '$12,500',
-    spent: '$4,200',
-    description: 'Complete overhaul of the existing CRM interface to improve user engagement and data visualization accuracy.',
-    updates: [
-      { id: 1, date: 'Oct 15', text: 'Completed the initial wireframes for the dashboard.' },
-      { id: 2, date: 'Oct 10', text: 'Requirement gathering phase completed.' }
-    ]
-  };
+export class ContractViewDetailsComponent implements OnInit {
+
+  loading: boolean = false;
+
+  contractId: string = '';
+
+  contract!: Contract;
+
+  constructor(
+    private route: ActivatedRoute,
+    private contractService: ContractService
+  ) {}
+
+  ngOnInit(): void {
+    
+this.route.queryParams.subscribe(params => {
+
+  this.contractId = params['id'];
+
+  if (this.contractId) {
+
+    this.getContractById();
+
+  }
+
+});
+
+  }
+
+  // ========================================
+  // GET CONTRACT BY ID
+  // ========================================
+
+  getContractById(): void {
+
+    this.loading = true;
+
+    this.contractService
+      .getMyContractById(this.contractId)
+      .subscribe({
+
+        next: (response) => {
+
+          this.contract = response.contract;
+
+          this.loading = false;
+
+        },
+
+        error: (error) => {
+
+          console.error(error);
+
+          this.loading = false;
+
+        }
+
+      });
+
+  }
+
 }

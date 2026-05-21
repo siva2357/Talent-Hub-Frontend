@@ -1,7 +1,7 @@
 <div class="contracts-page py-5">
+
   <div class="container-fluid max-w-7xl mx-auto px-4">
 
-    <!-- Header Section -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-4">
       <div>
         <h3 class="text-white fw-bold mb-2 h4">Your Contracts</h3>
@@ -14,7 +14,7 @@
     </div>
 
     <div class="row g-4">
-      <!-- Left Section: Filters (col-4) -->
+
       <div class="col-12 col-lg-4">
         <div class="glass p-4 rounded-4 sticky-top shadow-lg border-white border-opacity-10"
           style="top: 110px; z-index: 0;">
@@ -60,98 +60,254 @@
         </div>
       </div>
 
-      <!-- Right Section: Contract Cards (col-8) -->
       <div class="col-12 col-lg-8">
-        <div class="row g-4">
-          @for (contract of filteredContracts; track contract.id) {
-          <div class="col-12">
-            <div
-              class="contract-card glass rounded-4 overflow-hidden border-white border-opacity-10 shadow-lg transition-all hover-translate-up">
-              <div class="p-4">
-                <div class="d-flex justify-content-between align-items-start mb-4">
-                  <div class="d-flex align-items-center gap-3">
-                    <div class="contract-icon-box glass rounded-3 d-flex align-items-center justify-content-center">
-                      <i class="bi bi-file-earmark-text text-primary fs-4"></i>
-                    </div>
-                    <div>
-                      <h5 class="text-white fw-bold mb-1">{{contract.title}}</h5>
-                      <div class="d-flex align-items-center gap-2">
-                        <span class="text-secondary text-xxs uppercase tracking-widest fw-bold">ID:
-                          #CON-{{contract.id}}092</span>
-                        <span
-                          class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 text-xxs">
-                          {{contract.status}}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+        @if (contracts.length === 0) {
 
-                <!-- Contract Metadata Grid -->
-                <div class="row g-3 mb-4 pt-3 border-top border-white border-opacity-5">
-                  <div class="col-6 col-sm-3">
-                    <div class="text-secondary text-xxs uppercase tracking-widest fw-bold mb-1">Type</div>
-                    <div class="text-white text-xs fw-bold">{{contract.type}}</div>
-                  </div>
-                  <div class="col-6 col-sm-3">
-                    <div class="text-secondary text-xxs uppercase tracking-widest fw-bold mb-1">Budget</div>
-                    <div class="text-white text-xs fw-bold">{{contract.budget}}</div>
-                  </div>
-                  <div class="col-6 col-sm-3">
-                    <div class="text-secondary text-xxs uppercase tracking-widest fw-bold mb-1">Start Date</div>
-                    <div class="text-white text-xs fw-bold">{{contract.startDate}}</div>
-                  </div>
-                  <div class="col-6 col-sm-3">
-                    <div class="text-secondary text-xxs uppercase tracking-widest fw-bold mb-1">End Date</div>
-                    <div class="text-white text-xs fw-bold">{{contract.endDate}}</div>
-                  </div>
-                </div>
+        <div class="col-12">
 
-                <div class="mb-4">
-                  <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-secondary text-xxs uppercase tracking-widest fw-bold">Progress</span>
-                    <span class="text-white text-xxs fw-bold">{{contract.progress}}%</span>
-                  </div>
-                  <div class="progress bg-white bg-opacity-5" style="height: 6px;">
-                    <div class="progress-bar bg-primary rounded-pill shadow-glow-primary"
-                      [style.width.%]="contract.progress"></div>
-                  </div>
-                </div>
-              </div>
+          <div class="glass p-5 rounded-4 text-center border-white border-opacity-10">
 
-              <!-- Card Footer Actions -->
-              <div
-                class="px-4 py-3 border-top border-white border-opacity-5 d-flex justify-content-between align-items-center"
-                style="background: rgba(255, 255, 255, 0.02);">
-                <div class="d-flex gap-2">
-                  <app-button variant="info" size="sm" [routerLink]="['/user/contract-view-details', contract.id]">
-                    View Contract
-                  </app-button>
-                  <app-button variant="warning" size="sm" (click)="editContract()">
-                    Edit
-                  </app-button>
-                  <app-button variant="danger" size="sm" (click)="deleteContract(contract.id)">
-                    Delete
-                  </app-button>
-                </div>
-              </div>
-            </div>
+            <i class="bi bi-file-earmark-x text-secondary display-1 opacity-25 mb-4 d-block"></i>
+
+            <h4 class="text-white fw-bold">
+
+              No Contracts Posted Yet
+
+            </h4>
+
+            <p class="text-secondary">
+
+              Start by creating your first contract
+              and hiring top talent.
+
+            </p>
+
+            <app-button variant="primary" size="sm" customClass="rounded-pill px-5 mt-3 fw-bold shadow-glow-primary"
+              routerLink="/user/contract-form">
+
+              Post New Contract
+
+            </app-button>
+
           </div>
-          } @empty {
-          <div class="col-12">
-            <div class="glass p-5 rounded-4 text-center border-white border-opacity-10">
-              <i class="bi bi-file-earmark-x text-secondary display-1 opacity-25 mb-4 d-block"></i>
-              <h4 class="text-white fw-bold">No Contracts Found</h4>
-              <p class="text-secondary">Try adjusting your filter criteria or start a new contract.</p>
-              <app-button variant="primary" size="md" customClass="rounded-pill px-5 mt-3 fw-bold shadow-glow-primary"
-                (click)="resetFilters()">
-                Clear All Filters
-              </app-button>
-            </div>
-          </div>
-          }
+
         </div>
+
+        }
+
+        @else if (filteredContracts.length === 0) {
+
+        <div class="col-12">
+
+          <div class="glass p-5 rounded-4 text-center border-white border-opacity-10">
+
+            <i class="bi bi-search text-secondary display-1 opacity-25 mb-4 d-block"></i>
+
+            <h4 class="text-white fw-bold">
+
+              No Matching Contracts Found
+
+            </h4>
+
+            <p class="text-secondary">
+
+              Try adjusting your filter criteria
+              or start a new contract.
+
+            </p>
+
+            <app-button variant="primary" size="md" customClass="rounded-pill px-5 mt-3 fw-bold shadow-glow-primary"
+              (click)="resetFilters()">
+
+              Clear All Filters
+
+            </app-button>
+
+          </div>
+
+        </div>
+
+        }
+
+        @else {
+
+        @for (contract of filteredContracts; track contract._id) {
+
+        <div class="col-12">
+
+          <div
+            class="contract-card mb-4 glass rounded-4 overflow-hidden border-white border-opacity-10 shadow-lg transition-all hover-translate-up">
+
+            <div class="p-4">
+
+              <!-- HEADER -->
+              <div class="d-flex justify-content-between align-items-start mb-4">
+
+                <div class="d-flex align-items-center gap-3">
+
+                  <div class="contract-icon-box glass rounded-3 d-flex align-items-center justify-content-center">
+                    <i class="bi bi-file-earmark-text text-primary fs-4"></i>
+                  </div>
+
+                  <div>
+
+                    <h5 class="text-white fw-bold mb-1">
+                      {{ contract.contractTitle }}
+                    </h5>
+
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 ">
+                        {{ contract.status }}
+                      </span>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!-- METADATA -->
+              <div class="row g-3 mb-4 pt-3 mt-4 border-top border-white border-opacity-5">
+
+                <!-- TYPE -->
+                <div class="col-6 col-sm-3">
+
+                  <div class="text-secondary text-xxs uppercase tracking-widest fw-bold mb-1">
+                    Type
+                  </div>
+
+                  <div class="text-white text-xs fw-bold">
+
+                    {{ contract.budgetType }}
+
+                  </div>
+
+                </div>
+
+                <!-- BUDGET -->
+                <div class="col-6 col-sm-3">
+
+                  <div class="text-secondary text-xxs uppercase tracking-widest fw-bold mb-1">
+                    Budget
+                  </div>
+
+                  <div class="text-white text-xs fw-bold">
+
+                    ${{ contract.estimatedBudget }}
+
+                  </div>
+
+                </div>
+
+                <!-- START DATE -->
+                <div class="col-6 col-sm-3">
+
+                  <div class="text-secondary text-xxs uppercase tracking-widest fw-bold mb-1">
+                    Start Date
+                  </div>
+
+                  <div class="text-white text-xs fw-bold">
+
+                    {{
+                    contract.contractStartDate
+                    | date : 'MMM d, y'
+                    }}
+
+                  </div>
+
+                </div>
+
+                <!-- END DATE -->
+                <div class="col-6 col-sm-3">
+
+                  <div class="text-secondary text-xxs uppercase tracking-widest fw-bold mb-1">
+                    End Date
+                  </div>
+
+                  <div class="text-white text-xs fw-bold">
+
+                    {{
+                    contract.contractEndDate
+                    | date : 'MMM d, y'
+                    }}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!-- STATIC PROGRESS -->
+              <div class="mb-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-2">
+
+                  <span class="text-secondary text-xxs uppercase tracking-widest fw-bold">
+                    Progress
+                  </span>
+
+                  <span class="text-white text-xxs fw-bold">
+
+                    65%
+
+                  </span>
+
+                </div>
+
+                <div class="progress bg-white bg-opacity-5" style="height: 6px;">
+
+                  <div class="progress-bar bg-primary rounded-pill shadow-glow-primary" style="width: 65%;"></div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div
+              class="px-4 py-3 border-top border-white border-opacity-5 d-flex justify-content-between align-items-center"
+              style="background: rgba(255, 255, 255, 0.02);">
+
+              <div class="d-flex gap-2 flex-wrap">
+
+                <!-- VIEW -->
+                <app-button variant="info" size="sm" (click)="viewContract(contract._id)">
+
+                  View Contract
+
+                </app-button>
+
+                <!-- EDIT -->
+                <app-button variant="warning" size="sm" (click)="editContract(contract._id)">
+
+                  Edit
+
+                </app-button>
+
+                <!-- DELETE -->
+                <app-button variant="danger" size="sm" (click)="deleteContract(contract._id)">
+
+                  Delete
+
+                </app-button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        }
+
+        }
       </div>
+
     </div>
+
   </div>
+  
 </div>

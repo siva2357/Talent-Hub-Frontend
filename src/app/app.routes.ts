@@ -116,28 +116,32 @@ export const routes: Routes = [
 
       // Client Pages
       { path: 'client-dashboard', component: ClientDashboardComponent },
+
       { path: 'your-contracts', component: YourContractsComponent },
+      { path: 'contract-form', component: ContractFormComponent },
+      { path: 'contract-view-details', component: ContractViewDetailsComponent },
       { path: 'contract-proposals', component: ContractProposalsComponent },
       { path: 'contract-progress', component: ContractProgressComponent },
       { path: 'contract-timesheet', component: ContractTimesheetComponent },
+
       { path: 'search-talent', component: SearchTalentComponent },
       { path: 'talent-profile', component: TalentProfileComponent },
+      { path: 'project-details/:id', component: ProjectDetailsComponent },
+      { path: 'contract-profile/:id', component: ContractProfileComponent },
       { path: 'saved-talent', component: SavedTalentComponent },
       { path: 'pending-offers', component: PendingOffersComponent },
       { path: 'hired-talent', component: HiredTalentComponent },
+
       { path: 'financial-summary', component: FinancialSummaryComponent },
       { path: 'transaction-history', component: TransactionHistoryComponent },
       { path: 'spending-activities', component: SpendingActivitiesComponent },
-      { path: 'contract-form', component: ContractFormComponent },
-      { path: 'talent-profile', component: TalentProfileComponent },
-      { path: 'project-details/:id', component: ProjectDetailsComponent },
-      { path: 'contract-view-details/:id', component: ContractViewDetailsComponent },
-      { path: 'contract-profile/:id', component: ContractProfileComponent },
 
-      // Freelancer Pages
+
+
+      // Freelancer Page
       { path: 'my-dashboard', component: FreelancerDashboardComponent },
       { path: 'find-contracts', component: FindContractsComponent },
-      { path: 'contract-details/:id', component: ContractDetailsComponent },
+      { path: 'contract-details', component: ContractDetailsComponent },
       { path: 'saved-contracts', component: SavedContractsComponent },
       { path: 'proposals', component: ProposalsComponent },
       { path: 'offers', component: OffersComponent },

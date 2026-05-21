@@ -69,77 +69,224 @@
       </aside>
 
       <!-- Main Content: Contracts Grid -->
-      <main class="col-lg-9">
-        <div class="row g-4">
-          @for (contract of filteredContracts; track contract.id) {
-          <div class="col-lg-6 col-md-6">
-            <div class="contract-card glass p-4 rounded-4 h-100 d-flex flex-column">
-              <!-- Top Info -->
-              <div class="d-flex justify-content-between align-items-start mb-4">
-                <div class="d-flex align-items-center gap-3">
-                  <div>
-                    <h5 class="fw-bold mb-2 h6">{{contract.title}}</h5>
-                    <div class="d-flex gap-2">
-                      <span class="badge-type"
-                        [ngClass]="contract.type === 'Fixed Price' ? 'fixed' : 'hourly'">{{contract.type}}</span>
-                      <span class="badge-level">{{contract.level}}</span>
-                    </div>
-                  </div>
-                </div>
-                <button class="btn-save"><i class="bi bi-bookmark"></i></button>
+<!-- Main Content: Contracts Grid -->
+<main class="col-lg-9">
+
+  <div class="row g-4">
+
+    @for (contract of filteredContracts; track contract._id) {
+
+    <div class="col-lg-6 col-md-6">
+
+      <div class="contract-card glass p-4 rounded-4 h-100 d-flex flex-column">
+
+        <!-- Top Info -->
+        <div class="d-flex justify-content-between align-items-start mb-4">
+
+          <div class="d-flex align-items-center gap-3">
+
+            <div>
+
+              <h5 class="fw-bold mb-2 h6">
+                {{ contract.contractTitle }}
+              </h5>
+
+              <div class="d-flex gap-2">
+
+                <span
+                  class="badge-type"
+                  [ngClass]="
+                    contract.budgetType === 'Fixed Price'
+                      ? 'fixed'
+                      : 'hourly'
+                  "
+                >
+                  {{ contract.budgetType }}
+                </span>
+
               </div>
 
-              <!-- Description -->
-              <p class="text-sm text-secondary mb-4 flex-grow-1">
-                {{contract.description}}
-              </p>
-
-              <!-- Tech Stack -->
-              <div class="d-flex flex-wrap gap-2 mb-4">
-                @for (tech of contract.techStack; track tech) {
-                <span class="tech-tag">{{tech}}</span>
-                }
-              </div>
-
-              <!-- Stats & Action -->
-              <div class="pt-4 border-top border-white border-opacity-10 mt-auto">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                  <div class="contract-stat">
-                    <div class="text-white fw-bold">{{contract.budget}}</div>
-                    <div class="text-xxs text-secondary">{{contract.budgetLabel}}</div>
-                  </div>
-                  <div class="contract-stat text-end">
-                    <div class="text-white fw-bold"><i class="bi bi-clock me-1"></i> {{contract.duration}}</div>
-                    <div class="text-xxs text-secondary">Duration</div>
-                  </div>
-                </div>
-                <a [routerLink]="['/user/contract-details', contract.id]" class="text-decoration-none">
-                  <app-button variant="brand" size="sm" customClass="w-100 py-2">Apply Now &rarr;</app-button>
-                </a>
-              </div>
             </div>
+
           </div>
-          } @empty {
-          <div class="col-12 text-center py-5">
-            <div class="empty-state glass p-5 rounded-5">
-              <i class="bi bi-search fs-1 text-secondary opacity-25 mb-3 d-block"></i>
-              <h4 class="text-white">No contracts found</h4>
-              <p class="text-secondary">Try adjusting your filters or search query.</p>
-              <button (click)="searchQuery = ''; selectedLevel = 'All Levels'" class="btn btn-primary px-4 mt-2">Clear
-                All</button>
-            </div>
-          </div>
+
+  <button
+  class="btn-save"
+  (click)="saveContract(contract._id)"
+>
+
+  @if(contract.hasSaved){
+
+    <i class="bi bi-bookmark-fill"></i>
+
+  } @else {
+
+    <i class="bi bi-bookmark"></i>
+
+  }
+
+</button>
+
+        </div>
+
+        <!-- Description -->
+        <p class="text-sm text-secondary mb-4 flex-grow-1" [innerHTML]="contract.contractDescription"></p>
+
+        <!-- Future Tech Stack -->
+        
+        <div class="d-flex flex-wrap gap-2 mb-4">
+
+          @for (tech of contract.techStack; track tech) {
+
+          <span class="tech-tag">
+            {{ tech }}
+          </span>
+
           }
+
+        </div>
+       
+
+        <!-- Stats -->
+        <div class="pt-4 border-top border-white border-opacity-10 mt-auto">
+
+          <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div class="contract-stat">
+
+              <div class="text-white fw-bold">
+
+                ₹{{ contract.estimatedBudget }}
+
+              </div>
+
+              <div class="text-xxs text-secondary">
+
+                Budget
+
+              </div>
+
+            </div>
+
+            <div class="contract-stat text-end">
+
+              <div class="text-white fw-bold">
+
+                <i class="bi bi-calendar-event me-1"></i>
+
+                {{ contract.totalDuration  }}
+
+              </div>
+
+              <div class="text-xxs text-secondary">
+
+                {{ contract.contractStartDate | date:'mediumDate' }}  -  {{ contract.contractEndDate | date:'mediumDate' }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="pt-4 border-top border-white border-opacity-10 mt-auto"></div>
+
+
+          <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div class="contract-stat">
+
+              <div class="text-white fw-bold">
+
+                {{ contract.clientName }}
+
+              </div>
+
+              <a
+  [href]="contract.website"
+  target="_blank"
+  class="text-xxs text-primary text-decoration-none"
+>
+
+  {{ contract.website }}
+
+</a>
+
+            </div>
+
+            <div class="contract-stat text-end">
+
+              <div class="text-white fw-bold">
+
+                <i class="bi bi-buildings me-1"></i>
+
+                {{ contract.clientType  }}
+
+              </div>
+
+              <div class="text-xxs text-secondary">
+
+                {{ contract.industry }} 
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <a
+            [routerLink]="['/user/contract-details', contract._id]"
+            class="text-decoration-none"
+          >
+
+            <app-button
+              variant="brand"
+              size="sm"
+              customClass="w-100 py-2"  (click)="viewContract(contract._id)"
+            >
+              Apply Now →
+            </app-button>
+
+          </a>
+
         </div>
 
-        <!-- Infinite Scroll Loading Indicator (Mock) -->
-        <div class="text-center mt-5 py-4">
-          <div class="spinner-border text-primary opacity-50" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <p class="text-secondary smaller mt-2">Loading more contracts...</p>
-        </div>
-      </main>
+      </div>
+
+    </div>
+
+    } @empty {
+
+    <div class="col-12 text-center py-5">
+
+      <div class="empty-state glass p-5 rounded-5">
+
+        <i class="bi bi-search fs-1 text-secondary opacity-25 mb-3 d-block"></i>
+
+        <h4 class="text-white">
+          No contracts found
+        </h4>
+
+        <p class="text-secondary">
+          Try adjusting your filters or search query.
+        </p>
+
+        <button
+          (click)="searchQuery = ''"
+          class="btn btn-primary px-4 mt-2"
+        >
+          Clear All
+        </button>
+
+      </div>
+
+    </div>
+
+    }
+
+  </div>
+
+</main>
     </div>
   </div>
 </div>

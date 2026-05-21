@@ -8,7 +8,7 @@ import { ChipComponent } from '../../../shared/components/chip/chip.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { ProfileService } from '../../../core/services/profile.service';
 import { UploadService } from '../../../core/services/upload.service';
-import { BucketKey, UploadSection } from '../../../core/enums/upload.enums';
+import { BucketKey, UploadSection } from '../../../core/enums/upload.enum';
 import {
   BasicInformationDto,
   LocationDto,

@@ -1,3 +1,4 @@
+import { Contract } from "./contract.model";
 
 
 export interface Registration {
@@ -95,6 +96,7 @@ export interface ClientProfile {
   verification: ProfileVerification;
   socialLinks: ProfileSocialLink[];
   languages: ProfileLanguage[];
+  contracts:Contract[];
   createdAt?: string;
   updatedAt?: string;
 }

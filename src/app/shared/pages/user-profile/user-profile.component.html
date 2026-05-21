@@ -9,26 +9,13 @@
         <div class="banner-orb orb-2 position-absolute"></div>
         <div class="banner-gradient-fade position-absolute w-100 h-100"></div>
 
-        <!-- Floating Back Arrow Navigation -->
-<!-- Floating Back Arrow Navigation -->
-<a
-    [routerLink]="
-        isClient()
-            ? '/user/client-dashboard'
-            : isFreelancer()
-                ? '/user/my-dashboard'
-                : '/user/admin'
-    "
-    class="btn-back-nav rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 start-0 m-4 shadow-lg z-3"
-    title="Back to Dashboard">
-
-    <i class="bi bi-arrow-left"></i>
-
-</a>
+        <a [routerLink]="isClient() ? '/user/client-dashboard' : isFreelancer() ? '/user/my-dashboard' : '/user/admin'"
+            class="btn-back-nav rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 start-0 m-4 shadow-lg z-3"
+            title="Back to Dashboard"><i class="bi bi-arrow-left fs-4"></i></a>
     </div>
 
     <!-- Main Profile Container -->
-    <div class="container max-w-6xl mx-auto profile-content-overlap px-3 px-md-4">
+    <div class="container  mx-auto profile-content-overlap ">
 
         <!-- Profile Header Panel -->
         <div class="glass-dark p-4 p-md-5 rounded-4 border-glass mb-5 shadow-lg position-relative overflow-hidden">
@@ -38,46 +25,39 @@
             <div class="row align-items-center g-4 position-relative z-2">
 
                 <!-- Avatar with glowing background -->
-                <!-- Avatar with glowing background -->
-<div class="col-12 col-md-auto text-center text-md-start">
-    <div class="profile-avatar-container position-relative mx-auto">
-        <div class="profile-avatar-glow position-absolute w-100 h-100 rounded-circle"></div>
 
-        <div
-            class="profile-avatar rounded-circle overflow-hidden d-flex align-items-center justify-content-center fw-bold text-white position-relative z-2">
+                <div class="col-12 col-md-auto text-center text-md-start">
+                    <div class="profile-avatar-container position-relative mx-auto">
+                        <div class="profile-avatar-glow position-absolute w-100 h-100 rounded-circle"></div>
 
-            @if (profile?.basicInformation?.profilePhoto) {
-            <img
-                [src]="profile?.basicInformation?.profilePhoto"
-                alt="Profile"
-                class="w-100 h-100 object-fit-cover">
-            }
+                        <div class="profile-avatar rounded-circle overflow-hidden d-flex align-items-center justify-content-center fw-bold text-white position-relative z-2">
 
-            @else {
-            {{ user?.fullName?.charAt(0) || 'U' }}
-            }
+                            @if (profile?.basicInformation?.profilePhoto) {
+                            <img [src]="profile?.basicInformation?.profilePhoto" alt="Profile" class="w-100 h-100 object-fit-cover">
+                            }
 
-        </div>
-    </div>
-</div>
+                            @else { {{ user?.fullName?.charAt(0) || 'U' }} }
+
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Personal Info Details -->
                 <div class="col-12 col-md flex-grow-1 text-center text-md-start">
+
                     <div class="d-flex flex-column">
-                        <div
-                            class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 flex-wrap mb-1">
-                            <h2 class="text-white fw-extrabold mb-0 profile-name">{{ profile?.basicInformation?.fullName || 'No Data' }}</h2>
-                            <span class="badge-verified d-inline-flex align-items-center justify-content-center"
-                                title="Verified Specialist">
+
+                        <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 flex-wrap mb-1">
+                            <h2 class="text-white fw-extrabold mb-0 profile-name">{{ profile?.basicInformation?.fullName  }}</h2>
+                            <span class="badge-verified d-inline-flex align-items-center justify-content-center" title="Verified Specialist">
                                 <i class="bi bi-patch-check-fill"></i>
                             </span>
                         </div>
 
-                        <div
-                            class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-start gap-3 mt-2 text-secondary-light font-sm">
+                        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-start gap-3 mt-2 text-secondary-light font-sm">
                             <span class="d-flex align-items-center gap-2 info-chip">
                                 <i class="bi bi-geo-alt-fill text-primary-light"></i>
-                                <span>{{ profile?.basicInformation?.location || 'No Data' }}</span>
+                                <span>{{ profile?.location?.country }}, {{ profile?.location?.city }}</span>
                             </span>
                             <span class="d-flex align-items-center gap-2 info-chip">
                                 <i class="bi bi-envelope-fill text-primary-light"></i>
@@ -88,7 +68,9 @@
                                 <span>{{ profile?.basicInformation?.joinedDate || 'No Data' }}</span>
                             </span>
                         </div>
+
                     </div>
+
                 </div>
 
 
@@ -106,7 +88,8 @@
                 <div
                     class="glass-dark p-4 p-md-5 rounded-4 border-glass mb-4 shadow-sm position-relative overflow-hidden">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
-                        <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{ profile?.professionalDetails?.title || 'No Data' }}</h4>
+                        <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{ profile?.professionalDetails?.title
+                            || 'No Data' }}</h4>
                         <div
                             class="hourly-rate-capsule px-3.5 py-2 rounded-3 border-glass d-flex align-items-center gap-2 bg-success-glow">
                             <i class="bi bi-cash text-success-light fs-5"></i>
@@ -243,7 +226,8 @@
                                         class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
                                         <i class="bi bi-clock-fill text-primary-light"></i>
                                         <div class="d-flex flex-column">
-                                            <span class="text-secondary-light font-xs uppercase-label">Hours Tracked</span>
+                                            <span class="text-secondary-light font-xs uppercase-label">Hours
+                                                Tracked</span>
                                             <span class="text-white fw-bold font-sm font-monospace">{{
                                                 contract.attendance.hoursTracked }} hrs</span>
                                         </div>
@@ -254,7 +238,8 @@
                                         class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
                                         <i class="bi bi-calendar-range text-primary-light"></i>
                                         <div class="d-flex flex-column">
-                                            <span class="text-secondary-light font-xs uppercase-label">Timeline Period</span>
+                                            <span class="text-secondary-light font-xs uppercase-label">Timeline
+                                                Period</span>
                                             <span class="text-white fw-bold font-xs font-monospace text-nowrap">{{
                                                 contract.attendance.startDate }} - {{ contract.attendance.endDate
                                                 }}</span>
@@ -266,7 +251,8 @@
                                         class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
                                         <i class="bi bi-bar-chart-fill text-primary-light"></i>
                                         <div class="d-flex flex-column">
-                                            <span class="text-secondary-light font-xs uppercase-label">Weekly Average</span>
+                                            <span class="text-secondary-light font-xs uppercase-label">Weekly
+                                                Average</span>
                                             <span class="text-white fw-bold font-sm font-monospace">{{
                                                 contract.attendance.weeklyAverage }}</span>
                                         </div>
@@ -277,7 +263,8 @@
                                         class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
                                         <i class="bi bi-person-check-fill text-success-light"></i>
                                         <div class="d-flex flex-column">
-                                            <span class="text-secondary-light font-xs uppercase-label">Attendance Rate</span>
+                                            <span class="text-secondary-light font-xs uppercase-label">Attendance
+                                                Rate</span>
                                             <span class="text-success-light fw-bold font-sm font-monospace">{{
                                                 contract.attendance.avgAttendanceRate }}%</span>
                                         </div>
@@ -433,30 +420,37 @@
 
                 <!-- Languages Card -->
                 <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden mt-4">
-                    <div class="sidebar-glow bg-success-glow position-absolute w-100 h-100 top-0 start-0 opacity-10"></div>
+                    <div class="sidebar-glow bg-success-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
+                    </div>
                     <div class="position-relative z-2">
                         <h4 class="text-white fw-bold mb-4 text-md font-headline d-flex align-items-center gap-2">
                             <i class="bi bi-translate text-success-light"></i>
                             <span>Languages Spoken</span>
                         </h4>
                         <div class="d-flex flex-column gap-3">
-                            
+
                             <!-- English -->
-                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                            <div
+                                class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
                                 <span class="text-white fw-bold font-sm">English</span>
-                                <span class="badge bg-success-glow text-success-light px-2.5 py-1 rounded font-xs fw-semibold">Professional</span>
+                                <span
+                                    class="badge bg-success-glow text-success-light px-2.5 py-1 rounded font-xs fw-semibold">Professional</span>
                             </div>
 
                             <!-- German -->
-                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                            <div
+                                class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
                                 <span class="text-white fw-bold font-sm">German</span>
-                                <span class="badge bg-primary-glow text-primary-light px-2.5 py-1 rounded font-xs fw-semibold">Intermediate</span>
+                                <span
+                                    class="badge bg-primary-glow text-primary-light px-2.5 py-1 rounded font-xs fw-semibold">Intermediate</span>
                             </div>
 
                             <!-- Spanish -->
-                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                            <div
+                                class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
                                 <span class="text-white fw-bold font-sm">Spanish</span>
-                                <span class="badge bg-secondary-glow text-secondary-light px-2.5 py-1 rounded font-xs fw-semibold">Beginner</span>
+                                <span
+                                    class="badge bg-secondary-glow text-secondary-light px-2.5 py-1 rounded font-xs fw-semibold">Beginner</span>
                             </div>
 
                         </div>
@@ -471,22 +465,18 @@
         @if (isClient()) {
         <div class="animate-fade-in row g-4">
 
-            <!-- Left Sidebar: Corporate profile & Completed Logs -->
             <div class="col-12 col-lg-8">
-                <!-- Company Profile Summary -->
-                <div
-                    class="glass-dark p-4 p-md-5 rounded-4 border-glass mb-4 shadow-sm position-relative overflow-hidden">
+                <div class="glass-dark p-4 p-md-5 rounded-4 border-glass mb-4 shadow-sm position-relative overflow-hidden">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+                       
                         <div class="d-flex align-items-center gap-2.5">
-                            <div
-                                class="corporate-badge rounded-3 d-flex align-items-center justify-content-center text-primary-light">
+                            <div class="corporate-badge rounded-3 d-flex align-items-center justify-content-center text-primary-light">
                                 <i class="bi bi-building fs-4"></i>
                             </div>
-                            <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{ profile?.professionalDetails?.company }}</h4>
+                            <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{  profile?.professionalDetails?.company }}</h4>
                         </div>
 
-                        <a [href]="profile?.professionalDetails?.website" target="_blank"
-                            class="btn-corporate-web px-3.5 py-2 rounded-3 border-glass d-flex align-items-center gap-2 text-decoration-none">
+                        <a [href]="profile?.professionalDetails?.website" target="_blank" class="btn-corporate-web px-3.5 py-2 rounded-3 border-glass d-flex align-items-center gap-2 text-decoration-none">
                             <i class="bi bi-globe2 text-primary-light"></i>
                             <span class="text-primary-light fw-bold font-sm">Visit Website</span>
                             <i class="bi bi-box-arrow-up-right text-primary-light font-xs ms-0.5"></i>
@@ -499,103 +489,204 @@
                 </div>
 
                 <!-- Client Contract Ledger Logs -->
-                <div class="glass-dark p-4 p-md-5 rounded-4 border-glass shadow-sm">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="section-indicator rounded-pill"></div>
-                            <h4 class="text-white fw-bold mb-0 text-lg font-headline">My Contract</h4>
-                        </div>
-                        <span class="badge-completed-count font-monospace font-xs px-2.5 py-1 rounded-2">
-                            {{ (profile?.professionalDetails?.completedContracts || []).length }} Contracts
-                        </span>
+<div class="glass-dark p-4 p-md-5 rounded-4 border-glass shadow-sm">
+
+    <!-- HEADER -->
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+
+        <div class="d-flex align-items-center gap-3">
+
+            <div class="section-indicator rounded-pill"></div>
+
+            <div>
+
+                <h4 class="text-white fw-bold mb-1">
+                    Posted Contracts
+                </h4>
+
+                <p class="text-secondary mb-0 small">
+                    Public contracts created by this client
+                </p>
+
+            </div>
+
+        </div>
+
+        <span class="badge-completed-count font-monospace font-xs px-3 py-2 rounded-2">
+            {{ contracts.length || 0 }} Contracts
+        </span>
+
+    </div>
+
+    <!-- CONTRACT LIST -->
+    <div class="d-flex flex-column gap-4">
+
+        @for (contract of contracts; track contract._id) {
+
+        <div class="contract-ledger-row p-4 rounded-4 border-glass position-relative overflow-hidden bg-card-dark d-flex flex-column gap-4">
+
+            <!-- STATUS BAR -->
+            <div
+                class="contract-status-bar position-absolute h-100"
+                [ngClass]="{
+                    'badge-warning': contract.status === 'pending',
+                    'badge-success': contract.status === 'active',
+                    'badge-danger': contract.status === 'closed'
+                }">
+
+            </div>
+
+            <!-- TOP -->
+            <div class="d-flex flex-column flex-xl-row justify-content-between gap-4 position-relative z-2">
+
+                <!-- LEFT -->
+                <div class="d-flex align-items-start gap-3">
+
+                    <!-- ICON -->
+                    <div class="contract-avatar">
+
+                        <i class="bi bi-briefcase-fill"></i>
+
                     </div>
 
-                    <!-- High Fidelity Contract Cards Grid (Responsive Alternative to plain tables) -->
-                    <div class="d-flex flex-column gap-4">
-                        @for (c of (profile?.professionalDetails?.completedContracts || []); track c){
-                        <div
-                            class="contract-ledger-row p-4 rounded-4 border-glass position-relative overflow-hidden bg-card-dark text-start d-flex flex-column gap-3 mb-4">
-                            <div class="contract-status-bar position-absolute h-100 bg-success"></div>
+                    <!-- DETAILS -->
+                    <div class="flex-grow-1">
 
-                            <div
-                                class="d-flex align-items-start align-items-md-center justify-content-between flex-wrap gap-3 position-relative z-2">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div
-                                        class="avatar-circle rounded-circle bg-primary-glow text-primary-light d-flex align-items-center justify-content-center fw-bold">
-                                        {{ c.avatar }}
-                                    </div>
-                                    <div class="d-flex flex-column text-start">
-                                        <h5
-                                            class="text-white fw-bold font-sm mb-1 d-flex align-items-center gap-2 flex-wrap">
-                                            <span>{{ c.title }}</span>
-                                            <span
-                                                class="badge badge-contract-id font-monospace font-xs px-2 py-0.5 rounded">
-                                                {{ c.id }}
-                                            </span>
-                                        </h5>
-                                        <span class="text-secondary-light font-xs">
-                                            Freelancer Specialist: <strong class="text-white-50">{{ c.freelancer }}</strong>
-                                        </span>
-                                    </div>
-                                </div>
+                        <div class="d-flex align-items-center gap-2 flex-wrap mb-2">
 
-                                <div class="d-flex align-items-center gap-4 ms-md-auto text-md-end">
-                                    <div class="d-flex flex-column">
-                                        <span class="text-secondary-light font-xs text-uppercase ls-1">Expenditure</span>
-                                        <span class="text-success-light fw-extrabold font-monospace font-sm mt-0.5">
-                                            ${{ c.budget | number:'1.2-2' }}
-                                        </span>
-                                    </div>
-                                    <div class="d-flex flex-column">
-                                        <span class="text-secondary-light font-xs text-uppercase ls-1">Finished</span>
-                                        <span class="text-white fw-semibold font-monospace font-xs mt-1">
-                                            {{ c.date }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            <span class="contract-type-badge">
 
-                            <!-- Deliverables Completed items -->
-                            <div class="p-3 rounded-3 border-glass text-start position-relative z-2 mt-1"
-                                style="background: rgba(0,0,0,0.15);">
-                                <div
-                                    class="d-flex align-items-center gap-2 mb-1.5 text-secondary-light font-xs fw-semibold">
-                                    <i class="bi bi-check2-circle text-success-light"></i>
-                                    <span>Delivered Scope of Work</span>
-                                </div>
-                                <p class="text-secondary font-sm mb-0 lh-relaxed">{{ c.deliverables }}</p>
-                            </div>
+                                {{ contract.budgetType }}
 
-                            <!-- Attendance & Time Logs -->
-                            <div class="row g-3 mt-1 position-relative z-2 justify-content-start">
-                                <div class="col-12 col-sm-6">
-                                    <div
-                                        class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
-                                        <i class="bi bi-clock-fill text-primary-light"></i>
-                                        <div class="d-flex flex-column text-start">
-                                            <span class="text-secondary-light font-xs uppercase-label">Hours Tracked</span>
-                                            <span class="text-white fw-bold font-sm font-monospace">{{
-                                                c.attendance.hoursTracked }} hrs</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <div
-                                        class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
-                                        <i class="bi bi-calendar-range text-primary-light"></i>
-                                        <div class="d-flex flex-column text-start">
-                                            <span class="text-secondary-light font-xs uppercase-label">Timeline Period</span>
-                                            <span class="text-white fw-bold font-sm font-monospace text-nowrap">{{
-                                                c.attendance.startDate }} - {{ c.attendance.endDate }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </span>
+
+                            <span
+                                class="contract-status-badge text-capitalize"
+                                [ngClass]="{
+                                    'pending': contract.status === 'pending',
+                                    'active': contract.status === 'active',
+                                    'closed': contract.status === 'closed'
+                                }">
+
+                                {{ contract.status }}
+
+                            </span>
+
                         </div>
-                        }
+
+                        <h4 class="text-white fw-bold mb-2">
+
+                            {{ contract.contractTitle }}
+
+                        </h4>
+
+                        <div class="d-flex flex-wrap gap-4 mt-3">
+
+                            <div>
+
+                                <span class="info-label-small">
+                                    Budget
+                                </span>
+
+                                <h6 class="text-success fw-bold mb-0 mt-1">
+
+                                    ₹ {{ contract.estimatedBudget | number }}
+
+                                </h6>
+
+                            </div>
+
+                            <div>
+
+                                <span class="info-label-small">
+                                    Start Date
+                                </span>
+
+                                <h6 class="text-white mb-0 mt-1">
+
+                                    {{ contract.contractStartDate | date:'mediumDate' }}
+
+                                </h6>
+
+                            </div>
+
+                            <div>
+
+                                <span class="info-label-small">
+                                    End Date
+                                </span>
+
+                                <h6 class="text-white mb-0 mt-1">
+
+                                    {{ contract.contractEndDate | date:'mediumDate' }}
+
+                                </h6>
+
+                            </div>
+
+                        </div>
+
                     </div>
 
                 </div>
+
+                <!-- RIGHT -->
+                <div class="d-flex flex-column align-items-xl-end justify-content-between gap-3">
+
+                    <div class="text-xl-end">
+
+                        <span class="info-label-small">
+                            Posted On
+                        </span>
+
+                        <h6 class="text-white fw-semibold mb-0 mt-1">
+
+                            {{ contract.createdAt | date:'mediumDate' }}
+
+                        </h6>
+
+                    </div>
+
+                    <button
+                        class="btn btn-primary rounded-pill px-4 py-2">
+
+                        View Contract
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div
+                class="contract-description-box p-4 rounded-4">
+
+                <div class="d-flex align-items-center gap-2 mb-3">
+
+                    <i class="bi bi-file-earmark-text text-primary"></i>
+
+                    <h6 class="text-white fw-bold mb-0">
+                        Contract Description
+                    </h6>
+
+                </div>
+
+                <div
+                    class="text-secondary contract-description-content"
+                    [innerHTML]="contract.contractDescription">
+
+                </div>
+
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+
+</div>
             </div>
 
             <!-- Right Sidebar: Client Stats & Verification badge -->
@@ -606,62 +697,54 @@
                     <div class="position-relative z-2">
                         <h4 class="text-white fw-bold mb-4 text-md font-headline">Platform Analytics</h4>
                         <div class="row g-3 mb-4">
+
                             <div class="col-6">
-                                <div
-                                    class="stat-badge-box p-3.5 rounded-4 border-glass text-center bg-card-dark position-relative overflow-hidden">
-                                    <div
-                                        class="stat-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
-                                    </div>
-                                    <h3 class="text-white fw-extrabold mb-1.5 font-monospace text-2xl">{{ profile?.professionalDetails?.jobsPosted || 0 }}</h3>
+
+                                <div class="stat-badge-box p-3.5 py-2 rounded-4 border-glass text-center bg-card-dark position-relative overflow-hidden">
+                                    <div  class="stat-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10"></div>
+                                    <h5 class="text-white ">{{ profile?.professionalDetails?.jobsPosted || 0 }}</h5>
                                     <span class="text-secondary-light font-xs text-uppercase ls-1">Jobs Posted</span>
                                 </div>
+
                             </div>
+
                             <div class="col-6">
-                                <div
-                                    class="stat-badge-box p-3.5 rounded-4 border-glass text-center bg-card-dark position-relative overflow-hidden">
-                                    <div
-                                        class="stat-glow bg-success-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
-                                    </div>
-                                    <h3 class="text-success-light fw-extrabold mb-1.5 font-monospace text-2xl">{{ profile?.professionalDetails?.hireRate || 0 }}%</h3>
+                                <div class="stat-badge-box p-3.5 py-2 rounded-4 border-glass text-center bg-card-dark position-relative overflow-hidden">
+                                    <div class="stat-glow bg-success-glow position-absolute w-100 h-100 top-0 start-0 opacity-10"></div>
+                                    <h5 class="text-success-light ">{{ profile?.professionalDetails?.hireRate || 0 }}%</h5>
                                     <span class="text-secondary-light font-xs text-uppercase ls-1">Hire Rate</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Total Spending spent -->
-                        <div
-                            class="expenditure-banner p-3.5 rounded-4 border-glass d-flex align-items-center justify-content-between position-relative overflow-hidden bg-card-dark">
-                            <div
-                                class="stat-glow bg-success-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
-                            </div>
+                        <div class="expenditure-banner p-3 py-3 rounded-4 border-glass d-flex align-items-center justify-content-between position-relative overflow-hidden bg-card-dark">
+                            <div class="stat-glow bg-success-glow position-absolute w-100 h-100 top-0 start-0 opacity-10"> </div>
                             <div class="d-flex align-items-center gap-3 position-relative z-2">
-                                <div
-                                    class="expenditure-icon rounded-3 d-flex align-items-center justify-content-center text-success-light">
+                                <div  class="expenditure-icon rounded-3 d-flex align-items-center justify-content-center text-success-light">
                                     <i class="bi bi-wallet2 fs-5"></i>
                                 </div>
                                 <div class="d-flex flex-column">
-                                    <span class="text-secondary-light font-xs text-uppercase ls-1">Total
-                                        Investments</span>
+                                    <span class="text-secondary-light font-xs text-uppercase ls-1">Total Investments</span>
                                     <h4 class="text-success-light fw-extrabold mb-0 font-monospace text-lg mt-0.5">
                                         ${{ profile?.professionalDetails?.totalSpent || 0 }}
                                     </h4>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
                 <!-- Client Verification Card -->
-                <div
-                    class="glass-dark p-5 rounded-4 border-glass shadow-sm text-center position-relative overflow-hidden mb-4">
+                <div class="glass-dark p-5 rounded-4 border-glass shadow-sm  position-relative overflow-hidden mb-4">
                     <div class="sidebar-glow sidebar-glow-bottom position-absolute"></div>
                     <div class="position-relative z-2">
-                        <div
-                            class="verification-badge-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4 bg-primary-glow border-primary">
+                        <div class="verification-badge-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4 bg-primary-glow border-primary">
                             <i class="bi bi-shield-lock-fill fs-3 text-primary-light"></i>
                         </div>
-                        <h5 class="text-white fw-bold mb-2 text-md font-headline">Verified Corporate Account</h5>
-                        <p class="text-secondary font-sm mb-0 lh-relaxed px-1">
+                        <h5 class="text-white fw-bold mb-2 text-md font-headline text-center">Verified Corporate Account</h5>
+                        <p class="text-secondary font-sm mb-0 text-justify px-1">
                             Escrow payment instruments fully verified and linked to institutional banking lines. Fully
                             authorized for commercial engagement.
                         </p>
@@ -669,119 +752,106 @@
                 </div>
 
                 <!-- Detailed Social Media Connections Card -->
-   <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden">
-    <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
-    </div>
+                <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden">
+                    <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10"> </div>
 
-    <div class="position-relative z-2">
-        <h4 class="text-white fw-bold mb-4 text-md font-headline">
-            Online Presence
-        </h4>
+                    <div class="position-relative z-2">
+                        <h4 class="text-white fw-bold mb-4 text-md font-headline"> Online Presence </h4>
 
-        @if (profile?.socialLinks?.length) {
+                        @if (profile?.socialLinks?.length) {
 
-        <div class="d-flex flex-column gap-3">
+                        <div class="d-flex flex-column gap-3">
 
-            @for (social of profile?.socialLinks; track social) {
+                            @for (social of profile?.socialLinks; track social) {
 
-            <a
-                [href]="social?.url || '#'"
-                target="_blank"
-                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
+                            <a [href]="social?.url || '#'" target="_blank" class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
 
-                <div class="d-flex align-items-center gap-3">
+                                <div class="d-flex align-items-center gap-3">
 
-                    <div
-                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-white bg-dark-glow">
+                                    <div  class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-white bg-dark-glow">
+                                        <i class="bi bi-globe"></i>
+                                    </div>
 
-                        <i class="bi bi-globe"></i>
+                                    <div class="d-flex flex-column text-start">
 
-                    </div>
+                                        <span class="text-white fw-bold font-sm">
+                                            {{ social?.platform || 'Social Link' }}
+                                        </span>
 
-                    <div class="d-flex flex-column text-start">
+                                        <span class="text-secondary-light font-xs font-monospace">
+                                            {{ social?.url || 'No URL' }}
+                                        </span>
 
-                        <span class="text-white fw-bold font-sm">
-                            {{ social?.platform || 'Social Link' }}
-                        </span>
+                                    </div>
 
-                        <span class="text-secondary-light font-xs font-monospace">
-                            {{ social?.url || 'No URL' }}
-                        </span>
+                                </div>
+
+                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
+
+                            </a>
+
+                            }
+
+                        </div>
+
+                        }
+
+                        @else {
+
+                        <div class="rounded-4 border-glass p-4 text-center text-secondary-light font-sm bg-black-20">
+
+                            No Social Links Added
+
+                        </div>
+
+                        }
 
                     </div>
 
                 </div>
-
-                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
-
-            </a>
-
-            }
-
-        </div>
-
-        }
-
-        @else {
-
-        <div
-            class="rounded-4 border-glass p-4 text-center text-secondary-light font-sm bg-black-20">
-
-            No Social Links Added
-
-        </div>
-
-        }
-
-    </div>
-</div>
                 <!-- Languages Card -->
                 <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden mt-4">
+                    
                     <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10"></div>
+
                     <div class="position-relative z-2">
-                        <h4 class="text-white fw-bold mb-4 text-md font-headline d-flex align-items-center gap-2">
-                            <i class="bi bi-translate text-primary-light"></i>
-                            <span>Languages Supported</span>
-                        </h4>
-                       <div class="d-flex flex-column gap-3">
+                        <h4 class="text-white fw-bold mb-4 text-md font-headline d-flex align-items-center gap-2"><i class="bi bi-translate text-primary-light"></i><span>Languages Supported</span></h4>
 
-    @if (profile?.languages?.length) {
+                        <div class="d-flex flex-column gap-3">
 
-        @for (language of profile?.languages; track language) {
+                            @if (profile?.languages?.length) {
 
-        <div
-            class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                            @for (language of profile?.languages; track language) {
 
-            <span class="text-white fw-bold font-sm">
-                {{ language?.name || 'No Data' }}
-            </span>
+                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
 
-            <span
-                class="badge bg-primary-glow text-primary-light px-2.5 py-1 rounded font-xs fw-semibold">
-                {{ language?.level || 'No Data' }}
-            </span>
+                                <span class="text-white fw-bold font-sm"> {{ language?.name || 'No Data' }} </span>
 
-        </div>
+                                <span class="badge bg-primary-glow text-primary-light px-2.5 py-1 rounded font-xs fw-semibold"> {{ language?.level || 'No Data' }}</span>
 
-        }
+                            </div>
 
-    }
+                            }
 
-    @else {
+                            }
 
-    <div class="text-secondary-light font-sm">
-        No Languages Added
-    </div>
+                            @else {
 
-    }
+                            <div class="text-secondary-light font-sm">
+                                No Languages Added
+                            </div>
 
-</div>
+                            }
+
+                        </div>
                     </div>
                 </div>
+
             </div>
 
         </div>
         }
 
     </div>
+
 </div>

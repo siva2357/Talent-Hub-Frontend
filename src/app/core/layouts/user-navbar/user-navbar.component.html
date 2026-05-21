@@ -43,15 +43,20 @@
         </div>
 
         <!-- RIGHT SECTION: User Actions (Absolute Right) -->
-        <div class="d-none d-lg-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-2 gap-lg-3">
             <!-- AI Intelligence Logo -->
-            <div class="ai-logo-container ms-3 me-3">
-                <img src="assets/logo/AI intelligence.png" alt="AI" class="ai-logo">
-            </div>
+<!-- AI Intelligence Logo -->
 
+<div class="ai-logo-container ms-3 me-3 d-none d-lg-block">
+  <img
+    src="assets/logo/AI intelligence.png"
+    alt="AI"
+    class="ai-logo"
+  >
+</div>
             <!-- Chat & Notifications Icons -->
-            <div class="d-flex align-items-center gap-3 ms-2">
-                <a routerLink="/user/chat" class="text-decoration-none">
+            <div class="d-flex align-items-center gap-3 me-2 ">
+                <a routerLink="/user/chat" class="text-decoration-none d-none d-lg-block">
                     <button class="btn btn-link icon-btn shadow-none">
                         <i class="bi bi-chat-left-text fs-4"></i>
                         <span class="icon-badge">3</span>
@@ -62,7 +67,7 @@
             </div>
 
             <!-- User Profile Avatar -->
-            <div class="dropdown">
+            <div class="dropdown me-2">
                 <a
   href="javascript:void(0)"
   class="d-flex align-items-center text-decoration-none dropdown-toggle no-caret"
@@ -140,5 +145,82 @@
               </li>
             }
         </ul>
+
+        <!-- Mobile Quick Actions -->
+
+<div class="mobile-quick-actions mt-4 pt-4 border-top border-white border-opacity-10">
+
+  <!-- AI Intelligence -->
+
+  <a
+    routerLink="/user/ai"
+    data-bs-dismiss="offcanvas"
+    class="mobile-action-card text-decoration-none mb-3 d-flex align-items-center justify-content-between"
+  >
+
+    <div class="d-flex align-items-center gap-3">
+
+      <div class="mobile-action-icon ai-bg">
+        <i class="bi bi-stars"></i>
+      </div>
+
+      <div>
+
+        <h6 class="text-white mb-1 fw-semibold">
+          AI Intelligence
+        </h6>
+
+        <p class="text-secondary mb-0 smaller">
+          Smart AI powered tools
+        </p>
+
+      </div>
+
+    </div>
+
+    <i class="bi bi-chevron-right text-secondary"></i>
+
+  </a>
+
+  <!-- Chat -->
+
+  <a
+    routerLink="/user/chat"
+    data-bs-dismiss="offcanvas"
+    class="mobile-action-card text-decoration-none mb-3 d-flex align-items-center justify-content-between"
+  >
+
+    <div class="d-flex align-items-center gap-3">
+
+      <div class="mobile-action-icon chat-bg position-relative">
+
+        <i class="bi bi-chat-dots"></i>
+
+        <span class="mobile-badge">
+          3
+        </span>
+
+      </div>
+
+      <div>
+
+        <h6 class="text-white mb-1 fw-semibold">
+          Messages
+        </h6>
+
+        <p class="text-secondary mb-0 smaller">
+          Open conversations
+        </p>
+
+      </div>
+
+    </div>
+
+    <i class="bi bi-chevron-right text-secondary"></i>
+
+  </a>
+
+</div>
+
     </div>
 </div>

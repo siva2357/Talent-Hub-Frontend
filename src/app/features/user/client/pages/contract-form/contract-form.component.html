@@ -1,78 +1,113 @@
-<div class="contract-form-page p-3 p-md-4 p-xl-5">
+<div class="contract-form-page p-3 p-md-4 p-xl-5 position-relative">
+
+  <!-- BACK BUTTON -->
+  <a routerLink="/user/your-contracts"
+    class="btn-back-nav rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 start-0 m-4 shadow-lg z-3"
+    title="Back to Contracts">
+    <i class="bi bi-arrow-left fs-4"></i>
+  </a>
+
   <div class="container max-w-4xl mx-auto">
-    
+
+    <!-- HEADER -->
     <div class="mb-5 text-center text-md-start">
-      <h2 class="text-white fw-bold mb-2">Post a New Contract</h2>
-      <p class="text-secondary mb-0">Provide details about your project to attract top talent.</p>
+
+      <h2 class="text-white fw-bold mb-2">
+        {{ mode === 'create'? 'Create New Contract' : 'Update Contract' }}
+      </h2>
+
+      <p class="text-secondary mb-0"> Fill all contract details properly.</p>
+
     </div>
 
-    <form (ngSubmit)="onSubmit()" class="glass p-4 p-md-5 rounded-4 shadow-lg">
+    <!-- FORM -->
+    <form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="glass p-4 p-md-5 rounded-4 shadow-lg">
+
       <div class="row g-4">
-        <!-- Title -->
+
+        <!-- CONTRACT TITLE -->
         <div class="col-12">
-          <label class="form-label text-white fw-medium mb-2">Project Title</label>
-          <input type="text" class="form-control bg-dark-subtle border-white border-opacity-10 text-white p-3 rounded-3" 
-                 placeholder="e.g. Frontend Redesign with Angular" [(ngModel)]="contractData.title" name="title" required>
+
+          <app-input type="text" label="Contract Title" placeholder="Enter Contract Title" icon="bi-briefcase-fill" formControlName="contractTitle" [required]="true" [error]="
+              f['contractTitle'].touched && f['contractTitle'].errors?.['required'] ? 'Contract title is required'  : '' ">
+          </app-input>
+
         </div>
 
-        <!-- Description -->
+        <!-- BUDGET TYPE -->
+        <div class="col-12 col-md-6">
+
+          <app-input type="select" label="Budget Type" placeholder="Select Budget Type" icon="bi-cash-stack" formControlName="budgetType" [options]="budgetTypeOptions" [required]="true"> </app-input>
+
+        </div>
+
+        <!-- ESTIMATED BUDGET -->
+        <div class="col-12 col-md-6">
+
+          <app-input type="text" label="Estimated Budget" placeholder="Enter Estimated Budget" icon="bi-currency-dollar" formControlName="estimatedBudget" [required]="true" [error]="
+              f['estimatedBudget'].touched && f['estimatedBudget'].errors?.['required'] ? 'Estimated budget is required' : ''">
+          </app-input>
+
+        </div>
+
+        <!-- START DATE -->
+        <div class="col-12 col-md-6">
+
+          <app-input type="date" label="Contract Start Date" icon="bi-calendar-event" formControlName="contractStartDate" [required]="true" [error]="
+              f['contractStartDate'].touched && f['contractStartDate'].errors?.['required'] ? 'Start date is required' : '' ">
+          </app-input>
+
+        </div>
+
+        <!-- END DATE -->
+        <div class="col-12 col-md-6">
+
+          <app-input type="date" label="Contract End Date" icon="bi-calendar-check" formControlName="contractEndDate" [required]="true" [error]="
+              f['contractEndDate'].touched && f['contractEndDate'].errors?.['required'] ? 'End date is required' : ''">
+          </app-input>
+
+        </div>
+
+        <!-- STATUS -->
         <div class="col-12">
-          <label class="form-label text-white fw-medium mb-2">Detailed Description</label>
-          <textarea class="form-control bg-dark-subtle border-white border-opacity-10 text-white p-3 rounded-3" 
-                    rows="5" placeholder="Explain your project goals and requirements..." 
-                    [(ngModel)]="contractData.description" name="description" required></textarea>
+
+          <app-input type="select" label="Contract Status" placeholder="Select Contract Status" icon="bi-check-circle-fill" formControlName="status" [options]="statusOptions" [required]="true"> </app-input>
+
         </div>
 
-        <!-- Category -->
-        <div class="col-12 col-md-6">
-          <label class="form-label text-white fw-medium mb-2">Category</label>
-          <select class="form-select bg-dark-subtle border-white border-opacity-10 text-white p-3 rounded-3" 
-                  [(ngModel)]="contractData.category" name="category">
-            <option value="Development">Development</option>
-            <option value="Design">Design</option>
-            <option value="Marketing">Marketing</option>
-            <option value="Writing">Writing</option>
-          </select>
+        <!-- DESCRIPTION -->
+        <div class="col-12">
+
+          <app-rich-text-editor label="Contract Description" placeholder="Write complete contract details here..." formControlName="contractDescription" [required]="true" [error]="
+              f['contractDescription'].touched && f['contractDescription'].errors?.['required'] ? 'Description is required' : '' ">
+          </app-rich-text-editor>
+
         </div>
 
-        <!-- Budget Type -->
-        <div class="col-12 col-md-6">
-          <label class="form-label text-white fw-medium mb-2">Budget Type</label>
-          <div class="d-flex gap-3 mt-1">
-            <div class="form-check custom-check p-3 rounded-3 flex-grow-1" [class.active]="contractData.budgetType === 'fixed'" (click)="contractData.budgetType = 'fixed'">
-              <input class="form-check-input d-none" type="radio" name="budgetType" id="fixed" value="fixed" [(ngModel)]="contractData.budgetType">
-              <label class="form-check-label text-white w-100 cursor-pointer" for="fixed">
-                <i class="bi bi-tag-fill me-2"></i> Fixed Price
-              </label>
-            </div>
-            <div class="form-check custom-check p-3 rounded-3 flex-grow-1" [class.active]="contractData.budgetType === 'hourly'" (click)="contractData.budgetType = 'hourly'">
-              <input class="form-check-input d-none" type="radio" name="budgetType" id="hourly" value="hourly" [(ngModel)]="contractData.budgetType">
-              <label class="form-check-label text-white w-100 cursor-pointer" for="hourly">
-                <i class="bi bi-clock-fill me-2"></i> Hourly Rate
-              </label>
-            </div>
+        <!-- SUBMIT -->
+        <!-- ACTION BUTTONS -->
+        <div class="col-12 pt-3">
+
+          <div class="d-flex justify-content-between align-items-center gap-3">
+
+            <!-- LEFT BUTTON -->
+            <app-button type="button" variant="outline" size="sm" customClass="rounded-3 py-3 px-4 " routerLink="/user/your-contracts">
+              {{ mode === 'create' ? 'Cancel' : 'Discard Changes'}}
+            </app-button>
+
+            <!-- RIGHT BUTTON -->
+            <app-button type="submit" variant="primary" size="sm" customClass="rounded-3 py-3 px-4 " [loading]="loading">
+              {{ mode === 'create' ? 'Post Contract' : 'Update Contract'}}
+            </app-button>
+
           </div>
+
         </div>
 
-        <!-- Amount -->
-        <div class="col-12 col-md-6">
-          <label class="form-label text-white fw-medium mb-2">Estimated Budget ($)</label>
-          <input type="number" class="form-control bg-dark-subtle border-white border-opacity-10 text-white p-3 rounded-3" 
-                 placeholder="0.00" [(ngModel)]="contractData.budgetAmount" name="amount" required>
-        </div>
-
-        <!-- Deadline -->
-        <div class="col-12 col-md-6">
-          <label class="form-label text-white fw-medium mb-2">Expected Deadline</label>
-          <input type="date" class="form-control bg-dark-subtle border-white border-opacity-10 text-white p-3 rounded-3" 
-                 [(ngModel)]="contractData.deadline" name="deadline">
-        </div>
-
-        <!-- Submit -->
-        <div class="col-12 mt-5">
-          <button type="submit" class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow-lg">Post Contract Now</button>
-        </div>
       </div>
+
     </form>
+
   </div>
+
 </div>
