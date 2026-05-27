@@ -2,15 +2,15 @@
 
 ## Project Timeline Overview
 
-- Phase 1: 12 May – 16 May
+- Phase 1: 12 May – 19 May
     Focus Area: UI/UX Research, Design & Data Modeling
     Deliverables: Wireframes, Figma Screens, Design System, DB Schema & ERD
 
-- Phase 2: 18 May – 22 May
+- Phase 2: 19 May – 21 May
     Focus Area: Frontend + Backend Development
     Deliverables: Functional Modules, APIs, Database Integration
 
-- Phase 3: 25 May – 29 May
+- Phase 3: 26 May – 29 May
     Focus Area: Gen AI & AI Intelligent Assistant Integration
     Deliverables: AI Chat Module, Smart Assistant, Prompt Flows, AI APIs
 
