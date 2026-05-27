@@ -1,198 +1,383 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-export type ProposalStatus = 'Applied' | 'Shortlisted' | 'Assessment Scheduled' | 'Interview Scheduled' | 'Hired' | 'Rejected';
+import { ContractService }
+from '../../../../../core/services/contract.service';
+import { ApplicationService } from '../../../../../core/services/application.service';
 
-export interface Proposal {
-  id: number;
-  name: string;
-  avatar: string;
-  role: string;
-  location: string;
-  matchScore: number;
-  matchTier: 'High' | 'Medium' | 'Low';
-  coverLetter: string;
-  skills: string[];
-  hourlyRate: number;
-  duration: string;
-  successRate: number;
-  rating: number;
-  status: ProposalStatus;
-  isAvailable: boolean;
-}
-
-export interface ProposalContract {
-  id: number;
-  title: string;
-  budget: number;
-  spent: number;
-  remaining: number;
-  startDate: string;
-  endDate: string;
-  status: string;
-  proposals: Proposal[];
-}
 
 @Component({
   selector: 'app-contract-proposals',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './contract-proposals.component.html',
-  styleUrl: './contract-proposals.component.css'
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
+  templateUrl:
+    './contract-proposals.component.html',
+  styleUrl:
+    './contract-proposals.component.css'
 })
-export class ContractProposalsComponent {
-  expandedContractId: number | null = 1;
+
+export class ContractProposalsComponent
+implements OnInit {
+
+  // ========================================
+  // UI State
+  // ========================================
+
+  expandedContractId: string | null = null;
+
   searchQuery: string = '';
 
-  contracts: ProposalContract[] = [
-    {
-      id: 1,
-      title: 'Frontend Re-architecture & UI Modernization',
-      budget: 8500,
-      spent: 4500,
-      remaining: 4000,
-      startDate: 'May 01, 2026',
-      endDate: 'Jul 15, 2026',
-      status: 'Active',
-      proposals: [
-        {
-          id: 101,
-          name: 'Sarah Connor',
-          avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150',
-          role: 'Senior Angular Specialist & UI Architect',
-          location: 'Austin, TX, USA',
-          matchScore: 98,
-          matchTier: 'High',
-          coverLetter: 'I would love to help you modernize your frontend architecture! Having worked with Angular for 6+ years, I specialize in standalone components, responsive animations, and robust modular design patterns.',
-          skills: ['Angular', 'TypeScript', 'RxJS', 'NgRx', 'Vivid Styling'],
-          hourlyRate: 65,
-          duration: '4 Weeks',
-          successRate: 100,
-          rating: 4.9,
-          status: 'Applied',
-          isAvailable: true
+  isLoading: boolean = false;
+
+  // ========================================
+  // Data
+  // ========================================
+
+  contractApplicants: any[] = [];
+
+  constructor( private contractService:ContractService,  private applicationService: ApplicationService ) {}
+
+  // ========================================
+  // Init
+  // ========================================
+
+  ngOnInit(): void {
+
+    this.getApplicants();
+
+  }
+
+  // ========================================
+  // Get Contracts With Applicants
+  // ========================================
+
+  getApplicants(): void {
+
+    this.isLoading = true;
+
+    this.contractService
+      .getContractApplicants()
+      .subscribe({
+
+        next: (res) => {
+
+          this.contractApplicants =
+            res.contracts || [];
+
+          // Open first contract
+          if (
+            this.contractApplicants.length > 0
+          ) {
+
+            this.expandedContractId =
+              this.contractApplicants[0]._id;
+
+          }
+
+          this.isLoading = false;
+
         },
-        {
-          id: 102,
-          name: 'John Connor',
-          avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150',
-          role: 'UI/UX Designer & Prototyper',
-          location: 'Toronto, Canada',
-          matchScore: 91,
-          matchTier: 'High',
-          coverLetter: 'Hi! I focus on building extremely premium, interactive web designs. I will deliver stunning glassmorphism layouts, harmonious customized color schemes, and seamless prototype transition details.',
-          skills: ['Figma', 'UI Design', 'CSS Grid', 'Micro-animations', 'UX Research'],
-          hourlyRate: 50,
-          duration: '3 Weeks',
-          successRate: 98,
-          rating: 5.0,
-          status: 'Shortlisted',
-          isAvailable: false
-        },
-        {
-          id: 103,
-          name: 'T-800 Cyberdyne',
-          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150',
-          role: 'QA Automation & Performance Tester',
-          location: 'Silicon Valley, CA',
-          matchScore: 68,
-          matchTier: 'Low',
-          coverLetter: 'I will systematically analyze your software codebase, establish comprehensive end-to-end Cypress tests, and automate your deployments. High performance and absolute stability guaranteed.',
-          skills: ['Cypress', 'CI/CD', 'Jest', 'Playwright', 'Load Testing'],
-          hourlyRate: 70,
-          duration: '8 Weeks',
-          successRate: 90,
-          rating: 4.6,
-          status: 'Assessment Scheduled',
-          isAvailable: true
+
+        error: (err) => {
+
+          console.error(err);
+
+          this.isLoading = false;
+
         }
-      ]
-    },
-    {
-      id: 2,
-      title: 'Backend API Optimization',
-      budget: 5000,
-      spent: 1000,
-      remaining: 4000,
-      startDate: 'Apr 01, 2026',
-      endDate: 'Jun 10, 2026',
-      status: 'Active',
-      proposals: [
-        {
-          id: 201,
-          name: 'Marcus Wright',
-          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150',
-          role: 'Full Stack Node.js Engineer',
-          location: 'Berlin, Germany',
-          matchScore: 84,
-          matchTier: 'Medium',
-          coverLetter: 'Hello! I have reviewed your API optimization needs. I can scale your backend routes, configure optimized Redis caching mechanisms, and trim down your database query latencies by up to 40%.',
-          skills: ['Node.js', 'Express', 'PostgreSQL', 'Redis', 'Docker'],
-          hourlyRate: 55,
-          duration: '6 Weeks',
-          successRate: 95,
-          rating: 4.8,
-          status: 'Interview Scheduled',
-          isAvailable: true
-        }
-      ]
-    }
-  ];
 
-  toggleContract(id: number) {
-    this.expandedContractId = this.expandedContractId === id ? null : id;
+      });
+
   }
 
-  advanceStatus(contractId: number, proposalId: number) {
-    const contract = this.contracts.find(c => c.id === contractId);
-    if (!contract) return;
-    const proposal = contract.proposals.find(p => p.id === proposalId);
-    if (!proposal) return;
+  // ========================================
+  // Toggle Accordion
+  // ========================================
 
-    switch (proposal.status) {
-      case 'Applied':
-        proposal.status = 'Shortlisted';
-        break;
-      case 'Shortlisted':
-        proposal.status = 'Assessment Scheduled';
-        break;
-      case 'Assessment Scheduled':
-        proposal.status = 'Interview Scheduled';
-        break;
-      case 'Interview Scheduled':
-        proposal.status = 'Hired';
-        break;
-      case 'Hired':
-        proposal.status = 'Rejected';
-        break;
-    }
+  toggleContract(id: string): void {
+
+    this.expandedContractId =
+      this.expandedContractId === id
+        ? null
+        : id;
+
   }
 
-  updateStatus(contractId: number, proposalId: number, status: ProposalStatus) {
-    const contract = this.contracts.find(c => c.id === contractId);
-    if (!contract) return;
-    const proposal = contract.proposals.find(p => p.id === proposalId);
-    if (proposal) {
-      proposal.status = status;
-    }
-  }
+  // ========================================
+  // Advance Recruitment Status
+  // ========================================
 
-  getStatusLabel(status: ProposalStatus): string {
+  // ========================================
+  // Status Label
+  // ========================================
+
+  getStatusLabel(
+    status: string
+  ): string {
+
     switch (status) {
-      case 'Assessment Scheduled': return 'Assessment';
-      case 'Interview Scheduled': return 'Interview';
-      default: return status;
+
+      case 'application received':
+        return 'Applied';
+
+      case 'application shortlisted':
+        return 'Shortlisted';
+
+      case 'assessment scheduled':
+        return 'Assessment Pending';
+
+      case 'assessment completed':
+        return 'Assessment Completed';
+
+      case 'interview scheduled':
+        return 'Interview Pending';
+        
+      case 'interview completed':
+        return 'Interview Completed';
+
+      case 'shortlisted':
+        return 'Hired';
+
+      case 'rejected':
+        return 'Rejected';
+
+      default:
+        return status;
+
     }
+
   }
 
-  getFilteredProposals(proposals: Proposal[]): Proposal[] {
-    if (!this.searchQuery.trim()) return proposals;
-    const q = this.searchQuery.toLowerCase();
-    return proposals.filter(p => 
-      p.name.toLowerCase().includes(q) || 
-      p.role.toLowerCase().includes(q) || 
-      p.skills.some(s => s.toLowerCase().includes(q))
+  // ========================================
+  // Search Filter
+  // ========================================
+
+  getFilteredProposals(
+    proposals: any[]
+  ): any[] {
+
+    if (
+      !this.searchQuery.trim()
+    ) {
+
+      return proposals;
+
+    }
+
+    const q =
+      this.searchQuery.toLowerCase();
+
+    return proposals.filter(
+
+      (proposal: any) =>
+
+        proposal.freelancer?.fullName
+          ?.toLowerCase()
+          .includes(q)
+
+        ||
+
+        proposal.freelancer?.professionalHeadline
+          ?.toLowerCase()
+          .includes(q)
+
+        ||
+
+        proposal.freelancer?.skills?.some(
+
+          (skill: string) =>
+
+            skill
+              .toLowerCase()
+              .includes(q)
+
+        )
+
     );
+
   }
+
+  // ========================================
+  // Step Progress
+  // ========================================
+
+  getProgressClass(
+    status: string
+  ): string {
+
+    switch (status) {
+
+      case 'application shortlisted':
+        return 'progress-20';
+
+      case 'assessment scheduled':
+        return 'progress-40';
+
+      case 'assessment completed':
+        return 'progress-50';
+
+      case 'interview scheduled':
+        return 'progress-60';
+        
+      case 'interview completed':
+        return 'progress-80';
+
+      case 'shortlisted':
+        return 'progress-100';
+
+      case 'rejected':
+        return 'progress-100';
+
+      default:
+        return '';
+
+    }
+
+  }
+
+
+
+
+// ========================================
+// Recruitment Modal State
+// ========================================
+
+showRecruitmentModal = false;
+isSubmitting = false;
+selectedProposal: any = null;
+
+// The chosen action from the dropdown
+nextAction: string = '';
+
+// Forms
+assessmentForm = { title: '', description: '', date: '' };
+interviewForm = { title: '', description: '', date: '' };
+rejectionReason = '';
+
+getAvailableActions(): { label: string, value: string }[] {
+  if (!this.selectedProposal) return [];
+  const status = this.selectedProposal.applicationStatus;
+  
+  if (status === 'application received') {
+    return [
+      { label: 'Shortlist Application', value: 'shortlist' },
+      { label: 'Reject Application', value: 'reject' }
+    ];
+  }
+  if (status === 'application shortlisted') {
+    return [
+      { label: 'Schedule Assessment', value: 'schedule-assessment' },
+      { label: 'Reject Application', value: 'reject' }
+    ];
+  }
+  if (status === 'assessment completed') {
+    return [
+      { label: 'Schedule Interview', value: 'schedule-interview' },
+      { label: 'Reject Application', value: 'reject' }
+    ];
+  }
+  if (status === 'interview scheduled') {
+    return [
+      { label: 'Mark Interview Completed', value: 'complete-interview' }
+    ];
+  }
+  if (status === 'interview completed') {
+    return [
+      { label: 'Hire Candidate (Final Shortlist)', value: 'hire' },
+      { label: 'Reject Application', value: 'reject' }
+    ];
+  }
+  return [];
+}
+
+openRecruitmentModal(proposal: any): void {
+  this.selectedProposal = proposal;
+  this.nextAction = '';
+  this.assessmentForm = { title: '', description: '', date: '' };
+  this.interviewForm = { title: '', description: '', date: '' };
+  this.rejectionReason = '';
+
+  const actions = this.getAvailableActions();
+  if (actions.length > 0) {
+    this.nextAction = actions[0].value;
+  }
+
+  this.showRecruitmentModal = true;
+  document.body.classList.add('modal-open');
+}
+
+submitRecruitmentAction(): void {
+  if (!this.selectedProposal || !this.nextAction) return;
+
+  const id = this.selectedProposal.applicationId;
+  this.isSubmitting = true;
+
+  if (this.nextAction === 'shortlist') {
+    this.applicationService.shortlistApplication(id).subscribe({
+      next: () => {
+        this.selectedProposal.applicationStatus = 'application shortlisted';
+        this.closeModal();
+      },
+      error: () => this.isSubmitting = false
+    });
+  } 
+  else if (this.nextAction === 'reject') {
+    this.applicationService.rejectApplication(id, {}).subscribe({
+      next: () => {
+        this.selectedProposal.applicationStatus = 'rejected';
+        this.closeModal();
+      },
+      error: () => this.isSubmitting = false
+    });
+  }
+  else if (this.nextAction === 'schedule-assessment') {
+    this.applicationService.scheduleAssessment(id, this.assessmentForm).subscribe({
+      next: () => {
+        this.selectedProposal.applicationStatus = 'assessment scheduled';
+        this.closeModal();
+      },
+      error: () => this.isSubmitting = false
+    });
+  }
+  else if (this.nextAction === 'schedule-interview') {
+    this.applicationService.scheduleInterview(id, this.interviewForm).subscribe({
+      next: () => {
+        this.selectedProposal.applicationStatus = 'interview scheduled';
+        this.closeModal();
+      },
+      error: () => this.isSubmitting = false
+    });
+  }
+  else if (this.nextAction === 'complete-interview') {
+    this.applicationService.interviewResult(id, { result: 'completed' }).subscribe({
+      next: () => {
+        this.selectedProposal.applicationStatus = 'interview completed';
+        this.closeModal();
+      },
+      error: () => this.isSubmitting = false
+    });
+  }
+  else if (this.nextAction === 'hire') {
+    this.applicationService.finalizeApplication(id, { result: 'shortlisted' }).subscribe({
+      next: () => {
+        this.selectedProposal.applicationStatus = 'shortlisted';
+        this.closeModal();
+      },
+      error: () => this.isSubmitting = false
+    });
+  }
+}
+
+closeModal(): void {
+  this.showRecruitmentModal = false;
+  this.selectedProposal = null;
+  this.nextAction = '';
+  this.isSubmitting = false;
+  document.body.classList.remove('modal-open');
+}
+
 }

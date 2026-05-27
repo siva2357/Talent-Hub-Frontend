@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
+import { ApplicationService } from '../../../../../core/services/application.service';
 
 interface Offer {
   id: string;
@@ -25,43 +26,51 @@ interface Offer {
   templateUrl: './offers.component.html',
   styleUrl: './offers.component.css'
 })
-export class OffersComponent {
-  offers: Offer[] = [
-    {
-      id: '1',
-      contractTitle: 'Senior Angular Developer',
-      client: 'TechNova',
-      date: 'Oct 18, 2023',
-      budget: '$5,000',
-      contractType: 'Fixed Price',
-      level: 'Expert',
-      description: 'Lead the frontend development of an enterprise SaaS analytics platform. This role involves managing a team of 4 developers.',
-      techStack: ['Angular', 'NgRx', 'RxJS'],
-      expiresIn: '2 Days',
-      startDate: 'Nov 01, 2023',
-      status: 'Pending'
-    },
-    {
-      id: '2',
-      contractTitle: 'UI Designer for Mobile App',
-      client: 'GrowthLabs',
-      date: 'Oct 20, 2023',
-      budget: '$3,200',
-      contractType: 'Fixed Price',
-      level: 'Intermediate',
-      description: 'Design a clean and modern user interface for a fitness tracking application with focus on accessibility.',
-      techStack: ['Figma', 'UI/UX', 'Mobile Design'],
-      expiresIn: '5 Days',
-      startDate: 'Oct 25, 2023',
-      status: 'Pending'
-    }
-  ];
+export class OffersComponent implements OnInit {
+  private applicationService = inject(ApplicationService);
+
+  offers: Offer[] = [];
+  isLoading = true;
+
+  ngOnInit(): void {
+    this.fetchOffers();
+  }
+
+  fetchOffers(): void {
+    this.isLoading = true;
+    this.applicationService.getFreelancerOffers().subscribe({
+      next: (res: any) => {
+        if (res.success && res.offers) {
+          this.offers = res.offers;
+        } else {
+          this.offers = [];
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch dynamic offers:', err);
+        this.offers = [];
+        this.isLoading = false;
+      }
+    });
+  }
 
   acceptOffer(id: string) {
     console.log('Offer Accepted:', id);
   }
 
   declineOffer(id: string) {
-    console.log('Offer Declined:', id);
+    if (confirm('Are you sure you want to decline this contract offer?')) {
+      this.applicationService.declineOffer(id).subscribe({
+        next: () => {
+          alert('Offer declined successfully.');
+          this.fetchOffers();
+        },
+        error: (err) => {
+          console.error('Failed to decline offer:', err);
+          alert('Failed to decline offer. Please try again.');
+        }
+      });
+    }
   }
 }

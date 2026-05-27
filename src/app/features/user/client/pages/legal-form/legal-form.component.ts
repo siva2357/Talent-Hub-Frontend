@@ -1,0 +1,117 @@
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ContractService } from '../../../../../core/services/contract.service';
+import { ApplicationService } from '../../../../../core/services/application.service';
+
+@Component({
+  selector: 'app-legal-form',
+  standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule],
+  templateUrl: './legal-form.component.html',
+  styleUrl: './legal-form.component.css'
+})
+export class LegalFormComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private contractService = inject(ContractService);
+  private applicationService = inject(ApplicationService);
+
+  contractId: string | null = null;
+  contractData: any = null;
+  selectedApplicant: any = null;
+  isLoading = true;
+  error: string | null = null;
+
+  scopeOfWork = '';
+  additionalTerms = '';
+  confirmTerms = false;
+  isSubmitting = false;
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.contractId = params.get('contractId');
+      if (this.contractId) {
+        this.fetchContractDetails(this.contractId);
+      } else {
+        this.error = "No contract ID provided.";
+        this.isLoading = false;
+      }
+    });
+  }
+
+  fetchContractDetails(id: string): void {
+    this.isLoading = true;
+    this.error = null;
+    
+    this.contractService.getMyContractById(id).subscribe({
+      next: (res: any) => {
+        if (res.success && res.contract) {
+          this.contractData = res.contract;
+          
+          // Find the shortlisted applicant (the one we are sending the offer to)
+          if (this.contractData.applicants && this.contractData.applicants.length > 0) {
+            // Find an applicant whose populated applicationId has applicationStatus === 'shortlisted'
+            this.selectedApplicant = this.contractData.applicants.find((a: any) => 
+              a.applicationId && a.applicationId.applicationStatus === 'shortlisted'
+            );
+            
+            // Fallback if none is marked shortlisted, just take the first one (for robust testing)
+            if (!this.selectedApplicant) {
+              this.selectedApplicant = this.contractData.applicants[0];
+            }
+          }
+        } else {
+          this.error = "Failed to load contract details.";
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error("Error fetching contract:", err);
+        this.error = "An error occurred while fetching contract details.";
+        this.isLoading = false;
+      }
+    });
+  }
+
+  sendOffer(): void {
+    if (!this.selectedApplicant) {
+      alert("No applicant selected for this contract.");
+      return;
+    }
+    
+    const appId = this.selectedApplicant.applicationId && typeof this.selectedApplicant.applicationId === 'object'
+      ? this.selectedApplicant.applicationId._id
+      : this.selectedApplicant.applicationId;
+
+    if (!appId) {
+      alert("Application ID is missing.");
+      return;
+    }
+
+    if (!this.confirmTerms) {
+      alert("Please confirm the legal terms by checking the box.");
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.applicationService.sendOffer(appId, {
+      scopeOfWork: this.scopeOfWork,
+      additionalTerms: this.additionalTerms
+    }).subscribe({
+      next: (res) => {
+        alert("Offer generated and sent successfully!");
+        this.isSubmitting = false;
+        // Redirect to hired-talent page and activate the offers tab
+        this.router.navigate(['/user/hired-talent'], { queryParams: { tab: 'offers' } });
+      },
+      error: (err) => {
+        console.error("Error sending offer:", err);
+        alert(err.error?.message || "Failed to send contract offer. Please try again.");
+        this.isSubmitting = false;
+      }
+    });
+  }
+}
+

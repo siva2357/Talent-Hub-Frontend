@@ -6,78 +6,100 @@
             <p class="text-secondary mb-0">Review and manage your incoming contract offers.</p>
         </div>
 
-        <!-- Offers List -->
-        <div class="row g-4">
-            @for (offer of offers; track offer.id) {
-            <div class="col-lg-6">
-                <div class="contract-card glass p-4 rounded-4 h-100 d-flex flex-column">
-                    <!-- Top Info -->
-                    <div class="d-flex justify-content-between align-items-start mb-4">
-                        <div>
-                            <h5 class="fw-bold mb-2 h6 text-white">{{offer.contractTitle}}</h5>
-                            <div class="d-flex gap-2">
-                                <span class="badge-type"
-                                    [ngClass]="offer.contractType === 'Fixed Price' ? 'fixed' : 'hourly'">{{offer.contractType}}</span>
-                                <span class="badge-level">{{offer.level}}</span>
-                                <span class="badge-expires ms-2"><i class="bi bi-hourglass-split me-1"></i> Expires in
-                                    {{offer.expiresIn}}</span>
+        @if (isLoading) {
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        } @else {
+            <!-- Offers List -->
+            <div class="row g-4">
+                @for (offer of offers; track offer.id) {
+                <div class="col-lg-6">
+                    <div class="contract-card glass p-4 rounded-4 h-100 d-flex flex-column border-white border-opacity-5">
+                        <!-- Top Info -->
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div>
+                                <h5 class="fw-bold mb-2 h6 text-white">{{offer.contractTitle}}</h5>
+                                <div class="d-flex gap-2 align-items-center">
+                                    <span class="badge-type"
+                                        [ngClass]="offer.contractType === 'Fixed Price' ? 'fixed' : 'hourly'">{{offer.contractType}}</span>
+                                    <span class="badge-level">{{offer.level}}</span>
+                                    @if (offer.status === 'Pending') {
+                                        <span class="badge-expires ms-2"><i class="bi bi-hourglass-split me-1"></i> Expires in
+                                            {{offer.expiresIn}}</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="text-white fw-bold">{{offer.budget}}</div>
+                                <div class="text-xxs text-secondary">Offer Amount</div>
                             </div>
                         </div>
-                        <div class="text-end">
-                            <div class="text-white fw-bold">{{offer.budget}}</div>
-                            <div class="text-xxs text-secondary">Offer Amount</div>
+
+                        <!-- Main Content Area -->
+                        <div class="flex-grow-1">
+                            <p class="text-sm text-secondary mb-3">
+                                {{offer.description}}
+                            </p>
+
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                @for (tech of offer.techStack; track tech) {
+                                <span class="tech-tag">{{tech}}</span>
+                                }
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Main Content Area -->
-                    <div class="flex-grow-1">
-                        <p class="text-sm text-secondary mb-3">
-                            {{offer.description}}
-                        </p>
+                        <!-- Offer Details Box -->
+                        <div class="offer-details-box p-3 rounded-4 mb-3 glass border border-white border-opacity-5">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <p class="text-secondary smaller mb-1">Start Date</p>
+                                    <p class="text-white small mb-0 fw-bold">{{offer.startDate}}</p>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <p class="text-secondary smaller mb-1">Client</p>
+                                    <p class="text-white small mb-0 fw-bold">{{offer.client}}</p>
+                                </div>
+                            </div>
+                        </div>
 
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            @for (tech of offer.techStack; track tech) {
-                            <span class="tech-tag">{{tech}}</span>
+                        <!-- Stats & Actions -->
+                        <div class="pt-3 border-top border-white border-opacity-10 mt-auto">
+                            @if (offer.status === 'Pending') {
+                                <div class="d-flex gap-2">
+                                    <app-button variant="brand" [routerLink]="['/user/legal-contract', offer.id]">
+                                        Accept Offer
+                                    </app-button>
+                                    <app-button variant="outline" (click)="declineOffer(offer.id)">
+                                        Decline
+                                    </app-button>
+                                </div>
+                            } @else {
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi text-sm" [ngClass]="offer.status === 'Accepted' ? 'bi-patch-check-fill text-success' : 'bi-x-circle-fill text-danger'"></i>
+                                        <span class="text-sm fw-bold" [ngClass]="offer.status === 'Accepted' ? 'text-success' : 'text-danger'">
+                                            Offer {{ offer.status }}
+                                        </span>
+                                    </div>
+                                    <span class="text-xxs text-secondary uppercase tracking-widest">Completed</span>
+                                </div>
                             }
                         </div>
                     </div>
-
-                    <!-- Offer Details Box -->
-                    <div class="offer-details-box p-3 rounded-4 mb-3 glass border border-white border-opacity-5">
-                        <div class="row g-3">
-                            <div class="col-6">
-                                <p class="text-secondary smaller mb-1">Start Date</p>
-                                <p class="text-white small mb-0 fw-bold">{{offer.startDate}}</p>
-                            </div>
-                            <div class="col-6 text-end">
-                                <p class="text-secondary smaller mb-1">Client</p>
-                                <p class="text-white small mb-0 fw-bold">{{offer.client}}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Stats & Actions -->
-                    <div class="pt-3 border-top border-white border-opacity-10 mt-auto">
-                        <div class="d-flex gap-2">
-                            <app-button variant="brand" [routerLink]="['/user/legal-contract', offer.id]">
-                                Accept Offer
-                            </app-button>
-                            <app-button variant="outline" (click)="declineOffer(offer.id)">
-                                Decline
-                            </app-button>
-                        </div>
+                </div>
+                } @empty {
+                <div class="col-12 text-center py-5">
+                    <div class="empty-state glass p-5 rounded-5 border-dashed">
+                        <i class="bi bi-briefcase fs-1 opacity-25 text-secondary mb-4 d-block"></i>
+                        <h4 class="text-white fw-bold">No active offers</h4>
+                        <p class="text-secondary mb-0">Check back later or browse more contracts to get started.</p>
                     </div>
                 </div>
+                }
             </div>
-            } @empty {
-            <div class="col-12 text-center py-5">
-                <div class="empty-state glass p-5 rounded-5 border-dashed">
-                    <i class="bi bi-briefcase fs-1 opacity-25 text-secondary mb-4 d-block"></i>
-                    <h4 class="text-white fw-bold">No active offers</h4>
-                    <p class="text-secondary mb-0">Check back later or browse more contracts to get started.</p>
-                </div>
-            </div>
-            }
-        </div>
+        }
     </div>
 </div>

@@ -1,88 +1,356 @@
 <div class="hired-talent-page p-3 p-md-4 p-xl-5">
   <div class="container-fluid max-w-7xl mx-auto">
 
-    <div class="mb-5 text-center text-md-start">
-      <h3 class="text-white fw-bold mb-3 h4">Hired Talent</h3>
-      <p class="text-secondary mb-0">Manage your active team members and track their performance.</p>
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-5 gap-3">
+      <div class="text-center text-md-start">
+        <h3 class="text-white fw-bold mb-2 h4">Team & Offers Hub</h3>
+        <p class="text-secondary mb-0">Manage active hires and track sent contract offers in one place.</p>
+      </div>
+
+      <!-- Tab Navigator (Swapped: Pending Offers is first tab, Hired Talents is second) -->
+      <div class="glass p-1.5 rounded-pill border-white border-opacity-10 d-inline-flex gap-1">
+        <button class="btn rounded-pill px-4 py-2 fw-bold text-xs transition-all border-0" 
+                [ngClass]="activeTab === 'offers' ? 'btn-primary shadow-glow-primary text-white' : 'btn-transparent text-secondary'" 
+                (click)="switchTab('offers')">
+          <i class="bi bi-envelope-paper me-2"></i>Pending Offers
+        </button>
+        <button class="btn rounded-pill px-4 py-2 fw-bold text-xs transition-all border-0" 
+                [ngClass]="activeTab === 'hired' ? 'btn-primary shadow-glow-primary text-white' : 'btn-transparent text-secondary'" 
+                (click)="switchTab('hired')">
+          <i class="bi bi-people me-2"></i>Hired Talents
+        </button>
+      </div>
     </div>
 
-    <div class="row g-4">
-      @for (talent of hiredTalent; track talent.id) {
-      <div class="col-lg-4 col-md-6">
-        <div class="profile-card glass p-4 rounded-4 h-100 border-opacity-10 border-white d-flex flex-column">
-          <!-- Top Info -->
-          <div class="d-flex justify-content-between align-items-start mb-4">
-            <div class="d-flex align-items-center gap-3">
-              <div class="avatar-wrapper position-relative">
-                <img [src]="talent.avatar" [alt]="talent.name" class="rounded-circle border border-2 border-dark"
-                  style="width: 64px; height: 64px; object-fit: cover;">
-                <span class="status-indicator position-absolute bg-success"></span>
-              </div>
-              <div>
-                <h5 class="text-white fw-bold mb-1">{{talent.name}}</h5>
-                <div class="d-flex align-items-center gap-1 text-secondary text-xs">
-                  <i class="bi bi-geo-alt"></i>
-                  <span>{{talent.location}}</span>
-                </div>
-                <p class="text-xs text-secondary mt-1 mb-0">{{talent.role}}</p>
-              </div>
-            </div>
-            <div class="performance-ring text-start">
-              <div class="ring-wrapper ms-0 mb-1" [ngClass]="talent.performanceTier.toLowerCase()">
-                <span class="percent text-white">{{talent.performance}}%</span>
-              </div>
-              <div class="fw-bold text-xs" [ngClass]="{
-                    'text-success': talent.performanceTier === 'High',
-                    'text-warning': talent.performanceTier === 'Medium',
-                    'text-danger': talent.performanceTier === 'Low'
-                  }">{{talent.performanceTier}}</div>
-              <div class="text-secondary text-xxs">Performance</div>
-            </div>
-          </div>
-
-          <!-- Active Contract Info -->
-          <div class="glass bg-white bg-opacity-5 p-3 rounded-3 mb-4 d-flex justify-content-between align-items-center">
-            <div>
-              <span class="text-secondary text-xxs text-uppercase d-block mb-1">Contract Status</span>
-              <span
-                class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">{{talent.contractStatus}}</span>
-            </div>
-            <div class="text-end">
-              <span class="text-secondary text-xxs text-uppercase d-block mb-1">Hours Logged</span>
-              <span class="text-white fw-bold">{{talent.hoursLogged}}</span>
-            </div>
-          </div>
-
-          <!-- Stats Grid -->
-          <div class="row g-2 mb-4 py-3 border-top border-bottom border-white border-opacity-10">
-            <div class="col-3 text-start border-end border-white border-opacity-10">
-              <div class="text-white fw-bold text-sm">${{talent.hourlyRate}}/hr</div>
-              <div class="text-secondary text-xxs">Rate</div>
-            </div>
-            <div class="col-3 text-start border-end border-white border-opacity-10">
-              <div class="text-white fw-bold text-sm">{{talent.projectsCount}}</div>
-              <div class="text-secondary text-xxs">Projects</div>
-            </div>
-            <div class="col-3 text-start border-end border-white border-opacity-10">
-              <div class="text-white fw-bold text-sm">{{talent.rating}}</div>
-              <div class="text-secondary text-xxs">Rating</div>
-            </div>
-            <div class="col-3 text-start">
-              <div class="text-white fw-bold text-sm">{{talent.totalHours | number}}</div>
-              <div class="text-secondary text-xxs">Hours</div>
-            </div>
-          </div>
-
-          <!-- Footer Actions -->
-          <div class="d-flex gap-2 mt-auto">
-            <button class="btn btn-dark text-white rounded-3 px-3 border-white border-opacity-10 w-100"
-              routerLink="/user/contract-view-details/1">View Details</button>
-            <button class="btn btn-primary rounded-3 px-3 fw-bold w-100"
-              routerLink="/user/contract-timesheet">Timesheets</button>
-          </div>
+    <!-- Active Tab Loading State -->
+    @if(isLoading) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
         </div>
       </div>
+    } @else {
+
+      <!-- TAB 1: PENDING OFFERS & PIPELINES (Swapped as first tab) -->
+      @if (activeTab === 'offers') {
+        <div class="animate-fade-in">
+          <!-- Horizontal Filters Bar -->
+          <div class="glass p-3 rounded-4 mb-5 border-white border-opacity-10">
+            <div class="row g-3 align-items-center">
+              <div class="col-12 col-md-4">
+                <div class="d-flex align-items-center gap-3 px-2">
+                  <i class="bi bi-search text-secondary"></i>
+                  <input type="text" class="form-control bg-transparent border-0 text-white shadow-none search-input" 
+                         placeholder="Search by candidate name or role..." [(ngModel)]="searchQuery">
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <select class="form-select bg-transparent text-white border-white border-opacity-10 shadow-none rounded-3 py-2" [(ngModel)]="statusFilter">
+                  <option class="bg-dark">All Status</option>
+                  <option class="bg-dark">Shortlisted</option>
+                  <option class="bg-dark">Pending</option>
+                  <option class="bg-dark">Rejected</option>
+                </select>
+              </div>
+              <div class="col-12 col-md-3">
+                <select class="form-select bg-transparent text-white border-white border-opacity-10 shadow-none rounded-3 py-2" [(ngModel)]="typeFilter">
+                  <option class="bg-dark">All Types</option>
+                  <option class="bg-dark">Hourly</option>
+                  <option class="bg-dark">Fixed Price</option>
+                </select>
+              </div>
+              <div class="col-12 col-md-2">
+                <div class="text-secondary text-xs text-end px-2">
+                  Showing {{filteredOffers.length}} Offers
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Offers Grid -->
+          <div class="row g-4">
+            @for (offer of filteredOffers; track offer.applicationId) {
+              <div class="col-lg-4 col-md-6">
+                <div class="profile-card glass p-4 rounded-4 h-100 border-opacity-10 border-white d-flex flex-column position-relative overflow-hidden">
+                  
+                  <!-- Performance Ring -->
+                  <div class="position-absolute top-0 end-0 p-3 z-3">
+                    <div class="performance-ring text-center">
+                      <div class="ring-wrapper mx-auto mb-1 high">
+                        <span class="percent text-white">95%</span>
+                      </div>
+                      <div class="text-secondary text-xxs">Performance</div>
+                    </div>
+                  </div>
+
+                  <!-- Top Info -->
+                  <div class="d-flex justify-content-between align-items-start mb-3 pe-5">
+                    <div class="d-flex align-items-center gap-3">
+                      <div class="avatar-wrapper position-relative">
+                        <img [src]="offer.freelancer?.profilePhoto || 'assets/images/default-user.png'" [alt]="offer.freelancer?.fullName" class="rounded-circle border border-2 border-dark"
+                          style="width: 64px; height: 64px; object-fit: cover;">
+                        <span class="status-indicator position-absolute" [ngClass]="{
+                              'bg-primary': !offer.offerStatus || offer.offerStatus === 'none',
+                              'bg-warning': offer.offerStatus === 'sent',
+                              'bg-danger': offer.offerStatus === 'declined'
+                            }"></span>
+                      </div>
+                      <div>
+                        <h5 class="text-white fw-bold mb-1" style="font-size: 16px;">{{offer.freelancer?.fullName}}</h5>
+                        <div class="d-flex align-items-center gap-1 text-secondary text-xs">
+                          <i class="bi bi-geo-alt"></i>
+                          <span>Remote</span>
+                        </div>
+                        <p class="text-xs text-secondary mt-1 mb-0">{{offer.freelancer?.professionalHeadline}}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Active Contract Info -->
+                  <div class="glass bg-white bg-opacity-5 p-3 rounded-3 mb-4 d-flex justify-content-between align-items-center">
+                    <div>
+                      <span class="text-secondary text-xxs text-uppercase d-block mb-1">Contract Post</span>
+                      <span class="text-white fw-medium text-sm">{{offer.contract?.title}}</span>
+                    </div>
+                    <div class="text-end">
+                      <span class="text-secondary text-xxs text-uppercase d-block mb-1">Status</span>
+                      <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3">{{offer.contract?.status}}</span>
+                    </div>
+                  </div>
+
+                  <!-- Offer Status Label & Badge -->
+                  <div class="mb-4 d-flex align-items-center gap-2">
+                    <span class="text-secondary text-xs fw-bold uppercase tracking-widest">Pipeline Status :</span>
+                    <div class="status-badge-vivid px-3 py-1 rounded-pill d-inline-flex" [ngClass]="{
+                        'status-accepted': !offer.offerStatus || offer.offerStatus === 'none',
+                        'status-pending': offer.offerStatus === 'sent',
+                        'status-rejected': offer.offerStatus === 'declined'
+                      }">
+                      <i class="bi text-xs" [ngClass]="{
+                          'bi-bookmark-fill': !offer.offerStatus || offer.offerStatus === 'none',
+                          'bi-clock-history': offer.offerStatus === 'sent',
+                          'bi-x-circle-fill': offer.offerStatus === 'declined'
+                        }"></i>
+                      <span class="text-xxs fw-bold ms-1 uppercase tracking-widest">
+                        {{ !offer.offerStatus || offer.offerStatus === 'none' ? 'Shortlisted' : (offer.offerStatus === 'declined' ? 'Rejected' : 'Pending') }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Timeline Info -->
+                  <div class="mb-4 pt-3 border-top border-white border-opacity-5">
+                    @if (!offer.offerStatus || offer.offerStatus === 'none') {
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-secondary text-xs">Shortlisted:</span>
+                        <span class="text-white text-xs fw-bold">{{offer.hiredAt || (offer.createdAt | date:'MMM d, yyyy')}}</span>
+                      </div>
+                    } @else {
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-secondary text-xs">Offer Sent:</span>
+                        <span class="text-white text-xs fw-bold">{{offer.offerSentDate || (offer.createdAt | date:'MMM d, yyyy')}}</span>
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Offer Details Stats -->
+                  <div class="row g-2 mb-4 py-3 border-top border-bottom border-white border-opacity-10 mt-auto">
+                    <div class="col-6 text-start border-end border-white border-opacity-10">
+                      <div class="text-white fw-bold text-sm">{{ getOfferRate(offer) }}</div>
+                      <div class="text-secondary text-xxs">Offer Value</div>
+                    </div>
+                    <div class="col-6 text-start">
+                      <div class="text-white fw-bold text-sm">{{ getOfferType(offer) }}</div>
+                      <div class="text-secondary text-xxs">Payment Type</div>
+                    </div>
+                  </div>
+
+                  <!-- Footer Actions -->
+                  <div class="d-flex align-items-center justify-content-between pt-3 border-top border-white border-opacity-5 gap-2">
+                    @if (!offer.offerStatus || offer.offerStatus === 'none') {
+                      <button class="btn btn-primary rounded-3 px-3 py-1.5 fw-bold text-xxs shadow-glow-primary"
+                        [routerLink]="['/user/legal-form', offer.contract?._id]">
+                        <i class="bi bi-envelope-paper me-1"></i>Send Offer Letter
+                      </button>
+                    } @else if (offer.offerStatus === 'declined') {
+                      <span class="text-danger fw-bold text-xxs border border-danger border-opacity-25 rounded-3 px-3 py-1.5 bg-danger bg-opacity-5">
+                        <i class="bi bi-x-circle-fill me-1"></i>Declined by Candidate
+                      </span>
+                    } @else {
+                      <span class="text-warning fw-bold text-xxs border border-warning border-opacity-25 rounded-3 px-3 py-1.5 bg-warning bg-opacity-5">
+                        <i class="bi bi-clock-history me-1"></i>Awaiting Signing
+                      </span>
+                    }
+                    <button class="btn btn-dark text-white rounded-3 px-3 py-1.5 fw-bold text-xxs" routerLink="/user/chat">
+                      Message
+                    </button>
+                  </div>
+                </div>
+              </div>
+            } @empty {
+              <div class="col-12 text-center py-5 animate-fade-in">
+                <div class="glass p-5 rounded-4 border-white border-opacity-10">
+                  <i class="bi bi-search text-secondary display-1 mb-4 opacity-25"></i>
+                  <h3 class="text-white fw-bold">No pending offers found</h3>
+                  <p class="text-secondary">All caught up! You have no active offer pipeline or shortlisted talent.</p>
+                  <button class="btn btn-primary rounded-pill px-4 py-2 mt-3 fw-bold shadow-glow-primary" 
+                          (click)="searchQuery=''; statusFilter='All Status'; typeFilter='All Types'">
+                    Clear Filters
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
       }
-    </div>
+
+      <!-- TAB 2: HIRED TALENTS (ACCORDION GROUPING BY CONTRACT) -->
+      @if (activeTab === 'hired') {
+        <div class="d-flex flex-column gap-4 animate-fade-in">
+          @for (group of groupedHiredContracts; track group.contractId) {
+            <div class="glass rounded-4 border-white border-opacity-10 overflow-hidden">
+              
+              <!-- Accordion Header -->
+              <div class="accordion-header-btn p-4 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3" 
+                   (click)="toggleGroup(group)">
+                <div class="d-flex align-items-center gap-3 flex-grow-1">
+                  <div class="rounded-circle bg-success bg-opacity-10 text-success p-2.5 d-flex align-items-center justify-content-center">
+                    <i class="bi bi-briefcase fw-bold fs-5"></i>
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                      <h4 class="text-white fw-bold mb-0 h5">{{group.contractTitle}}</h4>
+                      <span class="badge rounded-pill px-3 py-1 fw-bold text-xxs text-uppercase bg-primary text-white">
+                        {{ group.contractStatus || 'Active' }}
+                      </span>
+                    </div>
+                    <!-- Meta row: budget, type, dates, count -->
+                    <div class="d-flex flex-wrap gap-3 align-items-center">
+                      <span class="text-secondary text-xs d-flex align-items-center gap-1">
+                        <i class="bi bi-people-fill text-success opacity-75"></i>
+                        {{group.talents.length}} Hired Freelancer{{group.talents.length > 1 ? 's' : ''}}
+                      </span>
+                      @if (group.contractBudget) {
+                        <span class="text-secondary text-xs d-flex align-items-center gap-1">
+                          <i class="bi bi-currency-dollar text-primary opacity-75"></i>
+                          ${{ group.contractBudget | number }} · {{ group.contractType }}
+                        </span>
+                      }
+                      @if (group.contractStartDate) {
+                        <span class="text-secondary text-xs d-flex align-items-center gap-1">
+                          <i class="bi bi-calendar3 opacity-75"></i>
+                          {{ group.contractStartDate | date:'MMM d, yyyy' }} – {{ group.contractEndDate | date:'MMM d, yyyy' }}
+                        </span>
+                      }
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-3 ms-auto ms-sm-0" (click)="$event.stopPropagation()">
+                  @if (hasDiary(group)) {
+                    <a routerLink="/user/contract-progress" class="btn btn-success btn-sm rounded-3 fw-bold text-xxs px-3 py-1.5">
+                      <i class="bi bi-journal-check me-1"></i>View Diary
+                    </a>
+                  } @else {
+                    <button class="btn btn-primary btn-sm rounded-3 fw-bold text-xxs px-3 py-1.5 shadow-glow-primary"
+                      [disabled]="initializingDiary.has(group.contractId)"
+                      (click)="initializeDiary(group)">
+                      <i class="bi bi-journal-plus me-1"></i>
+                      {{ initializingDiary.has(group.contractId) ? 'Creating...' : 'Initialize Diary' }}
+                    </button>
+                  }
+                  <span class="text-secondary text-xs d-none d-md-inline">Click to toggle</span>
+                  <i class="bi bi-chevron-up text-white fs-5 rotate-icon" [class.collapsed]="!group.isExpanded"></i>
+                </div>
+              </div>
+
+              <!-- Accordion Content -->
+              @if (group.isExpanded) {
+                <div class="p-4 border-top border-white border-opacity-5 bg-black bg-opacity-20">
+                  <div class="row g-4">
+                    @for (talent of group.talents; track talent.applicationId) {
+                      <div class="col-lg-4 col-md-6">
+                        <div class="profile-card glass p-4 rounded-4 border-opacity-5 border-white d-flex flex-column h-100 bg-black bg-opacity-20">
+                          
+                          <!-- Top Info -->
+                          <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                              <div class="avatar-wrapper position-relative">
+                                <img [src]="talent.freelancer?.profilePhoto || 'assets/images/default-user.png'"
+                                  [alt]="talent.freelancer?.fullName" class="rounded-circle border border-2 border-dark"
+                                  style="width: 64px; height: 64px; object-fit: cover;">
+                                <span class="status-indicator position-absolute bg-success"></span>
+                              </div>
+                              <div>
+                                <h5 class="text-white fw-bold mb-1" style="font-size: 16px;">{{talent.freelancer?.fullName}}</h5>
+                                <div class="d-flex align-items-center gap-1 text-secondary text-xs">
+                                  <i class="bi bi-geo-alt"></i>
+                                  <span>Remote</span>
+                                </div>
+                                <p class="text-xs text-secondary mt-1 mb-0">{{talent.freelancer?.professionalHeadline}}</p>
+                              </div>
+                            </div>
+                            
+                            <div class="performance-ring text-start">
+                              <div class="ring-wrapper ms-0 mb-1 high">
+                                <span class="percent text-white">95%</span>
+                              </div>
+                              <div class="fw-bold text-xs text-success">High</div>
+                              <div class="text-secondary text-xxs">Performance</div>
+                            </div>
+                          </div>
+
+                          <!-- Stats Grid (Rates etc.) -->
+                          <div class="row g-2 mb-4 py-3 border-top border-bottom border-white border-opacity-10 mt-auto">
+                            <div class="col-6 text-start border-end border-white border-opacity-10">
+                              <div class="text-white fw-bold text-sm">{{ getOfferRate(talent) }}</div>
+                              <div class="text-secondary text-xxs">Hired Rate</div>
+                            </div>
+                            <div class="col-6 text-start">
+                              <div class="text-white fw-bold text-sm">{{ getOfferType(talent) }}</div>
+                              <div class="text-secondary text-xxs">Type</div>
+                            </div>
+                          </div>
+
+                          <!-- Dates -->
+                          <div class="mb-4 text-xs text-secondary d-flex flex-column gap-1">
+                            <div class="d-flex justify-content-between">
+                              <span>Hired date:</span>
+                              <span class="text-white fw-bold">{{talent.signedAt || talent.hiredAt | date:'MMM d, yyyy'}}</span>
+                            </div>
+                          </div>
+
+                          <!-- Action Buttons -->
+                          <div class="d-flex justify-content-between align-items-center gap-2 pt-3 border-top border-white border-opacity-5">
+                            <button class="btn btn-success rounded-3 px-3 py-1.5 fw-bold text-xxs shadow-glow-success" 
+                                    (click)="downloadSignedContract(talent)">
+                              <i class="bi bi-file-earmark-pdf me-1"></i>Download Signed Contract
+                            </button>
+                            <button class="btn btn-dark text-white rounded-3 px-3 py-1.5 fw-bold text-xxs" routerLink="/user/chat">
+                              Message
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          } @empty {
+            <div class="text-center py-5 animate-fade-in">
+              <div class="glass p-5 rounded-4 d-inline-block border-white border-opacity-10">
+                <i class="bi bi-people text-secondary display-3 mb-3 opacity-25"></i>
+                <h5 class="text-white fw-bold">No Hired Talents Yet</h5>
+                <p class="text-secondary mb-0">Once freelancers accept your contract offers, they will be listed here by project.</p>
+                <button class="btn btn-primary rounded-pill px-4 py-2 mt-4 fw-bold shadow-glow-primary" 
+                        (click)="switchTab('offers')">
+                  <i class="bi bi-envelope-paper me-2"></i>Send Offer Letter
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
   </div>
 </div>

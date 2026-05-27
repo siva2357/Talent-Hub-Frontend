@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { InputComponent } from '../../../../../shared/components/input/input.component';
 import { ChipComponent } from '../../../../../shared/components/chip/chip.component';
+import { ContractService } from '../../../../../core/services/contract.service';
+import { ApplicationService } from '../../../../../core/services/application.service';
 
 interface Proposal {
   id: string;
@@ -38,7 +40,14 @@ interface ActiveFilter {
   templateUrl: './proposals.component.html',
   styleUrl: './proposals.component.css'
 })
-export class ProposalsComponent {
+export class ProposalsComponent implements OnInit {
+  private contractService = inject(ContractService);
+  private applicationService = inject(ApplicationService);
+  private route = inject(ActivatedRoute);
+
+  // Tabs: 'proposals' | 'offers'
+  activeTab: 'proposals' | 'offers' = 'proposals';
+
   // Filter Selection State (Internal)
   searchQuery: string = '';
   dateFilter: string = 'All Time';
@@ -70,107 +79,136 @@ export class ProposalsComponent {
     { label: 'Rejected', value: 'Rejected' }
   ];
 
-  allProposals: Proposal[] = [
-    { 
-      id: '1', 
-      contractTitle: 'Senior Angular Developer', 
-      client: 'TechNova', 
-      date: 'Oct 12, 2023', 
-      budget: '$5,000', 
-      budgetLabel: 'Proposal Amount',
-      duration: '3 Months',
-      contractType: 'Fixed Price',
-      level: 'Expert',
-      description: 'Lead the frontend development of an enterprise SaaS analytics platform.',
-      techStack: ['Angular', 'NgRx', 'RxJS'],
-      status: 'Pending', 
-      type: 'Applied' 
-    },
-    { 
-      id: '2', 
-      contractTitle: 'UI Designer for Mobile App', 
-      client: 'GrowthLabs', 
-      date: 'Oct 15, 2023', 
-      budget: '$3,200', 
-      budgetLabel: 'Estimated Pay',
-      duration: '1 Month',
-      contractType: 'Fixed Price',
-      level: 'Intermediate',
-      description: 'Design a clean and modern user interface for a fitness tracking application.',
-      techStack: ['Figma', 'UI/UX', 'Prototyping'],
-      status: 'Under Review', 
-      type: 'Applied' 
-    },
-    { 
-      id: '3', 
-      contractTitle: 'Frontend Optimization Task', 
-      client: 'SaaSify', 
-      date: 'Oct 08, 2023', 
-      budget: '$1,500', 
-      budgetLabel: 'Task Payment',
-      duration: '2 Weeks',
-      contractType: 'Fixed Price',
-      level: 'Expert',
-      description: 'Optimize core web vitals and bundle size for a high-traffic dashboard.',
-      techStack: ['Angular', 'Web Vitals', 'Performance'],
-      status: 'Shortlisted for Assessment',
-      type: 'Assignment',
-      deadline: 'Oct 20, 2023',
-      link: 'https://assessment.talenthub.com/task/342'
-    },
-    { 
-      id: '4', 
-      contractTitle: 'Lead React Engineer', 
-      client: 'CloudFlow', 
-      date: 'Oct 05, 2023', 
-      budget: '$8,000', 
-      budgetLabel: 'Monthly Rate',
-      duration: '6 Months',
-      contractType: 'Hourly',
-      level: 'Expert',
-      description: 'Manage a team of developers to build scalable cloud infrastructure tools.',
-      techStack: ['React', 'TypeScript', 'AWS'],
-      status: 'Interview Scheduled',
-      type: 'Interview',
-      meetingTime: 'Oct 18, 2023 - 10:00 AM EST',
-      link: 'https://meet.talenthub.com/j/lead-react-456'
-    },
-    { 
-      id: '5', 
-      contractTitle: 'Python Data Scraper', 
-      client: 'DataQuest', 
-      date: 'Oct 01, 2023', 
-      budget: '$2,500', 
-      budgetLabel: 'Project Budget',
-      duration: '1 Month',
-      contractType: 'Fixed Price',
-      level: 'Intermediate',
-      description: 'Develop a high-performance data scraping tool for real estate analytics.',
-      techStack: ['Python', 'Scrapy', 'MongoDB'],
-      status: 'Shortlisted', 
-      type: 'Shortlisted' 
-    },
-    { 
-      id: '6', 
-      contractTitle: 'E-commerce Redesign', 
-      client: 'ShopZilla', 
-      date: 'Sep 25, 2023', 
-      budget: '$4,000', 
-      budgetLabel: 'Proposal Amount',
-      duration: '2 Months',
-      contractType: 'Fixed Price',
-      level: 'Expert',
-      description: 'Complete UI/UX overhaul of an existing electronics e-commerce store.',
-      techStack: ['React', 'Node.js', 'Tailwind'],
-      status: 'Rejected', 
-      type: 'Rejected' 
+  allProposals: any[] = [];
+  appliedProposals: any[] = [];
+  offers: any[] = [];
+  isLoading: boolean = false;
+
+  ngOnInit(): void {
+    // Check if routed with default tab data
+    const snapshotData = this.route.snapshot.data;
+    if (snapshotData && snapshotData['defaultTab'] === 'offers') {
+      this.activeTab = 'offers';
     }
-  ];
 
-  appliedProposals: Proposal[] = [...this.allProposals];
+    // Also check for query parameters to switch tabs dynamically
+    this.route.queryParams.subscribe(params => {
+      if (params['tab'] === 'offers') {
+        this.activeTab = 'offers';
+      } else if (params['tab'] === 'proposals') {
+        this.activeTab = 'proposals';
+      }
+    });
 
-  constructor() {
-    this.applyFilters();
+    this.fetchAppliedContracts();
+    this.fetchOffers();
+  }
+
+  switchTab(tab: 'proposals' | 'offers'): void {
+    this.activeTab = tab;
+  }
+
+  fetchOffers(): void {
+    this.isLoading = true;
+    this.applicationService.getFreelancerOffers().subscribe({
+      next: (res: any) => {
+        if (res.success && res.offers) {
+          this.offers = res.offers;
+        } else {
+          this.offers = [];
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch dynamic offers:', err);
+        this.offers = [];
+        this.isLoading = false;
+      }
+    });
+  }
+
+  declineOffer(id: string) {
+    if (confirm('Are you sure you want to decline this contract offer?')) {
+      this.applicationService.declineOffer(id).subscribe({
+        next: () => {
+          alert('Offer declined successfully.');
+          this.fetchOffers();
+        },
+        error: (err) => {
+          console.error('Failed to decline offer:', err);
+          alert('Failed to decline offer. Please try again.');
+        }
+      });
+    }
+  }
+
+  downloadSignedContract(offerId: string): void {
+    window.open(this.applicationService.getContractPdfUrl(offerId), '_blank');
+  }
+
+  markAssessmentCompleted(proposalId: string) {
+    if (!proposalId) return;
+    this.isLoading = true;
+    this.applicationService.submitAssessment(proposalId).subscribe({
+      next: (res) => {
+        if (res.success) {
+          // Re-fetch to update state
+          this.fetchAppliedContracts();
+        } else {
+          this.isLoading = false;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to submit assessment:', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  fetchAppliedContracts() {
+    this.isLoading = true;
+    this.contractService.getAppliedContracts().subscribe({
+      next: (res: any) => {
+        if (res.success && res.applications) {
+          this.allProposals = res.applications.map((app: any) => ({
+            id: app.applicationId,
+            contractTitle: app.contract?.contractTitle || 'Unknown Title',
+            client: app.client?.fullName || 'Unknown Client',
+            date: new Date(app.appliedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+            budget: `$${app.contract?.estimatedBudget?.toLocaleString() || '0'}`,
+            budgetLabel: app.contract?.budgetType === 'Hourly Rate' ? 'Hourly Rate' : 'Proposal Amount',
+            duration: app.contract?.contractStartDate && app.contract?.contractEndDate ? 
+              (() => {
+                const start = new Date(app.contract.contractStartDate);
+                const end = new Date(app.contract.contractEndDate);
+                const diffTime = Math.abs(end.getTime() - start.getTime());
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if (diffDays < 30) return `${diffDays} Days`;
+                const diffMonths = Math.floor(diffDays / 30);
+                return `${diffMonths} Month${diffMonths > 1 ? 's' : ''}`;
+              })() : 'Unknown',
+            contractType: app.contract?.budgetType === 'Hourly Rate' ? 'Hourly' : 'Fixed Price',
+            level: 'Intermediate',
+            description: app.contract?.contractDescription || '',
+            techStack: app.contract?.techStack || [],
+            status: app.applicationStatus ? app.applicationStatus.replace(/\b\w/g, (l: string) => l.toUpperCase()) : 'Pending',
+            type: (app.applicationStatus === 'application received' || app.applicationStatus === 'application shortlisted') ? 'Applied' :
+              (app.applicationStatus === 'shortlisted') ? 'Shortlisted' :
+                app.applicationStatus === 'rejected' ? 'Rejected' :
+                  (app.applicationStatus === 'interview scheduled' || app.applicationStatus === 'interview completed') ? 'Interview' :
+                    (app.applicationStatus === 'assessment scheduled' || app.applicationStatus === 'assessment completed') ? 'Assignment' : 'Applied',
+            assessment: app.assessment,
+            interview: app.interview
+          }));
+          this.applyFilters();
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch applied contracts:', err);
+        this.isLoading = false;
+      }
+    });
   }
 
   applyFilters() {
@@ -191,11 +229,11 @@ export class ProposalsComponent {
 
     // 2. Filter Data
     this.appliedProposals = this.allProposals.filter(p => {
-      const matchesSearch = p.contractTitle.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
-                          p.client.toLowerCase().includes(this.searchQuery.toLowerCase());
-      
+      const matchesSearch = p.contractTitle.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        p.client.toLowerCase().includes(this.searchQuery.toLowerCase());
+
       const matchesStatus = this.statusFilter === 'All Status' || p.type === this.statusFilter;
-      
+
       return matchesSearch && matchesStatus;
     });
   }
@@ -215,4 +253,8 @@ export class ProposalsComponent {
     this.statusFilter = 'All Status';
     this.applyFilters();
   }
+
+
+
+
 }

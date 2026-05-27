@@ -1,275 +1,227 @@
 <div class="contract-diary-page pb-5">
     <div class="container py-4">
+
         <!-- Header Section -->
-        <div class="mb-5 text-center">
+        <div class="mb-5">
             <h2 class="text-white fw-bold mb-1">Contract <span class="text-primary">Diary</span></h2>
-            <p class="text-secondary mb-0">Monitor your contract evolution and milestone progress.</p>
+            <p class="text-secondary mb-0">Track your milestone progress and submit updates to your client.</p>
         </div>
 
+        <!-- Loading -->
+        @if (isLoading) {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        } @else {
+
+        <!-- Diaries -->
+        @if (diaries.length > 0) {
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <!-- Accordion Item 1 -->
+
+                @for (diary of diaries; track diary._id) {
                 <div class="diary-accordion-item glass rounded-4 overflow-hidden mb-4">
+
+                    <!-- Accordion Header -->
                     <div class="accordion-header p-4 d-flex align-items-center justify-content-between cursor-pointer"
-                        (click)="toggleAccordion()">
+                        (click)="toggleDiary(diary._id)">
                         <div class="d-flex align-items-center gap-4 flex-grow-1">
                             <div class="contract-info">
-                                <h5 class="text-white fw-bold mb-1">Senior Frontend Developer - Angular Expert</h5>
+                                <h5 class="text-white fw-bold mb-1">
+                                    {{ diary.contractId.contractTitle || 'Contract' }}
+                                </h5>
                                 <div class="d-flex flex-wrap gap-3 mt-2">
-                                    <div class="badge-item"><i class="bi bi-calendar-event me-2"></i>May 10, 2026 - Aug
-                                        10,
-                                        2026
+                                    <div class="badge-item">
+                                        <i class="bi bi-calendar-event me-2"></i>
+                                        {{ formatDate(diary.contractId.contractStartDate) }} –
+                                        {{ formatDate(diary.contractId.contractEndDate) }}
                                     </div>
-                                    <div class="badge-item"><i class="bi bi-layers me-2"></i>Milestone Based</div>
-                                    <div class="badge-item"><i class="bi bi-currency-dollar me-2"></i>$4,500 Total</div>
+                                    <div class="badge-item">
+                                        <i class="bi bi-layers me-2"></i>
+                                        {{ diary.phases.length }} Phases
+                                    </div>
+                                    <div class="badge-item">
+                                        <i class="bi bi-currency-dollar me-2"></i>
+                                        ${{ getTotalBudget(diary) | number }} Total
+                                    </div>
+                                    <div class="badge-item">
+                                        <i class="bi bi-person me-2"></i>
+                                        {{ diary.clientId.registrationDetails.fullName || 'Client' }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-4">
-                            <span class="status-badge in-progress">Active Phase</span>
+                            <span class="status-badge"
+                                [ngClass]="diary.overallStatus === 'completed' ? 'approved' : 'in-progress'">
+                                {{ diary.overallStatus === 'completed' ? 'Completed' : 'Active Phase' }}
+                            </span>
                             <i class="bi bi-chevron-down text-secondary fs-5 transition-transform"
-                                [class.rotate-180]="isExpanded"></i>
+                                [class.rotate-180]="expandedDiaryId === diary._id"></i>
                         </div>
                     </div>
 
-                    @if (isExpanded) {
+                    <!-- Accordion Body -->
+                    @if (expandedDiaryId === diary._id) {
                     <div class="accordion-body p-4 border-top border-white border-opacity-5">
                         <h6 class="text-white fw-bold mb-4">Evolutionary Progress Tracker</h6>
-                        <div class="step-tracker">
-                            <!-- Approved Phase -->
-                            <div class="step-item completed">
-                                <div class="step-marker"><i class="bi bi-check-lg"></i></div>
-                                <div class="step-content pb-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <h6 class="text-white fw-bold mb-0">Phase 1: Project Setup & Architecture
-                                            </h6>
-                                            <div class="deadline-badge ms-2">
-                                                <i class="bi bi-clock text-success me-1"></i>
-                                                <span class="text-xxs text-success fw-bold">May 15, 2026</span>
-                                            </div>
-                                        </div>
-                                        <span class="status-badge approved">Approved</span>
-                                    </div>
-                                    <p class="text-secondary small mb-3">Initial repository setup, architecture
-                                        definition, and core component library integration.</p>
 
-                                    <!-- Media Previews (Static/Historic) -->
-                                    <div class="media-previews mb-3">
-                                        <div
-                                            class="d-flex align-items-center gap-3 p-2 glass rounded-3 border-white border-opacity-5">
-                                            <div class="file-icon bg-success bg-opacity-10 p-2 rounded-2">
-                                                <i class="bi bi-file-earmark-zip-fill text-success fs-5"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <div class="text-white small fw-bold">boilerplate_v1.zip</div>
-                                                <div class="text-secondary text-xxs">45.2 MB • Source Files</div>
-                                            </div>
-                                            <button class="btn-icon text-secondary"><i
-                                                    class="bi bi-download"></i></button>
-                                        </div>
-                                    </div>
-
-                                    <div class="text-xxs text-secondary">Approved: May 15, 2026</div>
-                                </div>
-                            </div>
-
-                            <!-- Requested Changes Phase -->
-                            <div class="step-item changes">
-                                <div class="step-marker"><i class="bi bi-exclamation-triangle-fill"></i></div>
-                                <div class="step-content pb-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <h6 class="text-white fw-bold mb-0">Phase 2: Authentication & Security</h6>
-                                            <div class="deadline-badge ms-2">
-                                                <i class="bi bi-clock text-secondary me-1"></i>
-                                                <span class="text-xxs text-secondary fw-bold">May 25, 2026</span>
-                                            </div>
-                                        </div>
-                                        <span class="status-badge requested">Requested Changes</span>
-                                    </div>
-                                    <p class="text-secondary small mb-3">The client requested updates to the OAuth2
-                                        implementation and token refresh logic.</p>
-
-                                    <!-- Action Area for Responding to Changes -->
-                                    <div class="action-area glass p-3 rounded-3 mb-3 border-warning border-opacity-25">
-                                        <h6 class="text-warning text-xxs fw-bold mb-3">CLIENT FEEDBACK: "Please use
-                                            HTTP-only cookies for storage."</h6>
-                                        <textarea class="form-control glass border-0 text-white small mb-3" rows="2"
-                                            placeholder="Your response/update..."></textarea>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <button class="btn-upload small"><i class="bi bi-paperclip me-2"></i>Attach
-                                                Proof</button>
-                                            <app-button variant="brand" size="sm">Submit Revision</app-button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Existing Files for this Phase -->
-                                    <div class="media-previews">
-                                        <div
-                                            class="d-flex align-items-center gap-3 p-2 glass rounded-3 border-white border-opacity-5 opacity-75">
-                                            <div class="file-icon bg-warning bg-opacity-10 p-2 rounded-2">
-                                                <i class="bi bi-shield-lock-fill text-warning fs-5"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <div class="text-white small fw-bold">auth_flow_diagram.png</div>
-                                                <div class="text-secondary text-xxs">1.2 MB • Rejected Version</div>
-                                            </div>
-                                            <button class="btn-icon text-secondary"><i class="bi bi-trash"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- In Progress Phase -->
-                            <div class="step-item in-progress">
-                                <div class="step-marker"></div>
-                                <div class="step-content pb-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <h6 class="text-white fw-bold mb-0">Phase 3: Dashboard Implementation</h6>
-                                            <div class="deadline-badge ms-2">
-                                                <i class="bi bi-clock text-secondary me-1"></i>
-                                                <span class="text-xxs text-secondary fw-bold">June 15, 2026</span>
-                                            </div>
-                                        </div>
-                                        <span class="status-badge in-progress">In Progress</span>
-                                    </div>
-                                    <p class="text-secondary small mb-2">Building the main dashboard views, real-time
-                                        charts integration, and user data models.</p>
-                                    <div class="progress-bar-container glass rounded-pill mt-2 mb-4 overflow-hidden"
-                                        style="height: 6px;">
-                                        <div class="progress-fill bg-primary" style="width: 65%;"></div>
-                                    </div>
-
-                                    <!-- Action Area -->
-                                    <div class="action-area glass p-3 rounded-3 mb-4">
-                                        <h6 class="text-white text-xxs fw-bold mb-3">SUBMIT PROGRESS UPDATE</h6>
-                                        <div class="mb-3">
-                                            <textarea class="form-control glass border-0 text-white small" rows="2"
-                                                placeholder="Describe your progress..."></textarea>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <button class="btn-upload small"><i class="bi bi-paperclip me-2"></i>Attach
-                                                Files</button>
-                                            <app-button variant="brand" size="sm">Submit Update</app-button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Media Previews Section -->
-                                    <div class="media-previews">
-                                        <h6 class="text-white text-xxs fw-bold mb-3 opacity-50">ATTACHED MEDIA</h6>
-
-                                        <div class="d-flex flex-wrap gap-3 mb-3">
-                                            <!-- PDF Preview (Half Width) -->
-                                            <div class="d-flex align-items-center gap-3 p-2 glass rounded-3 border-white border-opacity-5 flex-grow-1"
-                                                style="min-width: 250px;">
-                                                <div class="file-icon bg-danger bg-opacity-10 p-2 rounded-2">
-                                                    <i class="bi bi-file-earmark-pdf-fill text-danger fs-5"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div class="text-white small fw-bold">technical_spec_v2.pdf</div>
-                                                    <div class="text-secondary text-xxs">2.4 MB • PDF</div>
-                                                </div>
-                                                <button class="btn-icon text-secondary me-1"><i
-                                                        class="bi bi-eye"></i></button>
-                                                <button class="btn-icon text-secondary"><i
-                                                        class="bi bi-trash"></i></button>
-                                            </div>
-
-                                            <!-- Video Preview (Half Width) -->
-                                            <div class="d-flex align-items-center gap-3 p-2 glass rounded-3 border-white border-opacity-5 flex-grow-1"
-                                                style="min-width: 250px;">
-                                                <div class="file-icon bg-primary bg-opacity-10 p-2 rounded-2">
-                                                    <i class="bi bi-play-btn-fill text-primary fs-5"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div class="text-white small fw-bold">demo_recording.mp4</div>
-                                                    <div class="text-secondary text-xxs">15.8 MB • 0:45</div>
-                                                </div>
-                                                <button class="btn-icon text-secondary me-1"><i
-                                                        class="bi bi-play-fill text-primary"></i></button>
-                                                <button class="btn-icon text-secondary"><i
-                                                        class="bi bi-trash"></i></button>
-                                            </div>
-                                        </div>
-
-                                        <!-- Image Gallery Preview -->
-                                        <div class="image-gallery-grid">
-                                            <div class="gallery-item glass rounded-3 overflow-hidden">
-                                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=200"
-                                                    alt="Dashboard Draft">
-                                                <div class="gallery-overlay"><i class="bi bi-zoom-in"></i></div>
-                                            </div>
-                                            <div class="gallery-item glass rounded-3 overflow-hidden">
-                                                <img src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=200"
-                                                    alt="UI Kit">
-                                                <div class="gallery-overlay"><i class="bi bi-zoom-in"></i></div>
-                                            </div>
-                                            <div class="gallery-item glass rounded-3 overflow-hidden">
-                                                <div class="more-overlay">+2</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Pending Phase (Overdue Example) -->
-                            <div class="step-item overdue">
-                                <div class="step-marker"><i class="bi bi-clock-history"></i></div>
-                                <div class="step-content">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <h6 class="text-white fw-bold mb-0">Phase 4: Final Testing & Deployment</h6>
-                                            <div class="deadline-badge ms-2">
-                                                <i class="bi bi-alarm text-danger me-1 blink"></i>
-                                                <span class="text-xxs text-danger fw-bold blink">OVERDUE: June 20,
-                                                    2026</span>
-                                            </div>
-                                        </div>
-                                        <span class="status-badge pending">Not Completed</span>
-                                    </div>
-                                    <p class="text-secondary small mb-3">E2E testing, performance optimization, and
-                                        final production deployment to GCP.</p>
-
-                                    <!-- Action Area -->
-                                    <div class="action-area glass p-3 rounded-3 mb-4">
-                                        <h6 class="text-white text-xxs fw-bold mb-3">SUBMIT PROGRESS UPDATE</h6>
-                                        <div class="mb-3">
-                                            <textarea class="form-control glass border-0 text-white small" rows="2"
-                                                placeholder="Describe your progress..."></textarea>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <button class="btn-upload small"><i class="bi bi-paperclip me-2"></i>Attach
-                                                Files</button>
-                                            <app-button variant="brand" size="sm">Submit Update</app-button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Media Previews Section (Empty State for Pending) -->
-                                    <div class="media-previews opacity-50">
-                                        <div class="text-center py-3 glass rounded-3 border-dashed">
-                                            <div class="text-secondary text-xxs">No files attached yet</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        @if (diary.phases.length === 0) {
+                        <div class="text-center py-4 glass rounded-4 border-dashed">
+                            <i class="bi bi-hourglass text-secondary fs-3 opacity-25 d-block mb-2"></i>
+                            <p class="text-secondary small mb-0">No phases added yet. Waiting for client to set up milestones.</p>
                         </div>
+                        } @else {
+                        <div class="step-tracker">
+
+                            @for (phase of diary.phases; track phase._id) {
+                            <div class="step-item" [ngClass]="phase.status">
+                                <div class="step-marker">
+                                    <i class="bi" [ngClass]="getStatusIcon(phase.status)"></i>
+                                </div>
+                                <div class="step-content pb-4">
+
+                                    <!-- Phase Header -->
+                                    <div class="d-flex justify-content-between align-items-center mb-1 flex-wrap gap-2">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <h6 class="text-white fw-bold mb-0">{{ phase.name }}</h6>
+                                            @if (phase.deadline) {
+                                            <div class="deadline-badge ms-2"
+                                                [class.overdue-badge]="phase.status === 'overdue'">
+                                                <i class="bi me-1"
+                                                    [ngClass]="phase.status === 'overdue' ? 'bi-alarm text-danger blink' : 'bi-clock text-secondary'"></i>
+                                                <span class="text-xxs fw-bold"
+                                                    [ngClass]="phase.status === 'overdue' ? 'text-danger blink' : 'text-secondary'">
+                                                    {{ phase.status === 'overdue' ? 'OVERDUE: ' : '' }}{{ formatDate(phase.deadline) }}
+                                                </span>
+                                            </div>
+                                            }
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if (phase.amount > 0) {
+                                            <span class="text-white fw-bold small">${{ phase.amount | number }}</span>
+                                            }
+                                            <span class="status-badge" [ngClass]="phase.status">
+                                                {{ phase.status | titlecase }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Phase Description -->
+                                    @if (phase.description) {
+                                    <p class="text-secondary small mb-3">{{ phase.description }}</p>
+                                    }
+
+                                    <!-- Client Feedback (changes-requested) -->
+                                    @if (phase.status === 'changes-requested' && phase.clientFeedback) {
+                                    <div class="action-area glass p-3 rounded-3 mb-3 border-warning border-opacity-25">
+                                        <h6 class="text-warning text-xxs fw-bold mb-2">
+                                            <i class="bi bi-chat-left-text me-1"></i>CLIENT FEEDBACK
+                                        </h6>
+                                        <p class="text-white small mb-0">{{ phase.clientFeedback }}</p>
+                                    </div>
+                                    }
+
+                                    <!-- Approved Info -->
+                                    @if (phase.status === 'approved') {
+                                    <div class="text-xxs text-success mb-2">
+                                        <i class="bi bi-check-circle me-1"></i>
+                                        Approved {{ formatDate(phase.approvedAt) }}
+                                    </div>
+                                    }
+
+                                    <!-- Attachments -->
+                                    @if (phase.attachments.length > 0) {
+                                    <div class="media-previews mb-3">
+                                        <h6 class="text-white text-xxs fw-bold mb-2 opacity-50">ATTACHED FILES</h6>
+                                        <div class="d-flex flex-column gap-2">
+                                            @for (file of phase.attachments; track file._id) {
+                                            <div class="d-flex align-items-center gap-3 p-2 glass rounded-3 border-white border-opacity-5">
+                                                <div class="file-icon bg-white bg-opacity-5 p-2 rounded-2">
+                                                    <i class="bi fs-5" [ngClass]="getFileIcon(file.fileType)"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <div class="text-white small fw-bold">{{ file.fileName }}</div>
+                                                    <div class="text-secondary text-xxs">{{ file.fileSize }}</div>
+                                                </div>
+                                                <a [href]="file.fileUrl" target="_blank" class="btn-icon text-secondary">
+                                                    <i class="bi bi-download"></i>
+                                                </a>
+                                            </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    }
+
+                                    <!-- Action Area: Start Phase -->
+                                    @if (canStart(phase)) {
+                                    <div class="action-area glass p-3 rounded-3 mb-3">
+                                        <h6 class="text-white text-xxs fw-bold mb-3">START THIS PHASE</h6>
+                                        <app-button variant="brand" size="sm"
+                                            [disabled]="submitting[phase._id]"
+                                            (click)="startPhase(diary._id, phase._id)">
+                                            <i class="bi bi-play-fill me-1"></i>
+                                            {{ submitting[phase._id] ? 'Starting...' : 'Start Phase' }}
+                                        </app-button>
+                                    </div>
+                                    }
+
+                                    <!-- Action Area: Submit Update -->
+                                    @if (canSubmit(phase)) {
+                                    <div class="action-area glass p-3 rounded-3 mb-3">
+                                        <h6 class="text-white text-xxs fw-bold mb-3">SUBMIT PROGRESS UPDATE</h6>
+                                        <div class="mb-3">
+                                            <textarea class="form-control glass border-0 text-white small" rows="2"
+                                                placeholder="Describe your progress, what you've completed..."
+                                                [(ngModel)]="phaseNotes[phase._id]"></textarea>
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <app-button variant="brand" size="sm"
+                                                [disabled]="submitting[phase._id]"
+                                                (click)="submitUpdate(diary._id, phase._id)">
+                                                <i class="bi bi-send me-1"></i>
+                                                {{ submitting[phase._id] ? 'Submitting...' : 'Submit Update' }}
+                                            </app-button>
+                                        </div>
+                                    </div>
+                                    }
+
+                                </div>
+                            </div>
+                            }
+
+                        </div>
+                        }
                     </div>
                     }
-                </div>
 
-                <!-- Empty State Demo -->
-                <div class="text-center py-5 mt-5">
+                </div>
+                }
+
+            </div>
+        </div>
+        } @else {
+        <!-- Empty State -->
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="text-center py-5">
                     <div class="empty-state glass p-5 rounded-5 border-dashed">
                         <i class="bi bi-journal-text fs-1 text-secondary opacity-25 mb-3 d-block"></i>
-                        <h4 class="text-white fw-bold">There are no diary records for this contract</h4>
-                        <p class="text-secondary mb-4">Wait for the client to initialize the evolutionary progress
-                            steps.</p>
-                        <app-button variant="outline" size="sm">Contact Client</app-button>
+                        <h4 class="text-white fw-bold">No diary records yet</h4>
+                        <p class="text-secondary mb-4">
+                            Once a client accepts your contract and initializes the diary, it will appear here.
+                        </p>
+                        <a routerLink="/user/proposals" [queryParams]="{tab: 'offers'}">
+                            <app-button variant="outline" size="sm">View Your Offers</app-button>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
+        }
+
+        }
     </div>
 </div>

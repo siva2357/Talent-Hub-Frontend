@@ -34,7 +34,6 @@ import { NotFoundComponent } from './shared/pages/not-found/not-found.component'
 // Freelancer Pages
 import { FreelancerDashboardComponent } from './features/user/freelancer/pages/freelancer-dashboard/freelancer-dashboard.component';
 import { ProposalsComponent } from './features/user/freelancer/pages/proposals/proposals.component';
-import { OffersComponent } from './features/user/freelancer/pages/offers/offers.component';
 import { ActiveContractsComponent } from './features/user/freelancer/pages/active-contracts/active-contracts.component';
 import { ContractDiaryComponent } from './features/user/freelancer/pages/contract-diary/contract-diary.component';
 import { HourlyWorkDiaryComponent } from './features/user/freelancer/pages/hourly-work-diary/hourly-work-diary.component';
@@ -70,6 +69,7 @@ import { ContractFormComponent } from './features/user/client/pages/contract-for
 import { ContractViewDetailsComponent } from './features/user/client/pages/contract-view-details/contract-view-details.component';
 import { ProjectDetailsComponent } from './features/user/client/pages/project-details/project-details.component';
 import { ContractProfileComponent } from './features/user/client/pages/contract-profile/contract-profile.component';
+import { LegalFormComponent } from './features/user/client/pages/legal-form/legal-form.component';
 
 // Admin Component
 import { AdminComponent } from './features/user/admin/admin.component';
@@ -129,7 +129,6 @@ export const routes: Routes = [
       { path: 'project-details/:id', component: ProjectDetailsComponent },
       { path: 'contract-profile/:id', component: ContractProfileComponent },
       { path: 'saved-talent', component: SavedTalentComponent },
-      { path: 'pending-offers', component: PendingOffersComponent },
       { path: 'hired-talent', component: HiredTalentComponent },
 
       { path: 'financial-summary', component: FinancialSummaryComponent },
@@ -144,7 +143,7 @@ export const routes: Routes = [
       { path: 'contract-details', component: ContractDetailsComponent },
       { path: 'saved-contracts', component: SavedContractsComponent },
       { path: 'proposals', component: ProposalsComponent },
-      { path: 'offers', component: OffersComponent },
+      { path: 'offers', component: ProposalsComponent, data: { defaultTab: 'offers' } },
       { path: 'active-contracts', component: ActiveContractsComponent },
       { path: 'contract-diary', component: ContractDiaryComponent },
       { path: 'hourly-work-diary', component: HourlyWorkDiaryComponent },
@@ -171,6 +170,7 @@ export const routes: Routes = [
       { path: 'interview-setup', component: InterviewSetupComponent },
       { path: 'interview-room', component: InterviewRoomComponent },
       { path: 'legal-contract/:id', component: LegalContractComponent },
+      { path: 'legal-form/:contractId', component: LegalFormComponent },
     ]
   },
 

@@ -1,49 +1,202 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ContractService } from '../../../../../core/services/contract.service';
+import { ApplicationService } from '../../../../../core/services/application.service';
+import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
 
 @Component({
   selector: 'app-hired-talent',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './hired-talent.component.html',
   styleUrl: './hired-talent.component.css'
 })
-export class HiredTalentComponent {
-  hiredTalent = [
-    {
-      id: 1,
-      name: 'Aryan Sharma',
-      role: 'UI/UX Designer',
-      location: 'Mumbai, India',
-      avatar: '/assets/images/profiles/avatar-1.jpg',
-      performance: 98,
-      performanceTier: 'High',
-      skills: ['UI Design', 'Figma', 'Prototyping', 'User Research'],
-      hourlyRate: 75,
-      projectsCount: 82,
-      rating: 4.9,
-      totalHours: 2450,
-      isAvailable: true,
-      contractStatus: 'Active',
-      hoursLogged: '120 hrs'
-    },
-    {
-      id: 5,
-      name: 'Vikram Singh',
-      role: 'Frontend Developer',
-      location: 'Delhi, India',
-      avatar: '/assets/images/profiles/avatar-5.jpg',
-      performance: 63,
-      performanceTier: 'Medium',
-      skills: ['React', 'Next.js', 'Tailwind', 'JavaScript'],
-      hourlyRate: 70,
-      projectsCount: 96,
-      rating: 4.8,
-      totalHours: 2780,
-      isAvailable: true,
-      contractStatus: 'Active',
-      hoursLogged: '45 hrs'
+export class HiredTalentComponent implements OnInit {
+  private contractService = inject(ContractService);
+  private applicationService = inject(ApplicationService);
+  private diaryService = inject(ContractDiaryService);
+  private route = inject(ActivatedRoute);
+
+  // Tabs: 'offers' (Pending Offers) | 'hired' (Hired Talents)
+  activeTab: 'offers' | 'hired' = 'offers';
+
+  // Sent Offers (offerStatus !== 'accepted')
+  offers: any[] = [];
+  isLoading = true;
+
+  // Grouped Hired Talents (offerStatus === 'accepted'), grouped by contract
+  groupedHiredContracts: any[] = [];
+
+  // Track which applicationIds already have a diary
+  existingDiaryMap: Set<string> = new Set();
+  initializingDiary: Set<string> = new Set();
+
+  searchQuery = '';
+  statusFilter = 'All Status';
+  typeFilter = 'All Types';
+
+  ngOnInit(): void {
+    // Check for query parameters to switch tabs
+    this.route.queryParams.subscribe(params => {
+      if (params['tab'] === 'hired') {
+        this.activeTab = 'hired';
+      }
+    });
+
+    this.fetchHiredTalents();
+  }
+
+  fetchHiredTalents(): void {
+    this.isLoading = true;
+
+    // Fetch existing diaries in parallel
+    this.diaryService.getClientDiaries().subscribe({
+      next: (diaryRes: any) => {
+        if (diaryRes.success && diaryRes.diaries) {
+          diaryRes.diaries.forEach((d: any) => this.existingDiaryMap.add(d.applicationId?.toString()));
+        }
+      },
+      error: () => {} // non-critical
+    });
+
+    this.contractService.getHiredTalents().subscribe({
+      next: (res: any) => {
+        if (res.success && res.hiredTalents) {
+          const allHired = res.hiredTalents;
+          
+          // Tab 1: Pending & Pipelines (not accepted yet)
+          this.offers = allHired.filter((t: any) => t.offerStatus !== 'accepted');
+          
+          // Tab 2: Hired Talents (accepted offers)
+          const acceptedHires = allHired.filter((t: any) => t.offerStatus === 'accepted');
+          
+          // Group accepted hires by contract
+          const groupsMap = new Map<string, any>();
+          acceptedHires.forEach((hire: any) => {
+            const contractId = hire.contract?._id || 'unknown';
+            if (!groupsMap.has(contractId)) {
+              groupsMap.set(contractId, {
+                contractId:        contractId,
+                contractTitle:     hire.contract?.title          || 'Unknown Contract',
+                contractStatus:    hire.contract?.status         || 'Active',
+                contractBudget:    hire.contract?.estimatedBudget || 0,
+                contractType:      hire.contract?.budgetType      || 'Fixed Price',
+                contractStartDate: hire.contract?.contractStartDate || null,
+                contractEndDate:   hire.contract?.contractEndDate   || null,
+                talents:    [],
+                isExpanded: true
+              });
+            }
+            groupsMap.get(contractId).talents.push(hire);
+          });
+          
+          this.groupedHiredContracts = Array.from(groupsMap.values());
+        } else {
+          this.offers = [];
+          this.groupedHiredContracts = [];
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch hired talents:', err);
+        this.offers = [];
+        this.groupedHiredContracts = [];
+        this.isLoading = false;
+      }
+    });
+  }
+
+  /** Initialize a contract diary for the first accepted freelancer in a group */
+  initializeDiary(group: any): void {
+    const firstTalent = group.talents[0];
+    if (!firstTalent?.applicationId) return;
+
+    this.initializingDiary.add(group.contractId);
+
+    this.diaryService.initializeDiary({
+      applicationId: firstTalent.applicationId,
+      phases: [
+        {
+          name: 'Phase 1 – Kickoff',
+          description: 'Initial setup and project kickoff.',
+          amount: 0
+        }
+      ]
+    }).subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          this.existingDiaryMap.add(firstTalent.applicationId);
+        }
+        this.initializingDiary.delete(group.contractId);
+      },
+      error: (err: any) => {
+        console.error('Failed to initialize diary:', err);
+        this.initializingDiary.delete(group.contractId);
+      }
+    });
+  }
+
+  hasDiary(group: any): boolean {
+    return group.talents.some((t: any) => this.existingDiaryMap.has(t.applicationId?.toString()));
+  }
+
+  // Filter offers based on search and selected options
+  get filteredOffers(): any[] {
+    return this.offers.filter(offer => {
+      const name = offer.freelancer?.fullName || '';
+      const headline = offer.freelancer?.professionalHeadline || '';
+      const title = offer.contract?.title || '';
+      
+      const matchesSearch = name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        headline.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        title.toLowerCase().includes(this.searchQuery.toLowerCase());
+      
+      // Status mapping
+      let displayStatus = 'Pending';
+      if (offer.offerStatus === 'declined') displayStatus = 'Rejected';
+      if (offer.offerStatus === 'sent') displayStatus = 'Pending';
+      if (!offer.offerStatus || offer.offerStatus === 'none') displayStatus = 'Shortlisted';
+
+      const matchesStatus = this.statusFilter === 'All Status' || displayStatus === this.statusFilter;
+      
+      // Contract type mapping
+      const contractType = offer.contract?.budgetType === 'Hourly Rate' ? 'Hourly' : 'Fixed Price';
+      const matchesType = this.typeFilter === 'All Types' || contractType === this.typeFilter;
+
+      return matchesSearch && matchesStatus && matchesType;
+    });
+  }
+
+  switchTab(tab: 'offers' | 'hired'): void {
+    this.activeTab = tab;
+  }
+
+  toggleGroup(group: any): void {
+    group.isExpanded = !group.isExpanded;
+  }
+
+  getContractPdfUrl(appId: string): string {
+    return this.applicationService.getContractPdfUrl(appId);
+  }
+
+  downloadSignedContract(offer: any): void {
+    const appId = offer.applicationId;
+    if (appId.startsWith('mock_')) {
+      alert("PDF download is only available for real server-created offers.");
+      return;
     }
-  ];
+    window.open(this.getContractPdfUrl(appId), '_blank');
+  }
+
+  getOfferRate(offer: any): string {
+    const budget = offer.contract?.estimatedBudget || 0;
+    const type = offer.contract?.budgetType || 'Fixed Price';
+    return type === 'Hourly Rate' ? `$${budget}/hr` : `$${budget}`;
+  }
+
+  getOfferType(offer: any): string {
+    return offer.contract?.budgetType === 'Hourly Rate' ? 'Hourly' : 'Fixed Price';
+  }
 }

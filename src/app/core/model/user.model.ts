@@ -5,7 +5,7 @@ export interface Registration {
   id: string;
   email: string;
   fullName: string;
-  role: 'Client' | 'Freelancer';
+  role: 'Client' | 'Freelancer' | 'Admin';
   profileCompleted: boolean;
   emailVerified: boolean;
   mobileVerification: boolean;

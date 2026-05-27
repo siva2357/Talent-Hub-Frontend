@@ -21,7 +21,7 @@ export class ContractService {
   // ========================================
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('th_token');
 
     return new HttpHeaders({
       Authorization: `Bearer ${token}`
@@ -259,20 +259,27 @@ export class ContractService {
   // ========================================
   // Get Contract Applicants
   // ========================================
+getContractApplicants(): Observable<any> {
 
-  getContractApplicants(
-    contractId: string
-  ): Observable<any> {
+  return this.http.get(
+    `${this.baseUrl}/my-contracts/applicants`,
+    {
+      headers: this.getHeaders()
+    }
+  );
 
+}
+
+  // ========================================
+  // Get Hired Talents
+  // ========================================
+  getHiredTalents(): Observable<any> {
     return this.http.get(
-      `${this.baseUrl}/my-contracts/${contractId}/applicants`,
+      `${this.baseUrl}/hired-talents`,
       {
         headers: this.getHeaders()
       }
     );
-
   }
-
-
 
 }

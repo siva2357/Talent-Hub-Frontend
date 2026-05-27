@@ -6,6 +6,7 @@ export interface NavSubItem {
   description: string;
   icon: string;
   route: string;
+  queryParams?: any;
 }
 
 /**

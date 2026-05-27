@@ -27,7 +27,7 @@
                     <ul class="dropdown-menu dropdown-menu-dark shadow border-0 mt-2">
                         @for (item of menu.subItems; track item.route) {
                         <li>
-                            <a class="dropdown-item mega-menu-item" [routerLink]="item.route" routerLinkActive="active-link">
+                            <a class="dropdown-item mega-menu-item" [routerLink]="item.route" [queryParams]="item.queryParams || {}" routerLinkActive="active-link">
                                 <div class="menu-icon-box"><i class="bi" [class]="item.icon"></i></div>
                                 <div class="menu-content">
                                     <h6 class="menu-title">{{ item.label }}</h6>
@@ -136,7 +136,7 @@
                   @for (item of menu.subItems; track item.route) {
                     <li class="nav-item">
                       <a class="nav-link text-white opacity-70" style="font-size: 13px;"
-                         [routerLink]="item.route" routerLinkActive="active-link" data-bs-dismiss="offcanvas">
+                         [routerLink]="item.route" [queryParams]="item.queryParams || {}" routerLinkActive="active-link" data-bs-dismiss="offcanvas">
                         <i class="bi me-2" [class]="item.icon"></i>{{ item.label }}
                       </a>
                     </li>

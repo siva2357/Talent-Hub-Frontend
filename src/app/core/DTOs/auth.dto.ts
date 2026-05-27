@@ -38,7 +38,7 @@ export interface ChangePasswordRequest {
 export interface LoginResponse {
   success: boolean;
   token: string;
-  role: 'Client' | 'Freelancer';
+  role: 'Client' | 'Freelancer' | 'Admin';
   profileCompleted: boolean;
   mobileVerification: boolean;
 }

@@ -71,8 +71,7 @@ export class UserNavbarComponent implements OnInit {
       subItems: [
         { label: 'Search Talent', description: 'Discover top-rated freelancers for your projects.', icon: 'bi-search', route: '/user/search-talent' },
         { label: 'Saved Talent', description: 'Manage your bookmarked freelancer profiles.', icon: 'bi-bookmark-heart', route: '/user/saved-talent' },
-        { label: 'Pending Offers', description: 'Track contract offers sent to freelancers.', icon: 'bi-envelope-paper', route: '/user/pending-offers' },
-        { label: 'Hired Talent', description: 'View and manage freelancers currently working for you.', icon: 'bi-people', route: '/user/hired-talent' },
+        { label: 'Hired & Offers', description: 'Manage active hires and track sent contract offers.', icon: 'bi-people', route: '/user/hired-talent' },
       ]
     },
     {
@@ -90,12 +89,11 @@ export class UserNavbarComponent implements OnInit {
     {
       label: 'Find Contracts',
       roles: 'freelancer',
-      activePaths: ['find-contracts', 'saved-contracts', 'proposals', 'offers'],
+      activePaths: ['find-contracts', 'saved-contracts', 'proposals'],
       subItems: [
         { label: 'Find Contracts', description: 'Browse available jobs and opportunities posted by clients.', icon: 'bi-search', route: '/user/find-contracts' },
-        { label: 'Saved Contracts', description: 'Manage bookmarked or saved job opportunities.', icon: 'bi-bookmark-star', route: '/user/saved-contracts' },
-        { label: 'Proposals', description: 'Track all submitted proposals and applications.', icon: 'bi-file-earmark-text', route: '/user/proposals' },
-        { label: 'Offers', description: 'Manage offers received from clients.', icon: 'bi-gift', route: '/user/offers' },
+        { label: 'Saved Contracts', description: 'Manage bookmarked or saved job opportunities.', icon: 'bi-bookmark-heart', route: '/user/saved-contracts' },
+        { label: 'Proposals & Offers', description: 'Track submitted proposals and received contract offers.', icon: 'bi-file-earmark-text', route: '/user/proposals' },
       ]
     },
     {
