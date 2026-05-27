@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule, TitleCasePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { InputComponent } from '../../components/input/input.component';
 import { ButtonComponent } from '../../components/button/button.component';
 import { ChipComponent } from '../../components/chip/chip.component';
+import { AuthService } from '../../../core/services/auth.service';
+import { ProfileService } from '../../../core/services/profile.service';
 
 @Component({
   selector: 'app-account-settings',
@@ -15,18 +17,27 @@ import { ChipComponent } from '../../components/chip/chip.component';
     FormsModule,
     InputComponent,
     ButtonComponent,
-    ChipComponent,
-    TitleCasePipe
+    ChipComponent
   ],
   templateUrl: './account-settings.component.html',
   styleUrl: './account-settings.component.css'
 })
 export class AccountSettingsComponent implements OnInit {
+  private authService = inject(AuthService);
+  private profileService = inject(ProfileService);
+  private router = inject(Router);
+
   // SETTINGS TABS LAYOUT STATE
   activeTab: 'profile' | 'security' | 'notifications' | 'manage' = 'profile';
 
   // ROLE MODE (Embedded Dual-Mode Form)
-  userMode: 'freelancer' | 'client' = 'freelancer';
+  get userMode(): 'freelancer' | 'client' {
+    return this.authService.currentUser()?.role === 'Client' ? 'client' : 'freelancer';
+  }
+
+  get realUserRole(): string {
+    return this.authService.currentUser()?.role || 'Freelancer';
+  }
 
   // BACKUP STATE FOR DISCARD/ROLLBACK
   originalData: any;
@@ -35,12 +46,19 @@ export class AccountSettingsComponent implements OnInit {
   confirmDelete: boolean = false;
   deleteConfirmPassword: string = '';
 
+  // Phone OTP state
+  otpCode: string = '';
+  otpSent: boolean = false;
+  phoneVerified: boolean = false;
+  emailVerified: boolean = false;
+  phoneNumber: string = '';
+
   // PREFILLED IDENTITY DATA
   prefilledData = {
-    fullName: 'Siva Prasad',
-    email: 'siva.prasad@example.com',
-    username: 'sivaprasad',
-    bio: 'Full Stack Engineer passionate about high-performance modern web platforms.'
+    fullName: '',
+    email: '',
+    username: '',
+    bio: ''
   };
 
   // FORM VARIABLES
@@ -49,28 +67,25 @@ export class AccountSettingsComponent implements OnInit {
   availabilityType: string = 'full-time';
   clientType: string = 'individual';
   hiringType: string = 'long-term';
-  professionalHeadline: string = 'Senior Angular & Node Specialist';
-  websiteUrl: string = 'https://sivaprasad.dev';
-  industry: string = 'tech';
-  country: string = 'IN';
-  city: string = 'Hyderabad';
+  professionalHeadline: string = '';
+  websiteUrl: string = '';
+  industry: string = '';
+  country: string = '';
+  city: string = '';
   timezone: string = 'IST';
 
   // SOCIAL LINKS COLLECTIONS
-  savedSocialLinks: any[] = [
-    { platform: 'github', url: 'https://github.com/sivaprasad', status: 'Connected' },
-    { platform: 'linkedin', url: 'https://linkedin.com/in/sivaprasad', status: 'Connected' }
-  ];
-  currentLink = { platform: 'twitter', url: '' };
+  savedSocialLinks: any[] = [];
+  currentLink = { platform: 'linkedin', profileUrl: '' };
 
   isEditModalOpen: boolean = false;
   editingLinkIndex: number = -1;
-  editingLinkData = { platform: '', url: '' };
+  editingLinkData = { platform: '', profileUrl: '' };
 
   // CATEGORIES & SKILLS COLLECTIONS
-  selectedCategories: string[] = ['Web Development', 'UI/UX Design'];
+  selectedCategories: string[] = [];
   selectedCategoryInput: string = '';
-  skills: string[] = ['Angular', 'TypeScript', 'NodeJS', 'RxJS', 'CSS Grid', 'Bootstrap'];
+  skills: string[] = [];
   currentSkill: string = '';
 
   // SECURITY FORM FIELDS
@@ -148,10 +163,67 @@ export class AccountSettingsComponent implements OnInit {
     { label: '(GMT+01:00) Berlin Time', value: 'CET' }
   ];
 
-  // LOGICAL HANDLERS
-  toggleRole(): void {
-    this.userMode = this.userMode === 'freelancer' ? 'client' : 'freelancer';
+  ngOnInit(): void {
+
+    // Load notification preferences from localStorage
+    const savedNotifs = localStorage.getItem('th_notif_prefs');
+    if (savedNotifs) {
+      try {
+        this.notificationPreferences = JSON.parse(savedNotifs);
+      } catch (e) {
+        // Keep defaults
+      }
+    }
+
+    this.loadProfileData();
   }
+
+  loadProfileData(): void {
+    this.profileService.getMyProfile().subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          const u = res.user || {};
+          const p = res.profile || {};
+          const basic = p.basicInformation || {};
+
+          this.prefilledData = {
+            fullName: basic.fullName || u.fullName || '',
+            email: basic.email || u.email || '',
+            username: basic.username || (u.email ? u.email.split('@')[0] : ''),
+            bio: basic.shortBio || ''
+          };
+
+          this.emailVerified = u.emailVerified || false;
+          this.phoneVerified = u.mobileVerification || p.verification?.phoneNumber || false;
+          this.phoneNumber = u.phoneNumber || '';
+
+          this.gender = basic.gender || 'male';
+          this.country = p.location?.country || 'IN';
+          this.city = p.location?.city || '';
+          this.timezone = p.location?.timezone || 'IST';
+          this.savedSocialLinks = p.socialLinks || [];
+          this.selectedCategories = p.professionalDetails?.categories || [];
+          this.skills = p.professionalDetails?.skills || [];
+
+          if (this.userMode === 'freelancer') {
+            this.professionalHeadline = basic.professionalHeadline || '';
+            this.availabilityType = p.availability?.[0] || 'full-time';
+          } else {
+            this.clientType = p.professionalDetails?.clientType || 'individual';
+            this.websiteUrl = p.professionalDetails?.website || '';
+            this.industry = p.professionalDetails?.industry || 'tech';
+          }
+
+          this.backupData();
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load profile data:', err);
+      }
+    });
+  }
+
+  // LOGICAL HANDLERS
 
   setSelection(type: string, value: string): void {
     if (type === 'experience') this.experienceLevel = value;
@@ -192,9 +264,9 @@ export class AccountSettingsComponent implements OnInit {
 
   // SOCIAL LINKS ACTIONS
   saveSocialLink(): void {
-    if (this.currentLink.platform && this.currentLink.url) {
-      this.savedSocialLinks.push({ ...this.currentLink, status: 'Connected' });
-      this.currentLink = { platform: 'twitter', url: '' };
+    if (this.currentLink.platform && this.currentLink.profileUrl) {
+      this.savedSocialLinks.push({ ...this.currentLink });
+      this.currentLink = { platform: 'linkedin', profileUrl: '' };
     }
   }
 
@@ -215,7 +287,7 @@ export class AccountSettingsComponent implements OnInit {
 
   updateSocialLink(): void {
     if (this.editingLinkIndex > -1) {
-      this.savedSocialLinks[this.editingLinkIndex].url = this.editingLinkData.url;
+      this.savedSocialLinks[this.editingLinkIndex].profileUrl = this.editingLinkData.profileUrl;
       this.closeEditModal();
     }
   }
@@ -235,12 +307,63 @@ export class AccountSettingsComponent implements OnInit {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      console.log('Profile image updated:', file.name);
+      const formData = new FormData();
+      formData.append('profilePhoto', file);
+      
+      // Upload new photo directly
+      this.profileService.updateProfile(formData).subscribe({
+        next: (res) => {
+          alert('Profile photo updated successfully!');
+          this.loadProfileData();
+        },
+        error: (err) => {
+          alert('Failed to upload profile photo');
+        }
+      });
     }
   }
 
-  ngOnInit(): void {
-    this.backupData();
+  sendOtp(): void {
+    if (!this.phoneNumber) {
+      alert('Please enter a valid phone number');
+      return;
+    }
+    let fullPhone = this.phoneNumber.trim();
+    if (!fullPhone.startsWith('+')) {
+      fullPhone = '+91' + fullPhone;
+    }
+    this.profileService.sendPhoneOTP(fullPhone).subscribe({
+      next: (res) => {
+        alert(res.message || 'OTP sent successfully!');
+        this.otpSent = true;
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Failed to send OTP');
+      }
+    });
+  }
+
+  verifyOtp(): void {
+    if (!this.otpCode) {
+      alert('Please enter the OTP');
+      return;
+    }
+    let fullPhone = this.phoneNumber.trim();
+    if (!fullPhone.startsWith('+')) {
+      fullPhone = '+91' + fullPhone;
+    }
+    this.profileService.verifyPhoneOTP(fullPhone, this.otpCode).subscribe({
+      next: (res) => {
+        alert(res.message || 'Phone verified successfully!');
+        this.phoneVerified = true;
+        this.otpSent = false;
+        this.otpCode = '';
+        this.loadProfileData();
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Failed to verify OTP');
+      }
+    });
   }
 
   // BACKUP FORM STATE
@@ -294,32 +417,106 @@ export class AccountSettingsComponent implements OnInit {
   // SECURE ACCOUNT DELETION
   deleteAccount(): void {
     if (this.confirmDelete && this.deleteConfirmPassword) {
-      alert('Account successfully deleted! Redirecting to homepage...');
-      console.warn('USER DELETED THE ACCOUNT PERMANENTLY.');
-      this.confirmDelete = false;
-      this.deleteConfirmPassword = '';
+      this.profileService.deleteProfile().subscribe({
+        next: (res) => {
+          alert('Account profile deleted successfully! Redirecting...');
+          this.confirmDelete = false;
+          this.deleteConfirmPassword = '';
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          alert(err.error?.message || 'Failed to delete profile');
+        }
+      });
     }
   }
 
   // GLOBAL SAVE SUBMISSIONS
   saveSettings(): void {
-    alert('Settings Saved Successfully!');
-    this.backupData(); // Set the new baseline for subsequent discards
-    console.log('Saving all account setting data...', {
-      activeTab: this.activeTab,
-      userMode: this.userMode,
-      profileDetails: {
+    if (this.activeTab === 'security') {
+      if (!this.securityData.currentPassword || !this.securityData.newPassword || !this.securityData.confirmPassword) {
+        alert('Please fill all password fields');
+        return;
+      }
+      if (this.securityData.newPassword !== this.securityData.confirmPassword) {
+        alert('New passwords do not match');
+        return;
+      }
+      
+      this.authService.changePassword({
+        oldPassword: this.securityData.currentPassword,
+        newPassword: this.securityData.newPassword
+      }).subscribe({
+        next: (res) => {
+          alert('Password updated successfully!');
+          this.securityData.currentPassword = '';
+          this.securityData.newPassword = '';
+          this.securityData.confirmPassword = '';
+        },
+        error: (err) => {
+          alert(err.error?.message || 'Failed to update password');
+        }
+      });
+      return;
+    }
+
+    if (this.activeTab === 'profile') {
+      // Build request body for profile update
+      const basicInfo: any = {
+        fullName: this.prefilledData.fullName,
+        email: this.prefilledData.email,
+        username: this.prefilledData.username,
         gender: this.gender,
-        experienceLevel: this.experienceLevel,
-        availabilityType: this.availabilityType,
-        clientType: this.clientType,
-        hiringType: this.hiringType,
-        selectedCategories: this.selectedCategories,
-        skills: this.skills,
-        socialLinks: this.savedSocialLinks
-      },
-      security: this.securityData,
-      notifications: this.notificationPreferences
-    });
+        shortBio: this.prefilledData.bio
+      };
+
+      const location = {
+        country: this.country,
+        city: this.city,
+        timezone: this.timezone
+      };
+
+      let profDetails: any = {};
+      let availability: string[] = [];
+
+      if (this.userMode === 'freelancer') {
+        basicInfo.professionalHeadline = this.professionalHeadline;
+        profDetails = {
+          categories: this.selectedCategories,
+          skills: this.skills
+        };
+        availability = [this.availabilityType];
+      } else {
+        profDetails = {
+          clientType: this.clientType,
+          website: this.websiteUrl,
+          industry: this.industry
+        };
+      }
+
+      const payload = {
+        basicInformation: basicInfo,
+        professionalDetails: profDetails,
+        location,
+        socialLinks: this.savedSocialLinks,
+        availability: this.userMode === 'freelancer' ? availability : undefined
+      };
+
+      this.profileService.updateProfile(payload).subscribe({
+        next: (res) => {
+          alert('Settings Saved Successfully!');
+          this.backupData();
+        },
+        error: (err) => {
+          console.error('Failed to save profile settings:', err);
+          alert(err.error?.message || 'Failed to save settings');
+        }
+      });
+    } else {
+      // Save notification preferences in local storage so it is persistent
+      localStorage.setItem('th_notif_prefs', JSON.stringify(this.notificationPreferences));
+      alert('Notification settings saved successfully!');
+      this.backupData();
+    }
   }
 }

@@ -34,6 +34,22 @@
                         </div>
                     }
                 </div>
+                
+                <!-- Contract Selector -->
+                <div class="mb-4">
+                    <label class="text-secondary text-xxs fw-bold text-uppercase opacity-50 mb-2 d-block" style="letter-spacing: 0.5px;">Active Contract</label>
+                    <select class="form-select bg-dark text-white border-white border-opacity-10 py-2.5 px-3 rounded-3" 
+                            style="background-color: rgba(255, 255, 255, 0.02) !important; font-size: 14px;"
+                            [value]="selectedContractId" 
+                            (change)="onContractChange($any($event.target).value)">
+                        @for (c of activeContracts; track c.id) {
+                            <option [value]="c.id" style="background-color: #11141b;">{{ c.contractTitle }} ({{ c.client }})</option>
+                        }
+                        @if (activeContracts.length === 0 && !isLoading) {
+                            <option value="" style="background-color: #11141b;">No Active Contracts Found</option>
+                        }
+                    </select>
+                </div>
 
                 <!-- Status Summary -->
                 <div class="row g-3 mb-4">

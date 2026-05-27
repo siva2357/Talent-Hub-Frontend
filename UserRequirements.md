@@ -202,8 +202,124 @@ This module helps freelancers manage earnings, reports, and withdrawal activitie
 
 ---
 ### Freelancer Dashboard Component
-### 1 Find Work Component
-### 2 Saved Jobs Component
+
+
+
+### 1 Find Contracts Component
+# Find Contracts Page Requirements
+
+## Main Purpose
+The Find Contracts page allows freelancers to explore available contracts based on their skills, interests, and work preferences. Freelancers can filter contracts, view summaries, save contracts, and apply for opportunities.
+
+---
+
+# Page Features
+
+## 1. Contract Filters Section
+
+Freelancers should be able to filter contracts according to their preferences.
+
+### Filter Options
+- Contract Category
+- Skills Required
+- Experience Level
+- Budget Range
+- Contract Type
+  - Fixed
+  - Hourly
+  - Weekly
+- Project Duration
+- Client Location
+- Remote / On-site
+- Payment Range
+- Posted Date
+- Search by Keyword
+
+---
+
+# 2. Contracts Listing Section
+
+## Layout
+- Display 3 contract cards per row
+- Responsive card layout
+- Pagination or infinite scrolling support
+
+---
+
+# 3. Contract Card Features
+
+Each contract card should display:
+
+- Contract Title
+- Contract Type
+- Experience Level
+- Contract Description
+- Tech Stack
+- Budget
+- Budget Label
+- Contract Duration
+
+
+---
+
+# 4. Apply Now Navigation
+
+## Functionality
+When the freelancer clicks the **Apply Now** button:
+- Redirect the user to the Contract Details Page
+- Display complete contract information
+- Allow the freelancer to review all details before applying
+
+---
+
+# 5. Contract Details Page
+
+The Contract Details page should contain complete information related to the selected contract.
+
+## Contract Information
+- Full Contract Description
+- Responsibilities
+- Required Skills
+- Budget Information
+- Contract Duration
+- Experience Requirements
+- Project Attachments
+- Client Details
+- Posted Date
+- Number of Proposals
+- Contract Status
+
+
+
+---
+
+# 6. Contract Actions
+
+## Buttons and Actions
+
+### Save Contract Button
+Allows freelancers to save/bookmark the contract for later access.
+
+### Apply to Contract Button
+Allows freelancers to submit a proposal or application for the contract.
+
+---
+
+# 7. Additional Features
+
+- Similar Contracts Suggestions
+- Freelancer Proposal Submission Form
+- Client Rating & Reviews
+- Share Contract Option
+- Report Contract Option
+- Contract Activity Overview
+
+
+
+
+
+
+### 2 Saved Contract Component
 ### 3 Proposals Component
 ### 4 Offers Component
 ### 5 Your Active Contracts Component
@@ -214,3 +330,6 @@ This module helps freelancers manage earnings, reports, and withdrawal activitie
 ### 10 Finance Overview Component
 ### 11 Finance Report Component
 ### 12 Finance management Component
+
+
+

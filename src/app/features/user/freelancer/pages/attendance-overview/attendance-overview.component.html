@@ -9,8 +9,30 @@
                     </p>
                 </div>
 
+                <!-- Contract Selector -->
+                <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-5">
+                    <label class="text-secondary text-xxs fw-bold text-uppercase opacity-50 mb-2 d-block" style="letter-spacing: 0.5px;">Select Active Contract</label>
+                    <select class="form-select bg-dark text-white border-white border-opacity-10 py-2.5 px-3 rounded-3" 
+                            style="background-color: rgba(255, 255, 255, 0.02) !important; font-size: 14px;"
+                            [value]="selectedContractId" 
+                            (change)="onContractChange($any($event.target).value)">
+                        @for (c of activeContracts; track c.id) {
+                            <option [value]="c.id" style="background-color: #11141b;">{{ c.contractTitle }} ({{ c.client }})</option>
+                        }
+                        @if (activeContracts.length === 0 && !isLoading) {
+                            <option value="" style="background-color: #11141b;">No Active Contracts Found</option>
+                        }
+                    </select>
+                </div>
+
                 <!-- Monthly Accordions -->
                 <div class="attendance-list">
+                    @if (attendanceData.length === 0 && !isLoading) {
+                        <div class="text-center py-5 glass rounded-4 border-white border-opacity-5 opacity-50">
+                            <i class="bi bi-calendar-x fs-1 mb-3 d-block"></i>
+                            <p class="mb-0">No attendance logs found for this contract</p>
+                        </div>
+                    }
                     @for (item of attendanceData; track $index) {
                     <div
                         class="attendance-accordion glass rounded-4 overflow-hidden mb-4 border-white border-opacity-5">

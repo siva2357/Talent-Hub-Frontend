@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
+import { ApplicationService } from '../../../../../core/services/application.service';
+import { AttendanceService } from '../../../../../core/services/attendance.service';
 
 @Component({
   selector: 'app-attendance-overview',
@@ -10,92 +11,71 @@ import { ButtonComponent } from '../../../../../shared/components/button/button.
   templateUrl: './attendance-overview.component.html',
   styleUrl: './attendance-overview.component.css'
 })
-export class AttendanceOverviewComponent {
+export class AttendanceOverviewComponent implements OnInit {
+  private applicationService = inject(ApplicationService);
+  private attendanceService = inject(AttendanceService);
+
   expandedIndex: number | null = 0;
   isEvidenceModalOpen = false;
   selectedLog: any = null;
 
-  attendanceData = [
-    {
-      contractTitle: 'Senior Frontend Developer - Angular Expert',
-      month: 'May 2026',
-      totalHours: '142.5h',
-      daysPresent: 20,
-      status: 'In Progress',
-      id: 'CON-78241',
-      logs: [
-        {
-          date: 'May 15, 2026',
-          day: 'Friday',
-          sessions: [
-            {
-              checkIn: '08:00 AM', checkOut: '10:00 AM', hours: 2,
-              location: 'Hitech City, Hyderabad', faceImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300'
-            },
-            {
-              checkIn: '10:15 AM', checkOut: '12:15 PM', hours: 2,
-              location: 'Madhapur, Hyderabad', faceImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300'
-            },
-            {
-              checkIn: '01:00 PM', checkOut: '03:00 PM', hours: 2,
-              location: 'Gachibowli, Hyderabad', faceImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300'
-            },
-            {
-              checkIn: '03:15 PM', checkOut: '05:15 PM', hours: 2,
-              location: 'Jubilee Hills, Hyderabad', faceImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300'
-            },
-            {
-              checkIn: '05:30 PM', checkOut: '07:30 PM', hours: 2,
-              location: 'Kondapur, Hyderabad', faceImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300'
-            },
-            {
-              checkIn: '07:45 PM', checkOut: '09:45 PM', hours: 2,
-              location: 'Banjara Hills, Hyderabad', faceImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300'
-            }
-          ],
-          totalHours: 12,
-          status: 'Attended'
-        },
-        {
-          date: 'May 14, 2026',
-          day: 'Thursday',
-          sessions: [
-            {
-              checkIn: '09:15 AM',
-              checkOut: '02:15 PM',
-              hours: 5,
-              location: 'Work From Home, Gachibowli',
-              faceImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300'
-            }
-          ],
-          totalHours: 5,
-          status: 'Partially Attended'
-        },
-        {
-          date: 'May 13, 2026',
-          day: 'Wednesday',
-          sessions: [],
-          totalHours: 0,
-          status: 'Absent'
-        },
-        {
-          date: 'May 12, 2026',
-          day: 'Tuesday',
-          sessions: [
-            {
-              checkIn: '09:30 AM',
-              checkOut: '06:00 PM',
-              hours: 8.5,
-              location: 'Co-working Space, Jubilee Hills',
-              faceImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300'
-            }
-          ],
-          totalHours: 8.5,
-          status: 'Attended'
+  activeContracts: any[] = [];
+  selectedContractId: string = '';
+  attendanceData: any[] = [];
+  isLoading = true;
+
+  ngOnInit(): void {
+    this.fetchActiveContracts();
+  }
+
+  fetchActiveContracts(): void {
+    this.isLoading = true;
+    this.applicationService.getFreelancerOffers().subscribe({
+      next: (res: any) => {
+        if (res.success && res.offers) {
+          this.activeContracts = res.offers.filter((o: any) => o.status === 'Accepted');
+          if (this.activeContracts.length > 0) {
+            const savedId = this.attendanceService.activeContractId;
+            this.selectedContractId = savedId && this.activeContracts.some(c => c.id === savedId)
+              ? savedId 
+              : this.activeContracts[0].id;
+            
+            this.onContractChange(this.selectedContractId);
+          }
         }
-      ]
-    }
-  ];
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch active contracts:', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onContractChange(contractId: string): void {
+    this.selectedContractId = contractId;
+    this.attendanceService.activeContractId = contractId;
+    this.loadOverview();
+  }
+
+  loadOverview(): void {
+    if (!this.selectedContractId) return;
+
+    this.isLoading = true;
+    this.attendanceService.getAttendanceOverview(this.selectedContractId).subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          this.attendanceData = res.attendanceData || [];
+          this.expandedIndex = this.attendanceData.length > 0 ? 0 : null;
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load attendance overview:', err);
+        this.isLoading = false;
+      }
+    });
+  }
 
   toggleAccordion(index: number) {
     this.expandedIndex = this.expandedIndex === index ? null : index;
