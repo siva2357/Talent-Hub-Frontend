@@ -68,7 +68,7 @@ export class SigninComponent {
         this.isLoading = false;
         // Redirect user based on profile status or role
         if (user.role === 'Admin') {
-          this.router.navigate(['/user/admin']);
+          this.router.navigate(['/user/admin/dashboard']);
         } else if (!user.profileCompleted) {
           this.router.navigate(['/account/profile-form']);
         } else {

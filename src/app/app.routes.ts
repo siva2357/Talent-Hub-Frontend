@@ -38,6 +38,7 @@ import { ActiveContractsComponent } from './features/user/freelancer/pages/activ
 import { ContractDiaryComponent } from './features/user/freelancer/pages/contract-diary/contract-diary.component';
 import { HourlyWorkDiaryComponent } from './features/user/freelancer/pages/hourly-work-diary/hourly-work-diary.component';
 import { AttendanceOverviewComponent } from './features/user/freelancer/pages/attendance-overview/attendance-overview.component';
+import { PortfolioComponent } from './features/user/freelancer/pages/portfolio/portfolio.component';
 import { MarkAttendanceComponent } from './features/user/freelancer/pages/mark-attendance/mark-attendance.component';
 import { FinanceOverviewComponent } from './features/user/freelancer/pages/finance-overview/finance-overview.component';
 import { FinanceReportComponent } from './features/user/freelancer/pages/finance-report/finance-report.component';
@@ -71,8 +72,15 @@ import { ProjectDetailsComponent } from './features/user/client/pages/project-de
 import { ContractProfileComponent } from './features/user/client/pages/contract-profile/contract-profile.component';
 import { LegalFormComponent } from './features/user/client/pages/legal-form/legal-form.component';
 
-// Admin Component
+// Admin Components
 import { AdminComponent } from './features/user/admin/admin.component';
+import { AdminDashboardComponent } from './features/user/admin/pages/admin-dashboard/admin-dashboard.component';
+import { ClientListComponent } from './features/user/admin/pages/client-list/client-list.component';
+import { FreelancerListComponent } from './features/user/admin/pages/freelancer-list/freelancer-list.component';
+import { AdminFinancialSummaryComponent } from './features/user/admin/pages/financial-summary/financial-summary.component';
+import { AdminReportsComponent } from './features/user/admin/pages/reports/reports.component';
+import { SupportRequestsComponent } from './features/user/admin/pages/support-requests/support-requests.component';
+import { BlogPostComponent } from './features/user/admin/pages/blog-post/blog-post.component';
 
 export const routes: Routes = [
   // Public Routes (With Navbar and Footer)
@@ -153,9 +161,17 @@ export const routes: Routes = [
       { path: 'finance-overview', component: FinanceOverviewComponent },
       { path: 'finance-report', component: FinanceReportComponent },
       { path: 'finance-management', component: FinanceManagementComponent },
+      { path: 'portfolio', component: PortfolioComponent },
 
-      // Admin Route
-      { path: 'admin', component: AdminComponent }
+      // Admin Routes
+      { path: 'admin', redirectTo: 'admin/dashboard', pathMatch: 'full' },
+      { path: 'admin/dashboard', component: AdminDashboardComponent },
+      { path: 'admin/clients', component: ClientListComponent },
+      { path: 'admin/freelancers', component: FreelancerListComponent },
+      { path: 'admin/finances', component: AdminFinancialSummaryComponent },
+      { path: 'admin/reports', component: AdminReportsComponent },
+      { path: 'admin/support', component: SupportRequestsComponent },
+      { path: 'admin/blog', component: BlogPostComponent }
     ]
   },
 

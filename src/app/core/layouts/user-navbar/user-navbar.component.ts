@@ -125,6 +125,14 @@ export class UserNavbarComponent implements OnInit {
         { label: 'Earnings and Withdraw', description: 'Manage freelancer earnings and withdrawal requests.', icon: 'bi-cash-stack', route: '/user/finance-management' },
       ]
     },
+    {
+      label: 'Portfolio',
+      roles: 'freelancer',
+      activePaths: ['portfolio'],
+      subItems: [
+        { label: 'My Portfolio', description: 'Showcase and manage your projects.', icon: 'bi-briefcase', route: '/user/portfolio' }
+      ]
+    },
   ];
 
   // ─── Computed helpers ──────────────────────────────────────────────────────
@@ -143,6 +151,7 @@ export class UserNavbarComponent implements OnInit {
 
   get userRole(): 'admin' | 'client' | 'freelancer' | '' {
     const role = this.currentUser?.role?.toLowerCase();
+    if (role === 'admin') return 'admin';
     if (role === 'client') return 'client';
     if (role === 'freelancer') return 'freelancer';
     if (this.router.url.includes('/user/admin')) return 'admin';
@@ -160,7 +169,7 @@ export class UserNavbarComponent implements OnInit {
 
   get dashboardLink(): string {
     switch (this.userRole) {
-      case 'admin': return '/user/admin/client-management';
+      case 'admin': return '/user/admin/dashboard';
       case 'client': return '/user/client-dashboard';
       case 'freelancer': return '/user/my-dashboard';
       default: return '/';

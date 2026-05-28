@@ -17,6 +17,29 @@
 
             <!-- Desktop Nav Links (Left-Aligned) -->
             <ul class="navbar-nav d-none d-lg-flex flex-row gap-0 gap-xl-2 ms-2">
+                @if (userRole === 'admin') {
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-medium px-2 px-xl-3" routerLink="/user/admin/dashboard" routerLinkActive="active-module">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-medium px-2 px-xl-3" routerLink="/user/admin/clients" routerLinkActive="active-module">Client List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-medium px-2 px-xl-3" routerLink="/user/admin/freelancers" routerLinkActive="active-module">Freelancer List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-medium px-2 px-xl-3" routerLink="/user/admin/finances" routerLinkActive="active-module">Financial Summary</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-medium px-2 px-xl-3" routerLink="/user/admin/reports" routerLinkActive="active-module">Reports</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-medium px-2 px-xl-3" routerLink="/user/admin/support" routerLinkActive="active-module">Support Requests</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-medium px-2 px-xl-3" routerLink="/user/admin/blog" routerLinkActive="active-module">Blog Manager</a>
+                </li>
+                } @else {
                 @for (menu of visibleMenuItems; track menu.label) {
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white fw-medium px-2 px-xl-3 no-caret" href="#"
@@ -38,6 +61,7 @@
                         }
                     </ul>
                 </li>
+                }
                 }
             </ul>
         </div>
@@ -126,6 +150,43 @@
     </div>
     <div class="offcanvas-body p-4">
         <ul class="navbar-nav gap-1">
+            @if (userRole === 'admin') {
+              <li class="nav-item mb-2">
+                <a class="nav-link text-white fw-semibold" routerLink="/user/admin/dashboard" routerLinkActive="active-module" data-bs-dismiss="offcanvas">
+                  <i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard
+                </a>
+              </li>
+              <li class="nav-item mb-2">
+                <a class="nav-link text-white fw-semibold" routerLink="/user/admin/clients" routerLinkActive="active-module" data-bs-dismiss="offcanvas">
+                  <i class="bi bi-people me-2 text-primary"></i>Client List
+                </a>
+              </li>
+              <li class="nav-item mb-2">
+                <a class="nav-link text-white fw-semibold" routerLink="/user/admin/freelancers" routerLinkActive="active-module" data-bs-dismiss="offcanvas">
+                  <i class="bi bi-person-workspace me-2 text-primary"></i>Freelancer List
+                </a>
+              </li>
+              <li class="nav-item mb-2">
+                <a class="nav-link text-white fw-semibold" routerLink="/user/admin/finances" routerLinkActive="active-module" data-bs-dismiss="offcanvas">
+                  <i class="bi bi-cash-stack me-2 text-primary"></i>Financial Summary
+                </a>
+              </li>
+              <li class="nav-item mb-2">
+                <a class="nav-link text-white fw-semibold" routerLink="/user/admin/reports" routerLinkActive="active-module" data-bs-dismiss="offcanvas">
+                  <i class="bi bi-file-earmark-bar-graph me-2 text-primary"></i>Reports
+                </a>
+              </li>
+              <li class="nav-item mb-2">
+                <a class="nav-link text-white fw-semibold" routerLink="/user/admin/support" routerLinkActive="active-module" data-bs-dismiss="offcanvas">
+                  <i class="bi bi-headset me-2 text-primary"></i>Support Requests
+                </a>
+              </li>
+              <li class="nav-item mb-2">
+                <a class="nav-link text-white fw-semibold" routerLink="/user/admin/blog" routerLinkActive="active-module" data-bs-dismiss="offcanvas">
+                  <i class="bi bi-pencil-square me-2 text-primary"></i>Blog Manager
+                </a>
+              </li>
+            } @else {
             @for (menu of visibleMenuItems; track menu.label) {
               <li class="nav-item mb-2">
                 <a class="nav-link text-white fw-semibold" [routerLink]="menu.subItems[0].route" data-bs-dismiss="offcanvas"
@@ -143,6 +204,7 @@
                   }
                 </ul>
               </li>
+            }
             }
         </ul>
 

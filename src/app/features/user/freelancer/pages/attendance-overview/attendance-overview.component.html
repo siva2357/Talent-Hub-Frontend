@@ -16,8 +16,8 @@
                             style="background-color: rgba(255, 255, 255, 0.02) !important; font-size: 14px;"
                             [value]="selectedContractId" 
                             (change)="onContractChange($any($event.target).value)">
-                        @for (c of activeContracts; track c.id) {
-                            <option [value]="c.id" style="background-color: #11141b;">{{ c.contractTitle }} ({{ c.client }})</option>
+                        @for (c of activeContracts; track c.contractId || c.id || c._id) {
+                            <option [value]="c.contractId || c.id || c._id" style="background-color: #11141b;">{{ c.contractTitle }} ({{ c.client }})</option>
                         }
                         @if (activeContracts.length === 0 && !isLoading) {
                             <option value="" style="background-color: #11141b;">No Active Contracts Found</option>

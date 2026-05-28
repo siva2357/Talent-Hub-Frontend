@@ -1,0 +1,220 @@
+<div class="client-list-page p-3 p-md-4 p-xl-5">
+  <div class="container-fluid max-w-7xl mx-auto">
+    
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <h2 class="text-white fw-bold mb-1">Client Management 🏢</h2>
+        <p class="text-secondary mb-0">Audit client activities, spent volumes, and configure access settings.</p>
+      </div>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="glass rounded-4 p-4 mb-4">
+      <div class="row g-3 align-items-center justify-content-between">
+        <!-- Search bar -->
+        <div class="col-12 col-md-5 col-lg-4">
+          <div class="search-box position-relative">
+            <i class="bi bi-search search-icon text-secondary"></i>
+            <input type="text" 
+                   class="form-control bg-glass text-white border-0 ps-5" 
+                   placeholder="Search client by name or email..." 
+                   (input)="onSearch($event)">
+          </div>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="col-12 col-md-auto">
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'All'" 
+                    [class.btn-dark]="statusFilter !== 'All'"
+                    (click)="onFilterStatus('All')">All</button>
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'Active'" 
+                    [class.btn-dark]="statusFilter !== 'Active'"
+                    (click)="onFilterStatus('Active')">Active</button>
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'Suspended'" 
+                    [class.btn-dark]="statusFilter !== 'Suspended'"
+                    (click)="onFilterStatus('Suspended')">Suspended</button>
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'Blocked'" 
+                    [class.btn-dark]="statusFilter !== 'Blocked'"
+                    (click)="onFilterStatus('Blocked')">Blocked</button>
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'Deactivated'" 
+                    [class.btn-dark]="statusFilter !== 'Deactivated'"
+                    (click)="onFilterStatus('Deactivated')">Deactivated</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="glass rounded-4 overflow-hidden border border-white border-opacity-5">
+      <div class="table-responsive">
+        <table class="table table-dark table-hover mb-0 align-middle custom-table">
+          <thead>
+            <tr class="text-secondary">
+              <th scope="col" class="py-3 ps-4">Client Name</th>
+              <th scope="col" class="py-3">Email Address</th>
+              <th scope="col" class="py-3">Phone Number</th>
+              <th scope="col" class="py-3">Professional Details</th>
+              <th scope="col" class="py-3">Status</th>
+              <th scope="col" class="py-3 pe-4 text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (filteredClients.length === 0) {
+              <tr>
+                <td colspan="6" class="text-center py-5 text-secondary">
+                  <i class="bi bi-inbox fs-1 d-block mb-3 opacity-30"></i>
+                  No clients match the selected criteria.
+                </td>
+              </tr>
+            } @else {
+              @for (client of filteredClients; track client.id) {
+                <tr class="border-bottom border-white border-opacity-5">
+                  <td class="py-3 ps-4">
+                    <div class="d-flex align-items-center gap-3">
+                      <!-- Company logo/avatar simulation -->
+                      <div class="company-logo rounded-circle d-flex align-items-center justify-content-center"
+                           [ngClass]="client.logoColor">
+                        {{client.clientName.charAt(0)}}
+                      </div>
+                      <div>
+                        <h6 class="text-white mb-0 fw-semibold">{{client.clientName}}</h6>
+                        <span class="text-secondary smaller opacity-75">{{client.name}} (ID: {{client.id}})</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="text-white opacity-85">{{client.email}}</span>
+                  </td>
+                  <td>
+                    <span class="text-white opacity-85">{{client.phoneNumber}}</span>
+                  </td>
+                  <td>
+                    <div class="d-flex flex-column">
+                      <span class="text-white small fw-medium">{{client.industry}}</span>
+                      <span class="text-secondary smaller opacity-75">{{client.projectsCount}} Contracts &bull; {{client.spent | currency:'USD':'symbol':'1.0-0'}} Spent</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge" 
+                          [class.badge-success]="client.status === 'Active'" 
+                          [class.badge-danger]="client.status === 'Suspended' || client.status === 'Blocked'"
+                          [class.badge-warning]="client.status === 'Deactivated'">
+                      {{client.status}}
+                    </span>
+                  </td>
+                  <td class="pe-4 text-end">
+                    <div class="dropdown">
+                      <button class="btn btn-sm btn-outline-light bg-glass border-0 dropdown-toggle no-caret px-2" 
+                              type="button" 
+                              data-bs-toggle="dropdown" 
+                              aria-expanded="false">
+                        <i class="bi bi-three-dots-vertical"></i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-0 p-1">
+                        <li>
+                          <a class="dropdown-item py-2" href="javascript:void(0)" (click)="viewProfile(client)">
+                            <i class="bi bi-person me-2 text-primary"></i> View Profile
+                          </a>
+                        </li>
+                        <li><hr class="dropdown-divider border-white border-opacity-10 my-1"></li>
+                        
+                        <!-- Block / Unblock option -->
+                        @if (client.status === 'Blocked') {
+                          <li>
+                            <a class="dropdown-item py-2 text-success" href="javascript:void(0)" (click)="changeClientStatus(client.id, 'Active')">
+                              <i class="bi bi-shield-check me-2 text-success"></i> Unblock Account
+                            </a>
+                          </li>
+                        } @else {
+                          <li>
+                            <a class="dropdown-item py-2 text-danger" href="javascript:void(0)" (click)="changeClientStatus(client.id, 'Blocked')">
+                              <i class="bi bi-shield-slash me-2 text-danger"></i> Block Account
+                            </a>
+                          </li>
+                        }
+
+                        <!-- Activate / Deactivate option -->
+                        @if (client.status === 'Active') {
+                          <li>
+                            <a class="dropdown-item py-2 text-warning" href="javascript:void(0)" (click)="changeClientStatus(client.id, 'Deactivated')">
+                              <i class="bi bi-pause-circle me-2 text-warning"></i> Deactivate
+                            </a>
+                          </li>
+                        } @else if (client.status === 'Deactivated' || client.status === 'Suspended') {
+                          <li>
+                            <a class="dropdown-item py-2 text-success" href="javascript:void(0)" (click)="changeClientStatus(client.id, 'Active')">
+                              <i class="bi bi-play-circle me-2 text-success"></i> Activate
+                            </a>
+                          </li>
+                        }
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Client Profile Details Modal Overlay -->
+    @if (selectedClient) {
+      <div class="custom-modal-backdrop d-flex align-items-center justify-content-center">
+        <div class="glass modal-card rounded-4 p-4 position-relative">
+          <button class="btn-close btn-close-white position-absolute top-0 end-0 m-3" (click)="closeProfileModal()"></button>
+          
+          <div class="d-flex align-items-center gap-3 border-bottom border-white border-opacity-10 pb-3 mb-4">
+            <div class="company-logo rounded-circle d-flex align-items-center justify-content-center fs-4" [ngClass]="selectedClient.logoColor" style="width: 55px; height: 55px;">
+              {{selectedClient.clientName.charAt(0)}}
+            </div>
+            <div>
+              <h4 class="text-white fw-bold mb-0">{{selectedClient.clientName}}</h4>
+              <span class="text-secondary small">{{selectedClient.name}} (Company) &bull; {{selectedClient.email}}</span>
+            </div>
+          </div>
+
+          <div class="row g-3 text-secondary mb-4">
+            <div class="col-6">
+              <span class="smaller-label d-block text-uppercase tracking-wider">Client ID</span>
+              <span class="text-white fw-medium">{{selectedClient.id}}</span>
+            </div>
+            <div class="col-6">
+              <span class="smaller-label d-block text-uppercase tracking-wider">Joined Date</span>
+              <span class="text-white fw-medium">{{selectedClient.joinedDate | date:'mediumDate'}}</span>
+            </div>
+            <div class="col-6">
+              <span class="smaller-label d-block text-uppercase tracking-wider">Total Contracts</span>
+              <span class="text-white fw-medium">{{selectedClient.projectsCount}} Active Contracts</span>
+            </div>
+            <div class="col-6">
+              <span class="smaller-label d-block text-uppercase tracking-wider">Total Invested</span>
+              <span class="text-success fw-bold">{{selectedClient.spent | currency:'USD':'symbol':'1.0-0'}}</span>
+            </div>
+            <div class="col-12">
+              <span class="smaller-label d-block text-uppercase tracking-wider">Access Status</span>
+              <span class="badge mt-1" 
+                    [class.badge-success]="selectedClient.status === 'Active'" 
+                    [class.badge-danger]="selectedClient.status === 'Suspended' || selectedClient.status === 'Blocked'"
+                    [class.badge-warning]="selectedClient.status === 'Deactivated'">
+                {{selectedClient.status}}
+              </span>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 justify-content-end mt-4 pt-3 border-top border-white border-opacity-10">
+            <button class="btn btn-sm btn-outline-light bg-glass rounded-3 border-0 px-3" (click)="closeProfileModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

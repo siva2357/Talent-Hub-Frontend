@@ -36,11 +36,19 @@ export class SpendingActivitiesComponent implements OnInit {
     this.diaryService.getClientDiaries().subscribe({
       next: (res: any) => {
         if (res.success && res.diaries) {
-          // Filter diaries that are completed (overallStatus === 'completed')
-          const completed = res.diaries.filter((d: any) => d.overallStatus === 'completed');
-          
-          this.contracts = completed.map((diary: any) => {
-            const budget = (diary.phases || []).reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
+          this.contracts = res.diaries.map((diary: any) => {
+            const budget = (diary.phases || []).reduce((sum: number, p: any) => sum + (p.amount || 0), 0) || diary.contractId?.estimatedBudget || 0;
+            const totalPaid = (diary.phases || [])
+              .filter((p: any) => p.status === 'approved')
+              .reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
+
+            let mappedStatus = 'In Progress';
+            if (diary.overallStatus === 'completed') {
+              mappedStatus = 'Paid';
+            } else if (diary.overallStatus === 'in-progress') {
+              mappedStatus = 'Processed';
+            }
+
             return {
               contractId: diary.contractId?._id || diary._id,
               title: diary.contractId?.contractTitle || 'Contract',
@@ -49,15 +57,15 @@ export class SpendingActivitiesComponent implements OnInit {
               startDate: diary.contractId?.contractStartDate || diary.createdAt,
               endDate: diary.contractId?.contractEndDate || diary.updatedAt,
               budget,
-              totalPaid: budget, // Since it is completed, all milestones are approved and paid
-              status: 'Paid'
+              totalPaid,
+              status: mappedStatus
             };
           });
         }
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Failed to load completed diaries:', err);
+        console.error('Failed to load diaries:', err);
         this.isLoading = false;
       }
     });

@@ -1,0 +1,259 @@
+<div class="freelancer-list-page p-3 p-md-4 p-xl-5">
+  <div class="container-fluid max-w-7xl mx-auto">
+    
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <h2 class="text-white fw-bold mb-1">Freelancer Directory 💼</h2>
+        <p class="text-secondary mb-0">Approve profile verification requests, inspect service ratings, and moderate accounts.</p>
+      </div>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="glass rounded-4 p-4 mb-4">
+      <div class="row g-3 align-items-center justify-content-between">
+        <!-- Search bar -->
+        <div class="col-12 col-md-5 col-lg-4">
+          <div class="search-box position-relative">
+            <i class="bi bi-search search-icon text-secondary"></i>
+            <input type="text" 
+                   class="form-control bg-glass text-white border-0 ps-5" 
+                   placeholder="Search by name, email, or skill..." 
+                   (input)="onSearch($event)">
+          </div>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="col-12 col-md-auto">
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'All'" 
+                    [class.btn-dark]="statusFilter !== 'All'"
+                    (click)="onFilterStatus('All')">All</button>
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'Active'" 
+                    [class.btn-dark]="statusFilter !== 'Active'"
+                    (click)="onFilterStatus('Active')">Active</button>
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'Pending Approval'" 
+                    [class.btn-dark]="statusFilter !== 'Pending Approval'"
+                    (click)="onFilterStatus('Pending Approval')">Pending Onboarding</button>
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'Blocked'" 
+                    [class.btn-dark]="statusFilter !== 'Blocked'"
+                    (click)="onFilterStatus('Blocked')">Blocked</button>
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'Deactivated'" 
+                    [class.btn-dark]="statusFilter !== 'Deactivated'"
+                    (click)="onFilterStatus('Deactivated')">Deactivated</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="glass rounded-4 overflow-hidden border border-white border-opacity-5">
+      <div class="table-responsive">
+        <table class="table table-dark table-hover mb-0 align-middle custom-table">
+          <thead>
+            <tr class="text-secondary">
+              <th scope="col" class="py-3 ps-4">Freelancer Name</th>
+              <th scope="col" class="py-3">Email Address</th>
+              <th scope="col" class="py-3">Phone Number</th>
+              <th scope="col" class="py-3">Professional Details</th>
+              <th scope="col" class="py-3">Status</th>
+              <th scope="col" class="py-3 pe-4 text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (filteredFreelancers.length === 0) {
+              <tr>
+                <td colspan="6" class="text-center py-5 text-secondary">
+                  <i class="bi bi-inbox fs-1 d-block mb-3 opacity-30"></i>
+                  No freelancers match the selected filters.
+                </td>
+              </tr>
+            } @else {
+              @for (freelancer of filteredFreelancers; track freelancer.id) {
+                <tr class="border-bottom border-white border-opacity-5">
+                  <td class="py-3 ps-4">
+                    <div class="d-flex align-items-center gap-3">
+                      <!-- Avatar initials circle -->
+                      <div class="avatar-circle rounded-circle d-flex align-items-center justify-content-center">
+                        <span class="avatar-initials">{{freelancer.name.charAt(0)}}</span>
+                      </div>
+                      <div>
+                        <h6 class="text-white mb-0 fw-semibold">{{freelancer.name}}</h6>
+                        <span class="text-secondary smaller opacity-75">ID: {{freelancer.id}}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="text-white opacity-85">{{freelancer.email}}</span>
+                  </td>
+                  <td>
+                    <span class="text-white opacity-85">{{freelancer.phoneNumber}}</span>
+                  </td>
+                  <td>
+                    <div class="d-flex flex-column gap-1">
+                      <span class="text-white small fw-medium">{{freelancer.title}}</span>
+                      <div class="d-flex flex-wrap gap-1">
+                        @for (skill of freelancer.skills; track skill) {
+                          <span class="badge bg-secondary bg-opacity-20 text-white rounded-pill px-2 py-0 smaller-badge" style="font-size: 10px !important;">{{skill}}</span>
+                        }
+                      </div>
+                      <span class="text-secondary smaller opacity-75">
+                        <i class="bi bi-star-fill text-warning"></i> {{freelancer.rating | number:'1.1-1'}} &bull; {{freelancer.hourlyRate | currency}}/hr &bull; {{freelancer.earnings | currency:'USD':'symbol':'1.0-0'}} Earnings
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge" 
+                          [class.badge-success]="freelancer.status === 'Active'" 
+                          [class.badge-warning]="freelancer.status === 'Pending Approval' || freelancer.status === 'Deactivated'"
+                          [class.badge-danger]="freelancer.status === 'Suspended' || freelancer.status === 'Blocked'">
+                      {{freelancer.status === 'Pending Approval' ? 'Pending' : freelancer.status}}
+                    </span>
+                  </td>
+                  <td class="pe-4 text-end">
+                    <div class="dropdown">
+                      <button class="btn btn-sm btn-outline-light bg-glass border-0 dropdown-toggle no-caret px-2" 
+                              type="button" 
+                              data-bs-toggle="dropdown" 
+                              aria-expanded="false">
+                        <i class="bi bi-three-dots-vertical"></i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-0 p-1">
+                        <li>
+                          <a class="dropdown-item py-2" href="javascript:void(0)" (click)="viewProfile(freelancer)">
+                            <i class="bi bi-person me-2 text-primary"></i> View Profile
+                          </a>
+                        </li>
+                        
+                        @if (freelancer.status === 'Pending Approval') {
+                          <li><hr class="dropdown-divider border-white border-opacity-10 my-1"></li>
+                          <li>
+                            <a class="dropdown-item py-2 text-success" href="javascript:void(0)" (click)="approveFreelancer(freelancer.id)">
+                              <i class="bi bi-check-lg me-2 text-success"></i> Approve Profile
+                            </a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item py-2 text-danger" href="javascript:void(0)" (click)="changeFreelancerStatus(freelancer.id, 'Blocked')">
+                              <i class="bi bi-slash-circle me-2 text-danger"></i> Block / Reject
+                            </a>
+                          </li>
+                        } @else {
+                          <li><hr class="dropdown-divider border-white border-opacity-10 my-1"></li>
+                          <!-- Block / Unblock option -->
+                          @if (freelancer.status === 'Blocked') {
+                            <li>
+                              <a class="dropdown-item py-2 text-success" href="javascript:void(0)" (click)="changeFreelancerStatus(freelancer.id, 'Active')">
+                                <i class="bi bi-shield-check me-2 text-success"></i> Unblock Account
+                              </a>
+                            </li>
+                          } @else {
+                            <li>
+                              <a class="dropdown-item py-2 text-danger" href="javascript:void(0)" (click)="changeFreelancerStatus(freelancer.id, 'Blocked')">
+                                <i class="bi bi-shield-slash me-2 text-danger"></i> Block Account
+                              </a>
+                            </li>
+                          }
+
+                          <!-- Activate / Deactivate option -->
+                          @if (freelancer.status === 'Active') {
+                            <li>
+                              <a class="dropdown-item py-2 text-warning" href="javascript:void(0)" (click)="changeFreelancerStatus(freelancer.id, 'Deactivated')">
+                                <i class="bi bi-pause-circle me-2 text-warning"></i> Deactivate
+                              </a>
+                            </li>
+                          } @else if (freelancer.status === 'Deactivated' || freelancer.status === 'Suspended') {
+                            <li>
+                              <a class="dropdown-item py-2 text-success" href="javascript:void(0)" (click)="changeFreelancerStatus(freelancer.id, 'Active')">
+                                <i class="bi bi-play-circle me-2 text-success"></i> Activate
+                              </a>
+                            </li>
+                          }
+                        }
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Freelancer Profile Details Modal Overlay -->
+    @if (selectedFreelancer) {
+      <div class="custom-modal-backdrop d-flex align-items-center justify-content-center">
+        <div class="glass modal-card rounded-4 p-4 position-relative">
+          <button class="btn-close btn-close-white position-absolute top-0 end-0 m-3" (click)="closeProfileModal()"></button>
+          
+          <div class="d-flex align-items-center gap-3 border-bottom border-white border-opacity-10 pb-3 mb-4">
+            <div class="avatar-circle rounded-circle d-flex align-items-center justify-content-center fs-4" style="width: 55px; height: 55px;">
+              <span class="avatar-initials">{{selectedFreelancer.name.charAt(0)}}</span>
+            </div>
+            <div>
+              <h4 class="text-white fw-bold mb-0">{{selectedFreelancer.name}}</h4>
+              <span class="text-secondary small">{{selectedFreelancer.email}}</span>
+            </div>
+          </div>
+
+          <div class="row g-3 text-secondary mb-4">
+            <div class="col-6">
+              <span class="smaller-label d-block text-uppercase tracking-wider">Freelancer ID</span>
+              <span class="text-white fw-medium">{{selectedFreelancer.id}}</span>
+            </div>
+            <div class="col-6">
+              <span class="smaller-label d-block text-uppercase tracking-wider">Joined Date</span>
+              <span class="text-white fw-medium">{{selectedFreelancer.joinedDate | date:'mediumDate'}}</span>
+            </div>
+            <div class="col-6">
+              <span class="smaller-label d-block text-uppercase tracking-wider">Hourly Rate</span>
+              <span class="text-white fw-medium">{{selectedFreelancer.hourlyRate | currency:'USD':'symbol':'1.0-0'}}/hr</span>
+            </div>
+            <div class="col-6">
+              <span class="smaller-label d-block text-uppercase tracking-wider">Total Earnings</span>
+              <span class="text-success fw-bold">{{selectedFreelancer.earnings | currency:'USD':'symbol':'1.0-0'}}</span>
+            </div>
+            <div class="col-6">
+              <span class="smaller-label d-block text-uppercase tracking-wider">Rating</span>
+              <span class="text-white fw-medium"><i class="bi bi-star-fill text-warning me-1"></i> {{selectedFreelancer.rating | number:'1.1-1'}}</span>
+            </div>
+            <div class="col-6">
+              <span class="smaller-label d-block text-uppercase tracking-wider">Completed Contracts</span>
+              <span class="text-white fw-medium">{{selectedFreelancer.completedProjects}} contracts</span>
+            </div>
+            <div class="col-12">
+              <span class="smaller-label d-block text-uppercase tracking-wider">Skills Tech Stack</span>
+              <div class="d-flex flex-wrap gap-1 mt-1">
+                @for (skill of selectedFreelancer.skills; track skill) {
+                  <span class="badge bg-secondary bg-opacity-20 text-white rounded-pill px-2 py-1 smaller-badge">{{skill}}</span>
+                }
+              </div>
+            </div>
+            <div class="col-12">
+              <span class="smaller-label d-block text-uppercase tracking-wider">Account Status</span>
+              <span class="badge mt-1" 
+                    [class.badge-success]="selectedFreelancer.status === 'Active'" 
+                    [class.badge-warning]="selectedFreelancer.status === 'Pending Approval' || selectedFreelancer.status === 'Deactivated'"
+                    [class.badge-danger]="selectedFreelancer.status === 'Suspended' || selectedFreelancer.status === 'Blocked'">
+                {{selectedFreelancer.status}}
+              </span>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 justify-content-end mt-4 pt-3 border-top border-white border-opacity-10">
+            @if (selectedFreelancer.status === 'Pending Approval') {
+              <button class="btn btn-sm btn-success rounded-3 px-3 me-auto" (click)="approveFreelancer(selectedFreelancer.id)">Approve Profile</button>
+            }
+            <button class="btn btn-sm btn-outline-light bg-glass rounded-3 border-0 px-3" (click)="closeProfileModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

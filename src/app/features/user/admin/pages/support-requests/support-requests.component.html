@@ -1,0 +1,262 @@
+<div class="support-requests-page p-3 p-md-4 p-xl-5">
+  <div class="container-fluid max-w-7xl mx-auto">
+    
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="text-white fw-bold mb-1">Support Desk Tickets 🛡️</h2>
+        <p class="text-secondary mb-0">Manage customer service requests, reply to client & freelancer tickets, and assign status logs.</p>
+      </div>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="glass rounded-4 p-4 mb-4">
+      <div class="row g-3 align-items-center justify-content-between">
+        <!-- Search bar -->
+        <div class="col-12 col-md-4">
+          <div class="search-box position-relative">
+            <i class="bi bi-search search-icon text-secondary"></i>
+            <input type="text" 
+                   class="form-control bg-glass text-white border-0 ps-5" 
+                   placeholder="Search Ticket ID, user, or topic..." 
+                   (input)="onSearch($event)">
+          </div>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="col-12 col-md-auto d-flex flex-wrap gap-2 align-items-center">
+          <!-- User Type Filter -->
+          <div class="btn-group me-2">
+            <button class="btn btn-sm btn-dark dropdown-toggle bg-glass border-0 text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              User Type: {{userTypeFilter}}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><a class="dropdown-item" href="javascript:void(0)" (click)="onFilterUserType('All')">All</a></li>
+              <li><a class="dropdown-item" href="javascript:void(0)" (click)="onFilterUserType('Client')">Clients</a></li>
+              <li><a class="dropdown-item" href="javascript:void(0)" (click)="onFilterUserType('Freelancer')">Freelancers</a></li>
+            </ul>
+          </div>
+
+          <!-- Status Filters -->
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'All'" 
+                    [class.btn-dark]="statusFilter !== 'All'"
+                    (click)="onFilterStatus('All')">All Tickets</button>
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'Pending'" 
+                    [class.btn-dark]="statusFilter !== 'Pending'"
+                    (click)="onFilterStatus('Pending')">Pending</button>
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'Unresolved'" 
+                    [class.btn-dark]="statusFilter !== 'Unresolved'"
+                    (click)="onFilterStatus('Unresolved')">Unresolved</button>
+            <button class="btn btn-sm filter-btn rounded-3" 
+                    [class.btn-primary]="statusFilter === 'Resolved'" 
+                    [class.btn-dark]="statusFilter !== 'Resolved'"
+                    (click)="onFilterStatus('Resolved')">Resolved</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Split Layout -->
+    <div class="row g-4">
+      
+      <!-- Left side: Tickets List (col-md-5) -->
+      <div class="col-12 col-md-5">
+        <div class="glass rounded-4 p-3 h-100">
+          <h5 class="text-white fw-bold mb-3 px-1">Tickets ({{filteredRequests.length}})</h5>
+          
+          <div class="tickets-list-scroll d-flex flex-column gap-3">
+            @if (filteredRequests.length === 0) {
+              <div class="text-center py-5 text-secondary bg-glass rounded-4">
+                <i class="bi bi-inbox fs-1 d-block mb-3 opacity-30"></i>
+                No tickets match your filter criteria.
+              </div>
+            } @else {
+              @for (req of filteredRequests; track req.id) {
+                <div class="ticket-card p-3 rounded-4" 
+                     [class.active]="selectedRequest?.id === req.id"
+                     (click)="selectRequest(req)">
+                  
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="text-primary fw-mono fw-semibold small">{{req.id}}</span>
+                    <span class="badge" 
+                          [class.badge-success]="req.status === 'Resolved'" 
+                          [class.badge-warning]="req.status === 'Pending'"
+                          [class.badge-danger]="req.status === 'Unresolved'">
+                      {{req.status}}
+                    </span>
+                  </div>
+
+                  <h6 class="text-white fw-bold mb-1 text-truncate">{{req.subject}}</h6>
+                  <p class="text-secondary small text-truncate mb-2">{{req.message}}</p>
+
+                  <div class="d-flex justify-content-between align-items-center pt-2 border-top border-white border-opacity-5">
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="badge" 
+                            [class.bg-info]="req.userType === 'Client'" 
+                            [class.bg-success]="req.userType === 'Freelancer'">
+                        {{req.userType}}
+                      </span>
+                      <span class="text-white opacity-75 small text-truncate" style="max-width: 130px;">{{req.userName}}</span>
+                    </div>
+                    <span class="text-secondary smaller opacity-75">{{req.createdDate | date:'mediumDate'}}</span>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Right side: Ticket Details & Reply (col-md-7) -->
+      <div class="col-12 col-md-7">
+        @if (selectedRequest) {
+          <div class="glass rounded-4 p-4 d-flex flex-column h-100">
+            
+            <!-- Details Header -->
+            <div class="d-flex align-items-start justify-content-between border-bottom border-white border-opacity-10 pb-3 mb-3">
+              <div>
+                <span class="badge mb-2 me-2" [class.bg-info]="selectedRequest.userType === 'Client'" [class.bg-success]="selectedRequest.userType === 'Freelancer'">
+                  {{selectedRequest.userType}}
+                </span>
+                <span class="text-secondary small fw-mono">ID: <span class="text-primary">{{selectedRequest.id}}</span></span>
+                <h4 class="text-white fw-bold mt-1 mb-0">{{selectedRequest.subject}}</h4>
+                <p class="text-secondary small mb-0 mt-1">Submitted by <span class="text-white fw-semibold">{{selectedRequest.userName}}</span> ({{selectedRequest.userEmail}}) &bull; {{selectedRequest.createdDate | date:'mediumDate'}}</p>
+              </div>
+              <div class="d-flex flex-column align-items-end gap-2">
+                <span class="badge" 
+                      [class.badge-success]="selectedRequest.status === 'Resolved'" 
+                      [class.badge-warning]="selectedRequest.status === 'Pending'"
+                      [class.badge-danger]="selectedRequest.status === 'Unresolved'">
+                  {{selectedRequest.status}}
+                </span>
+              </div>
+            </div>
+
+            <!-- Thread Conversation History -->
+            <div class="flex-grow-1 mb-4">
+              <h6 class="text-secondary small text-uppercase tracking-wider mb-3">Conversation Thread</h6>
+              
+              <div class="chat-thread-scroll bg-glass rounded-4 p-3 d-flex flex-column gap-3 mb-3" style="min-height: 250px;">
+                
+                <!-- Original Message (always from user) -->
+                <div class="d-flex flex-column align-items-start">
+                  <div class="message-bubble user">
+                    <p class="text-white opacity-85 mb-1" style="white-space: pre-wrap;">{{selectedRequest.message}}</p>
+                    <div class="d-flex align-items-center gap-1 justify-content-end mt-1">
+                      <span class="text-secondary smaller opacity-70">{{selectedRequest.userName}} &bull; {{selectedRequest.createdDate | date:'shortTime'}}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Replies -->
+                @for (reply of selectedRequest.replies; track $index) {
+                  <div class="d-flex flex-column" [class.align-items-end]="reply.sender === 'Admin'" [class.align-items-start]="reply.sender !== 'Admin'">
+                    <div class="message-bubble" [class.admin]="reply.sender === 'Admin'" [class.user]="reply.sender !== 'Admin'">
+                      <p class="text-white opacity-85 mb-1" style="white-space: pre-wrap;">{{reply.message}}</p>
+                      <div class="d-flex align-items-center gap-1 justify-content-end mt-1">
+                        <span class="text-secondary smaller opacity-70">
+                          {{reply.sender}} &bull; {{reply.timestamp}}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Ticket Status Banner -->
+            <div class="d-flex align-items-center justify-content-between p-3 rounded-4 mb-3 border border-white border-opacity-5"
+                 [class.border-warning]="selectedRequest.status === 'Pending'"
+                 [class.border-success]="selectedRequest.status === 'Resolved'"
+                 [style.background]="selectedRequest.status === 'Pending' ? 'rgba(255, 193, 7, 0.02)' : 'rgba(25, 135, 84, 0.02)'">
+              <div class="d-flex align-items-center gap-2">
+                @if (selectedRequest.status === 'Pending') {
+                  <i class="bi bi-hourglass-split text-warning fs-5"></i>
+                  <div>
+                    <span class="text-warning small fw-bold d-block">Ticket Status: Pending</span>
+                    <span class="text-secondary smaller">Waiting for user solution feedback confirmation.</span>
+                  </div>
+                } @else if (selectedRequest.status === 'Resolved') {
+                  <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                  <div>
+                    <span class="text-success small fw-bold d-block">Ticket Status: Resolved</span>
+                    <span class="text-secondary smaller">Resolution confirmed directly by the user.</span>
+                  </div>
+                } @else {
+                  <i class="bi bi-exclamation-circle-fill text-danger fs-5"></i>
+                  <div>
+                    <span class="text-danger small fw-bold d-block">Ticket Status: Unresolved</span>
+                    <span class="text-secondary smaller">Needs review or additional response.</span>
+                  </div>
+                }
+              </div>
+              <span class="badge" 
+                    [class.badge-warning]="selectedRequest.status === 'Pending'"
+                    [class.badge-success]="selectedRequest.status === 'Resolved'"
+                    [class.badge-danger]="selectedRequest.status === 'Unresolved'">
+                {{selectedRequest.status}}
+              </span>
+            </div>
+
+            <!-- Simulation Panel for User Feedback (Only shown if ticket is not already Resolved) -->
+            @if (selectedRequest.status !== 'Resolved') {
+              <div class="glass p-3 rounded-4 mb-3 border border-warning border-opacity-10" style="background: rgba(255, 193, 7, 0.02) !important;">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="text-warning small fw-bold"><i class="bi bi-cpu-fill me-1"></i> Test Environment Simulator:</span>
+                  <span class="badge bg-warning text-dark smaller">User Feedback Actions</span>
+                </div>
+                <p class="text-secondary smaller mb-3">Tickets can only be resolved via user response. Click below to simulate the user submitting feedback and closing the ticket:</p>
+                <div class="d-flex flex-wrap gap-2">
+                  <button class="btn btn-xs btn-outline-warning rounded-3 px-3 py-1 text-xs small" 
+                          (click)="simulateUserFeedback('Thanks! The solution worked perfectly and resolved my problem. 5 stars!')">
+                    <i class="bi bi-emoji-smile me-1"></i> Accept Solution (5-star feedback)
+                  </button>
+                  <button class="btn btn-xs btn-outline-secondary rounded-3 px-3 py-1 text-xs text-white small" 
+                          (click)="simulateUserFeedback('The support team resolved my query, the payment is verified now. Thank you!')">
+                    <i class="bi-chat-left-text me-1"></i> Send Closure Statement
+                  </button>
+                </div>
+              </div>
+            }
+
+            <!-- Reply Box -->
+            <div class="reply-editor mt-auto">
+              <h6 class="text-secondary small text-uppercase tracking-wider mb-2">Write a Response</h6>
+              <div class="position-relative">
+                <textarea class="form-control bg-glass text-white border-0 rounded-4 p-3" 
+                          rows="3" 
+                          placeholder="Type your reply to the user here..."
+                          [(ngModel)]="replyText"
+                          (keydown.enter)="$event.preventDefault(); submitReply()">
+                </textarea>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <span class="text-secondary smaller opacity-75">Press Enter to send, or click Reply</span>
+                  <button class="btn btn-primary btn-sm rounded-3 px-4 d-flex align-items-center gap-2" 
+                          [disabled]="!replyText.trim()"
+                          (click)="submitReply()">
+                    <i class="bi bi-send-fill"></i> Send Reply
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        } @else {
+          <!-- Empty State when nothing selected -->
+          <div class="glass rounded-4 p-5 d-flex flex-column align-items-center justify-content-center h-100 text-center text-secondary border border-white border-opacity-5" style="min-height: 450px;">
+            <div class="mb-4 text-primary bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+              <i class="bi bi-headset fs-1"></i>
+            </div>
+            <h4 class="text-white fw-bold mb-2">No Ticket Selected</h4>
+            <p class="max-w-md mx-auto text-secondary mb-0">Select a support ticket from the left panel to review message threads, send custom replies, and transition status logs.</p>
+          </div>
+        }
+      </div>
+
+    </div>
+  </div>
+</div>
