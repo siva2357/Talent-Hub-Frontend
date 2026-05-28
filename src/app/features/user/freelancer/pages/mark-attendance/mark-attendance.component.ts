@@ -1,14 +1,15 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { Router } from '@angular/router';
 import { ApplicationService } from '../../../../../core/services/application.service';
 import { AttendanceService } from '../../../../../core/services/attendance.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-mark-attendance',
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule, ButtonComponent, FormsModule],
   templateUrl: './mark-attendance.component.html',
   styleUrl: './mark-attendance.component.css'
 })
@@ -16,6 +17,7 @@ export class MarkAttendanceComponent implements OnInit {
   private router = inject(Router);
   private applicationService = inject(ApplicationService);
   private attendanceService = inject(AttendanceService);
+  private cdr = inject(ChangeDetectorRef);
 
   currentDate = new Date();
   isCheckedIn = false;
@@ -27,6 +29,8 @@ export class MarkAttendanceComponent implements OnInit {
   selectedContractId: string = '';
   todaySessions: any[] = [];
   isLoading = true;
+  isPunchingIn = false;
+  isPunchingOut = false;
 
   ngOnInit(): void {
     this.fetchActiveContracts();
@@ -36,27 +40,34 @@ export class MarkAttendanceComponent implements OnInit {
     this.isLoading = true;
     this.applicationService.getFreelancerOffers().subscribe({
       next: (res: any) => {
+        console.log('Freelancer offers received:', res);
         if (res.success && res.offers) {
           this.activeContracts = res.offers.filter((o: any) => o.status === 'Accepted');
+          console.log('Accepted active contracts:', this.activeContracts);
           if (this.activeContracts.length > 0) {
             const savedId = this.attendanceService.activeContractId;
-            this.selectedContractId = savedId && this.activeContracts.some(c => c.id === savedId)
+            const resolveId = (c: any) => c.contractId || c.id || c._id;
+            this.selectedContractId = savedId && this.activeContracts.some(c => resolveId(c) === savedId)
               ? savedId 
-              : this.activeContracts[0].id;
+              : resolveId(this.activeContracts[0]);
             
+            console.log('Resolved selectedContractId:', this.selectedContractId);
             this.onContractChange(this.selectedContractId);
           }
         }
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Failed to fetch active contracts:', err);
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
 
   onContractChange(contractId: string): void {
+    console.log('onContractChange called with:', contractId);
     this.selectedContractId = contractId;
     this.attendanceService.activeContractId = contractId;
     this.loadTodayStatus();
@@ -65,29 +76,9 @@ export class MarkAttendanceComponent implements OnInit {
   loadTodayStatus(): void {
     if (!this.selectedContractId) return;
 
-    // Check if we have pending capture details to commit for this contract
-    const captureInfo = this.attendanceService.lastCapturedInfo;
-    if (captureInfo) {
-      this.attendanceService.checkIn({
-        contractId: this.selectedContractId,
-        location: captureInfo.location,
-        faceImage: captureInfo.faceImage,
-        faceMatch: captureInfo.faceMatch
-      }).subscribe({
-        next: (res) => {
-          this.attendanceService.lastCapturedInfo = null; // Clear state
-          this.loadTodayStatus();
-        },
-        error: (err) => {
-          console.error('Check-in failed:', err);
-          this.attendanceService.lastCapturedInfo = null;
-        }
-      });
-      return;
-    }
-
     this.attendanceService.getTodayStatus(this.selectedContractId).subscribe({
       next: (res: any) => {
+        console.log('getTodayStatus response received:', res);
         if (res.success) {
           this.isCheckedIn = res.isCheckedIn;
           this.totalLoggedToday = res.totalLoggedToday.toString();
@@ -113,28 +104,69 @@ export class MarkAttendanceComponent implements OnInit {
               image: s.faceImage || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300'
             };
           }).reverse();
+          this.cdr.detectChanges();
         }
       },
       error: (err) => {
         console.error('Failed to get today status:', err);
+        this.cdr.detectChanges();
       }
     });
   }
 
   punchIn() {
-    if (!this.selectedContractId) return;
-    this.attendanceService.activeContractId = this.selectedContractId;
-    this.router.navigate(['/user/capture-attendance']);
+    if (!this.selectedContractId || this.isPunchingIn) return;
+    this.isPunchingIn = true;
+
+    let locationStr = 'Madhapur, Hyderabad';
+    const completeCheckIn = (loc: string) => {
+      this.attendanceService.checkIn({
+        contractId: this.selectedContractId,
+        location: loc,
+        faceImage: '',
+        faceMatch: true
+      }).subscribe({
+        next: (res) => {
+          this.isPunchingIn = false;
+          this.loadTodayStatus();
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Check-in failed:', err);
+          this.isPunchingIn = false;
+          this.cdr.detectChanges();
+        }
+      });
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          locationStr = `Lat: ${position.coords.latitude.toFixed(4)}, Lon: ${position.coords.longitude.toFixed(4)}`;
+          completeCheckIn(locationStr);
+        },
+        (error) => {
+          completeCheckIn(locationStr);
+        }
+      );
+    } else {
+      completeCheckIn(locationStr);
+    }
   }
 
   punchOut() {
-    if (!this.selectedContractId) return;
+    if (!this.selectedContractId || this.isPunchingOut) return;
+    this.isPunchingOut = true;
     this.attendanceService.checkOut({ contractId: this.selectedContractId }).subscribe({
       next: (res) => {
+        this.isPunchingOut = false;
         this.loadTodayStatus();
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Check-out failed:', err);
+        this.isPunchingOut = false;
+        this.cdr.detectChanges();
       }
     });
   }

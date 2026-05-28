@@ -108,11 +108,13 @@
                                 <!-- Days Grid -->
                                 <div class="row g-2 g-xl-3 text-center">
                                     <!-- Template snippet for each day -->
-                                    <ng-template #dayBlock let-dayName="dayName" let-dayData="dayData">
+                                    <ng-template #dayBlock let-dayName="dayName" let-dayData="dayData" let-contractId="contractId">
                                         <div class="col">
                                             <div class="day-block p-2 p-md-3 rounded-3 d-flex flex-column h-100"
                                                 [class.active-day]="dayData.hours > 0"
-                                                [class.na-day]="dayData.attendance === 'N/A'">
+                                                [class.na-day]="dayData.attendance === 'N/A'"
+                                                [class.interactive-day]="dayData.hours > 0"
+                                                (click)="viewDayLogs(contractId, dayData, dayName)">
                                                 <p class="small text-uppercase mb-0 fw-bold"
                                                     [class.text-white]="dayData.hours > 0"
                                                     [class.text-secondary]="dayData.hours === 0 || dayData.attendance === 'N/A'">
@@ -120,47 +122,22 @@
                                                 <span class="d-block text-secondary mb-2"
                                                     style="font-size: 10px !important; font-weight: 500; opacity: 0.8;">{{dayData.date}}</span>
 
-                                                @if(dayData.attendance === 'N/A') {
-                                                <h5 class="mb-2 fw-bold text-secondary text-opacity-50">-</h5>
-                                                <div class="mt-auto d-flex flex-column gap-2">
-                                                    <span class="badge w-100 small badge-attendance-na">N/A</span>
-                                                    <div style="height: 48px;"></div> <!-- Placeholder -->
-                                                </div>
+                                                @if(dayData.attendance === 'N/A' || dayData.hours === 0) {
+                                                    <h5 class="mb-2 fw-bold text-secondary text-opacity-50">-</h5>
                                                 } @else {
-                                                <h5 class="mb-2 fw-bold" [class.text-white]="dayData.hours > 0"
-                                                    [class.text-secondary]="dayData.hours === 0">{{dayData.hours}}h</h5>
+                                                    <h5 class="mb-2 fw-bold" [class.text-white]="dayData.hours > 0"
+                                                        [class.text-secondary]="dayData.hours === 0">{{dayData.hours}}h</h5>
 
-                                                <div class="mt-auto d-flex flex-column gap-2">
-                                                    <span class="badge w-100 small" [ngClass]="{
-                                                                      'badge-attendance-present': dayData.attendance === 'Present',
-                                                                      'badge-attendance-partial': dayData.attendance === 'Partial',
-                                                                      'badge-attendance-absent': dayData.attendance === 'Absent',
-                                                                      'badge-attendance-pending': dayData.attendance === 'Pending'
-                                                                  }">
-                                                        {{dayData.attendance}}
-                                                    </span>
-
-                                                    @if(dayData.attendance !== 'Absent' && dayData.attendance !==
-                                                    'Pending') {
-                                                    <div class="d-flex flex-column align-items-center justify-content-center gap-1 mt-1"
-                                                        [class.text-success]="dayData.faceMatch"
-                                                        [class.text-danger]="!dayData.faceMatch">
-                                                        <span class="text-secondary" style="font-size: 14px;">Face
-                                                            match:</span>
-                                                        <div class="d-flex align-items-center gap-1 fw-bold"
-                                                            style="font-size: 14px;">
-                                                            <i class="bi"
-                                                                [class.bi-person-check-fill]="dayData.faceMatch"
-                                                                [class.bi-person-x-fill]="!dayData.faceMatch"></i>
-                                                            <span>{{dayData.faceMatch ? 'Verified' : 'Not
-                                                                verified'}}</span>
-                                                        </div>
+                                                    <div class="mt-auto d-flex flex-column gap-2">
+                                                        <span class="badge w-100 small" [ngClass]="{
+                                                                          'badge-attendance-present': dayData.attendance === 'Present',
+                                                                          'badge-attendance-partial': dayData.attendance === 'Partial',
+                                                                          'badge-attendance-absent': dayData.attendance === 'Absent',
+                                                                          'badge-attendance-pending': dayData.attendance === 'Pending'
+                                                                      }">
+                                                            {{dayData.attendance}}
+                                                        </span>
                                                     </div>
-                                                    } @else {
-                                                    <div style="height: 48px;"></div>
-                                                    <!-- Placeholder to maintain alignment -->
-                                                    }
-                                                </div>
                                                 }
                                             </div>
                                         </div>
@@ -168,19 +145,19 @@
 
                                     <!-- Rendering days -->
                                     <ng-container
-                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Mon', dayData: sheet.mon }"></ng-container>
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Mon', dayData: sheet.mon, contractId: contract.id }"></ng-container>
                                     <ng-container
-                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Tue', dayData: sheet.tue }"></ng-container>
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Tue', dayData: sheet.tue, contractId: contract.id }"></ng-container>
                                     <ng-container
-                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Wed', dayData: sheet.wed }"></ng-container>
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Wed', dayData: sheet.wed, contractId: contract.id }"></ng-container>
                                     <ng-container
-                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Thu', dayData: sheet.thu }"></ng-container>
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Thu', dayData: sheet.thu, contractId: contract.id }"></ng-container>
                                     <ng-container
-                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Fri', dayData: sheet.fri }"></ng-container>
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Fri', dayData: sheet.fri, contractId: contract.id }"></ng-container>
                                     <ng-container
-                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Sat', dayData: sheet.sat }"></ng-container>
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Sat', dayData: sheet.sat, contractId: contract.id }"></ng-container>
                                     <ng-container
-                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Sun', dayData: sheet.sun }"></ng-container>
+                                        *ngTemplateOutlet="dayBlock; context: { dayName: 'Sun', dayData: sheet.sun, contractId: contract.id }"></ng-container>
 
                                     <!-- Total -->
                                     <div class="col-12 col-xl-auto mt-3 mt-xl-0 d-flex">
@@ -207,6 +184,56 @@
             </div>
             }
         </div>
+
+        <!-- Attendance Logs Modal -->
+        @if (showLogsModal && selectedDayLogs) {
+        <div class="custom-modal-overlay d-flex align-items-center justify-content-center" (click)="closeLogsModal()">
+            <div class="custom-modal-content glass p-4 rounded-4 animate-in" (click)="$event.stopPropagation()">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-white border-opacity-10">
+                    <h5 class="text-white fw-bold mb-0">
+                        <i class="bi bi-person-badge-fill text-primary me-2"></i>
+                        Logs for {{ selectedDayLogs.dayName }} ({{ selectedDayLogs.date }})
+                    </h5>
+                    <button class="btn-close btn-close-white" (click)="closeLogsModal()"></button>
+                </div>
+                
+                <div class="modal-scroll-area">
+                    <div class="d-flex justify-content-between align-items-center mb-3 bg-dark bg-opacity-50 p-3 rounded-3 border border-white border-opacity-5">
+                        <span class="text-secondary small">Total Logged Time: <strong class="text-white h6 mb-0 ms-1">{{ selectedDayLogs.totalHours }}h</strong></span>
+                        <span class="badge rounded-pill px-3 py-1 fw-semibold" 
+                              [ngClass]="selectedDayLogs.status === 'Attended' ? 'badge-success-soft' : 'badge-warning-soft'">
+                            {{ selectedDayLogs.status }}
+                        </span>
+                    </div>
+
+                    <h6 class="text-white fw-bold mb-3 text-start">Daily Sessions</h6>
+                    
+                    @for (session of selectedDayLogs.sessions; track session.checkIn) {
+                    <div class="session-card mb-3 p-3 rounded-3 border border-white border-opacity-15 bg-dark bg-opacity-30 text-start">
+                        <div class="row g-3">
+                            <div class="col-12 d-flex flex-column gap-2 justify-content-center">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="text-secondary small">Time:</span>
+                                    <span class="text-white fw-semibold small">
+                                        <i class="bi bi-clock text-primary me-1"></i>
+                                        {{ session.checkIn }} - {{ session.checkOut || 'Active' }}
+                                    </span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="text-secondary small">Location:</span>
+                                    <span class="text-white small text-truncate" style="max-width: 250px;">
+                                        <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                        {{ session.location }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+        }
 
     </div>
 </div>

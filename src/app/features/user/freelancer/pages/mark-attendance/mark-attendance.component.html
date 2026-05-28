@@ -40,10 +40,10 @@
                     <label class="text-secondary text-xxs fw-bold text-uppercase opacity-50 mb-2 d-block" style="letter-spacing: 0.5px;">Active Contract</label>
                     <select class="form-select bg-dark text-white border-white border-opacity-10 py-2.5 px-3 rounded-3" 
                             style="background-color: rgba(255, 255, 255, 0.02) !important; font-size: 14px;"
-                            [value]="selectedContractId" 
-                            (change)="onContractChange($any($event.target).value)">
-                        @for (c of activeContracts; track c.id) {
-                            <option [value]="c.id" style="background-color: #11141b;">{{ c.contractTitle }} ({{ c.client }})</option>
+                            [(ngModel)]="selectedContractId" 
+                            (ngModelChange)="onContractChange(selectedContractId)">
+                        @for (c of activeContracts; track c.contractId || c.id || c._id) {
+                            <option [value]="c.contractId || c.id || c._id" style="background-color: #11141b;">{{ c.contractTitle }} ({{ c.client }})</option>
                         }
                         @if (activeContracts.length === 0 && !isLoading) {
                             <option value="" style="background-color: #11141b;">No Active Contracts Found</option>
@@ -74,14 +74,14 @@
                 <div class="row g-3 pt-1">
                     <div class="col-6">
                         <app-button variant="brand" size="md" customClass="w-100 py-2.5 shadow-glow rounded-3" 
-                                    [disabled]="isCheckedIn" (click)="punchIn()">
+                                    [disabled]="isCheckedIn" [loading]="isPunchingIn" (click)="punchIn()">
                             <i class="bi bi-box-arrow-in-right me-2"></i>
                             Punch In
                         </app-button>
                     </div>
                     <div class="col-6">
                         <app-button variant="danger" size="md" customClass="w-100 py-2.5 rounded-3 shadow-sm" 
-                                    [disabled]="!isCheckedIn" (click)="punchOut()">
+                                    [disabled]="!isCheckedIn" [loading]="isPunchingOut" (click)="punchOut()">
                             <i class="bi bi-box-arrow-right me-2"></i>
                             Punch Out
                         </app-button>
@@ -137,17 +137,11 @@
                         <div class="timeline-dot bg-primary"></div>
                         <div class="timeline-card glass-light rounded-3 p-3 border border-white border-opacity-5">
                             <div class="row align-items-center g-3">
-                                <div class="col-auto">
-                                    <div class="session-thumb rounded-2 border border-primary border-opacity-20 overflow-hidden shadow-sm"
-                                        style="width: 50px; height: 50px;">
-                                        <img [src]="session.image" class="w-100 h-100 object-fit-cover">
-                                    </div>
-                                </div>
                                 <div class="col">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
                                             <div class="text-white fw-bold" style="font-size: 14px;">{{ session.checkIn
-                                                }} - {{ session.checkOut }}</div>
+                                                 }} - {{ session.checkOut }}</div>
                                             <div
                                                 class="d-flex align-items-center gap-2 text-secondary text-xxs mt-1 opacity-75">
                                                 <i class="bi bi-geo-alt-fill text-primary"></i>

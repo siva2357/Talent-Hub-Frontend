@@ -159,3 +159,113 @@
       border-color: rgba(26, 115, 232, 0.5);
       box-shadow: 0 0 0 0.25rem rgba(26, 115, 232, 0.25);
   }
+
+  /* Interactive Day Blocks */
+  .day-block.interactive-day {
+      cursor: pointer;
+      position: relative;
+  }
+  .day-block.interactive-day:hover {
+      background: rgba(255, 255, 255, 0.15) !important;
+      border-color: #6366f1 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px -6px rgba(99, 102, 241, 0.4);
+  }
+
+  /* Custom Modal for Attendance Logs */
+  .custom-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 1050;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+  }
+
+  .custom-modal-content {
+      width: 95%;
+      max-width: 600px;
+      max-height: 80vh;
+      background: rgba(13, 17, 23, 0.95) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+      display: flex;
+      flex-direction: column;
+  }
+
+  .modal-scroll-area {
+      overflow-y: auto;
+      flex-grow: 1;
+      padding-right: 5px;
+      max-height: 55vh;
+  }
+
+  .modal-scroll-area::-webkit-scrollbar {
+      width: 6px;
+  }
+  .modal-scroll-area::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 3px;
+  }
+  .modal-scroll-area::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+  }
+  .modal-scroll-area::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Session Cards Inside Modal */
+  .session-card {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.02);
+      transition: background-color 0.2s ease;
+  }
+  .session-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+  }
+
+  .session-photo-wrapper {
+      position: relative;
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      background: #000;
+  }
+  .session-photo {
+      transition: transform 0.3s ease;
+  }
+  .session-photo-wrapper:hover .session-photo {
+      transform: scale(1.1);
+  }
+
+  /* Custom badge soft adjustments */
+  .badge-success-soft {
+      background: rgba(16, 185, 129, 0.15) !important;
+      color: #34d399 !important;
+      border: 1px solid rgba(16, 185, 129, 0.3) !important;
+      font-size: 11px !important;
+  }
+  .badge-warning-soft {
+      background: rgba(245, 158, 11, 0.15) !important;
+      color: #fbbf24 !important;
+      border: 1px solid rgba(245, 158, 11, 0.3) !important;
+      font-size: 11px !important;
+  }
+
+  /* Modal Entrance Animation */
+  .animate-in {
+      animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes modalFadeIn {
+      from {
+          opacity: 0;
+          transform: scale(0.95) translateY(10px);
+      }
+      to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+      }
+  }
