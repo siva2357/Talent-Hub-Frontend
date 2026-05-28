@@ -62,6 +62,7 @@ import { SavedTalentComponent } from './features/user/client/pages/saved-talent/
 import { PendingOffersComponent } from './features/user/client/pages/pending-offers/pending-offers.component';
 import { HiredTalentComponent } from './features/user/client/pages/hired-talent/hired-talent.component';
 import { FinancialSummaryComponent } from './features/user/client/pages/financial-summary/financial-summary.component';
+import { PaymentGatewayComponent } from './features/user/client/pages/payment-gateway/payment-gateway.component';
 import { TransactionHistoryComponent } from './features/user/client/pages/transaction-history/transaction-history.component';
 import { SpendingActivitiesComponent } from './features/user/client/pages/spending-activities/spending-activities.component';
 import { ContractFormComponent } from './features/user/client/pages/contract-form/contract-form.component';
@@ -131,6 +132,7 @@ export const routes: Routes = [
       { path: 'hired-talent', component: HiredTalentComponent },
 
       { path: 'financial-summary', component: FinancialSummaryComponent },
+      { path: 'payment-gateway', component: PaymentGatewayComponent },
       { path: 'transaction-history', component: TransactionHistoryComponent },
       { path: 'spending-activities', component: SpendingActivitiesComponent },
 

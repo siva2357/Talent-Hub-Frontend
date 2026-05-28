@@ -1,0 +1,145 @@
+.payment-page {
+    background: transparent;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.max-w-lg {
+    max-width: 500px;
+    width: 100%;
+}
+
+/* Glassmorphism Dark Theme Panel */
+.glass-dark {
+    background: rgba(10, 13, 18, 0.45) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1.5px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Payment Card Layout */
+.payment-card {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Mesh Gradients */
+.card-mesh-glow {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Glow Borders */
+.border-primary-glow {
+    border-color: rgba(42, 128, 255, 0.35) !important;
+}
+.border-warning-glow {
+    border-color: rgba(255, 193, 7, 0.35) !important;
+}
+.border-success-glow {
+    border-color: rgba(25, 135, 84, 0.35) !important;
+}
+.border-danger-glow {
+    border-color: rgba(220, 53, 69, 0.35) !important;
+}
+
+.glow-primary {
+    box-shadow: 0 10px 40px rgba(42, 128, 255, 0.08);
+}
+.glow-warning {
+    box-shadow: 0 10px 40px rgba(255, 193, 7, 0.08);
+}
+.glow-success {
+    box-shadow: 0 10px 40px rgba(25, 135, 84, 0.08);
+}
+.glow-danger {
+    box-shadow: 0 10px 40px rgba(220, 53, 69, 0.08);
+}
+
+/* Premium Inputs */
+.custom-input {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.25s ease;
+}
+
+.custom-input:focus {
+    border-color: #2A80FF !important;
+    box-shadow: 0 0 15px rgba(42, 128, 255, 0.25) !important;
+}
+
+/* Payment Method Cards */
+.payment-method-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1.5px solid rgba(255, 255, 255, 0.08) !important;
+    transition: all 0.25s ease;
+}
+
+.payment-method-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(42, 128, 255, 0.3) !important;
+}
+
+.payment-method-card.active {
+    background: rgba(42, 128, 255, 0.15) !important;
+    border-color: #2A80FF !important;
+    box-shadow: 0 0 15px rgba(42, 128, 255, 0.25) !important;
+}
+
+.payment-method-card.active i {
+    color: #2A80FF !important;
+}
+
+/* Shadow Utility */
+.shadow-primary {
+    box-shadow: 0 8px 24px rgba(42, 128, 255, 0.35) !important;
+}
+.shadow-success {
+    box-shadow: 0 8px 24px rgba(25, 135, 84, 0.35) !important;
+}
+.shadow-danger {
+    box-shadow: 0 8px 24px rgba(220, 53, 69, 0.35) !important;
+}
+
+.ls-1 {
+    letter-spacing: 0.5px;
+}
+
+.text-secondary-light {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.font-monospace {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+}
+
+/* Animations */
+.animate-pop {
+    animation: pop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes pop {
+    0% { transform: scale(0.6); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}

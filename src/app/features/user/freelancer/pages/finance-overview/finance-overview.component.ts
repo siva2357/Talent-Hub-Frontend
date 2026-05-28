@@ -1,7 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
+import { FinanceService } from '../../../../../core/services/finance.service';
+import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
 
 @Component({
   selector: 'app-finance-overview',
@@ -10,58 +12,96 @@ import { ButtonComponent } from '../../../../../shared/components/button/button.
   templateUrl: './finance-overview.component.html',
   styleUrl: './finance-overview.component.css'
 })
-export class FinanceOverviewComponent {
+export class FinanceOverviewComponent implements OnInit {
   private router = inject(Router);
+  private financeService = inject(FinanceService);
+  private diaryService = inject(ContractDiaryService);
 
   // Financial Stats
-  totalEarnings = 12450.00;
-  paymentsReceived = 9800.00;
-  amountWithdrawn = 8500.00;
-  balanceLeft = 1300.00;
+  totalEarnings = 0;
+  paymentsReceived = 0;
+  amountWithdrawn = 0;
+  balanceLeft = 0;
 
-  // Mock Contract Data with Phase breakdown
-  contracts = [
-    {
-      title: 'E-commerce Platform Development',
-      client: 'RetailGenius Inc.',
-      totalEarned: 4500.00,
-      lastPaymentDate: '2026-05-12',
-      status: 'Ongoing',
-      type: 'Fixed Price',
-      phases: [
-        { name: 'UI/UX Design Mockups', amount: 1200.00, status: 'Paid', date: '2026-04-15' },
-        { name: 'Frontend Implementation', amount: 1800.00, status: 'Paid', date: '2026-05-12' },
-        { name: 'Backend API Integration', amount: 1500.00, status: 'In Review', date: '-' }
-      ]
-    },
-    {
-      title: 'Mobile Banking App UI/UX',
-      client: 'Fintech Solutions',
-      totalEarned: 3200.00,
-      lastPaymentDate: '2026-05-10',
-      status: 'Completed',
-      type: 'Hourly',
-      phases: [
-        { name: 'Discovery & Wireframes', amount: 800.00, status: 'Paid', date: '2026-04-20' },
-        { name: 'High-Fidelity UI Design', amount: 1400.00, status: 'Paid', date: '2026-05-01' },
-        { name: 'Prototyping & Handoff', amount: 1000.00, status: 'Paid', date: '2026-05-10' }
-      ]
-    },
-    {
-      title: 'AI Chatbot Integration',
-      client: 'TechFlow AI',
-      totalEarned: 1950.00,
-      lastPaymentDate: '2026-05-14',
-      status: 'Ongoing',
-      type: 'Hourly',
-      phases: [
-        { name: 'NLU Model Training', amount: 950.00, status: 'Paid', date: '2026-05-14' },
-        { name: 'API Hook Setup', amount: 1000.00, status: 'Pending', date: '-' }
-      ]
-    }
-  ];
-
+  contracts: any[] = [];
   selectedContract: any = null;
+  isLoading = true;
+
+  ngOnInit() {
+    this.loadStats();
+    this.loadContracts();
+  }
+
+  loadStats() {
+    this.financeService.getStats().subscribe({
+      next: (res: any) => {
+        if (res.success && res.stats) {
+          this.totalEarnings = res.stats.totalEarnings || 0;
+          this.paymentsReceived = res.stats.paymentsReceived || 0;
+          this.amountWithdrawn = res.stats.amountWithdrawn || 0;
+          this.balanceLeft = res.stats.balanceLeft || 0;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load freelancer stats:', err);
+      }
+    });
+  }
+
+  loadContracts() {
+    this.isLoading = true;
+    this.diaryService.getFreelancerDiaries().subscribe({
+      next: (res: any) => {
+        if (res.success && res.diaries) {
+          this.contracts = res.diaries.map((diary: any) => {
+            const approvedPhases = (diary.phases || []).filter((p: any) => p.status === 'approved');
+            const totalEarned = approvedPhases.reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
+            
+            // Find latest payment date
+            let lastPaymentDate = '-';
+            if (approvedPhases.length > 0) {
+              const sorted = approvedPhases.sort((a: any, b: any) => new Date(b.approvedAt).getTime() - new Date(a.approvedAt).getTime());
+              lastPaymentDate = new Date(sorted[0].approvedAt).toLocaleDateString();
+            }
+
+            const mappedPhases = (diary.phases || []).map((p: any) => {
+              let mappedStatus = 'Pending';
+              if (p.status === 'approved') mappedStatus = 'Paid';
+              else if (p.status === 'submitted') mappedStatus = 'In Review';
+              else if (p.status === 'changes-requested') mappedStatus = 'Changes Requested';
+              else if (p.status === 'in-progress') mappedStatus = 'In Progress';
+
+              return {
+                name: p.name,
+                amount: p.amount || 0,
+                status: mappedStatus,
+                date: p.approvedAt ? new Date(p.approvedAt).toLocaleDateString() : '-'
+              };
+            });
+
+            let mappedStatus = 'Ongoing';
+            if (diary.overallStatus === 'completed') mappedStatus = 'Completed';
+            else if (diary.overallStatus === 'cancelled') mappedStatus = 'Cancelled';
+
+            return {
+              title: diary.contractId?.contractTitle || 'Contract',
+              client: diary.clientId?.registrationDetails?.fullName || 'Client',
+              totalEarned,
+              lastPaymentDate,
+              status: mappedStatus,
+              type: diary.contractId?.budgetType || 'Fixed Price',
+              phases: mappedPhases
+            };
+          });
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load freelancer contract details:', err);
+        this.isLoading = false;
+      }
+    });
+  }
 
   toggleContractDetails(contract: any) {
     this.selectedContract = this.selectedContract === contract ? null : contract;

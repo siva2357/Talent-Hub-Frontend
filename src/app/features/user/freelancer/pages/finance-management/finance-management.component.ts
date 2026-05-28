@@ -5,6 +5,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angul
 import { ChipComponent } from '../../../../../shared/components/chip/chip.component';
 import { InputComponent } from '../../../../../shared/components/input/input.component';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
+import { FinanceService } from '../../../../../core/services/finance.service';
+import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
 
 @Component({
   selector: 'app-finance-management',
@@ -15,11 +17,13 @@ import { ButtonComponent } from '../../../../../shared/components/button/button.
 })
 export class FinanceManagementComponent implements OnInit {
   private location = inject(Location);
+  private financeService = inject(FinanceService);
+  private diaryService = inject(ContractDiaryService);
 
   // Summary Stats
-  totalBalance = 12300.00;
-  totalReceived = 45800.00;
-  totalWithdrawn = 33500.00;
+  totalBalance = 0;
+  totalReceived = 0;
+  totalWithdrawn = 0;
 
   // Filter Form
   filterForm = new FormGroup({
@@ -42,61 +46,99 @@ export class FinanceManagementComponent implements OnInit {
   activeFilters: { key: string, label: string, value: string }[] = [];
 
   // Transaction Data
-  managementData = [
-    {
-      title: 'E-commerce Platform Development',
-      client: 'RetailGenius Inc.',
-      type: 'Fixed Price',
-      budget: 15000.00,
-      receivedAmount: 5000.00,
-      receivedDate: '2026-05-10',
-      withdrawnAmount: 0,
-      withdrawnDate: null,
-      balance: 5000.00,
-      status: 'Received'
-    },
-    {
-      title: 'Mobile Banking App UI/UX',
-      client: 'Fintech Solutions',
-      type: 'Fixed Price',
-      budget: 8000.00,
-      receivedAmount: 8000.00,
-      receivedDate: '2026-04-15',
-      withdrawnAmount: 8000.00,
-      withdrawnDate: '2026-04-20',
-      balance: 0,
-      status: 'Withdrawn'
-    },
-    {
-      title: 'Cloud Infrastructure Migration',
-      client: 'DataStream Systems',
-      type: 'Hourly',
-      budget: 5500.00,
-      receivedAmount: 3500.00,
-      receivedDate: '2026-05-01',
-      withdrawnAmount: 2000.00,
-      withdrawnDate: '2026-05-05',
-      balance: 1500.00,
-      status: 'Received'
-    },
-    {
-      title: 'AI Chatbot Integration',
-      client: 'TechFlow AI',
-      type: 'Hourly',
-      budget: 4000.00,
-      receivedAmount: 1950.00,
-      receivedDate: '2026-05-12',
-      withdrawnAmount: 0,
-      withdrawnDate: null,
-      balance: 1950.00,
-      status: 'Received'
-    }
-  ];
-
-  filteredData = [...this.managementData];
+  managementData: any[] = [];
+  filteredData: any[] = [];
+  isLoading = true;
 
   ngOnInit() {
-    this.applyFilters();
+    this.loadStats();
+    this.loadContracts();
+  }
+
+  loadStats() {
+    this.financeService.getStats().subscribe({
+      next: (res: any) => {
+        if (res.success && res.stats) {
+          this.totalBalance = res.stats.balanceLeft || 0;
+          this.totalReceived = res.stats.totalEarnings || 0;
+          this.totalWithdrawn = res.stats.amountWithdrawn || 0;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load freelancer stats:', err);
+      }
+    });
+  }
+
+  loadContracts() {
+    this.isLoading = true;
+    this.diaryService.getFreelancerDiaries().subscribe({
+      next: (resDiaries: any) => {
+        if (resDiaries.success && resDiaries.diaries) {
+          this.financeService.getTransactions().subscribe({
+            next: (resTxns: any) => {
+              const txns = resTxns.success ? resTxns.transactions : [];
+
+              this.managementData = resDiaries.diaries.map((diary: any) => {
+                const contractId = diary.contractId?._id;
+
+                // Filter transactions associated with this contract
+                const contractTxns = txns.filter((t: any) => t.contractId && (t.contractId._id === contractId || t.contractId === contractId));
+
+                const receivedAmount = contractTxns
+                  .filter((t: any) => t.type === 'Payment Released')
+                  .reduce((sum: number, t: any) => sum + t.amount, 0);
+
+                const withdrawnAmount = contractTxns
+                  .filter((t: any) => t.type === 'Withdrawal')
+                  .reduce((sum: number, t: any) => sum + t.amount, 0);
+
+                const balance = Math.max(0, receivedAmount - withdrawnAmount);
+
+                const releaseTxns = contractTxns.filter((t: any) => t.type === 'Payment Released');
+                let receivedDate = diary.createdAt;
+                if (releaseTxns.length > 0) {
+                  receivedDate = releaseTxns[0].createdAt;
+                }
+
+                const withdrawTxns = contractTxns.filter((t: any) => t.type === 'Withdrawal');
+                let withdrawnDate = null;
+                if (withdrawTxns.length > 0) {
+                  withdrawnDate = withdrawTxns[0].createdAt;
+                }
+
+                return {
+                  contractId,
+                  title: diary.contractId?.contractTitle || 'Contract',
+                  client: diary.clientId?.registrationDetails?.fullName || 'Client',
+                  type: diary.contractId?.budgetType || 'Fixed Price',
+                  budget: (diary.phases || []).reduce((sum: number, p: any) => sum + (p.amount || 0), 0),
+                  receivedAmount,
+                  receivedDate,
+                  withdrawnAmount,
+                  withdrawnDate,
+                  balance,
+                  status: balance > 0 ? 'Received' : 'Withdrawn'
+                };
+              });
+
+              this.applyFilters();
+              this.isLoading = false;
+            },
+            error: (err) => {
+              console.error('Failed to load transactions for mapping:', err);
+              this.isLoading = false;
+            }
+          });
+        } else {
+          this.isLoading = false;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load diaries:', err);
+        this.isLoading = false;
+      }
+    });
   }
 
   applyFilters() {
@@ -153,26 +195,47 @@ export class FinanceManagementComponent implements OnInit {
   }
 
   confirmWithdrawal() {
-    if (this.selectedWithdrawItem) {
-      // Simulate withdrawal logic
-      const index = this.managementData.findIndex(i => i.title === this.selectedWithdrawItem.title);
-      if (index > -1) {
-        const item = this.managementData[index];
-        item.withdrawnAmount += item.balance;
-        item.withdrawnDate = new Date().toISOString().split('T')[0];
-        item.balance = 0;
-        item.status = 'Withdrawn';
-        
-        this.totalWithdrawn += item.withdrawnAmount;
-        this.totalBalance -= item.withdrawnAmount;
-        
-        this.applyFilters();
-        this.closeModal();
-      }
+    if (this.selectedWithdrawItem && this.agreeToTerms) {
+      const amount = this.selectedWithdrawItem.balance;
+      const contractId = this.selectedWithdrawItem.contractId;
+
+      this.financeService.withdraw(amount, contractId).subscribe({
+        next: (res: any) => {
+          if (res.success) {
+            alert(`Withdrawal request for $${amount.toFixed(2)} processed successfully!`);
+            this.loadStats();
+            this.loadContracts();
+            this.closeModal();
+          }
+        },
+        error: (err) => {
+          alert('Withdrawal request failed: ' + (err.error?.message || 'Error occurred'));
+        }
+      });
     }
   }
 
   downloadInvoice(item: any) {
     console.log('Downloading invoice for:', item.title);
+    const invoiceContent = `==================================================
+TALENT-HUB WITHDRAWAL RECEIPT
+==================================================
+Contract Reference : ${item.contractId || 'N/A'}
+Contract Title     : ${item.title}
+Client             : ${item.client}
+Withdrawal Amount  : $${item.balance.toFixed(2)}
+Payment Status     : COMPLETED
+Invoice Reference  : WDN-${Math.floor(100000 + Math.random() * 900000)}
+Issued Date        : ${new Date().toLocaleDateString()}
+==================================================
+Thank you for using Talent-Hub Escrow Payments!
+==================================================`;
+
+    const blob = new Blob([invoiceContent], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Withdrawal_Receipt_${item.title.replace(/\s+/g, '_')}.txt`;
+    link.click();
+    URL.revokeObjectURL(link.href);
   }
 }

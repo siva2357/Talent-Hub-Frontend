@@ -5,7 +5,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { InputComponent } from '../../../../../shared/components/input/input.component';
 import { ChipComponent } from '../../../../../shared/components/chip/chip.component';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
-
+import { FinanceService } from '../../../../../core/services/finance.service';
+import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
 
 @Component({
   selector: 'app-finance-report',
@@ -17,6 +18,8 @@ import { ButtonComponent } from '../../../../../shared/components/button/button.
 export class FinanceReportComponent implements OnInit {
   private location = inject(Location);
   private router = inject(Router);
+  private financeService = inject(FinanceService);
+  private diaryService = inject(ContractDiaryService);
 
   // Filter Form
   filterForm = new FormGroup({
@@ -38,81 +41,78 @@ export class FinanceReportComponent implements OnInit {
 
   contractTypeOptions = [
     { label: 'Fixed Price', value: 'Fixed Price' },
-    { label: 'Hourly', value: 'Hourly' },
-    { label: 'Monthly Retainer', value: 'Monthly Retainer' }
+    { label: 'Hourly', value: 'Hourly' }
   ];
 
   // Active Filter Chips
   activeFilters: { key: string, label: string, value: string }[] = [];
 
   // Summary Stats for the report
-  amountReceived = 18400.00;
-  amountPending = 6100.00;
+  amountReceived = 0;
+  amountPending = 0;
 
   // Detailed Report Data
-  reportData = [
-    {
-      title: 'E-commerce Platform Development',
-      client: 'RetailGenius Inc.',
-      budget: 15000.00,
-      earned: 12000.00,
-      status: 'In Progress',
-      type: 'Fixed Price',
-      startDate: '2026-01-10',
-      endDate: '2026-06-30',
-      completion: 80
-    },
-    {
-      title: 'Mobile Banking App UI/UX',
-      client: 'Fintech Solutions',
-      budget: 8000.00,
-      earned: 8000.00,
-      status: 'Completed',
-      type: 'Fixed Price',
-      startDate: '2025-11-15',
-      endDate: '2026-05-10',
-      completion: 100
-    },
-    {
-      title: 'Cloud Infrastructure Migration',
-      client: 'DataStream Systems',
-      budget: 5500.00,
-      earned: 3500.00,
-      status: 'In Progress',
-      type: 'Hourly',
-      startDate: '2026-03-01',
-      endDate: '2026-08-15',
-      completion: 60
-    },
-    {
-      title: 'AI Chatbot Integration',
-      client: 'TechFlow AI',
-      budget: 4000.00,
-      earned: 1950.00,
-      status: 'In Progress',
-      type: 'Hourly',
-      startDate: '2026-04-20',
-      endDate: '2026-10-30',
-      completion: 45
-    },
-    {
-      title: 'SEO & Content Strategy',
-      client: 'GreenLife Wellness',
-      budget: 3000.00,
-      earned: 3000.00,
-      status: 'Completed',
-      type: 'Monthly Retainer',
-      startDate: '2025-12-01',
-      endDate: '2026-05-31',
-      completion: 100
-    }
-  ];
-
-  // Filtered Data Display
+  reportData: any[] = [];
   filteredData: any[] = [];
+  isLoading = true;
 
   ngOnInit() {
-    this.applyFilters();
+    this.loadStats();
+    this.loadReport();
+  }
+
+  loadStats() {
+    this.financeService.getStats().subscribe({
+      next: (res: any) => {
+        if (res.success && res.stats) {
+          this.amountReceived = res.stats.totalEarnings || 0;
+          this.amountPending = res.stats.balanceLeft || 0;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load stats:', err);
+      }
+    });
+  }
+
+  loadReport() {
+    this.isLoading = true;
+    this.diaryService.getFreelancerDiaries().subscribe({
+      next: (res: any) => {
+        if (res.success && res.diaries) {
+          this.reportData = res.diaries.map((diary: any) => {
+            const approvedPhases = (diary.phases || []).filter((p: any) => p.status === 'approved');
+            const earned = approvedPhases.reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
+            const budget = (diary.phases || []).reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
+            const totalPhases = (diary.phases || []).length;
+            const completion = totalPhases > 0 ? Math.round((approvedPhases.length / totalPhases) * 100) : 0;
+
+            let mappedStatus = 'In Progress';
+            if (diary.overallStatus === 'completed') mappedStatus = 'Completed';
+            else if (diary.overallStatus === 'cancelled') mappedStatus = 'Cancelled';
+
+            return {
+              title: diary.contractId?.contractTitle || 'Contract',
+              client: diary.clientId?.registrationDetails?.fullName || 'Client',
+              budget,
+              earned,
+              status: mappedStatus,
+              type: diary.contractId?.budgetType || 'Fixed Price',
+              startDate: diary.contractId?.contractStartDate || diary.createdAt,
+              endDate: diary.contractId?.contractEndDate || diary.updatedAt,
+              completion
+            };
+          });
+
+          this.applyFilters();
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load freelancer contract diaries:', err);
+        this.isLoading = false;
+      }
+    });
   }
 
   applyFilters() {
@@ -162,10 +162,35 @@ export class FinanceReportComponent implements OnInit {
 
   downloadReport(format: string) {
     console.log(`Downloading report as ${format}...`);
-    // Logic for generating/downloading report would go here
+    
+    let reportContent = `TALENT HUB FINANCIAL STATEMENT\n`;
+    reportContent += `=============================\n`;
+    reportContent += `Amount Received : $${this.amountReceived.toFixed(2)}\n`;
+    reportContent += `Amount Pending  : $${this.amountPending.toFixed(2)}\n`;
+    reportContent += `=============================\n\n`;
+    reportContent += `Contract details breakdown:\n`;
+    
+    this.filteredData.forEach(item => {
+      reportContent += `-----------------------------\n`;
+      reportContent += `Title      : ${item.title}\n`;
+      reportContent += `Client     : ${item.client}\n`;
+      reportContent += `Budget     : $${item.budget.toFixed(2)}\n`;
+      reportContent += `Earned     : $${item.earned.toFixed(2)}\n`;
+      reportContent += `Status     : ${item.status}\n`;
+      reportContent += `Type       : ${item.type}\n`;
+      reportContent += `Completion : ${item.completion}%\n`;
+    });
+
+    const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Financial_Statement_Report.txt`;
+    link.click();
+    URL.revokeObjectURL(link.href);
   }
 
   contactSupport() {
     this.router.navigate(['/user/contact-support']);
   }
 }
+

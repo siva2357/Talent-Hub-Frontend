@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { FinanceService } from '../../../../../core/services/finance.service';
+import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
 
 export interface Invoice {
   id: string;
@@ -10,7 +13,8 @@ export interface Invoice {
   endDate: string;
   amount: number;
   status: 'Paid' | 'Pending' | 'Processed';
-  type: 'Hourly' | 'Fixed Price';
+  type: string;
+  remainingAmount: number;
 }
 
 @Component({
@@ -21,79 +25,81 @@ export interface Invoice {
   styleUrl: './financial-summary.component.css'
 })
 export class FinancialSummaryComponent implements OnInit {
+  private financeService = inject(FinanceService);
+  private diaryService = inject(ContractDiaryService);
+  private router = inject(Router);
+
   // Summary Stats
-  totalBalance = 15750.00;
-  totalSpent = 42300.00;
-  upcomingPayments = 3250.00;
+  totalBalance = 0;
+  totalSpent = 0;
+  upcomingPayments = 0;
 
   // Search & Filter state
   searchQuery = '';
   statusFilter = 'All';
 
-  // Interactive deposit modal state
-  showDepositModal = false;
-  depositAmount = 1000;
-  depositMethod = 'card';
-  isDepositing = false;
+  // Deposit input state
+  fundAmount = 1000;
 
   // Rich Transaction Invoices Data
-  invoices: Invoice[] = [
-    {
-      id: 'CON-802',
-      title: 'Frontend Re-architecture & UI Modernization',
-      freelancer: 'Sarah Connor',
-      startDate: '2026-05-01',
-      endDate: '2026-07-15',
-      amount: 4500.00,
-      status: 'Paid',
-      type: 'Hourly'
-    },
-    {
-      id: 'CON-405',
-      title: 'Backend API Optimization',
-      freelancer: 'Marcus Wright',
-      startDate: '2026-04-01',
-      endDate: '2026-06-10',
-      amount: 1000.00,
-      status: 'Processed',
-      type: 'Fixed Price'
-    },
-    {
-      id: 'CON-912',
-      title: 'Mobile Banking App UI/UX Development',
-      freelancer: 'John Connor',
-      startDate: '2026-05-10',
-      endDate: '2026-06-30',
-      amount: 3250.00,
-      status: 'Pending',
-      type: 'Hourly'
-    },
-    {
-      id: 'CON-104',
-      title: 'AI Chatbot Integration & Agent Workflows',
-      freelancer: 'Sarah Connor',
-      startDate: '2026-05-12',
-      endDate: '2026-08-12',
-      amount: 1950.00,
-      status: 'Processed',
-      type: 'Fixed Price'
-    },
-    {
-      id: 'CON-307',
-      title: 'Cloud Infrastructure Migration & DevOps Setup',
-      freelancer: 'T-800 Cyberdyne',
-      startDate: '2026-04-15',
-      endDate: '2026-07-15',
-      amount: 5500.00,
-      status: 'Paid',
-      type: 'Fixed Price'
-    }
-  ];
-
+  invoices: Invoice[] = [];
   filteredInvoices: Invoice[] = [];
 
   ngOnInit() {
-    this.applyFilters();
+    this.loadStats();
+    this.loadInvoices();
+  }
+
+  loadStats() {
+    this.financeService.getStats().subscribe({
+      next: (res: any) => {
+        if (res.success && res.stats) {
+          this.totalBalance = res.stats.totalBalance || 0;
+          this.totalSpent = res.stats.totalSpent || 0;
+          this.upcomingPayments = res.stats.upcomingPayments || 0;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load finance stats:', err);
+      }
+    });
+  }
+
+  loadInvoices() {
+    this.diaryService.getClientDiaries().subscribe({
+      next: (res: any) => {
+        if (res.success && res.diaries) {
+          this.invoices = res.diaries.map((diary: any) => {
+            let mappedStatus: 'Paid' | 'Processed' | 'Pending' = 'Pending';
+            if (diary.overallStatus === 'completed') {
+              mappedStatus = 'Paid';
+            } else if (diary.overallStatus === 'in-progress') {
+              mappedStatus = 'Processed';
+            }
+
+            const budget = diary.contractId?.estimatedBudget || 0;
+            const spent = diary.contractId?.spent || 0;
+            const remainingAmount = budget > spent ? (budget - spent) : budget;
+
+            return {
+              id: diary.contractId?._id || diary._id,
+              title: diary.contractId?.contractTitle || 'Contract',
+              freelancer: diary.freelancerId?.registrationDetails?.fullName || 'Freelancer',
+              startDate: diary.contractId?.contractStartDate || diary.createdAt,
+              endDate: diary.contractId?.contractEndDate || diary.updatedAt,
+              amount: spent,
+              status: mappedStatus,
+              type: diary.contractId?.budgetType || 'Fixed Price',
+              remainingAmount: remainingAmount || 1000
+            };
+          });
+          this.applyFilters();
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load invoices:', err);
+      }
+    });
   }
 
   applyFilters() {
@@ -117,15 +123,14 @@ export class FinancialSummaryComponent implements OnInit {
   downloadInvoice(inv: Invoice) {
     console.log('Downloading invoice details for Contract ID:', inv.id);
     
-    // Simulate immediate premium browser download toast
     const dummyBlob = new Blob([
       `TALENT HUB TRANSACTION INVOICE\n` +
       `=============================\n` +
-      `Contract ID: ${inv.id}\n` +
-      `Contract: ${inv.title}\n` +
-      `Freelancer: ${inv.freelancer}\n` +
-      `Project Period: ${inv.startDate} to ${inv.endDate}\n` +
-      `Amount Paid: $${inv.amount.toFixed(2)}\n` +
+      `Invoice ID: ${inv.id}\n` +
+      `Description: ${inv.title}\n` +
+      `Destination: ${inv.freelancer}\n` +
+      `Transaction Period: ${new Date(inv.startDate).toLocaleDateString()} to ${new Date(inv.endDate).toLocaleDateString()}\n` +
+      `Amount: $${inv.amount.toFixed(2)}\n` +
       `Status: ${inv.status}\n` +
       `Date Generated: ${new Date().toLocaleDateString()}\n` +
       `=============================\n` +
@@ -139,22 +144,18 @@ export class FinancialSummaryComponent implements OnInit {
     URL.revokeObjectURL(link.href);
   }
 
-  // Interactive Add Funds Dialog
+  // Navigation to Payment Gateway Page
   openDeposit() {
-    this.showDepositModal = true;
-    this.depositAmount = 2500;
+    if (this.fundAmount > 0) {
+      this.router.navigate(['/user/payment-gateway'], { queryParams: { amount: this.fundAmount } });
+    }
   }
 
-  closeDeposit() {
-    this.showDepositModal = false;
-  }
-
-  processDeposit() {
-    this.isDepositing = true;
-    setTimeout(() => {
-      this.totalBalance += this.depositAmount;
-      this.isDepositing = false;
-      this.closeDeposit();
-    }, 1200);
+  // Redirect to Payment Gateway to fund a specific contract
+  fundContract(inv: Invoice) {
+    if (inv.remainingAmount > 0) {
+      this.router.navigate(['/user/payment-gateway'], { queryParams: { amount: inv.remainingAmount } });
+    }
   }
 }
+

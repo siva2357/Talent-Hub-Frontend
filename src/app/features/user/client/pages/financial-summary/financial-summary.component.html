@@ -205,12 +205,22 @@
                             </td>
                             <!-- Dynamic Download Action -->
                             <td class="py-4 text-center">
-                                <button
-                                    class="btn btn-outline-secondary btn-sm rounded-3 py-2 px-3 text-white border-white border-opacity-10 d-inline-flex align-items-center gap-2 download-action-btn"
-                                    (click)="downloadInvoice(inv)">
-                                    <i class="bi bi-file-earmark-arrow-down text-primary-light fs-6"></i>
-                                    <span style="font-size: 12px;">Invoice</span>
-                                </button>
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    @if (inv.status !== 'Paid') {
+                                    <button
+                                        class="btn btn-primary btn-sm rounded-3 py-2 px-3 fw-bold transition-all shadow-primary d-inline-flex align-items-center gap-1.5"
+                                        (click)="fundContract(inv)">
+                                        <i class="bi bi-credit-card-2-front"></i>
+                                        <span style="font-size: 12px;">Pay / Fund</span>
+                                    </button>
+                                    }
+                                    <button
+                                        class="btn btn-outline-secondary btn-sm rounded-3 py-2 px-3 text-white border-white border-opacity-10 d-inline-flex align-items-center gap-2 download-action-btn"
+                                        (click)="downloadInvoice(inv)">
+                                        <i class="bi bi-file-earmark-arrow-down text-primary-light fs-6"></i>
+                                        <span style="font-size: 12px;">Invoice</span>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         } @empty {
@@ -232,101 +242,3 @@
 
     </div>
 </div>
-
-<!-- Add Funds Modal -->
-@if (showDepositModal) {
-<div class="modal fade show d-block" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content glass-dark border border-primary border-opacity-40 shadow-lg">
-            <!-- Modal Header -->
-            <div class="modal-header border-bottom border-white border-opacity-10 p-4">
-                <h5 class="modal-title text-white fw-bold d-flex align-items-center gap-3">
-                    <div class="p-2 rounded-3 bg-primary bg-opacity-20 border border-primary border-opacity-50 d-flex align-items-center justify-content-center shadow-lg"
-                        style="width: 42px; height: 42px;">
-                        <i class="bi bi-wallet2 text-primary fs-4"></i>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <span style="font-size: 1.1rem;">Add Available Funds</span>
-                        <span class="text-secondary small fw-normal">Deposit funds instantly to your available
-                            balance</span>
-                    </div>
-                </h5>
-                <button type="button" class="btn-close btn-close-white shadow-none opacity-50 hover-opacity-100"
-                    (click)="closeDeposit()" aria-label="Close"></button>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body p-4">
-                <div class="mb-4">
-                    <label class="text-primary text-uppercase fw-bold ls-1 mb-2 d-block"
-                        style="font-size: 10px;">Deposit Amount</label>
-                    <div class="position-relative">
-                        <span class="position-absolute top-50 start-3 translate-middle-y text-secondary fs-5">$</span>
-                        <input type="number"
-                            class="form-control bg-black bg-opacity-40 border border-white border-opacity-10 text-white rounded-3 py-3 ps-5 fs-4 fw-bold shadow-none custom-input"
-                            [(ngModel)]="depositAmount">
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <label class="text-primary text-uppercase fw-bold ls-1 mb-2 d-block" style="font-size: 10px;">Select
-                        Payment Source</label>
-                    <div class="row g-2">
-                        <div class="col-4">
-                            <div class="payment-method-card p-3 rounded-3 text-center border cursor-pointer transition-all"
-                                [class.active]="depositMethod === 'card'" (click)="depositMethod = 'card'">
-                                <i class="bi bi-credit-card fs-4 text-white-50"></i>
-                                <div class="text-secondary mt-1 small">Credit Card</div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="payment-method-card p-3 rounded-3 text-center border cursor-pointer transition-all"
-                                [class.active]="depositMethod === 'paypal'" (click)="depositMethod = 'paypal'">
-                                <i class="bi bi-paypal fs-4 text-white-50"></i>
-                                <div class="text-secondary mt-1 small">PayPal</div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="payment-method-card p-3 rounded-3 text-center border cursor-pointer transition-all"
-                                [class.active]="depositMethod === 'stripe'" (click)="depositMethod = 'stripe'">
-                                <i class="bi bi-stripe fs-4 text-white-50"></i>
-                                <div class="text-secondary mt-1 small">Stripe</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-3 rounded-3 bg-white bg-opacity-5 border border-white border-opacity-5">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-secondary">Platform Processing Fee:</span>
-                        <span class="text-success fw-bold">Free (0.00)</span>
-                    </div>
-                    <div class="d-flex justify-content-between border-top border-white border-opacity-10 pt-2">
-                        <span class="text-white fw-bold">Total Charged:</span>
-                        <span class="text-white fw-extrabold">${{ depositAmount | number:'1.2-2' }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="modal-footer border-top border-white border-opacity-10 p-4">
-                <button type="button" class="btn btn-outline-secondary rounded-3 px-4 py-2.5 text-white"
-                    (click)="closeDeposit()">Cancel</button>
-                <button type="button"
-                    class="btn btn-primary rounded-3 px-4 py-2.5 d-flex align-items-center gap-2 shadow-primary"
-                    [disabled]="depositAmount <= 0 || isDepositing" (click)="processDeposit()">
-                    @if (isDepositing) {
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    <span>Processing Deposit...</span>
-                    } @else {
-                    <i class="bi bi-shield-check"></i>
-                    <span>Confirm Deposit</span>
-                    }
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Backdrop -->
-<div class="modal-backdrop fade show" (click)="closeDeposit()"></div>
-}

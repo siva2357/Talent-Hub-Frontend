@@ -1,0 +1,208 @@
+<div class="payment-page p-3 p-md-4 p-xl-5">
+    <div class="container-fluid max-w-lg mx-auto">
+
+        <!-- Initial Screen -->
+        @if (paymentState === 'initial') {
+        <div class="payment-card glass-dark p-4 p-md-5 rounded-4 border border-primary-glow glow-primary">
+            <div class="card-mesh-glow bg-primary"></div>
+            
+            <div class="text-center mb-4 position-relative z-3">
+                <div class="gateway-logo mx-auto mb-3 d-flex align-items-center justify-content-center bg-primary bg-opacity-10 border border-primary border-opacity-30 rounded-circle" style="width: 64px; height: 64px;">
+                    <i class="bi bi-shield-lock-fill text-primary fs-3"></i>
+                </div>
+                <h3 class="text-white fw-bold">Secure Payment Gateway</h3>
+                <p class="text-secondary small">Authorized Razorpay Payment Gateway Portal</p>
+            </div>
+
+            <!-- Error message -->
+            @if (errorMessage) {
+            <div class="alert alert-danger border-danger border-opacity-20 bg-danger bg-opacity-10 text-danger small rounded-3 p-3 mb-4 d-flex align-items-center gap-2">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span>{{ errorMessage }}</span>
+            </div>
+            }
+
+            <div class="position-relative z-3">
+                <!-- Amount Input -->
+                <div class="mb-4">
+                    <label class="text-primary text-uppercase fw-bold ls-1 mb-2 d-block" style="font-size: 10px; letter-spacing: 1px;">Deposit Amount (USD)</label>
+                    <div class="position-relative">
+                        <span class="position-absolute top-50 start-3 translate-middle-y text-secondary fs-5">$</span>
+                        <input type="number"
+                            class="form-control bg-black bg-opacity-40 border border-white border-opacity-10 text-white rounded-3 py-3 ps-5 fs-4 fw-bold shadow-none custom-input"
+                            [(ngModel)]="depositAmount">
+                    </div>
+                </div>
+
+                <!-- Payment Method Selection -->
+                <div class="mb-4">
+                    <label class="text-primary text-uppercase fw-bold ls-1 mb-2 d-block" style="font-size: 10px; letter-spacing: 1px;">Select Payment Instrument</label>
+                    <div class="row g-2">
+                        <div class="col-4">
+                            <div class="payment-method-card p-3 rounded-3 text-center border cursor-pointer transition-all"
+                                [class.active]="depositMethod === 'card'" (click)="depositMethod = 'card'">
+                                <i class="bi bi-credit-card fs-4 text-white-50"></i>
+                                <div class="text-secondary mt-1 small">Credit Card</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="payment-method-card p-3 rounded-3 text-center border cursor-pointer transition-all"
+                                [class.active]="depositMethod === 'paypal'" (click)="depositMethod = 'paypal'">
+                                <i class="bi bi-paypal fs-4 text-white-50"></i>
+                                <div class="text-secondary mt-1 small">PayPal</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="payment-method-card p-3 rounded-3 text-center border cursor-pointer transition-all"
+                                [class.active]="depositMethod === 'stripe'" (click)="depositMethod = 'stripe'">
+                                <i class="bi bi-stripe fs-4 text-white-50"></i>
+                                <div class="text-secondary mt-1 small">Stripe</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Pricing Breakdown -->
+                <div class="p-3 rounded-3 bg-white bg-opacity-5 border border-white border-opacity-5 mb-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-secondary small">Processing & Gateway Fee:</span>
+                        <span class="text-success fw-bold small">Free ($0.00)</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-top border-white border-opacity-10 pt-2">
+                        <span class="text-white fw-bold">Total Amount to Charge:</span>
+                        <span class="text-white fw-extrabold">${{ depositAmount | number:'1.2-2' }}</span>
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <button type="button" class="btn btn-primary rounded-3 w-100 py-3 d-flex align-items-center justify-content-center gap-2 shadow-primary fw-bold transition-all mb-2"
+                    [disabled]="depositAmount <= 0" (click)="initiatePayment()">
+                    <i class="bi bi-credit-card-2-front-fill"></i>
+                    <span>Confirm & Pay via Razorpay</span>
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary border-white border-opacity-10 text-white rounded-3 w-100 py-2.5 fw-bold transition-all"
+                    (click)="goBack()">
+                    Cancel Transaction
+                </button>
+            </div>
+        </div>
+        }
+
+        <!-- Processing Screen -->
+        @if (paymentState === 'processing') {
+        <div class="payment-card glass-dark p-5 rounded-4 border border-warning-glow glow-warning text-center">
+            <div class="card-mesh-glow bg-warning"></div>
+            <div class="position-relative z-3">
+                <div class="spinner-wrapper mb-4">
+                    <div class="spinner-border text-warning" style="width: 4rem; height: 4rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <h3 class="text-white fw-bold mb-2">Processing Secure Payment</h3>
+                <p class="text-secondary-light">Connecting to Razorpay secure servers. Please wait...</p>
+                <div class="p-3 rounded-3 bg-white bg-opacity-5 border border-white border-opacity-5 mt-4 d-inline-block text-start" style="max-width: 320px;">
+                    <div class="small text-secondary mb-1">Order ID Generated:</div>
+                    <div class="font-monospace text-warning small mb-2">{{ orderId || 'Generating...' }}</div>
+                    @if (isSandbox) {
+                    <div class="alert alert-info border-info border-opacity-20 bg-info bg-opacity-5 text-info rounded-3 p-2 mb-0 small">
+                        <i class="bi bi-info-circle me-1"></i> Sandbox simulator auto-verifying payment...
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+        }
+
+        <!-- Success Screen -->
+        @if (paymentState === 'success') {
+        <div class="payment-card glass-dark p-4 p-md-5 rounded-4 border border-success-glow glow-success">
+            <div class="card-mesh-glow bg-success"></div>
+            
+            <div class="text-center mb-4 position-relative z-3">
+                <div class="gateway-logo mx-auto mb-3 d-flex align-items-center justify-content-center bg-success bg-opacity-10 border border-success border-opacity-30 rounded-circle animate-pop" style="width: 64px; height: 64px;">
+                    <i class="bi bi-check-circle-fill text-success fs-3"></i>
+                </div>
+                <h3 class="text-white fw-bold">Payment Successful</h3>
+                <p class="text-success small">Funds Credited Successfully</p>
+            </div>
+
+            <div class="position-relative z-3">
+                <!-- Transaction receipt content -->
+                <div class="p-4 rounded-4 bg-black bg-opacity-40 border border-white border-opacity-5 mb-4">
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Invoice Number</span>
+                        <span class="text-white fw-bold font-monospace small">{{ invoiceNumber }}</span>
+                    </div>
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Transaction ID</span>
+                        <span class="text-white fw-bold font-monospace small">{{ paymentId }}</span>
+                    </div>
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Order ID</span>
+                        <span class="text-white fw-bold font-monospace small">{{ orderId }}</span>
+                    </div>
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Payment Gateway</span>
+                        <span class="text-white fw-bold small">Razorpay</span>
+                    </div>
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Payment Date</span>
+                        <span class="text-white fw-bold small">{{ paymentDate }}</span>
+                    </div>
+                    <div class="receipt-item d-flex justify-content-between pt-1">
+                        <span class="text-white fw-bold">Amount Credited</span>
+                        <span class="text-success fw-extrabold fs-5">${{ depositAmount | number:'1.2-2' }}</span>
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <button type="button" class="btn btn-success rounded-3 w-100 py-3 d-flex align-items-center justify-content-center gap-2 shadow-success fw-bold transition-all mb-2 text-white"
+                    (click)="downloadInvoice()">
+                    <i class="bi bi-file-earmark-arrow-down-fill"></i>
+                    <span>Download Invoice</span>
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary border-white border-opacity-10 text-white rounded-3 w-100 py-2.5 fw-bold transition-all"
+                    (click)="goBack()">
+                    Go to Financial Summary
+                </button>
+            </div>
+        </div>
+        }
+
+        <!-- Failed Screen -->
+        @if (paymentState === 'failed') {
+        <div class="payment-card glass-dark p-4 p-md-5 rounded-4 border border-danger-glow glow-danger">
+            <div class="card-mesh-glow bg-danger"></div>
+            
+            <div class="text-center mb-4 position-relative z-3">
+                <div class="gateway-logo mx-auto mb-3 d-flex align-items-center justify-content-center bg-danger bg-opacity-10 border border-danger border-opacity-30 rounded-circle animate-shake" style="width: 64px; height: 64px;">
+                    <i class="bi bi-x-circle-fill text-danger fs-3"></i>
+                </div>
+                <h3 class="text-white fw-bold">Payment Failed</h3>
+                <p class="text-danger small">Transaction Cancelled or Rejected</p>
+            </div>
+
+            <div class="position-relative z-3">
+                <div class="alert alert-danger border-danger border-opacity-20 bg-danger bg-opacity-10 text-danger small rounded-3 p-3 mb-4 text-center">
+                    {{ errorMessage || 'We were unable to verify your payment. Please try again.' }}
+                </div>
+
+                <!-- Action buttons -->
+                <button type="button" class="btn btn-danger rounded-3 w-100 py-3 d-flex align-items-center justify-content-center gap-2 shadow-danger fw-bold transition-all mb-2 text-white"
+                    (click)="paymentState = 'initial'; errorMessage = ''">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    <span>Try Again</span>
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary border-white border-opacity-10 text-white rounded-3 w-100 py-2.5 fw-bold transition-all"
+                    (click)="goBack()">
+                    Back to Financial Summary
+                </button>
+            </div>
+        </div>
+        }
+
+    </div>
+</div>
