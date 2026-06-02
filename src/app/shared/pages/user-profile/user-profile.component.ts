@@ -23,6 +23,7 @@ export class UserProfileComponent implements OnInit {
   user: any = null;
   profile: any = null;
 contracts: any[] = [];
+  diaries: any[] = [];
   isLoading = true;
 
   isFreelancer = computed(() =>
@@ -44,6 +45,7 @@ contracts: any[] = [];
         this.user = res.user;
         this.profile = res.profile;
         this.contracts = res.contracts || [];
+        this.diaries = res.diaries || [];
         this.isLoading = false;
       },
       error: (err) => {
@@ -70,5 +72,26 @@ contracts: any[] = [];
     }
 
     return stars;
+  }
+
+  getSocialIcon(platform: string): string {
+    const p = platform?.toLowerCase() || '';
+    if (p.includes('linkedin')) return 'bi-linkedin';
+    if (p.includes('twitter') || p.includes('x')) return 'bi-twitter-x';
+    if (p.includes('github')) return 'bi-github';
+    if (p.includes('dribbble')) return 'bi-dribbble';
+    if (p.includes('behance')) return 'bi-behance';
+    if (p.includes('portfolio') || p.includes('website') || p.includes('link')) return 'bi-link-45deg';
+    return 'bi-globe';
+  }
+
+  getSocialColorClass(platform: string): string {
+    const p = platform?.toLowerCase() || '';
+    if (p.includes('linkedin')) return 'text-info bg-info-glow';
+    if (p.includes('twitter') || p.includes('x')) return 'text-white bg-dark-glow';
+    if (p.includes('github')) return 'text-white bg-dark-glow';
+    if (p.includes('dribbble')) return 'text-danger bg-danger-glow';
+    if (p.includes('behance')) return 'text-primary bg-primary-glow';
+    return 'text-white bg-dark-glow';
   }
 }

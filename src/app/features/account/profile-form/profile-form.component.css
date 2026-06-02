@@ -156,7 +156,8 @@
 .content-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  gap: 20px;
 }
 
 /* PROGRESS CIRCLE */
@@ -359,6 +360,12 @@
 .form-section {
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.form-section:focus-within {
+  z-index: 50 !important;
 }
 
 .section-number {
@@ -1040,4 +1047,24 @@
   .connected-card {
     padding: 10px;
   }
+}
+
+/* Descending z-indices for profile form sections to ensure downward-opening dropdowns render on top */
+#basic {
+  z-index: 10 !important;
+}
+#professional {
+  z-index: 9 !important;
+}
+#location {
+  z-index: 8 !important;
+}
+#availability {
+  z-index: 7 !important;
+}
+#verification {
+  z-index: 6 !important;
+}
+#social {
+  z-index: 5 !important;
 }

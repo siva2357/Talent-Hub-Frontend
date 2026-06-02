@@ -33,8 +33,8 @@ export class ProfileService {
   /**
    * Retrieves the current user's profile and user status.
    */
-  getMyProfile(): Observable<{ success: boolean; user: any; profile: FreelancerProfile | ClientProfile | null;contracts: Contract[]; }> {
-    return this.http.get<{ success: boolean; user: any; profile: FreelancerProfile | ClientProfile | null;contracts: Contract[]; }>(`${this.baseUrl}/profile/me`);
+  getMyProfile(): Observable<{ success: boolean; user: any; profile: FreelancerProfile | ClientProfile | null; contracts: Contract[]; diaries?: any[]; }> {
+    return this.http.get<{ success: boolean; user: any; profile: FreelancerProfile | ClientProfile | null; contracts: Contract[]; diaries?: any[]; }>(`${this.baseUrl}/profile/me`);
   }
 
   /**

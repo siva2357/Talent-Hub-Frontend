@@ -1,5 +1,14 @@
 import { Contract } from "./contract.model";
-
+import { ClientType } from "../enums/client-type.enum";
+import { Gender } from "../enums/gender.enum";
+import { Availability } from "../enums/availability.enum";
+import { Industry } from "../enums/industry.enum";
+import { Country } from "../enums/country.enum";
+import { Timezone } from "../enums/timezone.enum";
+import { SocialPlatform } from "../enums/social-platform.enum";
+import { Category } from "../enums/category.enum";
+import { Language } from "../enums/language.enum";
+import { Proficiency } from "../enums/proficiency.enum";
 
 export interface Registration {
   id: string;
@@ -32,23 +41,23 @@ export interface ProfileBasicInformation {
   fullName: string;
   email: string;
   username: string;
-  gender: string;
+  gender: Gender | string;
   professionalHeadline?: string;
   shortBio: string;
 }
 
 export interface ProfileProfessionalDetails {
-  categories?: string[];
+  categories?: (Category | string)[];
   skills?: string[];
-  clientType?: 'Individual' | 'Startup' | 'Agency' | 'Business';
+  clientType?: ClientType;
   website?: string;
-  industry?: string;
+  industry?: Industry | string;
 }
 
 export interface ProfileLocation {
-  country: string;
+  country: Country | string;
   city: string;
-  timezone: string;
+  timezone: Timezone | string;
 }
 
 export interface ProfileVerification {
@@ -57,13 +66,13 @@ export interface ProfileVerification {
 }
 
 export interface ProfileSocialLink {
-  platform: string;
+  platform: SocialPlatform | string;
   profileUrl: string;
 }
 
 export interface ProfileLanguage {
-  language: string;
-  proficiency: string;
+  language: Language | string;
+  proficiency: Proficiency | string;
 }
 
 export interface FreelancerProfile {
@@ -71,11 +80,11 @@ export interface FreelancerProfile {
   userId: string;
   basicInformation: ProfileBasicInformation;
   professionalDetails: {
-    categories: string[];
+    categories: (Category | string)[];
     skills: string[];
   };
   location: ProfileLocation;
-  availability: string[];
+  availability: (Availability | string)[];
   verification: ProfileVerification;
   socialLinks: ProfileSocialLink[];
   languages: ProfileLanguage[];
@@ -88,15 +97,15 @@ export interface ClientProfile {
   userId: string;
   basicInformation: ProfileBasicInformation;
   professionalDetails: {
-    clientType: 'Individual' | 'Startup' | 'Agency' | 'Business';
+    clientType: ClientType;
     website: string;
-    industry: string;
+    industry: Industry | string;
   };
   location: ProfileLocation;
   verification: ProfileVerification;
   socialLinks: ProfileSocialLink[];
   languages: ProfileLanguage[];
-  contracts:Contract[];
+  contracts: Contract[];
   createdAt?: string;
   updatedAt?: string;
 }

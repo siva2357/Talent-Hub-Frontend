@@ -1,0 +1,113 @@
+.upload-wrapper {
+  width: 100%;
+}
+
+.upload-wrapper.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* AVATAR VARIANT */
+.profile-pic-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pic-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.pic-placeholder:hover {
+  background: rgba(42, 128, 255, 0.05);
+  border-color: var(--brand-500, #3b82f6);
+  transform: scale(1.02);
+}
+
+.pic-placeholder.uploading {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.upload-spinner-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+}
+
+.camera-btn-abs {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 32px;
+  height: 32px;
+  background: var(--brand-500, #3b82f6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 15px;
+  border: 3px solid #111827; /* Dark background color match */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  z-index: 2;
+  transition: all 0.3s;
+}
+
+.camera-btn-abs:hover {
+  transform: scale(1.1);
+  background: var(--brand-400, #60a5fa);
+}
+
+/* DRAG & DROP VARIANT */
+.dragdrop-zone {
+  width: 100%;
+  min-height: 150px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dragdrop-zone:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--brand-500, #3b82f6);
+}
+
+.dragdrop-zone.dragover {
+  background: rgba(42, 128, 255, 0.08);
+  border-color: var(--brand-500, #3b82f6);
+  box-shadow: 0 0 20px rgba(42, 128, 255, 0.2);
+  transform: scale(1.01);
+}
+
+.dragdrop-zone.uploading {
+  border-style: solid;
+  cursor: not-allowed;
+}
+
+.upload-icon-box {
+  width: 42px;
+  height: 42px;
+  background: rgba(42, 128, 255, 0.1);
+  color: var(--brand-400, #60a5fa);
+  font-size: 20px;
+  transition: all 0.3s;
+}
+
+.dragdrop-zone:hover .upload-icon-box {
+  transform: translateY(-2px);
+  background: rgba(42, 128, 255, 0.15);
+  color: var(--brand-300, #93c5fd);
+}

@@ -15,7 +15,7 @@
     </div>
 
     <!-- Main Profile Container -->
-    <div class="container  mx-auto profile-content-overlap ">
+    <div class="container mx-auto profile-content-overlap">
 
         <!-- Profile Header Panel -->
         <div class="glass-dark p-4 p-md-5 rounded-4 border-glass mb-5 shadow-lg position-relative overflow-hidden">
@@ -48,24 +48,30 @@
                     <div class="d-flex flex-column">
 
                         <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 flex-wrap mb-1">
-                            <h2 class="text-white fw-extrabold mb-0 profile-name">{{ profile?.basicInformation?.fullName  }}</h2>
+                            <h2 class="text-white fw-extrabold mb-0 profile-name">{{ profile?.basicInformation?.fullName || user?.fullName }}</h2>
+                            @if (user?.emailVerified || user?.mobileVerification || profile?.verification?.emailAddress || profile?.verification?.phoneNumber) {
                             <span class="badge-verified d-inline-flex align-items-center justify-content-center" title="Verified Specialist">
                                 <i class="bi bi-patch-check-fill"></i>
                             </span>
+                            }
                         </div>
 
                         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-start gap-3 mt-2 text-secondary-light font-sm">
                             <span class="d-flex align-items-center gap-2 info-chip">
                                 <i class="bi bi-geo-alt-fill text-primary-light"></i>
-                                <span>{{ profile?.location?.country }}, {{ profile?.location?.city }}</span>
+                                @if (profile?.location?.city || profile?.location?.country) {
+                                <span>{{ profile?.location?.city }}{{ profile?.location?.city && profile?.location?.country ? ', ' : '' }}{{ profile?.location?.country }}</span>
+                                } @else {
+                                <span>No Location Data</span>
+                                }
                             </span>
                             <span class="d-flex align-items-center gap-2 info-chip">
                                 <i class="bi bi-envelope-fill text-primary-light"></i>
-                                <span>{{ profile?.basicInformation?.email || 'No Data' }}</span>
+                                <span>{{ profile?.basicInformation?.email || user?.email || 'No Email' }}</span>
                             </span>
                             <span class="d-flex align-items-center gap-2 info-chip">
                                 <i class="bi bi-calendar3-event text-primary-light"></i>
-                                <span>{{ profile?.basicInformation?.joinedDate || 'No Data' }}</span>
+                                <span>Joined {{ ((profile?.createdAt || user?.createdAt) | date:'mediumDate') || 'No Date' }}</span>
                             </span>
                         </div>
 
@@ -83,27 +89,27 @@
         <div class="animate-fade-in row g-4">
 
             <!-- Left Sidebar: Professional Summary & Skills -->
-            <div class="col-12 col-lg-8">
+            <div class="col-12 col-lg-7">
                 <!-- About Summary -->
                 <div
                     class="glass-dark p-4 p-md-5 rounded-4 border-glass mb-4 shadow-sm position-relative overflow-hidden">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
-                        <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{ profile?.professionalDetails?.title
-                            || 'No Data' }}</h4>
+                        <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{ profile?.basicInformation?.professionalHeadline || 'Professional' }}</h4>
                         <div
                             class="hourly-rate-capsule px-3.5 py-2 rounded-3 border-glass d-flex align-items-center gap-2 bg-success-glow">
                             <i class="bi bi-cash text-success-light fs-5"></i>
                             <span class="text-success-light fw-extrabold font-monospace text-lg">
-                                ${{ profile?.professionalDetails?.hourlyRate | number:'1.2-2' }}/hr
+                                ${{ (profile?.hourlyRate || profile?.professionalDetails?.hourlyRate || 50) | number:'1.2-2' }}/hr
                             </span>
                         </div>
                     </div>
                     <p class="text-secondary lh-lg mb-0 font-sm profile-description">
-                        {{ profile?.professionalDetails?.summary || 'No data available' }}
+                        {{ profile?.basicInformation?.shortBio || 'No bio available' }}
                     </p>
                 </div>
 
                 <!-- Work Portfolio Grid -->
+                @if (profile?.professionalDetails?.portfolio?.length) {
                 <div class="glass-dark p-4 p-md-5 rounded-4 border-glass shadow-sm mb-4">
                     <div class="d-flex align-items-center gap-3 mb-4">
                         <div class="section-indicator rounded-pill"></div>
@@ -141,6 +147,7 @@
                         }
                     </div>
                 </div>
+                }
 
                 <!-- My Contract Diary -->
                 <div class="glass-dark p-4 p-md-5 rounded-4 border-glass shadow-sm">
@@ -150,12 +157,12 @@
                             <h4 class="text-white fw-bold mb-0 text-lg font-headline">My Contract Diary</h4>
                         </div>
                         <span class="badge badge-completed-count py-1.5 px-3 rounded-pill text-xs font-semibold">
-                            {{ profile?.professionalDetails?.contracts.length }} Completed Contracts
+                            {{ diaries.length || 0 }} Completed Contracts
                         </span>
                     </div>
 
                     <div class="d-flex flex-column gap-3.5">
-                        @for (contract of profile?.professionalDetails?.contracts; track contract.id) {
+                        @for (contract of diaries; track contract._id) {
                         <div
                             class="contract-ledger-row p-4 rounded-4 border-glass position-relative overflow-hidden bg-card-dark text-start d-flex flex-column gap-3 mb-4">
                             <div class="contract-status-bar position-absolute h-100 bg-success"></div>
@@ -164,62 +171,64 @@
                                 class="d-flex align-items-start align-items-md-center justify-content-between flex-wrap gap-3 position-relative z-2">
                                 <div class="d-flex align-items-center gap-3">
                                     <div
-                                        class="avatar-circle rounded-circle bg-primary-glow text-primary-light d-flex align-items-center justify-content-center">
-                                        {{ contract.avatar }}
+                                        class="avatar-circle rounded-circle bg-primary-glow text-primary-light d-flex align-items-center justify-content-center text-uppercase">
+                                        {{ (contract.clientName || 'C').charAt(0) }}
                                     </div>
                                     <div class="d-flex flex-column">
                                         <h5
                                             class="text-white fw-bold font-sm mb-1 d-flex align-items-center gap-2 flex-wrap">
-                                            <span>{{ contract.title }}</span>
+                                            <span>{{ contract.contractTitle }}</span>
                                             <span
                                                 class="badge badge-contract-id font-monospace font-xs px-2 py-0.5 rounded">
-                                                {{ contract.id }}
+                                                {{ contract._id }}
                                             </span>
                                         </h5>
                                         <span class="text-secondary-light font-xs">
-                                            Client: <strong class="text-white-50">{{ contract.client }}</strong>
+                                            Client: <strong class="text-white-50">{{ contract.clientName || 'Client' }}</strong>
                                         </span>
                                     </div>
                                 </div>
 
                                 <div class="d-flex align-items-center gap-4 ms-md-auto text-md-end">
                                     <div class="d-flex flex-column text-start text-md-end">
-                                        <span class="text-secondary-light font-xs text-uppercase ls-1">Client
-                                            Feedback</span>
-                                        <div class="d-flex align-items-center gap-1 justify-content-md-end mt-0.5 text-warning"
-                                            style="font-size: 13.5px;">
-                                            @for (star of getStarsArray(contract.rating); track $index) {
-                                            <i class="bi" [class]="star"></i>
-                                            }
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-column">
-                                        <span class="text-secondary-light font-xs text-uppercase ls-1">Earnings</span>
-                                        <span class="text-success-light fw-extrabold font-monospace font-sm mt-0.5">
-                                            ${{ contract.budget | number:'1.2-2' }}
+                                        <span class="text-secondary-light font-xs text-uppercase ls-1">Status</span>
+                                        <span class="text-capitalize font-sm mt-0.5 fw-semibold" [ngClass]="{
+                                            'text-warning': contract.status === 'pending',
+                                            'text-success-light': contract.status === 'in progress' || contract.status === 'active',
+                                            'text-info': contract.status === 'completed',
+                                            'text-danger': contract.status === 'closed'
+                                        }">
+                                            {{ contract.status }}
                                         </span>
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <span class="text-secondary-light font-xs text-uppercase ls-1">Completed</span>
+                                        <span class="text-secondary-light font-xs text-uppercase ls-1">Budget</span>
+                                        <span class="text-success-light fw-extrabold font-monospace font-sm mt-0.5">
+                                            ₹{{ contract.estimatedBudget | number }}
+                                        </span>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <span class="text-secondary-light font-xs text-uppercase ls-1">End Date</span>
                                         <span class="text-white fw-semibold font-monospace font-xs mt-1">
-                                            {{ contract.completedDate }}
+                                            {{ contract.contractEndDate | date:'mediumDate' }}
                                         </span>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Deliverables Completed items -->
+                            <!-- Deliverables Completed items / Description -->
                             <div class="p-3 rounded-3 border-glass text-start position-relative z-2 mt-1"
                                 style="background: rgba(0,0,0,0.15);">
                                 <div
                                     class="d-flex align-items-center gap-2 mb-1.5 text-secondary-light font-xs fw-semibold">
-                                    <i class="bi bi-check2-circle text-success-light"></i>
-                                    <span>Completed Deliverables</span>
+                                    <i class="bi bi-file-earmark-text text-primary-light"></i>
+                                    <span>Contract Description</span>
                                 </div>
-                                <p class="text-secondary font-sm mb-0 lh-relaxed">{{ contract.deliverables }}</p>
+                                <p class="text-secondary font-sm mb-0 lh-relaxed" [innerHTML]="contract.contractDescription"></p>
                             </div>
 
                             <!-- Attendance & Time Logs -->
+                            @if (contract.attendance) {
                             <div class="row g-2 mt-1 position-relative z-2">
                                 <div class="col-12 col-sm-6 col-md-3">
                                     <div
@@ -271,7 +280,9 @@
                                     </div>
                                 </div>
                             </div>
+                            }
                             <!-- Client Feedback Review Card -->
+                            @if (contract.review) {
                             <div class="p-4 ps-4.5 rounded-3 border-glass text-start position-relative z-2 mt-4 bg-warning-glow"
                                 style="border-left: 4px solid var(--bs-warning) !important; padding-left: 1.5rem !important;">
                                 <div class="d-flex align-items-center gap-2 mb-2 text-warning font-xs fw-semibold">
@@ -280,14 +291,53 @@
                                 </div>
                                 <p class="text-white font-sm mb-0 lh-relaxed italic-quote">"{{ contract.review }}"</p>
                             </div>
+                            }
+                        </div>
+                        } @empty {
+                        <div class="rounded-4 border-glass p-5 text-center text-secondary-light font-sm bg-black-20">
+                            <i class="bi bi-journal-text fs-3 mb-3 d-block text-secondary-light"></i>
+                            No Contracts Recorded Yet
+                        </div>
+                        }
+                    </div>
+                <!-- Detailed Social Media Connections Card -->
+                <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden mt-4">
+                    <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
+                    </div>
+                    <div class="position-relative z-2">
+                        <h4 class="text-white fw-bold mb-4 text-md font-headline">Online Presence</h4>
+                        
+                        @if (profile?.socialLinks?.length) {
+                        <div class="d-flex flex-column gap-3">
+                            @for (social of profile?.socialLinks; track social) {
+                            <a [href]="social?.profileUrl || '#'" target="_blank"
+                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="social-logo-box rounded-circle d-flex align-items-center justify-content-center" [class]="getSocialColorClass(social?.platform)">
+                                        <i class="bi fs-5" [class]="getSocialIcon(social?.platform)"></i>
+                                    </div>
+                                    <div class="d-flex flex-column text-start">
+                                        <span class="text-white fw-bold font-sm text-capitalize">{{ social?.platform || 'Social Link' }}</span>
+                                        <span class="text-secondary-light font-xs font-monospace">{{ social?.profileUrl || 'No URL' }}</span>
+                                    </div>
+                                </div>
+                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
+                            </a>
+                            }
+                        </div>
+                        } @else {
+                        <div class="rounded-4 border-glass p-4 text-center text-secondary-light font-sm bg-black-20">
+                            No Social Links Added
                         </div>
                         }
                     </div>
                 </div>
+
+                </div>
             </div>
 
             <!-- Right Sidebar: Stats & Core Skills -->
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-lg-5">
                 <!-- Professional Statistics Cards -->
                 <div class="glass-dark p-4 rounded-4 border-glass mb-4 shadow-sm position-relative overflow-hidden">
                     <div class="sidebar-glow sidebar-glow-top position-absolute"></div>
@@ -338,85 +388,7 @@
                     </div>
                 </div>
 
-                <!-- Detailed Social Media Connections Card -->
-                <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden">
-                    <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10">
-                    </div>
-                    <div class="position-relative z-2">
-                        <h4 class="text-white fw-bold mb-4 text-md font-headline">Online Presence</h4>
-                        <div class="d-flex flex-column gap-3">
 
-                            <!-- GitHub Detailed Card -->
-                            <a [href]="user.github" target="_blank"
-                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div
-                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-white bg-dark-glow">
-                                        <i class="bi bi-github fs-5"></i>
-                                    </div>
-                                    <div class="d-flex flex-column text-start">
-                                        <span class="text-white fw-bold font-sm">GitHub</span>
-                                        <span
-                                            class="text-secondary-light font-xs font-monospace">github.com/sarahconnor</span>
-                                    </div>
-                                </div>
-                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
-                            </a>
-
-                            <!-- LinkedIn Detailed Card -->
-                            <a [href]="user.linkedin" target="_blank"
-                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div
-                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-info bg-info-glow">
-                                        <i class="bi bi-linkedin fs-5"></i>
-                                    </div>
-                                    <div class="d-flex flex-column text-start">
-                                        <span class="text-white fw-bold font-sm">LinkedIn</span>
-                                        <span
-                                            class="text-secondary-light font-xs font-monospace">linkedin.com/in/sarahconnor</span>
-                                    </div>
-                                </div>
-                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
-                            </a>
-
-                            <!-- Twitter/X Detailed Card -->
-                            <a [href]="user.twitter" target="_blank"
-                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div
-                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-white bg-dark-glow">
-                                        <i class="bi bi-twitter-x fs-5"></i>
-                                    </div>
-                                    <div class="d-flex flex-column text-start">
-                                        <span class="text-white fw-bold font-sm">Twitter / X</span>
-                                        <span
-                                            class="text-secondary-light font-xs font-monospace">twitter.com/sarahconnor</span>
-                                    </div>
-                                </div>
-                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
-                            </a>
-
-                            <!-- Dribbble Detailed Card -->
-                            <a [href]="user.dribbble" target="_blank"
-                                class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div
-                                        class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-danger bg-danger-glow">
-                                        <i class="bi bi-dribbble fs-5"></i>
-                                    </div>
-                                    <div class="d-flex flex-column text-start">
-                                        <span class="text-white fw-bold font-sm">Dribbble</span>
-                                        <span
-                                            class="text-secondary-light font-xs font-monospace">dribbble.com/sarahconnor</span>
-                                    </div>
-                                </div>
-                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
-                            </a>
-
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Languages Card -->
                 <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden mt-4">
@@ -428,31 +400,18 @@
                             <span>Languages Spoken</span>
                         </h4>
                         <div class="d-flex flex-column gap-3">
-
-                            <!-- English -->
-                            <div
-                                class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
-                                <span class="text-white fw-bold font-sm">English</span>
-                                <span
-                                    class="badge bg-success-glow text-success-light px-2.5 py-1 rounded font-xs fw-semibold">Professional</span>
-                            </div>
-
-                            <!-- German -->
-                            <div
-                                class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
-                                <span class="text-white fw-bold font-sm">German</span>
-                                <span
-                                    class="badge bg-primary-glow text-primary-light px-2.5 py-1 rounded font-xs fw-semibold">Intermediate</span>
-                            </div>
-
-                            <!-- Spanish -->
-                            <div
-                                class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
-                                <span class="text-white fw-bold font-sm">Spanish</span>
-                                <span
-                                    class="badge bg-secondary-glow text-secondary-light px-2.5 py-1 rounded font-xs fw-semibold">Beginner</span>
-                            </div>
-
+                            @if (profile?.languages?.length) {
+                                @for (language of profile?.languages; track language) {
+                                <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                                    <span class="text-white fw-bold font-sm">{{ language?.language || 'No Data' }}</span>
+                                    <span [class]="language?.proficiency?.toLowerCase() === 'professional' || language?.proficiency?.toLowerCase() === 'native' ? 'badge bg-success-glow text-success-light px-2.5 py-1 rounded font-xs fw-semibold text-capitalize' : 'badge bg-primary-glow text-primary-light px-2.5 py-1 rounded font-xs fw-semibold text-capitalize'">{{ language?.proficiency || 'No Data' }}</span>
+                                </div>
+                                }
+                            } @else {
+                                <div class="text-secondary-light font-sm">
+                                    No Languages Added
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -465,7 +424,7 @@
         @if (isClient()) {
         <div class="animate-fade-in row g-4">
 
-            <div class="col-12 col-lg-8">
+            <div class="col-12 col-lg-7">
                 <div class="glass-dark p-4 p-md-5 rounded-4 border-glass mb-4 shadow-sm position-relative overflow-hidden">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
                        
@@ -473,18 +432,25 @@
                             <div class="corporate-badge rounded-3 d-flex align-items-center justify-content-center text-primary-light">
                                 <i class="bi bi-building fs-4"></i>
                             </div>
-                            <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{  profile?.professionalDetails?.company }}</h4>
+                            <div>
+                                <h4 class="text-white fw-bold mb-0 text-xl font-headline">{{ profile?.professionalDetails?.clientType || 'Client' }}</h4>
+                                @if (profile?.professionalDetails?.industry) {
+                                <span class="text-secondary-light font-xs text-uppercase ls-1">Industry: {{ profile?.professionalDetails?.industry }}</span>
+                                }
+                            </div>
                         </div>
 
-                        <a [href]="profile?.professionalDetails?.website" target="_blank" class="btn-corporate-web px-3.5 py-2 rounded-3 border-glass d-flex align-items-center gap-2 text-decoration-none">
+                        @if (profile?.professionalDetails?.website) {
+                        <a [href]="profile?.professionalDetails?.website.startsWith('http') ? profile?.professionalDetails?.website : 'https://' + profile?.professionalDetails?.website" target="_blank" class="btn-corporate-web px-3.5 py-2 rounded-3 border-glass d-flex align-items-center gap-2 text-decoration-none">
                             <i class="bi bi-globe2 text-primary-light"></i>
                             <span class="text-primary-light fw-bold font-sm">Visit Website</span>
                             <i class="bi bi-box-arrow-up-right text-primary-light font-xs ms-0.5"></i>
                         </a>
+                        }
                     </div>
 
                     <p class="text-secondary lh-lg mb-0 font-sm profile-description">
-                        {{ profile?.professionalDetails?.summary || 'No data available' }}
+                        {{ profile?.basicInformation?.shortBio || 'No bio available' }}
                     </p>
                 </div>
 
@@ -682,15 +648,128 @@
 
         </div>
 
+        } @empty {
+        <div class="rounded-4 border-glass p-5 text-center text-secondary-light font-sm bg-black-20">
+            <i class="bi bi-briefcase fs-3 mb-3 d-block text-secondary-light"></i>
+            No Contracts Posted Yet
+        </div>
         }
 
     </div>
 
 </div>
+
+                <!-- Detailed Social Media Connections Card -->
+                <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden mt-4">
+                    <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10"> </div>
+
+                    <div class="position-relative z-2">
+                        <h4 class="text-white fw-bold mb-4 text-md font-headline"> Online Presence </h4>
+
+                        @if (profile?.socialLinks?.length) {
+
+                        <div class="d-flex flex-column gap-3">
+
+                            @for (social of profile?.socialLinks; track social) {
+
+                            <a [href]="social?.profileUrl || '#'" target="_blank" class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
+
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <div class="social-logo-box rounded-circle d-flex align-items-center justify-content-center" [class]="getSocialColorClass(social?.platform)">
+                                        <i class="bi fs-5" [class]="getSocialIcon(social?.platform)"></i>
+                                    </div>
+
+                                    <div class="d-flex flex-column text-start">
+
+                                        <span class="text-white fw-bold font-sm text-capitalize">
+                                            {{ social?.platform || 'Social Link' }}
+                                        </span>
+
+                                        <span class="text-secondary-light font-xs font-monospace">
+                                            {{ social?.profileUrl || 'No URL' }}
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
+
+                            </a>
+
+                            }
+
+                        </div>
+
+                        }
+
+                        @else {
+
+                        <div class="rounded-4 border-glass p-4 text-center text-secondary-light font-sm bg-black-20">
+
+                            No Social Links Added
+
+                        </div>
+
+                        }
+
+                    </div>
+
+                </div>
+
             </div>
 
             <!-- Right Sidebar: Client Stats & Verification badge -->
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-lg-5">
+                <!-- Account Verification Status Card -->
+                <div class="glass-dark p-4 rounded-4 border-glass mb-4 shadow-sm position-relative overflow-hidden">
+                    <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10"></div>
+                    <div class="position-relative z-2">
+                        <h4 class="text-white fw-bold mb-4 text-md font-headline d-flex align-items-center gap-2">
+                            <i class="bi bi-shield-check text-primary-light"></i>
+                            <span>Verification Status</span>
+                        </h4>
+                        
+                        <div class="d-flex flex-column gap-3">
+                            <!-- Payment Verification -->
+                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-credit-card-2-front text-success-light"></i>
+                                    <span class="text-white fw-bold font-sm">Payment Verification</span>
+                                </div>
+                                <span class="badge bg-success-glow text-success-light px-2.5 py-1 rounded font-xs fw-semibold">Verified</span>
+                            </div>
+
+                            <!-- Email Verification -->
+                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-envelope" [class.text-success-light]="profile?.verification?.emailAddress || user?.emailVerified" [class.text-warning]="!(profile?.verification?.emailAddress || user?.emailVerified)"></i>
+                                    <span class="text-white fw-bold font-sm">Email Address</span>
+                                </div>
+                                @if (profile?.verification?.emailAddress || user?.emailVerified) {
+                                    <span class="badge bg-success-glow text-success-light px-2.5 py-1 rounded font-xs fw-semibold">Verified</span>
+                                } @else {
+                                    <span class="badge bg-warning-glow text-warning px-2.5 py-1 rounded font-xs fw-semibold">Unverified</span>
+                                }
+                            </div>
+
+                            <!-- Phone Verification -->
+                            <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-telephone" [class.text-success-light]="profile?.verification?.phoneNumber || user?.mobileVerification" [class.text-warning]="!(profile?.verification?.phoneNumber || user?.mobileVerification)"></i>
+                                    <span class="text-white fw-bold font-sm">Phone Number</span>
+                                </div>
+                                @if (profile?.verification?.phoneNumber || user?.mobileVerification) {
+                                    <span class="badge bg-success-glow text-success-light px-2.5 py-1 rounded font-xs fw-semibold">Verified</span>
+                                } @else {
+                                    <span class="badge bg-warning-glow text-warning px-2.5 py-1 rounded font-xs fw-semibold">Unverified</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Client Activity Cards -->
                 <div class="glass-dark p-4 rounded-4 border-glass mb-4 shadow-sm position-relative overflow-hidden">
                     <div class="sidebar-glow sidebar-glow-top position-absolute"></div>
@@ -740,75 +819,17 @@
                 <div class="glass-dark p-5 rounded-4 border-glass shadow-sm  position-relative overflow-hidden mb-4">
                     <div class="sidebar-glow sidebar-glow-bottom position-absolute"></div>
                     <div class="position-relative z-2">
-                        <div class="verification-badge-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4 bg-primary-glow border-primary">
-                            <i class="bi bi-shield-lock-fill fs-3 text-primary-light"></i>
+                        <div class="verification-badge-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4 bg-success-glow border-success">
+                            <i class="bi bi-shield-fill-check fs-3 text-success-light"></i>
                         </div>
-                        <h5 class="text-white fw-bold mb-2 text-md font-headline text-center">Verified Corporate Account</h5>
-                        <p class="text-secondary font-sm mb-0 text-justify px-1">
-                            Escrow payment instruments fully verified and linked to institutional banking lines. Fully
-                            authorized for commercial engagement.
+                        <h5 class="text-white fw-bold mb-2 text-md font-headline text-center">Verified Client Account</h5>
+                        <p class="text-secondary font-sm mb-0 text-center px-1">
+                            Escrow payment instruments fully verified and billing integration completed successfully. Fully authorized for commercial engagement.
                         </p>
                     </div>
                 </div>
 
-                <!-- Detailed Social Media Connections Card -->
-                <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden">
-                    <div class="sidebar-glow bg-primary-glow position-absolute w-100 h-100 top-0 start-0 opacity-10"> </div>
 
-                    <div class="position-relative z-2">
-                        <h4 class="text-white fw-bold mb-4 text-md font-headline"> Online Presence </h4>
-
-                        @if (profile?.socialLinks?.length) {
-
-                        <div class="d-flex flex-column gap-3">
-
-                            @for (social of profile?.socialLinks; track social) {
-
-                            <a [href]="social?.url || '#'" target="_blank" class="social-detail-card p-3 rounded-3 border-glass d-flex align-items-center justify-content-between text-decoration-none">
-
-                                <div class="d-flex align-items-center gap-3">
-
-                                    <div  class="social-logo-box rounded-circle d-flex align-items-center justify-content-center text-white bg-dark-glow">
-                                        <i class="bi bi-globe"></i>
-                                    </div>
-
-                                    <div class="d-flex flex-column text-start">
-
-                                        <span class="text-white fw-bold font-sm">
-                                            {{ social?.platform || 'Social Link' }}
-                                        </span>
-
-                                        <span class="text-secondary-light font-xs font-monospace">
-                                            {{ social?.url || 'No URL' }}
-                                        </span>
-
-                                    </div>
-
-                                </div>
-
-                                <i class="bi bi-arrow-up-right text-secondary-light font-xs ms-2"></i>
-
-                            </a>
-
-                            }
-
-                        </div>
-
-                        }
-
-                        @else {
-
-                        <div class="rounded-4 border-glass p-4 text-center text-secondary-light font-sm bg-black-20">
-
-                            No Social Links Added
-
-                        </div>
-
-                        }
-
-                    </div>
-
-                </div>
                 <!-- Languages Card -->
                 <div class="glass-dark p-4 rounded-4 border-glass shadow-sm position-relative overflow-hidden mt-4">
                     
@@ -825,9 +846,9 @@
 
                             <div class="d-flex align-items-center justify-content-between p-2.5 rounded-3 border-glass bg-black-20">
 
-                                <span class="text-white fw-bold font-sm"> {{ language?.name || 'No Data' }} </span>
+                                <span class="text-white fw-bold font-sm"> {{ language?.language || 'No Data' }} </span>
 
-                                <span class="badge bg-primary-glow text-primary-light px-2.5 py-1 rounded font-xs fw-semibold"> {{ language?.level || 'No Data' }}</span>
+                                <span [class]="language?.proficiency?.toLowerCase() === 'professional' || language?.proficiency?.toLowerCase() === 'native' ? 'badge bg-success-glow text-success-light px-2.5 py-1 rounded font-xs fw-semibold text-capitalize' : 'badge bg-primary-glow text-primary-light px-2.5 py-1 rounded font-xs fw-semibold text-capitalize'"> {{ language?.proficiency || 'No Data' }}</span>
 
                             </div>
 

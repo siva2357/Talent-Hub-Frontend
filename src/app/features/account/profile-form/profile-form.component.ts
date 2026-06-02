@@ -9,20 +9,23 @@ import { AuthService } from '../../../core/services/auth.service';
 import { ProfileService } from '../../../core/services/profile.service';
 import { UploadService } from '../../../core/services/upload.service';
 import { BucketKey, UploadSection } from '../../../core/enums/upload.enum';
-import {
-  BasicInformationDto,
-  LocationDto,
-  VerificationDto,
-  SocialLinkDto,
-  LanguageDto,
-  FreelancerProfileDto,
-  ClientProfileDto
-} from '../../../core/DTOs/profile.dto';
+import { FileUploadComponent } from '../../../shared/components/file-upload/file-upload.component';
+import { Gender } from '../../../core/enums/gender.enum';
+import { Availability } from '../../../core/enums/availability.enum';
+import { ClientType } from '../../../core/enums/client-type.enum';
+import { Industry } from '../../../core/enums/industry.enum';
+import { Country } from '../../../core/enums/country.enum';
+import { Timezone } from '../../../core/enums/timezone.enum';
+import { SocialPlatform } from '../../../core/enums/social-platform.enum';
+import { Category } from '../../../core/enums/category.enum';
+import { Language } from '../../../core/enums/language.enum';
+import { Proficiency } from '../../../core/enums/proficiency.enum';
+import { BasicInformationDto, LocationDto, VerificationDto, SocialLinkDto, LanguageDto, FreelancerProfileDto, ClientProfileDto } from '../../../core/DTOs/profile.dto';
 
 @Component({
   selector: 'app-profile-form',
   standalone: true,
-  imports: [CommonModule, RouterLink, InputComponent, ButtonComponent, ChipComponent, TitleCasePipe, FormsModule],
+  imports: [CommonModule, RouterLink, InputComponent, ButtonComponent, ChipComponent, TitleCasePipe, FormsModule, FileUploadComponent],
   templateUrl: './profile-form.component.html',
   styleUrl: './profile-form.component.css',
 })
@@ -32,6 +35,11 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
   private uploadService = inject(UploadService);
   private router = inject(Router);
 
+  BucketKey = BucketKey;
+  UploadSection = UploadSection;
+  ClientType = ClientType;
+  clientTypes = Object.values(ClientType);
+
   // Photo Upload State
   uploadedProfilePhotoUrl: string | null = null;
   isUploadingPhoto = false;
@@ -39,7 +47,37 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   userRole: 'freelancer' | 'client' = 'freelancer';
   activeSection: string = 'basic';
-  progress: number = 0;
+  get progress(): number {
+    const fields: boolean[] = [];
+
+    // Common fields
+    fields.push(!!(this.profilePhotoPreview || this.uploadedProfilePhotoUrl));
+    fields.push(!!this.username);
+    fields.push(!!this.gender);
+    fields.push(!!this.shortBio);
+    fields.push(!!this.country);
+    fields.push(!!this.city);
+    fields.push(!!this.timezone);
+    fields.push(this.isPhoneVerified);
+
+    if (this.userRole === 'freelancer') {
+      fields.push(!!this.professionalHeadline);
+      fields.push(this.selectedCategories.length > 0);
+      fields.push(this.skills.length > 0);
+      fields.push(!!this.availabilityType);
+    } else {
+      // For Clients
+      fields.push(!!this.clientType);
+      if (this.clientType !== 'Individual') {
+        fields.push(!!this.website);
+        fields.push(!!this.industry);
+      }
+    }
+
+    const completed = fields.filter(Boolean).length;
+    const total = fields.length;
+    return total > 0 ? Math.round((completed / total) * 100) : 0;
+  }
   isProfessionalDropdownOpen: boolean = false;
   private observer: IntersectionObserver | null = null;
 
@@ -64,6 +102,7 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
   city: string = '';
   timezone: string = '';
   availabilityType: string = 'full-time';
+  hourlyRate: number = 50;
   phoneNumber: string = '';
   profilePhotoPreview: string | null = null;
 
@@ -86,23 +125,23 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
   currentLanguage = { language: '', proficiency: '' };
 
   languageOptions = [
-    { label: 'English', value: 'English' },
-    { label: 'Hindi', value: 'Hindi' },
-    { label: 'Spanish', value: 'Spanish' },
-    { label: 'French', value: 'French' },
-    { label: 'German', value: 'German' },
-    { label: 'Arabic', value: 'Arabic' },
-    { label: 'Chinese', value: 'Chinese' },
-    { label: 'Japanese', value: 'Japanese' },
-    { label: 'Portuguese', value: 'Portuguese' },
-    { label: 'Russian', value: 'Russian' },
+    { label: 'English', value: Language.English },
+    { label: 'Hindi', value: Language.Hindi },
+    { label: 'Spanish', value: Language.Spanish },
+    { label: 'French', value: Language.French },
+    { label: 'German', value: Language.German },
+    { label: 'Arabic', value: Language.Arabic },
+    { label: 'Chinese', value: Language.Chinese },
+    { label: 'Japanese', value: Language.Japanese },
+    { label: 'Portuguese', value: Language.Portuguese },
+    { label: 'Russian', value: Language.Russian },
   ];
 
   proficiencyOptions = [
-    { label: 'Basic', value: 'basic' },
-    { label: 'Conversational', value: 'conversational' },
-    { label: 'Professional', value: 'professional' },
-    { label: 'Native / Bilingual', value: 'native' },
+    { label: 'Basic', value: Proficiency.Basic },
+    { label: 'Conversational', value: Proficiency.Conversational },
+    { label: 'Professional', value: Proficiency.Professional },
+    { label: 'Native / Bilingual', value: Proficiency.Native },
   ];
 
   isEditModalOpen: boolean = false;
@@ -110,24 +149,24 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
   editingLinkData = { platform: '', url: '' };
 
   platformOptions = [
-    { label: 'LinkedIn', value: 'linkedin', icon: 'bi-linkedin' },
-    { label: 'Twitter / X', value: 'twitter', icon: 'bi-twitter-x' },
-    { label: 'GitHub', value: 'github', icon: 'bi-github' },
-    { label: 'Portfolio', value: 'portfolio', icon: 'bi-link-45deg' },
-    { label: 'Dribbble', value: 'dribbble', icon: 'bi-dribbble' },
-    { label: 'Behance', value: 'behance', icon: 'bi-behance' }
+    { label: 'LinkedIn', value: SocialPlatform.LinkedIn, icon: 'bi-linkedin' },
+    { label: 'Twitter / X', value: SocialPlatform.Twitter, icon: 'bi-twitter-x' },
+    { label: 'GitHub', value: SocialPlatform.GitHub, icon: 'bi-github' },
+    { label: 'Portfolio', value: SocialPlatform.Portfolio, icon: 'bi-link-45deg' },
+    { label: 'Dribbble', value: SocialPlatform.Dribbble, icon: 'bi-dribbble' },
+    { label: 'Behance', value: SocialPlatform.Behance, icon: 'bi-behance' }
   ];
 
   genderOptions = [
-    { label: 'Male', value: 'male' },
-    { label: 'Female', value: 'female' },
-    { label: 'Other', value: 'other' }
+    { label: 'Male', value: Gender.Male },
+    { label: 'Female', value: Gender.Female },
+    { label: 'Other', value: Gender.Other }
   ];
 
   availabilityOptions = [
-    { label: 'Full Time', value: 'full-time' },
-    { label: 'Part Time', value: 'part-time' },
-    { label: 'Other', value: 'other' }
+    { label: 'Full Time', value: Availability.FullTime },
+    { label: 'Part Time', value: Availability.PartTime },
+    { label: 'Other', value: Availability.Other }
   ];
 
   freelancerSections = [
@@ -135,8 +174,8 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
     { id: 'professional', label: 'Professional Details', sub: 'Your work & expertise', icon: 'bi-briefcase' },
     { id: 'location', label: 'Location', sub: 'Where are you based?', icon: 'bi-geo-alt' },
     { id: 'availability', label: 'Availability', sub: 'When you can work', icon: 'bi-clock' },
-    { id: 'verification', label: 'Verification', sub: 'Verify your contact', icon: 'bi-shield-check' },
-    { id: 'social', label: 'Social & Links', sub: 'Your portfolio & profiles', icon: 'bi-link-45deg' },
+    { id: 'verification', label: 'Verify your contact', sub: 'Verify your contact', icon: 'bi-shield-check' },
+    { id: 'social', label: 'Social & Languages', sub: 'Profiles & languages', icon: 'bi-link-45deg' },
   ];
 
   clientSections = [
@@ -144,34 +183,34 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
     { id: 'professional', label: 'Professional Details', sub: 'Your business details', icon: 'bi-briefcase' },
     { id: 'location', label: 'Location', sub: 'Where are you based?', icon: 'bi-geo-alt' },
     { id: 'verification', label: 'Verification', sub: 'Verify your contact details', icon: 'bi-shield-check' },
-    { id: 'social', label: 'Social Links', sub: 'Add your social profiles', icon: 'bi-link-45deg' },
+    { id: 'social', label: 'Social & Languages', sub: 'Profiles & languages', icon: 'bi-link-45deg' },
   ];
 
   industryOptions = [
-    { label: 'Technology', value: 'tech' },
-    { label: 'Healthcare', value: 'health' },
-    { label: 'Finance', value: 'finance' },
-    { label: 'Education', value: 'edu' },
-    { label: 'Marketing', value: 'marketing' },
-    { label: 'Design', value: 'design' },
-    { label: 'Other', value: 'other' }
+    { label: 'Technology', value: Industry.Technology },
+    { label: 'Healthcare', value: Industry.Healthcare },
+    { label: 'Finance', value: Industry.Finance },
+    { label: 'Education', value: Industry.Education },
+    { label: 'Marketing', value: Industry.Marketing },
+    { label: 'Design', value: Industry.Design },
+    { label: 'Other', value: Industry.Other }
   ];
 
   countryOptions = [
-    { label: 'United States', value: 'US' },
-    { label: 'United Kingdom', value: 'UK' },
-    { label: 'India', value: 'IN' },
-    { label: 'Canada', value: 'CA' },
-    { label: 'Australia', value: 'AU' },
-    { label: 'Germany', value: 'DE' }
+    { label: 'United States', value: Country.UnitedStates },
+    { label: 'United Kingdom', value: Country.UnitedKingdom },
+    { label: 'India', value: Country.India },
+    { label: 'Canada', value: Country.Canada },
+    { label: 'Australia', value: Country.Australia },
+    { label: 'Germany', value: Country.Germany }
   ];
 
   timezoneOptions = [
-    { label: '(GMT-05:00) Eastern Time', value: 'ET' },
-    { label: '(GMT-08:00) Pacific Time', value: 'PT' },
-    { label: '(GMT+05:30) India Standard Time', value: 'IST' },
-    { label: '(GMT+00:00) London', value: 'GMT' },
-    { label: '(GMT+01:00) Berlin', value: 'CET' }
+    { label: '(GMT-05:00) Eastern Time', value: Timezone.EasternTime },
+    { label: '(GMT-08:00) Pacific Time', value: Timezone.PacificTime },
+    { label: '(GMT+05:30) India Standard Time', value: Timezone.IndiaTime },
+    { label: '(GMT+00:00) London', value: Timezone.LondonTime },
+    { label: '(GMT+01:00) Berlin', value: Timezone.BerlinTime }
   ];
 
   ngOnInit(): void {
@@ -248,12 +287,12 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
   // CATEGORIES & SKILLS HANDLING
 
   categoryOptions = [
-    { label: 'Web Development', value: 'Web Development' },
-    { label: 'Mobile Development', value: 'Mobile Development' },
-    { label: 'UI/UX Design', value: 'UI/UX Design' },
-    { label: 'Data Science', value: 'Data Science' },
-    { label: 'Marketing', value: 'Marketing' },
-    { label: 'Content Writing', value: 'Content Writing' }
+    { label: 'Web Development', value: Category.WebDevelopment },
+    { label: 'Mobile Development', value: Category.MobileDevelopment },
+    { label: 'UI/UX Design', value: Category.UIUXDesign },
+    { label: 'Data Science', value: Category.DataScience },
+    { label: 'Marketing', value: Category.Marketing },
+    { label: 'Content Writing', value: Category.ContentWriting }
   ];
 
   addCategory(value: any): void {
@@ -289,7 +328,16 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   setSelection(type: string, value: string): void {
-    if (type === 'availability') this.availabilityType = value;
+    if (type === 'availability') {
+      this.availabilityType = value;
+      if (value === 'part-time') {
+        this.hourlyRate = 30;
+      } else if (value === 'full-time') {
+        this.hourlyRate = 50;
+      } else {
+        this.hourlyRate = 20;
+      }
+    }
     if (type === 'clientType') {
       this.clientType = value.charAt(0).toUpperCase() + value.slice(1);
     }
@@ -327,6 +375,16 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  onProfilePhotoUploaded(url: string): void {
+    this.uploadedProfilePhotoUrl = url;
+    this.profilePhotoPreview = url;
+  }
+
+  onProfilePhotoRemoved(): void {
+    this.uploadedProfilePhotoUrl = null;
+    this.profilePhotoPreview = null;
+  }
+
   addSocialLink(): void {
     this.currentLink = { platform: '', url: '' };
   }
@@ -340,6 +398,20 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   removeSocialLink(index: number): void {
     this.savedSocialLinks.splice(index, 1);
+  }
+
+  addLanguage(): void {
+    if (this.currentLanguage.language && this.currentLanguage.proficiency) {
+      const exists = this.savedLanguages.some(l => l.language === this.currentLanguage.language);
+      if (!exists) {
+        this.savedLanguages.push({ ...this.currentLanguage });
+      }
+      this.currentLanguage = { language: '', proficiency: '' };
+    }
+  }
+
+  removeLanguage(index: number): void {
+    this.savedLanguages.splice(index, 1);
   }
 
   openEditModal(index: number): void {
@@ -419,6 +491,7 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         location,
         availability: [this.availabilityType],
+        hourlyRate: this.hourlyRate,
         verification,
         socialLinks
       };
@@ -429,14 +502,15 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
       formData.append('verification', JSON.stringify(freelancerProfile.verification));
       formData.append('socialLinks', JSON.stringify(freelancerProfile.socialLinks));
       formData.append('availability', JSON.stringify(freelancerProfile.availability));
+      formData.append('hourlyRate', this.hourlyRate.toString());
       formData.append('languages', JSON.stringify(languages));
     } else {
       const clientProfile: ClientProfileDto = {
         basicInformation,
         professionalDetails: {
           clientType: this.clientType as any,
-          website: this.website,
-          industry: this.industry
+          website: this.clientType === 'Individual' ? '' : this.website,
+          industry: this.clientType === 'Individual' ? '' : this.industry
         },
         location,
         verification,

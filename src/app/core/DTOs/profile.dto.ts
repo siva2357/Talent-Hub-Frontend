@@ -42,6 +42,7 @@ export interface FreelancerProfileDto {
   professionalDetails?: ProfessionalDetailsDto;
   location?: LocationDto;
   availability?: string[];
+  hourlyRate?: number;
   verification?: VerificationDto;
   socialLinks?: SocialLinkDto[];
   languages?: LanguageDto[];
