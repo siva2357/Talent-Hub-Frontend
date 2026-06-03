@@ -54,6 +54,18 @@
                   {{ contract.totalDuration }}
                 </span>
 
+                @if (contract.contractType) {
+                  <span class="badge-category">
+                    Category: {{ contract.contractType }}
+                  </span>
+                }
+
+                @if (contract.contractSubject) {
+                  <span class="badge-subject">
+                    Subject: {{ contract.contractSubject }}
+                  </span>
+                }
+
                 <span class="text-secondary small ms-2 mt-1">
                   <i class="bi bi-clock me-1"></i>
 
@@ -67,7 +79,7 @@
 
             </div>
 
-            <button class="btn-save-large">
+            <button class="btn-save-large" [class.saved]="contract.hasSaved" (click)="toggleSaveContract()">
               <i class="bi" [ngClass]="
                   contract.hasSaved
                     ? 'bi-bookmark-fill'
@@ -254,53 +266,55 @@
             <div class="client-info-list d-grid gap-3">
 
               <!-- Industry -->
+              @if (contract.clientType !== 'Individual' && contract.industry) {
+                <div class="d-flex align-items-center gap-3">
 
-              <div class="d-flex align-items-center gap-3">
+                  <i class="bi bi-briefcase text-primary"></i>
 
-                <i class="bi bi-briefcase text-primary"></i>
+                  <div>
 
-                <div>
+                    <div class="text-secondary smaller">
+                      Industry
+                    </div>
 
-                  <div class="text-secondary smaller">
-                    Industry
-                  </div>
+                    <div class="text-white small fw-medium">
 
-                  <div class="text-white small fw-medium">
+                      {{
+                      contract.industry
+                      }}
 
-                    {{
-                    contract.industry
-                    }}
+                    </div>
 
                   </div>
 
                 </div>
-
-              </div>
+              }
 
               <!-- Website -->
+              @if (contract.clientType !== 'Individual' && contract.website) {
+                <div class="d-flex align-items-center gap-3">
 
-              <div class="d-flex align-items-center gap-3">
+                  <i class="bi bi-globe text-success"></i>
 
-                <i class="bi bi-globe text-success"></i>
+                  <div>
 
-                <div>
+                    <div class="text-secondary smaller">
+                      Website
+                    </div>
 
-                  <div class="text-secondary smaller">
-                    Website
+                    <a [href]="contract.website" target="_blank"
+                      class="text-primary small fw-medium text-decoration-none">
+
+                      {{
+                      contract.website
+                      }}
+
+                    </a>
+
                   </div>
 
-                  <a [href]="contract.website" target="_blank"
-                    class="text-primary small fw-medium text-decoration-none">
-
-                    {{
-                    contract.website
-                    }}
-
-                  </a>
-
                 </div>
-
-              </div>
+              }
 
               <!-- Posted -->
 

@@ -24,6 +24,22 @@
 
           </h1>
 
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-1.5">
+              Status: {{ contract.status }}
+            </span>
+            @if (contract.contractType) {
+              <span class="badge rounded-pill bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-3 py-1.5">
+                Category: {{ contract.contractType }}
+              </span>
+            }
+            @if (contract.contractSubject) {
+              <span class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary border border-white border-opacity-10 px-3 py-1.5">
+                Subject: {{ contract.contractSubject }}
+              </span>
+            }
+          </div>
+
         </div>
 
         <!-- GRID -->
@@ -62,7 +78,7 @@
               </div>
 
               <p class="info-label">
-                Contract Type
+                Budget Type
               </p>
 
               <h5 class="info-value text-white">

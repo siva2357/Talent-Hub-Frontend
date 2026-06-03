@@ -142,3 +142,63 @@
 @media (min-width: 768px) {
   .border-end-md { border-right: 1px solid rgba(255, 255, 255, 0.1) !important; }
 }
+
+/* Custom Tooltip Styling */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translate(-50%, 10px) scale(0.9);
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  width: max-content;
+  max-width: 220px;
+  white-space: normal;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 9999;
+}
+
+[data-tooltip]::after {
+  content: "";
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translate(-50%, 10px) scale(0.9);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #0f172a transparent transparent transparent;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 9999;
+}
+
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+
+/* Hide scrollbar on modal container while retaining scroll ability */
+.modal-card {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+.modal-card::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

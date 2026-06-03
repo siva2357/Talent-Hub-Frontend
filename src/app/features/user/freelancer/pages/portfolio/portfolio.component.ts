@@ -2,19 +2,26 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { PortfolioService, PortfolioItem } from '../../../../../core/services/portfolio.service';
+import { PortfolioService, PortfolioItem, PortfolioMedia } from '../../../../../core/services/portfolio.service';
 import { RichTextEditorComponent } from '../../../../../shared/components/rich-text-editor/rich-text-editor.component';
+import { FileUploadComponent } from '../../../../../shared/components/file-upload/file-upload.component';
+import { ButtonComponent } from '../../../../../shared/components/button/button.component';
+import { InputComponent } from '../../../../../shared/components/input/input.component';
+import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
 
 @Component({
   selector: 'app-portfolio',
   standalone: true,
-  imports: [CommonModule, FormsModule, RichTextEditorComponent],
+  imports: [CommonModule, FormsModule, RichTextEditorComponent, FileUploadComponent, ButtonComponent, InputComponent],
   templateUrl: './portfolio.component.html',
   styleUrl: './portfolio.component.css'
 })
 export class PortfolioComponent implements OnInit {
   private portfolioService = inject(PortfolioService);
   private toastr = inject(ToastrService);
+
+  BucketKey = BucketKey;
+  UploadSection = UploadSection;
 
   items: PortfolioItem[] = [];
   isFormOpen = false;
@@ -25,9 +32,11 @@ export class PortfolioComponent implements OnInit {
   title = '';
   description = '';
   role = '';
+  projectType = '';
   techInput = ''; // Comma-separated list e.g. "Angular, TypeScript, CSS"
   projectUrl = '';
-  imageUrl = '';
+  mediaItems: PortfolioMedia[] = [];
+  tempUploadUrl: string | null = null;
 
   ngOnInit(): void {
     this.loadPortfolio();
@@ -37,6 +46,9 @@ export class PortfolioComponent implements OnInit {
     this.portfolioService.getPortfolioItems().subscribe({
       next: (data) => {
         this.items = data;
+      },
+      error: (err) => {
+        console.error('Failed to load portfolio items:', err);
       }
     });
   }
@@ -48,7 +60,7 @@ export class PortfolioComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (!this.title.trim() || !this.description.trim() || !this.role.trim() || !this.techInput.trim()) {
+    if (!this.title.trim() || !this.description.trim() || !this.role.trim() || !this.projectType.trim() || !this.techInput.trim()) {
       this.toastr.warning('Please fill in all required fields.', 'My Portfolio');
       return;
     }
@@ -58,20 +70,41 @@ export class PortfolioComponent implements OnInit {
       .map(t => t.trim())
       .filter(t => t.length > 0);
 
-    const imgArg = this.imageUrl || undefined;
-    const urlArg = this.projectUrl || undefined;
+    const payload = {
+      title: this.title,
+      description: this.description,
+      role: this.role,
+      projectType: this.projectType,
+      tags: techArray,
+      media: this.mediaItems,
+      projectUrl: this.projectUrl || undefined
+    };
 
     if (this.isEditing) {
-      this.portfolioService.deletePortfolioItem(this.editId);
-      this.portfolioService.addPortfolioItem(this.title, this.description, this.role, techArray, urlArg, imgArg);
-      this.toastr.success('Portfolio project updated successfully!', 'My Portfolio');
+      this.portfolioService.updatePortfolioItem(this.editId, payload).subscribe({
+        next: () => {
+          this.toastr.success('Portfolio project updated successfully!', 'My Portfolio');
+          this.closeFormModal();
+          this.loadPortfolio();
+        },
+        error: (err) => {
+          this.toastr.error('Failed to update portfolio project.', 'My Portfolio');
+          console.error(err);
+        }
+      });
     } else {
-      this.portfolioService.addPortfolioItem(this.title, this.description, this.role, techArray, urlArg, imgArg);
-      this.toastr.success('New portfolio project added!', 'My Portfolio');
+      this.portfolioService.addPortfolioItem(payload).subscribe({
+        next: () => {
+          this.toastr.success('New portfolio project added!', 'My Portfolio');
+          this.closeFormModal();
+          this.loadPortfolio();
+        },
+        error: (err) => {
+          this.toastr.error('Failed to add portfolio project.', 'My Portfolio');
+          console.error(err);
+        }
+      });
     }
-
-    this.closeFormModal();
-    this.loadPortfolio();
   }
 
   editItem(item: PortfolioItem): void {
@@ -80,40 +113,42 @@ export class PortfolioComponent implements OnInit {
     this.title = item.title;
     this.description = item.description;
     this.role = item.role;
-    this.techInput = item.technologies.join(', ');
+    this.projectType = item.projectType || '';
+    this.techInput = item.tags.join(', ');
     this.projectUrl = item.projectUrl || '';
-    this.imageUrl = item.imageUrl || '';
+    this.mediaItems = [...item.media];
     this.isFormOpen = true;
   }
 
   deleteItem(id: string): void {
     if (confirm('Are you sure you want to delete this portfolio project?')) {
-      this.portfolioService.deletePortfolioItem(id);
-      this.toastr.success('Project deleted from portfolio.', 'My Portfolio');
-      this.loadPortfolio();
+      this.portfolioService.deletePortfolioItem(id).subscribe({
+        next: () => {
+          this.toastr.success('Project deleted from portfolio.', 'My Portfolio');
+          this.loadPortfolio();
+        },
+        error: (err) => {
+          this.toastr.error('Failed to delete portfolio project.', 'My Portfolio');
+          console.error(err);
+        }
+      });
     }
   }
 
-  onImageSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        this.toastr.error('Please upload an image file only.', 'Image Upload');
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imageUrl = e.target.result;
-        this.toastr.success('Project thumbnail preview loaded.', 'Image Upload');
-      };
-      reader.readAsDataURL(file);
-    }
+  onUploadSuccess(url: string): void {
+    if (!url) return;
+    const isVideo = /\.(mp4|webm|ogg|mov|avi|flv|mkv|wmv)/i.test(url);
+    this.mediaItems.push({
+      mediaType: isVideo ? 'video' : 'image',
+      url: url
+    });
+    this.tempUploadUrl = null; // Reset value so user can upload more files
+    this.toastr.success(`Added ${isVideo ? 'video' : 'image'} to project showcase.`, 'Upload Media');
   }
 
-  removeImage(): void {
-    this.imageUrl = '';
-    this.toastr.info('Project image removed.', 'Image Upload');
+  removeMedia(index: number): void {
+    this.mediaItems.splice(index, 1);
+    this.toastr.info('Media attachment removed.', 'Upload Media');
   }
 
   resetForm(): void {
@@ -122,9 +157,10 @@ export class PortfolioComponent implements OnInit {
     this.title = '';
     this.description = '';
     this.role = '';
+    this.projectType = '';
     this.techInput = '';
     this.projectUrl = '';
-    this.imageUrl = '';
+    this.mediaItems = [];
   }
 
   closeFormModal(): void {

@@ -100,36 +100,44 @@ export class FindContractsComponent implements OnInit {
 // ========================================
 
 saveContract(id: string): void {
+  const contract = this.contracts.find((c) => c._id === id);
+  if (!contract) return;
 
-  this.contractService.saveContract(id).subscribe({
-
-    next: (res) => {
-
-      this.contracts = this.contracts.map((contract) => {
-
-        if (contract._id === id) {
-
-          return {
-            ...contract,
-            hasSaved: true
-          };
-
-        }
-
-        return contract;
-
-      });
-
-    },
-
-    error: (err) => {
-
-      console.error(err);
-
-    }
-
-  });
-
+  if (contract.hasSaved) {
+    this.contractService.unsaveContract(id).subscribe({
+      next: () => {
+        this.contracts = this.contracts.map((c) => {
+          if (c._id === id) {
+            return {
+              ...c,
+              hasSaved: false
+            };
+          }
+          return c;
+        });
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  } else {
+    this.contractService.saveContract(id).subscribe({
+      next: () => {
+        this.contracts = this.contracts.map((c) => {
+          if (c._id === id) {
+            return {
+              ...c,
+              hasSaved: true
+            };
+          }
+          return c;
+        });
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
 }
 
   // ========================================

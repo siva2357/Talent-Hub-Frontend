@@ -1,87 +1,85 @@
-import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { ProfileService } from './profile.service';
+
+export interface PortfolioMedia {
+  _id?: string;
+  mediaType: 'image' | 'video';
+  url: string;
+}
 
 export interface PortfolioItem {
   id: string;
   title: string;
   description: string;
   role: string;
-  technologies: string[];
+  projectType: string;
+  tags: string[];
+  media: PortfolioMedia[];
   projectUrl?: string;
-  imageUrl?: string;
-  createdDate: string;
+  createdDate?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class PortfolioService {
-  private initialItems: PortfolioItem[] = [
-    {
-      id: 'p1',
-      title: 'E-Commerce Mobile Application',
-      description: 'Developed a premium e-commerce application for iOS and Android with secure Stripe checkout integration, real-time push notifications, and personalized product recommendations powered by an on-device recommendation model.',
-      role: 'Lead Mobile Developer',
-      technologies: ['React Native', 'Redux Toolkit', 'Stripe API', 'Firebase'],
-      projectUrl: 'https://github.com/example/ecommerce-app',
-      imageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=600&q=80',
-      createdDate: 'May 10, 2026'
-    },
-    {
-      id: 'p2',
-      title: 'Real-time Chat & Video Workspace',
-      description: 'Built a real-time collaborative workspace featuring custom chat rooms, secure file sharing, markdown editing, and WebRTC-based multi-user audio/video call streams.',
-      role: 'Fullstack Architect',
-      technologies: ['Angular', 'Socket.io', 'Node.js', 'WebRTC', 'MongoDB'],
-      projectUrl: 'https://github.com/example/chat-workspace',
-      imageUrl: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&w=600&q=80',
-      createdDate: 'April 15, 2026'
-    },
-    {
-      id: 'p3',
-      title: 'Fintech Dashboard & Analytics Portal',
-      description: 'Created a high-fidelity dashboard for a financial services platform, providing real-time SVG charting, transaction search filters, PDF invoice downloads, and automated accounting logs.',
-      role: 'Frontend Engineer',
-      technologies: ['Angular', 'TypeScript', 'Chart.js', 'Bootstrap 5'],
-      projectUrl: 'https://github.com/example/fintech-dashboard',
-      imageUrl: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80',
-      createdDate: 'March 01, 2026'
-    }
-  ];
-
-  private portfolioSubject = new BehaviorSubject<PortfolioItem[]>(this.initialItems);
+  private http = inject(HttpClient);
+  private profileService = inject(ProfileService);
+  private readonly baseUrl = environment.apiGatewayUrl;
 
   getPortfolioItems(): Observable<PortfolioItem[]> {
-    return this.portfolioSubject.asObservable();
+    return this.profileService.getMyProfile().pipe(
+      map(res => {
+        if (res.success && res.profile && (res.profile as any).professionalDetails?.portfolio) {
+          return (res.profile as any).professionalDetails.portfolio.map((item: any) => this.mapToPortfolioItem(item));
+        }
+        return [];
+      })
+    );
   }
 
-  addPortfolioItem(title: string, description: string, role: string, technologies: string[], projectUrl?: string, imageUrl?: string): void {
-    const newItem: PortfolioItem = {
-      id: `p${this.portfolioSubject.value.length + 1}`,
-      title,
-      description,
-      role,
-      technologies,
-      projectUrl: projectUrl || '',
-      imageUrl: imageUrl || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80', // Default fallback
-      createdDate: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+  addPortfolioItem(item: {
+    title: string;
+    description: string;
+    role: string;
+    projectType: string;
+    tags: string[];
+    media: PortfolioMedia[];
+    projectUrl?: string;
+  }): Observable<{ success: boolean; item: any }> {
+    return this.http.post<{ success: boolean; item: any }>(`${this.baseUrl}/profile/portfolio`, item);
+  }
+
+  updatePortfolioItem(id: string, item: {
+    title?: string;
+    description?: string;
+    role?: string;
+    projectType?: string;
+    tags?: string[];
+    media?: PortfolioMedia[];
+    projectUrl?: string;
+  }): Observable<{ success: boolean; item: any }> {
+    return this.http.put<{ success: boolean; item: any }>(`${this.baseUrl}/profile/portfolio/${id}`, item);
+  }
+
+  deletePortfolioItem(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/profile/portfolio/${id}`);
+  }
+
+  private mapToPortfolioItem(item: any): PortfolioItem {
+    return {
+      id: item._id || item.id,
+      title: item.title,
+      description: item.description || '',
+      role: item.role || '',
+      projectType: item.projectType || '',
+      tags: item.tags || item.technologies || [],
+      media: item.media || (item.imageUrl ? [{ mediaType: 'image', url: item.imageUrl }] : []),
+      projectUrl: item.projectUrl || '',
+      createdDate: item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : item.createdDate || ''
     };
-
-    this.portfolioSubject.next([newItem, ...this.portfolioSubject.value]);
-  }
-
-  deletePortfolioItem(id: string): void {
-    const updated = this.portfolioSubject.value.filter(item => item.id !== id);
-    this.portfolioSubject.next(updated);
-  }
-
-  updatePortfolioItem(id: string, updatedFields: Partial<PortfolioItem>): void {
-    const updated = this.portfolioSubject.value.map((item): PortfolioItem => {
-      if (item.id === id) {
-        return { ...item, ...updatedFields };
-      }
-      return item;
-    });
-    this.portfolioSubject.next(updated);
   }
 }

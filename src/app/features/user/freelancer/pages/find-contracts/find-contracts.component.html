@@ -91,7 +91,7 @@
                 {{ contract.contractTitle }}
               </h5>
 
-              <div class="d-flex gap-2">
+              <div class="d-flex gap-2 flex-wrap">
 
                 <span
                   class="badge-type"
@@ -104,6 +104,17 @@
                   {{ contract.budgetType }}
                 </span>
 
+                @if (contract.contractType) {
+                  <span class="badge-tag category">
+                    {{ contract.contractType }}
+                  </span>
+                }
+                @if (contract.contractSubject) {
+                  <span class="badge-tag subject">
+                    {{ contract.contractSubject }}
+                  </span>
+                }
+
               </div>
 
             </div>
@@ -112,6 +123,7 @@
 
   <button
   class="btn-save"
+  [class.saved]="contract.hasSaved"
   (click)="saveContract(contract._id)"
 >
 
@@ -187,52 +199,6 @@
             </div>
 
           </div>
-
-          <div class="pt-4 border-top border-white border-opacity-10 mt-auto"></div>
-
-
-          <div class="d-flex justify-content-between align-items-center mb-4">
-
-            <div class="contract-stat">
-
-              <div class="text-white fw-bold">
-
-                {{ contract.clientName }}
-
-              </div>
-
-              <a
-  [href]="contract.website"
-  target="_blank"
-  class="text-xxs text-primary text-decoration-none"
->
-
-  {{ contract.website }}
-
-</a>
-
-            </div>
-
-            <div class="contract-stat text-end">
-
-              <div class="text-white fw-bold">
-
-                <i class="bi bi-buildings me-1"></i>
-
-                {{ contract.clientType  }}
-
-              </div>
-
-              <div class="text-xxs text-secondary">
-
-                {{ contract.industry }} 
-
-              </div>
-
-            </div>
-
-          </div>
-
 
 <app-button
   variant="brand"

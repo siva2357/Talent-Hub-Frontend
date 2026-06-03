@@ -35,3 +35,20 @@ export const BUDGET_TYPE_OPTIONS = [
   }
 
 ];
+
+export const CONTRACT_TYPE_OPTIONS = [
+  { label: 'Frontend', value: 'Frontend' },
+  { label: 'Backend', value: 'Backend' },
+  { label: 'Fullstack', value: 'Fullstack' },
+  { label: 'Mobile Dev', value: 'Mobile Dev' }
+];
+
+export const CONTRACT_SUBJECT_OPTIONS = [
+  { label: 'Fintech', value: 'Fintech' },
+  { label: 'Enterprise', value: 'Enterprise' },
+  { label: 'E-Commerce', value: 'E-Commerce' },
+  { label: 'Healthcare', value: 'Healthcare' },
+  { label: 'Edtech', value: 'Edtech' },
+  { label: 'Social Media', value: 'Social Media' },
+  { label: 'Other', value: 'Other' }
+];

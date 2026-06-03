@@ -17,18 +17,14 @@
     <div class="row g-4">
       @for (talent of savedTalents; track talent.id) {
       <div class="col-lg-4 col-md-6">
-        <div class="profile-card glass p-4 rounded-4 h-100 border-opacity-10 border-white d-flex flex-column">
+        <div class="profile-card glass p-4 rounded-4 h-100 border-opacity-10 border-white d-flex flex-column"
+          (click)="viewProfile(talent.id)" style="cursor: pointer;">
           <!-- Top Info -->
           <div class="d-flex justify-content-between align-items-start mb-4">
             <div class="d-flex align-items-center gap-3">
               <div class="avatar-wrapper position-relative">
                 <img [src]="talent.avatar" [alt]="talent.name" class="rounded-circle border border-2 border-dark"
                   style="width: 64px; height: 64px; object-fit: cover;">
-                <span class="status-indicator position-absolute" [ngClass]="{
-                        'bg-success': talent.performanceTier === 'High',
-                        'bg-warning': talent.performanceTier === 'Medium',
-                        'bg-danger': talent.performanceTier === 'Low'
-                      }"></span>
               </div>
               <div>
                 <h5 class="text-white fw-bold mb-1">{{talent.name}}</h5>
@@ -39,14 +35,16 @@
                 <p class="text-xs text-secondary mt-1 mb-0">{{talent.role}}</p>
               </div>
             </div>
-            <div class="performance-ring text-start">
-              <div class="ring-wrapper ms-0 mb-1" [ngClass]="talent.performanceTier.toLowerCase()">
+            <div class="performance-ring text-start" (click)="$event.stopPropagation()">
+              <div class="ring-wrapper ms-0 mb-1" [ngClass]="talent.performanceTier.toLowerCase()" style="cursor: help;"
+                data-tooltip="Please start contract to level up score and better hiring">
                 <span class="percent text-white">{{talent.performance}}%</span>
               </div>
               <div class="fw-bold text-xs" [ngClass]="{
                       'text-success': talent.performanceTier === 'High',
                       'text-warning': talent.performanceTier === 'Medium',
-                      'text-danger': talent.performanceTier === 'Low'
+                      'text-danger': talent.performanceTier === 'Low',
+                      'text-secondary': talent.performanceTier === 'New' || talent.performanceTier === 'N/A'
                     }">{{talent.performanceTier}}</div>
               <div class="text-secondary text-xxs">Performance</div>
             </div>
@@ -70,7 +68,7 @@
             </div>
             <div class="col-3 text-start border-end border-white border-opacity-10">
               <div class="text-white fw-bold text-sm">{{talent.projectsCount}}</div>
-              <div class="text-secondary text-xxs">Projects</div>
+              <div class="text-secondary text-xxs">Contracts</div>
             </div>
             <div class="col-3 text-start border-end border-white border-opacity-10">
               <div class="text-white fw-bold text-sm">{{talent.rating}}</div>
@@ -83,15 +81,16 @@
           </div>
 
           <!-- Footer Actions -->
-          <div class="d-flex align-items-center justify-content-between mt-auto">
+          <div class="d-flex align-items-center justify-content-between mt-auto" (click)="$event.stopPropagation()">
             <div class="d-flex align-items-center gap-2">
               <span class="text-secondary text-xs">Saved {{talent.dateSaved}}</span>
             </div>
             <div class="d-flex gap-2">
-              <button class="btn btn-outline-primary btn-sm rounded-3 px-2 border-opacity-25 border-primary">
+              <button class="btn btn-outline-primary btn-sm rounded-3 px-2 border-opacity-25 border-primary"
+                (click)="unsaveTalent(talent.id, $event)">
                 <i class="bi bi-bookmark-fill text-primary"></i>
               </button>
-              <button class="btn btn-primary btn-sm px-3 rounded-3" routerLink="/user/talent-profile">View Profile
+              <button class="btn btn-primary btn-sm px-3 rounded-3" (click)="viewProfile(talent.id)">View Profile
                 &rarr;</button>
             </div>
           </div>

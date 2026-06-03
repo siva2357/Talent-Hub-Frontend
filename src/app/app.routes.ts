@@ -133,7 +133,7 @@ export const routes: Routes = [
       { path: 'contract-timesheet', component: ContractTimesheetComponent },
 
       { path: 'search-talent', component: SearchTalentComponent },
-      { path: 'talent-profile', component: TalentProfileComponent },
+      { path: 'talent-profile/:id', component: TalentProfileComponent },
       { path: 'project-details/:id', component: ProjectDetailsComponent },
       { path: 'contract-profile/:id', component: ContractProfileComponent },
       { path: 'saved-talent', component: SavedTalentComponent },

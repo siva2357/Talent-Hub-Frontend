@@ -1,306 +1,440 @@
 <div class="talent-profile-page">
-  <!-- Profile Cover Image -->
-  <div class="profile-cover position-relative">
-    <img [src]="talent.coverImage" class="w-100 h-100 object-fit-cover">
-    <div class="cover-overlay"></div>
+  @if (talent) {
+    <!-- Profile Cover Image -->
+    <div class="profile-cover position-relative">
+      <img [src]="talent.coverImage" class="w-100 h-100 object-fit-cover">
+      <div class="cover-overlay"></div>
 
-    <!-- Back Navigation (Pinned Top-Left) -->
-    <div class="position-absolute top-0 start-0 p-4 z-index-top">
-      <app-button variant="outline" size="sm" customClass="rounded-3 border-opacity-25 text-white shadow-lg glass-vivid"
-        routerLink="/user/search-talent">
-        <i class="bi bi-arrow-left fs-5 me-2 text-white"></i> Back to Search
-      </app-button>
-    </div>
-  </div>
-
-  <div class="container max-w-5xl mx-auto pb-5 mb-5 profile-container-overlap">
-    <!-- Profile Header -->
-    <div class="glass p-4 p-md-5 rounded-4 mb-4 border-white border-opacity-10">
-      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-start gap-4">
-        <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start gap-4">
-          <div class="avatar-wrapper position-relative">
-            <img [src]="talent.avatar" [alt]="talent.name" class="rounded-circle border border-3 border-dark shadow-lg"
-              style="width: 140px; height: 140px; object-fit: cover;">
-            <span class="status-indicator-lg position-absolute bg-success"></span>
-          </div>
-          <div class="text-center text-md-start pt-2">
-            <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-3 mb-2">
-              <h1 class="text-white fw-bold mb-0 h2">{{talent.name}}</h1>
-              <button class="btn btn-outline-light btn-sm rounded-3 px-2 border-opacity-25 border-white">
-                <i class="bi bi-bookmark text-white"></i>
-              </button>
-            </div>
-            <div
-              class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 text-secondary mb-2">
-              <i class="bi bi-geo-alt"></i>
-              <span>{{talent.location}}</span>
-            </div>
-            <p class="text-secondary mb-3">{{talent.title}}</p>
-            <div class="d-flex gap-2 justify-content-center justify-content-md-start mb-4">
-              <span class="pill-badge"><i class="bi bi-star-fill text-warning me-2"></i> {{talent.rating}} Rating</span>
-              <span class="pill-badge"><i class="bi bi-briefcase me-2"></i> {{talent.projects}} Projects</span>
-            </div>
-
-            <!-- Trust Badges -->
-            <div class="d-flex flex-wrap gap-4 mt-auto pt-4 border-top border-white border-opacity-5">
-              <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-award-fill text-warning fs-5"></i>
-                <div class="d-flex flex-column">
-                  <span class="text-white fw-bold smaller">Top Rated Plus</span>
-                  <span class="text-secondary text-xxs">Upwork Badge</span>
-                </div>
-              </div>
-              <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-patch-check-fill text-primary fs-5"></i>
-                <div class="d-flex flex-column">
-                  <span class="text-white fw-bold smaller">100%</span>
-                  <span class="text-secondary text-xxs">Verified</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="performance-overview text-center text-md-end d-flex flex-column h-100">
-          <div class="ring-container-lg mb-2">
-            <div class="ring-wrapper-lg high">
-              <span class="percent text-white h4 fw-bold mb-0">{{talent.performance}}%</span>
-            </div>
-          </div>
-          <div class="text-success fw-bold h5 mb-1">{{talent.performanceTier}}</div>
-          <div class="text-secondary small">Performance</div>
-
-          <div class="mt-4 pt-4">
-            <app-button variant="primary" size="md" routerLink="/user/chat">
-              Message Me
-            </app-button>
-          </div>
-        </div>
+      <!-- Back Navigation (Pinned Top-Left) -->
+      <div class="position-absolute top-0 start-0 p-4 z-index-top">
+        <app-button variant="outline" size="sm" customClass="rounded-3 border-opacity-25 text-white shadow-lg glass-vivid"
+          routerLink="/user/search-talent">
+          <i class="bi bi-arrow-left fs-5 me-2 text-white"></i> Back to Search
+        </app-button>
       </div>
     </div>
 
-    <!-- Stats Bar -->
-    <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
-      <div class="row g-4 text-center">
-        <div class="col-6 col-md-3 border-end border-white border-opacity-10">
-          <div class="d-flex flex-column align-items-center">
-            <div class="stat-icon mb-2"><i class="bi bi-currency-dollar text-white"></i></div>
-            <div class="text-white fw-bold h5 mb-0">${{talent.hourlyRate}}/hr</div>
-            <div class="text-secondary smaller">Hourly Rate</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3 border-end-md border-white border-opacity-10">
-          <div class="d-flex flex-column align-items-center">
-            <div class="stat-icon mb-2"><i class="bi bi-clock text-white"></i></div>
-            <div class="text-white fw-bold h5 mb-0">{{talent.hoursWorked}}</div>
-            <div class="text-secondary smaller">Hours Worked</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3 border-end border-white border-opacity-10">
-          <div class="d-flex flex-column align-items-center">
-            <div class="stat-icon mb-2"><i class="bi bi-calendar-check text-white"></i></div>
-            <div class="text-white fw-bold h5 mb-0">{{talent.experience}}</div>
-            <div class="text-secondary smaller">Experience</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="d-flex flex-column align-items-center">
-            <div class="stat-icon mb-2"><i class="bi bi-person-check text-white"></i></div>
-            <div class="text-white fw-bold h5 mb-0">{{talent.jobSuccess}}</div>
-            <div class="text-secondary smaller">Job Success</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main Grid -->
-    <div class="row g-4">
-      <!-- Left Column -->
-      <div class="col-12 col-lg-7">
-        <!-- Skills -->
-        <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="text-white fw-bold mb-0">Skills</h5>
-            <a href="#" class="text-primary text-decoration-none smaller fw-bold">View all (12)</a>
-          </div>
-          <div class="d-flex flex-wrap gap-2">
-            @for (skill of talent.skills; track skill) {
-            <span class="skill-badge-lg">
-              <span class="dot bg-success me-2"></span> {{skill}}
-            </span>
-            }
-          </div>
-        </div>
-
-        <!-- About -->
-        <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
-          <h5 class="text-white fw-bold mb-3">About</h5>
-          <p class="text-secondary lh-lg mb-0">{{talent.bio}}</p>
-        </div>
-
-        <!-- Contract History (Replaced Experience) -->
-        <div class="glass p-4 rounded-4 border-white border-opacity-10">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="text-white fw-bold mb-0">Contract History</h5>
-          </div>
-          <div class="experience-timeline">
-            @for (contract of talent.contractHistory; track contract.role) {
-            <div class="timeline-item d-flex gap-3 pb-4 mb-4 border-bottom border-white border-opacity-5">
+    <div class="container max-w-5xl mx-auto pb-5 mb-5 profile-container-overlap">
+      <!-- Profile Header -->
+      <div class="glass p-4 p-md-5 rounded-4 mb-4 border-white border-opacity-10">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-start gap-4">
+          <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start gap-4">
+            <div class="avatar-wrapper position-relative">
+              <img [src]="talent.avatar" [alt]="talent.name" class="rounded-circle border border-3 border-dark shadow-lg"
+                style="width: 140px; height: 140px; object-fit: cover;">
+              <span class="status-indicator-lg position-absolute" [ngClass]="{
+                    'bg-success': talent.performanceTier === 'High',
+                    'bg-warning': talent.performanceTier === 'Medium',
+                    'bg-danger': talent.performanceTier === 'Low',
+                    'bg-secondary': talent.performanceTier === 'New' || talent.performanceTier === 'N/A'
+                  }"></span>
+            </div>
+            <div class="text-center text-md-start pt-2">
+              <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-3 mb-2">
+                <h1 class="text-white fw-bold mb-0 h2">{{talent.name}}</h1>
+                <button class="btn btn-outline-light btn-sm rounded-3 px-2 border-opacity-25 border-white" (click)="toggleSaveTalent()">
+                  <i class="bi" [ngClass]="isSavedTalent ? 'bi-bookmark-fill text-primary' : 'bi-bookmark text-white'"></i>
+                </button>
+              </div>
               <div
-                class="timeline-icon-box {{contract.color}} rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
-                <i class="bi {{contract.icon}} text-white fs-5"></i>
+                class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 text-secondary mb-2">
+                <i class="bi bi-geo-alt"></i>
+                <span>{{talent.location}}</span>
               </div>
-              <div class="flex-grow-1">
-                <div class="d-flex justify-content-between align-items-start">
-                  <div>
-                    <h6 class="text-white fw-bold mb-1 pointer" [routerLink]="['/user/contract-profile', 1]">
-                      {{contract.role}}</h6>
-                    <p class="text-secondary smaller mb-1">{{contract.company}} • <span
-                        class="text-white">{{contract.amount}}</span></p>
-                    <p class="text-secondary smaller mb-2">{{contract.duration}}</p>
-                    <a [routerLink]="['/user/contract-profile', 1]"
-                      class="text-primary text-decoration-none text-xxs fw-bold">VIEW DETAILS &rarr;</a>
+              <p class="text-secondary mb-3">{{talent.title}}</p>
+              <div class="d-flex gap-2 justify-content-center justify-content-md-start mb-4">
+                <span class="pill-badge"><i class="bi bi-star-fill text-warning me-2"></i> {{talent.rating}} Rating</span>
+                <span class="pill-badge"><i class="bi bi-briefcase me-2"></i> {{talent.projects}} Projects</span>
+              </div>
+
+              <!-- Trust Badges -->
+              <div class="d-flex flex-wrap gap-4 mt-auto pt-4 border-top border-white border-opacity-5">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-award-fill text-warning fs-5"></i>
+                  <div class="d-flex flex-column">
+                    <span class="text-white fw-bold smaller">Top Rated Plus</span>
+                    <span class="text-secondary text-xxs">Platform Badge</span>
                   </div>
-                  <div class="d-flex align-items-center gap-1">
-                    <i class="bi bi-star-fill text-warning smaller"></i>
-                    <span class="text-white smaller fw-bold">{{contract.rating}}</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-patch-check-fill text-primary fs-5"></i>
+                  <div class="d-flex flex-column">
+                    <span class="text-white fw-bold smaller">100%</span>
+                    <span class="text-secondary text-xxs">Verified</span>
                   </div>
                 </div>
               </div>
             </div>
-            }
+          </div>
+
+          <div class="performance-overview text-center text-md-end d-flex flex-column h-100">
+            <div class="ring-container-lg mb-2">
+              <div class="ring-wrapper-lg" [ngClass]="talent.performanceTier.toLowerCase()"
+                   style="cursor: help;" data-tooltip="Please start contract to level up score and better hiring">
+                <span class="percent text-white h4 fw-bold mb-0">{{talent.performance}}%</span>
+              </div>
+            </div>
+            <div class="fw-bold h5 mb-1" [ngClass]="{
+                  'text-success': talent.performanceTier === 'High',
+                  'text-warning': talent.performanceTier === 'Medium',
+                  'text-danger': talent.performanceTier === 'Low',
+                  'text-secondary': talent.performanceTier === 'New' || talent.performanceTier === 'N/A'
+                }">{{talent.performanceTier}}</div>
+            <div class="text-secondary small">Performance</div>
+
+            <div class="mt-4 pt-4">
+              <app-button variant="primary" size="md" routerLink="/user/chat">
+                Message Me
+              </app-button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Right Column -->
-      <div class="col-12 col-lg-5">
-        <!-- Performance Score -->
-        <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
-          <div class="d-flex align-items-center gap-2 mb-4">
-            <h5 class="text-white fw-bold mb-0">Performance Score</h5>
-            <i class="bi bi-question-circle text-secondary smaller"></i>
-          </div>
-          <div class="d-flex align-items-center gap-2 mb-3">
-            <span class="text-success fw-bold h4 mb-0">{{talent.performance}}%</span>
-            <span class="text-success smaller fw-bold">High Performance</span>
-          </div>
-          <div class="performance-bar-container mb-4">
-            <div class="performance-bar">
-              <div class="bar-segment low"></div>
-              <div class="bar-segment medium"></div>
-              <div class="bar-segment high"></div>
-              <div class="bar-indicator" [style.left.%]="talent.performance"></div>
+      <!-- Stats Bar -->
+      <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
+        <div class="row g-4 text-center">
+          <div class="col-6 col-md-3 border-end border-white border-opacity-10">
+            <div class="d-flex flex-column align-items-center">
+              <div class="stat-icon mb-2"><i class="bi bi-currency-dollar text-white"></i></div>
+              <div class="text-white fw-bold h5 mb-0">${{talent.hourlyRate}}/hr</div>
+              <div class="text-secondary smaller">Hourly Rate</div>
             </div>
           </div>
-          <p class="text-secondary smaller mb-4">This talent consistently delivers outstanding quality work and exceeds
-            expectations.</p>
-          <div class="d-flex justify-content-between">
-            <div class="d-flex align-items-center gap-1"><span class="dot bg-danger"></span> <span
-                class="text-secondary text-xxs">Low (25-45)</span></div>
-            <div class="d-flex align-items-center gap-1"><span class="dot bg-warning"></span> <span
-                class="text-secondary text-xxs">Medium (55-75)</span></div>
-            <div class="d-flex align-items-center gap-1"><span class="dot bg-success"></span> <span
-                class="text-secondary text-xxs">High (75-100)</span></div>
-          </div>
-        </div>
-
-        <!-- Availability -->
-        <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
-              <h5 class="text-white fw-bold mb-4">Availability</h5>
-              <div class="d-flex align-items-center gap-2 mb-2">
-                <span class="dot bg-success"></span>
-                <span class="text-success fw-bold smaller">{{talent.availability}}</span>
-              </div>
-              <p class="text-white fw-bold mb-1">{{talent.weeklyHours}}</p>
-              <p class="text-secondary smaller mb-0">Open to new projects</p>
+          <div class="col-6 col-md-3 border-end-md border-white border-opacity-10">
+            <div class="d-flex flex-column align-items-center">
+              <div class="stat-icon mb-2"><i class="bi bi-clock text-white"></i></div>
+              <div class="text-white fw-bold h5 mb-0">{{talent.hoursWorked}}</div>
+              <div class="text-secondary smaller">Hours Worked</div>
             </div>
-            <div class="calendar-icon-box glass p-3 rounded-3 border-white border-opacity-10">
-              <i class="bi bi-calendar3 text-white fs-4"></i>
+          </div>
+          <div class="col-6 col-md-3 border-end border-white border-opacity-10">
+            <div class="d-flex flex-column align-items-center">
+              <div class="stat-icon mb-2"><i class="bi bi-calendar-check text-white"></i></div>
+              <div class="text-white fw-bold h5 mb-0">{{talent.experience}}</div>
+              <div class="text-secondary smaller">Experience</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="d-flex flex-column align-items-center">
+              <div class="stat-icon mb-2"><i class="bi bi-person-check text-white"></i></div>
+              <div class="text-white fw-bold h5 mb-0">{{talent.jobSuccess}}</div>
+              <div class="text-secondary smaller">Job Success</div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Languages -->
-        <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
-          <h5 class="text-white fw-bold mb-4">Languages</h5>
-          <div class="d-flex flex-wrap gap-2">
-            @for (lang of talent.languages; track lang.name) {
-            <div class="language-pill glass px-3 py-2 rounded-3 border-white border-opacity-10">
-              <span class="text-white smaller fw-medium">{{lang.name}}</span>
-              <span class="text-success smaller ms-2">{{lang.level}}</span>
+      <!-- Main Grid -->
+      <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-12 col-lg-7">
+          <!-- Skills -->
+          <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5 class="text-white fw-bold mb-0">Skills</h5>
+              <span class="text-primary smaller fw-bold">Total Skills ({{talent.skills.length}})</span>
             </div>
-            }
+            <div class="d-flex flex-wrap gap-2">
+              @for (skill of talent.skills; track skill) {
+              <span class="skill-badge-lg">
+                <span class="dot bg-success me-2"></span> {{skill}}
+              </span>
+              } @empty {
+                <span class="text-secondary small">No skills added yet.</span>
+              }
+            </div>
           </div>
-        </div>
 
-        <!-- Social Media Profile Card -->
-        <div class="glass p-4 rounded-4 border-white border-opacity-10">
-          <h5 class="text-white fw-bold mb-4">Connect with Alex</h5>
-          <div class="d-grid gap-3">
-            @for (social of talent.socialMedia; track social.name) {
-            <a [href]="social.url"
-              class="social-link glass d-flex align-items-center justify-content-between p-3 rounded-3 text-decoration-none border-white border-opacity-5">
-              <div class="d-flex align-items-center gap-3">
-                <div class="social-icon-box rounded-2 d-flex align-items-center justify-content-center shadow-sm"
-                  [ngClass]="{
-                       'bg-linkedin': social.name === 'LinkedIn',
-                       'bg-behance': social.name === 'Behance',
-                       'bg-dribbble': social.name === 'Dribbble',
-                       'bg-twitter': social.name === 'Twitter'
-                     }">
-                  <i class="bi {{social.icon}} text-white"></i>
+          <!-- About -->
+          <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
+            <h5 class="text-white fw-bold mb-3">About</h5>
+            <p class="text-secondary lh-lg mb-0" style="white-space: pre-line;">{{talent.bio}}</p>
+          </div>
+
+          <!-- Contract History (Replaced Experience) -->
+          <div class="glass p-4 rounded-4 border-white border-opacity-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5 class="text-white fw-bold mb-0">Contract History</h5>
+            </div>
+            <div class="experience-timeline">
+              @for (contract of talent.contractHistory; track contract.role) {
+              <div class="timeline-item d-flex gap-3 pb-4 mb-4 border-bottom border-white border-opacity-5">
+                <div
+                  class="timeline-icon-box {{contract.color}} rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
+                  <i class="bi {{contract.icon}} text-white fs-5"></i>
                 </div>
-                <span class="text-white smaller fw-medium">{{social.name}}</span>
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <h6 class="text-white fw-bold mb-1">{{contract.role}}</h6>
+                      <p class="text-secondary smaller mb-1">{{contract.company}} • <span
+                          class="text-white">{{contract.amount}}</span></p>
+                      <p class="text-secondary smaller mb-2">{{contract.duration}}</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-1">
+                      <i class="bi bi-star-fill text-warning smaller"></i>
+                      <span class="text-white smaller fw-bold">{{contract.rating}}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <span class="text-secondary smaller">{{social.handle}}</span>
-            </a>
-            }
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-12 col-lg-5">
+          <!-- Performance Score -->
+          <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
+            <div class="d-flex align-items-center gap-2 mb-4">
+              <h5 class="text-white fw-bold mb-0">Performance Score</h5>
+              <i class="bi bi-question-circle text-secondary smaller"></i>
+            </div>
+            <div class="d-flex align-items-center gap-2 mb-3" style="cursor: help;" data-tooltip="Please start contract to level up score and better hiring">
+              <span class="fw-bold h4 mb-0" [ngClass]="{
+                    'text-success': talent.performanceTier === 'High',
+                    'text-warning': talent.performanceTier === 'Medium',
+                    'text-danger': talent.performanceTier === 'Low',
+                    'text-secondary': talent.performanceTier === 'New' || talent.performanceTier === 'N/A'
+                  }">{{talent.performance}}%</span>
+              <span class="smaller fw-bold" [ngClass]="{
+                    'text-success': talent.performanceTier === 'High',
+                    'text-warning': talent.performanceTier === 'Medium',
+                    'text-danger': talent.performanceTier === 'Low',
+                    'text-secondary': talent.performanceTier === 'New' || talent.performanceTier === 'N/A'
+                  }">{{talent.performanceTier}} Performance</span>
+            </div>
+            <div class="performance-bar-container mb-4">
+              <div class="performance-bar">
+                <div class="bar-segment low"></div>
+                <div class="bar-segment medium"></div>
+                <div class="bar-segment high"></div>
+                <div class="bar-indicator" [style.left.%]="talent.performance"></div>
+              </div>
+            </div>
+            <p class="text-secondary smaller mb-4">This talent's score represents contract consistency, milestone approvals, and client ratings.</p>
+            <div class="d-flex justify-content-between">
+              <div class="d-flex align-items-center gap-1"><span class="dot bg-danger"></span> <span
+                  class="text-secondary text-xxs">Low (25-45)</span></div>
+              <div class="d-flex align-items-center gap-1"><span class="dot bg-warning"></span> <span
+                  class="text-secondary text-xxs">Medium (55-75)</span></div>
+              <div class="d-flex align-items-center gap-1"><span class="dot bg-success"></span> <span
+                  class="text-secondary text-xxs">High (75-100)</span></div>
+            </div>
+          </div>
+
+          <!-- Availability -->
+          <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h5 class="text-white fw-bold mb-4">Availability</h5>
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="dot bg-success"></span>
+                  <span class="text-success fw-bold smaller">{{talent.availability}}</span>
+                </div>
+                <p class="text-white fw-bold mb-1">{{talent.weeklyHours}}</p>
+                <p class="text-secondary smaller mb-0">Open to new projects</p>
+              </div>
+              <div class="calendar-icon-box glass p-3 rounded-3 border-white border-opacity-10">
+                <i class="bi bi-calendar3 text-white fs-4"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Languages -->
+          <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
+            <h5 class="text-white fw-bold mb-4">Languages</h5>
+            <div class="d-flex flex-wrap gap-2">
+              @for (lang of talent.languages; track lang.name) {
+              <div class="language-pill glass px-3 py-2 rounded-3 border-white border-opacity-10">
+                <span class="text-white smaller fw-medium">{{lang.name}}</span>
+                <span class="text-success smaller ms-2">{{lang.level}}</span>
+              </div>
+              }
+            </div>
+          </div>
+
+          <!-- Social Media Profile Card -->
+          <div class="glass p-4 rounded-4 border-white border-opacity-10">
+            <h5 class="text-white fw-bold mb-4">Connect with {{talent.name}}</h5>
+            <div class="d-grid gap-3">
+              @for (social of talent.socialMedia; track social.name) {
+              <a [href]="social.url" target="_blank"
+                class="social-link glass d-flex align-items-center justify-content-between p-3 rounded-3 text-decoration-none border-white border-opacity-5">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="social-icon-box rounded-2 d-flex align-items-center justify-content-center shadow-sm"
+                    [ngClass]="{
+                         'bg-linkedin': social.name === 'LinkedIn',
+                         'bg-behance': social.name === 'Behance',
+                         'bg-dribbble': social.name === 'Dribbble',
+                         'bg-twitter': social.name === 'Twitter'
+                       }">
+                    <i class="bi {{social.icon}} text-white"></i>
+                  </div>
+                  <span class="text-white smaller fw-medium">{{social.name}}</span>
+                </div>
+                <span class="text-secondary smaller">{{social.handle}}</span>
+              </a>
+              }
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- Portfolio Section (Full Column) (NEW) -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="glass p-4 p-md-5 rounded-4 border-white border-opacity-10">
+            <div class="d-flex justify-content-between align-items-center mb-5">
+              <div>
+                <h4 class="text-white fw-bold mb-1">Project Portfolio</h4>
+                <p class="text-secondary smaller mb-0">High-performance deliverables and creative solutions.</p>
+              </div>
+            </div>
+
+            <div class="row g-4">
+              @for (item of talent.portfolio; track item.id) {
+              <div class="col-12 col-md-4">
+                <div class="portfolio-card glass overflow-hidden rounded-4 h-100 border-white border-opacity-5 pointer hover-blue-border" 
+                     (click)="openPortfolioDetail(item)"
+                     style="cursor: pointer; transition: all 0.3s ease;">
+                  <div class="portfolio-image-wrapper bg-black position-relative" style="height: 180px; overflow: hidden;">
+                    @if (item.media && item.media.length > 0) {
+                      @if (item.media[0].mediaType === 'image') {
+                        <img [src]="item.media[0].url" class="w-100 h-100 object-fit-cover" [alt]="item.title">
+                      } @else {
+                        <video [src]="item.media[0].url" class="w-100 h-100 object-fit-cover" autoplay muted loop playsinline></video>
+                      }
+                    } @else {
+                      <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-secondary opacity-50">
+                        <i class="bi bi-image fs-2 mb-1"></i>
+                        <span class="smaller">No Preview Media</span>
+                      </div>
+                    }
+                  </div>
+                  <div class="p-4">
+                    <span class="text-primary text-xxs fw-bold text-uppercase mb-2 d-block">{{item.category}}</span>
+                    <h6 class="text-white fw-bold mb-3">{{item.title}}</h6>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-graph-up-arrow text-success smaller"></i>
+                        <span class="text-success text-xxs fw-bold">{{item.performance}}</span>
+                      </div>
+                      <span class="text-primary-light smaller fw-semibold">Explore <i class="bi bi-arrow-right-short"></i></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- Portfolio Section (Full Column) (NEW) -->
-    <div class="row mt-4">
-      <div class="col-12">
-        <div class="glass p-4 p-md-5 rounded-4 border-white border-opacity-10">
-          <div class="d-flex justify-content-between align-items-center mb-5">
-            <div>
-              <h4 class="text-white fw-bold mb-1">Project Portfolio</h4>
-              <p class="text-secondary smaller mb-0">High-performance deliverables and creative solutions.</p>
+    <!-- Portfolio Detail Modal -->
+    @if (selectedPortfolioItem) {
+      <div class="custom-modal-backdrop d-flex align-items-center justify-content-center animate-fade-in" style="z-index: 1050; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);">
+        <div class="glass modal-card rounded-4 p-4 p-md-5 position-relative border border-white border-opacity-10 shadow-lg" style="max-width: 850px; width: 90%; max-height: 90vh; overflow-y: auto; background: rgba(15, 23, 42, 0.95);">
+          <button class="btn-close btn-close-white position-absolute top-0 end-0 m-3" (click)="closePortfolioDetail()"></button>
+          
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge bg-transparent text-primary border border-primary px-3 py-1.5 rounded-3 font-monospace text-xs" style="background: transparent !important;">
+              {{ selectedPortfolioItem.category }}
+            </span>
+            @if (selectedPortfolioItem.role) {
+              <span class="badge bg-dark bg-opacity-70 text-secondary border border-white border-opacity-10 px-3 py-1.5 rounded-3 text-xs">
+                Role: {{ selectedPortfolioItem.role }}
+              </span>
+            }
+          </div>
+          
+          <h3 class="text-white fw-bold mb-4">{{ selectedPortfolioItem.title }}</h3>
+          
+          <!-- Media Showcase (Grid / List) -->
+          @if (selectedPortfolioItem.media && selectedPortfolioItem.media.length > 0) {
+            <div class="mb-4">
+              <h6 class="text-secondary small text-uppercase tracking-wider mb-3">Project Media Showcase</h6>
+              
+              <!-- Large primary media view -->
+              <div class="position-relative bg-black rounded-4 overflow-hidden mb-3 border border-white border-opacity-10 ratio ratio-16x9" style="max-height: 400px;">
+                @if (selectedPortfolioItem.media[0].mediaType === 'image') {
+                  <img [src]="selectedPortfolioItem.media[0].url" alt="Primary Showcase" class="object-fit-contain w-100 h-100">
+                } @else {
+                  <video [src]="selectedPortfolioItem.media[0].url" class="object-fit-contain w-100 h-100" controls autoplay muted playsinline></video>
+                }
+              </div>
+
+              <!-- Other media grid if count > 1 -->
+              @if (selectedPortfolioItem.media.length > 1) {
+                <div class="row g-2">
+                  @for (med of selectedPortfolioItem.media.slice(1); track med.url) {
+                    <div class="col-6 col-sm-4 col-md-3">
+                      <div class="position-relative bg-black rounded-3 overflow-hidden border border-white border-opacity-10 ratio ratio-16x9 pointer" 
+                           (click)="selectedPortfolioItem.media.unshift(selectedPortfolioItem.media.splice(selectedPortfolioItem.media.indexOf(med), 1)[0])"
+                           style="cursor: pointer;">
+                        @if (med.mediaType === 'image') {
+                          <img [src]="med.url" alt="Showcase Thumbnail" class="object-fit-cover w-100 h-100">
+                        } @else {
+                          <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-dark">
+                            <video [src]="med.url" class="object-fit-cover w-100 h-100" muted></video>
+                            <i class="bi bi-play-circle-fill position-absolute text-white fs-4 opacity-75"></i>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
             </div>
-            <button class="btn btn-outline-light rounded-pill px-4 btn-sm border-opacity-25">View All Projects</button>
+          }
+
+          <!-- Project Information -->
+          <div class="row g-4 mb-4">
+            <div class="col-12">
+              <h6 class="text-secondary small text-uppercase tracking-wider mb-2">Project Description</h6>
+              <div class="text-secondary-light font-sm lh-relaxed p-3 bg-glass rounded-4" [innerHTML]="selectedPortfolioItem.description"></div>
+            </div>
           </div>
 
-          <div class="row g-4">
-            @for (item of talent.portfolio; track item.id) {
-            <div class="col-12 col-md-4">
-              <div class="portfolio-card glass overflow-hidden rounded-4 h-100 border-white border-opacity-5">
-                <div class="portfolio-image-wrapper">
-                  <img [src]="item.image" class="w-100 h-100 object-fit-cover" [alt]="item.title">
-                  <div class="portfolio-overlay">
-                    <button class="btn btn-light btn-sm rounded-pill px-3 fw-bold"
-                      [routerLink]="['/user/project-details', item.id]">View Details</button>
-                  </div>
-                </div>
-                <div class="p-4">
-                  <span class="text-primary text-xxs fw-bold text-uppercase mb-2 d-block">{{item.category}}</span>
-                  <h6 class="text-white fw-bold mb-3">{{item.title}}</h6>
-                  <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-graph-up-arrow text-success smaller"></i>
-                    <span class="text-success text-xxs fw-bold">{{item.performance}}</span>
-                  </div>
-                </div>
+          <!-- Tags -->
+          @if (selectedPortfolioItem.tags && selectedPortfolioItem.tags.length > 0) {
+            <div class="mb-4">
+              <h6 class="text-secondary small text-uppercase tracking-wider mb-2">Technologies & Skills</h6>
+              <div class="d-flex flex-wrap gap-2">
+                @for (tag of selectedPortfolioItem.tags; track tag) {
+                  <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2.5 py-1.5 text-xs">
+                    {{ tag }}
+                  </span>
+                }
               </div>
             </div>
+          }
+
+          <!-- Modal Action Buttons -->
+          <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top border-white border-opacity-10">
+            <button type="button" class="btn btn-outline-light bg-glass border-0 px-4 py-2 rounded-3" (click)="closePortfolioDetail()">
+              Close
+            </button>
+            @if (selectedPortfolioItem.projectUrl) {
+              <a [href]="selectedPortfolioItem.projectUrl" target="_blank" class="btn btn-primary px-4 py-2 rounded-3 d-flex align-items-center gap-2">
+                Visit Project Website <i class="bi bi-box-arrow-up-right"></i>
+              </a>
             }
           </div>
         </div>
       </div>
+    }
+  } @else {
+    <!-- Loading State -->
+    <div class="container max-w-5xl mx-auto py-5 my-5 text-center">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">Loading Profile...</span>
+      </div>
+      <p class="text-secondary mt-3">Fetching talent profile details...</p>
     </div>
-
-  </div>
+  }
 </div>

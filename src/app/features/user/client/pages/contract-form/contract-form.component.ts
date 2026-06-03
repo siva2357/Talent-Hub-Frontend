@@ -7,7 +7,7 @@ import { RichTextEditorComponent } from '../../../../../shared/components/rich-t
 import { ContractService } from '../../../../../core/services/contract.service';
 import { CreateContractDTO, UpdateContractDTO } from '../../../../../core/DTOs/contract.dto';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { CONTRACT_STATUS_OPTIONS, BUDGET_TYPE_OPTIONS} from '../../../../../core/constants/contract-options.constant';
+import { CONTRACT_STATUS_OPTIONS, BUDGET_TYPE_OPTIONS, CONTRACT_TYPE_OPTIONS, CONTRACT_SUBJECT_OPTIONS } from '../../../../../core/constants/contract-options.constant';
 import { ContractStatusEnum, BudgetTypeEnum } from '../../../../../core/enums/contract.enum';
 
 @Component({
@@ -31,6 +31,8 @@ export class ContractFormComponent implements OnInit {
   loading: boolean = false;
   statusOptions = CONTRACT_STATUS_OPTIONS;
   budgetTypeOptions = BUDGET_TYPE_OPTIONS;
+  contractTypeOptions = CONTRACT_TYPE_OPTIONS;
+  contractSubjectOptions = CONTRACT_SUBJECT_OPTIONS;
   contractForm!: FormGroup;
 
   constructor( private fb: FormBuilder, private contractService: ContractService, private router: Router, private route: ActivatedRoute) {}
@@ -55,6 +57,8 @@ export class ContractFormComponent implements OnInit {
       contractStartDate: ['', Validators.required],
       contractEndDate: ['', Validators.required],
       contractDescription: ['', Validators.required],
+      contractType: ['', Validators.required],
+      contractSubject: ['', Validators.required],
       status: [ContractStatusEnum.PENDING, Validators.required],
     });
   }
@@ -70,6 +74,8 @@ export class ContractFormComponent implements OnInit {
           contractStartDate: this.formatDate(response.contract.contractStartDate),
           contractEndDate: this.formatDate(response.contract.contractEndDate),
           contractDescription: response.contract.contractDescription,
+          contractType: response.contract.contractType,
+          contractSubject: response.contract.contractSubject,
           status: response.contract.status,
         });
         this.loading = false;
@@ -96,6 +102,13 @@ export class ContractFormComponent implements OnInit {
       alert('End date must be greater than start date');
       return;
     }
+
+    const minEndDate = new Date(startDate);
+    minEndDate.setMonth(minEndDate.getMonth() + 2);
+    if (endDate < minEndDate) {
+      alert('Contract duration must be at least 2 months');
+      return;
+    }
     this.loading = true;
     const payload: CreateContractDTO | UpdateContractDTO = {
       contractTitle: this.contractForm.value.contractTitle,
@@ -104,6 +117,8 @@ export class ContractFormComponent implements OnInit {
       contractStartDate: this.contractForm.value.contractStartDate,
       contractEndDate: this.contractForm.value.contractEndDate,
       contractDescription: this.contractForm.value.contractDescription,
+      contractType: this.contractForm.value.contractType,
+      contractSubject: this.contractForm.value.contractSubject,
       status: this.contractForm.value.status,
     };
 
@@ -116,6 +131,8 @@ export class ContractFormComponent implements OnInit {
           this.contractForm.patchValue({
             budgetType: 'Fixed Price',
             status: 'pending',
+            contractType: '',
+            contractSubject: '',
           });
           // REDIRECT
           this.router.navigate(['/user/your-contracts']);

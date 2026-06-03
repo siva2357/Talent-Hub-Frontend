@@ -22,9 +22,10 @@ export class UserProfileComponent implements OnInit {
 
   user: any = null;
   profile: any = null;
-contracts: any[] = [];
+  contracts: any[] = [];
   diaries: any[] = [];
   isLoading = true;
+  selectedPortfolioItem: any = null;
 
   isFreelancer = computed(() =>
     this.currentUser()?.role === 'Freelancer'
@@ -36,6 +37,14 @@ contracts: any[] = [];
 
   ngOnInit(): void {
     this.getProfile();
+  }
+
+  openPortfolioDetail(item: any): void {
+    this.selectedPortfolioItem = item;
+  }
+
+  closePortfolioDetail(): void {
+    this.selectedPortfolioItem = null;
   }
 
 

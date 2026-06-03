@@ -153,4 +153,28 @@ withdrawApplication(): void {
 
 }
 
+  toggleSaveContract(): void {
+    if (!this.contract) return;
+
+    if (this.contract.hasSaved) {
+      this.contractService.unsaveContract(this.contractId).subscribe({
+        next: () => {
+          this.contract.hasSaved = false;
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    } else {
+      this.contractService.saveContract(this.contractId).subscribe({
+        next: () => {
+          this.contract.hasSaved = true;
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    }
+  }
+
 }

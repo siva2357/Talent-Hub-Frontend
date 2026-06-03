@@ -7,6 +7,8 @@ export interface Contract {
   contractEndDate: string;
   totalDuration:string;
   contractDescription: string;
+  contractType: string;
+  contractSubject: string;
   clientName: string;
   clientType: string;
   website: string;

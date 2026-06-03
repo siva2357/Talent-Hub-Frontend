@@ -14,52 +14,62 @@
     </div>
 
     <div class="row g-4">
-      @for (contract of savedContracts; track contract.id) {
+      @for (contract of savedContracts; track contract._id) {
       <div class="col-lg-4 col-md-6">
         <div class="contract-card glass p-4 rounded-4 h-100 d-flex flex-column">
           <!-- Top Info -->
           <div class="d-flex justify-content-between align-items-start mb-4">
             <div class="d-flex align-items-center gap-3">
               <div>
-                <h5 class="fw-bold mb-2 h6">{{contract.title}}</h5>
-                <div class="d-flex gap-2">
+                <h5 class="fw-bold mb-2 h6">{{contract.contractTitle}}</h5>
+                <div class="d-flex gap-2 flex-wrap">
                   <span class="badge-type"
-                    [ngClass]="contract.type === 'Fixed Price' ? 'fixed' : 'hourly'">{{contract.type}}</span>
-                  <span class="badge-level">{{contract.level}}</span>
+                    [ngClass]="contract.budgetType === 'Fixed Price' ? 'fixed' : 'hourly'">{{contract.budgetType}}</span>
+                  @if (contract.contractType) {
+                    <span class="badge-tag category">
+                      {{ contract.contractType }}
+                    </span>
+                  }
+                  @if (contract.contractSubject) {
+                    <span class="badge-tag subject">
+                      {{ contract.contractSubject }}
+                    </span>
+                  }
                 </div>
               </div>
             </div>
             <!-- Using a solid bookmark for saved contracts -->
-            <button class="btn-save saved" (click)="removeContract(contract.id)"><i class="bi bi-bookmark-fill"></i></button>
+            <button class="btn-save saved" (click)="removeContract(contract._id)"><i class="bi bi-bookmark-fill"></i></button>
           </div>
 
           <!-- Description -->
-          <p class="text-sm text-secondary mb-4 flex-grow-1">
-            {{contract.description}}
+          <p class="text-sm text-secondary mb-4 flex-grow-1" [innerHTML]="contract.contractDescription">
           </p>
 
           <!-- Tech Stack -->
-          <div class="d-flex flex-wrap gap-2 mb-4">
-            @for (tech of contract.techStack; track tech) {
-            <span class="tech-tag">{{tech}}</span>
-            }
-          </div>
+          @if (contract.techStack && contract.techStack.length > 0) {
+            <div class="d-flex flex-wrap gap-2 mb-4">
+              @for (tech of contract.techStack; track tech) {
+              <span class="tech-tag">{{tech}}</span>
+              }
+            </div>
+          }
 
           <!-- Stats & Action -->
           <div class="pt-4 border-top border-white border-opacity-10 mt-auto">
             <div class="d-flex justify-content-between align-items-center mb-4">
               <div class="contract-stat">
-                <div class="text-white fw-bold">{{contract.budget}}</div>
-                <div class="text-xxs text-secondary">{{contract.budgetLabel}}</div>
+                <div class="text-white fw-bold">₹{{contract.estimatedBudget}}</div>
+                <div class="text-xxs text-secondary">Budget</div>
               </div>
               <div class="contract-stat text-end">
-                <div class="text-white fw-bold"><i class="bi bi-clock me-1"></i> {{contract.duration}}</div>
-                <div class="text-xxs text-secondary">Duration</div>
+                <div class="text-white fw-bold"><i class="bi bi-clock me-1"></i> {{contract.totalDuration}}</div>
+                <div class="text-xxs text-secondary">
+                  {{ contract.contractStartDate | date:'mediumDate' }}  -  {{ contract.contractEndDate | date:'mediumDate' }}
+                </div>
               </div>
             </div>
-            <a [routerLink]="['/user/contract-details', contract.id]" class="text-decoration-none">
-                <app-button variant="brand" size="sm" customClass="w-100 py-2">View Details &rarr;</app-button>
-            </a>
+            <app-button variant="brand" size="sm" customClass="w-100 py-2" (click)="viewContract(contract._id)">View Details &rarr;</app-button>
           </div>
         </div>
       </div>

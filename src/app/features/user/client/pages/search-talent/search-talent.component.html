@@ -1,12 +1,13 @@
 <div class="search-talent-page p-3 p-md-4 p-xl-5">
   <div class="container-fluid max-w-7xl mx-auto">
-    
+
     <!-- GET TO KNOW YOUR TALENTS SECTION -->
     <section class="profiles-section mb-5">
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-4">
         <div>
           <h3 class="text-white fw-bold mb-3 h4">Get to know your Talents</h3>
-          <p class="text-secondary text-lg mb-0">Discover skilled professionals and find the perfect match for your projects.</p>
+          <p class="text-secondary text-lg mb-0">Discover skilled professionals and find the perfect match for your
+            projects.</p>
         </div>
         <div class="d-flex gap-4 profile-legend">
           <div class="d-flex align-items-center gap-2">
@@ -30,32 +31,44 @@
           <div class="col-12 col-md-4">
             <div class="d-flex align-items-center gap-3 px-2">
               <i class="bi bi-search text-secondary"></i>
-              <input type="text" class="form-control bg-transparent border-0 text-white shadow-none search-input" 
-                     placeholder="Search by skills, title, or name..." [(ngModel)]="searchQuery">
+              <input type="text" class="form-control bg-transparent border-0 text-white shadow-none search-input"
+                placeholder="Search by skills, title, or name..." [(ngModel)]="searchQuery"
+                (keyup.enter)="applyFilters()">
             </div>
           </div>
           <div class="col-12 col-md-3">
-            <select class="form-select bg-transparent text-white border-white border-opacity-10 shadow-none rounded-3">
-              <option class="bg-dark">All Categories</option>
-              <option class="bg-dark">UI/UX Design</option>
-              <option class="bg-dark">Full Stack Development</option>
-              <option class="bg-dark">Data Science</option>
+            <select class="form-select bg-transparent text-white border-white border-opacity-10 shadow-none rounded-3"
+              [(ngModel)]="selectedCategory">
+              <option class="bg-dark" value="All Categories">All Categories</option>
+              <option class="bg-dark" value="UI/UX Design">UI/UX Design</option>
+              <option class="bg-dark" value="Full Stack Development">Full Stack Development</option>
+              <option class="bg-dark" value="Data Science">Data Science</option>
             </select>
           </div>
           <div class="col-12 col-md-3">
             <div class="d-flex gap-2 align-items-center">
-              <input type="number" class="form-control bg-transparent text-white border-white border-opacity-10 shadow-none rounded-3" placeholder="Min $">
+              <input type="number"
+                class="form-control bg-transparent text-white border-white border-opacity-10 shadow-none rounded-3"
+                placeholder="Min $" [(ngModel)]="minRate">
               <span class="text-secondary">-</span>
-              <input type="number" class="form-control bg-transparent text-white border-white border-opacity-10 shadow-none rounded-3" placeholder="Max $">
+              <input type="number"
+                class="form-control bg-transparent text-white border-white border-opacity-10 shadow-none rounded-3"
+                placeholder="Max $" [(ngModel)]="maxRate">
             </div>
           </div>
           <div class="col-12 col-md-2">
-            <button class="btn btn-primary w-100 rounded-pill">Apply Filters</button>
+            <button class="btn btn-primary w-100 rounded-pill" (click)="applyFilters()">Apply Filters</button>
           </div>
         </div>
       </div>
 
       <div class="row g-4">
+        @if (talents.length === 0) {
+        <div class="col-12 text-center py-5">
+          <h4 class="text-white fw-bold mb-2">No talents found</h4>
+          <p class="text-secondary">Try adjusting your filters or search terms.</p>
+        </div>
+        } @else {
         @for (talent of talents; track talent.id) {
         <div class="col-lg-4 col-md-6">
           <div class="profile-card glass p-4 rounded-4 h-100 border-opacity-10 border-white d-flex flex-column">
@@ -63,17 +76,11 @@
             <div class="d-flex justify-content-between align-items-start mb-4">
               <div class="d-flex align-items-center gap-3">
                 <div class="avatar-wrapper position-relative">
-                  <img [src]="talent.avatar" [alt]="talent.name" 
-                       class="rounded-circle border border-2 border-dark"
-                       style="width: 64px; height: 64px; object-fit: cover;">
-                  <span class="status-indicator position-absolute" [ngClass]="{
-                        'bg-success': talent.performanceTier === 'High',
-                        'bg-warning': talent.performanceTier === 'Medium',
-                        'bg-danger': talent.performanceTier === 'Low'
-                      }"></span>
+                  <img [src]="talent.avatar" [alt]="talent.name" class="rounded-circle border border-2 border-dark"
+                    style="width: 64px; height: 64px; object-fit: cover;">
                 </div>
                 <div>
-                  <h5 class="text-white fw-bold mb-1">{{talent.name}}</h5>
+                  <h5 class="text-white fw-bold mb-1 pointer" (click)="viewProfile(talent.id)">{{talent.name}}</h5>
                   <div class="d-flex align-items-center gap-1 text-secondary text-xs">
                     <i class="bi bi-geo-alt"></i>
                     <span>{{talent.location}}</span>
@@ -82,14 +89,16 @@
                 </div>
               </div>
               <div class="performance-ring text-start">
-                <div class="ring-wrapper ms-0 mb-1" [ngClass]="talent.performanceTier.toLowerCase()">
+                <div class="ring-wrapper ms-0 mb-1" [ngClass]="talent.performanceTier.toLowerCase()"
+                  style="cursor: help;" data-tooltip="Please start contract to level up score and better hiring">
                   <span class="percent text-white">{{talent.performance}}%</span>
                 </div>
                 <div class="fw-bold text-xs" [ngClass]="{
-                      'text-success': talent.performanceTier === 'High',
-                      'text-warning': talent.performanceTier === 'Medium',
-                      'text-danger': talent.performanceTier === 'Low'
-                    }">{{talent.performanceTier}}</div>
+                        'text-success': talent.performanceTier === 'High',
+                        'text-warning': talent.performanceTier === 'Medium',
+                        'text-danger': talent.performanceTier === 'Low',
+                        'text-secondary': talent.performanceTier === 'New' || talent.performanceTier === 'N/A'
+                      }">{{talent.performanceTier}}</div>
                 <div class="text-secondary text-xxs">Performance</div>
               </div>
             </div>
@@ -112,7 +121,7 @@
               </div>
               <div class="col-3 text-start border-end border-white border-opacity-10">
                 <div class="text-white fw-bold text-sm">{{talent.projectsCount}}</div>
-                <div class="text-secondary text-xxs">Projects</div>
+                <div class="text-secondary text-xxs">Contracts</div>
               </div>
               <div class="col-3 text-start border-end border-white border-opacity-10">
                 <div class="text-white fw-bold text-sm">{{talent.rating}}</div>
@@ -128,21 +137,24 @@
             <div class="d-flex align-items-center justify-content-between mt-auto">
               <div class="d-flex align-items-center gap-2">
                 <span class="dot" [ngClass]="{
-                      'bg-success': talent.performanceTier === 'High',
-                      'bg-warning': talent.performanceTier === 'Medium',
-                      'bg-danger': talent.performanceTier === 'Low'
-                    }"></span>
-                <span class="text-xs text-secondary">{{talent.isAvailable ? 'Available' : 'Busy'}}</span>
+                        'bg-success': talent.status === 'active',
+                        'bg-danger': talent.status !== 'active'
+                      }"></span>
+                <span class="text-xs text-secondary">{{talent.status === 'active' ? 'Online' : 'Offline'}}</span>
               </div>
               <div class="d-flex gap-2">
-                <button class="btn btn-outline-secondary btn-sm rounded-3 px-2 border-opacity-25 border-white">
-                  <i class="bi bi-bookmark text-white"></i>
+                <button class="btn btn-outline-secondary btn-sm rounded-3 px-2 border-opacity-25 border-white"
+                  (click)="toggleSaveTalent(talent.id)">
+                  <i class="bi"
+                    [ngClass]="isSaved(talent.id) ? 'bi-bookmark-fill text-primary' : 'bi-bookmark text-white'"></i>
                 </button>
-                <button class="btn btn-primary btn-sm px-3 rounded-3" routerLink="/user/talent-profile">View Profile &rarr;</button>
+                <button class="btn btn-primary btn-sm px-3 rounded-3" (click)="viewProfile(talent.id)">View Profile
+                  &rarr;</button>
               </div>
             </div>
           </div>
         </div>
+        }
         }
       </div>
 

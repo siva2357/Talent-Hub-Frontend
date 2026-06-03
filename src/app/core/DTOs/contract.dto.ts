@@ -9,6 +9,8 @@ export interface CreateContractDTO {
   contractStartDate: string;
   contractEndDate: string;
   contractDescription: string;
+  contractType: string;
+  contractSubject: string;
 }
 
 export interface UpdateContractDTO {
@@ -18,5 +20,7 @@ export interface UpdateContractDTO {
   contractStartDate?: string;
   contractEndDate?: string;
   contractDescription?: string;
+  contractType?: string;
+  contractSubject?: string;
   status?: 'pending' | 'in progress' | 'completed';
 }

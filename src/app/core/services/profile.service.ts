@@ -79,4 +79,39 @@ export class ProfileService {
       })
     );
   }
+
+  /**
+   * Fetches all freelancer profiles from the database matching the given filter criteria.
+   */
+  getFreelancers(params?: { search?: string; category?: string; minRate?: number; maxRate?: number }): Observable<{ success: boolean; freelancers: any[] }> {
+    return this.http.get<{ success: boolean; freelancers: any[] }>(`${this.baseUrl}/profile/freelancers`, { params: params as any });
+  }
+
+  /**
+   * Fetches a specific freelancer profile by ID.
+   */
+  getFreelancerProfileById(id: string): Observable<{ success: boolean; profile: any }> {
+    return this.http.get<{ success: boolean; profile: any }>(`${this.baseUrl}/profile/freelancer/${id}`);
+  }
+
+  /**
+   * Saves a freelancer profile to the logged-in client's bookmarks.
+   */
+  saveTalent(id: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/profile/save-talent/${id}`, {});
+  }
+
+  /**
+   * Removes a freelancer profile from the logged-in client's bookmarks.
+   */
+  unsaveTalent(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/profile/unsave-talent/${id}`);
+  }
+
+  /**
+   * Fetches all saved talents for the logged-in client.
+   */
+  getSavedTalents(): Observable<{ success: boolean; savedTalents: any[] }> {
+    return this.http.get<{ success: boolean; savedTalents: any[] }>(`${this.baseUrl}/profile/saved-talents`);
+  }
 }
