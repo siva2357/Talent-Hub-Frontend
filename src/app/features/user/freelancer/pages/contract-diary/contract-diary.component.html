@@ -25,7 +25,7 @@
                 <div class="diary-accordion-item glass rounded-4 overflow-hidden mb-4">
 
                     <!-- Accordion Header -->
-                    <div class="accordion-header p-4 d-flex align-items-center justify-content-between cursor-pointer"
+                    <div class="accordion-header p-4 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 cursor-pointer"
                         (click)="toggleDiary(diary._id)">
                         <div class="d-flex align-items-center gap-4 flex-grow-1">
                             <div class="contract-info">
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center gap-4">
+                        <div class="d-flex align-items-center justify-content-between w-100 w-md-auto gap-4 mt-2 mt-md-0">
                             <span class="status-badge"
                                 [ngClass]="diary.overallStatus === 'completed' ? 'approved' : 'in-progress'">
                                 {{ diary.overallStatus === 'completed' ? 'Completed' : 'Active Phase' }}
@@ -114,6 +114,18 @@
                                     <p class="text-secondary small mb-3">{{ phase.description }}</p>
                                     }
 
+                                    <!-- Client Phase Requirements / Attachments -->
+                                    @if (phase.clientAttachments && phase.clientAttachments.length > 0) {
+                                    <div class="mb-3">
+                                        <h6 class="text-white text-xxs fw-bold mb-2 opacity-50">REQUIREMENT FILES</h6>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            @for (file of phase.clientAttachments; track file._id) {
+                                                <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true"></app-file-preview>
+                                            }
+                                        </div>
+                                    </div>
+                                    }
+
                                     <!-- Client Feedback (changes-requested) -->
                                     @if (phase.status === 'changes-requested' && phase.clientFeedback) {
                                     <div class="action-area glass p-3 rounded-3 mb-3 border-warning border-opacity-25">
@@ -133,23 +145,12 @@
                                     }
 
                                     <!-- Attachments -->
-                                    @if (phase.attachments.length > 0) {
+                                    @if (phase.attachments && phase.attachments.length > 0) {
                                     <div class="media-previews mb-3">
                                         <h6 class="text-white text-xxs fw-bold mb-2 opacity-50">ATTACHED FILES</h6>
-                                        <div class="d-flex flex-column gap-2">
+                                        <div class="d-flex flex-wrap gap-2">
                                             @for (file of phase.attachments; track file._id) {
-                                            <div class="d-flex align-items-center gap-3 p-2 glass rounded-3 border-white border-opacity-5">
-                                                <div class="file-icon bg-white bg-opacity-5 p-2 rounded-2">
-                                                    <i class="bi fs-5" [ngClass]="getFileIcon(file.fileType)"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div class="text-white small fw-bold">{{ file.fileName }}</div>
-                                                    <div class="text-secondary text-xxs">{{ file.fileSize }}</div>
-                                                </div>
-                                                <a [href]="file.fileUrl" target="_blank" class="btn-icon text-secondary">
-                                                    <i class="bi bi-download"></i>
-                                                </a>
-                                            </div>
+                                                <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true"></app-file-preview>
                                             }
                                         </div>
                                     </div>
@@ -177,6 +178,31 @@
                                                 placeholder="Describe your progress, what you've completed..."
                                                 [(ngModel)]="phaseNotes[phase._id]"></textarea>
                                         </div>
+
+                                        <!-- File Upload for Freelancer Proof of Work -->
+                                        <div class="mb-3">
+                                            <app-file-upload
+                                                label="Proof of Work / Deliverables"
+                                                variant="dragdrop"
+                                                [bucketKey]="BucketKey.FreelancerData"
+                                                [uploadSection]="UploadSection.ContractFiles"
+                                                [(ngModel)]="tempUploadUrls[phase._id]"
+                                                name="tempUpload-{{phase._id}}"
+                                                (uploadSuccessDetailed)="onFileUploaded(phase._id, $event)"
+                                                placeholder="Drag & drop work files here or click to browse">
+                                            </app-file-upload>
+
+                                            @if (uploadedFiles[phase._id] && uploadedFiles[phase._id].length > 0) {
+                                                <div class="row g-2 mt-2">
+                                                    @for (file of uploadedFiles[phase._id]; track $index) {
+                                                        <div class="col-12 col-md-6">
+                                                            <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" (remove)="removeAttachment(phase._id, $index)"></app-file-preview>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+
                                         <div class="d-flex justify-content-end">
                                             <app-button variant="brand" size="sm"
                                                 [disabled]="submitting[phase._id]"

@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { InputComponent } from '../../components/input/input.component';
 import { ButtonComponent } from '../../components/button/button.component';
+import { AuthService } from '../../../core/services/auth.service';
+import { SupportService } from '../../../core/services/support.service';
 
 interface Subcategory {
   label: string;
@@ -31,6 +33,7 @@ interface ScreenshotFile {
   imports: [
     CommonModule,
     RouterLink,
+    RouterModule,
     FormsModule,
     InputComponent,
     ButtonComponent
@@ -38,9 +41,33 @@ interface ScreenshotFile {
   templateUrl: './contact-support.component.html',
   styleUrl: './contact-support.component.css'
 })
-export class ContactSupportComponent {
+export class ContactSupportComponent implements OnInit {
+  private authService = inject(AuthService);
+  private supportService = inject(SupportService);
+
   // ROLE MODE (Embedded Dual-Mode Form)
   userMode: 'freelancer' | 'client' = 'freelancer';
+
+  ngOnInit(): void {
+    const role = this.authService.currentUser()?.role?.toLowerCase();
+    if (role === 'client') {
+      this.userMode = 'client';
+    } else {
+      this.userMode = 'freelancer';
+    }
+  }
+
+  getDashboardLink(): string {
+    const role = this.authService.currentUser()?.role?.toLowerCase();
+    if (role === 'client') {
+      return '/user/client-dashboard';
+    } else if (role === 'freelancer') {
+      return '/user/my-dashboard';
+    } else if (role === 'admin') {
+      return '/user/admin/dashboard';
+    }
+    return '/';
+  }
 
   // SELECTED TICKET STATE
   selectedCategoryId: string = '';
@@ -171,7 +198,7 @@ export class ContactSupportComponent {
     );
   }
 
-  // DISPATCH TICKET TO ADMIN (SIMULATED ESCALATION)
+  // DISPATCH TICKET TO ADMIN (PERSISTENT ESCALATION)
   submitTicket(): void {
     if (!this.isFormValid) return;
 
@@ -180,17 +207,25 @@ export class ContactSupportComponent {
     const currentYear = new Date().getFullYear();
     this.generatedTicketId = `TKT-${currentYear}-${randomNum}`;
 
-    console.log('Dispatching Support Ticket to Admin Console...', {
+    const ticketData = {
       ticketId: this.generatedTicketId,
       category: this.selectedCategoryId,
       subcategory: this.selectedSubcategoryValue,
       description: this.issueDescription,
-      attachmentsCount: this.uploadedScreenshots.length,
-      timestamp: new Date().toISOString()
-    });
+      attachments: this.uploadedScreenshots.map(s => ({ name: s.name, url: s.url }))
+    };
 
-    // Open success popup
-    this.isSuccessModalOpen = true;
+    this.supportService.createTicket(ticketData).subscribe({
+      next: (res) => {
+        if (res.success) {
+          // Open success popup
+          this.isSuccessModalOpen = true;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to submit ticket:', err);
+      }
+    });
   }
 
   // RESET TICKET FORM & CLOSE SUCCESS DIALOG

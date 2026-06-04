@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
+import { FileUploadComponent } from '../../../../../shared/components/file-upload/file-upload.component';
+import { FilePreviewComponent } from '../../../../../shared/components/file-preview/file-preview.component';
+import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
 
 interface Attachment {
   _id: string;
@@ -23,6 +26,7 @@ interface Phase {
   freelancerNote: string;
   clientFeedback: string;
   attachments: Attachment[];
+  clientAttachments?: Attachment[];
   approvedAt: string;
   submittedAt: string;
 }
@@ -38,6 +42,7 @@ interface Diary {
     contractEndDate: string;
     contractDescription: string;
     techStack: string[];
+    spent?: number;
   };
   clientId: { registrationDetails: { fullName: string } };
   phases: Phase[];
@@ -46,7 +51,7 @@ interface Diary {
 @Component({
   selector: 'app-contract-diary',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent],
+  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent, FileUploadComponent, FilePreviewComponent],
   templateUrl: './contract-diary.component.html',
   styleUrl: './contract-diary.component.css'
 })
@@ -60,6 +65,30 @@ export class ContractDiaryComponent implements OnInit {
   // Submission state per phase
   phaseNotes: Record<string, string> = {};
   submitting: Record<string, boolean> = {};
+
+  BucketKey = BucketKey;
+  UploadSection = UploadSection;
+  tempUploadUrls: Record<string, string | null> = {};
+  uploadedFiles: Record<string, any[]> = {};
+
+  onFileUploaded(phaseId: string, fileInfo: any): void {
+    if (!this.uploadedFiles[phaseId]) {
+      this.uploadedFiles[phaseId] = [];
+    }
+    this.uploadedFiles[phaseId].push({
+      fileName: fileInfo.fileName,
+      fileUrl: fileInfo.url,
+      fileType: fileInfo.fileType,
+      fileSize: fileInfo.fileSize
+    });
+    this.tempUploadUrls[phaseId] = null;
+  }
+
+  removeAttachment(phaseId: string, index: number): void {
+    if (this.uploadedFiles[phaseId]) {
+      this.uploadedFiles[phaseId].splice(index, 1);
+    }
+  }
 
   ngOnInit(): void {
     this.fetchDiaries();
@@ -98,9 +127,16 @@ export class ContractDiaryComponent implements OnInit {
   submitUpdate(diaryId: string, phaseId: string): void {
     const note = this.phaseNotes[phaseId] || '';
     this.submitting[phaseId] = true;
-    this.diaryService.submitPhaseUpdate(diaryId, phaseId, { freelancerNote: note }).subscribe({
+    this.diaryService.submitPhaseUpdate(diaryId, phaseId, {
+      freelancerNote: note,
+      attachments: this.uploadedFiles[phaseId] || []
+    }).subscribe({
       next: () => {
         this.phaseNotes[phaseId] = '';
+        if (this.uploadedFiles[phaseId]) {
+          this.uploadedFiles[phaseId] = [];
+        }
+        this.tempUploadUrls[phaseId] = null;
         this.fetchDiaries();
         this.submitting[phaseId] = false;
       },
@@ -142,6 +178,6 @@ export class ContractDiaryComponent implements OnInit {
   }
 
   getTotalBudget(diary: Diary): number {
-    return diary.phases.reduce((sum, p) => sum + (p.amount || 0), 0);
+    return diary.contractId.estimatedBudget || 0;
   }
 }

@@ -28,7 +28,7 @@ export class ContractDiaryService {
   }
 
   /** Add a single phase to an existing diary */
-  addPhase(diaryId: string, phase: { name: string; description?: string; deadline?: string; amount?: number }): Observable<any> {
+  addPhase(diaryId: string, phase: { name: string; description?: string; deadline?: string; amount?: number; clientAttachments?: any[] }): Observable<any> {
     return this.http.post(`${this.baseUrl}${API_ENDPOINTS.CONTRACT_DIARY.PHASES(diaryId)}`, phase, this.getHeaders());
   }
 

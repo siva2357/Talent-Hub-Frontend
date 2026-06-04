@@ -54,4 +54,9 @@ export class FinanceService {
     const token = localStorage.getItem('th_token') || '';
     return `${this.baseUrl}/finance/invoices/${transactionId}/download?token=${token}`;
   }
+
+  getPaymentStatementPdfUrl(contractId: string): string {
+    const token = localStorage.getItem('th_token') || '';
+    return `${this.baseUrl}/finance/payments/${contractId}/download?token=${token}`;
+  }
 }

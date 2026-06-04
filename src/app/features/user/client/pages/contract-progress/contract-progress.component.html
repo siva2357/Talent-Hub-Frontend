@@ -90,7 +90,12 @@
             <!-- Add Phase Form -->
             @if (showAddPhaseFor === diary._id) {
             <div class="glass p-4 rounded-4 mb-4 border border-primary border-opacity-25">
-              <h6 class="text-white fw-bold mb-3 text-xs text-uppercase">New Phase</h6>
+              <h6 class="text-white fw-bold mb-3 text-xs text-uppercase d-flex justify-content-between align-items-center">
+                <span>New Phase</span>
+                <span class="text-secondary normal-case" style="font-size: 0.75rem;">
+                  Remaining Contract Budget: <strong class="text-success">${{ getRemainingBudget(diary) | number }}</strong>
+                </span>
+              </h6>
               <div class="row g-3 mb-3">
                 <div class="col-md-6">
                   <input type="text" class="form-control glass border-0 text-white small"
@@ -107,6 +112,29 @@
                 <div class="col-12">
                   <textarea class="form-control glass border-0 text-white small" rows="2"
                     placeholder="Phase description (optional)" [(ngModel)]="newPhase.description"></textarea>
+                </div>
+                <!-- File Upload for Phase Requirements -->
+                <div class="col-12 mt-2">
+                  <app-file-upload
+                    label="Phase Requirements / References"
+                    variant="dragdrop"
+                    [bucketKey]="BucketKey.ClientData"
+                    [uploadSection]="UploadSection.ContractFiles"
+                    [(ngModel)]="tempUploadUrl"
+                    name="tempUpload"
+                    (uploadSuccessDetailed)="onFileUploaded($event)"
+                    placeholder="Drag & drop requirement files here or click to browse">
+                  </app-file-upload>
+
+                  @if (newPhaseAttachments.length > 0) {
+                    <div class="row g-2 mt-2">
+                      @for (file of newPhaseAttachments; track $index) {
+                        <div class="col-12 col-md-6 col-lg-4">
+                          <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" (remove)="removeAttachment($index)"></app-file-preview>
+                        </div>
+                      }
+                    </div>
+                  }
                 </div>
               </div>
               <div class="d-flex gap-2 justify-content-end">
@@ -166,6 +194,18 @@
                     }
                   </div>
 
+                  <!-- Client Phase Requirements / Attachments -->
+                  @if (phase.clientAttachments && phase.clientAttachments.length > 0) {
+                  <div class="mb-3">
+                    <h6 class="text-secondary text-xxs fw-bold mb-2">REQUIREMENT FILES</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                      @for (file of phase.clientAttachments; track file._id) {
+                        <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true"></app-file-preview>
+                      }
+                    </div>
+                  </div>
+                  }
+
                   <!-- Freelancer Note (when submitted) -->
                   @if (phase.freelancerNote && (phase.status === 'submitted' || phase.status === 'approved')) {
                   <div class="glass p-3 rounded-3 mb-3 border-white border-opacity-5">
@@ -174,24 +214,13 @@
                   </div>
                   }
 
-                  <!-- Attachments -->
-                  @if (phase.attachments.length > 0) {
+                  <!-- Attachments (Delivered by Freelancer) -->
+                  @if (phase.attachments && phase.attachments.length > 0) {
                   <div class="mb-3">
                     <h6 class="text-secondary text-xxs fw-bold mb-2">SUBMITTED FILES</h6>
-                    <div class="d-flex flex-column gap-2">
+                    <div class="d-flex flex-wrap gap-2">
                       @for (file of phase.attachments; track file._id) {
-                      <div class="d-flex align-items-center gap-3 p-2 glass rounded-3 border-white border-opacity-5">
-                        <div class="file-icon-sm p-2 rounded-2 bg-white bg-opacity-5">
-                          <i class="bi" [ngClass]="getFileIcon(file.fileType)"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                          <div class="text-white small fw-bold">{{ file.fileName }}</div>
-                          <div class="text-secondary text-xxs">{{ file.fileSize }}</div>
-                        </div>
-                        <a [href]="file.fileUrl" target="_blank" class="btn btn-sm btn-outline-secondary rounded-2 text-xs">
-                          <i class="bi bi-download"></i>
-                        </a>
-                      </div>
+                        <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true"></app-file-preview>
                       }
                     </div>
                   </div>

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InputComponent } from '../../../../../shared/components/input/input.component';
 import { ChipComponent } from '../../../../../shared/components/chip/chip.component';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
@@ -11,7 +11,7 @@ import { ContractDiaryService } from '../../../../../core/services/contract-diar
 @Component({
   selector: 'app-finance-report',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, ChipComponent, InputComponent, ReactiveFormsModule],
+  imports: [CommonModule, ButtonComponent, ChipComponent, InputComponent, ReactiveFormsModule, FormsModule],
   templateUrl: './finance-report.component.html',
   styleUrl: './finance-report.component.css'
 })
@@ -75,44 +75,114 @@ export class FinanceReportComponent implements OnInit {
     });
   }
 
+  selectedWithdrawItem: any = null;
+  showWithdrawModal: boolean = false;
+  agreeToTerms: boolean = false;
+
   loadReport() {
     this.isLoading = true;
     this.diaryService.getFreelancerDiaries().subscribe({
-      next: (res: any) => {
-        if (res.success && res.diaries) {
-          this.reportData = res.diaries.map((diary: any) => {
-            const approvedPhases = (diary.phases || []).filter((p: any) => p.status === 'approved');
-            const earned = approvedPhases.reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
-            const budget = (diary.phases || []).reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
-            const totalPhases = (diary.phases || []).length;
-            const completion = totalPhases > 0 ? Math.round((approvedPhases.length / totalPhases) * 100) : 0;
+      next: (resDiaries: any) => {
+        if (resDiaries.success && resDiaries.diaries) {
+          this.financeService.getTransactions().subscribe({
+            next: (resTxns: any) => {
+              const txns = resTxns.success ? resTxns.transactions : [];
 
-            let mappedStatus = 'In Progress';
-            if (diary.overallStatus === 'completed') mappedStatus = 'Completed';
-            else if (diary.overallStatus === 'cancelled') mappedStatus = 'Cancelled';
+              this.reportData = resDiaries.diaries.map((diary: any) => {
+                const contractId = diary.contractId?._id;
 
-            return {
-              title: diary.contractId?.contractTitle || 'Contract',
-              client: diary.clientId?.registrationDetails?.fullName || 'Client',
-              budget,
-              earned,
-              status: mappedStatus,
-              type: diary.contractId?.budgetType || 'Fixed Price',
-              startDate: diary.contractId?.contractStartDate || diary.createdAt,
-              endDate: diary.contractId?.contractEndDate || diary.updatedAt,
-              completion
-            };
+                // Filter transactions associated with this contract
+                const contractTxns = txns.filter((t: any) => t.contractId && (t.contractId._id === contractId || t.contractId === contractId));
+
+                const receivedAmount = contractTxns
+                  .filter((t: any) => t.type === 'Payment Released')
+                  .reduce((sum: number, t: any) => sum + t.amount, 0);
+
+                const withdrawnAmount = contractTxns
+                  .filter((t: any) => t.type === 'Withdrawal')
+                  .reduce((sum: number, t: any) => sum + t.amount, 0);
+
+                const balance = Math.max(0, receivedAmount - withdrawnAmount);
+
+                const approvedPhases = (diary.phases || []).filter((p: any) => p.status === 'approved');
+                const earned = approvedPhases.reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
+                const budget = (diary.phases || []).reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
+                const totalPhases = (diary.phases || []).length;
+                const completion = totalPhases > 0 ? Math.round((approvedPhases.length / totalPhases) * 100) : 0;
+
+                let mappedStatus = 'In Progress';
+                if (diary.overallStatus === 'completed') mappedStatus = 'Completed';
+                else if (diary.overallStatus === 'cancelled') mappedStatus = 'Cancelled';
+
+                return {
+                  contractId,
+                  title: diary.contractId?.contractTitle || 'Contract',
+                  client: diary.clientId?.registrationDetails?.fullName || 'Client',
+                  budget,
+                  earned,
+                  status: mappedStatus,
+                  type: diary.contractId?.budgetType || 'Fixed Price',
+                  startDate: diary.contractId?.contractStartDate || diary.createdAt,
+                  endDate: diary.contractId?.contractEndDate || diary.updatedAt,
+                  completion,
+                  balance,
+                  withdrawnAmount,
+                  receivedAmount
+                };
+              });
+
+              this.applyFilters();
+              this.isLoading = false;
+            },
+            error: (err) => {
+              console.error('Failed to load transactions for report mapping:', err);
+              this.isLoading = false;
+            }
           });
-
-          this.applyFilters();
+        } else {
+          this.isLoading = false;
         }
-        this.isLoading = false;
       },
       error: (err) => {
         console.error('Failed to load freelancer contract diaries:', err);
         this.isLoading = false;
       }
     });
+  }
+
+  withdraw(item: any) {
+    if (item.balance > 0) {
+      this.selectedWithdrawItem = item;
+      this.showWithdrawModal = true;
+      this.agreeToTerms = false;
+    }
+  }
+
+  closeModal() {
+    this.showWithdrawModal = false;
+    this.selectedWithdrawItem = null;
+    this.agreeToTerms = false;
+  }
+
+  confirmWithdrawal() {
+    if (this.selectedWithdrawItem && this.agreeToTerms) {
+      const amount = this.selectedWithdrawItem.balance;
+      const contractId = this.selectedWithdrawItem.contractId;
+
+      this.financeService.withdraw(amount, contractId).subscribe({
+        next: (res: any) => {
+          if (res.success) {
+            alert(`Withdrawal request for $${amount.toFixed(2)} processed successfully!`);
+            this.loadStats();
+            this.loadReport();
+            this.closeModal();
+          }
+        },
+        error: (err) => {
+          alert('Withdrawal request failed: ' + (err.error?.message || 'Error occurred'));
+        }
+      });
+    }
   }
 
   applyFilters() {
@@ -187,6 +257,14 @@ export class FinanceReportComponent implements OnInit {
     link.download = `Financial_Statement_Report.txt`;
     link.click();
     URL.revokeObjectURL(link.href);
+  }
+
+  downloadPaymentStatement(item: any) {
+    if (item.contractId) {
+      window.open(this.financeService.getPaymentStatementPdfUrl(item.contractId), '_blank');
+    } else {
+      alert('Contract ID not found.');
+    }
   }
 
   contactSupport() {

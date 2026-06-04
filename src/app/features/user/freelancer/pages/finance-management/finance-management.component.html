@@ -241,8 +241,14 @@
                                         <i class="bi bi-currency-dollar fs-5"></i>
                                         <span>Withdrawal Amount</span>
                                     </div>
-                                    <div class="amount-display text-white fw-extrabold mb-2 ls-n2">
+                                    <div class="amount-display text-white fw-extrabold mb-1 ls-n2">
                                         ${{ selectedWithdrawItem.balance | number:'1.2-2' }}
+                                    </div>
+                                    <div class="text-secondary small mb-2">
+                                        Platform Fee (10%): -${{ selectedWithdrawItem.balance * 0.10 | number:'1.2-2' }}
+                                    </div>
+                                    <div class="text-success fw-bold mb-2">
+                                        Net to Receive: ${{ selectedWithdrawItem.balance * 0.90 | number:'1.2-2' }}
                                     </div>
                                     <div
                                         class="mt-4 py-2 px-4 rounded-pill bg-primary bg-opacity-20 text-primary border border-primary border-opacity-30 small fw-bold d-flex align-items-center gap-2 shadow-sm">

@@ -36,13 +36,12 @@ import { FreelancerDashboardComponent } from './features/user/freelancer/pages/f
 import { ProposalsComponent } from './features/user/freelancer/pages/proposals/proposals.component';
 import { ActiveContractsComponent } from './features/user/freelancer/pages/active-contracts/active-contracts.component';
 import { ContractDiaryComponent } from './features/user/freelancer/pages/contract-diary/contract-diary.component';
-import { HourlyWorkDiaryComponent } from './features/user/freelancer/pages/hourly-work-diary/hourly-work-diary.component';
 import { AttendanceOverviewComponent } from './features/user/freelancer/pages/attendance-overview/attendance-overview.component';
 import { PortfolioComponent } from './features/user/freelancer/pages/portfolio/portfolio.component';
 import { MarkAttendanceComponent } from './features/user/freelancer/pages/mark-attendance/mark-attendance.component';
 import { FinanceOverviewComponent } from './features/user/freelancer/pages/finance-overview/finance-overview.component';
 import { FinanceReportComponent } from './features/user/freelancer/pages/finance-report/finance-report.component';
-import { FinanceManagementComponent } from './features/user/freelancer/pages/finance-management/finance-management.component';
+
 
 // Error/Utility Components
 import { AccessDeniedComponent } from './shared/pages/access-denied/access-denied.component';
@@ -65,7 +64,7 @@ import { HiredTalentComponent } from './features/user/client/pages/hired-talent/
 import { FinancialSummaryComponent } from './features/user/client/pages/financial-summary/financial-summary.component';
 import { PaymentGatewayComponent } from './features/user/client/pages/payment-gateway/payment-gateway.component';
 import { TransactionHistoryComponent } from './features/user/client/pages/transaction-history/transaction-history.component';
-import { SpendingActivitiesComponent } from './features/user/client/pages/spending-activities/spending-activities.component';
+
 import { ContractFormComponent } from './features/user/client/pages/contract-form/contract-form.component';
 import { ContractViewDetailsComponent } from './features/user/client/pages/contract-view-details/contract-view-details.component';
 import { ProjectDetailsComponent } from './features/user/client/pages/project-details/project-details.component';
@@ -141,7 +140,7 @@ export const routes: Routes = [
 
       { path: 'financial-summary', component: FinancialSummaryComponent },
       { path: 'transaction-history', component: TransactionHistoryComponent },
-      { path: 'spending-activities', component: SpendingActivitiesComponent },
+
 
 
 
@@ -154,12 +153,11 @@ export const routes: Routes = [
       { path: 'offers', component: ProposalsComponent, data: { defaultTab: 'offers' } },
       { path: 'active-contracts', component: ActiveContractsComponent },
       { path: 'contract-diary', component: ContractDiaryComponent },
-      { path: 'hourly-work-diary', component: HourlyWorkDiaryComponent },
       { path: 'attendance-overview', component: AttendanceOverviewComponent },
       { path: 'mark-attendance', component: MarkAttendanceComponent },
       { path: 'finance-overview', component: FinanceOverviewComponent },
       { path: 'finance-report', component: FinanceReportComponent },
-      { path: 'finance-management', component: FinanceManagementComponent },
+
       { path: 'portfolio', component: PortfolioComponent },
 
       // Admin Routes

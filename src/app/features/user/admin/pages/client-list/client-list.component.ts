@@ -55,11 +55,14 @@ export class ClientListComponent implements OnInit {
   }
 
   changeClientStatus(id: string, status: 'Active' | 'Suspended' | 'Blocked' | 'Deactivated'): void {
-    this.adminService.updateClientStatus(id, status);
-    this.loadClients();
-    if (this.selectedClient && this.selectedClient.id === id) {
-      this.selectedClient.status = status;
-    }
+    this.adminService.updateClientStatus(id, status).subscribe({
+      next: () => {
+        this.loadClients();
+        if (this.selectedClient && this.selectedClient.id === id) {
+          this.selectedClient.status = status;
+        }
+      }
+    });
   }
 
   viewProfile(client: ClientData): void {

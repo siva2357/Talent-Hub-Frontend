@@ -112,10 +112,10 @@ export class FinanceOverviewComponent implements OnInit {
   }
 
   viewAllTransactions() {
-    this.router.navigate(['/user/finance-management']);
+    this.router.navigate(['/user/finance-report']);
   }
 
   withdraw() {
-    this.router.navigate(['/user/finance-management']);
+    this.router.navigate(['/user/finance-report']);
   }
 }

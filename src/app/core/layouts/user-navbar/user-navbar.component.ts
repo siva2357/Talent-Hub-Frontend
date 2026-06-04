@@ -77,11 +77,10 @@ export class UserNavbarComponent implements OnInit {
     {
       label: 'Financial Management',
       roles: 'client',
-      activePaths: ['financial-summary', 'transaction-history', 'spending-activities'],
+      activePaths: ['financial-summary', 'transaction-history'],
       subItems: [
         { label: 'Financial Summary', description: 'Overview of your spending, invoices, and billing.', icon: 'bi-pie-chart', route: '/user/financial-summary' },
         { label: 'Transaction History', description: 'Detailed logs of all payments and transfers.', icon: 'bi-receipt', route: '/user/transaction-history' },
-        { label: 'Spending by Activities', description: 'Analyze your budget distribution across projects.', icon: 'bi-bar-chart-steps', route: '/user/spending-activities' },
       ]
     },
 
@@ -99,11 +98,10 @@ export class UserNavbarComponent implements OnInit {
     {
       label: 'Contract Management',
       roles: 'freelancer',
-      activePaths: ['active-contracts', 'contract-diary', 'hourly-work-diary'],
+      activePaths: ['active-contracts', 'contract-diary'],
       subItems: [
         { label: 'Active Contracts', description: 'View and manage ongoing contracts.', icon: 'bi-briefcase', route: '/user/active-contracts' },
         { label: 'Contract Diary', description: 'Maintain daily work records and activity logs.', icon: 'bi-journal-text', route: '/user/contract-diary' },
-        { label: 'Hourly Work Diary', description: 'Upload and manage daily work progress.', icon: 'bi-clock-history', route: '/user/hourly-work-diary' },
       ]
     },
     {
@@ -118,11 +116,10 @@ export class UserNavbarComponent implements OnInit {
     {
       label: 'Financial Management',
       roles: 'freelancer',
-      activePaths: ['finance-overview', 'finance-report', 'finance-management'],
+      activePaths: ['finance-overview', 'finance-report'],
       subItems: [
         { label: 'Finance Overview', description: 'Display financial summaries and account info.', icon: 'bi-wallet2', route: '/user/finance-overview' },
         { label: 'Your Report', description: 'Generate and view financial reports.', icon: 'bi-file-earmark-bar-graph', route: '/user/finance-report' },
-        { label: 'Earnings and Withdraw', description: 'Manage freelancer earnings and withdrawal requests.', icon: 'bi-cash-stack', route: '/user/finance-management' },
       ]
     },
     {

@@ -1,5 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
 
 export interface ClientData {
   id: string;
@@ -64,6 +67,7 @@ export interface SupportRequest {
   userEmail: string;
   subject: string;
   message: string;
+  attachments?: { name: string; url: string }[];
   status: 'Pending' | 'Resolved' | 'Unresolved';
   createdDate: string;
   replies?: SupportRequestReply[];
@@ -74,6 +78,18 @@ export interface SupportRequest {
   providedIn: 'root'
 })
 export class AdminService {
+  private http = inject(HttpClient);
+  private readonly baseUrl = environment.apiGatewayUrl;
+
+  private getHeaders() {
+    const token = localStorage.getItem('th_token');
+    return {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      }),
+    };
+  }
+
   // Stateful BehaviorSubjects to simulate real-time admin changes
   private clientsSubject = new BehaviorSubject<ClientData[]>([
     { id: 'c1', name: 'Stripe Inc.', clientName: 'John Collison', email: 'john.collison@stripe.com', phoneNumber: '+1 (555) 019-2834', spent: 125400, projectsCount: 14, status: 'Active', joinedDate: '2025-01-15', logoColor: 'indigo', industry: 'Financial Services' },
@@ -171,68 +187,42 @@ export class AdminService {
 
   // Clients API
   getClients(): Observable<ClientData[]> {
-    return this.clientsSubject.asObservable();
+    return this.http.get<ClientData[]>(
+      `${this.baseUrl}${API_ENDPOINTS.ADMIN.CLIENTS}`,
+      this.getHeaders()
+    );
   }
 
-  toggleClientStatus(id: string): void {
-    const current = this.clientsSubject.value.find(c => c.id === id);
-    if (current) {
-      const nextStatus = current.status === 'Active' ? 'Suspended' : 'Active';
-      this.updateClientStatus(id, nextStatus);
-    }
-  }
-
-  updateClientStatus(id: string, newStatus: 'Active' | 'Suspended' | 'Blocked' | 'Deactivated'): void {
-    const clients = this.clientsSubject.value.map((c): ClientData => {
-      if (c.id === id) {
-        this.addActivity({
-          user: 'Admin',
-          action: `updated ${c.name} status to ${newStatus}.`,
-          project: 'Client Management',
-          time: 'Just now',
-          icon: 'bi-person-gear',
-          type: 'system'
-        });
-        return { ...c, status: newStatus };
-      }
-      return c;
-    });
-    this.clientsSubject.next(clients);
+  updateClientStatus(id: string, newStatus: 'Active' | 'Suspended' | 'Blocked' | 'Deactivated'): Observable<any> {
+    return this.http.patch<any>(
+      `${this.baseUrl}${API_ENDPOINTS.ADMIN.UPDATE_CLIENT_STATUS(id)}`,
+      { status: newStatus },
+      this.getHeaders()
+    );
   }
 
   // Freelancers API
   getFreelancers(): Observable<FreelancerData[]> {
-    return this.freelancersSubject.asObservable();
+    return this.http.get<FreelancerData[]>(
+      `${this.baseUrl}${API_ENDPOINTS.ADMIN.FREELANCERS}`,
+      this.getHeaders()
+    );
   }
 
-  toggleFreelancerStatus(id: string): void {
-    const current = this.freelancersSubject.value.find(f => f.id === id);
-    if (current) {
-      const nextStatus = current.status === 'Active' ? 'Suspended' : 'Active';
-      this.updateFreelancerStatus(id, nextStatus);
-    }
+  updateFreelancerStatus(id: string, newStatus: 'Active' | 'Suspended' | 'Pending Approval' | 'Blocked' | 'Deactivated'): Observable<any> {
+    return this.http.patch<any>(
+      `${this.baseUrl}${API_ENDPOINTS.ADMIN.UPDATE_FREELANCER_STATUS(id)}`,
+      { status: newStatus },
+      this.getHeaders()
+    );
   }
 
-  updateFreelancerStatus(id: string, newStatus: 'Active' | 'Suspended' | 'Pending Approval' | 'Blocked' | 'Deactivated'): void {
-    const freelancers = this.freelancersSubject.value.map((f): FreelancerData => {
-      if (f.id === id) {
-        this.addActivity({
-          user: 'Admin',
-          action: `updated ${f.name} status to ${newStatus}.`,
-          project: 'Freelancer Management',
-          time: 'Just now',
-          icon: 'bi-person-gear',
-          type: 'system'
-        });
-        return { ...f, status: newStatus };
-      }
-      return f;
-    });
-    this.freelancersSubject.next(freelancers);
-  }
-
-  approveFreelancer(id: string): void {
-    this.updateFreelancerStatus(id, 'Active');
+  approveFreelancer(id: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.ADMIN.APPROVE_FREELANCER(id)}`,
+      {},
+      this.getHeaders()
+    );
   }
 
   // Transactions / Finances API
@@ -287,99 +277,61 @@ export class AdminService {
     activeContracts: number;
     totalCommissions: number;
   }> {
-    const clients = this.clientsSubject.value.length;
-    const freelancers = this.freelancersSubject.value.length;
-    return of({
-      totalClients: clients,
-      totalFreelancers: freelancers,
-      activeContracts: 16,
-      totalCommissions: 43490
-    });
+    return this.http.get<{
+      totalClients: number;
+      totalFreelancers: number;
+      activeContracts: number;
+      totalCommissions: number;
+    }>(
+      `${this.baseUrl}${API_ENDPOINTS.ADMIN.DASHBOARD_STATS}`,
+      this.getHeaders()
+    );
   }
 
   getRecentActivities(): Observable<any[]> {
-    return this.activitiesSubject.asObservable();
+    return new Observable<any[]>(observer => {
+      this.getDashboardStats().subscribe({
+        next: (data: any) => {
+          observer.next(data.activities || []);
+          observer.complete();
+        },
+        error: (err) => {
+          observer.error(err);
+        }
+      });
+    });
   }
 
   // Support Requests API
   getSupportRequests(): Observable<SupportRequest[]> {
-    return this.supportRequestsSubject.asObservable();
+    return this.http.get<SupportRequest[]>(
+      `${this.baseUrl}${API_ENDPOINTS.SUPPORT.GET_ALL_TICKETS}`,
+      this.getHeaders()
+    );
   }
 
-  updateSupportRequestStatus(id: string, status: 'Pending' | 'Resolved' | 'Unresolved'): void {
-    const updated = this.supportRequestsSubject.value.map((req): SupportRequest => {
-      if (req.id === id) {
-        this.addActivity({
-          user: 'Admin',
-          action: `updated ticket ${req.id} status to ${status}.`,
-          project: 'Support Desk',
-          time: 'Just now',
-          icon: 'bi-headset',
-          type: 'system'
-        });
-        return { ...req, status };
-      }
-      return req;
-    });
-    this.supportRequestsSubject.next(updated);
+  updateSupportRequestStatus(id: string, status: 'Pending' | 'Resolved' | 'Unresolved'): Observable<any> {
+    return this.http.patch<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SUPPORT.UPDATE_STATUS(id)}`,
+      { status },
+      this.getHeaders()
+    );
   }
 
-  replyToSupportRequest(id: string, message: string): void {
-    const updated = this.supportRequestsSubject.value.map((req): SupportRequest => {
-      if (req.id === id) {
-        const replies = req.replies || [];
-        const newReplies: SupportRequestReply[] = [
-          ...replies,
-          {
-            sender: 'Admin',
-            message,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-          }
-        ];
-        
-        this.addActivity({
-          user: 'Admin',
-          action: `replied to ticket ${req.id}.`,
-          project: 'Support Desk',
-          time: 'Just now',
-          icon: 'bi-reply-fill',
-          type: 'system'
-        });
-        
-        return { ...req, replies: newReplies, status: 'Pending' };
-      }
-      return req;
-    });
-    this.supportRequestsSubject.next(updated);
+  replyToSupportRequest(id: string, message: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SUPPORT.REPLY(id)}`,
+      { message },
+      this.getHeaders()
+    );
   }
 
-  submitUserFeedbackAndResolve(id: string, message: string): void {
-    const updated = this.supportRequestsSubject.value.map((req): SupportRequest => {
-      if (req.id === id) {
-        const replies = req.replies || [];
-        const newReplies: SupportRequestReply[] = [
-          ...replies,
-          {
-            sender: 'User',
-            message,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-          }
-        ];
-        
-        this.addActivity({
-          user: req.userName,
-          action: `resolved ticket ${req.id} with feedback.`,
-          project: 'Support Desk',
-          time: 'Just now',
-          icon: 'bi-check-circle-fill',
-          type: 'system'
-        });
-        
-        return { ...req, replies: newReplies, status: 'Resolved' };
-      }
-      return req;
-    });
-    this.supportRequestsSubject.next(updated);
+  submitUserFeedbackAndResolve(id: string, message: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}${API_ENDPOINTS.SUPPORT.FEEDBACK(id)}`,
+      { feedbackText: message },
+      this.getHeaders()
+    );
   }
 
   // Private helpers

@@ -168,20 +168,13 @@
                                             </div>
 
                                             <!-- Action Buttons Doublet -->
-                                            <div class="milestone-row-actions d-flex align-items-center justify-content-end gap-2" style="min-width: 290px;">
+                                            <div class="milestone-row-actions d-flex align-items-center justify-content-end gap-2" style="min-width: 180px;">
                                                 @if (m.status === 'Completed') {
                                                     <!-- Button 1: Amount Paid -->
                                                     <button class="btn btn-sm rounded-3 py-2 px-3 fw-bold border-success border-opacity-25 text-success d-inline-flex align-items-center gap-1.5"
                                                             style="background: rgba(25, 135, 84, 0.1) !important; cursor: default; font-size: 11px;">
                                                         <i class="bi bi-check-circle-fill"></i>
                                                         <span>Paid ${{ m.amount | number:'1.2-2' }}</span>
-                                                    </button>
-                                                    
-                                                    <!-- Button 2: Download Invoice -->
-                                                    <button class="btn btn-outline-secondary btn-sm rounded-3 py-2 px-3 text-white border-white border-opacity-10 d-inline-flex align-items-center gap-1.5 download-action-btn"
-                                                            (click)="downloadMilestoneReceipt(c, m)">
-                                                        <i class="bi bi-file-earmark-arrow-down text-primary-light fs-6"></i>
-                                                        <span style="font-size: 11px;">Invoice</span>
                                                     </button>
                                                 } @else if (m.status === 'In Progress' || m.status === 'Review' || m.status === 'Rejected') {
                                                     <!-- Button 1: Start Payment / Retry Payment -->
@@ -190,26 +183,12 @@
                                                         <i class="bi" [ngClass]="m.status === 'Rejected' ? 'bi-arrow-repeat' : 'bi-shield-check'"></i>
                                                         <span style="font-size: 11px;">{{ m.status === 'Rejected' ? 'Retry Payment' : 'Start Payment' }}</span>
                                                     </button>
-                                                    
-                                                    <!-- Button 2: Disabled Invoice -->
-                                                    <button class="btn btn-outline-secondary btn-sm rounded-3 py-2 px-3 text-white border-white border-opacity-10 d-inline-flex align-items-center gap-1.5 opacity-40"
-                                                            style="cursor: not-allowed;" disabled>
-                                                        <i class="bi bi-file-earmark-arrow-down text-secondary fs-6"></i>
-                                                        <span style="font-size: 11px;">Invoice</span>
-                                                    </button>
                                                 } @else {
                                                     <!-- Button 1: Start Payment (disabled) -->
                                                     <button class="btn btn-success btn-sm rounded-3 py-2 px-3 fw-bold d-inline-flex align-items-center gap-1.5 opacity-40"
                                                             style="cursor: not-allowed;" disabled>
                                                         <i class="bi bi-shield-check fs-6"></i>
                                                         <span style="font-size: 11px;">Start Payment</span>
-                                                    </button>
-                                                    
-                                                    <!-- Button 2: Disabled Invoice -->
-                                                    <button class="btn btn-outline-secondary btn-sm rounded-3 py-2 px-3 text-white border-white border-opacity-10 d-inline-flex align-items-center gap-1.5 opacity-40"
-                                                            style="cursor: not-allowed;" disabled>
-                                                        <i class="bi bi-file-earmark-arrow-down text-secondary fs-6"></i>
-                                                        <span style="font-size: 11px;">Invoice</span>
                                                     </button>
                                                 }
                                             </div>

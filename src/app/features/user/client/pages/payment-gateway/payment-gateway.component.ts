@@ -77,8 +77,11 @@ export class PaymentGatewayComponent implements OnInit {
     this.paymentState = 'processing';
     this.errorMessage = '';
 
+    // Calculate total amount to charge: includes 10% platform fee if contractId is set
+    const totalAmount = this.contractId ? this.depositAmount * 1.10 : this.depositAmount;
+
     // Step 1: Create Order on Backend
-    this.financeService.createRazorpayOrder(this.depositAmount).subscribe({
+    this.financeService.createRazorpayOrder(totalAmount).subscribe({
       next: (res: any) => {
         if (res.success) {
           this.orderId = res.order.id;
@@ -106,7 +109,7 @@ export class PaymentGatewayComponent implements OnInit {
                 razorpay_payment_id: mockPaymentId,
                 razorpay_order_id: this.orderId,
                 razorpay_signature: 'sandbox_signature',
-                amount: this.depositAmount,
+                amount: totalAmount,
                 contractId: this.contractId || undefined
               });
             }, 1500);
@@ -126,7 +129,7 @@ export class PaymentGatewayComponent implements OnInit {
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_signature: response.razorpay_signature,
-                amount: this.depositAmount,
+                amount: totalAmount,
                 contractId: this.contractId || undefined
               });
             },
@@ -208,6 +211,10 @@ export class PaymentGatewayComponent implements OnInit {
       ? `Contract Funding - ID: ${this.contractId} (${this.contractTitle})`
       : 'Wallet Deposit / Account Funding';
 
+    const baseAmountStr = this.contractId ? `Base Amount       : $${this.depositAmount.toFixed(2)}` : `Amount            : $${this.depositAmount.toFixed(2)}`;
+    const platformFeeStr = this.contractId ? `Platform Fee (10%): $${(this.depositAmount * 0.10).toFixed(2)}` : 'Processing Fee    : $0.00';
+    const totalAmount = this.contractId ? this.depositAmount * 1.10 : this.depositAmount;
+
     const receiptContent = `==================================================
 TALENT HUB OFFICIAL TRANSACTION INVOICE
 ==================================================
@@ -226,9 +233,9 @@ Email : ${userEmail || 'N/A'}
 TRANSACTION DETAILS:
 -------------------
 Description       : ${description}
-Amount            : $${this.depositAmount.toFixed(2)}
-Processing Fee    : $0.00
-Net Credited      : $${this.depositAmount.toFixed(2)}
+${baseAmountStr}
+${platformFeeStr}
+Total Charged     : $${totalAmount.toFixed(2)}
 Status            : PAID & RELEASED
 
 ==================================================

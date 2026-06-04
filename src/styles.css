@@ -463,3 +463,20 @@ section {
   left: -100px;
   background: radial-gradient(circle, #3b82f6, transparent);
 }
+
+/* ================= TABLE RESPONSIVE DROPDOWN CLIPPING FIX ================= */
+@media (min-width: 992px) {
+  .table-responsive,
+  .table-responsive-md,
+  .table-responsive-lg,
+  .table-responsive-xl {
+    overflow: visible !important;
+  }
+  
+  /* Ensure parent containers of table-responsive don't clip on desktop */
+  .glass-dark.overflow-hidden,
+  .glass.overflow-hidden,
+  .report-table-section.overflow-hidden {
+    overflow: visible !important;
+  }
+}

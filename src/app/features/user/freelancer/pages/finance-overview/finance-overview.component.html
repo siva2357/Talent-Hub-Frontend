@@ -94,8 +94,8 @@
                     <div class="list-item p-4 transition-all cursor-pointer hover-bg-darker" 
                          [class.active-item]="selectedContract === contract"
                          (click)="toggleContractDetails(contract)">
-                        <div class="row align-items-center">
-                            <div class="col-lg-5 col-md-4">
+                        <div class="row align-items-center g-3 g-md-0">
+                            <div class="col-12 col-md-4 col-lg-5 mb-2 mb-md-0">
                                 <div class="d-flex align-items-center gap-3">
                                     <i class="bi" [ngClass]="selectedContract === contract ? 'bi-chevron-down text-secondary' : 'bi-chevron-right text-secondary'" style="font-size: 0.8rem;"></i>
                                     <div>
@@ -107,15 +107,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-3">
+                            <div class="col-6 col-md-3 col-lg-3">
                                 <div class="text-secondary text-uppercase mb-1" style="font-size: 10px; letter-spacing: 0.5px;">Total Earned</div>
                                 <div class="text-white fw-bold" style="font-size: 15px;">${{ contract.totalEarned | number:'1.2-2' }}</div>
                             </div>
-                            <div class="col-lg-2 col-md-3">
+                            <div class="col-6 col-md-3 col-lg-2">
                                 <div class="text-secondary text-uppercase mb-1" style="font-size: 10px; letter-spacing: 0.5px;">Last Payment</div>
                                 <div class="text-white" style="font-size: 13px;">{{ contract.lastPaymentDate !== '-' ? (contract.lastPaymentDate | date:'mediumDate') : 'Pending' }}</div>
                             </div>
-                            <div class="col-lg-2 col-md-2 text-end">
+                            <div class="col-12 col-md-2 col-lg-2 text-md-end mt-2 mt-md-0">
                                 <span class="badge rounded-pill px-3 py-1.5 fw-medium" 
                                       [ngStyle]="contract.status === 'Completed' ? 
                                       {'background': 'rgba(16, 185, 129, 0.1)', 'color': '#10b981'} : 
@@ -128,15 +128,15 @@
 
                     <!-- Phase Breakdown (Conditional) -->
                     @if (selectedContract === contract) {
-                        <div class="phase-breakdown px-5 py-4 animate-in" style="background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.02);">
+                        <div class="phase-breakdown px-4 px-md-5 py-4 animate-in" style="background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.02);">
                             <div class="mb-4 d-flex align-items-center gap-2">
                                 <div class="h-px bg-primary opacity-50" style="width: 20px;"></div>
                                 <span class="text-primary text-uppercase fw-bold text-xxs ls-1">Payment Phase Breakdown</span>
                             </div>
                             
-                            <div class="phase-list px-3">
+                            <div class="phase-list px-1 px-md-3">
                                 <!-- Table Header -->
-                                <div class="row pb-3 mb-2 text-secondary text-uppercase fw-bold" style="font-size: 10px; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <div class="row pb-3 mb-2 text-secondary text-uppercase fw-bold d-none d-md-flex" style="font-size: 10px; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.05);">
                                     <div class="col-5">Phase Description</div>
                                     <div class="col-3">Release Date</div>
                                     <div class="col-2">Status</div>
@@ -145,25 +145,25 @@
 
                                 <!-- Table Body (Rows) -->
                                 @for (phase of contract.phases; track phase.name) {
-                                    <div class="row py-3 align-items-center" style="border-bottom: 1px solid rgba(255,255,255,0.03);">
-                                        <div class="col-5">
-                                            <span class="text-white fw-medium">{{ phase.name }}</span>
+                                    <div class="row py-3 align-items-center g-2 g-md-0" style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                                        <div class="col-12 col-md-5 mb-1 mb-md-0">
+                                            <span class="text-white fw-medium" style="font-size: 13.5px;">{{ phase.name }}</span>
                                         </div>
-                                        <div class="col-3">
-                                            <span class="text-secondary small">{{ phase.date }}</span>
+                                        <div class="col-4 col-md-3">
+                                            <span class="text-secondary small" style="font-size: 12.5px;">{{ phase.date }}</span>
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-4 col-md-2">
                                             <div class="d-flex align-items-center gap-2">
                                                 <div class="status-dot" [ngClass]="{
                                                     'bg-success': phase.status === 'Paid',
                                                     'bg-warning': phase.status === 'In Review',
                                                     'bg-primary': phase.status === 'Pending'
                                                 }"></div>
-                                                <span class="text-secondary small">{{ phase.status }}</span>
+                                                <span class="text-secondary small" style="font-size: 12.5px;">{{ phase.status }}</span>
                                             </div>
                                         </div>
-                                        <div class="col-2 text-end">
-                                            <span class="text-success fw-bold">${{ phase.amount | number:'1.2-2' }}</span>
+                                        <div class="col-4 col-md-2 text-end text-success fw-bold">
+                                            <span style="font-size: 13.5px;">${{ phase.amount | number:'1.2-2' }}</span>
                                         </div>
                                     </div>
                                 }

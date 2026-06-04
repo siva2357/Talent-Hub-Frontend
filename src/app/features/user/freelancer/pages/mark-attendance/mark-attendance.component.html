@@ -1,22 +1,26 @@
-<div class="mark-attendance-page container-fluid py-4 px-md-5">
+<div class="mark-attendance-page container py-4">
     <!-- Header Section -->
-    <div class="row mb-4 align-items-end">
-        <div class="col">
-            <h2 class="text-white fw-bold mb-1">Daily Work Diary</h2>
-            <p class="text-secondary mb-0">Record your attendance and verify sessions for today</p>
-        </div>
-        <div class="col-auto text-end">
-            <div class="badge badge-dark p-2 px-3 border border-white border-opacity-10">
-                <i class="bi bi-calendar3 me-2 text-primary"></i>
-                <span class="fw-bold">{{ currentDate | date:'MMMM dd, yyyy' }}</span>
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-9 col-xl-8">
+            <div class="row align-items-end g-3">
+                <div class="col">
+                    <h2 class="text-white fw-bold mb-1">Daily Work Diary</h2>
+                    <p class="text-secondary mb-0">Record your attendance and verify sessions for today</p>
+                </div>
+                <div class="col-auto text-end">
+                    <div class="badge badge-dark p-2 px-3 border border-white border-opacity-10" style="background-color: rgba(255, 255, 255, 0.02) !important;">
+                        <i class="bi bi-calendar3 me-2 text-primary"></i>
+                        <span class="fw-bold">{{ currentDate | date:'MMMM dd, yyyy' }}</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-7 mx-auto">
+    <div class="row justify-content-center">
+        <div class="col-lg-9 col-xl-8">
             <!-- Main Control Card -->
-            <div class="attendance-control-card glass-dark rounded-4 p-4 border border-white border-opacity-5 mb-4 shadow-xl overflow-hidden position-relative">
+            <div class="attendance-control-card glass-dark rounded-4 p-4 border border-white border-opacity-5 mb-4 shadow-xl position-relative">
                 <div class="d-flex justify-content-between align-items-start mb-4">
                     <div>
                         <h5 class="text-white fw-bold mb-0">Attendance Center</h5>
@@ -108,7 +112,7 @@
                 <div class="mt-4 pt-3 border-top border-white border-opacity-5">
                     <div class="d-flex align-items-center justify-content-center gap-2 text-secondary text-xxs opacity-40">
                         <i class="bi bi-shield-check text-success"></i>
-                        <span>AI Face & Location Verification Active</span>
+                        <span>Secure Location-Based Verification Active</span>
                     </div>
                 </div>
             </div>

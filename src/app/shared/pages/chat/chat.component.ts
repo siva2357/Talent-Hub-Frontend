@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 export interface Contact {
   id: string;
@@ -28,66 +30,23 @@ export interface ChatMessage {
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, AfterViewInit {
+  private authService = inject(AuthService);
+
+  @ViewChild('messageStream') messageStream!: ElementRef<HTMLDivElement>;
+
+  currentUser = this.authService.currentUser;
   searchQuery: string = '';
   activeTab: 'all' | 'direct' | 'channels' = 'all';
   newMessageText: string = '';
   selectedContact!: Contact;
+  showChatMobile: boolean = false;
 
-  contacts: Contact[] = [
-    {
-      id: '1',
-      name: 'Sarah Connor',
-      avatar: 'S',
-      status: 'online',
-      role: 'Lead Frontend Developer',
-      lastActive: 'Active now',
-      type: 'direct',
-      unreadCount: 2,
-      lastMessage: "Let's review the re-architecture blueprints tomorrow morning.",
-      lastMessageTime: '10:42 AM'
-    },
-    {
-      id: '2',
-      name: 'T-800 Cyberdyne',
-      avatar: 'T',
-      status: 'away',
-      role: 'DevOps Architect',
-      lastActive: '5m ago',
-      type: 'direct',
-      unreadCount: 0,
-      lastMessage: 'Infrastructure migration finalized. Terminating all previous errors.',
-      lastMessageTime: 'Yesterday'
-    },
-    {
-      id: '3',
-      name: 'John Connor',
-      avatar: 'J',
-      status: 'online',
-      role: 'Mobile UI/UX Specialist',
-      lastActive: 'Active now',
-      type: 'direct',
-      unreadCount: 0,
-      lastMessage: 'The new banking app mockups are looking extremely sleek.',
-      lastMessageTime: '2 days ago'
-    },
-    {
-      id: 'dev-channel',
-      name: '# core-development',
-      avatar: '#',
-      status: 'online',
-      role: 'Public Channel',
-      lastActive: '12 members',
-      type: 'channel',
-      unreadCount: 5,
-      lastMessage: 'John uploaded a new design asset wireframe.png.',
-      lastMessageTime: '3 days ago'
-    }
-  ];
+  contacts: Contact[] = [];
 
   // Messages map for each contact/channel
   messagesMap: { [key: string]: ChatMessage[] } = {
@@ -114,8 +73,123 @@ export class ChatComponent implements OnInit {
   };
 
   ngOnInit() {
+    const role = this.currentUser()?.role?.toLowerCase() || '';
+    if (role === 'freelancer') {
+      this.contacts = [
+        {
+          id: '1',
+          name: 'Sarah Connor',
+          avatar: 'S',
+          status: 'online',
+          role: 'Client / Hiring Manager',
+          lastActive: 'Active now',
+          type: 'direct',
+          unreadCount: 2,
+          lastMessage: "Let's review the re-architecture blueprints tomorrow morning.",
+          lastMessageTime: '10:42 AM'
+        },
+        {
+          id: '2',
+          name: 'T-800 Cyberdyne',
+          avatar: 'T',
+          status: 'away',
+          role: 'Project Manager',
+          lastActive: '5m ago',
+          type: 'direct',
+          unreadCount: 0,
+          lastMessage: 'Infrastructure migration finalized. Terminating all previous errors.',
+          lastMessageTime: 'Yesterday'
+        },
+        {
+          id: '3',
+          name: 'John Connor',
+          avatar: 'J',
+          status: 'online',
+          role: 'Lead Architect',
+          lastActive: 'Active now',
+          type: 'direct',
+          unreadCount: 0,
+          lastMessage: 'The new banking app mockups are looking extremely sleek.',
+          lastMessageTime: '2 days ago'
+        },
+        {
+          id: 'dev-channel',
+          name: '# core-development',
+          avatar: '#',
+          status: 'online',
+          role: 'Public Channel',
+          lastActive: '12 members',
+          type: 'channel',
+          unreadCount: 5,
+          lastMessage: 'John uploaded a new design asset wireframe.png.',
+          lastMessageTime: '3 days ago'
+        }
+      ];
+    } else {
+      this.contacts = [
+        {
+          id: '1',
+          name: 'Sarah Connor',
+          avatar: 'S',
+          status: 'online',
+          role: 'Lead Frontend Developer',
+          lastActive: 'Active now',
+          type: 'direct',
+          unreadCount: 2,
+          lastMessage: "Let's review the re-architecture blueprints tomorrow morning.",
+          lastMessageTime: '10:42 AM'
+        },
+        {
+          id: '2',
+          name: 'T-800 Cyberdyne',
+          avatar: 'T',
+          status: 'away',
+          role: 'DevOps Architect',
+          lastActive: '5m ago',
+          type: 'direct',
+          unreadCount: 0,
+          lastMessage: 'Infrastructure migration finalized. Terminating all previous errors.',
+          lastMessageTime: 'Yesterday'
+        },
+        {
+          id: '3',
+          name: 'John Connor',
+          avatar: 'J',
+          status: 'online',
+          role: 'Mobile UI/UX Specialist',
+          lastActive: 'Active now',
+          type: 'direct',
+          unreadCount: 0,
+          lastMessage: 'The new banking app mockups are looking extremely sleek.',
+          lastMessageTime: '2 days ago'
+        },
+        {
+          id: 'dev-channel',
+          name: '# core-development',
+          avatar: '#',
+          status: 'online',
+          role: 'Public Channel',
+          lastActive: '12 members',
+          type: 'channel',
+          unreadCount: 5,
+          lastMessage: 'John uploaded a new design asset wireframe.png.',
+          lastMessageTime: '3 days ago'
+        }
+      ];
+    }
+
     // Select the first contact by default
-    this.selectedContact = this.contacts[0];
+    if (this.contacts.length > 0) {
+      this.selectedContact = this.contacts[0];
+    }
+  }
+
+  ngAfterViewInit() {
+    this.scrollToBottom();
+  }
+
+  get currentUserFullName(): string {
+    return this.currentUser()?.fullName || 'Me';
   }
 
   get filteredContacts(): Contact[] {
@@ -130,16 +204,18 @@ export class ChatComponent implements OnInit {
   }
 
   get currentMessages(): ChatMessage[] {
-    return this.messagesMap[this.selectedContact.id] || [];
+    return this.messagesMap[this.selectedContact?.id] || [];
   }
 
   selectContact(contact: Contact) {
     this.selectedContact = contact;
     contact.unreadCount = 0; // Clear unread when clicked
+    this.showChatMobile = true;
+    this.scrollToBottom();
   }
 
   sendMessage() {
-    if (!this.newMessageText.trim()) return;
+    if (!this.newMessageText.trim() || !this.selectedContact) return;
 
     const currentContactId = this.selectedContact.id;
     const sentText = this.newMessageText;
@@ -147,7 +223,7 @@ export class ChatComponent implements OnInit {
     const userMsg: ChatMessage = {
       id: 'sent-' + Date.now(),
       senderId: 'me',
-      senderName: 'Client',
+      senderName: this.currentUserFullName,
       text: sentText,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       status: 'sent'
@@ -164,6 +240,7 @@ export class ChatComponent implements OnInit {
     this.selectedContact.lastMessageTime = userMsg.time;
 
     this.newMessageText = '';
+    this.scrollToBottom();
 
     // Trigger mock reply after 1.5 seconds
     setTimeout(() => {
@@ -175,7 +252,7 @@ export class ChatComponent implements OnInit {
   triggerMockReply(contactId: string, query: string) {
     // Only reply if the user is still viewing the same contact
     let replyText = 'Thanks for the message! I am currently working on our milestones and will get back to you shortly.';
-    let senderName = this.selectedContact.name;
+    let senderName = this.selectedContact?.name || 'User';
 
     if (contactId === '1') {
       if (query.toLowerCase().includes('re-architecture') || query.toLowerCase().includes('blueprint') || query.toLowerCase().includes('tomorrow')) {
@@ -201,6 +278,9 @@ export class ChatComponent implements OnInit {
       status: 'read'
     };
 
+    if (!this.messagesMap[contactId]) {
+      this.messagesMap[contactId] = [];
+    }
     this.messagesMap[contactId].push(replyMsg);
     
     // Update contact last message
@@ -208,27 +288,56 @@ export class ChatComponent implements OnInit {
     if (contactObj) {
       contactObj.lastMessage = replyText;
       contactObj.lastMessageTime = replyMsg.time;
-      if (this.selectedContact.id !== contactId) {
+      if (this.selectedContact?.id !== contactId) {
         contactObj.unreadCount++;
       }
     }
+    this.scrollToBottom();
   }
 
-  // Attachment Mock
   addAttachment() {
+    if (!this.selectedContact) return;
     const currentContactId = this.selectedContact.id;
     const attachMsg: ChatMessage = {
       id: 'attach-' + Date.now(),
       senderId: 'me',
-      senderName: 'Client',
+      senderName: this.currentUserFullName,
       text: 'Shared a new contract deliverable document:',
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       status: 'sent',
       attachments: [{ name: 'Project_Escrow_Agreement.pdf', size: '1.8 MB', type: 'document' }]
     };
 
+    if (!this.messagesMap[currentContactId]) {
+      this.messagesMap[currentContactId] = [];
+    }
     this.messagesMap[currentContactId].push(attachMsg);
     this.selectedContact.lastMessage = 'Shared an attachment: Project_Escrow_Agreement.pdf';
     this.selectedContact.lastMessageTime = attachMsg.time;
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    setTimeout(() => {
+      try {
+        if (this.messageStream && this.messageStream.nativeElement) {
+          this.messageStream.nativeElement.scrollTop = this.messageStream.nativeElement.scrollHeight;
+        }
+      } catch (err) {
+        console.error('Scroll error:', err);
+      }
+    }, 50);
+  }
+
+  getDashboardRoute(): string {
+    const role = this.currentUser()?.role?.toLowerCase() || '';
+    if (role === 'client') {
+      return '/user/client-dashboard';
+    } else if (role === 'freelancer') {
+      return '/user/my-dashboard';
+    } else if (role === 'admin') {
+      return '/user/admin/dashboard';
+    }
+    return '/user/client-dashboard';
   }
 }

@@ -86,9 +86,16 @@ export class SupportRequestsComponent implements OnInit {
       this.toastr.warning('Tickets can only be resolved by direct user feedback.', 'Support Desk');
       return;
     }
-    this.adminService.updateSupportRequestStatus(id, status);
-    this.toastr.info(`Ticket status marked as ${status}`, 'Support Desk');
-    this.loadRequests();
+    this.adminService.updateSupportRequestStatus(id, status).subscribe({
+      next: () => {
+        this.toastr.info(`Ticket status marked as ${status}`, 'Support Desk');
+        this.loadRequests();
+      },
+      error: (err) => {
+        this.toastr.error('Failed to update ticket status', 'Support Desk');
+        console.error(err);
+      }
+    });
   }
 
   selectRequest(request: SupportRequest): void {
@@ -99,16 +106,30 @@ export class SupportRequestsComponent implements OnInit {
   submitReply(): void {
     if (!this.selectedRequest || !this.replyText.trim()) return;
 
-    this.adminService.replyToSupportRequest(this.selectedRequest.id, this.replyText.trim());
-    this.toastr.success('Reply sent successfully. Ticket marked as Pending.', 'Support Desk');
-    this.replyText = '';
-    this.loadRequests();
+    this.adminService.replyToSupportRequest(this.selectedRequest.id, this.replyText.trim()).subscribe({
+      next: () => {
+        this.toastr.success('Reply sent successfully. Ticket marked as Pending.', 'Support Desk');
+        this.replyText = '';
+        this.loadRequests();
+      },
+      error: (err) => {
+        this.toastr.error('Failed to send reply', 'Support Desk');
+        console.error(err);
+      }
+    });
   }
 
   simulateUserFeedback(feedbackText: string): void {
     if (!this.selectedRequest) return;
-    this.adminService.submitUserFeedbackAndResolve(this.selectedRequest.id, feedbackText);
-    this.toastr.success('Simulated user feedback submitted. Ticket resolved.', 'Support Desk');
-    this.loadRequests();
+    this.adminService.submitUserFeedbackAndResolve(this.selectedRequest.id, feedbackText).subscribe({
+      next: () => {
+        this.toastr.success('Simulated user feedback submitted. Ticket resolved.', 'Support Desk');
+        this.loadRequests();
+      },
+      error: (err) => {
+        this.toastr.error('Failed to simulate feedback', 'Support Desk');
+        console.error(err);
+      }
+    });
   }
 }

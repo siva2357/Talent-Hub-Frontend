@@ -54,13 +54,24 @@
 
                 <!-- Order Pricing Breakdown -->
                 <div class="p-3 rounded-3 mb-4" style="background: rgba(0, 0, 0, 0.35); border: 1.5px solid rgba(255, 255, 255, 0.05);">
+                    @if (contractId) {
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-secondary small">Base Funding Amount:</span>
+                        <span class="text-white fw-bold small">${{ depositAmount | number:'1.2-2' }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-secondary small">Platform Fee (10%):</span>
+                        <span class="text-warning fw-bold small">${{ depositAmount * 0.10 | number:'1.2-2' }}</span>
+                    </div>
+                    } @else {
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-secondary small">Processing & Gateway Fee:</span>
                         <span class="text-success fw-bold small">Free ($0.00)</span>
                     </div>
+                    }
                     <div class="d-flex justify-content-between border-top border-white border-opacity-10 pt-2">
                         <span class="text-white fw-bold">Total Amount to Charge:</span>
-                        <span class="text-white fw-extrabold">${{ depositAmount | number:'1.2-2' }}</span>
+                        <span class="text-white fw-extrabold">${{ (contractId ? depositAmount * 1.10 : depositAmount) | number:'1.2-2' }}</span>
                     </div>
                 </div>
 
@@ -141,9 +152,19 @@
                         <span class="text-secondary small">Payment Date</span>
                         <span class="text-white fw-bold small">{{ paymentDate }}</span>
                     </div>
+                    @if (contractId) {
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Base Amount</span>
+                        <span class="text-white fw-bold small">${{ depositAmount | number:'1.2-2' }}</span>
+                    </div>
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Platform Fee (10%)</span>
+                        <span class="text-warning fw-bold small">${{ depositAmount * 0.10 | number:'1.2-2' }}</span>
+                    </div>
+                    }
                     <div class="receipt-item d-flex justify-content-between pt-1">
-                        <span class="text-white fw-bold">{{ contractId ? 'Amount Funded' : 'Amount Credited' }}</span>
-                        <span class="text-success fw-extrabold fs-5">${{ depositAmount | number:'1.2-2' }}</span>
+                        <span class="text-white fw-bold">{{ contractId ? 'Total Amount Charged' : 'Amount Credited' }}</span>
+                        <span class="text-success fw-extrabold fs-5">${{ (contractId ? depositAmount * 1.10 : depositAmount) | number:'1.2-2' }}</span>
                     </div>
                 </div>
 

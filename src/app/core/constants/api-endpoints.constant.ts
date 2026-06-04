@@ -114,5 +114,25 @@ export const API_ENDPOINTS = {
     MY_OFFERS: '/applications/my-offers',
     ITEM: (id: string) => `/applications/${id}`,
     CONTRACT_PDF: (id: string, token: string) => `/applications/${id}/contract-pdf?token=${token}`
+  },
+
+  // Support Endpoints
+  SUPPORT: {
+    CREATE_TICKET: '/support/tickets',
+    GET_MY_TICKETS: '/support/tickets',
+    GET_ALL_TICKETS: '/support/admin/tickets',
+    UPDATE_STATUS: (id: string) => `/support/admin/tickets/${id}/status`,
+    REPLY: (id: string) => `/support/admin/tickets/${id}/reply`,
+    FEEDBACK: (id: string) => `/support/tickets/${id}/feedback`
+  },
+
+  // Admin Endpoints
+  ADMIN: {
+    CLIENTS: '/admin/clients',
+    UPDATE_CLIENT_STATUS: (id: string) => `/admin/clients/${id}/status`,
+    FREELANCERS: '/admin/freelancers',
+    UPDATE_FREELANCER_STATUS: (id: string) => `/admin/freelancers/${id}/status`,
+    APPROVE_FREELANCER: (id: string) => `/admin/freelancers/${id}/approve`,
+    DASHBOARD_STATS: '/admin/dashboard/stats'
   }
 };

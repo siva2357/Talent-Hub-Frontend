@@ -80,12 +80,14 @@
 </div>
             <!-- Chat & Notifications Icons -->
             <div class="d-flex align-items-center gap-3 me-2 ">
+                @if (userRole !== 'admin') {
                 <a routerLink="/user/chat" class="text-decoration-none d-none d-lg-block">
                     <button class="btn btn-link icon-btn shadow-none">
                         <i class="bi bi-chat-left-text fs-4"></i>
                         <span class="icon-badge">3</span>
                     </button>
                 </a>
+                }
                 <!-- Notifications Component -->
                 <app-notifications></app-notifications>
             </div>
@@ -127,7 +129,9 @@
                     </li>
                     <li><a class="dropdown-item" routerLink="/user/profile"><i class="bi bi-person me-2"></i> My Profile</a></li>
                     <li><a class="dropdown-item" routerLink="/user/settings"><i class="bi bi-gear me-2"></i> Settings</a></li>
+                    @if (userRole !== 'admin') {
                     <li><a class="dropdown-item" routerLink="/user/contact-support"><i class="bi bi-headset me-2"></i> Contact Support</a></li>
+                    }
                     <li>
                         <hr class="dropdown-divider border-white border-opacity-10">
                     </li>
@@ -246,6 +250,7 @@
 
   <!-- Chat -->
 
+  @if (userRole !== 'admin') {
   <a
     routerLink="/user/chat"
     data-bs-dismiss="offcanvas"
@@ -281,6 +286,7 @@
     <i class="bi bi-chevron-right text-secondary"></i>
 
   </a>
+  }
 
 </div>
 

@@ -33,6 +33,7 @@ export class FileUploadComponent implements ControlValueAccessor {
   @Input() disabled: boolean = false;
 
   @Output() uploadSuccess = new EventEmitter<string>();
+  @Output() uploadSuccessDetailed = new EventEmitter<{ url: string; fileName: string; fileSize: string; fileType: string }>();
   @Output() uploadStart = new EventEmitter<void>();
   @Output() uploadError = new EventEmitter<string>();
   @Output() fileRemoved = new EventEmitter<void>();
@@ -135,6 +136,17 @@ export class FileUploadComponent implements ControlValueAccessor {
           this.value = res.url;
           this.onChange(this.value);
           this.uploadSuccess.emit(res.url);
+
+          const formattedSize = file.size > 1024 * 1024
+            ? `${(file.size / (1024 * 1024)).toFixed(2)} MB`
+            : `${(file.size / 1024).toFixed(1)} KB`;
+
+          this.uploadSuccessDetailed.emit({
+            url: res.url,
+            fileName: file.name,
+            fileType: file.type || file.name.split('.').pop() || '',
+            fileSize: formattedSize
+          });
         } else {
           const errorMsg = res.message || 'Upload failed.';
           this.errorMessage = errorMsg;

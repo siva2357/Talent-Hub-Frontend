@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
+import { FileUploadComponent } from '../../../../../shared/components/file-upload/file-upload.component';
+import { FilePreviewComponent } from '../../../../../shared/components/file-preview/file-preview.component';
+import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
 
 interface Attachment {
   _id: string;
@@ -23,6 +26,7 @@ interface Phase {
   freelancerNote: string;
   clientFeedback: string;
   attachments: Attachment[];
+  clientAttachments?: Attachment[];
   approvedAt: string;
 }
 
@@ -35,6 +39,7 @@ interface Diary {
     budgetType: string;
     contractStartDate: string;
     contractEndDate: string;
+    spent?: number;
   };
   freelancerId: { registrationDetails: { fullName: string } };
   phases: Phase[];
@@ -43,7 +48,7 @@ interface Diary {
 @Component({
   selector: 'app-contract-progress',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent],
+  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent, FileUploadComponent, FilePreviewComponent],
   templateUrl: './contract-progress.component.html',
   styleUrl: './contract-progress.component.css'
 })
@@ -64,6 +69,20 @@ export class ContractProgressComponent implements OnInit {
     name: '', description: '', deadline: '', amount: null
   };
   showAddPhaseFor: string | null = null;
+
+  BucketKey = BucketKey;
+  UploadSection = UploadSection;
+  tempUploadUrl: string | null = null;
+  newPhaseAttachments: any[] = [];
+
+  onFileUploaded(fileInfo: any): void {
+    this.newPhaseAttachments.push(fileInfo);
+    this.tempUploadUrl = null;
+  }
+
+  removeAttachment(index: number): void {
+    this.newPhaseAttachments.splice(index, 1);
+  }
 
   ngOnInit(): void {
     this.fetchDiaries();
@@ -119,10 +138,13 @@ export class ContractProgressComponent implements OnInit {
       name: this.newPhase.name,
       description: this.newPhase.description,
       deadline: this.newPhase.deadline || undefined,
-      amount: this.newPhase.amount || 0
+      amount: this.newPhase.amount || 0,
+      clientAttachments: this.newPhaseAttachments
     }).subscribe({
       next: () => {
         this.newPhase = { name: '', description: '', deadline: '', amount: null };
+        this.newPhaseAttachments = [];
+        this.tempUploadUrl = null;
         this.showAddPhaseFor = null;
         this.fetchDiaries();
         this.addingPhase[diaryId] = false;
@@ -137,11 +159,16 @@ export class ContractProgressComponent implements OnInit {
   }
 
   getTotalBudget(diary: Diary): number {
-    return diary.phases.reduce((s, p) => s + (p.amount || 0), 0);
+    return diary.contractId.estimatedBudget || 0;
+  }
+
+  getRemainingBudget(diary: Diary): number {
+    const totalAllocated = diary.phases.reduce((sum, p) => sum + (p.amount || 0), 0);
+    return Math.max(0, (diary.contractId.estimatedBudget || 0) - totalAllocated);
   }
 
   getSpent(diary: Diary): number {
-    return diary.phases.filter(p => p.status === 'approved').reduce((s, p) => s + (p.amount || 0), 0);
+    return diary.contractId.spent || 0;
   }
 
   getCompletedCount(diary: Diary): number {

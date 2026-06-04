@@ -74,10 +74,13 @@ export class FinancialSummaryComponent implements OnInit {
           this.invoices = res.contracts.map((contract: any) => {
             const budget = contract.estimatedBudget || 0;
             const spent = contract.spent || 0;
-            const remainingAmount = budget > spent ? (budget - spent) : 0;
+            
+            const roundedSpent = Math.round(spent * 100) / 100;
+            const roundedBudget = Math.round(budget * 100) / 100;
+            const remainingAmount = roundedBudget > roundedSpent ? Math.round((roundedBudget - roundedSpent) * 100) / 100 : 0;
 
             let mappedStatus: 'Paid' | 'Pending' | 'Payment Failed' = 'Pending';
-            if (spent >= budget && budget > 0) {
+            if (contract.status === 'in progress' || contract.status === 'completed') {
               mappedStatus = 'Paid';
             } else {
               mappedStatus = 'Pending';
@@ -88,8 +91,8 @@ export class FinancialSummaryComponent implements OnInit {
               title: contract.contractTitle || 'Contract',
               startDate: contract.contractStartDate,
               endDate: contract.contractEndDate,
-              amount: spent,
-              estimatedBudget: budget,
+              amount: roundedSpent,
+              estimatedBudget: roundedBudget,
               status: mappedStatus,
               type: contract.budgetType || 'Fixed Price',
               contractType: contract.contractType || 'N/A',

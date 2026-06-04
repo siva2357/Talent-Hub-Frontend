@@ -56,19 +56,25 @@ export class FreelancerListComponent implements OnInit {
   }
 
   changeFreelancerStatus(id: string, status: 'Active' | 'Suspended' | 'Pending Approval' | 'Blocked' | 'Deactivated'): void {
-    this.adminService.updateFreelancerStatus(id, status);
-    this.loadFreelancers();
-    if (this.selectedFreelancer && this.selectedFreelancer.id === id) {
-      this.selectedFreelancer.status = status;
-    }
+    this.adminService.updateFreelancerStatus(id, status).subscribe({
+      next: () => {
+        this.loadFreelancers();
+        if (this.selectedFreelancer && this.selectedFreelancer.id === id) {
+          this.selectedFreelancer.status = status;
+        }
+      }
+    });
   }
 
   approveFreelancer(id: string): void {
-    this.adminService.approveFreelancer(id);
-    this.loadFreelancers();
-    if (this.selectedFreelancer && this.selectedFreelancer.id === id) {
-      this.selectedFreelancer.status = 'Active';
-    }
+    this.adminService.approveFreelancer(id).subscribe({
+      next: () => {
+        this.loadFreelancers();
+        if (this.selectedFreelancer && this.selectedFreelancer.id === id) {
+          this.selectedFreelancer.status = 'Active';
+        }
+      }
+    });
   }
 
   viewProfile(freelancer: FreelancerData): void {

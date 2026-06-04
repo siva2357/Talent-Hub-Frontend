@@ -8,7 +8,7 @@
     <!-- TOP CINEMATIC HEADER -->
     <header class="support-header d-flex align-items-center gap-3 mb-5">
       <!-- Floating Navigation Back Arrow -->
-      <a [routerLink]="userMode === 'freelancer' ? '/user/my-dashboard' : '/user/client-dashboard'" class="btn-back-nav rounded-circle d-flex align-items-center justify-content-center" title="Back to Dashboard">
+      <a [routerLink]="getDashboardLink()" class="btn-back-nav rounded-circle d-flex align-items-center justify-content-center" title="Back to Dashboard">
         <i class="bi bi-arrow-left"></i>
       </a>
       <div>
@@ -189,7 +189,7 @@
 
             <!-- SUBMIT FOOTER BAR -->
             <footer class="wizard-footer border-top-glass pt-4 mt-3 pb-2 d-flex justify-content-between align-items-center flex-wrap gap-3">
-              <a [routerLink]="userMode === 'freelancer' ? '/user/my-dashboard' : '/user/client-dashboard'" class="text-decoration-none text-secondary-light hover-white">
+              <a [routerLink]="getDashboardLink()" class="text-decoration-none text-secondary-light hover-white">
                 <i class="bi bi-arrow-left me-1"></i> Return to Dashboard
               </a>
               <app-button variant="primary" 

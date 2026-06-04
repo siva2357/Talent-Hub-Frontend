@@ -246,7 +246,7 @@
                       }
 
                       @if (proposal.type === 'Interview') {
-                      <a [routerLink]="['/user/interview-setup']" class="w-100 text-decoration-none">
+                      <a [routerLink]="['/user/interview-setup']" [queryParams]="{ id: proposal.id }" class="w-100 text-decoration-none">
                         <app-button variant="brand">
                           Join Meeting
                         </app-button>
