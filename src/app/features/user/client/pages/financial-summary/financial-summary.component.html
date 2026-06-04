@@ -29,21 +29,6 @@
                         </div>
                         <h2 class="text-white fw-extrabold mt-3 mb-4 fs-2">${{ totalBalance | number:'1.2-2' }}</h2>
                     </div>
-                    <div class="position-relative z-3 d-flex flex-column gap-2">
-                        <div class="position-relative">
-                            <span class="position-absolute start-3 top-50 translate-middle-y text-secondary small" style="z-index: 5;">$</span>
-                            <input type="number" 
-                                   class="form-control form-control-sm bg-black bg-opacity-40 border border-white border-opacity-10 text-white rounded-3 ps-4 py-2" 
-                                   style="font-size: 13px; outline: none; box-shadow: none;"
-                                   [(ngModel)]="fundAmount" 
-                                   placeholder="Deposit Amount">
-                        </div>
-                        <button
-                            class="btn btn-primary btn-sm rounded-3 w-100 py-2.5 fw-bold transition-all add-funds-btn shadow-primary"
-                            (click)="openDeposit()">
-                            <i class="bi bi-plus-lg me-2"></i>Add Funds
-                        </button>
-                    </div>
                 </div>
             </div>
             <!-- Total Lifetime Spent Card -->
@@ -121,16 +106,17 @@
                         [class.btn-outline-secondary]="statusFilter !== 'Paid'"
                         [class.text-white]="statusFilter !== 'Paid'"
                         (click)="statusFilter = 'Paid'; applyFilters()">Paid</button>
-                    <button class="btn btn-sm rounded-3 px-3 py-2 fw-medium transition-all"
-                        [class.btn-primary]="statusFilter === 'Processed'"
-                        [class.btn-outline-secondary]="statusFilter !== 'Processed'"
-                        [class.text-white]="statusFilter !== 'Processed'"
-                        (click)="statusFilter = 'Processed'; applyFilters()">Processed</button>
+
                     <button class="btn btn-sm rounded-3 px-3 py-2 fw-medium transition-all"
                         [class.btn-warning]="statusFilter === 'Pending'"
                         [class.btn-outline-secondary]="statusFilter !== 'Pending'"
                         [class.text-white]="statusFilter !== 'Pending'"
                         (click)="statusFilter = 'Pending'; applyFilters()">Pending</button>
+                    <button class="btn btn-sm rounded-3 px-3 py-2 fw-medium transition-all"
+                        [class.btn-danger]="statusFilter === 'Payment Failed'"
+                        [class.btn-outline-secondary]="statusFilter !== 'Payment Failed'"
+                        [class.text-white]="statusFilter !== 'Payment Failed'"
+                        (click)="statusFilter = 'Payment Failed'; applyFilters()">Payment Failed</button>
                     <button class="btn btn-sm btn-outline-secondary text-white rounded-3 px-3 py-2"
                         (click)="resetFilters()">
                         <i class="bi bi-arrow-counterclockwise"></i>
@@ -145,46 +131,46 @@
                 <table class="table table-dark mb-0 align-middle custom-table">
                     <thead>
                         <tr>
-                            <th class="ps-4 py-3 text-secondary" style="font-size: 16px;">Contract
-                                Details</th>
-                            <th class="py-3 text-secondary" style="font-size: 16px;">Freelancer</th>
-                            <th class="py-3 text-secondary" style="font-size: 16px;">Start Date</th>
-                            <th class="py-3 text-secondary" style="font-size: 16px;">End Date</th>
-                            <th class="py-3 text-secondary" style="font-size: 16px;">Amount Paid
-                            </th>
-                            <th class="py-3 text-secondary  text-center" style="font-size: 16px;">
-                                Status</th>
-                            <th class="py-3 text-secondary   text-center" style="font-size: 16px;">
-                                Actions</th>
+                            <th class="ps-4 py-3 text-secondary" style="font-size: 15px;">Contract Title</th>
+                            <th class="py-3 text-secondary" style="font-size: 15px;">Contract Type</th>
+                            <th class="py-3 text-secondary" style="font-size: 15px;">Contract Subject</th>
+                            <th class="py-3 text-secondary" style="font-size: 15px;">Budget Type</th>
+                            <th class="py-3 text-secondary" style="font-size: 15px;">Estimated Budget</th>
+                            <th class="py-3 text-secondary" style="font-size: 15px;">Start Date</th>
+                            <th class="py-3 text-secondary" style="font-size: 15px;">End Date</th>
+                            <th class="py-3 text-secondary" style="font-size: 15px;">Amount Paid</th>
+                            <th class="py-3 text-secondary text-center" style="font-size: 15px;">Status</th>
+                            <th class="py-3 text-secondary text-center" style="font-size: 15px;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @for (inv of filteredInvoices; track inv.id) {
                         <tr class="transition-all table-row-hover">
-                            <!-- Contract Title & ID -->
+                            <!-- Contract Title -->
                             <td class="ps-4 py-4">
-                                <h6 class="text-white fw-bold mb-1 fs-6">{{ inv.title }}</h6>
-                                <div class="d-flex align-items-center gap-2 mt-1">
-                                    <span
-                                        class="badge border border-white border-opacity-10 text-primary-light font-monospace py-1.5 px-2"
-                                        style="font-size: 11px; background: rgba(255, 255, 255, 0.05) !important;">
-                                        {{ inv.id }}
-                                    </span>
-                                    <span class="badge border border-info border-opacity-10 text-info py-1.5 px-2"
-                                        style="font-size: 11px; background: rgba(13, 202, 240, 0.05) !important;">
-                                        {{ inv.type }}
-                                    </span>
-                                </div>
+                                <h6 class="text-white fw-bold mb-0 fs-6">{{ inv.title }}</h6>
                             </td>
-                            <!-- Freelancer Name -->
+                            <!-- Contract Type -->
                             <td class="py-4">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="freelancer-avatar rounded-circle d-flex align-items-center justify-content-center bg-primary bg-opacity-10 border border-primary border-opacity-20 text-primary-light fw-bold"
-                                        style="width: 32px; height: 32px; font-size: 12px;">
-                                        {{ inv.freelancer.charAt(0) }}
-                                    </div>
-                                    <span class="text-white-50 fw-semibold">{{ inv.freelancer }}</span>
-                                </div>
+                                <span class="badge border border-info border-opacity-10 text-info py-1 px-2.5"
+                                    style="font-size: 12px; background: rgba(13, 202, 240, 0.05) !important;">
+                                    {{ inv.contractType }}
+                                </span>
+                            </td>
+                            <!-- Contract Subject -->
+                            <td class="py-4">
+                                <span class="badge border border-primary border-opacity-10 text-primary-light py-1 px-2.5"
+                                    style="font-size: 12px; background: rgba(13, 110, 253, 0.05) !important;">
+                                    {{ inv.contractSubject }}
+                                </span>
+                            </td>
+                            <!-- Budget Type -->
+                            <td class="py-4 text-white-50 fw-medium">
+                                {{ inv.type }}
+                            </td>
+                            <!-- Estimated Budget -->
+                            <td class="py-4 text-success fw-bold">
+                                ${{ (inv.estimatedBudget || 0) | number:'1.2-2' }}
                             </td>
                             <!-- Start Date -->
                             <td class="py-4 text-secondary-light">
@@ -197,48 +183,52 @@
                                 {{ inv.endDate | date:'MMM d, y' }}
                             </td>
                             <!-- Amount Paid -->
-                            <td class="py-4 text-white fw-bold fs-6">
+                            <td class="py-4 text-white fw-bold">
                                 ${{ inv.amount | number:'1.2-2' }}
                             </td>
-                            <!-- Custom Glowing Status Badge -->
+                            <!-- Status -->
                             <td class="py-4 text-center">
                                 <span class="badge rounded-pill px-3 py-2 fw-medium text-capitalize shadow-sm"
                                     [ngClass]="{
-                                          'badge-status-paid': inv.status === 'Paid',
-                                          'badge-status-processed': inv.status === 'Processed',
-                                          'badge-status-pending': inv.status === 'Pending'
-                                      }">
+                                           'badge-status-paid': inv.status === 'Paid',
+                                           'badge-status-pending': inv.status === 'Pending',
+                                           'badge-status-failed': inv.status === 'Payment Failed'
+                                       }">
                                     {{ inv.status }}
                                 </span>
                             </td>
-                            <!-- Dynamic Download Action -->
+                            <!-- Actions Dropdown -->
                             <td class="py-4 text-center">
-                                <div class="d-flex align-items-center justify-content-center gap-2">
-                                    @if (inv.status !== 'Paid') {
-                                    <button
-                                        class="btn btn-primary btn-sm rounded-3 py-2 px-3 fw-bold transition-all shadow-primary d-inline-flex align-items-center gap-1.5"
-                                        (click)="fundContract(inv)">
-                                        <i class="bi bi-credit-card-2-front"></i>
-                                        <span style="font-size: 12px;">Pay / Fund</span>
+                                <div class="dropdown">
+                                    <button class="btn btn-link text-white-50 p-0 border-0 no-caret dropdown-toggle" type="button" [id]="'actions-' + inv.id" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical fs-5"></i>
                                     </button>
-                                    }
-                                    <button
-                                        class="btn btn-outline-secondary btn-sm rounded-3 py-2 px-3 text-white border-white border-opacity-10 d-inline-flex align-items-center gap-2 download-action-btn"
-                                        (click)="downloadInvoice(inv)">
-                                        <i class="bi bi-file-earmark-arrow-down text-primary-light fs-6"></i>
-                                        <span style="font-size: 12px;">Invoice</span>
-                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end glass-dropdown border border-white border-opacity-10 py-1" [attr.aria-labelledby]="'actions-' + inv.id">
+                                        @if (inv.status !== 'Paid' && inv.status !== 'Payment Failed') {
+                                        <li>
+                                            <button class="dropdown-item text-white py-2 px-3 d-flex align-items-center gap-2" (click)="fundContract(inv)">
+                                                <i class="bi bi-credit-card-2-front text-primary"></i>
+                                                <span>Pay / Fund</span>
+                                            </button>
+                                        </li>
+                                        }
+                                        <li>
+                                            <button class="dropdown-item text-white py-2 px-3 d-flex align-items-center gap-2" (click)="downloadInvoice(inv)">
+                                                <i class="bi bi-file-earmark-arrow-down text-primary-light"></i>
+                                                <span>Invoice</span>
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </div>
                             </td>
                         </tr>
                         } @empty {
                         <tr>
-                            <td colspan="7" class="text-center py-5">
+                            <td colspan="10" class="text-center py-5">
                                 <div
                                     class="p-4 rounded-4 bg-white bg-opacity-5 d-inline-block border border-white border-opacity-5">
                                     <i class="bi bi-folder2-open text-secondary fs-1 mb-3"></i>
-                                    <p class="text-secondary mb-0">No transaction invoices found matching current
-                                        criteria.</p>
+                                    <p class="text-secondary mb-0">No transaction invoices found matching current criteria.</p>
                                 </div>
                             </td>
                         </tr>

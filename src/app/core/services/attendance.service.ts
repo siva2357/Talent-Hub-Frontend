@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -33,19 +34,19 @@ export class AttendanceService {
   // ==========================================
 
   checkIn(data: { contractId: string; location: string; faceImage: string; faceMatch: boolean }): Observable<any> {
-    return this.http.post(`${this.baseUrl}/attendance/check-in`, data, this.getHeaders());
+    return this.http.post(`${this.baseUrl}${API_ENDPOINTS.ATTENDANCE.CHECK_IN}`, data, this.getHeaders());
   }
 
   checkOut(data: { contractId: string }): Observable<any> {
-    return this.http.post(`${this.baseUrl}/attendance/check-out`, data, this.getHeaders());
+    return this.http.post(`${this.baseUrl}${API_ENDPOINTS.ATTENDANCE.CHECK_OUT}`, data, this.getHeaders());
   }
 
   getTodayStatus(contractId: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/attendance/status/${contractId}`, this.getHeaders());
+    return this.http.get(`${this.baseUrl}${API_ENDPOINTS.ATTENDANCE.STATUS(contractId)}`, this.getHeaders());
   }
 
   getAttendanceOverview(contractId: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/attendance/overview/${contractId}`, this.getHeaders());
+    return this.http.get(`${this.baseUrl}${API_ENDPOINTS.ATTENDANCE.OVERVIEW(contractId)}`, this.getHeaders());
   }
 
   // ==========================================
@@ -53,10 +54,10 @@ export class AttendanceService {
   // ==========================================
 
   getClientTimesheets(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/timesheets/client`, this.getHeaders());
+    return this.http.get(`${this.baseUrl}${API_ENDPOINTS.ATTENDANCE.TIMESHEETS_CLIENT}`, this.getHeaders());
   }
 
   approveTimesheet(timesheetId: string): Observable<any> {
-    return this.http.put(`${this.baseUrl}/timesheets/${timesheetId}/approve`, {}, this.getHeaders());
+    return this.http.put(`${this.baseUrl}${API_ENDPOINTS.ATTENDANCE.TIMESHEET_APPROVE(timesheetId)}`, {}, this.getHeaders());
   }
 }

@@ -5,11 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { ContractService } from '../../../../../core/services/contract.service';
 import { ApplicationService } from '../../../../../core/services/application.service';
 import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
+import { InputComponent } from '../../../../../shared/components/input/input.component';
+import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 
 @Component({
   selector: 'app-hired-talent',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, InputComponent, ButtonComponent],
   templateUrl: './hired-talent.component.html',
   styleUrl: './hired-talent.component.css'
 })
@@ -18,6 +20,20 @@ export class HiredTalentComponent implements OnInit {
   private applicationService = inject(ApplicationService);
   private diaryService = inject(ContractDiaryService);
   private route = inject(ActivatedRoute);
+
+  // Filter options
+  statusOptions = [
+    { label: 'All Status', value: 'All Status' },
+    { label: 'Pending', value: 'Pending' },
+    { label: 'Shortlisted', value: 'Shortlisted' },
+    { label: 'Rejected', value: 'Rejected' }
+  ];
+
+  typeOptions = [
+    { label: 'All Types', value: 'All Types' },
+    { label: 'Fixed Price', value: 'Fixed Price' },
+    { label: 'Hourly', value: 'Hourly' }
+  ];
 
   // Tabs: 'offers' (Pending Offers) | 'hired' (Hired Talents)
   activeTab: 'offers' | 'hired' = 'offers';
@@ -58,40 +74,40 @@ export class HiredTalentComponent implements OnInit {
           diaryRes.diaries.forEach((d: any) => this.existingDiaryMap.add(d.applicationId?.toString()));
         }
       },
-      error: () => {} // non-critical
+      error: () => { } // non-critical
     });
 
     this.contractService.getHiredTalents().subscribe({
       next: (res: any) => {
         if (res.success && res.hiredTalents) {
           const allHired = res.hiredTalents;
-          
+
           // Tab 1: Pending & Pipelines (not accepted yet)
           this.offers = allHired.filter((t: any) => t.offerStatus !== 'accepted');
-          
+
           // Tab 2: Hired Talents (accepted offers)
           const acceptedHires = allHired.filter((t: any) => t.offerStatus === 'accepted');
-          
+
           // Group accepted hires by contract
           const groupsMap = new Map<string, any>();
           acceptedHires.forEach((hire: any) => {
             const contractId = hire.contract?._id || 'unknown';
             if (!groupsMap.has(contractId)) {
               groupsMap.set(contractId, {
-                contractId:        contractId,
-                contractTitle:     hire.contract?.title          || 'Unknown Contract',
-                contractStatus:    hire.contract?.status         || 'Active',
-                contractBudget:    hire.contract?.estimatedBudget || 0,
-                contractType:      hire.contract?.budgetType      || 'Fixed Price',
+                contractId: contractId,
+                contractTitle: hire.contract?.title || 'Unknown Contract',
+                contractStatus: hire.contract?.status || 'Active',
+                contractBudget: hire.contract?.estimatedBudget || 0,
+                contractType: hire.contract?.budgetType || 'Fixed Price',
                 contractStartDate: hire.contract?.contractStartDate || null,
-                contractEndDate:   hire.contract?.contractEndDate   || null,
-                talents:    [],
+                contractEndDate: hire.contract?.contractEndDate || null,
+                talents: [],
                 isExpanded: true
               });
             }
             groupsMap.get(contractId).talents.push(hire);
           });
-          
+
           this.groupedHiredContracts = Array.from(groupsMap.values());
         } else {
           this.offers = [];
@@ -148,11 +164,11 @@ export class HiredTalentComponent implements OnInit {
       const name = offer.freelancer?.fullName || '';
       const headline = offer.freelancer?.professionalHeadline || '';
       const title = offer.contract?.title || '';
-      
+
       const matchesSearch = name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
         headline.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
         title.toLowerCase().includes(this.searchQuery.toLowerCase());
-      
+
       // Status mapping
       let displayStatus = 'Pending';
       if (offer.offerStatus === 'declined') displayStatus = 'Rejected';
@@ -160,7 +176,7 @@ export class HiredTalentComponent implements OnInit {
       if (!offer.offerStatus || offer.offerStatus === 'none') displayStatus = 'Shortlisted';
 
       const matchesStatus = this.statusFilter === 'All Status' || displayStatus === this.statusFilter;
-      
+
       // Contract type mapping
       const contractType = offer.contract?.budgetType === 'Hourly Rate' ? 'Hourly' : 'Fixed Price';
       const matchesType = this.typeFilter === 'All Types' || contractType === this.typeFilter;

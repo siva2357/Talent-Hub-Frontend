@@ -23,6 +23,8 @@ export class PaymentGatewayComponent implements OnInit {
   depositAmount = 1000;
   depositMethod = 'card';
   errorMessage = '';
+  contractId = '';
+  contractTitle = '';
 
   // Order Details
   orderId = '';
@@ -42,6 +44,12 @@ export class PaymentGatewayComponent implements OnInit {
       const amountParam = parseFloat(params['amount']);
       if (amountParam && amountParam > 0) {
         this.depositAmount = amountParam;
+      }
+      if (params['contractId']) {
+        this.contractId = params['contractId'];
+      }
+      if (params['contractTitle']) {
+        this.contractTitle = params['contractTitle'];
       }
     });
   }
@@ -79,11 +87,13 @@ export class PaymentGatewayComponent implements OnInit {
           const userDetailsJson = localStorage.getItem('th_user');
           let userName = 'Client';
           let userEmail = 'client@talenthub.com';
+          let userContact = '9999999999';
           if (userDetailsJson) {
             try {
               const userObj = JSON.parse(userDetailsJson);
               userName = userObj.fullName || userObj.registrationDetails?.fullName || 'Client';
               userEmail = userObj.email || userObj.registrationDetails?.email || 'client@talenthub.com';
+              userContact = userObj.phoneNumber || userObj.phone || userObj.registrationDetails?.phoneNumber || userObj.registrationDetails?.phone || '9999999999';
             } catch (e) {}
           }
 
@@ -96,7 +106,8 @@ export class PaymentGatewayComponent implements OnInit {
                 razorpay_payment_id: mockPaymentId,
                 razorpay_order_id: this.orderId,
                 razorpay_signature: 'sandbox_signature',
-                amount: this.depositAmount
+                amount: this.depositAmount,
+                contractId: this.contractId || undefined
               });
             }, 1500);
             return;
@@ -108,19 +119,21 @@ export class PaymentGatewayComponent implements OnInit {
             amount: res.order.amount,
             currency: res.order.currency,
             name: 'Talent Hub',
-            description: 'Deposit Funds to Wallet',
+            description: this.contractId ? `Fund Contract: ${this.contractTitle}` : 'Deposit Funds to Wallet',
             order_id: this.orderId,
             handler: (response: any) => {
               this.verifyPayment({
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_signature: response.razorpay_signature,
-                amount: this.depositAmount
+                amount: this.depositAmount,
+                contractId: this.contractId || undefined
               });
             },
             prefill: {
               name: userName,
-              email: userEmail
+              email: userEmail,
+              contact: userContact
             },
             theme: {
               color: '#0d6efd'
@@ -152,6 +165,7 @@ export class PaymentGatewayComponent implements OnInit {
     razorpay_order_id: string;
     razorpay_signature: string;
     amount: number;
+    contractId?: string;
   }) {
     this.financeService.verifyRazorpayPayment(payload).subscribe({
       next: (res: any) => {
@@ -161,6 +175,11 @@ export class PaymentGatewayComponent implements OnInit {
           this.paymentDate = new Date().toLocaleString();
           this.invoiceNumber = `DEP-INV-${Math.floor(100000 + Math.random() * 900000)}`;
           this.paymentState = 'success';
+          
+          // Auto-redirect to financial summary page after 1.5 seconds
+          setTimeout(() => {
+            this.router.navigate(['/user/financial-summary']);
+          }, 1500);
         } else {
           this.paymentState = 'failed';
           this.errorMessage = 'Transaction verification rejected by server.';
@@ -185,6 +204,10 @@ export class PaymentGatewayComponent implements OnInit {
       } catch (e) {}
     }
 
+    const description = this.contractId
+      ? `Contract Funding - ID: ${this.contractId} (${this.contractTitle})`
+      : 'Wallet Deposit / Account Funding';
+
     const receiptContent = `==================================================
 TALENT HUB OFFICIAL TRANSACTION INVOICE
 ==================================================
@@ -202,15 +225,15 @@ Email : ${userEmail || 'N/A'}
 
 TRANSACTION DETAILS:
 -------------------
-Description       : Wallet Deposit / Account Funding
-Deposit Amount    : $${this.depositAmount.toFixed(2)}
+Description       : ${description}
+Amount            : $${this.depositAmount.toFixed(2)}
 Processing Fee    : $0.00
 Net Credited      : $${this.depositAmount.toFixed(2)}
-Wallet Status     : CREDITED
+Status            : PAID & RELEASED
 
 ==================================================
-Thank you for funding your Talent Hub escrow wallet.
-Your balance has been updated successfully.
+Thank you for using Talent Hub.
+Your transaction has been updated successfully.
 ==================================================`;
 
     const blob = new Blob([receiptContent], { type: 'text/plain;charset=utf-8' });

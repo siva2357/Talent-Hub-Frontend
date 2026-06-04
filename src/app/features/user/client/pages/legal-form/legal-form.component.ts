@@ -4,11 +4,13 @@ import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ContractService } from '../../../../../core/services/contract.service';
 import { ApplicationService } from '../../../../../core/services/application.service';
+import { ButtonComponent } from '../../../../../shared/components/button/button.component';
+import { InputComponent } from '../../../../../shared/components/input/input.component';
 
 @Component({
   selector: 'app-legal-form',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, ButtonComponent, InputComponent],
   templateUrl: './legal-form.component.html',
   styleUrl: './legal-form.component.css'
 })

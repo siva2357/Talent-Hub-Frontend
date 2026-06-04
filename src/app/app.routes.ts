@@ -140,7 +140,6 @@ export const routes: Routes = [
       { path: 'hired-talent', component: HiredTalentComponent },
 
       { path: 'financial-summary', component: FinancialSummaryComponent },
-      { path: 'payment-gateway', component: PaymentGatewayComponent },
       { path: 'transaction-history', component: TransactionHistoryComponent },
       { path: 'spending-activities', component: SpendingActivitiesComponent },
 
@@ -187,6 +186,8 @@ export const routes: Routes = [
       { path: 'interview-room', component: InterviewRoomComponent },
       { path: 'legal-contract/:id', component: LegalContractComponent },
       { path: 'legal-form/:contractId', component: LegalFormComponent },
+      { path: 'payment-gateway', component: PaymentGatewayComponent },
+      { path: 'payment_gateway', component: PaymentGatewayComponent },
     ]
   },
 

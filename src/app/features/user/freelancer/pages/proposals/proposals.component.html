@@ -93,8 +93,11 @@
               <div class="col-lg-6">
                 <div class="contract-card glass p-4 rounded-4 h-100 d-flex flex-column">
                   <!-- Top Info -->
-                  <div class="d-flex justify-content-between align-items-start mb-4 ">
-                    <div>
+                  <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div class="w-100">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="text-secondary small fw-medium" style="font-size: 11px;">{{proposal.client}} · {{proposal.date}}</span>
+                      </div>
                       <h5 class="fw-bold mb-2 h6 text-white">{{proposal.contractTitle}}</h5>
                       <div class="d-flex gap-2">
                         <span class="badge-type"
@@ -243,7 +246,7 @@
                       }
 
                       @if (proposal.type === 'Interview') {
-                      <a [routerLink]="['/user/interview-setup']" class="w-50 text-decoration-none">
+                      <a [routerLink]="['/user/interview-setup']" class="w-100 text-decoration-none">
                         <app-button variant="brand">
                           Join Meeting
                         </app-button>
@@ -251,13 +254,13 @@
                       }
 
                       @if (proposal.type === 'Shortlisted') {
-                      <app-button variant="brand" class="w-50" (click)="switchTab('offers')">
+                      <app-button variant="brand" class="w-100" (click)="switchTab('offers')">
                         View Offer Details
                       </app-button>
                       }
 
                       @if (proposal.type === 'Applied') {
-                      <a [routerLink]="['/user/contract-details', proposal.id]" class="w-50 text-decoration-none">
+                      <a [routerLink]="['/user/contract-details']" [queryParams]="{ id: proposal.contractId }" class="w-100 text-decoration-none">
                         <app-button variant="brand">
                           View Original Post
                         </app-button>
@@ -344,12 +347,12 @@
                   <div class="pt-3 border-top border-white border-opacity-10 mt-auto">
                     @if (offer.status === 'Pending') {
                       <div class="d-flex gap-2">
-                        <button class="btn btn-primary rounded-3 px-4 py-2 fw-bold text-xs shadow-glow-primary" [routerLink]="['/user/legal-contract', offer.id]">
+                        <app-button variant="primary" customClass="rounded-3 px-4 py-2 fw-bold text-xs shadow-glow-primary" [routerLink]="['/user/legal-contract', offer.id]">
                           Accept Offer
-                        </button>
-                        <button class="btn btn-outline-light rounded-3 px-4 py-2 fw-bold text-xs" (click)="declineOffer(offer.id)">
+                        </app-button>
+                        <app-button variant="outline" customClass="rounded-3 px-4 py-2 fw-bold text-xs border-white border-opacity-25 text-white" (click)="declineOffer(offer.id)">
                           Decline
-                        </button>
+                        </app-button>
                       </div>
                     } @else {
                       <div class="d-flex flex-column gap-2 w-100">
@@ -361,12 +364,12 @@
                         </div>
                         @if (offer.status === 'Accepted') {
                           <div class="d-flex gap-2 flex-wrap">
-                            <button class="btn btn-success text-xs py-2 px-3 rounded-3 fw-bold" (click)="downloadSignedContract(offer.id)">
+                            <app-button variant="success" customClass="text-xs py-2 px-3 rounded-3 fw-bold text-white" (click)="downloadSignedContract(offer.id)">
                               <i class="bi bi-file-earmark-pdf me-1"></i>Download Contract
-                            </button>
-                            <button class="btn btn-outline-light text-xs py-2 px-3 rounded-3 fw-bold" [routerLink]="['/user/active-contracts']">
+                            </app-button>
+                            <app-button variant="outline" customClass="text-xs py-2 px-3 rounded-3 fw-bold text-white border-white border-opacity-25" [routerLink]="['/user/active-contracts']">
                               <i class="bi bi-briefcase me-1"></i>Go to Your Contract
-                            </button>
+                            </app-button>
                           </div>
                         } @else {
                           <span class="text-xxs text-secondary uppercase tracking-widest">Completed</span>

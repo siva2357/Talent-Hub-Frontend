@@ -212,14 +212,16 @@
   position: relative;
 }
 
-.step-item:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: 25px;
-  left: 60px;
-  width: calc(100% - 70px);
-  height: 1px;
-  background: linear-gradient(90deg, var(--brand-500), transparent);
+@media (min-width: 992px) {
+  .step-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 60px;
+    width: calc(100% - 70px);
+    height: 1px;
+    background: linear-gradient(90deg, var(--brand-500), transparent);
+  }
 }
 
 .text-secondary-dim {

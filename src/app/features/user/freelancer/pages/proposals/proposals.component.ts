@@ -172,6 +172,7 @@ export class ProposalsComponent implements OnInit {
         if (res.success && res.applications) {
           this.allProposals = res.applications.map((app: any) => ({
             id: app.applicationId,
+            contractId: app.contract?._id || '',
             contractTitle: app.contract?.contractTitle || 'Unknown Title',
             client: app.client?.fullName || 'Unknown Client',
             date: new Date(app.appliedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),

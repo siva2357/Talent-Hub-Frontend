@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { InputComponent } from '../../components/input/input.component';
 import { ButtonComponent } from '../../components/button/button.component';
 import { ChipComponent } from '../../components/chip/chip.component';
+import { validateSocialLink, RegexPatterns } from '../../../core/regex/patterns';
 
 @Component({
   selector: 'app-account-settings',
@@ -372,6 +373,10 @@ export class AccountSettingsComponent implements OnInit {
   // SOCIAL LINKS ACTIONS
   saveSocialLink(): void {
     if (this.currentLink.platform && this.currentLink.profileUrl) {
+      if (!validateSocialLink(this.currentLink.platform, this.currentLink.profileUrl)) {
+        alert(`Please enter a valid ${this.currentLink.platform} URL.`);
+        return;
+      }
       this.savedSocialLinks.push({ ...this.currentLink });
       this.currentLink = { platform: 'linkedin', profileUrl: '' };
     }
@@ -394,6 +399,10 @@ export class AccountSettingsComponent implements OnInit {
 
   updateSocialLink(): void {
     if (this.editingLinkIndex > -1) {
+      if (!validateSocialLink(this.editingLinkData.platform, this.editingLinkData.profileUrl)) {
+        alert(`Please enter a valid ${this.editingLinkData.platform} URL.`);
+        return;
+      }
       this.savedSocialLinks[this.editingLinkIndex].profileUrl = this.editingLinkData.profileUrl;
       this.closeEditModal();
     }
@@ -451,6 +460,10 @@ export class AccountSettingsComponent implements OnInit {
       return;
     }
     let fullPhone = this.phoneNumber.trim();
+    if (!RegexPatterns.PHONE.test(fullPhone)) {
+      alert('Please enter a valid phone number (e.g., +919876543210 or 9876543210).');
+      return;
+    }
     if (!fullPhone.startsWith('+')) {
       fullPhone = '+91' + fullPhone;
     }
@@ -625,7 +638,9 @@ export class AccountSettingsComponent implements OnInit {
 
       // Auto-flush any in-progress social link or language
       if (this.currentLink.platform && this.currentLink.profileUrl) {
-        this.savedSocialLinks.push({ ...this.currentLink });
+        if (validateSocialLink(this.currentLink.platform, this.currentLink.profileUrl)) {
+          this.savedSocialLinks.push({ ...this.currentLink });
+        }
         this.currentLink = { platform: 'linkedin', profileUrl: '' };
       }
       if (this.currentLanguage.language && this.currentLanguage.proficiency) {

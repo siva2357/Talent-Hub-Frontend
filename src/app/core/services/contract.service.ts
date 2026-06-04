@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AuthService } from './auth.service';
+import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
 import { CreateContractDTO, UpdateContractDTO } from '../DTOs/contract.dto';
 import { ContractResponse, ContractsResponse } from '../model/contract.model';
 
@@ -12,9 +12,7 @@ import { ContractResponse, ContractsResponse } from '../model/contract.model';
 
 export class ContractService {
   private http = inject(HttpClient);
-  private authService = inject(AuthService);
-  private readonly baseUrl = environment.apiGatewayUrl + '/contracts';
-
+  private readonly baseUrl = environment.apiGatewayUrl;
 
   // ========================================
   // Authorization Headers
@@ -31,9 +29,8 @@ export class ContractService {
   createContract(
     data: CreateContractDTO
   ): Observable<ContractResponse> {
-
     return this.http.post<ContractResponse>(
-      `${this.baseUrl}`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.BASE}`,
       data,
       {
         headers: this.getHeaders()
@@ -41,15 +38,13 @@ export class ContractService {
     );
   }
 
-
   // ========================================
   // Get My Contracts
   // ========================================
 
   getMyContracts(): Observable<ContractsResponse> {
-
     return this.http.get<ContractsResponse>(
-      `${this.baseUrl}/my-contracts`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.MY_CONTRACTS}`,
       {
         headers: this.getHeaders()
       }
@@ -63,9 +58,8 @@ export class ContractService {
   getMyContractById(
     id: string
   ): Observable<ContractResponse> {
-
     return this.http.get<ContractResponse>(
-      `${this.baseUrl}/my-contracts/${id}`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.MY_CONTRACT(id)}`,
       {
         headers: this.getHeaders()
       }
@@ -80,9 +74,8 @@ export class ContractService {
     id: string,
     data: UpdateContractDTO
   ): Observable<ContractResponse> {
-
     return this.http.put<ContractResponse>(
-      `${this.baseUrl}/${id}`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.ITEM(id)}`,
       data,
       {
         headers: this.getHeaders()
@@ -97,34 +90,26 @@ export class ContractService {
   deleteContract(
     id: string
   ): Observable<any> {
-
     return this.http.delete(
-      `${this.baseUrl}/${id}`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.ITEM(id)}`,
       {
         headers: this.getHeaders()
       }
     );
   }
-
-
-
 
   // ========================================
   // Get All Contracts
   // ========================================
 
   getAllContracts(): Observable<ContractsResponse> {
-
     return this.http.get<ContractsResponse>(
-      `${this.baseUrl}`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.BASE}`,
       {
         headers: this.getHeaders()
       }
     );
-
   }
-
-
 
   // ========================================
   // Get Single Contract
@@ -133,16 +118,13 @@ export class ContractService {
   getSingleContract(
     id: string
   ): Observable<ContractResponse> {
-
     return this.http.get<ContractResponse>(
-      `${this.baseUrl}/${id}`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.ITEM(id)}`,
       {
         headers: this.getHeaders()
       }
     );
-
   }
-
 
   // ========================================
   // Save Contract
@@ -151,18 +133,14 @@ export class ContractService {
   saveContract(
     id: string
   ): Observable<any> {
-
     return this.http.post(
-      `${this.baseUrl}/save/${id}`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.SAVE(id)}`,
       {},
       {
         headers: this.getHeaders()
       }
     );
-
   }
-
-
 
   // ========================================
   // Unsave Contract
@@ -171,34 +149,26 @@ export class ContractService {
   unsaveContract(
     id: string
   ): Observable<any> {
-
     return this.http.delete(
-      `${this.baseUrl}/unsave/${id}`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.UNSAVE(id)}`,
       {
         headers: this.getHeaders()
       }
     );
-
   }
-
-
 
   // ========================================
   // Get Saved Contracts
   // ========================================
 
   getSavedContracts(): Observable<ContractsResponse> {
-
     return this.http.get<ContractsResponse>(
-      `${this.baseUrl}/saved-contracts`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.SAVED}`,
       {
         headers: this.getHeaders()
       }
     );
-
   }
-
-
 
   // ========================================
   // Apply To Contract
@@ -207,18 +177,14 @@ export class ContractService {
   applyToContract(
     id: string
   ): Observable<any> {
-
     return this.http.post(
-      `${this.baseUrl}/apply/${id}`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.APPLY(id)}`,
       {},
       {
         headers: this.getHeaders()
       }
     );
-
   }
-
-
 
   // ========================================
   // Withdraw Contract Application
@@ -227,59 +193,48 @@ export class ContractService {
   withdrawContractApplication(
     id: string
   ): Observable<any> {
-
     return this.http.delete(
-      `${this.baseUrl}/withdraw/${id}`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.WITHDRAW(id)}`,
       {
         headers: this.getHeaders()
       }
     );
-
   }
-
-
 
   // ========================================
   // Get Applied Contracts
   // ========================================
 
   getAppliedContracts(): Observable<ContractsResponse> {
-
     return this.http.get<ContractsResponse>(
-      `${this.baseUrl}/applied-contracts`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.APPLIED}`,
       {
         headers: this.getHeaders()
       }
     );
-
   }
-
-
 
   // ========================================
   // Get Contract Applicants
   // ========================================
-getContractApplicants(): Observable<any> {
-
-  return this.http.get(
-    `${this.baseUrl}/my-contracts/applicants`,
-    {
-      headers: this.getHeaders()
-    }
-  );
-
-}
+  getContractApplicants(): Observable<any> {
+    return this.http.get(
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.APPLICANTS}`,
+      {
+        headers: this.getHeaders()
+      }
+    );
+  }
 
   // ========================================
   // Get Hired Talents
   // ========================================
   getHiredTalents(): Observable<any> {
     return this.http.get(
-      `${this.baseUrl}/hired-talents`,
+      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.HIRED}`,
       {
         headers: this.getHeaders()
       }
     );
   }
-
 }

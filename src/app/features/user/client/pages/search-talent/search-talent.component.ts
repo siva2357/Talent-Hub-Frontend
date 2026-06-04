@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProfileService } from '../../../../../core/services/profile.service';
+import { InputComponent } from '../../../../../shared/components/input/input.component';
+import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 
 @Component({
   selector: 'app-search-talent',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, InputComponent, ButtonComponent],
   templateUrl: './search-talent.component.html',
   styleUrl: './search-talent.component.css'
 })
@@ -19,6 +21,13 @@ export class SearchTalentComponent implements OnInit {
   selectedCategory = 'All Categories';
   minRate: number | null = null;
   maxRate: number | null = null;
+
+  categoryOptions = [
+    { label: 'All Categories', value: 'All Categories' },
+    { label: 'UI/UX Design', value: 'UI/UX Design' },
+    { label: 'Full Stack Development', value: 'Full Stack Development' },
+    { label: 'Data Science', value: 'Data Science' }
+  ];
 
   talents: any[] = [];
   savedTalentsSet = new Set<string>();

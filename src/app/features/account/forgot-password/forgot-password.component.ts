@@ -5,6 +5,7 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RegexPatterns } from '../../../core/regex/patterns';
 
 @Component({
   selector: 'app-forgot-password',
@@ -25,6 +26,11 @@ export class ForgotPasswordComponent {
   onSubmit(): void {
     if (!this.email) {
       this.errorMessage = 'Please enter your email address.';
+      return;
+    }
+
+    if (!RegexPatterns.EMAIL.test(this.email.trim())) {
+      this.errorMessage = 'Please enter a valid email address.';
       return;
     }
 

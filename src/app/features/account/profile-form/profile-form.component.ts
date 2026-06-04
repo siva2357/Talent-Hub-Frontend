@@ -21,6 +21,7 @@ import { Category } from '../../../core/enums/category.enum';
 import { Language } from '../../../core/enums/language.enum';
 import { Proficiency } from '../../../core/enums/proficiency.enum';
 import { BasicInformationDto, LocationDto, VerificationDto, SocialLinkDto, LanguageDto, FreelancerProfileDto, ClientProfileDto } from '../../../core/DTOs/profile.dto';
+import { validateSocialLink, RegexPatterns } from '../../../core/regex/patterns';
 
 @Component({
   selector: 'app-profile-form',
@@ -391,6 +392,10 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   saveSocialLink(): void {
     if (this.currentLink.platform && this.currentLink.url) {
+      if (!validateSocialLink(this.currentLink.platform, this.currentLink.url)) {
+        alert(`Please enter a valid ${this.currentLink.platform} URL.`);
+        return;
+      }
       this.savedSocialLinks.push({ ...this.currentLink, status: 'Connected' });
       this.currentLink = { platform: '', url: '' };
     }
@@ -427,6 +432,10 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   updateSocialLink(): void {
     if (this.editingLinkIndex > -1) {
+      if (!validateSocialLink(this.editingLinkData.platform, this.editingLinkData.url)) {
+        alert(`Please enter a valid ${this.editingLinkData.platform} URL.`);
+        return;
+      }
       this.savedSocialLinks[this.editingLinkIndex].url = this.editingLinkData.url;
       this.closeEditModal();
     }
@@ -466,7 +475,9 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Auto-flush any in-progress social link the user typed but didn't click Add
     if (this.currentLink.platform && this.currentLink.url) {
-      this.savedSocialLinks.push({ ...this.currentLink, status: 'Connected' });
+      if (validateSocialLink(this.currentLink.platform, this.currentLink.url)) {
+        this.savedSocialLinks.push({ ...this.currentLink, status: 'Connected' });
+      }
       this.currentLink = { platform: '', url: '' };
     }
     // Auto-flush any in-progress language entry
@@ -546,12 +557,16 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
       this.phoneOtpError = 'Please enter a valid phone number';
       return;
     }
+    let formattedPhone = this.phoneNumber.trim();
+    if (!RegexPatterns.PHONE.test(formattedPhone)) {
+      this.phoneOtpError = 'Please enter a valid phone number (e.g., +919876543210 or 9876543210).';
+      return;
+    }
     this.isSendingPhoneOtp = true;
     this.phoneOtpError = null;
     this.phoneOtpSuccessMessage = null;
 
     // Standardize to include country code if not present (e.g. +91)
-    let formattedPhone = this.phoneNumber.trim();
     if (!formattedPhone.startsWith('+')) {
       formattedPhone = '+91' + formattedPhone;
     }

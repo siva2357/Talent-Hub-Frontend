@@ -18,7 +18,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule, FormsModu
   ]
 })
 export class InputComponent implements ControlValueAccessor {
-  @Input() type: 'text' | 'email' | 'password' | 'date' | 'select' | 'multiselect' | 'textarea' = 'text';
+  @Input() type: 'text' | 'email' | 'number' | 'password' | 'date' | 'datetime-local' | 'select' | 'multiselect' | 'textarea' = 'text';
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() options: { label: string, value: any }[] = []; // For select/multiselect

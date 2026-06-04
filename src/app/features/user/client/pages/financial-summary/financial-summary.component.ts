@@ -3,17 +3,19 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FinanceService } from '../../../../../core/services/finance.service';
-import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
+import { ContractService } from '../../../../../core/services/contract.service';
 
 export interface Invoice {
   id: string;
   title: string;
-  freelancer: string;
   startDate: string;
   endDate: string;
   amount: number;
-  status: 'Paid' | 'Pending' | 'Processed';
+  estimatedBudget?: number;
+  status: 'Paid' | 'Pending' | 'Payment Failed';
   type: string;
+  contractType?: string;
+  contractSubject?: string;
   remainingAmount: number;
 }
 
@@ -26,7 +28,7 @@ export interface Invoice {
 })
 export class FinancialSummaryComponent implements OnInit {
   private financeService = inject(FinanceService);
-  private diaryService = inject(ContractDiaryService);
+  private contractService = inject(ContractService);
   private router = inject(Router);
 
   // Summary Stats
@@ -66,31 +68,33 @@ export class FinancialSummaryComponent implements OnInit {
   }
 
   loadInvoices() {
-    this.diaryService.getClientDiaries().subscribe({
+    this.contractService.getMyContracts().subscribe({
       next: (res: any) => {
-        if (res.success && res.diaries) {
-          this.invoices = res.diaries.map((diary: any) => {
-            let mappedStatus: 'Paid' | 'Processed' | 'Pending' = 'Pending';
-            if (diary.overallStatus === 'completed') {
+        if (res.success && res.contracts) {
+          this.invoices = res.contracts.map((contract: any) => {
+            const budget = contract.estimatedBudget || 0;
+            const spent = contract.spent || 0;
+            const remainingAmount = budget > spent ? (budget - spent) : 0;
+
+            let mappedStatus: 'Paid' | 'Pending' | 'Payment Failed' = 'Pending';
+            if (spent >= budget && budget > 0) {
               mappedStatus = 'Paid';
-            } else if (diary.overallStatus === 'in-progress') {
-              mappedStatus = 'Processed';
+            } else {
+              mappedStatus = 'Pending';
             }
 
-            const budget = diary.contractId?.estimatedBudget || 0;
-            const spent = diary.contractId?.spent || 0;
-            const remainingAmount = budget > spent ? (budget - spent) : budget;
-
             return {
-              id: diary.contractId?._id || diary._id,
-              title: diary.contractId?.contractTitle || 'Contract',
-              freelancer: diary.freelancerId?.registrationDetails?.fullName || 'Freelancer',
-              startDate: diary.contractId?.contractStartDate || diary.createdAt,
-              endDate: diary.contractId?.contractEndDate || diary.updatedAt,
+              id: contract._id,
+              title: contract.contractTitle || 'Contract',
+              startDate: contract.contractStartDate,
+              endDate: contract.contractEndDate,
               amount: spent,
+              estimatedBudget: budget,
               status: mappedStatus,
-              type: diary.contractId?.budgetType || 'Fixed Price',
-              remainingAmount: remainingAmount || 1000
+              type: contract.budgetType || 'Fixed Price',
+              contractType: contract.contractType || 'N/A',
+              contractSubject: contract.contractSubject || 'N/A',
+              remainingAmount: remainingAmount
             };
           });
           this.applyFilters();
@@ -105,9 +109,8 @@ export class FinancialSummaryComponent implements OnInit {
   applyFilters() {
     this.filteredInvoices = this.invoices.filter(inv => {
       const matchesSearch = inv.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                            inv.freelancer.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                            inv.id.toLowerCase().includes(this.searchQuery.toLowerCase());
-      
+        inv.id.toLowerCase().includes(this.searchQuery.toLowerCase());
+
       const matchesStatus = this.statusFilter === 'All' || inv.status === this.statusFilter;
 
       return matchesSearch && matchesStatus;
@@ -121,30 +124,32 @@ export class FinancialSummaryComponent implements OnInit {
   }
 
   downloadInvoice(inv: Invoice) {
-    console.log('Downloading invoice details for Contract ID:', inv.id);
-    
-    const dummyBlob = new Blob([
-      `TALENT HUB TRANSACTION INVOICE\n` +
-      `=============================\n` +
-      `Invoice ID: ${inv.id}\n` +
-      `Description: ${inv.title}\n` +
-      `Destination: ${inv.freelancer}\n` +
-      `Transaction Period: ${new Date(inv.startDate).toLocaleDateString()} to ${new Date(inv.endDate).toLocaleDateString()}\n` +
-      `Amount: $${inv.amount.toFixed(2)}\n` +
-      `Status: ${inv.status}\n` +
-      `Date Generated: ${new Date().toLocaleDateString()}\n` +
-      `=============================\n` +
-      `Thank you for using Talent Hub!`
-    ], { type: 'text/plain' });
+    console.log('Fetching invoice details for Contract ID:', inv.id);
 
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(dummyBlob);
-    link.download = `Invoice_${inv.id}.txt`;
-    link.click();
-    URL.revokeObjectURL(link.href);
+    this.financeService.getInvoices().subscribe({
+      next: (res: any) => {
+        if (res.success && res.invoices) {
+          const matchingTxn = res.invoices.find((txn: any) => 
+            txn.contractId && txn.contractId._id === inv.id
+          );
+
+          if (matchingTxn) {
+            window.open(this.financeService.getInvoicePdfUrl(matchingTxn._id), '_blank');
+          } else {
+            alert('No completed payment transaction found for this contract yet.');
+          }
+        } else {
+          alert('Failed to retrieve transaction invoices from server.');
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load transaction invoices:', err);
+        alert('Failed to contact invoice service.');
+      }
+    });
   }
 
-  // Navigation to Payment Gateway Page
+  // Navigation to Payment Gateway Page (generic wallet deposit - legacy)
   openDeposit() {
     if (this.fundAmount > 0) {
       this.router.navigate(['/user/payment-gateway'], { queryParams: { amount: this.fundAmount } });
@@ -154,7 +159,13 @@ export class FinancialSummaryComponent implements OnInit {
   // Redirect to Payment Gateway to fund a specific contract
   fundContract(inv: Invoice) {
     if (inv.remainingAmount > 0) {
-      this.router.navigate(['/user/payment-gateway'], { queryParams: { amount: inv.remainingAmount } });
+      this.router.navigate(['/user/payment-gateway'], {
+        queryParams: {
+          amount: inv.remainingAmount,
+          contractId: inv.id,
+          contractTitle: inv.title
+        }
+      });
     }
   }
 }

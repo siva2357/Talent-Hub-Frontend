@@ -4,6 +4,7 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { RegexPatterns } from '../../../core/regex/patterns';
 
 @Component({
   selector: 'app-otp-verification',
@@ -40,7 +41,7 @@ export class OtpVerificationComponent {
     const value = input.value;
 
     // Move focus forward if a digit is entered
-    if (value && /^[0-9]$/.test(value)) {
+    if (value && RegexPatterns.NUMBER_ONLY.test(value) && value.length === 1) {
       if (index < 5) {
         const nextInput = this.otpInputs.toArray()[index + 1].nativeElement as HTMLInputElement;
         nextInput.focus();

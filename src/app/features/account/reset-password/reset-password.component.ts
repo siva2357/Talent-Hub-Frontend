@@ -5,6 +5,7 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RegexPatterns } from '../../../core/regex/patterns';
 
 @Component({
   selector: 'app-reset-password',
@@ -44,8 +45,8 @@ export class ResetPasswordComponent {
       return;
     }
 
-    if (this.newPassword.length < 8) {
-      this.errorMessage = 'Password must be at least 8 characters long.';
+    if (!RegexPatterns.STRONG_PASSWORD.test(this.newPassword)) {
+      this.errorMessage = 'Password must be at least 8 characters long, contain an uppercase, a lowercase, a number, and a special character.';
       return;
     }
 

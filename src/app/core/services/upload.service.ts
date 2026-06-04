@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class UploadService {
     formData.append('replace', replace ? 'true' : 'false');
 
     return this.http.post<{ success: boolean; message: string; url: string }>(
-      `${this.baseUrl}/uploads/upload`,
+      `${this.baseUrl}${API_ENDPOINTS.UPLOADS.UPLOAD}`,
       formData
     );
   }

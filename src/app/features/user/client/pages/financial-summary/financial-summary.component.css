@@ -193,6 +193,13 @@
     box-shadow: 0 0 15px rgba(255, 193, 7, 0.15) !important;
 }
 
+.badge-status-failed {
+    background: rgba(220, 53, 69, 0.1) !important;
+    color: #dc3545 !important;
+    border: 1.5px solid rgba(220, 53, 69, 0.25) !important;
+    box-shadow: 0 0 15px rgba(220, 53, 69, 0.15) !important;
+}
+
 /* Download Action Button styling */
 .download-action-btn {
     transition: all 0.25s ease;
@@ -258,4 +265,35 @@
 
 .font-monospace {
     font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+}
+
+/* Premium Glass Dropdown Menu */
+.glass-dropdown {
+    background: rgba(10, 13, 18, 0.95) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    border-radius: 12px !important;
+    min-width: 140px !important;
+    z-index: 10000;
+}
+
+.glass-dropdown .dropdown-item {
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    background: transparent !important;
+    transition: all 0.2s ease;
+    border: none !important;
+    text-align: left;
+    width: 100%;
+}
+
+.glass-dropdown .dropdown-item:hover {
+    background: rgba(42, 128, 255, 0.12) !important;
+    color: #ffffff !important;
+}
+
+.no-caret::after {
+    display: none !important;
 }

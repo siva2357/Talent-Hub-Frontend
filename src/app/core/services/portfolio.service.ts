@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
 import { ProfileService } from './profile.service';
 
 export interface PortfolioMedia {
@@ -50,7 +51,7 @@ export class PortfolioService {
     media: PortfolioMedia[];
     projectUrl?: string;
   }): Observable<{ success: boolean; item: any }> {
-    return this.http.post<{ success: boolean; item: any }>(`${this.baseUrl}/profile/portfolio`, item);
+    return this.http.post<{ success: boolean; item: any }>(`${this.baseUrl}${API_ENDPOINTS.PROFILE.PORTFOLIO}`, item);
   }
 
   updatePortfolioItem(id: string, item: {
@@ -62,11 +63,11 @@ export class PortfolioService {
     media?: PortfolioMedia[];
     projectUrl?: string;
   }): Observable<{ success: boolean; item: any }> {
-    return this.http.put<{ success: boolean; item: any }>(`${this.baseUrl}/profile/portfolio/${id}`, item);
+    return this.http.put<{ success: boolean; item: any }>(`${this.baseUrl}${API_ENDPOINTS.PROFILE.PORTFOLIO_ITEM(id)}`, item);
   }
 
   deletePortfolioItem(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/profile/portfolio/${id}`);
+    return this.http.delete<any>(`${this.baseUrl}${API_ENDPOINTS.PROFILE.PORTFOLIO_ITEM(id)}`);
   }
 
   private mapToPortfolioItem(item: any): PortfolioItem {

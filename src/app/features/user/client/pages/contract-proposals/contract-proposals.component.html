@@ -88,10 +88,10 @@
                     [style.opacity]="expandedContractId === contract._id ? '1' : '0'">
                     <div class="p-3 p-md-4 border-top border-white border-opacity-10 bg-dark bg-opacity-25">
 
-                        <div class="row g-4">
+                        <div class="row g-4 ">
                             @for (proposal of getFilteredProposals(contract.applicants); track proposal.applicationId){
-                            <div class="col-xl-4 col-md-6">
-                                <div class="proposal-card glass p-3 mt-3  rounded-4 h-100 border-white border-opacity-10 d-flex flex-column transition-all duration-300"
+                            <div class="col-xl-4 col-md-6 mb-4">
+                                <div class="proposal-card glass p-3 mt-3  rounded-4 h-100 d-flex flex-column transition-all duration-300"
                                     [class.accepted-card]="proposal.applicationStatus === 'hired'"
                                     [class.declined-card]="proposal.applicationStatus === 'rejected'">
 
@@ -126,10 +126,20 @@
 
                                         <!-- Match Rating Ring -->
                                         <div class="performance-ring text-end flex-shrink-0">
-                                            <div class="ring-wrapper ms-auto mb-1 high">
-                                                <span class="percent text-white fw-bold">92%</span>
+                                            <div class="ring-wrapper ms-auto mb-1"
+                                                [ngClass]="proposal.performanceTier.toLowerCase()" style="cursor: help;"
+                                                data-tooltip="Please start contract to level up score and better hiring">
+                                                <span class="percent text-white fw-bold">{{proposal.performance ||
+                                                    0}}%</span>
                                             </div>
-                                            <div class="fw-bold small text-success" style="font-size: 11px;">High Match
+                                            <div class="fw-bold small" [ngClass]="{
+                                                    'text-success': proposal.performanceTier === 'High',
+                                                    'text-warning': proposal.performanceTier === 'Medium',
+                                                    'text-danger': proposal.performanceTier === 'Low',
+                                                    'text-secondary': proposal.performanceTier === 'New' || !proposal.performanceTier
+                                                  }" style="font-size: 11px;">
+                                                {{ proposal.performanceTier || 'New' }} {{ proposal.performanceTier ===
+                                                'New' || !proposal.performanceTier ? 'Performance' : 'Match' }}
                                             </div>
                                         </div>
                                     </div>
@@ -293,12 +303,9 @@
                 <!-- Dynamic Action Selection -->
                 @if (getAvailableActions().length > 0) {
                 <div class="mb-4">
-                    <label class="form-label text-white small fw-bold">Next Action</label>
-                    <select class="form-select bg-black text-white border-secondary" [(ngModel)]="nextAction">
-                        @for (action of getAvailableActions(); track action.value) {
-                        <option [value]="action.value">{{action.label}}</option>
-                        }
-                    </select>
+                    <app-input type="select" label="Next Action" [(ngModel)]="nextAction"
+                        [options]="getAvailableActions()">
+                    </app-input>
                 </div>
                 } @else {
                 <div class="alert alert-secondary bg-secondary bg-opacity-10 border-secondary text-white mb-4">
@@ -311,22 +318,14 @@
                 @if(nextAction === 'schedule-assessment'){
                 <div
                     class="d-flex flex-column gap-3 p-3 rounded bg-secondary bg-opacity-10 border border-secondary border-opacity-50">
-                    <div>
-                        <label class="form-label text-white small">Assessment Title</label>
-                        <input type="text" class="form-control bg-black text-white border-secondary"
-                            placeholder="e.g. Frontend Architecture Assessment" [(ngModel)]="assessmentForm.title">
-                    </div>
-                    <div>
-                        <label class="form-label text-white small">Assessment Description</label>
-                        <textarea rows="3" class="form-control bg-black text-white border-secondary"
-                            placeholder="Enter assessment details..."
-                            [(ngModel)]="assessmentForm.description"></textarea>
-                    </div>
-                    <div>
-                        <label class="form-label text-white small">Assessment Deadline / Date</label>
-                        <input type="datetime-local" class="form-control bg-black text-white border-secondary"
-                            [(ngModel)]="assessmentForm.date">
-                    </div>
+                    <app-input type="text" label="Assessment Title" placeholder="e.g. Frontend Architecture Assessment"
+                        [(ngModel)]="assessmentForm.title">
+                    </app-input>
+                    <app-input type="textarea" label="Assessment Description" placeholder="Enter assessment details..."
+                        [(ngModel)]="assessmentForm.description">
+                    </app-input>
+                    <app-input type="date" label="Assessment Deadline / Date" [(ngModel)]="assessmentForm.date">
+                    </app-input>
                 </div>
                 }
 
@@ -334,22 +333,14 @@
                 @if(nextAction === 'schedule-interview'){
                 <div
                     class="d-flex flex-column gap-3 p-3 rounded bg-info bg-opacity-10 border border-info border-opacity-25">
-                    <div>
-                        <label class="form-label text-white small">Interview Title</label>
-                        <input type="text" class="form-control bg-black text-white border-secondary"
-                            placeholder="e.g. Technical Interview Round 1" [(ngModel)]="interviewForm.title">
-                    </div>
-                    <div>
-                        <label class="form-label text-white small">Interview Details (Link / Instructions)</label>
-                        <textarea rows="3" class="form-control bg-black text-white border-secondary"
-                            placeholder="Enter meeting link or location..."
-                            [(ngModel)]="interviewForm.description"></textarea>
-                    </div>
-                    <div>
-                        <label class="form-label text-white small">Interview Date & Time</label>
-                        <input type="datetime-local" class="form-control bg-black text-white border-secondary"
-                            [(ngModel)]="interviewForm.date">
-                    </div>
+                    <app-input type="text" label="Interview Title" placeholder="e.g. Technical Interview Round 1"
+                        [(ngModel)]="interviewForm.title">
+                    </app-input>
+                    <app-input type="textarea" label="Interview Details (Link / Instructions)"
+                        placeholder="Enter meeting link or location..." [(ngModel)]="interviewForm.description">
+                    </app-input>
+                    <app-input type="date" label="Interview Date & Time" [(ngModel)]="interviewForm.date">
+                    </app-input>
                 </div>
                 }
                 }
@@ -358,17 +349,18 @@
 
             <!-- Footer -->
             <div class="modal-footer border-secondary border-opacity-50">
-                <button type="button" class="btn btn-outline-light rounded-3" (click)="closeModal()">
+                <app-button variant="outline" customClass="rounded-3 px-4 text-white border-white border-opacity-25"
+                    (click)="closeModal()">
                     Close
-                </button>
+                </app-button>
                 @if (getAvailableActions().length > 0) {
-                <button type="button" class="btn btn-primary rounded-3 px-4" [disabled]="isSubmitting || !nextAction"
-                    (click)="submitRecruitmentAction()">
+                <app-button variant="primary" customClass="rounded-3 px-4 shadow-glow-primary"
+                    [disabled]="isSubmitting || !nextAction" (click)="submitRecruitmentAction()">
                     @if(isSubmitting){
                     <span class="spinner-border spinner-border-sm me-2"></span>
                     }
                     Submit Update
-                </button>
+                </app-button>
                 }
             </div>
 

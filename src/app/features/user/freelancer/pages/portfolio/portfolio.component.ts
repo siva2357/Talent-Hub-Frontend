@@ -7,12 +7,13 @@ import { RichTextEditorComponent } from '../../../../../shared/components/rich-t
 import { FileUploadComponent } from '../../../../../shared/components/file-upload/file-upload.component';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { InputComponent } from '../../../../../shared/components/input/input.component';
+import { FilePreviewComponent } from '../../../../../shared/components/file-preview/file-preview.component';
 import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
 
 @Component({
   selector: 'app-portfolio',
   standalone: true,
-  imports: [CommonModule, FormsModule, RichTextEditorComponent, FileUploadComponent, ButtonComponent, InputComponent],
+  imports: [CommonModule, FormsModule, RichTextEditorComponent, FileUploadComponent, ButtonComponent, InputComponent, FilePreviewComponent],
   templateUrl: './portfolio.component.html',
   styleUrl: './portfolio.component.css'
 })

@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -13,14 +14,13 @@ export class ApplicationService {
   // ========================================
 
   private http = inject(HttpClient);
-
   private authService = inject(AuthService);
 
   // ========================================
   // API URL
   // ========================================
 
-  private readonly baseUrl = environment.apiGatewayUrl + '/applications';
+  private readonly baseUrl = environment.apiGatewayUrl;
 
   // ========================================
   // Headers
@@ -42,10 +42,8 @@ export class ApplicationService {
 
   shortlistApplication(applicationId: string): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${applicationId}/shortlist`,
-
+      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.SHORTLIST(applicationId)}`,
       {},
-
       this.getHeaders(),
     );
   }
@@ -56,10 +54,8 @@ export class ApplicationService {
 
   rejectApplication(applicationId: string, data: any): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${applicationId}/reject`,
-
+      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.REJECT(applicationId)}`,
       data,
-
       this.getHeaders(),
     );
   }
@@ -70,10 +66,8 @@ export class ApplicationService {
 
   scheduleAssessment(applicationId: string, data: any): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${applicationId}/assessment`,
-
+      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.ASSESSMENT(applicationId)}`,
       data,
-
       this.getHeaders(),
     );
   }
@@ -84,10 +78,8 @@ export class ApplicationService {
 
   assessmentResult(applicationId: string, data: any): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${applicationId}/assessment-result`,
-
+      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.ASSESSMENT_RESULT(applicationId)}`,
       data,
-
       this.getHeaders(),
     );
   }
@@ -98,10 +90,8 @@ export class ApplicationService {
 
   scheduleInterview(applicationId: string, data: any): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${applicationId}/interview`,
-
+      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.INTERVIEW(applicationId)}`,
       data,
-
       this.getHeaders(),
     );
   }
@@ -112,10 +102,8 @@ export class ApplicationService {
 
   interviewResult(applicationId: string, data: any): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${applicationId}/interview-result`,
-
+      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.INTERVIEW_RESULT(applicationId)}`,
       data,
-
       this.getHeaders(),
     );
   }
@@ -126,10 +114,8 @@ export class ApplicationService {
 
   finalizeApplication(applicationId: string, data: any): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${applicationId}/finalize`,
-
+      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.FINALIZE(applicationId)}`,
       data,
-
       this.getHeaders(),
     );
   }
@@ -140,7 +126,7 @@ export class ApplicationService {
 
   submitAssessment(applicationId: string): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${applicationId}/submit-assessment`,
+      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.SUBMIT_ASSESSMENT(applicationId)}`,
       {},
       this.getHeaders()
     );
@@ -152,7 +138,7 @@ export class ApplicationService {
 
   sendOffer(applicationId: string, data: { scopeOfWork: string, additionalTerms: string }): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${applicationId}/send-offer`,
+      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.SEND_OFFER(applicationId)}`,
       data,
       this.getHeaders()
     );
@@ -164,7 +150,7 @@ export class ApplicationService {
 
   signOffer(applicationId: string, data: { signatureImage: string }): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${applicationId}/sign-offer`,
+      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.SIGN_OFFER(applicationId)}`,
       data,
       this.getHeaders()
     );
@@ -176,7 +162,7 @@ export class ApplicationService {
 
   declineOffer(applicationId: string): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/${applicationId}/decline-offer`,
+      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.DECLINE_OFFER(applicationId)}`,
       {},
       this.getHeaders()
     );
@@ -188,7 +174,7 @@ export class ApplicationService {
 
   getFreelancerOffers(): Observable<any> {
     return this.http.get(
-      `${this.baseUrl}/my-offers`,
+      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.MY_OFFERS}`,
       this.getHeaders()
     );
   }
@@ -199,7 +185,7 @@ export class ApplicationService {
 
   getApplicationById(applicationId: string): Observable<any> {
     return this.http.get(
-      `${this.baseUrl}/${applicationId}`,
+      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.ITEM(applicationId)}`,
       this.getHeaders()
     );
   }
@@ -209,7 +195,7 @@ export class ApplicationService {
   // ========================================
 
   getContractPdfUrl(applicationId: string): string {
-    const token = localStorage.getItem('th_token');
-    return `${this.baseUrl}/${applicationId}/contract-pdf?token=${token}`;
+    const token = localStorage.getItem('th_token') || '';
+    return `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.CONTRACT_PDF(applicationId, token)}`;
   }
 }

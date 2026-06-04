@@ -2,6 +2,7 @@ import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
 import {
   RegisterRequest,
   VerifyOtpRequest,
@@ -57,21 +58,21 @@ export class AuthService {
    * Registers a new user.
    */
   register(data: RegisterRequest): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/auth/register`, data);
+    return this.http.post<any>(`${this.baseUrl}${API_ENDPOINTS.AUTH.REGISTER}`, data);
   }
 
   /**
    * Verifies the registration OTP.
    */
   verifyOTP(data: VerifyOtpRequest): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/auth/verify-otp`, data);
+    return this.http.post<any>(`${this.baseUrl}${API_ENDPOINTS.AUTH.VERIFY_OTP}`, data);
   }
 
   /**
    * Authenticates the user and fetches their profile info.
    */
   login(data: LoginRequest): Observable<Registration> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login`, data).pipe(
+    return this.http.post<LoginResponse>(`${this.baseUrl}${API_ENDPOINTS.AUTH.LOGIN}`, data).pipe(
       tap((res) => {
         if (res.token) {
           this._token.set(res.token);
@@ -86,7 +87,7 @@ export class AuthService {
    * Fetches the logged in user's profile metadata and updates state.
    */
   fetchCurrentUser(): Observable<Registration> {
-    return this.http.get<{ success: boolean; user: Registration }>(`${this.baseUrl}/profile/me`).pipe(
+    return this.http.get<{ success: boolean; user: Registration }>(`${this.baseUrl}${API_ENDPOINTS.PROFILE.ME}`).pipe(
       tap((res) => {
         if (res.success && res.user) {
           this._currentUser.set(res.user);
@@ -114,49 +115,49 @@ export class AuthService {
    * Requests password reset OTP.
    */
   forgotPassword(data: ForgotPasswordRequest): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/auth/forgot-password`, data);
+    return this.http.post<any>(`${this.baseUrl}${API_ENDPOINTS.AUTH.FORGOT_PASSWORD}`, data);
   }
 
   /**
    * Verifies the reset password OTP.
    */
   verifyResetOTP(data: VerifyResetOtpRequest): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/auth/verify-reset-otp`, data);
+    return this.http.post<any>(`${this.baseUrl}${API_ENDPOINTS.AUTH.VERIFY_RESET_OTP}`, data);
   }
 
   /**
    * Resets the user password.
    */
   resetPassword(data: ResetPasswordRequest): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/auth/reset-password`, data);
+    return this.http.post<any>(`${this.baseUrl}${API_ENDPOINTS.AUTH.RESET_PASSWORD}`, data);
   }
 
   /**
    * Sends a forgot password code via email (from forgotPasswordRouter).
    */
   sendForgotPasswordCode(email: string): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/forgot-password/auth/forgot-password-code`, { email });
+    return this.http.post<any>(`${this.baseUrl}${API_ENDPOINTS.AUTH.FORGOT_PASSWORD_CODE}`, { email });
   }
 
   /**
    * Verifies the forgot password code (from forgotPasswordRouter).
    */
   verifyForgotPasswordCode(email: string, providedCode: string | number): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/forgot-password/auth/verify-forgotPassword-code`, { email, providedCode });
+    return this.http.post<any>(`${this.baseUrl}${API_ENDPOINTS.AUTH.VERIFY_FORGOT_PASSWORD_CODE}`, { email, providedCode });
   }
 
   /**
    * Resets the password using the verified code session (from forgotPasswordRouter).
    */
   resetPasswordWithCode(email: string, newPassword: string): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/forgot-password/auth/reset-password`, { email, newPassword });
+    return this.http.post<any>(`${this.baseUrl}${API_ENDPOINTS.AUTH.RESET_PASSWORD_WITH_CODE}`, { email, newPassword });
   }
 
   /**
    * Changes password for authenticated user.
    */
   changePassword(data: ChangePasswordRequest): Observable<any> {
-    return this.http.patch<any>(`${this.baseUrl}/change-password/auth/change-password`, data);
+    return this.http.patch<any>(`${this.baseUrl}${API_ENDPOINTS.AUTH.CHANGE_PASSWORD}`, data);
   }
 
   /**

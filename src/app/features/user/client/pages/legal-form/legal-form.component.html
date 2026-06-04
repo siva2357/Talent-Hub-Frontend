@@ -3,9 +3,9 @@
     
     <!-- Header -->
     <div class="mb-5 d-flex align-items-center gap-3 text-center text-md-start">
-      <button class="btn btn-dark text-white rounded-circle border-white border-opacity-10 d-flex align-items-center justify-content-center flex-shrink-0" routerLink="/user/hired-talent" style="width: 44px; height: 44px;">
+      <app-button variant="dark" customClass="text-white rounded-circle border-white border-opacity-10 d-flex align-items-center justify-content-center flex-shrink-0" routerLink="/user/hired-talent" style="width: 44px; height: 44px; padding: 0;">
         <i class="bi bi-arrow-left"></i>
-      </button>
+      </app-button>
       <div>
         <h3 class="text-white fw-bold mb-1 h4">Send Legal Contract Offer</h3>
         <p class="text-secondary mb-0">Review the terms and finalize the offer for your freelancer.</p>
@@ -56,18 +56,12 @@
             <form #offerForm="ngForm">
               <div class="mb-4">
                 <p class="text-secondary text-uppercase mb-2" style="font-size: 10px; letter-spacing: 0.5px;">Scope of Work Statement</p>
-                <div class="glass p-1 rounded-3">
-                  <textarea class="form-control bg-transparent border-0 text-white shadow-none px-3 py-2" rows="4" 
-                            placeholder="Define the exact deliverables..." [(ngModel)]="scopeOfWork" name="scopeOfWork" required></textarea>
-                </div>
+                <app-input type="textarea" placeholder="Define the exact deliverables..." [(ngModel)]="scopeOfWork" name="scopeOfWork" [required]="true"></app-input>
               </div>
 
               <div class="mb-4">
                 <p class="text-secondary text-uppercase mb-2" style="font-size: 10px; letter-spacing: 0.5px;">Additional Terms (Optional)</p>
-                <div class="glass p-1 rounded-3">
-                  <textarea class="form-control bg-transparent border-0 text-white shadow-none px-3 py-2" rows="4" 
-                            placeholder="Any NDAs, specific timelines, or IP ownership clauses..." [(ngModel)]="additionalTerms" name="additionalTerms"></textarea>
-                </div>
+                <app-input type="textarea" placeholder="Any NDAs, specific timelines, or IP ownership clauses..." [(ngModel)]="additionalTerms" name="additionalTerms"></app-input>
               </div>
 
               <div class="bg-dark bg-opacity-25 border border-white border-opacity-10 p-3 rounded-3 mb-4 d-flex gap-3 align-items-start">
@@ -85,12 +79,10 @@
               </div>
 
               <div class="d-flex justify-content-end gap-3 mt-5 border-top border-white border-opacity-10 pt-4">
-                <button type="button" class="btn btn-dark text-white border-white border-opacity-10 px-4 rounded-3 fw-bold" routerLink="/user/hired-talent">Cancel</button>
-                <button type="button" class="btn btn-primary px-4 rounded-3 fw-bold" (click)="sendOffer()" [disabled]="!confirmTerms || isSubmitting">
-                  <i class="bi bi-send me-2" *ngIf="!isSubmitting"></i>
-                  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="isSubmitting"></span>
-                  {{ isSubmitting ? 'Sending Offer...' : 'Generate & Send Offer' }}
-                </button>
+                <app-button variant="dark" customClass="text-white border-white border-opacity-10 px-4 rounded-3 fw-bold" routerLink="/user/hired-talent">Cancel</app-button>
+                <app-button variant="primary" customClass="px-4 rounded-3 fw-bold" (click)="sendOffer()" [disabled]="!confirmTerms" [loading]="isSubmitting">
+                  <i class="bi bi-send me-2"></i> Generate & Send Offer
+                </app-button>
               </div>
             </form>
           </div>
