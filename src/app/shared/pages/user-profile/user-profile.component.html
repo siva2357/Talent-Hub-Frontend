@@ -241,60 +241,7 @@
                                 <p class="text-secondary font-sm mb-0 lh-relaxed" [innerHTML]="contract.contractDescription"></p>
                             </div>
 
-                            <!-- Attendance & Time Logs -->
-                            @if (contract.attendance) {
-                            <div class="row g-2 mt-1 position-relative z-2">
-                                <div class="col-12 col-sm-6 col-md-3">
-                                    <div
-                                        class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
-                                        <i class="bi bi-clock-fill text-primary-light"></i>
-                                        <div class="d-flex flex-column">
-                                            <span class="text-secondary-light font-xs uppercase-label">Hours
-                                                Tracked</span>
-                                            <span class="text-white fw-bold font-sm font-monospace">{{
-                                                contract.attendance.hoursTracked }} hrs</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-3">
-                                    <div
-                                        class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
-                                        <i class="bi bi-calendar-range text-primary-light"></i>
-                                        <div class="d-flex flex-column">
-                                            <span class="text-secondary-light font-xs uppercase-label">Timeline
-                                                Period</span>
-                                            <span class="text-white fw-bold font-xs font-monospace text-nowrap">{{
-                                                contract.attendance.startDate }} - {{ contract.attendance.endDate
-                                                }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-3">
-                                    <div
-                                        class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
-                                        <i class="bi bi-bar-chart-fill text-primary-light"></i>
-                                        <div class="d-flex flex-column">
-                                            <span class="text-secondary-light font-xs uppercase-label">Weekly
-                                                Average</span>
-                                            <span class="text-white fw-bold font-sm font-monospace">{{
-                                                contract.attendance.weeklyAverage }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-3">
-                                    <div
-                                        class="attendance-stat-box p-3 rounded-3 border-glass bg-black-20 d-flex align-items-center gap-3 text-start">
-                                        <i class="bi bi-person-check-fill text-success-light"></i>
-                                        <div class="d-flex flex-column">
-                                            <span class="text-secondary-light font-xs uppercase-label">Attendance
-                                                Rate</span>
-                                            <span class="text-success-light fw-bold font-sm font-monospace">{{
-                                                contract.attendance.avgAttendanceRate }}%</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            }
+
                             <!-- Client Feedback Review Card -->
                             @if (contract.review) {
                             <div class="p-4 ps-4.5 rounded-3 border-glass text-start position-relative z-2 mt-4 bg-warning-glow"

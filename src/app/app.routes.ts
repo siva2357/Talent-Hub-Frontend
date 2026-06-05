@@ -36,9 +36,7 @@ import { FreelancerDashboardComponent } from './features/user/freelancer/pages/f
 import { ProposalsComponent } from './features/user/freelancer/pages/proposals/proposals.component';
 import { ActiveContractsComponent } from './features/user/freelancer/pages/active-contracts/active-contracts.component';
 import { ContractDiaryComponent } from './features/user/freelancer/pages/contract-diary/contract-diary.component';
-import { AttendanceOverviewComponent } from './features/user/freelancer/pages/attendance-overview/attendance-overview.component';
 import { PortfolioComponent } from './features/user/freelancer/pages/portfolio/portfolio.component';
-import { MarkAttendanceComponent } from './features/user/freelancer/pages/mark-attendance/mark-attendance.component';
 import { FinanceOverviewComponent } from './features/user/freelancer/pages/finance-overview/finance-overview.component';
 import { FinanceReportComponent } from './features/user/freelancer/pages/finance-report/finance-report.component';
 
@@ -55,7 +53,6 @@ import { ClientDashboardComponent } from './features/user/client/pages/client-da
 import { YourContractsComponent } from './features/user/client/pages/your-contracts/your-contracts.component';
 import { ContractProposalsComponent } from './features/user/client/pages/contract-proposals/contract-proposals.component';
 import { ContractProgressComponent } from './features/user/client/pages/contract-progress/contract-progress.component';
-import { ContractTimesheetComponent } from './features/user/client/pages/contract-timesheet/contract-timesheet.component';
 import { SearchTalentComponent } from './features/user/client/pages/search-talent/search-talent.component';
 import { TalentProfileComponent } from './features/user/client/pages/talent-profile/talent-profile.component';
 import { SavedTalentComponent } from './features/user/client/pages/saved-talent/saved-talent.component';
@@ -129,7 +126,6 @@ export const routes: Routes = [
       { path: 'contract-view-details', component: ContractViewDetailsComponent },
       { path: 'contract-proposals', component: ContractProposalsComponent },
       { path: 'contract-progress', component: ContractProgressComponent },
-      { path: 'contract-timesheet', component: ContractTimesheetComponent },
 
       { path: 'search-talent', component: SearchTalentComponent },
       { path: 'talent-profile/:id', component: TalentProfileComponent },
@@ -153,8 +149,6 @@ export const routes: Routes = [
       { path: 'offers', component: ProposalsComponent, data: { defaultTab: 'offers' } },
       { path: 'active-contracts', component: ActiveContractsComponent },
       { path: 'contract-diary', component: ContractDiaryComponent },
-      { path: 'attendance-overview', component: AttendanceOverviewComponent },
-      { path: 'mark-attendance', component: MarkAttendanceComponent },
       { path: 'finance-overview', component: FinanceOverviewComponent },
       { path: 'finance-report', component: FinanceReportComponent },
 

@@ -92,7 +92,7 @@ export class ContractProgressComponent implements OnInit {
     this.isLoading = true;
     this.diaryService.getClientDiaries().subscribe({
       next: (res: any) => {
-        this.diaries = res.diaries || [];
+        this.diaries = (res.diaries || []).filter((d: any) => d.contractId && (d.contractId.funded || 0) > 0);
         if (this.diaries.length > 0) {
           this.expandedDiaryId = this.diaries[0]._id;
         }

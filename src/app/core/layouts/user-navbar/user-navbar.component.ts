@@ -56,12 +56,11 @@ export class UserNavbarComponent implements OnInit {
     {
       label: 'Manage Contracts',
       roles: 'client',
-      activePaths: ['your-contracts', 'contract-proposals', 'contract-progress', 'contract-timesheet'],
+      activePaths: ['your-contracts', 'contract-proposals', 'contract-progress'],
       subItems: [
         { label: 'Your Contracts', description: 'View and manage all your active client contracts.', icon: 'bi-briefcase', route: '/user/your-contracts' },
         { label: 'Proposals', description: 'Review proposals submitted by freelancers.', icon: 'bi-file-earmark-text', route: '/user/contract-proposals' },
         { label: 'Contract Progress', description: 'Track milestones and deliverables for your projects.', icon: 'bi-graph-up', route: '/user/contract-progress' },
-        { label: 'Contract Timesheet', description: 'Review and approve freelancer hourly timesheets.', icon: 'bi-clock-history', route: '/user/contract-timesheet' },
       ]
     },
     {
@@ -104,15 +103,7 @@ export class UserNavbarComponent implements OnInit {
         { label: 'Contract Diary', description: 'Maintain daily work records and activity logs.', icon: 'bi-journal-text', route: '/user/contract-diary' },
       ]
     },
-    {
-      label: 'Attendance',
-      roles: 'freelancer',
-      activePaths: ['attendance-overview', 'mark-attendance'],
-      subItems: [
-        { label: 'Attendance Overview', description: 'View attendance records and activity summaries.', icon: 'bi-calendar-check', route: '/user/attendance-overview' },
-        { label: 'Mark Attendance', description: 'Mark your daily attendance.', icon: 'bi-patch-check', route: '/user/mark-attendance' },
-      ]
-    },
+
     {
       label: 'Financial Management',
       roles: 'freelancer',

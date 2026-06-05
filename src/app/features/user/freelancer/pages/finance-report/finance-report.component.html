@@ -11,7 +11,7 @@
             <div
                 class="report-summary-card glass-dark px-3 py-3 rounded-4 border border-success border-opacity-20 glow-success">
                 <span class="text-success text-uppercase fw-bold ls-1" style="font-size: 9px;">Amount Received</span>
-                <h4 class="text-white fw-bold mt-2 mb-0" style="font-size: 1.1rem;">${{ amountReceived | number:'1.2-2'
+                <h4 class="text-white fw-bold mt-2 mb-0" style="font-size: 1.1rem;">₹{{ amountReceived | number:'1.2-2'
                     }}</h4>
             </div>
         </div>
@@ -19,7 +19,7 @@
             <div
                 class="report-summary-card glass-dark px-3 py-3 rounded-4 border border-info border-opacity-20 glow-info">
                 <span class="text-info text-uppercase fw-bold ls-1" style="font-size: 9px;">Yet to be Received</span>
-                <h4 class="text-white fw-bold mt-2 mb-0" style="font-size: 1.1rem;">${{ amountPending | number:'1.2-2'
+                <h4 class="text-white fw-bold mt-2 mb-0" style="font-size: 1.1rem;">₹{{ amountPending | number:'1.2-2'
                     }}</h4>
             </div>
         </div>
@@ -119,10 +119,10 @@
                             </div>
                         </td>
                         <td class="py-4 fw-bold text-white">
-                            ${{ item.budget | number:'1.2-2' }}
+                            ₹{{ item.budget | number:'1.2-2' }}
                         </td>
                         <td class="py-4">
-                            <div class="text-success fw-bold">${{ item.earned | number:'1.2-2' }}</div>
+                            <div class="text-success fw-bold">₹{{ item.earned | number:'1.2-2' }}</div>
                         </td>
                         <td class="py-4 text-center">
                             <span class="badge rounded-pill px-3 py-1.5"
@@ -256,7 +256,7 @@
                                         <div>
                                             <div class="text-secondary small text-uppercase ls-1 mb-1"
                                                 style="font-size: 10px;">Total Budget</div>
-                                            <div class="text-white fw-bold h6 mb-0 text-nowrap">${{
+                                            <div class="text-white fw-bold h6 mb-0 text-nowrap">₹{{
                                                 selectedWithdrawItem.budget | number:'1.2-2' }}</div>
                                         </div>
                                     </div>
@@ -272,17 +272,17 @@
                                     class="amount-card p-5 rounded-5 border border-primary border-opacity-30 d-flex flex-column justify-content-center align-items-center text-center shadow-2xl">
                                     <div class="text-primary-light text-uppercase fw-extrabold ls-2 mb-3 d-flex align-items-center gap-2"
                                         style="font-size: 11px;">
-                                        <i class="bi bi-currency-dollar fs-5"></i>
+                                        <i class="bi bi-currency-rupee fs-5"></i>
                                         <span>Withdrawal Amount</span>
                                     </div>
                                     <div class="amount-display text-white fw-extrabold mb-1 ls-n2">
-                                        ${{ selectedWithdrawItem.balance | number:'1.2-2' }}
+                                        ₹{{ selectedWithdrawItem.balance | number:'1.2-2' }}
                                     </div>
                                     <div class="text-secondary small mb-2">
-                                        Platform Fee (10%): -${{ selectedWithdrawItem.balance * 0.10 | number:'1.2-2' }}
+                                        Platform Fee (10%): -₹{{ selectedWithdrawItem.balance * 0.10 | number:'1.2-2' }}
                                     </div>
                                     <div class="text-success fw-bold mb-2">
-                                        Net to Receive: ${{ selectedWithdrawItem.balance * 0.90 | number:'1.2-2' }}
+                                        Net to Receive: ₹{{ selectedWithdrawItem.balance * 0.90 | number:'1.2-2' }}
                                     </div>
                                     <div
                                         class="mt-4 py-2 px-4 rounded-pill bg-primary bg-opacity-20 text-primary border border-primary border-opacity-30 small fw-bold d-flex align-items-center gap-2 shadow-sm">

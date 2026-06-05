@@ -87,15 +87,7 @@ export const API_ENDPOINTS = {
     ITEM: (diaryId: string) => `/contract-diary/${diaryId}`
   },
 
-  // Attendance & Timesheet Endpoints
-  ATTENDANCE: {
-    CHECK_IN: '/attendance/check-in',
-    CHECK_OUT: '/attendance/check-out',
-    STATUS: (contractId: string) => `/attendance/status/${contractId}`,
-    OVERVIEW: (contractId: string) => `/attendance/overview/${contractId}`,
-    TIMESHEETS_CLIENT: '/timesheets/client',
-    TIMESHEET_APPROVE: (timesheetId: string) => `/timesheets/${timesheetId}/approve`
-  },
+
 
   // Application Endpoints
   APPLICATIONS: {

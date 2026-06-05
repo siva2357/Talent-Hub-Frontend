@@ -211,8 +211,8 @@ export class PaymentGatewayComponent implements OnInit {
       ? `Contract Funding - ID: ${this.contractId} (${this.contractTitle})`
       : 'Wallet Deposit / Account Funding';
 
-    const baseAmountStr = this.contractId ? `Base Amount       : $${this.depositAmount.toFixed(2)}` : `Amount            : $${this.depositAmount.toFixed(2)}`;
-    const platformFeeStr = this.contractId ? `Platform Fee (10%): $${(this.depositAmount * 0.10).toFixed(2)}` : 'Processing Fee    : $0.00';
+    const baseAmountStr = this.contractId ? `Base Amount       : ₹${this.depositAmount.toFixed(2)}` : `Amount            : ₹${this.depositAmount.toFixed(2)}`;
+    const platformFeeStr = this.contractId ? `Platform Fee (10%): ₹${(this.depositAmount * 0.10).toFixed(2)}` : 'Processing Fee    : ₹0.00';
     const totalAmount = this.contractId ? this.depositAmount * 1.10 : this.depositAmount;
 
     const receiptContent = `==================================================
@@ -235,7 +235,7 @@ TRANSACTION DETAILS:
 Description       : ${description}
 ${baseAmountStr}
 ${platformFeeStr}
-Total Charged     : $${totalAmount.toFixed(2)}
+Total Charged     : ₹${totalAmount.toFixed(2)}
 Status            : PAID & RELEASED
 
 ==================================================

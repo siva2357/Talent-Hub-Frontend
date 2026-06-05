@@ -172,7 +172,7 @@ export class FinanceReportComponent implements OnInit {
       this.financeService.withdraw(amount, contractId).subscribe({
         next: (res: any) => {
           if (res.success) {
-            alert(`Withdrawal request for $${amount.toFixed(2)} processed successfully!`);
+            alert(`Withdrawal request for ₹${amount.toFixed(2)} processed successfully!`);
             this.loadStats();
             this.loadReport();
             this.closeModal();
@@ -235,8 +235,8 @@ export class FinanceReportComponent implements OnInit {
     
     let reportContent = `TALENT HUB FINANCIAL STATEMENT\n`;
     reportContent += `=============================\n`;
-    reportContent += `Amount Received : $${this.amountReceived.toFixed(2)}\n`;
-    reportContent += `Amount Pending  : $${this.amountPending.toFixed(2)}\n`;
+    reportContent += `Amount Received : ₹${this.amountReceived.toFixed(2)}\n`;
+    reportContent += `Amount Pending  : ₹${this.amountPending.toFixed(2)}\n`;
     reportContent += `=============================\n\n`;
     reportContent += `Contract details breakdown:\n`;
     
@@ -244,8 +244,8 @@ export class FinanceReportComponent implements OnInit {
       reportContent += `-----------------------------\n`;
       reportContent += `Title      : ${item.title}\n`;
       reportContent += `Client     : ${item.client}\n`;
-      reportContent += `Budget     : $${item.budget.toFixed(2)}\n`;
-      reportContent += `Earned     : $${item.earned.toFixed(2)}\n`;
+      reportContent += `Budget     : ₹${item.budget.toFixed(2)}\n`;
+      reportContent += `Earned     : ₹${item.earned.toFixed(2)}\n`;
       reportContent += `Status     : ${item.status}\n`;
       reportContent += `Type       : ${item.type}\n`;
       reportContent += `Completion : ${item.completion}%\n`;

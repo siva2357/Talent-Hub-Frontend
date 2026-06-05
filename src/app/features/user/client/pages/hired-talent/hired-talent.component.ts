@@ -99,6 +99,7 @@ export class HiredTalentComponent implements OnInit {
                 contractTitle: hire.contract?.title || 'Unknown Contract',
                 contractStatus: hire.contract?.status || 'Active',
                 contractBudget: hire.contract?.estimatedBudget || 0,
+                contractFunded: hire.contract?.funded || 0,
                 contractType: hire.contract?.budgetType || 'Fixed Price',
                 contractStartDate: hire.contract?.contractStartDate || null,
                 contractEndDate: hire.contract?.contractEndDate || null,
@@ -134,13 +135,7 @@ export class HiredTalentComponent implements OnInit {
 
     this.diaryService.initializeDiary({
       applicationId: firstTalent.applicationId,
-      phases: [
-        {
-          name: 'Phase 1 – Kickoff',
-          description: 'Initial setup and project kickoff.',
-          amount: group.contractBudget || 0
-        }
-      ]
+      phases: []
     }).subscribe({
       next: (res: any) => {
         if (res.success) {

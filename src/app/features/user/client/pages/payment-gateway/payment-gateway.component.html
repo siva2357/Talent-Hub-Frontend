@@ -26,9 +26,9 @@
             <div class="position-relative z-3">
                 <!-- Amount Input -->
                 <div class="mb-4">
-                    <label class="text-primary text-uppercase fw-bold ls-1 mb-2 d-block" style="font-size: 10px; letter-spacing: 1px;">{{ contractId ? 'Funding Amount (USD)' : 'Deposit Amount (USD)' }}</label>
+                    <label class="text-primary text-uppercase fw-bold ls-1 mb-2 d-block" style="font-size: 10px; letter-spacing: 1px;">{{ contractId ? 'Funding Amount (INR)' : 'Deposit Amount (INR)' }}</label>
                     <div class="position-relative">
-                        <span class="position-absolute top-50 start-3 translate-middle-y text-secondary fs-5">$</span>
+                        <span class="position-absolute top-50 start-3 translate-middle-y text-secondary fs-5">₹</span>
                         <input type="number"
                             class="form-control bg-black bg-opacity-40 border border-white border-opacity-10 text-white rounded-3 py-3 ps-5 fs-4 fw-bold shadow-none custom-input"
                             [disabled]="!!contractId"
@@ -57,21 +57,21 @@
                     @if (contractId) {
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-secondary small">Base Funding Amount:</span>
-                        <span class="text-white fw-bold small">${{ depositAmount | number:'1.2-2' }}</span>
+                        <span class="text-white fw-bold small">₹{{ depositAmount | number:'1.2-2' }}</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-secondary small">Platform Fee (10%):</span>
-                        <span class="text-warning fw-bold small">${{ depositAmount * 0.10 | number:'1.2-2' }}</span>
+                        <span class="text-warning fw-bold small">₹{{ depositAmount * 0.10 | number:'1.2-2' }}</span>
                     </div>
                     } @else {
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-secondary small">Processing & Gateway Fee:</span>
-                        <span class="text-success fw-bold small">Free ($0.00)</span>
+                        <span class="text-success fw-bold small">Free (₹0.00)</span>
                     </div>
                     }
                     <div class="d-flex justify-content-between border-top border-white border-opacity-10 pt-2">
                         <span class="text-white fw-bold">Total Amount to Charge:</span>
-                        <span class="text-white fw-extrabold">${{ (contractId ? depositAmount * 1.10 : depositAmount) | number:'1.2-2' }}</span>
+                        <span class="text-white fw-extrabold">₹{{ (contractId ? depositAmount * 1.10 : depositAmount) | number:'1.2-2' }}</span>
                     </div>
                 </div>
 
@@ -155,16 +155,16 @@
                     @if (contractId) {
                     <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
                         <span class="text-secondary small">Base Amount</span>
-                        <span class="text-white fw-bold small">${{ depositAmount | number:'1.2-2' }}</span>
+                        <span class="text-white fw-bold small">₹{{ depositAmount | number:'1.2-2' }}</span>
                     </div>
                     <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
                         <span class="text-secondary small">Platform Fee (10%)</span>
-                        <span class="text-warning fw-bold small">${{ depositAmount * 0.10 | number:'1.2-2' }}</span>
+                        <span class="text-warning fw-bold small">₹{{ depositAmount * 0.10 | number:'1.2-2' }}</span>
                     </div>
                     }
                     <div class="receipt-item d-flex justify-content-between pt-1">
                         <span class="text-white fw-bold">{{ contractId ? 'Total Amount Charged' : 'Amount Credited' }}</span>
-                        <span class="text-success fw-extrabold fs-5">${{ (contractId ? depositAmount * 1.10 : depositAmount) | number:'1.2-2' }}</span>
+                        <span class="text-success fw-extrabold fs-5">₹{{ (contractId ? depositAmount * 1.10 : depositAmount) | number:'1.2-2' }}</span>
                     </div>
                 </div>
 

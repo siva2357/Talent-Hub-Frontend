@@ -193,8 +193,8 @@
                       </span>
                       @if (group.contractBudget) {
                         <span class="text-secondary text-xs d-flex align-items-center gap-1">
-                          <i class="bi bi-currency-dollar text-primary opacity-75"></i>
-                          ${{ group.contractBudget | number }} · {{ group.contractType }}
+                          <i class="bi bi-currency-rupee text-primary opacity-75"></i>
+                          ₹{{ group.contractBudget | number }} · {{ group.contractType }}
                         </span>
                       }
                       @if (group.contractStartDate) {
@@ -207,17 +207,23 @@
                   </div>
                 </div>
                 <div class="d-flex align-items-center gap-3 ms-auto ms-sm-0" (click)="$event.stopPropagation()">
-                  @if (hasDiary(group)) {
-                    <a routerLink="/user/contract-progress" class="btn btn-success btn-sm rounded-3 fw-bold text-xxs px-3 py-1.5">
-                      <i class="bi bi-journal-check me-1"></i>View Diary
-                    </a>
+                  @if (group.contractFunded > 0) {
+                    @if (hasDiary(group)) {
+                      <a routerLink="/user/contract-progress" class="btn btn-success btn-sm rounded-3 fw-bold text-xxs px-3 py-1.5">
+                        <i class="bi bi-journal-check me-1"></i>View Diary
+                      </a>
+                    } @else {
+                      <app-button variant="primary" size="sm" customClass="rounded-3 fw-bold shadow-glow-primary px-3 py-1.5" fontSize="10px"
+                        [disabled]="initializingDiary.has(group.contractId)"
+                        (click)="initializeDiary(group)">
+                        <i class="bi bi-journal-plus me-1"></i>
+                        {{ initializingDiary.has(group.contractId) ? 'Creating...' : 'Initialize Diary' }}
+                      </app-button>
+                    }
                   } @else {
-                    <app-button variant="primary" size="sm" customClass="rounded-3 fw-bold shadow-glow-primary px-3 py-1.5" fontSize="10px"
-                      [disabled]="initializingDiary.has(group.contractId)"
-                      (click)="initializeDiary(group)">
-                      <i class="bi bi-journal-plus me-1"></i>
-                      {{ initializingDiary.has(group.contractId) ? 'Creating...' : 'Initialize Diary' }}
-                    </app-button>
+                    <a routerLink="/user/financial-summary" class="btn btn-warning btn-sm rounded-3 fw-bold text-xxs px-3 py-1.5 text-black shadow-glow-warning">
+                      <i class="bi bi-credit-card-2-front me-1"></i>Pay / Fund Escrow
+                    </a>
                   }
                   <span class="text-secondary text-xs d-none d-md-inline">Click to toggle</span>
                   <i class="bi bi-chevron-up text-white fs-5 rotate-icon" [class.collapsed]="!group.isExpanded"></i>
