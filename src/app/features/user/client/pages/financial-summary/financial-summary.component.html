@@ -27,7 +27,7 @@
                                 <i class="bi bi-graph-up-arrow text-success"></i>
                             </div>
                         </div>
-                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-2">${{ totalSpent | number:'1.2-2' }}</h2>
+                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-2">₹{{ totalSpent | number:'1.2-2' }}</h2>
                     </div>
                     <div class="position-relative z-3">
                         <div class="small text-secondary-light d-flex align-items-center gap-2">
@@ -51,7 +51,7 @@
                                 <i class="bi bi-shield-check text-warning"></i>
                             </div>
                         </div>
-                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-2">${{ upcomingPayments | number:'1.2-2' }}</h2>
+                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-2">₹{{ upcomingPayments | number:'1.2-2' }}</h2>
                     </div>
                     <div class="position-relative z-3">
                         <div class="small text-secondary-light d-flex align-items-center gap-2">
@@ -151,7 +151,7 @@
                             </td>
                             <!-- Estimated Budget -->
                             <td class="py-4 text-success fw-bold">
-                                ${{ (inv.estimatedBudget || 0) | number:'1.2-2' }}
+                                ₹{{ (inv.estimatedBudget || 0) | number:'1.2-2' }}
                             </td>
                             <!-- Start Date -->
                             <td class="py-4 text-secondary-light">
@@ -181,7 +181,7 @@
                                         <i class="bi bi-three-dots-vertical fs-5"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end glass-dropdown border border-white border-opacity-10 py-1" [attr.aria-labelledby]="'actions-' + inv.id">
-                                        @if (inv.status !== 'Paid' && inv.status !== 'Payment Failed') {
+                                        @if (inv.remainingAmount > 0 && inv.status !== 'Payment Failed') {
                                         <li>
                                             <button class="dropdown-item text-white py-2 px-3 d-flex align-items-center gap-2" (click)="fundContract(inv)">
                                                 <i class="bi bi-credit-card-2-front text-primary"></i>

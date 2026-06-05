@@ -10,15 +10,25 @@
 
       <!-- Tab Navigator (Swapped: Pending Offers is first tab, Hired Talents is second) -->
       <div class="glass p-1.5 rounded-pill border-white border-opacity-10 d-inline-flex gap-1">
-        <button class="btn rounded-pill px-4 py-2 fw-bold text-xs transition-all border-0" 
+        <button class="btn rounded-pill px-4 py-2 fw-bold text-xs transition-all border-0 d-flex align-items-center gap-2" 
                 [ngClass]="activeTab === 'offers' ? 'btn-primary shadow-glow-primary text-white' : 'btn-transparent text-secondary'" 
                 (click)="switchTab('offers')">
-          <i class="bi bi-envelope-paper me-2"></i>Pending Offers
+          <i class="bi bi-envelope-paper"></i>
+          <span>Pending Offers</span>
+          <span class="badge rounded-pill bg-white bg-opacity-10 text-white px-2 py-0.5 text-xxs"
+                [ngClass]="activeTab === 'offers' ? 'bg-black bg-opacity-20' : 'bg-white bg-opacity-10'">
+            {{offersCount}}
+          </span>
         </button>
-        <button class="btn rounded-pill px-4 py-2 fw-bold text-xs transition-all border-0" 
+        <button class="btn rounded-pill px-4 py-2 fw-bold text-xs transition-all border-0 d-flex align-items-center gap-2" 
                 [ngClass]="activeTab === 'hired' ? 'btn-primary shadow-glow-primary text-white' : 'btn-transparent text-secondary'" 
                 (click)="switchTab('hired')">
-          <i class="bi bi-people me-2"></i>Hired Talents
+          <i class="bi bi-people"></i>
+          <span>Hired Talents</span>
+          <span class="badge rounded-pill bg-white bg-opacity-10 text-white px-2 py-0.5 text-xxs"
+                [ngClass]="activeTab === 'hired' ? 'bg-black bg-opacity-20' : 'bg-white bg-opacity-10'">
+            {{hiredCount}}
+          </span>
         </button>
       </div>
     </div>
@@ -59,101 +69,65 @@
           <div class="row g-4">
             @for (offer of filteredOffers; track offer.applicationId) {
               <div class="col-lg-4 col-md-6">
-                <div class="profile-card glass p-4 rounded-4 h-100 border-opacity-10 border-white d-flex flex-column position-relative overflow-hidden">
+                <app-talent-card
+                  [name]="offer.freelancer?.fullName || 'Freelancer'"
+                  [avatar]="offer.freelancer?.profilePhoto"
+                  [location]="'Remote'"
+                  [role]="offer.freelancer?.professionalHeadline || 'Freelancer Professional'"
+                  [performance]="getPerformance(offer)"
+                  [performanceTier]="getPerformanceTier(getPerformance(offer))"
+                  [stats]="getOfferStats(offer, 'Offer Value')"
+                  [statusClass]="!offer.offerStatus || offer.offerStatus === 'none' ? 'bg-primary' : (offer.offerStatus === 'sent' ? 'bg-warning' : 'bg-danger')">
                   
-                  <!-- Performance Ring -->
-                  <div class="position-absolute top-0 end-0 p-3 z-3">
-                    <div class="performance-ring text-center">
-                      <div class="ring-wrapper mx-auto mb-1 high">
-                        <span class="percent text-white">95%</span>
-                      </div>
-                      <div class="text-secondary text-xxs">Performance</div>
-                    </div>
-                  </div>
-
-                  <!-- Top Info -->
-                  <div class="d-flex justify-content-between align-items-start mb-3 pe-5">
-                    <div class="d-flex align-items-center gap-3">
-                      <div class="avatar-wrapper position-relative">
-                        <img [src]="offer.freelancer?.profilePhoto || 'assets/images/default-user.png'" [alt]="offer.freelancer?.fullName" class="rounded-circle border border-2 border-dark"
-                          style="width: 64px; height: 64px; object-fit: cover;">
-                        <span class="status-indicator position-absolute" [ngClass]="{
-                              'bg-primary': !offer.offerStatus || offer.offerStatus === 'none',
-                              'bg-warning': offer.offerStatus === 'sent',
-                              'bg-danger': offer.offerStatus === 'declined'
-                            }"></span>
-                      </div>
+                  <!-- Active Contract Info & Pipeline Status -->
+                  <div badges class="w-100">
+                    <div class="glass bg-white bg-opacity-5 p-3 rounded-3 mb-4 d-flex justify-content-between align-items-center">
                       <div>
-                        <h5 class="text-white fw-bold mb-1" style="font-size: 16px;">{{offer.freelancer?.fullName}}</h5>
-                        <div class="d-flex align-items-center gap-1 text-secondary text-xs">
-                          <i class="bi bi-geo-alt"></i>
-                          <span>Remote</span>
-                        </div>
-                        <p class="text-xs text-secondary mt-1 mb-0">{{offer.freelancer?.professionalHeadline}}</p>
+                        <span class="text-secondary text-xxs text-uppercase d-block mb-1">Contract Post</span>
+                        <span class="text-white fw-medium text-sm">{{offer.contract?.title}}</span>
+                      </div>
+                      <div class="text-end">
+                        <span class="text-secondary text-xxs text-uppercase d-block mb-1">Status</span>
+                        <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3">{{offer.contract?.status}}</span>
                       </div>
                     </div>
-                  </div>
 
-                  <!-- Active Contract Info -->
-                  <div class="glass bg-white bg-opacity-5 p-3 rounded-3 mb-4 d-flex justify-content-between align-items-center">
-                    <div>
-                      <span class="text-secondary text-xxs text-uppercase d-block mb-1">Contract Post</span>
-                      <span class="text-white fw-medium text-sm">{{offer.contract?.title}}</span>
-                    </div>
-                    <div class="text-end">
-                      <span class="text-secondary text-xxs text-uppercase d-block mb-1">Status</span>
-                      <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3">{{offer.contract?.status}}</span>
-                    </div>
-                  </div>
-
-                  <!-- Offer Status Label & Badge -->
-                  <div class="mb-4 d-flex align-items-center gap-2">
-                    <span class="text-secondary text-xs fw-bold uppercase tracking-widest">Pipeline Status :</span>
-                    <div class="status-badge-vivid px-3 py-1 rounded-pill d-inline-flex" [ngClass]="{
-                        'status-accepted': !offer.offerStatus || offer.offerStatus === 'none',
-                        'status-pending': offer.offerStatus === 'sent',
-                        'status-rejected': offer.offerStatus === 'declined'
-                      }">
-                      <i class="bi text-xs" [ngClass]="{
-                          'bi-bookmark-fill': !offer.offerStatus || offer.offerStatus === 'none',
-                          'bi-clock-history': offer.offerStatus === 'sent',
-                          'bi-x-circle-fill': offer.offerStatus === 'declined'
-                        }"></i>
-                      <span class="text-xxs fw-bold ms-1 uppercase tracking-widest">
-                        {{ !offer.offerStatus || offer.offerStatus === 'none' ? 'Shortlisted' : (offer.offerStatus === 'declined' ? 'Rejected' : 'Pending') }}
-                      </span>
+                    <div class="mb-4 d-flex align-items-center gap-2">
+                      <span class="text-secondary text-xs fw-bold uppercase tracking-widest">Pipeline Status :</span>
+                      <div class="status-badge-vivid px-3 py-1 rounded-pill d-inline-flex" [ngClass]="{
+                          'status-accepted': !offer.offerStatus || offer.offerStatus === 'none',
+                          'status-pending': offer.offerStatus === 'sent',
+                          'status-rejected': offer.offerStatus === 'declined'
+                        }">
+                        <i class="bi text-xs" [ngClass]="{
+                            'bi-bookmark-fill': !offer.offerStatus || offer.offerStatus === 'none',
+                            'bi-clock-history': offer.offerStatus === 'sent',
+                            'bi-x-circle-fill': offer.offerStatus === 'declined'
+                          }"></i>
+                        <span class="text-xxs fw-bold ms-1 uppercase tracking-widest">
+                          {{ !offer.offerStatus || offer.offerStatus === 'none' ? 'Shortlisted' : (offer.offerStatus === 'declined' ? 'Rejected' : 'Pending') }}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
                   <!-- Timeline Info -->
-                  <div class="mb-4 pt-3 border-top border-white border-opacity-5">
+                  <div timeline class="mb-4 pt-3 border-top border-white border-opacity-5 w-100">
                     @if (!offer.offerStatus || offer.offerStatus === 'none') {
                       <div class="d-flex justify-content-between align-items-center">
                         <span class="text-secondary text-xs">Shortlisted:</span>
-                        <span class="text-white text-xs fw-bold">{{offer.hiredAt || (offer.createdAt | date:'MMM d, yyyy')}}</span>
+                        <span class="text-white text-xs fw-bold">{{offer.hiredAt || (offer.appliedAt | date:'MMM d, yyyy')}}</span>
                       </div>
                     } @else {
                       <div class="d-flex justify-content-between align-items-center">
                         <span class="text-secondary text-xs">Offer Sent:</span>
-                        <span class="text-white text-xs fw-bold">{{offer.offerSentDate || (offer.createdAt | date:'MMM d, yyyy')}}</span>
+                        <span class="text-white text-xs fw-bold">{{offer.offerSentDate || (offer.appliedAt | date:'MMM d, yyyy')}}</span>
                       </div>
                     }
                   </div>
 
-                  <!-- Offer Details Stats -->
-                  <div class="row g-2 mb-4 py-3 border-top border-bottom border-white border-opacity-10 mt-auto">
-                    <div class="col-6 text-start border-end border-white border-opacity-10">
-                      <div class="text-white fw-bold text-sm">{{ getOfferRate(offer) }}</div>
-                      <div class="text-secondary text-xxs">Offer Value</div>
-                    </div>
-                    <div class="col-6 text-start">
-                      <div class="text-white fw-bold text-sm">{{ getOfferType(offer) }}</div>
-                      <div class="text-secondary text-xxs">Payment Type</div>
-                    </div>
-                  </div>
-
                   <!-- Footer Actions -->
-                  <div class="d-flex align-items-center justify-content-between pt-3 border-top border-white border-opacity-5 gap-2">
+                  <div actions class="d-flex align-items-center justify-content-between pt-3 border-top border-white border-opacity-10 gap-2 w-100">
                     @if (!offer.offerStatus || offer.offerStatus === 'none') {
                       <app-button variant="primary" size="sm" customClass="rounded-3 px-3 py-1.5 fw-bold shadow-glow-primary" fontSize="10px"
                         [routerLink]="['/user/legal-form', offer.contract?._id]">
@@ -172,7 +146,7 @@
                       Message
                     </app-button>
                   </div>
-                </div>
+                </app-talent-card>
               </div>
             } @empty {
               <div class="col-12 text-center py-5 animate-fade-in">
@@ -256,50 +230,18 @@
                   <div class="row g-4">
                     @for (talent of group.talents; track talent.applicationId) {
                       <div class="col-lg-4 col-md-6">
-                        <div class="profile-card glass p-4 rounded-4 border-opacity-5 border-white d-flex flex-column h-100 bg-black bg-opacity-20">
+                        <app-talent-card
+                          [name]="talent.freelancer?.fullName || 'Freelancer'"
+                          [avatar]="talent.freelancer?.profilePhoto"
+                          [location]="'Remote'"
+                          [role]="talent.freelancer?.professionalHeadline || 'Freelancer Professional'"
+                          [performance]="getPerformance(talent)"
+                          [performanceTier]="getPerformanceTier(getPerformance(talent))"
+                          [stats]="getOfferStats(talent, 'Hired Rate')"
+                          statusClass="bg-success">
                           
-                          <!-- Top Info -->
-                          <div class="d-flex justify-content-between align-items-start mb-4">
-                            <div class="d-flex align-items-center gap-3">
-                              <div class="avatar-wrapper position-relative">
-                                <img [src]="talent.freelancer?.profilePhoto || 'assets/images/default-user.png'"
-                                  [alt]="talent.freelancer?.fullName" class="rounded-circle border border-2 border-dark"
-                                  style="width: 64px; height: 64px; object-fit: cover;">
-                                <span class="status-indicator position-absolute bg-success"></span>
-                              </div>
-                              <div>
-                                <h5 class="text-white fw-bold mb-1" style="font-size: 16px;">{{talent.freelancer?.fullName}}</h5>
-                                <div class="d-flex align-items-center gap-1 text-secondary text-xs">
-                                  <i class="bi bi-geo-alt"></i>
-                                  <span>Remote</span>
-                                </div>
-                                <p class="text-xs text-secondary mt-1 mb-0">{{talent.freelancer?.professionalHeadline}}</p>
-                              </div>
-                            </div>
-                            
-                            <div class="performance-ring text-start">
-                              <div class="ring-wrapper ms-0 mb-1 high">
-                                <span class="percent text-white">95%</span>
-                              </div>
-                              <div class="fw-bold text-xs text-success">High</div>
-                              <div class="text-secondary text-xxs">Performance</div>
-                            </div>
-                          </div>
-
-                          <!-- Stats Grid (Rates etc.) -->
-                          <div class="row g-2 mb-4 py-3 border-top border-bottom border-white border-opacity-10 mt-auto">
-                            <div class="col-6 text-start border-end border-white border-opacity-10">
-                              <div class="text-white fw-bold text-sm">{{ getOfferRate(talent) }}</div>
-                              <div class="text-secondary text-xxs">Hired Rate</div>
-                            </div>
-                            <div class="col-6 text-start">
-                              <div class="text-white fw-bold text-sm">{{ getOfferType(talent) }}</div>
-                              <div class="text-secondary text-xxs">Type</div>
-                            </div>
-                          </div>
-
                           <!-- Dates -->
-                          <div class="mb-4 text-xs text-secondary d-flex flex-column gap-1">
+                          <div timeline class="mb-4 text-xs text-secondary d-flex flex-column gap-1 w-100">
                             <div class="d-flex justify-content-between">
                               <span>Hired date:</span>
                               <span class="text-white fw-bold">{{talent.signedAt || talent.hiredAt | date:'MMM d, yyyy'}}</span>
@@ -307,7 +249,7 @@
                           </div>
 
                           <!-- Action Buttons -->
-                          <div class="d-flex justify-content-between align-items-center gap-2 pt-3 border-top border-white border-opacity-5">
+                          <div actions class="d-flex justify-content-between align-items-center gap-2 pt-3 border-top border-white border-opacity-10 w-100">
                             <app-button variant="success" size="sm" customClass="rounded-3 px-3 py-1.5 fw-bold shadow-glow-success" fontSize="10px"
                                     (click)="downloadSignedContract(talent)">
                               <i class="bi bi-file-earmark-pdf me-1"></i>Download Signed Contract
@@ -316,7 +258,7 @@
                               Message
                             </app-button>
                           </div>
-                        </div>
+                        </app-talent-card>
                       </div>
                     }
                   </div>

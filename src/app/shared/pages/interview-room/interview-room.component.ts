@@ -289,10 +289,12 @@ export class InterviewRoomComponent implements OnInit, OnDestroy {
   endMeeting(): void {
     if (confirm('Are you sure you want to end this meeting?')) {
       if (this.userRole === 'client' && this.applicationId && this.applicationId !== 'demo') {
-        // Call backend API to mark the interview as completed
-        this.applicationService.interviewResult(this.applicationId, { result: 'completed' }).subscribe({
+        const feedback = prompt('Please enter interview feedback for the freelancer (optional):') || '';
+        
+        // Call backend API to mark the interview as completed with feedback
+        this.applicationService.interviewResult(this.applicationId, { result: 'completed', feedback }).subscribe({
           next: () => {
-            alert('Meeting ended. Application status updated to Interview Completed.');
+            alert('Meeting ended. Application status updated to Interview Completed with feedback.');
             this.router.navigate(['/user/contract-proposals']);
           },
           error: (err) => {

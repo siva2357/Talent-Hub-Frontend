@@ -20,7 +20,7 @@ export class ProfileService {
    * Submits profile details and optional profile photo to complete the profile.
    * Typically accepts FormData because profile picture upload uses multipart/form-data.
    */
-  completeProfile(data: FormData | { basicInformation: any; professionalDetails: any; location: any; availability?: any; socialLinks?: any; languages?: any }): Observable<any> {
+  completeProfile(data: FormData | { basicInformation?: any; professionalDetails?: any; location?: any; availability?: any; socialLinks?: any; languages?: any; paymentDetails?: any }): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}${API_ENDPOINTS.PROFILE.COMPLETE}`, data).pipe(
       tap((res) => {
         if (res.success) {
@@ -42,7 +42,7 @@ export class ProfileService {
    * Updates existing profile details and optional profile photo.
    * Typically accepts FormData because profile picture upload uses multipart/form-data.
    */
-  updateProfile(data: FormData | { basicInformation: any; professionalDetails: any; location: any; availability?: any; socialLinks?: any; languages?: any }): Observable<any> {
+  updateProfile(data: FormData | { basicInformation?: any; professionalDetails?: any; location?: any; availability?: any; socialLinks?: any; languages?: any; paymentDetails?: any }): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}${API_ENDPOINTS.PROFILE.UPDATE}`, data);
   }
 

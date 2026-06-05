@@ -91,98 +91,16 @@
                         <div class="row g-4 ">
                             @for (proposal of getFilteredProposals(contract.applicants); track proposal.applicationId){
                             <div class="col-xl-4 col-md-6 mb-4">
-                                <div class="proposal-card glass p-3 mt-3  rounded-4 h-100 d-flex flex-column transition-all duration-300"
-                                    [class.accepted-card]="proposal.applicationStatus === 'hired'"
-                                    [class.declined-card]="proposal.applicationStatus === 'rejected'">
+                                <app-talent-card [name]="proposal.freelancer.fullName"
+                                    [avatar]="proposal.freelancer.profilePhoto"
+                                    [location]="proposal.freelancer.city + ', ' + proposal.freelancer.country"
+                                    [role]="proposal.freelancer.professionalHeadline"
+                                    [performance]="proposal.performance" [performanceTier]="proposal.performanceTier"
+                                    [skills]="proposal.freelancer.skills" [stats]="proposal.stats"
+                                    statusClass="bg-success"
+                                    [cardClass]="proposal.applicationStatus === 'shortlisted' ? 'accepted-card' : proposal.applicationStatus === 'rejected' ? 'declined-card' : ''">
 
-                                    <!-- Candidate Info Header -->
-                                    <div class="d-flex justify-content-between align-items-start mb-3 gap-3">
-                                        <div class="d-flex align-items-center gap-3 flex-grow-1 min-width-0"
-                                            style="min-width: 0;">
-                                            <div class="avatar-wrapper position-relative flex-shrink-0">
-                                                <img [src]="proposal.freelancer.profilePhoto || 'assets/images/default-user.png'"
-                                                    [alt]="proposal.freelancer.fullName"
-                                                    class="rounded-circle border border-2 border-dark"
-                                                    style="width: 50px; height: 50px; object-fit: cover;">
-                                                <span class="status-indicator position-absolute bg-success"></span>
-                                            </div>
-                                            <div class="min-width-0 flex-grow-1"
-                                                style="min-width: 0; overflow: hidden;">
-                                                <h5 class="text-white fw-bold mb-1 h6 text-truncate">
-                                                    {{proposal.freelancer.fullName}}
-                                                </h5>
-                                                <div
-                                                    class="d-flex align-items-center gap-1 text-secondary small text-truncate">
-                                                    <i class="bi bi-geo-alt"></i>
-                                                    <span style="font-size: 11px;">{{proposal.freelancer.city}},
-                                                        {{proposal.freelancer.country}}</span>
-                                                </div>
-                                                <p class="text-primary small mt-1 mb-0 fw-semibold text-truncate"
-                                                    style="font-size: 13px;">
-                                                    {{proposal.freelancer.professionalHeadline}}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <!-- Match Rating Ring -->
-                                        <div class="performance-ring text-end flex-shrink-0">
-                                            <div class="ring-wrapper ms-auto mb-1"
-                                                [ngClass]="proposal.performanceTier.toLowerCase()" style="cursor: help;"
-                                                data-tooltip="Please start contract to level up score and better hiring">
-                                                <span class="percent text-white fw-bold">{{proposal.performance ||
-                                                    0}}%</span>
-                                            </div>
-                                            <div class="fw-bold small" [ngClass]="{
-                                                    'text-success': proposal.performanceTier === 'High',
-                                                    'text-warning': proposal.performanceTier === 'Medium',
-                                                    'text-danger': proposal.performanceTier === 'Low',
-                                                    'text-secondary': proposal.performanceTier === 'New' || !proposal.performanceTier
-                                                  }" style="font-size: 11px;">
-                                                {{ proposal.performanceTier || 'New' }} {{ proposal.performanceTier ===
-                                                'New' || !proposal.performanceTier ? 'Performance' : 'Match' }}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Skills Badge -->
-                                    <div class="mb-3 mt-auto">
-                                        <div class="d-flex flex-wrap gap-2">
-                                            @for (skill of proposal.freelancer.skills; track skill) {
-                                            <span class="badge-skill">{{skill}}</span>
-                                            }
-                                        </div>
-                                    </div>
-
-                                    <!-- Bid Specifications -->
-                                    <div
-                                        class="row g-3 mb-3 mt-3 py-2 border-top border-bottom border-white border-opacity-10 text-center">
-                                        <div class="col-6 col-sm-3 text-start">
-                                            <div class="text-white fw-bold h6 mb-1">${{proposal.hourlyRate}}</div>
-                                            <div class="text-secondary text-uppercase fw-bold"
-                                                style="font-size: 9px; letter-spacing: 0.5px;">Bid Rate</div>
-                                        </div>
-                                        <div class="col-6 col-sm-3 text-start">
-                                            <div class="text-white fw-bold h6 mb-1">{{proposal.duration}}</div>
-                                            <div class="text-secondary text-uppercase fw-bold"
-                                                style="font-size: 9px; letter-spacing: 0.5px;">Est. Time</div>
-                                        </div>
-                                        <div class="col-6 col-sm-3 text-start">
-                                            <div class="text-white fw-bold h6 mb-1">{{proposal.successRate}}%</div>
-                                            <div class="text-secondary text-uppercase fw-bold"
-                                                style="font-size: 9px; letter-spacing: 0.5px;">Success</div>
-                                        </div>
-                                        <div class="col-6 col-sm-3 text-start">
-                                            <div
-                                                class="text-white fw-bold h6 mb-1 d-flex align-items-center justify-content-start gap-1">
-                                                {{proposal.rating}} <i class="bi bi-star-fill text-warning small"></i>
-                                            </div>
-                                            <div class="text-secondary text-uppercase fw-bold"
-                                                style="font-size: 9px; letter-spacing: 0.5px;">Rating</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Status Badge -->
-                                    <div class="text-start mt-3 mb-3">
+                                    <div badges class="text-start mt-3 mb-3">
                                         <span class="badge px-3 py-2 fw-medium badge-status"
                                             [class.badge-status-applied]="proposal.applicationStatus === 'application received'"
                                             [class.badge-status-shortlisted]="proposal.applicationStatus === 'application shortlisted'"
@@ -194,14 +112,16 @@
                                         </span>
                                     </div>
 
-                                    <!-- Interactive Recruitment Phase Controls -->
-                                    <div
-                                        class="row g-2 w-100 m-0 pt-3 border-top border-white border-opacity-5 mt-auto">
-                                        
+                                    <div actions
+                                        class="row g-2 w-100 m-0 pt-3 border-top border-white border-opacity-10 mt-auto">
                                         @if (proposal.applicationStatus === 'interview scheduled') {
                                         <div class="col-12 ps-0 pe-0 mb-2">
-                                            <a [routerLink]="['/user/interview-setup']" [queryParams]="{ id: proposal.applicationId }" class="text-decoration-none">
-                                                <button class="btn btn-info btn-sm rounded-3 w-100 fw-medium text-white transition-all duration-300" style="height: 38px; font-size: 13px; background-color: #0dcaf0; border-color: #0dcaf0;">
+                                            <a [routerLink]="['/user/interview-setup']"
+                                                [queryParams]="{ id: proposal.applicationId }"
+                                                class="text-decoration-none">
+                                                <button
+                                                    class="btn btn-info btn-sm rounded-3 w-100 fw-medium text-white transition-all duration-300"
+                                                    style="height: 38px; font-size: 13px; background-color: #0dcaf0; border-color: #0dcaf0;">
                                                     <i class="bi bi-camera-video me-1"></i> Join Interview
                                                 </button>
                                             </a>
@@ -219,17 +139,15 @@
 
                                         <!-- Update Phase Button -->
                                         <div class="col-12 col-sm-7 pe-0 ps-sm-1 ps-0">
-                                            <button
-                                                class="btn btn-outline-primary btn-sm rounded-3 w-100 fw-medium update-phase-btn"
+                                            <button class="btn btn-outline-primary btn-sm rounded-3 w-100 fw-medium "
                                                 (click)="openRecruitmentModal(proposal)"
-                                                [disabled]="proposal.status === 'Rejected'"
+                                                [disabled]="proposal.applicationStatus === 'rejected' || proposal.applicationStatus === 'shortlisted'"
                                                 style="height: 38px; font-size: 13px; white-space: nowrap;">
                                                 Update Recruitment Phase
                                             </button>
                                         </div>
                                     </div>
-
-                                </div>
+                                </app-talent-card>
                             </div>
                             } @empty {
                             <div class="col-12 text-center py-5">

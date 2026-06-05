@@ -90,11 +90,15 @@ export class AccountSettingsComponent implements OnInit {
 
   // SOCIAL LINKS COLLECTIONS
   savedSocialLinks: any[] = [];
-  currentLink = { platform: 'linkedin', profileUrl: '' };
+  currentLink = { platform: '', profileUrl: '' };
 
   isEditModalOpen: boolean = false;
   editingLinkIndex: number = -1;
   editingLinkData = { platform: '', profileUrl: '' };
+
+  isEditLangModalOpen: boolean = false;
+  editingLangIndex: number = -1;
+  editingLangData = { language: '', proficiency: '' };
 
   // LANGUAGES COLLECTIONS
   savedLanguages: LanguageDto[] = [];
@@ -259,6 +263,17 @@ export class AccountSettingsComponent implements OnInit {
           this.profilePhotoUrl = basic.profilePhoto || null;
           this.savedLanguages = p.languages || [];
 
+          const pay = p.paymentDetails || {};
+          this.bankDetails = {
+            bankName: pay.bankName || '',
+            holderName: pay.holderName || '',
+            accountNumber: pay.accountNumber || '',
+            ifsc: pay.ifsc || ''
+          };
+          this.bankVerificationStatus = pay.status || 'unlinked';
+          this.bankAccountLinked = this.bankVerificationStatus !== 'unlinked';
+          this.bankAccountVerified = this.bankVerificationStatus === 'verified';
+
           this.gender = basic.gender || 'male';
           this.country = p.location?.country || 'IN';
           this.city = p.location?.city || '';
@@ -378,7 +393,7 @@ export class AccountSettingsComponent implements OnInit {
         return;
       }
       this.savedSocialLinks.push({ ...this.currentLink });
-      this.currentLink = { platform: 'linkedin', profileUrl: '' };
+      this.currentLink = { platform: '', profileUrl: '' };
     }
   }
 
@@ -416,8 +431,10 @@ export class AccountSettingsComponent implements OnInit {
   // LANGUAGES ACTIONS
   addLanguage(): void {
     if (this.currentLanguage.language && this.currentLanguage.proficiency) {
-      const exists = this.savedLanguages.some(l => l.language === this.currentLanguage.language);
-      if (!exists) {
+      const index = this.savedLanguages.findIndex(l => l.language === this.currentLanguage.language);
+      if (index > -1) {
+        this.savedLanguages[index].proficiency = this.currentLanguage.proficiency;
+      } else {
         this.savedLanguages.push({ ...this.currentLanguage });
       }
       this.currentLanguage = { language: '', proficiency: '' };
@@ -426,6 +443,24 @@ export class AccountSettingsComponent implements OnInit {
 
   removeLanguage(index: number): void {
     this.savedLanguages.splice(index, 1);
+  }
+
+  openEditLangModal(index: number): void {
+    this.editingLangIndex = index;
+    this.editingLangData = { ...this.savedLanguages[index] };
+    this.isEditLangModalOpen = true;
+  }
+
+  closeEditLangModal(): void {
+    this.isEditLangModalOpen = false;
+    this.editingLangIndex = -1;
+  }
+
+  updateLanguage(): void {
+    if (this.editingLangIndex > -1) {
+      this.savedLanguages[this.editingLangIndex].proficiency = this.editingLangData.proficiency;
+      this.closeEditLangModal();
+    }
   }
 
   triggerFileUpload(): void {
@@ -560,9 +595,10 @@ export class AccountSettingsComponent implements OnInit {
     if (this.confirmDelete && this.deleteConfirmPassword) {
       this.profileService.deleteProfile().subscribe({
         next: (res: any) => {
-          alert('Account profile deleted successfully! Redirecting...');
+          alert('Account and all associated data deleted successfully! Redirecting...');
           this.confirmDelete = false;
           this.deleteConfirmPassword = '';
+          this.authService.logout();
           this.router.navigate(['/']);
         },
         error: (err: any) => {
@@ -583,16 +619,17 @@ export class AccountSettingsComponent implements OnInit {
         alert('New passwords do not match');
         return;
       }
-
       this.authService.changePassword({
         oldPassword: this.securityData.currentPassword,
         newPassword: this.securityData.newPassword
       }).subscribe({
         next: (res: any) => {
-          alert('Password updated successfully!');
+          alert('Password updated successfully! Redirecting to login...');
           this.securityData.currentPassword = '';
           this.securityData.newPassword = '';
           this.securityData.confirmPassword = '';
+          this.authService.logout();
+          this.router.navigate(['/account/signin']);
         },
         error: (err: any) => {
           alert(err.error?.message || 'Failed to update password');
@@ -636,16 +673,37 @@ export class AccountSettingsComponent implements OnInit {
         };
       }
 
-      // Auto-flush any in-progress social link or language
-      if (this.currentLink.platform && this.currentLink.profileUrl) {
-        if (validateSocialLink(this.currentLink.platform, this.currentLink.profileUrl)) {
-          this.savedSocialLinks.push({ ...this.currentLink });
+      // Validate and auto-flush any in-progress social link or language
+      if (this.currentLink.platform || this.currentLink.profileUrl) {
+        if (!this.currentLink.platform) {
+          alert('Please select a platform for your in-progress social link.');
+          return;
         }
-        this.currentLink = { platform: 'linkedin', profileUrl: '' };
+        if (!this.currentLink.profileUrl) {
+          alert('Please enter a profile URL for your selected social platform.');
+          return;
+        }
+        if (!validateSocialLink(this.currentLink.platform, this.currentLink.profileUrl)) {
+          alert(`Please enter a valid URL for ${this.currentLink.platform}.`);
+          return;
+        }
+        this.savedSocialLinks.push({ ...this.currentLink });
+        this.currentLink = { platform: '', profileUrl: '' };
       }
-      if (this.currentLanguage.language && this.currentLanguage.proficiency) {
-        const exists = this.savedLanguages.some(l => l.language === this.currentLanguage.language);
-        if (!exists) {
+
+      if (this.currentLanguage.language || this.currentLanguage.proficiency) {
+        if (!this.currentLanguage.language) {
+          alert('Please select a language.');
+          return;
+        }
+        if (!this.currentLanguage.proficiency) {
+          alert('Please select a proficiency level for the language.');
+          return;
+        }
+        const index = this.savedLanguages.findIndex(l => l.language === this.currentLanguage.language);
+        if (index > -1) {
+          this.savedLanguages[index].proficiency = this.currentLanguage.proficiency;
+        } else {
           this.savedLanguages.push({ ...this.currentLanguage });
         }
         this.currentLanguage = { language: '', proficiency: '' };
@@ -694,7 +752,25 @@ export class AccountSettingsComponent implements OnInit {
     if (this.bankDetails.bankName && this.bankDetails.holderName && this.bankDetails.accountNumber && this.bankDetails.ifsc) {
       this.bankAccountLinked = true;
       this.bankVerificationStatus = 'pending';
-      alert('Bank account details saved. Status: Pending Verification.');
+      const payload = {
+        paymentDetails: {
+          bankName: this.bankDetails.bankName,
+          holderName: this.bankDetails.holderName,
+          accountNumber: this.bankDetails.accountNumber,
+          ifsc: this.bankDetails.ifsc,
+          status: 'pending',
+          verified: false
+        }
+      };
+      this.profileService.updateProfile(payload).subscribe({
+        next: (res: any) => {
+          alert('Bank account details saved. Status: Pending Verification.');
+          this.backupData();
+        },
+        error: (err: any) => {
+          alert('Failed to save bank details.');
+        }
+      });
     } else {
       alert('Please fill out all bank account fields.');
     }
@@ -703,7 +779,26 @@ export class AccountSettingsComponent implements OnInit {
   verifyBankDetails(): void {
     this.bankAccountVerified = true;
     this.bankVerificationStatus = 'verified';
-    alert('Bank account verification successful! Deposit/Withdrawal panels unlocked.');
+    const payload = {
+      paymentDetails: {
+        bankName: this.bankDetails.bankName,
+        holderName: this.bankDetails.holderName,
+        accountNumber: this.bankDetails.accountNumber,
+        ifsc: this.bankDetails.ifsc,
+        status: 'verified',
+        verified: true,
+        legalityAccepted: true
+      }
+    };
+    this.profileService.updateProfile(payload).subscribe({
+      next: (res: any) => {
+        alert('Bank account verification successful! Deposit/Withdrawal panels unlocked.');
+        this.backupData();
+      },
+      error: (err: any) => {
+        alert('Failed to verify bank details.');
+      }
+    });
   }
 
   depositFunds(): void {

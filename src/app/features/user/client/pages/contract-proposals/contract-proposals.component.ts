@@ -10,6 +10,8 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 
 
+import { TalentCardComponent } from '../../../../../shared/components/talent-card/talent-card.component';
+
 @Component({
   selector: 'app-contract-proposals',
   standalone: true,
@@ -18,7 +20,8 @@ import { ButtonComponent } from '../../../../../shared/components/button/button.
     FormsModule,
     RouterModule,
     InputComponent,
-    ButtonComponent
+    ButtonComponent,
+    TalentCardComponent
   ],
   templateUrl:
     './contract-proposals.component.html',
@@ -83,17 +86,16 @@ implements OnInit {
                   const rating = hasContracts ? (4.5 + (idHash % 5) / 10).toFixed(1) : '0.0';
                   const projectsCount = hasContracts ? (10 + (idHash % 40)) : 0;
                   const totalHours = hasContracts ? (100 + (idHash % 10) * 150) : 0;
-                  const performance = hasContracts ? (50 + (idHash % 51)) : 0;
+                  const completedCount = freelancer.completedContractsCount || 0;
+                  const performance = Math.min(100, completedCount * 10);
                   
-                  let performanceTier = 'New';
-                  if (hasContracts) {
-                    if (performance >= 75) {
-                      performanceTier = 'High';
-                    } else if (performance < 55) {
-                      performanceTier = 'Low';
-                    } else {
-                      performanceTier = 'Medium';
-                    }
+                  let performanceTier = 'Low';
+                  if (performance >= 80) {
+                    performanceTier = 'High';
+                  } else if (performance >= 40) {
+                    performanceTier = 'Medium';
+                  } else {
+                    performanceTier = 'Low';
                   }
 
                   // Bind properties back to proposal and freelancer objects
@@ -103,13 +105,25 @@ implements OnInit {
                   proposal.successRate = performance;
                   proposal.hourlyRate = freelancer.hourlyRate || 50;
                   proposal.duration = hasContracts ? `${2 + (idHash % 5)} months` : 'N/A';
+                  proposal.stats = [
+                    { value: `$${freelancer.hourlyRate || 50}`, label: 'Bid Rate' },
+                    { value: proposal.duration, label: 'Est. Time' },
+                    { value: `${performance}%`, label: 'Success' },
+                    { value: rating, label: 'Rating', hasStar: true }
+                  ];
                 } else {
                   proposal.performance = 0;
-                  proposal.performanceTier = 'New';
+                  proposal.performanceTier = 'Low';
                   proposal.rating = '0.0';
                   proposal.successRate = 0;
                   proposal.hourlyRate = 0;
                   proposal.duration = 'N/A';
+                  proposal.stats = [
+                    { value: '$0', label: 'Bid Rate' },
+                    { value: 'N/A', label: 'Est. Time' },
+                    { value: '0%', label: 'Success' },
+                    { value: '0.0', label: 'Rating', hasStar: true }
+                  ];
                 }
                 return proposal;
               });

@@ -55,6 +55,17 @@
                     </select>
                 </div>
 
+                <!-- Alert Banner if Upcoming -->
+                @if (isSelectedContractUpcoming) {
+                    <div class="alert glass border-warning border-opacity-25 text-warning rounded-4 p-3 d-flex align-items-center gap-3 mb-4">
+                        <i class="bi bi-lock-fill fs-4"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Contract Not Yet Started</h6>
+                            <p class="mb-0 small">Attendance tracking is locked. You will be able to punch in/out once this contract reaches its start date.</p>
+                        </div>
+                    </div>
+                }
+
                 <!-- Status Summary -->
                 <div class="row g-3 mb-4">
                     <div class="col-6">
@@ -78,14 +89,14 @@
                 <div class="row g-3 pt-1">
                     <div class="col-6">
                         <app-button variant="brand" size="md" customClass="w-100 py-2.5 shadow-glow rounded-3" 
-                                    [disabled]="isCheckedIn" [loading]="isPunchingIn" (click)="punchIn()">
+                                    [disabled]="isCheckedIn || isSelectedContractUpcoming" [loading]="isPunchingIn" (click)="punchIn()">
                             <i class="bi bi-box-arrow-in-right me-2"></i>
                             Punch In
                         </app-button>
                     </div>
                     <div class="col-6">
                         <app-button variant="danger" size="md" customClass="w-100 py-2.5 rounded-3 shadow-sm" 
-                                    [disabled]="!isCheckedIn" [loading]="isPunchingOut" (click)="punchOut()">
+                                    [disabled]="!isCheckedIn || isSelectedContractUpcoming" [loading]="isPunchingOut" (click)="punchOut()">
                             <i class="bi bi-box-arrow-right me-2"></i>
                             Punch Out
                         </app-button>

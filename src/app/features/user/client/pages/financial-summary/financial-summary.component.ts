@@ -77,14 +77,23 @@ export class FinancialSummaryComponent implements OnInit {
             
             const roundedSpent = Math.round(spent * 100) / 100;
             const roundedBudget = Math.round(budget * 100) / 100;
-            const remainingAmount = roundedBudget > roundedSpent ? Math.round((roundedBudget - roundedSpent) * 100) / 100 : 0;
+            const funded = contract.funded || 0;
+            const roundedFunded = Math.round(funded * 100) / 100;
 
             let mappedStatus: 'Paid' | 'Pending' | 'Payment Failed' = 'Pending';
-            if (contract.status === 'in progress' || contract.status === 'completed') {
+            if (contract.status === 'completed') {
               mappedStatus = 'Paid';
+            } else if (contract.status === 'in progress') {
+              if (roundedSpent >= roundedBudget && roundedBudget > 0) {
+                mappedStatus = 'Paid';
+              } else {
+                mappedStatus = 'Pending';
+              }
             } else {
               mappedStatus = 'Pending';
             }
+
+            const remainingAmount = roundedBudget > roundedFunded ? Math.round((roundedBudget - roundedFunded) * 100) / 100 : 0;
 
             return {
               id: contract._id,

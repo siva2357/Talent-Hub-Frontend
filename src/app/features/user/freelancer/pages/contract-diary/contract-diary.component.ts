@@ -180,4 +180,13 @@ export class ContractDiaryComponent implements OnInit {
   getTotalBudget(diary: Diary): number {
     return diary.contractId.estimatedBudget || 0;
   }
+
+  isContractActive(diary: Diary): boolean {
+    if (!diary.contractId?.contractStartDate) return true;
+    const start = new Date(diary.contractId.contractStartDate);
+    start.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today.getTime() >= start.getTime();
+  }
 }

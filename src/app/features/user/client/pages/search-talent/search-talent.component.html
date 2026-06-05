@@ -82,89 +82,29 @@
         } @else {
         @for (talent of talents; track talent.id) {
         <div class="col-lg-4 col-md-6">
-          <div class="profile-card glass p-4 rounded-4 h-100 border-opacity-10 border-white d-flex flex-column">
-            <!-- Top Info -->
-            <div class="d-flex justify-content-between align-items-start mb-4">
-              <div class="d-flex align-items-center gap-3">
-                <div class="avatar-wrapper position-relative">
-                  <img [src]="talent.avatar" [alt]="talent.name" class="rounded-circle border border-2 border-dark"
-                    style="width: 64px; height: 64px; object-fit: cover;">
-                </div>
-                <div>
-                  <h5 class="text-white fw-bold mb-1 pointer" (click)="viewProfile(talent.id)">{{talent.name}}</h5>
-                  <div class="d-flex align-items-center gap-1 text-secondary text-xs">
-                    <i class="bi bi-geo-alt"></i>
-                    <span>{{talent.location}}</span>
-                  </div>
-                  <p class="text-xs text-secondary mt-1 mb-0">{{talent.role}}</p>
-                </div>
-              </div>
-              <div class="performance-ring text-start">
-                <div class="ring-wrapper ms-0 mb-1" [ngClass]="talent.performanceTier.toLowerCase()"
-                  style="cursor: help;" data-tooltip="Please start contract to level up score and better hiring">
-                  <span class="percent text-white">{{talent.performance}}%</span>
-                </div>
-                <div class="fw-bold text-xs" [ngClass]="{
-                        'text-success': talent.performanceTier === 'High',
-                        'text-warning': talent.performanceTier === 'Medium',
-                        'text-danger': talent.performanceTier === 'Low',
-                        'text-secondary': talent.performanceTier === 'New' || talent.performanceTier === 'N/A'
-                      }">{{talent.performanceTier}}</div>
-                <div class="text-secondary text-xxs">Performance</div>
-              </div>
+          <app-talent-card
+            [name]="talent.name"
+            [avatar]="talent.avatar"
+            [location]="talent.location"
+            [role]="talent.role"
+            [performance]="talent.performance"
+            [performanceTier]="talent.performanceTier"
+            [skills]="talent.skills"
+            [stats]="talent.stats"
+            [statusClass]="talent.status === 'active' ? 'bg-success' : 'bg-danger'"
+            [statusLabel]="talent.status === 'active' ? 'Online' : 'Offline'"
+            (nameClick)="viewProfile(talent.id)">
+            <div actions class="d-flex gap-2">
+              <app-button variant="outline" size="sm" customClass="px-2 border-opacity-25 border-white"
+                (click)="toggleSaveTalent(talent.id)">
+                <i class="bi"
+                  [ngClass]="isSaved(talent.id) ? 'bi-bookmark-fill text-primary' : 'bi-bookmark text-white'"></i>
+              </app-button>
+              <app-button variant="primary" size="sm" customClass="px-3 rounded-3" (click)="viewProfile(talent.id)">
+                View Profile &rarr;
+              </app-button>
             </div>
-
-            <!-- Skills -->
-            <div class="mb-4">
-              <h6 class="text-primary text-xs fw-bold mb-3">Skills</h6>
-              <div class="d-flex flex-wrap gap-2">
-                @for (skill of talent.skills; track skill) {
-                <span class="badge-skill">{{skill}}</span>
-                }
-              </div>
-            </div>
-
-            <!-- Stats Grid -->
-            <div class="row g-2 mb-4 py-3 border-top border-bottom border-white border-opacity-10">
-              <div class="col-3 text-start border-end border-white border-opacity-10">
-                <div class="text-white fw-bold text-sm">${{talent.hourlyRate}}/hr</div>
-                <div class="text-secondary text-xxs">Rate</div>
-              </div>
-              <div class="col-3 text-start border-end border-white border-opacity-10">
-                <div class="text-white fw-bold text-sm">{{talent.projectsCount}}</div>
-                <div class="text-secondary text-xxs">Contracts</div>
-              </div>
-              <div class="col-3 text-start border-end border-white border-opacity-10">
-                <div class="text-white fw-bold text-sm">{{talent.rating}}</div>
-                <div class="text-secondary text-xxs">Rating</div>
-              </div>
-              <div class="col-3 text-start">
-                <div class="text-white fw-bold text-sm">{{talent.totalHours | number}}</div>
-                <div class="text-secondary text-xxs">Hours</div>
-              </div>
-            </div>
-
-            <!-- Footer Actions -->
-            <div class="d-flex align-items-center justify-content-between mt-auto">
-              <div class="d-flex align-items-center gap-2">
-                <span class="dot" [ngClass]="{
-                        'bg-success': talent.status === 'active',
-                        'bg-danger': talent.status !== 'active'
-                      }"></span>
-                <span class="text-xs text-secondary">{{talent.status === 'active' ? 'Online' : 'Offline'}}</span>
-              </div>
-              <div class="d-flex gap-2">
-                <app-button variant="outline" size="sm" customClass="px-2 border-opacity-25 border-white"
-                  (click)="toggleSaveTalent(talent.id)">
-                  <i class="bi"
-                    [ngClass]="isSaved(talent.id) ? 'bi-bookmark-fill text-primary' : 'bi-bookmark text-white'"></i>
-                </app-button>
-                <app-button variant="primary" size="sm" customClass="px-3 rounded-3" (click)="viewProfile(talent.id)">
-                  View Profile &rarr;
-                </app-button>
-              </div>
-            </div>
-          </div>
+          </app-talent-card>
         </div>
         }
         }

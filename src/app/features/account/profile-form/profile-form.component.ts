@@ -60,6 +60,7 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
     fields.push(!!this.city);
     fields.push(!!this.timezone);
     fields.push(this.isPhoneVerified);
+    fields.push(this.isPaymentVerified);
 
     if (this.userRole === 'freelancer') {
       fields.push(!!this.professionalHeadline);
@@ -119,6 +120,17 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
   isSendingPhoneOtp = false;
   isVerifyingPhone = false;
 
+  // Bank Account / Payment details state
+  bankDetails = {
+    bankName: '',
+    holderName: '',
+    accountNumber: '',
+    ifsc: ''
+  };
+  isPaymentVerified = false;
+  legalityAccepted = false;
+  isLinkingBank = false;
+
   savedSocialLinks: any[] = [];
   currentLink = { platform: '', url: '' };
 
@@ -149,6 +161,10 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
   editingLinkIndex: number = -1;
   editingLinkData = { platform: '', url: '' };
 
+  isEditLangModalOpen: boolean = false;
+  editingLangIndex: number = -1;
+  editingLangData = { language: '', proficiency: '' };
+
   platformOptions = [
     { label: 'LinkedIn', value: SocialPlatform.LinkedIn, icon: 'bi-linkedin' },
     { label: 'Twitter / X', value: SocialPlatform.Twitter, icon: 'bi-twitter-x' },
@@ -176,6 +192,7 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
     { id: 'location', label: 'Location', sub: 'Where are you based?', icon: 'bi-geo-alt' },
     { id: 'availability', label: 'Availability', sub: 'When you can work', icon: 'bi-clock' },
     { id: 'verification', label: 'Verify your contact', sub: 'Verify your contact', icon: 'bi-shield-check' },
+    { id: 'payment', label: 'Payment Setup', sub: 'Link bank & verify payouts', icon: 'bi-cash-coin' },
     { id: 'social', label: 'Social & Languages', sub: 'Profiles & languages', icon: 'bi-link-45deg' },
   ];
 
@@ -184,6 +201,7 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
     { id: 'professional', label: 'Professional Details', sub: 'Your business details', icon: 'bi-briefcase' },
     { id: 'location', label: 'Location', sub: 'Where are you based?', icon: 'bi-geo-alt' },
     { id: 'verification', label: 'Verification', sub: 'Verify your contact details', icon: 'bi-shield-check' },
+    { id: 'payment', label: 'Payment Verification', sub: 'Link bank & accept terms', icon: 'bi-cash-coin' },
     { id: 'social', label: 'Social & Languages', sub: 'Profiles & languages', icon: 'bi-link-45deg' },
   ];
 
@@ -407,8 +425,10 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   addLanguage(): void {
     if (this.currentLanguage.language && this.currentLanguage.proficiency) {
-      const exists = this.savedLanguages.some(l => l.language === this.currentLanguage.language);
-      if (!exists) {
+      const index = this.savedLanguages.findIndex(l => l.language === this.currentLanguage.language);
+      if (index > -1) {
+        this.savedLanguages[index].proficiency = this.currentLanguage.proficiency;
+      } else {
         this.savedLanguages.push({ ...this.currentLanguage });
       }
       this.currentLanguage = { language: '', proficiency: '' };
@@ -417,6 +437,24 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   removeLanguage(index: number): void {
     this.savedLanguages.splice(index, 1);
+  }
+
+  openEditLangModal(index: number): void {
+    this.editingLangIndex = index;
+    this.editingLangData = { ...this.savedLanguages[index] };
+    this.isEditLangModalOpen = true;
+  }
+
+  closeEditLangModal(): void {
+    this.isEditLangModalOpen = false;
+    this.editingLangIndex = -1;
+  }
+
+  updateLanguage(): void {
+    if (this.editingLangIndex > -1) {
+      this.savedLanguages[this.editingLangIndex].proficiency = this.editingLangData.proficiency;
+      this.closeEditLangModal();
+    }
   }
 
   openEditModal(index: number): void {
@@ -473,16 +511,45 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
       phoneNumber: this.isPhoneVerified
     };
 
-    // Auto-flush any in-progress social link the user typed but didn't click Add
-    if (this.currentLink.platform && this.currentLink.url) {
-      if (validateSocialLink(this.currentLink.platform, this.currentLink.url)) {
-        this.savedSocialLinks.push({ ...this.currentLink, status: 'Connected' });
+    // Validate and auto-flush any in-progress social link the user typed but didn't click Add
+    if (this.currentLink.platform || this.currentLink.url) {
+      if (!this.currentLink.platform) {
+        alert('Please select a platform for your in-progress social link.');
+        this.isLoading = false;
+        return;
       }
+      if (!this.currentLink.url) {
+        alert('Please enter a profile URL for your selected social platform.');
+        this.isLoading = false;
+        return;
+      }
+      if (!validateSocialLink(this.currentLink.platform, this.currentLink.url)) {
+        alert(`Please enter a valid URL for ${this.currentLink.platform}.`);
+        this.isLoading = false;
+        return;
+      }
+      this.savedSocialLinks.push({ ...this.currentLink, status: 'Connected' });
       this.currentLink = { platform: '', url: '' };
     }
-    // Auto-flush any in-progress language entry
-    if (this.currentLanguage.language && this.currentLanguage.proficiency) {
-      this.savedLanguages.push({ ...this.currentLanguage });
+
+    // Validate and auto-flush any in-progress language entry
+    if (this.currentLanguage.language || this.currentLanguage.proficiency) {
+      if (!this.currentLanguage.language) {
+        alert('Please select a language.');
+        this.isLoading = false;
+        return;
+      }
+      if (!this.currentLanguage.proficiency) {
+        alert('Please select a proficiency level for the language.');
+        this.isLoading = false;
+        return;
+      }
+      const index = this.savedLanguages.findIndex(l => l.language === this.currentLanguage.language);
+      if (index > -1) {
+        this.savedLanguages[index].proficiency = this.currentLanguage.proficiency;
+      } else {
+        this.savedLanguages.push({ ...this.currentLanguage });
+      }
       this.currentLanguage = { language: '', proficiency: '' };
     }
 
@@ -492,6 +559,16 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
     }));
 
     const languages: LanguageDto[] = this.savedLanguages;
+
+    const paymentDetails = {
+      bankName: this.bankDetails.bankName,
+      holderName: this.bankDetails.holderName,
+      accountNumber: this.bankDetails.accountNumber,
+      ifsc: this.bankDetails.ifsc,
+      verified: this.isPaymentVerified,
+      status: this.isPaymentVerified ? 'verified' : 'unlinked',
+      legalityAccepted: this.legalityAccepted
+    };
 
     if (this.userRole === 'freelancer') {
       const freelancerProfile: FreelancerProfileDto = {
@@ -515,6 +592,7 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
       formData.append('availability', JSON.stringify(freelancerProfile.availability));
       formData.append('hourlyRate', this.hourlyRate.toString());
       formData.append('languages', JSON.stringify(languages));
+      formData.append('paymentDetails', JSON.stringify(paymentDetails));
     } else {
       const clientProfile: ClientProfileDto = {
         basicInformation,
@@ -534,6 +612,7 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
       formData.append('verification', JSON.stringify(clientProfile.verification));
       formData.append('socialLinks', JSON.stringify(clientProfile.socialLinks));
       formData.append('languages', JSON.stringify(languages));
+      formData.append('paymentDetails', JSON.stringify(paymentDetails));
     }
 
     this.profileService.completeProfile(formData).subscribe({
@@ -610,5 +689,22 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
         this.phoneOtpError = err.error?.message || 'Invalid verification code.';
       }
     });
+  }
+
+  verifyPaymentDetails(): void {
+    if (this.bankDetails.bankName && this.bankDetails.holderName && this.bankDetails.accountNumber && this.bankDetails.ifsc) {
+      if (!this.legalityAccepted) {
+        alert('Please accept the escrow legality terms to proceed.');
+        return;
+      }
+      this.isLinkingBank = true;
+      setTimeout(() => {
+        this.isLinkingBank = false;
+        this.isPaymentVerified = true;
+        alert('Payment verification successful! Your account linked status is active.');
+      }, 1500); // 1.5 seconds mock verification delay
+    } else {
+      alert('Please fill out all bank account fields.');
+    }
   }
 }

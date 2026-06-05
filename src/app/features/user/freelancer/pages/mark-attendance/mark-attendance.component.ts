@@ -114,8 +114,21 @@ export class MarkAttendanceComponent implements OnInit {
     });
   }
 
+  get isSelectedContractUpcoming(): boolean {
+    if (!this.selectedContractId || this.activeContracts.length === 0) return false;
+    const resolveId = (c: any) => c.contractId || c.id || c._id;
+    const currentContract = this.activeContracts.find(c => resolveId(c) === this.selectedContractId);
+    if (!currentContract || !currentContract.startDate) return false;
+
+    const start = new Date(currentContract.startDate);
+    start.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today.getTime() < start.getTime();
+  }
+
   punchIn() {
-    if (!this.selectedContractId || this.isPunchingIn) return;
+    if (!this.selectedContractId || this.isPunchingIn || this.isSelectedContractUpcoming) return;
     this.isPunchingIn = true;
 
     let locationStr = 'Madhapur, Hyderabad';
@@ -155,7 +168,7 @@ export class MarkAttendanceComponent implements OnInit {
   }
 
   punchOut() {
-    if (!this.selectedContractId || this.isPunchingOut) return;
+    if (!this.selectedContractId || this.isPunchingOut || this.isSelectedContractUpcoming) return;
     this.isPunchingOut = true;
     this.attendanceService.checkOut({ contractId: this.selectedContractId }).subscribe({
       next: (res) => {

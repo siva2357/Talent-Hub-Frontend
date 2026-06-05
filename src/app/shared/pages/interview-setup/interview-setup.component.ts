@@ -124,13 +124,21 @@ export class InterviewSetupComponent implements OnInit, OnDestroy {
   }
 
   joinMeeting(): void {
-    this.router.navigate(['/user/interview-room'], {
-      queryParams: {
-        id: this.applicationId || 'demo',
-        mic: this.micEnabled,
-        cam: this.cameraEnabled
-      }
-    });
+    const userRole = this.currentUser?.role?.toLowerCase();
+    const queryParams = `?id=${this.applicationId || 'demo'}&mic=${this.micEnabled}&cam=${this.cameraEnabled}`;
+    const url = `/user/interview-room${queryParams}`;
+    
+    if (userRole === 'client') {
+      window.open(url, '_blank');
+    } else {
+      this.router.navigate(['/user/interview-room'], {
+        queryParams: {
+          id: this.applicationId || 'demo',
+          mic: this.micEnabled,
+          cam: this.cameraEnabled
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {

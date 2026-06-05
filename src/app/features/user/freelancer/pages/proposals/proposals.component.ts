@@ -82,7 +82,12 @@ export class ProposalsComponent implements OnInit {
   allProposals: any[] = [];
   appliedProposals: any[] = [];
   offers: any[] = [];
-  isLoading: boolean = false;
+  isProposalsLoading: boolean = false;
+  isOffersLoading: boolean = false;
+
+  get isLoading(): boolean {
+    return this.isProposalsLoading || this.isOffersLoading;
+  }
 
   ngOnInit(): void {
     // Check if routed with default tab data
@@ -106,10 +111,15 @@ export class ProposalsComponent implements OnInit {
 
   switchTab(tab: 'proposals' | 'offers'): void {
     this.activeTab = tab;
+    if (tab === 'proposals') {
+      this.fetchAppliedContracts();
+    } else if (tab === 'offers') {
+      this.fetchOffers();
+    }
   }
 
   fetchOffers(): void {
-    this.isLoading = true;
+    this.isOffersLoading = true;
     this.applicationService.getFreelancerOffers().subscribe({
       next: (res: any) => {
         if (res.success && res.offers) {
@@ -117,12 +127,12 @@ export class ProposalsComponent implements OnInit {
         } else {
           this.offers = [];
         }
-        this.isLoading = false;
+        this.isOffersLoading = false;
       },
       error: (err) => {
         console.error('Failed to fetch dynamic offers:', err);
         this.offers = [];
-        this.isLoading = false;
+        this.isOffersLoading = false;
       }
     });
   }
@@ -148,25 +158,25 @@ export class ProposalsComponent implements OnInit {
 
   markAssessmentCompleted(proposalId: string) {
     if (!proposalId) return;
-    this.isLoading = true;
+    this.isProposalsLoading = true;
     this.applicationService.submitAssessment(proposalId).subscribe({
       next: (res) => {
         if (res.success) {
           // Re-fetch to update state
           this.fetchAppliedContracts();
         } else {
-          this.isLoading = false;
+          this.isProposalsLoading = false;
         }
       },
       error: (err) => {
         console.error('Failed to submit assessment:', err);
-        this.isLoading = false;
+        this.isProposalsLoading = false;
       }
     });
   }
 
   fetchAppliedContracts() {
-    this.isLoading = true;
+    this.isProposalsLoading = true;
     this.contractService.getAppliedContracts().subscribe({
       next: (res: any) => {
         if (res.success && res.applications) {
@@ -203,11 +213,11 @@ export class ProposalsComponent implements OnInit {
           }));
           this.applyFilters();
         }
-        this.isLoading = false;
+        this.isProposalsLoading = false;
       },
       error: (err) => {
         console.error('Failed to fetch applied contracts:', err);
-        this.isLoading = false;
+        this.isProposalsLoading = false;
       }
     });
   }

@@ -68,6 +68,16 @@
                     <div class="accordion-body p-4 border-top border-white border-opacity-5">
                         <h6 class="text-white fw-bold mb-4">Evolutionary Progress Tracker</h6>
 
+                        @if (!isContractActive(diary)) {
+                        <div class="alert glass border-warning border-opacity-25 text-warning rounded-4 p-3 d-flex align-items-center gap-3 mb-4">
+                            <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+                            <div>
+                                <h6 class="fw-bold mb-1">Upcoming Contract Locked</h6>
+                                <p class="mb-0 small">This contract is scheduled to start on {{ formatDate(diary.contractId.contractStartDate) }}. Work milestones, starting phases, and updates will be locked until the start date.</p>
+                            </div>
+                        </div>
+                        }
+
                         @if (diary.phases.length === 0) {
                         <div class="text-center py-4 glass rounded-4 border-dashed">
                             <i class="bi bi-hourglass text-secondary fs-3 opacity-25 d-block mb-2"></i>
@@ -161,7 +171,7 @@
                                     <div class="action-area glass p-3 rounded-3 mb-3">
                                         <h6 class="text-white text-xxs fw-bold mb-3">START THIS PHASE</h6>
                                         <app-button variant="brand" size="sm"
-                                            [disabled]="submitting[phase._id]"
+                                            [disabled]="submitting[phase._id] || !isContractActive(diary)"
                                             (click)="startPhase(diary._id, phase._id)">
                                             <i class="bi bi-play-fill me-1"></i>
                                             {{ submitting[phase._id] ? 'Starting...' : 'Start Phase' }}
@@ -176,6 +186,7 @@
                                         <div class="mb-3">
                                             <textarea class="form-control glass border-0 text-white small" rows="2"
                                                 placeholder="Describe your progress, what you've completed..."
+                                                [disabled]="!isContractActive(diary)"
                                                 [(ngModel)]="phaseNotes[phase._id]"></textarea>
                                         </div>
 
@@ -184,6 +195,7 @@
                                             <app-file-upload
                                                 label="Proof of Work / Deliverables"
                                                 variant="dragdrop"
+                                                [disabled]="!isContractActive(diary)"
                                                 [bucketKey]="BucketKey.FreelancerData"
                                                 [uploadSection]="UploadSection.ContractFiles"
                                                 [(ngModel)]="tempUploadUrls[phase._id]"
@@ -205,7 +217,7 @@
 
                                         <div class="d-flex justify-content-end">
                                             <app-button variant="brand" size="sm"
-                                                [disabled]="submitting[phase._id]"
+                                                [disabled]="submitting[phase._id] || !isContractActive(diary)"
                                                 (click)="submitUpdate(diary._id, phase._id)">
                                                 <i class="bi bi-send me-1"></i>
                                                 {{ submitting[phase._id] ? 'Submitting...' : 'Submit Update' }}

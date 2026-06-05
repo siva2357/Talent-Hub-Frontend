@@ -53,7 +53,7 @@ export class ContractFormComponent implements OnInit {
     this.contractForm = this.fb.group({
       contractTitle: ['', [Validators.required, Validators.minLength(5)]],
       budgetType: [BudgetTypeEnum.FIXED_PRICE, Validators.required],
-      estimatedBudget: [null, [Validators.required, Validators.min(1)]],
+      estimatedBudget: [null, [Validators.required, Validators.min(25000), Validators.max(75000)]],
       contractStartDate: ['', Validators.required],
       contractEndDate: ['', Validators.required],
       contractDescription: ['', Validators.required],

@@ -100,15 +100,15 @@
                             <div class="col-12 col-md-3 d-flex align-items-center justify-content-md-end" style="gap: 28px !important;">
                                 <div class="text-md-end">
                                     <div class="text-secondary small" style="font-size: 11px;">Budget</div>
-                                    <div class="text-white fw-bold" style="font-size: 13px;">${{ c.budget | number:'1.2-2' }}</div>
+                                    <div class="text-white fw-bold" style="font-size: 13px;">₹{{ c.budget | number:'1.2-2' }}</div>
                                 </div>
                                 <div class="text-md-end">
                                     <div class="text-secondary small" style="font-size: 11px;">Paid</div>
-                                    <div class="text-success fw-bold" style="font-size: 13px;">${{ c.totalTransacted | number:'1.2-2' }}</div>
+                                    <div class="text-success fw-bold" style="font-size: 13px;">₹{{ c.totalTransacted | number:'1.2-2' }}</div>
                                 </div>
                                 <div class="text-md-end">
                                     <div class="text-secondary small" style="font-size: 11px;">Balance</div>
-                                    <div class="text-info fw-bold" style="font-size: 13px;">${{ (c.budget - c.totalTransacted) | number:'1.2-2' }}</div>
+                                    <div class="text-info fw-bold" style="font-size: 13px;">₹{{ (c.budget - c.totalTransacted) | number:'1.2-2' }}</div>
                                 </div>
                             </div>
                         </div>
@@ -164,7 +164,7 @@
                                             <!-- Amount to be paid -->
                                             <div class="d-flex flex-column align-items-end pe-2" style="min-width: 110px;">
                                                 <span class="text-secondary-light small" style="font-size: 10px; opacity: 0.6;">Amount to be paid</span>
-                                                <span class="fw-bold text-white" style="font-size: 14px;">${{ m.amount | number:'1.2-2' }}</span>
+                                                <span class="fw-bold text-white" style="font-size: 14px;">₹{{ m.amount | number:'1.2-2' }}</span>
                                             </div>
 
                                             <!-- Action Buttons Doublet -->
@@ -174,7 +174,7 @@
                                                     <button class="btn btn-sm rounded-3 py-2 px-3 fw-bold border-success border-opacity-25 text-success d-inline-flex align-items-center gap-1.5"
                                                             style="background: rgba(25, 135, 84, 0.1) !important; cursor: default; font-size: 11px;">
                                                         <i class="bi bi-check-circle-fill"></i>
-                                                        <span>Paid ${{ m.amount | number:'1.2-2' }}</span>
+                                                        <span>Paid ₹{{ m.amount | number:'1.2-2' }}</span>
                                                     </button>
                                                 } @else if (m.status === 'In Progress' || m.status === 'Review' || m.status === 'Rejected') {
                                                     <!-- Button 1: Start Payment / Retry Payment -->

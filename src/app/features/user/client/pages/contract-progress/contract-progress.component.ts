@@ -113,8 +113,15 @@ export class ContractProgressComponent implements OnInit {
   approvePhase(diaryId: string, phaseId: string): void {
     this.reviewing[phaseId] = true;
     this.diaryService.reviewPhase(diaryId, phaseId, 'approve').subscribe({
-      next: () => { this.fetchDiaries(); this.reviewing[phaseId] = false; },
-      error: () => { this.reviewing[phaseId] = false; }
+      next: (res: any) => {
+        alert(res.message || 'Phase approved and payment released successfully!');
+        this.fetchDiaries();
+        this.reviewing[phaseId] = false;
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Failed to approve phase.');
+        this.reviewing[phaseId] = false;
+      }
     });
   }
 
@@ -122,12 +129,16 @@ export class ContractProgressComponent implements OnInit {
     const feedback = this.feedbackText[phaseId] || '';
     this.reviewing[phaseId] = true;
     this.diaryService.reviewPhase(diaryId, phaseId, 'request-changes', feedback).subscribe({
-      next: () => {
+      next: (res: any) => {
+        alert(res.message || 'Changes requested successfully.');
         this.feedbackText[phaseId] = '';
         this.fetchDiaries();
         this.reviewing[phaseId] = false;
       },
-      error: () => { this.reviewing[phaseId] = false; }
+      error: (err) => {
+        alert(err.error?.message || 'Failed to request changes.');
+        this.reviewing[phaseId] = false;
+      }
     });
   }
 
@@ -141,7 +152,8 @@ export class ContractProgressComponent implements OnInit {
       amount: this.newPhase.amount || 0,
       clientAttachments: this.newPhaseAttachments
     }).subscribe({
-      next: () => {
+      next: (res: any) => {
+        alert(res.message || 'Phase added successfully.');
         this.newPhase = { name: '', description: '', deadline: '', amount: null };
         this.newPhaseAttachments = [];
         this.tempUploadUrl = null;
@@ -149,7 +161,10 @@ export class ContractProgressComponent implements OnInit {
         this.fetchDiaries();
         this.addingPhase[diaryId] = false;
       },
-      error: () => { this.addingPhase[diaryId] = false; }
+      error: (err) => {
+        alert(err.error?.message || 'Failed to add phase.');
+        this.addingPhase[diaryId] = false;
+      }
     });
   }
 
@@ -193,5 +208,14 @@ export class ContractProgressComponent implements OnInit {
       case 'overdue':           return 'bg-danger';
       default:                  return 'bg-secondary';
     }
+  }
+
+  isContractActive(diary: Diary): boolean {
+    if (!diary.contractId?.contractStartDate) return true;
+    const start = new Date(diary.contractId.contractStartDate);
+    start.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today.getTime() >= start.getTime();
   }
 }

@@ -11,27 +11,26 @@
       </div>
 
       <div class="auth-header">
-        <h1 class="text-3xl fw-bold mb-1">Create Account</h1>
-        <p class="text-xs opacity-60">Please fill in the details to get started</p>
+        <h1 class="text-2xl fw-bold ">Create Account</h1>
       </div>
 
       <form [formGroup]="registrationForm" (ngSubmit)="onRegister()" class="auth-form">
         <!-- FULL NAME -->
-        <div class="mb-3">
+        <div class="mb-1">
           <app-input type="text" placeholder="Enter your full name" icon="bi-person" formControlName="fullName"
             [error]="getFullNameError()">
           </app-input>
         </div>
 
         <!-- EMAIL -->
-        <div class="mb-3">
+        <div class="mb-1">
           <app-input type="email" placeholder="Enter your email" icon="bi-envelope" formControlName="email"
             [error]="getEmailError()">
           </app-input>
         </div>
 
         <!-- PASSWORD -->
-        <div class="mb-3">
+        <div class="mb-1">
           <app-input type="password" placeholder="Enter your password" icon="bi-lock" [showPasswordToggle]="true"
             formControlName="password" [error]="getPasswordError()">
           </app-input>
@@ -39,10 +38,10 @@
 
         <!-- GATEWAY ERROR MESSAGE -->
         @if (registrationError) {
-          <div class="alert alert-danger py-2 px-3 mb-3 text-sm d-flex align-items-center gap-2">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-            <span>{{ registrationError }}</span>
-          </div>
+        <div class="alert alert-danger py-2 px-3 mb-3 text-sm d-flex align-items-center gap-2">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span>{{ registrationError }}</span>
+        </div>
         }
 
         <div class="auth-action mt-4">

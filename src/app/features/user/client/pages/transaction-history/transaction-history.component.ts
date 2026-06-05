@@ -154,13 +154,13 @@ export class TransactionHistoryComponent implements OnInit {
       return;
     }
 
-    const confirmRelease = confirm(`Are you sure you want to release the escrow payment of $${m.amount.toLocaleString('en-US', {minimumFractionDigits: 2})} for milestone: "${m.title}"?`);
+    const confirmRelease = confirm(`Are you sure you want to release the escrow payment of ₹${m.amount.toLocaleString('en-IN', {minimumFractionDigits: 2})} for milestone: "${m.title}"?`);
     if (!confirmRelease) return;
 
     this.diaryService.reviewPhase(c.diaryId, m.id, 'approve').subscribe({
       next: (res: any) => {
         if (res.success) {
-          alert(`Successfully approved milestone and released escrow payment of $${m.amount.toFixed(2)} to the freelancer!`);
+          alert(`Successfully approved milestone and released escrow payment of ₹${m.amount.toFixed(2)} to the freelancer!`);
           this.loadDiaries();
         }
       },
@@ -187,7 +187,7 @@ export class TransactionHistoryComponent implements OnInit {
       `Milestone Title: ${m.title}\n` +
       `Date Completed: ${m.date ? new Date(m.date).toLocaleDateString() : 'N/A'}\n` +
       `Freelancer: ${c.freelancer}\n` +
-      `Amount Released: $${m.amount.toFixed(2)}\n` +
+      `Amount Released: ₹${m.amount.toFixed(2)}\n` +
       `Status: Released / Completed\n` +
       `=============================\n` +
       `Thank you for trusting Talent Hub!`

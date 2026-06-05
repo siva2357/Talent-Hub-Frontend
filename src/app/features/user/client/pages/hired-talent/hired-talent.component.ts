@@ -7,11 +7,12 @@ import { ApplicationService } from '../../../../../core/services/application.ser
 import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
 import { InputComponent } from '../../../../../shared/components/input/input.component';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
+import { TalentCardComponent } from '../../../../../shared/components/talent-card/talent-card.component';
 
 @Component({
   selector: 'app-hired-talent',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, InputComponent, ButtonComponent],
+  imports: [CommonModule, RouterModule, FormsModule, InputComponent, ButtonComponent, TalentCardComponent],
   templateUrl: './hired-talent.component.html',
   styleUrl: './hired-talent.component.css'
 })
@@ -137,7 +138,7 @@ export class HiredTalentComponent implements OnInit {
         {
           name: 'Phase 1 – Kickoff',
           description: 'Initial setup and project kickoff.',
-          amount: 0
+          amount: group.contractBudget || 0
         }
       ]
     }).subscribe({
@@ -214,5 +215,31 @@ export class HiredTalentComponent implements OnInit {
 
   getOfferType(offer: any): string {
     return offer.contract?.budgetType === 'Hourly Rate' ? 'Hourly' : 'Fixed Price';
+  }
+
+  getPerformance(talent: any): number {
+    const count = talent.freelancer?.completedContractsCount || 0;
+    return Math.min(100, count * 10);
+  }
+
+  getPerformanceTier(performance: number): string {
+    if (performance >= 80) return 'High';
+    if (performance >= 40) return 'Medium';
+    return 'Low';
+  }
+
+  get offersCount(): number {
+    return this.offers.length;
+  }
+
+  get hiredCount(): number {
+    return this.groupedHiredContracts.reduce((sum, group) => sum + (group.talents?.length || 0), 0);
+  }
+
+  getOfferStats(offer: any, label: 'Offer Value' | 'Hired Rate' = 'Offer Value'): any[] {
+    return [
+      { value: this.getOfferRate(offer), label: label },
+      { value: this.getOfferType(offer), label: label === 'Offer Value' ? 'Payment Type' : 'Type' }
+    ];
   }
 }
