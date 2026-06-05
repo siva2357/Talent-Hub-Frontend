@@ -84,7 +84,7 @@
                       </div>
                       <div>
                         <h6 class="text-white mb-0 fw-semibold">{{freelancer.name}}</h6>
-                        <span class="text-secondary smaller opacity-75">ID: {{freelancer.id}}</span>
+                        <span class="text-secondary smaller opacity-75">S.No: {{ $index + 1 }}</span>
                       </div>
                     </div>
                   </td>
@@ -97,14 +97,6 @@
                   <td>
                     <div class="d-flex flex-column gap-1">
                       <span class="text-white small fw-medium">{{freelancer.title}}</span>
-                      <div class="d-flex flex-wrap gap-1">
-                        @for (skill of freelancer.skills; track skill) {
-                          <span class="badge bg-secondary bg-opacity-20 text-white rounded-pill px-2 py-0 smaller-badge" style="font-size: 10px !important;">{{skill}}</span>
-                        }
-                      </div>
-                      <span class="text-secondary smaller opacity-75">
-                        <i class="bi bi-star-fill text-warning"></i> {{freelancer.rating | number:'1.1-1'}} &bull; {{freelancer.hourlyRate | currency}}/hr &bull; {{freelancer.earnings | currency:'USD':'symbol':'1.0-0'}} Earnings
-                      </span>
                     </div>
                   </td>
                   <td>
@@ -212,11 +204,11 @@
             </div>
             <div class="col-6">
               <span class="smaller-label d-block text-uppercase tracking-wider">Hourly Rate</span>
-              <span class="text-white fw-medium">{{selectedFreelancer.hourlyRate | currency:'USD':'symbol':'1.0-0'}}/hr</span>
+              <span class="text-white fw-medium">{{selectedFreelancer.hourlyRate | currency:'INR':'symbol':'1.0-0'}}/hr</span>
             </div>
             <div class="col-6">
               <span class="smaller-label d-block text-uppercase tracking-wider">Total Earnings</span>
-              <span class="text-success fw-bold">{{selectedFreelancer.earnings | currency:'USD':'symbol':'1.0-0'}}</span>
+              <span class="text-success fw-bold">{{selectedFreelancer.earnings | currency:'INR':'symbol':'1.0-0'}}</span>
             </div>
             <div class="col-6">
               <span class="smaller-label d-block text-uppercase tracking-wider">Rating</span>

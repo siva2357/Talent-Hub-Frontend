@@ -19,9 +19,9 @@ export class FinanceOverviewComponent implements OnInit {
 
   // Financial Stats
   totalEarnings = 0;
-  paymentsReceived = 0;
   amountWithdrawn = 0;
   balanceLeft = 0;
+  platformFeesDeducted = 0;
 
   contracts: any[] = [];
   selectedContract: any = null;
@@ -37,9 +37,9 @@ export class FinanceOverviewComponent implements OnInit {
       next: (res: any) => {
         if (res.success && res.stats) {
           this.totalEarnings = res.stats.totalEarnings || 0;
-          this.paymentsReceived = res.stats.paymentsReceived || 0;
           this.amountWithdrawn = res.stats.amountWithdrawn || 0;
           this.balanceLeft = res.stats.balanceLeft || 0;
+          this.platformFeesDeducted = res.stats.platformFeesDeducted || 0;
         }
       },
       error: (err) => {

@@ -125,6 +125,20 @@ export const API_ENDPOINTS = {
     FREELANCERS: '/admin/freelancers',
     UPDATE_FREELANCER_STATUS: (id: string) => `/admin/freelancers/${id}/status`,
     APPROVE_FREELANCER: (id: string) => `/admin/freelancers/${id}/approve`,
-    DASHBOARD_STATS: '/admin/dashboard/stats'
+    DASHBOARD_STATS: '/admin/dashboard/stats',
+    FINANCE_TRANSACTIONS: '/admin/finances/transactions',
+    FINANCE_STATS: '/admin/finances/stats',
+    REPORTS: '/admin/reports',
+    GENERATE_REPORT: '/admin/reports'
+  },
+
+  // Blogs Endpoints
+  BLOGS: {
+    BASE: '/blogs',
+    PUBLISHED: '/blogs/published',
+    POST: (slug: string) => `/blogs/post/${slug}`,
+    CREATE: '/blogs',
+    STATUS: (id: string) => `/blogs/${id}/status`,
+    DELETE: (id: string) => `/blogs/${id}`
   }
 };

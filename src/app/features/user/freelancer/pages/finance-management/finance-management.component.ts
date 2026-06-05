@@ -218,7 +218,7 @@ export class FinanceManagementComponent implements OnInit {
   downloadInvoice(item: any) {
     console.log('Downloading invoice for:', item.title);
     const grossAmount = item.balance;
-    const platformFee = grossAmount * 0.10;
+    const platformFee = grossAmount * 0.075;
     const netReceived = grossAmount - platformFee;
 
     const invoiceContent = `==================================================
@@ -227,9 +227,9 @@ TALENT-HUB WITHDRAWAL RECEIPT
 Contract Reference : ${item.contractId || 'N/A'}
 Contract Title     : ${item.title}
 Client             : ${item.client}
-Withdrawal Amount  : $${grossAmount.toFixed(2)}
-Platform Fee (10%) : -$${platformFee.toFixed(2)}
-Net Amount Received: $${netReceived.toFixed(2)}
+Withdrawal Amount  : ₹${grossAmount.toFixed(2)}
+Platform Fee (7.5%): -₹${platformFee.toFixed(2)}
+Net Amount Received: ₹${netReceived.toFixed(2)}
 Payment Status     : COMPLETED
 Invoice Reference  : WDN-${Math.floor(100000 + Math.random() * 900000)}
 Issued Date        : ${new Date().toLocaleDateString()}

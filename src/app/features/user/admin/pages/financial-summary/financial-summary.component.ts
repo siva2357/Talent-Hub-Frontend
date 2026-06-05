@@ -24,7 +24,7 @@ export class AdminFinancialSummaryComponent implements OnInit {
   };
 
   searchTerm = '';
-  typeFilter: 'All' | 'Escrow Deposit' | 'Freelancer Payout' | 'Commission Fee' = 'All';
+  statusFilter: 'All' | 'Completed' | 'In Progress' | 'Pending' = 'All';
 
   ngOnInit(): void {
     this.loadFinancials();
@@ -38,7 +38,7 @@ export class AdminFinancialSummaryComponent implements OnInit {
       }
     });
 
-    // Load detailed transactions
+    // Load detailed transactions (contracts data)
     this.adminService.getTransactions().subscribe({
       next: (data) => {
         this.transactions = data;
@@ -52,8 +52,8 @@ export class AdminFinancialSummaryComponent implements OnInit {
     this.applyFilters();
   }
 
-  onFilterType(type: 'All' | 'Escrow Deposit' | 'Freelancer Payout' | 'Commission Fee'): void {
-    this.typeFilter = type;
+  onFilterStatus(status: 'All' | 'Completed' | 'In Progress' | 'Pending'): void {
+    this.statusFilter = status;
     this.applyFilters();
   }
 
@@ -61,11 +61,11 @@ export class AdminFinancialSummaryComponent implements OnInit {
     this.filteredTransactions = this.transactions.filter(t => {
       const matchesSearch = t.clientName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
                             t.freelancerName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                            t.id.toLowerCase().includes(this.searchTerm.toLowerCase());
+                            (t.contractTitle || '').toLowerCase().includes(this.searchTerm.toLowerCase());
 
-      const matchesType = this.typeFilter === 'All' || t.type === this.typeFilter;
+      const matchesStatus = this.statusFilter === 'All' || t.status === this.statusFilter;
 
-      return matchesSearch && matchesType;
+      return matchesSearch && matchesStatus;
     });
   }
 }

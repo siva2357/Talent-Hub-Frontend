@@ -69,16 +69,30 @@ export class BlogPostComponent implements OnInit {
     const urlArg = this.mediaUrl || undefined;
 
     if (this.isEditing) {
-      this.blogService.deletePost(this.editId);
-      this.blogService.addPost(this.title, this.description, this.content, this.category, this.readTime, this.status, typeArg, urlArg);
-      this.toastr.success('Blog post updated successfully!', 'Blog Management');
+      this.blogService.updatePost(this.editId, this.title, this.description, this.content, this.category, this.readTime, this.status, typeArg, urlArg).subscribe({
+        next: () => {
+          this.toastr.success('Blog post updated successfully!', 'Blog Management');
+          this.closeFormModal();
+          this.loadPosts();
+        },
+        error: (err) => {
+          this.toastr.error('Failed to update blog post.', 'Blog Management');
+          console.error(err);
+        }
+      });
     } else {
-      this.blogService.addPost(this.title, this.description, this.content, this.category, this.readTime, this.status, typeArg, urlArg);
-      this.toastr.success('New blog post published successfully!', 'Blog Management');
+      this.blogService.addPost(this.title, this.description, this.content, this.category, this.readTime, this.status, typeArg, urlArg).subscribe({
+        next: () => {
+          this.toastr.success('New blog post published successfully!', 'Blog Management');
+          this.closeFormModal();
+          this.loadPosts();
+        },
+        error: (err) => {
+          this.toastr.error('Failed to publish blog post.', 'Blog Management');
+          console.error(err);
+        }
+      });
     }
-
-    this.closeFormModal();
-    this.loadPosts();
   }
 
   editPost(post: BlogPost): void {
@@ -97,16 +111,30 @@ export class BlogPostComponent implements OnInit {
 
   deletePost(id: string): void {
     if (confirm('Are you sure you want to delete this blog post?')) {
-      this.blogService.deletePost(id);
-      this.toastr.success('Blog post deleted successfully.', 'Blog Management');
-      this.loadPosts();
+      this.blogService.deletePost(id).subscribe({
+        next: () => {
+          this.toastr.success('Blog post deleted successfully.', 'Blog Management');
+          this.loadPosts();
+        },
+        error: (err) => {
+          this.toastr.error('Failed to delete blog post.', 'Blog Management');
+          console.error(err);
+        }
+      });
     }
   }
 
   togglePublishStatus(id: string): void {
-    this.blogService.togglePostStatus(id);
-    this.toastr.info('Publication status toggled.', 'Blog Management');
-    this.loadPosts();
+    this.blogService.togglePostStatus(id).subscribe({
+      next: () => {
+        this.toastr.info('Publication status toggled.', 'Blog Management');
+        this.loadPosts();
+      },
+      error: (err) => {
+        this.toastr.error('Failed to toggle publication status.', 'Blog Management');
+        console.error(err);
+      }
+    });
   }
 
   onMediaSelected(event: any): void {

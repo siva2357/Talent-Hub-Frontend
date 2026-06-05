@@ -14,7 +14,7 @@
         <!-- Summary Statistics Row -->
         <div class="row g-4 mb-5">
             <!-- Total Lifetime Spent Card -->
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-4">
                 <div
                     class="financial-card glass-dark px-4 py-4 rounded-4 border border-success-glow glow-success h-100 position-relative overflow-hidden d-flex flex-column justify-content-between">
                     <div class="card-mesh-glow bg-success"></div>
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <!-- Escrow Balance Card -->
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-4">
                 <div
                     class="financial-card glass-dark px-4 py-4 rounded-4 border border-warning-glow glow-warning h-100 position-relative overflow-hidden d-flex flex-column justify-content-between">
                     <div class="card-mesh-glow bg-warning"></div>
@@ -57,6 +57,30 @@
                         <div class="small text-secondary-light d-flex align-items-center gap-2">
                             <span class="pulse-dot-warning"></span>
                             <span>Funds securely held in escrow</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Platform Fees Paid Card -->
+            <div class="col-12 col-md-4">
+                <div
+                    class="financial-card glass-dark px-4 py-4 rounded-4 border border-info-glow glow-info h-100 position-relative overflow-hidden d-flex flex-column justify-content-between">
+                    <div class="card-mesh-glow bg-info"></div>
+                    <div class="position-relative z-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="text-info text-uppercase fw-bold ls-1"
+                                style="font-size: 10px; letter-spacing: 1px;">Platform Fees Paid</span>
+                            <div
+                                class="card-icon-wrapper rounded-circle d-flex align-items-center justify-content-center bg-info bg-opacity-10 border border-info border-opacity-30">
+                                <i class="bi bi-percent text-info"></i>
+                            </div>
+                        </div>
+                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-2">₹{{ platformFeesPaid | number:'1.2-2' }}</h2>
+                    </div>
+                    <div class="position-relative z-3">
+                        <div class="small text-secondary-light d-flex align-items-center gap-2">
+                            <span class="pulse-dot-info"></span>
+                            <span>10% platform tax included</span>
                         </div>
                     </div>
                 </div>

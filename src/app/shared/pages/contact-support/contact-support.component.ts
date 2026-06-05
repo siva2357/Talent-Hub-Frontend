@@ -109,12 +109,12 @@ export class ContactSupportComponent implements OnInit {
       id: 'contract',
       label: 'Contract Management',
       icon: 'bi-file-earmark-lock2-fill',
-      description: 'Errors during digital signature uploads, scope edits, or timesheets.',
+      description: 'Errors during digital signature uploads or scope edits.',
       subcategories: [
         { label: 'Digital signature upload failure', value: 'signature-upload' },
         { label: 'Scope modification approval stuck', value: 'scope-stuck' },
         { label: 'Contract closure request dispute', value: 'closure-dispute' },
-        { label: 'Attendance diary tracking mismatch', value: 'diary-mismatch' }
+        { label: 'Contract diary tracking mismatch', value: 'diary-mismatch' }
       ]
     },
     {

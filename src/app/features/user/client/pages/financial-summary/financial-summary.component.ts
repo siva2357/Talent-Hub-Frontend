@@ -35,6 +35,7 @@ export class FinancialSummaryComponent implements OnInit {
   totalBalance = 0;
   totalSpent = 0;
   upcomingPayments = 0;
+  platformFeesPaid = 0;
 
   // Search & Filter state
   searchQuery = '';
@@ -59,6 +60,7 @@ export class FinancialSummaryComponent implements OnInit {
           this.totalBalance = res.stats.totalBalance || 0;
           this.totalSpent = res.stats.totalSpent || 0;
           this.upcomingPayments = res.stats.upcomingPayments || 0;
+          this.platformFeesPaid = res.stats.platformFeesPaid || 0;
         }
       },
       error: (err) => {
