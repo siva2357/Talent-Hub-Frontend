@@ -4,7 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
 import { AuthService } from './auth.service';
-import { FreelancerProfile, ClientProfile } from '../model/user.model';
+import { FreelancerProfile, ClientProfile, FreelancerProfileResponse } from '../model/user.model';
 import { Contract } from '../model/contract.model';
 
 @Injectable({
@@ -60,6 +60,27 @@ export class ProfileService {
     );
   }
 
+getBanks(): Observable<{
+  success: boolean;
+  banks: {
+    code: string;
+    name: string;
+  }[];
+}> {
+
+  return this.http.get<{
+    success: boolean;
+    banks: {
+      code: string;
+      name: string;
+    }[];
+  }>(
+    `${this.baseUrl}${API_ENDPOINTS.MASTER.BANKS}`
+  );
+
+}
+
+
   /**
    * Requests an SMS OTP code to be sent to a user's mobile number.
    */
@@ -91,9 +112,15 @@ export class ProfileService {
   /**
    * Fetches a specific freelancer profile by ID.
    */
-  getFreelancerProfileById(id: string): Observable<{ success: boolean; profile: any }> {
-    return this.http.get<{ success: boolean; profile: any }>(`${this.baseUrl}${API_ENDPOINTS.PROFILE.FREELANCER(id)}`);
-  }
+getFreelancerProfileById(
+  id: string
+): Observable<FreelancerProfileResponse> {
+
+  return this.http.get<FreelancerProfileResponse>(
+    `${this.baseUrl}${API_ENDPOINTS.PROFILE.FREELANCER(id)}`
+  );
+
+}
 
   /**
    * Saves a freelancer profile to the logged-in client's bookmarks.

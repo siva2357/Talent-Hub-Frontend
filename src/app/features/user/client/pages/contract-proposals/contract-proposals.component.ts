@@ -131,15 +131,30 @@ implements OnInit {
             return contract;
           });
 
-          // Open first contract
-          if (
-            this.contractApplicants.length > 0
-          ) {
+         const previousExpandedId =
+  this.expandedContractId;
 
-            this.expandedContractId =
-              this.contractApplicants[0]._id;
+if (
+  previousExpandedId &&
+  this.contractApplicants.some(
+    contract =>
+      contract._id ===
+      previousExpandedId
+  )
+) {
 
-          }
+  this.expandedContractId =
+    previousExpandedId;
+
+}
+else if (
+  this.contractApplicants.length > 0
+) {
+
+  this.expandedContractId =
+    this.contractApplicants[0]._id;
+
+}
 
           this.isLoading = false;
 
@@ -321,40 +336,100 @@ assessmentForm = { title: '', description: '', date: '' };
 interviewForm = { title: '', description: '', date: '' };
 rejectionReason = '';
 
-getAvailableActions(): { label: string, value: string }[] {
-  if (!this.selectedProposal) return [];
-  const status = this.selectedProposal.applicationStatus;
-  
-  if (status === 'application received') {
-    return [
-      { label: 'Shortlist Application', value: 'shortlist' },
-      { label: 'Reject Application', value: 'reject' }
-    ];
+getAvailableActions(): { label: string; value: string }[] {
+
+  if (!this.selectedProposal) {
+    return [];
   }
-  if (status === 'application shortlisted') {
+
+  const status =
+    this.selectedProposal.applicationStatus;
+
+  switch (status) {
+
+    case 'application received':
+      return [
+        {
+          label: 'Shortlist Application',
+          value: 'shortlist'
+        },
+        {
+          label: 'Reject Application',
+          value: 'reject'
+        }
+      ];
+
+    case 'application shortlisted':
+      return [
+        {
+          label: 'Schedule Assessment',
+          value: 'schedule-assessment'
+        },
+        {
+          label: 'Reject Application',
+          value: 'reject'
+        }
+      ];
+
+    case 'assessment scheduled':
+      return [
+        {
+          label: 'Assessment Passed',
+          value: 'assessment-pass'
+        },
+        {
+          label: 'Assessment Failed',
+          value: 'assessment-fail'
+        }
+      ];
+
+case 'assessment completed':
+
+  if (
+    this.selectedProposal?.assessment?.status
+      === 'completed'
+  ) {
+
     return [
-      { label: 'Schedule Assessment', value: 'schedule-assessment' },
-      { label: 'Reject Application', value: 'reject' }
+      {
+        label: 'Schedule Interview',
+        value: 'schedule-interview'
+      }
     ];
+
   }
-  if (status === 'assessment completed') {
-    return [
-      { label: 'Schedule Interview', value: 'schedule-interview' },
-      { label: 'Reject Application', value: 'reject' }
-    ];
+
+  return [
+    {
+      label: 'Reject Application',
+      value: 'reject'
+    }
+  ];
+
+    case 'interview scheduled':
+      return [
+        {
+          label: 'Mark Interview Completed',
+          value: 'complete-interview'
+        }
+      ];
+
+    case 'interview completed':
+      return [
+        {
+          label: 'Hire Candidate',
+          value: 'hire'
+        },
+        {
+          label: 'Reject Application',
+          value: 'reject'
+        }
+      ];
+
+    default:
+      return [];
   }
-  if (status === 'interview scheduled') {
-    return [
-      { label: 'Mark Interview Completed', value: 'complete-interview' }
-    ];
-  }
-  if (status === 'interview completed') {
-    return [
-      { label: 'Hire Candidate (Final Shortlist)', value: 'hire' },
-      { label: 'Reject Application', value: 'reject' }
-    ];
-  }
-  return [];
+
 }
 
 openRecruitmentModal(proposal: any): void {
@@ -374,65 +449,225 @@ openRecruitmentModal(proposal: any): void {
 }
 
 submitRecruitmentAction(): void {
-  if (!this.selectedProposal || !this.nextAction) return;
 
-  const id = this.selectedProposal.applicationId;
+  if (
+    !this.selectedProposal ||
+    !this.nextAction
+  ) {
+    return;
+  }
+
+  const id =
+    this.selectedProposal.applicationId;
+
   this.isSubmitting = true;
 
-  if (this.nextAction === 'shortlist') {
-    this.applicationService.shortlistApplication(id).subscribe({
-      next: () => {
-        this.selectedProposal.applicationStatus = 'application shortlisted';
-        this.closeModal();
-      },
-      error: () => this.isSubmitting = false
-    });
-  } 
-  else if (this.nextAction === 'reject') {
-    this.applicationService.rejectApplication(id, {}).subscribe({
-      next: () => {
-        this.selectedProposal.applicationStatus = 'rejected';
-        this.closeModal();
-      },
-      error: () => this.isSubmitting = false
-    });
+  switch (this.nextAction) {
+
+    case 'shortlist':
+
+      this.applicationService
+        .shortlistApplication(id)
+        .subscribe({
+
+          next: () => {
+
+            this.handleSuccess();
+
+          },
+
+          error: (err) => {
+
+            this.handleError(err);
+
+          }
+
+        });
+
+      break;
+
+    case 'reject':
+
+      this.applicationService
+        .rejectApplication(id, {})
+        .subscribe({
+
+          next: () => {
+
+            this.handleSuccess();
+
+          },
+
+          error: (err) => {
+
+            this.handleError(err);
+
+          }
+
+        });
+
+      break;
+
+    case 'schedule-assessment':
+
+      this.applicationService
+        .scheduleAssessment(
+          id,
+          this.assessmentForm
+        )
+        .subscribe({
+
+          next: () => {
+
+            this.handleSuccess();
+
+          },
+
+          error: (err) => {
+
+            this.handleError(err);
+
+          }
+
+        });
+
+      break;
+
+    case 'assessment-pass':
+
+      this.applicationService
+        .assessmentResult(
+          id,
+          {
+            result: 'completed'
+          }
+        )
+        .subscribe({
+
+          next: () => {
+
+            this.handleSuccess();
+
+          },
+
+          error: (err) => {
+
+            this.handleError(err);
+
+          }
+
+        });
+
+      break;
+
+    case 'assessment-fail':
+
+      this.applicationService
+        .assessmentResult(
+          id,
+          {
+            result: 'failed'
+          }
+        )
+        .subscribe({
+
+          next: () => {
+
+            this.handleSuccess();
+
+          },
+
+          error: (err) => {
+
+            this.handleError(err);
+
+          }
+
+        });
+
+      break;
+
+    case 'schedule-interview':
+
+      this.applicationService
+        .scheduleInterview(
+          id,
+          this.interviewForm
+        )
+        .subscribe({
+
+          next: () => {
+
+            this.handleSuccess();
+
+          },
+
+          error: (err) => {
+
+            this.handleError(err);
+
+          }
+
+        });
+
+      break;
+
+    case 'complete-interview':
+
+      this.applicationService
+        .interviewResult(
+          id,
+          {
+            feedback: ''
+          }
+        )
+        .subscribe({
+
+          next: () => {
+
+            this.handleSuccess();
+
+          },
+
+          error: (err) => {
+
+            this.handleError(err);
+
+          }
+
+        });
+
+      break;
+
+    case 'hire':
+
+      this.applicationService
+        .finalizeApplication(
+          id,
+          {
+            result: 'shortlisted'
+          }
+        )
+        .subscribe({
+
+          next: () => {
+
+            this.handleSuccess();
+
+          },
+
+          error: (err) => {
+
+            this.handleError(err);
+
+          }
+
+        });
+
+      break;
+
   }
-  else if (this.nextAction === 'schedule-assessment') {
-    this.applicationService.scheduleAssessment(id, this.assessmentForm).subscribe({
-      next: () => {
-        this.selectedProposal.applicationStatus = 'assessment scheduled';
-        this.closeModal();
-      },
-      error: () => this.isSubmitting = false
-    });
-  }
-  else if (this.nextAction === 'schedule-interview') {
-    this.applicationService.scheduleInterview(id, this.interviewForm).subscribe({
-      next: () => {
-        this.selectedProposal.applicationStatus = 'interview scheduled';
-        this.closeModal();
-      },
-      error: () => this.isSubmitting = false
-    });
-  }
-  else if (this.nextAction === 'complete-interview') {
-    this.applicationService.interviewResult(id, { result: 'completed' }).subscribe({
-      next: () => {
-        this.selectedProposal.applicationStatus = 'interview completed';
-        this.closeModal();
-      },
-      error: () => this.isSubmitting = false
-    });
-  }
-  else if (this.nextAction === 'hire') {
-    this.applicationService.finalizeApplication(id, { result: 'shortlisted' }).subscribe({
-      next: () => {
-        this.selectedProposal.applicationStatus = 'shortlisted';
-        this.closeModal();
-      },
-      error: () => this.isSubmitting = false
-    });
-  }
+
 }
 
 closeModal(): void {
@@ -441,6 +676,35 @@ closeModal(): void {
   this.nextAction = '';
   this.isSubmitting = false;
   document.body.classList.remove('modal-open');
+}
+
+
+private handleSuccess(): void {
+
+  const expandedId =
+    this.expandedContractId;
+
+  this.closeModal();
+
+  this.isLoading = true;
+
+  this.getApplicants();
+
+  setTimeout(() => {
+
+    this.expandedContractId =
+      expandedId;
+
+  }, 300);
+
+}
+
+private handleError(error: any): void {
+
+  console.error(error);
+
+  this.isSubmitting = false;
+
 }
 
 }

@@ -7,26 +7,7 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
 import { ChipComponent } from '../../../../../shared/components/chip/chip.component';
 import { ContractService } from '../../../../../core/services/contract.service';
 import { ApplicationService } from '../../../../../core/services/application.service';
-
-interface Proposal {
-  id: string;
-  contractTitle: string;
-  client: string;
-  date: string;
-  budget: string;
-  budgetLabel: string;
-  duration: string;
-  type: 'Applied' | 'Assignment' | 'Interview' | 'Shortlisted' | 'Rejected';
-  contractType: 'Fixed Price' | 'Hourly';
-  level: 'Entry' | 'Intermediate' | 'Expert';
-  description: string;
-  techStack: string[];
-  status: string;
-  deadline?: string;
-  link?: string;
-  meetingTime?: string;
-}
-
+import { AppliedApplication, AppliedContractsResponse, Proposal } from '../../../../../core/model/proposal.modal';
 interface ActiveFilter {
   id: string;
   label: string;
@@ -45,7 +26,15 @@ export class ProposalsComponent implements OnInit {
   private applicationService = inject(ApplicationService);
   private route = inject(ActivatedRoute);
 
-  // Tabs: 'proposals' | 'offers'
+
+  assessmentSubmitting = false;
+
+offerDeclining = false;
+
+isProposalsLoading = false;
+
+isOffersLoading = false;
+
   activeTab: 'proposals' | 'offers' = 'proposals';
 
   // Filter Selection State (Internal)
@@ -79,15 +68,12 @@ export class ProposalsComponent implements OnInit {
     { label: 'Rejected', value: 'Rejected' }
   ];
 
-  allProposals: any[] = [];
-  appliedProposals: any[] = [];
-  offers: any[] = [];
-  isProposalsLoading: boolean = false;
-  isOffersLoading: boolean = false;
+allProposals: Proposal[] = [];
 
-  get isLoading(): boolean {
-    return this.isProposalsLoading || this.isOffersLoading;
-  }
+appliedProposals: Proposal[] = [];
+
+offers: any[] = [];
+
 
   ngOnInit(): void {
     // Check if routed with default tab data
@@ -105,122 +91,380 @@ export class ProposalsComponent implements OnInit {
       }
     });
 
-    this.fetchAppliedContracts();
-    this.fetchOffers();
+if (
+  this.activeTab === 'proposals'
+) {
+
+  this.fetchAppliedContracts();
+
+}
+else {
+
+  this.fetchOffers();
+
+}
   }
 
-  switchTab(tab: 'proposals' | 'offers'): void {
-    this.activeTab = tab;
-    if (tab === 'proposals') {
+switchTab(
+  tab: 'proposals' | 'offers'
+): void {
+
+  if (
+    this.activeTab === tab
+  ) {
+    return;
+  }
+
+  this.activeTab = tab;
+
+  if (
+    tab === 'proposals'
+  ) {
+
+    if (
+      !this.allProposals.length
+    ) {
+
       this.fetchAppliedContracts();
-    } else if (tab === 'offers') {
+
+    }
+
+  }
+
+  if (
+    tab === 'offers'
+  ) {
+
+    if (
+      !this.offers.length
+    ) {
+
       this.fetchOffers();
+
     }
+
   }
 
-  fetchOffers(): void {
-    this.isOffersLoading = true;
-    this.applicationService.getFreelancerOffers().subscribe({
+}
+
+fetchOffers(): void {
+
+  this.isOffersLoading = true;
+
+  this.applicationService
+    .getFreelancerOffers()
+    .subscribe({
+
       next: (res: any) => {
-        if (res.success && res.offers) {
-          this.offers = res.offers;
-        } else {
-          this.offers = [];
-        }
+
+        this.offers =
+          res?.success
+            ? (res.offers || [])
+            : [];
+
         this.isOffersLoading = false;
+
       },
+
       error: (err) => {
-        console.error('Failed to fetch dynamic offers:', err);
+
+        console.error(
+          'Failed to fetch offers:',
+          err
+        );
+
         this.offers = [];
+
         this.isOffersLoading = false;
+
       }
+
     });
+
+}
+
+declineOffer(id: string): void {
+
+  if (
+    !confirm(
+      'Are you sure you want to decline this contract offer?'
+    )
+  ) {
+    return;
   }
 
-  declineOffer(id: string) {
-    if (confirm('Are you sure you want to decline this contract offer?')) {
-      this.applicationService.declineOffer(id).subscribe({
-        next: () => {
-          alert('Offer declined successfully.');
-          this.fetchOffers();
-        },
-        error: (err) => {
-          console.error('Failed to decline offer:', err);
-          alert('Failed to decline offer. Please try again.');
-        }
-      });
-    }
-  }
+  this.offerDeclining = true;
+
+  this.applicationService
+    .declineOffer(id)
+    .subscribe({
+
+      next: () => {
+
+        this.fetchOffers();
+
+        this.offerDeclining = false;
+
+      },
+
+      error: (err) => {
+
+        console.error(
+          'Failed to decline offer:',
+          err
+        );
+
+        this.offerDeclining = false;
+
+      }
+
+    });
+
+}
 
   downloadSignedContract(offerId: string): void {
     window.open(this.applicationService.getContractPdfUrl(offerId), '_blank');
   }
 
-  markAssessmentCompleted(proposalId: string) {
-    if (!proposalId) return;
-    this.isProposalsLoading = true;
-    this.applicationService.submitAssessment(proposalId).subscribe({
-      next: (res) => {
-        if (res.success) {
-          // Re-fetch to update state
-          this.fetchAppliedContracts();
-        } else {
-          this.isProposalsLoading = false;
+markAssessmentCompleted(
+  proposalId: string
+): void {
+
+  this.assessmentSubmitting = true;
+
+  this.applicationService
+    .submitAssessment(proposalId)
+    .subscribe({
+
+      next: () => {
+
+        const proposal =
+          this.appliedProposals.find(
+            p => p.id === proposalId
+          );
+
+        if (proposal) {
+
+          proposal.status =
+            'Assessment Completed';
+
+          proposal.assessment.status =
+            'completed';
+
         }
+
+        this.assessmentSubmitting = false;
+
       },
-      error: (err) => {
-        console.error('Failed to submit assessment:', err);
-        this.isProposalsLoading = false;
+
+      error: () => {
+
+        this.assessmentSubmitting = false;
+
       }
+
     });
+
+}
+
+fetchAppliedContracts(): void {
+
+  this.isProposalsLoading = true;
+
+  this.contractService
+    .getAppliedContracts()
+    .subscribe({
+
+      next: (res) => {
+
+        this.allProposals =
+          res.success
+            ? res.applications.map(
+                app => this.mapApplicationToProposal(app)
+              )
+            : [];
+
+        this.applyFilters();
+
+      },
+
+      error: (err) => {
+
+        console.error(
+          'Failed to fetch applied contracts:',
+          err
+        );
+
+        this.allProposals = [];
+        this.appliedProposals = [];
+
+      },
+
+      complete: () => {
+
+        this.isProposalsLoading = false;
+
+      }
+
+    });
+
+}
+
+private mapApplicationToProposal(
+  app: AppliedApplication
+): Proposal {
+
+  return {
+
+    id: app.applicationId,
+
+    contractId:
+      app.contract?._id || '',
+
+    contractTitle:
+      app.contract?.contractTitle ||
+      'Unknown Title',
+
+    client:
+      app.client?.fullName ||
+      'Unknown Client',
+
+    date: new Date(
+      app.appliedAt
+    ).toLocaleDateString(),
+
+    budget: `${
+      app.contract?.estimatedBudget?.toLocaleString() || 0
+    }`,
+
+    budgetLabel:
+      app.contract?.budgetType === 'Hourly Rate'
+        ? 'Hourly Rate'
+        : 'Proposal Amount',
+
+    duration: this.calculateDuration(
+      app.contract?.contractStartDate,
+      app.contract?.contractEndDate
+    ),
+
+    contractType:
+      app.contract?.budgetType === 'Hourly Rate'
+        ? 'Hourly'
+        : 'Fixed Price',
+
+    level: 'Intermediate',
+
+    description:
+      app.contract?.contractDescription || '',
+
+    status:
+      app.applicationStatus
+        ? app.applicationStatus.replace(
+            /\b\w/g,
+            l => l.toUpperCase()
+          )
+        : 'Pending',
+
+    type: this.getProposalType(
+      app.applicationStatus
+    ),
+
+    assessment:
+      app.assessment,
+
+    interview:
+      app.interview
+
+  };
+
+}
+
+
+
+private getProposalType(
+  status: string
+): Proposal['type'] {
+
+  if (
+    status === 'application received' ||
+    status === 'application shortlisted'
+  ) {
+    return 'Applied';
   }
 
-  fetchAppliedContracts() {
-    this.isProposalsLoading = true;
-    this.contractService.getAppliedContracts().subscribe({
-      next: (res: any) => {
-        if (res.success && res.applications) {
-          this.allProposals = res.applications.map((app: any) => ({
-            id: app.applicationId,
-            contractId: app.contract?._id || '',
-            contractTitle: app.contract?.contractTitle || 'Unknown Title',
-            client: app.client?.fullName || 'Unknown Client',
-            date: new Date(app.appliedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-            budget: `$${app.contract?.estimatedBudget?.toLocaleString() || '0'}`,
-            budgetLabel: app.contract?.budgetType === 'Hourly Rate' ? 'Hourly Rate' : 'Proposal Amount',
-            duration: app.contract?.contractStartDate && app.contract?.contractEndDate ? 
-              (() => {
-                const start = new Date(app.contract.contractStartDate);
-                const end = new Date(app.contract.contractEndDate);
-                const diffTime = Math.abs(end.getTime() - start.getTime());
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                if (diffDays < 30) return `${diffDays} Days`;
-                const diffMonths = Math.floor(diffDays / 30);
-                return `${diffMonths} Month${diffMonths > 1 ? 's' : ''}`;
-              })() : 'Unknown',
-            contractType: app.contract?.budgetType === 'Hourly Rate' ? 'Hourly' : 'Fixed Price',
-            level: 'Intermediate',
-            description: app.contract?.contractDescription || '',
-            techStack: app.contract?.techStack || [],
-            status: app.applicationStatus ? app.applicationStatus.replace(/\b\w/g, (l: string) => l.toUpperCase()) : 'Pending',
-            type: (app.applicationStatus === 'application received' || app.applicationStatus === 'application shortlisted') ? 'Applied' :
-              (app.applicationStatus === 'shortlisted') ? 'Shortlisted' :
-                app.applicationStatus === 'rejected' ? 'Rejected' :
-                  (app.applicationStatus === 'interview scheduled' || app.applicationStatus === 'interview completed') ? 'Interview' :
-                    (app.applicationStatus === 'assessment scheduled' || app.applicationStatus === 'assessment completed') ? 'Assignment' : 'Applied',
-            assessment: app.assessment,
-            interview: app.interview
-          }));
-          this.applyFilters();
-        }
-        this.isProposalsLoading = false;
-      },
-      error: (err) => {
-        console.error('Failed to fetch applied contracts:', err);
-        this.isProposalsLoading = false;
-      }
-    });
+  if (
+    status === 'shortlisted'
+  ) {
+    return 'Shortlisted';
   }
+
+  if (
+    status === 'rejected'
+  ) {
+    return 'Rejected';
+  }
+
+  if (
+    status === 'assessment scheduled' ||
+    status === 'assessment completed'
+  ) {
+    return 'Assignment';
+  }
+
+  if (
+    status === 'interview scheduled' ||
+    status === 'interview completed'
+  ) {
+    return 'Interview';
+  }
+
+  return 'Applied';
+
+}
+
+private calculateDuration(
+  startDate: string,
+  endDate: string
+): string {
+
+  if (
+    !startDate ||
+    !endDate
+  ) {
+    return 'Unknown';
+  }
+
+  const start =
+    new Date(startDate);
+
+  const end =
+    new Date(endDate);
+
+  const diffDays =
+    Math.ceil(
+      Math.abs(
+        end.getTime() -
+        start.getTime()
+      ) /
+      (1000 * 60 * 60 * 24)
+    );
+
+  if (
+    diffDays < 30
+  ) {
+    return `${diffDays} Days`;
+  }
+
+  const months =
+    Math.floor(
+      diffDays / 30
+    );
+
+  return `${months} Month${months > 1 ? 's' : ''}`;
+
+}
+
+
 
   applyFilters() {
     // 1. Update Active Chips

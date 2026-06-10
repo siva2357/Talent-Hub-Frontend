@@ -2,176 +2,285 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { BlogService, BlogPost } from '../../../../../core/services/blog.service';
-import { RichTextEditorComponent } from '../../../../../shared/components/rich-text-editor/rich-text-editor.component';
+
+import { BlogService } from '../../../../../core/services/blog.service';
+import { Blog } from '../../../../../core/model/blog.model';
+import {
+  CreateBlogDto,
+  UpdateBlogDto
+} from '../../../../../core/DTOs/blog.dto';
+import { ButtonComponent } from "../../../../../shared/components/button/button.component";
+
+import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
+import {InputComponent } from "../../../../../shared/components/input/input.component"
+import { FileUploadComponent } from '../../../../../shared/components/file-upload/file-upload.component';
+import { FilePreviewComponent } from "../../../../../shared/components/file-preview/file-preview.component";
+import { RichTextEditorComponent }from "../../../../../shared/components/rich-text-editor/rich-text-editor.component";
 
 @Component({
   selector: 'app-blog-post',
   standalone: true,
-  imports: [CommonModule, FormsModule, RichTextEditorComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonComponent,
+    InputComponent,
+    FileUploadComponent,
+    FilePreviewComponent,
+    RichTextEditorComponent
+],
   templateUrl: './blog-post.component.html',
   styleUrl: './blog-post.component.css'
 })
 export class BlogPostComponent implements OnInit {
+
   private blogService = inject(BlogService);
   private toastr = inject(ToastrService);
 
-  posts: BlogPost[] = [];
+bucketKey = BucketKey.AdminCollection;
+
+uploadSection = UploadSection.BlogMedia;
+  posts: Blog[] = [];
+
   isFormOpen = false;
-
-  // Form Fields
   isEditing = false;
-  editId = '';
-  title = '';
-  description = '';
-  content = '';
-  category = 'Artificial Intelligence';
-  readTime = '5 min read';
-  status: 'Published' | 'Draft' = 'Published';
 
-  // Media upload fields
-  mediaType: 'image' | 'video' | null = null;
-  mediaUrl: string | null = null;
+  editId = '';
+
+  title = '';
+  category = '';
+  description = '';
+  mediaUrl = '';
+
+  status: 'Published' | 'Draft' = 'Draft';
 
   categories = [
-    'Artificial Intelligence',
-    'Services',
-    'Workflow',
     'Technology',
-    'Security'
+    'Artificial Intelligence',
+    'Education',
+    'Career',
+    'Business',
+    'Programming',
+    'Security',
+    'Other'
   ];
+
+
+
+categoryOptions = [
+  { label: 'Technology', value: 'Technology' },
+  { label: 'Career', value: 'Career' },
+  { label: 'Freelancing', value: 'Freelancing' },
+  { label: 'Business', value: 'Business' }
+];
 
   ngOnInit(): void {
     this.loadPosts();
   }
 
   loadPosts(): void {
-    this.blogService.getPosts().subscribe({
-      next: (data) => {
-        this.posts = data;
-      }
-    });
+
+    this.blogService
+      .getAllBlogsAdmin()
+      .subscribe({
+        next: (response) => {
+          this.posts = response.blogs;
+        },
+        error: (error) => {
+          console.error(error);
+
+          this.toastr.error(
+            'Failed to load blogs',
+            'Blog Management'
+          );
+        }
+      });
+
   }
 
   openCreateForm(): void {
+
     this.resetForm();
+
     this.isEditing = false;
+
     this.isFormOpen = true;
+
   }
 
   onSubmit(): void {
-    if (!this.title.trim() || !this.description.trim() || !this.content.trim()) {
-      this.toastr.warning('Please fill in all required fields.', 'Blog Management');
-      return;
-    }
 
-    const typeArg = this.mediaType || undefined;
-    const urlArg = this.mediaUrl || undefined;
+    if (
+      !this.title.trim() ||
+      !this.category.trim() ||
+      !this.description.trim()
+    ) {
+
+      this.toastr.warning(
+        'Please fill all required fields.',
+        'Blog Management'
+      );
+
+      return;
+
+    }
 
     if (this.isEditing) {
-      this.blogService.updatePost(this.editId, this.title, this.description, this.content, this.category, this.readTime, this.status, typeArg, urlArg).subscribe({
-        next: () => {
-          this.toastr.success('Blog post updated successfully!', 'Blog Management');
-          this.closeFormModal();
-          this.loadPosts();
-        },
-        error: (err) => {
-          this.toastr.error('Failed to update blog post.', 'Blog Management');
-          console.error(err);
-        }
-      });
+
+      const dto: UpdateBlogDto = {
+        title: this.title,
+        category: this.category,
+        description: this.description,
+        mediaUrl: this.mediaUrl,
+        status: this.status
+      };
+
+      this.blogService
+        .updateBlog(this.editId, dto)
+        .subscribe({
+          next: () => {
+
+            this.toastr.success(
+              'Blog updated successfully',
+              'Blog Management'
+            );
+
+            this.closeFormModal();
+
+            this.loadPosts();
+
+          },
+          error: (error) => {
+
+            console.error(error);
+
+            this.toastr.error(
+              'Failed to update blog',
+              'Blog Management'
+            );
+
+          }
+        });
+
     } else {
-      this.blogService.addPost(this.title, this.description, this.content, this.category, this.readTime, this.status, typeArg, urlArg).subscribe({
-        next: () => {
-          this.toastr.success('New blog post published successfully!', 'Blog Management');
-          this.closeFormModal();
-          this.loadPosts();
-        },
-        error: (err) => {
-          this.toastr.error('Failed to publish blog post.', 'Blog Management');
-          console.error(err);
-        }
-      });
+
+      const dto: CreateBlogDto = {
+        title: this.title,
+        category: this.category,
+        description: this.description,
+        mediaUrl: this.mediaUrl,
+        status: this.status
+      };
+
+      this.blogService
+        .createBlog(dto)
+        .subscribe({
+          next: () => {
+
+            this.toastr.success(
+              'Blog created successfully',
+              'Blog Management'
+            );
+
+            this.closeFormModal();
+
+            this.loadPosts();
+
+          },
+          error: (error) => {
+
+            console.error(error);
+
+            this.toastr.error(
+              'Failed to create blog',
+              'Blog Management'
+            );
+
+          }
+        });
+
     }
+
   }
 
-  editPost(post: BlogPost): void {
+  editPost(blog: Blog): void {
+
     this.isEditing = true;
-    this.editId = post.id;
-    this.title = post.title;
-    this.description = post.description;
-    this.content = post.content;
-    this.category = post.category;
-    this.readTime = post.readTime;
-    this.status = post.status;
-    this.mediaType = post.mediaType || null;
-    this.mediaUrl = post.mediaUrl || null;
+
+    this.editId = blog._id;
+
+    this.title = blog.title;
+    this.category = blog.category;
+    this.description = blog.description;
+
+    this.mediaUrl = blog.mediaUrl ?? '';
+
+    this.status = blog.status;
+
     this.isFormOpen = true;
+
   }
 
   deletePost(id: string): void {
-    if (confirm('Are you sure you want to delete this blog post?')) {
-      this.blogService.deletePost(id).subscribe({
+
+    const confirmed = confirm(
+      'Are you sure you want to delete this blog?'
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.blogService
+      .deleteBlog(id)
+      .subscribe({
         next: () => {
-          this.toastr.success('Blog post deleted successfully.', 'Blog Management');
+
+          this.toastr.success(
+            'Blog deleted successfully',
+            'Blog Management'
+          );
+
           this.loadPosts();
+
         },
-        error: (err) => {
-          this.toastr.error('Failed to delete blog post.', 'Blog Management');
-          console.error(err);
+        error: (error) => {
+
+          console.error(error);
+
+          this.toastr.error(
+            'Failed to delete blog',
+            'Blog Management'
+          );
+
         }
       });
-    }
-  }
 
-  togglePublishStatus(id: string): void {
-    this.blogService.togglePostStatus(id).subscribe({
-      next: () => {
-        this.toastr.info('Publication status toggled.', 'Blog Management');
-        this.loadPosts();
-      },
-      error: (err) => {
-        this.toastr.error('Failed to toggle publication status.', 'Blog Management');
-        console.error(err);
-      }
-    });
-  }
-
-  onMediaSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.mediaType = file.type.startsWith('video/') ? 'video' : 'image';
-      
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.mediaUrl = e.target.result;
-        this.toastr.success(`${file.name} loaded in preview.`, 'Media Upload');
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  removeMedia(): void {
-    this.mediaType = null;
-    this.mediaUrl = null;
-    this.toastr.info('Media attachment removed.', 'Media Upload');
   }
 
   resetForm(): void {
+
     this.isEditing = false;
+
     this.editId = '';
+
     this.title = '';
+    this.category = '';
+
     this.description = '';
-    this.content = '';
-    this.category = 'Artificial Intelligence';
-    this.readTime = '5 min read';
-    this.status = 'Published';
-    this.mediaType = null;
-    this.mediaUrl = null;
+
+    this.mediaUrl = '';
+
+    this.status = 'Draft';
+
   }
 
   closeFormModal(): void {
+
     this.resetForm();
+
     this.isFormOpen = false;
+
   }
+
 }

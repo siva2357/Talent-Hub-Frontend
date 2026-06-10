@@ -37,6 +37,25 @@ export interface LanguageDto {
   proficiency: string;
 }
 
+
+export interface PaymentDetailsDto {
+  bankName?: string;
+  holderName?: string;
+  accountNumber?: string;
+  ifsc?: string;
+  panNumber?: string;
+  aadhaarNumber?: string;
+  panCardUrl?: string;
+  aadhaarCardUrl?: string;
+  verified?: boolean;
+  status?: 'unlinked' | 'pending' | 'verified';
+  legalityAccepted?: boolean;
+}
+
+
+
+
+
 export interface FreelancerProfileDto {
   basicInformation?: BasicInformationDto;
   professionalDetails?: ProfessionalDetailsDto;
@@ -46,6 +65,7 @@ export interface FreelancerProfileDto {
   verification?: VerificationDto;
   socialLinks?: SocialLinkDto[];
   languages?: LanguageDto[];
+   paymentDetails?: PaymentDetailsDto;
 }
 
 export interface ClientProfileDto {
@@ -55,4 +75,5 @@ export interface ClientProfileDto {
   verification?: VerificationDto;
   socialLinks?: SocialLinkDto[];
   languages?: LanguageDto[];
+   paymentDetails?: PaymentDetailsDto;
 }

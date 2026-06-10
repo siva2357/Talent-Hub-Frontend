@@ -7,15 +7,6 @@
             <p class="text-secondary mb-0">Track your milestone progress and submit updates to your client.</p>
         </div>
 
-        <!-- Loading -->
-        @if (isLoading) {
-        <div class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
-        } @else {
-
         <!-- Diaries -->
         @if (diaries.length > 0) {
         <div class="row justify-content-center">
@@ -48,7 +39,7 @@
                                     </div>
                                     <div class="badge-item">
                                         <i class="bi bi-person me-2"></i>
-                                        {{ diary.clientId.registrationDetails.fullName || 'Client' }}
+                                        {{ diary.clientId?.registrationDetails?.fullName || 'Client' }}
                                     </div>
                                 </div>
                             </div>
@@ -137,12 +128,15 @@
                                     }
 
                                     <!-- Client Feedback (changes-requested) -->
-                                    @if (phase.status === 'changes-requested' && phase.clientFeedback) {
+                                  @if (
+  phase.status === 'changes-requested' &&
+  getLatestFeedback(phase)
+){
                                     <div class="action-area glass p-3 rounded-3 mb-3 border-warning border-opacity-25">
                                         <h6 class="text-warning text-xxs fw-bold mb-2">
                                             <i class="bi bi-chat-left-text me-1"></i>CLIENT FEEDBACK
                                         </h6>
-                                        <p class="text-white small mb-0">{{ phase.clientFeedback }}</p>
+                                        <p class="text-white small mb-0">{{ getLatestFeedback(phase) }}</p>
                                     </div>
                                     }
 
@@ -155,11 +149,16 @@
                                     }
 
                                     <!-- Attachments -->
-                                    @if (phase.attachments && phase.attachments.length > 0) {
+                                    @if (
+  getLatestAttachments(phase).length > 0
+){
                                     <div class="media-previews mb-3">
                                         <h6 class="text-white text-xxs fw-bold mb-2 opacity-50">ATTACHED FILES</h6>
                                         <div class="d-flex flex-wrap gap-2">
-                                            @for (file of phase.attachments; track file._id) {
+                                            @for (
+  file of getLatestAttachments(phase);
+  track file._id
+) {
                                                 <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true"></app-file-preview>
                                             }
                                         </div>
@@ -179,52 +178,26 @@
                                     </div>
                                     }
 
-                                    <!-- Action Area: Submit Update -->
-                                    @if (canSubmit(phase)) {
-                                    <div class="action-area glass p-3 rounded-3 mb-3">
-                                        <h6 class="text-white text-xxs fw-bold mb-3">SUBMIT PROGRESS UPDATE</h6>
-                                        <div class="mb-3">
-                                            <textarea class="form-control glass border-0 text-white small" rows="2"
-                                                placeholder="Describe your progress, what you've completed..."
-                                                [disabled]="!isContractActive(diary)"
-                                                [(ngModel)]="phaseNotes[phase._id]"></textarea>
-                                        </div>
+                      @if (canSubmit(phase)) {
+<div class="action-area glass p-3 rounded-3 mb-3">
 
-                                        <!-- File Upload for Freelancer Proof of Work -->
-                                        <div class="mb-3">
-                                            <app-file-upload
-                                                label="Proof of Work / Deliverables"
-                                                variant="dragdrop"
-                                                [disabled]="!isContractActive(diary)"
-                                                [bucketKey]="BucketKey.FreelancerData"
-                                                [uploadSection]="UploadSection.ContractFiles"
-                                                [(ngModel)]="tempUploadUrls[phase._id]"
-                                                name="tempUpload-{{phase._id}}"
-                                                (uploadSuccessDetailed)="onFileUploaded(phase._id, $event)"
-                                                placeholder="Drag & drop work files here or click to browse">
-                                            </app-file-upload>
+    <h6 class="text-white text-xxs fw-bold mb-3">
+        SUBMIT PROGRESS UPDATE
+    </h6>
 
-                                            @if (uploadedFiles[phase._id] && uploadedFiles[phase._id].length > 0) {
-                                                <div class="row g-2 mt-2">
-                                                    @for (file of uploadedFiles[phase._id]; track $index) {
-                                                        <div class="col-12 col-md-6">
-                                                            <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" (remove)="removeAttachment(phase._id, $index)"></app-file-preview>
-                                                        </div>
-                                                    }
-                                                </div>
-                                            }
-                                        </div>
+    <app-button
+        variant="brand"
+        size="sm"
+        [disabled]="!isContractActive(diary)"
+        (click)="openSubmitModal(diary._id, phase)">
 
-                                        <div class="d-flex justify-content-end">
-                                            <app-button variant="brand" size="sm"
-                                                [disabled]="submitting[phase._id] || !isContractActive(diary)"
-                                                (click)="submitUpdate(diary._id, phase._id)">
-                                                <i class="bi bi-send me-1"></i>
-                                                {{ submitting[phase._id] ? 'Submitting...' : 'Submit Update' }}
-                                            </app-button>
-                                        </div>
-                                    </div>
-                                    }
+        <i class="bi bi-send me-1"></i>
+        Open Submission Form
+
+    </app-button>
+
+</div>
+}
 
                                 </div>
                             </div>
@@ -260,6 +233,114 @@
         </div>
         }
 
-        }
     </div>
 </div>
+
+
+
+
+@if (showSubmitModal && selectedPhase) {
+
+<div
+  class="modal fade show"
+  tabindex="-1"
+  style="display:block;background:rgba(0,0,0,.7)">
+
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+
+    <div class="modal-content bg-dark border-secondary">
+
+      <div class="modal-header">
+
+        <h5 class="text-white">
+          Submit Phase Update
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="closeSubmitModal()">
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <textarea
+          rows="4"
+          class="form-control mb-3"
+          [(ngModel)]="phaseNotes[selectedPhase._id]"
+          placeholder="Describe your progress">
+        </textarea>
+
+        <app-file-upload
+          label="Proof of Work"
+          variant="dragdrop"
+          [bucketKey]="BucketKey.FreelancerData"
+          [uploadSection]="UploadSection.ContractFiles"
+          [(ngModel)]="tempUploadUrls[selectedPhase._id]"
+          name="submitUpload"
+          (uploadSuccessDetailed)="onFileUploaded(selectedPhase._id, $event)">
+        </app-file-upload>
+
+        @if (uploadedFiles[selectedPhase._id]?.length) {
+
+        <div class="row g-2 mt-3">
+
+          @for (
+            file of uploadedFiles[selectedPhase._id];
+            track $index
+          ) {
+
+          <div class="col-12">
+
+            <app-file-preview
+              [url]="file.fileUrl"
+              [fileName]="file.fileName"
+              (remove)="removeAttachment(selectedPhase._id, $index)">
+            </app-file-preview>
+
+          </div>
+
+          }
+
+        </div>
+
+        }
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeSubmitModal()">
+
+          Cancel
+
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="submitting[selectedPhase._id]"
+          (click)="submitUpdate(selectedDiaryId!, selectedPhase._id)">
+
+          {{
+            submitting[selectedPhase._id]
+              ? 'Submitting...'
+              : 'Submit Update'
+          }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+}

@@ -91,7 +91,7 @@ export const routes: Routes = [
       { path: 'services', component: ServicesComponent },
       { path: 'about-us', component: AboutUsComponent },
       { path: 'blog', component: BlogComponent },
-      { path: 'blog-details/:slug', component: BlogDetailsComponent },
+      { path: 'blog-details/:id', component: BlogDetailsComponent },
 
     ]
   },

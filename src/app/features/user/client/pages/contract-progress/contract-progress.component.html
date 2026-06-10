@@ -9,14 +9,7 @@
       </div>
     </div>
 
-    <!-- Loading -->
-    @if (isLoading) {
-    <div class="text-center py-5">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
-    } @else {
+
 
     @if (diaries.length > 0) {
     <div class="contracts-accordion">
@@ -91,74 +84,18 @@
 
             <div class="d-flex justify-content-between align-items-center mb-4">
               <h5 class="text-white fw-bold mb-0">Phase & Milestone Tracking</h5>
-              <button class="btn btn-outline-primary btn-sm rounded-3 fw-bold text-xs"
-                [disabled]="!isContractActive(diary)"
-                (click)="showAddPhaseFor = showAddPhaseFor === diary._id ? null : diary._id; $event.stopPropagation()">
-                <i class="bi bi-plus-circle me-1"></i> Add Phase
-              </button>
+           <button
+  class="btn btn-outline-primary btn-sm rounded-3 fw-bold text-xs"
+  [disabled]="!isContractActive(diary)"
+  (click)="openAddPhaseModal(diary._id); $event.stopPropagation()">
+
+  <i class="bi bi-plus-circle me-1"></i>
+  Add Phase
+
+</button>
             </div>
 
-            <!-- Add Phase Form -->
-            @if (showAddPhaseFor === diary._id) {
-            <div class="glass p-4 rounded-4 mb-4 border border-primary border-opacity-25">
-              <h6 class="text-white fw-bold mb-3 text-xs text-uppercase d-flex justify-content-between align-items-center">
-                <span>New Phase</span>
-                <span class="text-secondary normal-case" style="font-size: 0.75rem;">
-                  Remaining Contract Budget: <strong class="text-success">₹{{ getRemainingBudget(diary) | number }}</strong>
-                </span>
-              </h6>
-              <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                  <input type="text" class="form-control glass border-0 text-white small"
-                    placeholder="Phase name (required)" [(ngModel)]="newPhase.name">
-                </div>
-                <div class="col-md-3">
-                  <input type="date" class="form-control glass border-0 text-white small"
-                    [(ngModel)]="newPhase.deadline">
-                </div>
-                <div class="col-md-3">
-                  <input type="number" class="form-control glass border-0 text-white small"
-                    placeholder="Amount (₹)" [(ngModel)]="newPhase.amount">
-                </div>
-                <div class="col-12">
-                  <textarea class="form-control glass border-0 text-white small" rows="2"
-                    placeholder="Phase description (optional)" [(ngModel)]="newPhase.description"></textarea>
-                </div>
-                <!-- File Upload for Phase Requirements -->
-                <div class="col-12 mt-2">
-                  <app-file-upload
-                    label="Phase Requirements / References"
-                    variant="dragdrop"
-                    [bucketKey]="BucketKey.ClientData"
-                    [uploadSection]="UploadSection.ContractFiles"
-                    [(ngModel)]="tempUploadUrl"
-                    name="tempUpload"
-                    (uploadSuccessDetailed)="onFileUploaded($event)"
-                    placeholder="Drag & drop requirement files here or click to browse">
-                  </app-file-upload>
 
-                  @if (newPhaseAttachments.length > 0) {
-                    <div class="row g-2 mt-2">
-                      @for (file of newPhaseAttachments; track $index) {
-                        <div class="col-12 col-md-6 col-lg-4">
-                          <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" (remove)="removeAttachment($index)"></app-file-preview>
-                        </div>
-                      }
-                    </div>
-                  }
-                </div>
-              </div>
-              <div class="d-flex gap-2 justify-content-end">
-                <button class="btn btn-outline-secondary btn-sm rounded-3 text-xs fw-bold"
-                  (click)="showAddPhaseFor = null">Cancel</button>
-                <app-button variant="brand" size="sm"
-                  [disabled]="!newPhase.name || addingPhase[diary._id]"
-                  (click)="addPhase(diary._id)">
-                  {{ addingPhase[diary._id] ? 'Adding...' : 'Add Phase' }}
-                </app-button>
-              </div>
-            </div>
-            }
 
             <!-- Phases Timeline -->
             @if (diary.phases.length === 0) {
@@ -217,25 +154,65 @@
                   </div>
                   }
 
-                  <!-- Freelancer Note (when submitted) -->
-                  @if (phase.freelancerNote && (phase.status === 'submitted' || phase.status === 'approved')) {
-                  <div class="glass p-3 rounded-3 mb-3 border-white border-opacity-5">
-                    <h6 class="text-secondary text-xxs fw-bold mb-2">FREELANCER UPDATE</h6>
-                    <p class="text-white small mb-0">{{ phase.freelancerNote }}</p>
-                  </div>
-                  }
+@if (
+  phase.revisions &&
+  phase.revisions.length > 0 &&
+  phase.revisions[phase.revisions.length - 1].freelancerNote
+) {
 
-                  <!-- Attachments (Delivered by Freelancer) -->
-                  @if (phase.attachments && phase.attachments.length > 0) {
-                  <div class="mb-3">
-                    <h6 class="text-secondary text-xxs fw-bold mb-2">SUBMITTED FILES</h6>
-                    <div class="d-flex flex-wrap gap-2">
-                      @for (file of phase.attachments; track file._id) {
-                        <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true"></app-file-preview>
-                      }
-                    </div>
-                  </div>
-                  }
+<div class="glass p-3 rounded-3 mb-3 border-white border-opacity-5">
+
+  <h6 class="text-secondary text-xxs fw-bold mb-2">
+    FREELANCER UPDATE
+  </h6>
+
+  <p class="text-white small mb-0">
+    {{
+      phase.revisions[
+        phase.revisions.length - 1
+      ].freelancerNote
+    }}
+  </p>
+
+</div>
+
+}
+@if (
+  phase.revisions &&
+  phase.revisions.length > 0 &&
+  phase.revisions[
+    phase.revisions.length - 1
+  ].attachments.length > 0
+) {
+
+<div class="mb-3">
+
+  <h6 class="text-secondary text-xxs fw-bold mb-2">
+    SUBMITTED FILES
+  </h6>
+
+  <div class="d-flex flex-wrap gap-2">
+
+    @for (
+      file of phase.revisions[
+        phase.revisions.length - 1
+      ].attachments;
+      track file._id
+    ) {
+
+      <app-file-preview
+        [url]="file.fileUrl"
+        [fileName]="file.fileName"
+        [disabled]="true">
+      </app-file-preview>
+
+    }
+
+  </div>
+
+</div>
+
+}
 
                   <!-- Review Actions (only for submitted phases, and only when contract is active) -->
                   @if (phase.status === 'submitted' && isContractActive(diary)) {
@@ -302,6 +279,179 @@
     </div>
     }
 
-    }
+
   </div>
+
+
+  @if (showAddPhaseModal) {
+
+<div
+  class="modal fade show"
+  tabindex="-1"
+  style="display:block; background:rgba(0,0,0,.65);">
+
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+
+    <div class="modal-content bg-dark border border-secondary rounded-4">
+
+      <div class="modal-header border-secondary">
+
+        <h5 class="modal-title text-white">
+          Create New Phase
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="closeAddPhaseModal()">
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row g-3">
+
+          <div class="col-md-6">
+
+            <label class="form-label text-white">
+              Phase Name
+            </label>
+
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="newPhase.name">
+
+          </div>
+
+          <div class="col-md-3">
+
+            <label class="form-label text-white">
+              Deadline
+            </label>
+
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="newPhase.deadline">
+
+          </div>
+
+          <div class="col-md-3">
+
+            <label class="form-label text-white">
+              Amount
+            </label>
+
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="newPhase.amount">
+
+          </div>
+
+          <div class="col-12">
+
+            <label class="form-label text-white">
+              Description
+            </label>
+
+            <textarea
+              rows="4"
+              class="form-control"
+              [(ngModel)]="newPhase.description">
+            </textarea>
+
+          </div>
+
+          <div class="col-12">
+
+            <label class="form-label text-white">
+              Requirement Files
+            </label>
+
+            <app-file-upload
+              label="Requirements / References"
+              variant="dragdrop"
+             [bucketKey]="userRole === 'client' ? BucketKey.ClientData : BucketKey.FreelancerData"
+              [uploadSection]="UploadSection.ContractFiles"
+              [(ngModel)]="tempUploadUrl"
+              name="phaseUpload"
+              (uploadSuccessDetailed)="onFileUploaded($event)">
+            </app-file-upload>
+
+          </div>
+
+          @if (newPhase.clientAttachments.length > 0) {
+
+          <div class="col-12">
+
+            <div class="row g-2">
+
+              @for (
+                file of newPhase.clientAttachments;
+                track $index
+              ) {
+
+              <div class="col-md-4">
+
+                <app-file-preview
+                  [url]="file.fileUrl"
+                  [fileName]="file.fileName"
+                  (remove)="removeAttachment($index)">
+                </app-file-preview>
+
+              </div>
+
+              }
+
+            </div>
+
+          </div>
+
+          }
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer border-secondary">
+
+        <button
+          class="btn btn-outline-light"
+          (click)="closeAddPhaseModal()">
+
+          Cancel
+
+        </button>
+
+        <button
+          class="btn btn-primary"
+          [disabled]="
+            !newPhase.name ||
+            addingPhase[selectedDiaryId!]
+          "
+          (click)="addPhase(selectedDiaryId!)">
+
+          {{
+            addingPhase[selectedDiaryId!]
+              ? 'Creating...'
+              : 'Create Phase'
+          }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
+
+}
+
+</div>
+
+

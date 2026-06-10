@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
 import { CreateContractDTO, UpdateContractDTO } from '../DTOs/contract.dto';
 import { ContractResponse, ContractsResponse } from '../model/contract.model';
+import { AppliedContractsResponse } from '../model/proposal.modal';
 
 @Injectable({
   providedIn: 'root'
@@ -205,14 +206,16 @@ export class ContractService {
   // Get Applied Contracts
   // ========================================
 
-  getAppliedContracts(): Observable<ContractsResponse> {
-    return this.http.get<ContractsResponse>(
-      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.APPLIED}`,
-      {
-        headers: this.getHeaders()
-      }
-    );
-  }
+getAppliedContracts(): Observable<AppliedContractsResponse> {
+
+  return this.http.get<AppliedContractsResponse>(
+    `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.APPLIED}`,
+    {
+      headers: this.getHeaders()
+    }
+  );
+
+}
 
   // ========================================
   // Get Contract Applicants

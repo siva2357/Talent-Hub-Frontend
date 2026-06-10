@@ -7,46 +7,8 @@ import { ContractDiaryService } from '../../../../../core/services/contract-diar
 import { FileUploadComponent } from '../../../../../shared/components/file-upload/file-upload.component';
 import { FilePreviewComponent } from '../../../../../shared/components/file-preview/file-preview.component';
 import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
-
-interface Attachment {
-  _id: string;
-  fileName: string;
-  fileUrl: string;
-  fileType: string;
-  fileSize: string;
-}
-
-interface Phase {
-  _id: string;
-  name: string;
-  description: string;
-  deadline: string;
-  amount: number;
-  status: 'pending' | 'in-progress' | 'submitted' | 'changes-requested' | 'approved' | 'overdue';
-  freelancerNote: string;
-  clientFeedback: string;
-  attachments: Attachment[];
-  clientAttachments?: Attachment[];
-  approvedAt: string;
-  submittedAt: string;
-}
-
-interface Diary {
-  _id: string;
-  overallStatus: string;
-  contractId: {
-    contractTitle: string;
-    estimatedBudget: number;
-    budgetType: string;
-    contractStartDate: string;
-    contractEndDate: string;
-    contractDescription: string;
-    techStack: string[];
-    spent?: number;
-  };
-  clientId: { registrationDetails: { fullName: string } };
-  phases: Phase[];
-}
+import { Attachment, Diary, Phase, Revision } from '../../../../../core/model/contract-diary.model';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-contract-diary',
@@ -65,13 +27,65 @@ export class ContractDiaryComponent implements OnInit {
   // Submission state per phase
   phaseNotes: Record<string, string> = {};
   submitting: Record<string, boolean> = {};
+  showSubmitModal = false;
+
+selectedDiaryId: string | null = null;
+
+selectedPhase: Phase | null = null;
+
 
   BucketKey = BucketKey;
   UploadSection = UploadSection;
   tempUploadUrls: Record<string, string | null> = {};
-  uploadedFiles: Record<string, any[]> = {};
+  uploadedFiles: Record<string, Attachment[]> = {};
 
-  onFileUploaded(phaseId: string, fileInfo: any): void {
+
+
+  openSubmitModal(
+  diaryId: string,
+  phase: Phase
+): void {
+
+  this.selectedDiaryId = diaryId;
+
+  this.selectedPhase = phase;
+
+  this.phaseNotes[phase._id] ??= '';
+
+  this.uploadedFiles[phase._id] ??= [];
+
+  this.showSubmitModal = true;
+
+  document.body.classList.add(
+    'modal-open'
+  );
+
+}
+
+
+closeSubmitModal(): void {
+
+  this.showSubmitModal = false;
+
+  this.selectedDiaryId = null;
+
+  this.selectedPhase = null;
+
+  document.body.classList.remove(
+    'modal-open'
+  );
+
+}
+
+onFileUploaded(
+  phaseId: string,
+  fileInfo: {
+    url: string;
+    fileName: string;
+    fileType: string;
+    fileSize: string;
+  }
+): void {
     if (!this.uploadedFiles[phaseId]) {
       this.uploadedFiles[phaseId] = [];
     }
@@ -112,6 +126,59 @@ export class ContractDiaryComponent implements OnInit {
     });
   }
 
+  getLatestRevision(
+  phase: Phase
+): Revision | null {
+
+  if (!phase.revisions?.length) {
+    return null;
+  }
+
+  return phase.revisions[
+    phase.revisions.length - 1
+  ];
+
+}
+
+getLatestNote(
+  phase: Phase
+): string {
+
+  return this.getLatestRevision(
+    phase
+  )?.freelancerNote || '';
+
+}
+
+getLatestFeedback(
+  phase: Phase
+): string {
+
+  return this.getLatestRevision(
+    phase
+  )?.clientFeedback || '';
+
+}
+
+
+getLatestAttachments(
+  phase: Phase
+): Attachment[] {
+
+  return this.getLatestRevision(
+    phase
+  )?.attachments || [];
+
+}
+
+hasRevision(
+  phase: Phase
+): boolean {
+
+  return !!phase.revisions?.length;
+
+}
+
   toggleDiary(id: string): void {
     this.expandedDiaryId = this.expandedDiaryId === id ? null : id;
   }
@@ -124,26 +191,59 @@ export class ContractDiaryComponent implements OnInit {
     });
   }
 
-  submitUpdate(diaryId: string, phaseId: string): void {
-    const note = this.phaseNotes[phaseId] || '';
-    this.submitting[phaseId] = true;
-    this.diaryService.submitPhaseUpdate(diaryId, phaseId, {
-      freelancerNote: note,
-      attachments: this.uploadedFiles[phaseId] || []
-    }).subscribe({
-      next: () => {
-        this.phaseNotes[phaseId] = '';
-        if (this.uploadedFiles[phaseId]) {
-          this.uploadedFiles[phaseId] = [];
-        }
-        this.tempUploadUrls[phaseId] = null;
-        this.fetchDiaries();
-        this.submitting[phaseId] = false;
-      },
-      error: () => { this.submitting[phaseId] = false; }
-    });
+
+
+submitUpdate(
+  diaryId: string,
+  phaseId: string
+): void {
+
+  const note =
+    this.phaseNotes[phaseId]?.trim() || '';
+
+  const files =
+    this.uploadedFiles[phaseId] || [];
+
+  if (!note && files.length === 0) {
+    return;
   }
 
+  this.submitting[phaseId] = true;
+
+  this.diaryService.submitPhaseUpdate(
+    diaryId,
+    phaseId,
+    {
+      freelancerNote: note,
+      attachments: files
+    }
+  )
+  .pipe(
+    finalize(() => {
+      this.submitting[phaseId] = false;
+    })
+  )
+  .subscribe({
+
+    next: () => {
+
+      this.phaseNotes[phaseId] = '';
+      this.uploadedFiles[phaseId] = [];
+      this.tempUploadUrls[phaseId] = null;
+
+      this.closeSubmitModal();
+
+      this.fetchDiaries();
+
+    },
+
+    error: (err) => {
+      console.error(err);
+    }
+
+  });
+
+}
   getFileIcon(fileType: string): string {
     if (!fileType) return 'bi-file-earmark-fill';
     if (fileType.includes('pdf'))   return 'bi-file-earmark-pdf-fill text-danger';
@@ -164,9 +264,13 @@ export class ContractDiaryComponent implements OnInit {
     }
   }
 
-  canStart(phase: Phase): boolean {
-    return phase.status === 'pending' || phase.status === 'changes-requested';
-  }
+canStart(
+  phase: Phase
+): boolean {
+
+  return phase.status === 'pending';
+
+}
 
   canSubmit(phase: Phase): boolean {
     return phase.status === 'in-progress' || phase.status === 'changes-requested';
@@ -181,6 +285,24 @@ export class ContractDiaryComponent implements OnInit {
     return diary.contractId.estimatedBudget || 0;
   }
 
+  trackByPhase(
+  index: number,
+  phase: Phase
+): string {
+
+  return phase._id;
+
+}
+
+
+trackByDiary(
+  index: number,
+  diary: Diary
+): string {
+
+  return diary._id;
+
+}
   isContractActive(diary: Diary): boolean {
     if (!diary.contractId?.contractStartDate) return true;
     const start = new Date(diary.contractId.contractStartDate);

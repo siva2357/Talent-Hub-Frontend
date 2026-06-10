@@ -10,9 +10,9 @@ export const API_ENDPOINTS = {
     FORGOT_PASSWORD_CODE: '/forgot-password/auth/forgot-password-code',
     VERIFY_FORGOT_PASSWORD_CODE: '/forgot-password/auth/verify-forgotPassword-code',
     RESET_PASSWORD_WITH_CODE: '/forgot-password/auth/reset-password',
-    CHANGE_PASSWORD: '/change-password/auth/change-password'
+    CHANGE_PASSWORD: '/change-password/auth/change-password',
   },
-  
+
   // Profile & Portfolio Endpoints
   PROFILE: {
     COMPLETE: '/profile/complete',
@@ -26,13 +26,22 @@ export const API_ENDPOINTS = {
     SAVE_TALENT: (id: string) => `/profile/save-talent/${id}`,
     UNSAVE_TALENT: (id: string) => `/profile/unsave-talent/${id}`,
     SAVED_TALENTS: '/profile/saved-talents',
-    PORTFOLIO: '/profile/portfolio',
-    PORTFOLIO_ITEM: (id: string) => `/profile/portfolio/${id}`
   },
+
+  PORTFOLIO: {
+  CREATE: '/portfolio',
+  MY: '/portfolio/my',
+  FREELANCER: (freelancerId: string) =>
+    `/portfolio/freelancer/${freelancerId}`,
+  UPDATE: (portfolioId: string) =>
+    `/portfolio/${portfolioId}`,
+  DELETE: (portfolioId: string) =>
+    `/portfolio/${portfolioId}`,
+},
 
   // Upload Endpoints
   UPLOADS: {
-    UPLOAD: '/uploads/upload'
+    UPLOAD: '/uploads/upload',
   },
 
   // Notification Endpoints
@@ -41,7 +50,7 @@ export const API_ENDPOINTS = {
     MARK_READ: (id: string) => `/notifications/notifications/${id}/read`,
     MARK_ALL_READ: '/notifications/notifications/read-all',
     DELETE: (id: string) => `/notifications/notifications/${id}/delete`,
-    CLEAR: '/notifications/notifications/clear'
+    CLEAR: '/notifications/notifications/clear',
   },
 
   // Finance Endpoints
@@ -51,12 +60,12 @@ export const API_ENDPOINTS = {
     INVOICES: '/finance/invoices',
     RAZORPAY_ORDER: '/finance/razorpay/order',
     RAZORPAY_VERIFY: '/finance/razorpay/verify',
-    WITHDRAW: '/finance/withdraw'
+    WITHDRAW: '/finance/withdraw',
   },
 
   // Dashboard Endpoints
   DASHBOARD: {
-    STATS: '/dashboard/stats'
+    STATS: '/dashboard/stats',
   },
 
   // Contract Endpoints
@@ -72,22 +81,23 @@ export const API_ENDPOINTS = {
     WITHDRAW: (id: string) => `/contracts/withdraw/${id}`,
     APPLIED: '/contracts/applied-contracts',
     APPLICANTS: '/contracts/my-contracts/applicants',
-    HIRED: '/contracts/hired-talents'
+    HIRED: '/contracts/hired-talents',
   },
 
   // Contract Diary Endpoints
   CONTRACT_DIARY: {
     BASE: '/contract-diary',
     PHASES: (diaryId: string) => `/contract-diary/${diaryId}/phases`,
-    REVIEW_PHASE: (diaryId: string, phaseId: string) => `/contract-diary/${diaryId}/phases/${phaseId}/review`,
+    REVIEW_PHASE: (diaryId: string, phaseId: string) =>
+      `/contract-diary/${diaryId}/phases/${phaseId}/review`,
     MY_DIARIES: '/contract-diary/my-diaries',
     MY_DIARY: '/contract-diary/my-diary',
-    START_PHASE: (diaryId: string, phaseId: string) => `/contract-diary/${diaryId}/phases/${phaseId}/start`,
-    SUBMIT_PHASE: (diaryId: string, phaseId: string) => `/contract-diary/${diaryId}/phases/${phaseId}/submit`,
-    ITEM: (diaryId: string) => `/contract-diary/${diaryId}`
+    START_PHASE: (diaryId: string, phaseId: string) =>
+      `/contract-diary/${diaryId}/phases/${phaseId}/start`,
+    SUBMIT_PHASE: (diaryId: string, phaseId: string) =>
+      `/contract-diary/${diaryId}/phases/${phaseId}/submit`,
+    ITEM: (diaryId: string) => `/contract-diary/${diaryId}`,
   },
-
-
 
   // Application Endpoints
   APPLICATIONS: {
@@ -105,7 +115,7 @@ export const API_ENDPOINTS = {
     DECLINE_OFFER: (id: string) => `/applications/${id}/decline-offer`,
     MY_OFFERS: '/applications/my-offers',
     ITEM: (id: string) => `/applications/${id}`,
-    CONTRACT_PDF: (id: string, token: string) => `/applications/${id}/contract-pdf?token=${token}`
+    CONTRACT_PDF: (id: string, token: string) => `/applications/${id}/contract-pdf?token=${token}`,
   },
 
   // Support Endpoints
@@ -115,7 +125,7 @@ export const API_ENDPOINTS = {
     GET_ALL_TICKETS: '/support/admin/tickets',
     UPDATE_STATUS: (id: string) => `/support/admin/tickets/${id}/status`,
     REPLY: (id: string) => `/support/admin/tickets/${id}/reply`,
-    FEEDBACK: (id: string) => `/support/tickets/${id}/feedback`
+    FEEDBACK: (id: string) => `/support/tickets/${id}/feedback`,
   },
 
   // Admin Endpoints
@@ -129,16 +139,19 @@ export const API_ENDPOINTS = {
     FINANCE_TRANSACTIONS: '/admin/finances/transactions',
     FINANCE_STATS: '/admin/finances/stats',
     REPORTS: '/admin/reports',
-    GENERATE_REPORT: '/admin/reports'
+    GENERATE_REPORT: '/admin/reports',
   },
 
-  // Blogs Endpoints
   BLOGS: {
     BASE: '/blogs',
-    PUBLISHED: '/blogs/published',
-    POST: (slug: string) => `/blogs/post/${slug}`,
-    CREATE: '/blogs',
-    STATUS: (id: string) => `/blogs/${id}/status`,
-    DELETE: (id: string) => `/blogs/${id}`
-  }
+    BY_ID: (id: string) => `/blogs/${id}`,
+    ADMIN: '/blogs/admin',
+    ADMIN_BY_ID: (id: string) => `/blogs/admin/${id}`,
+  },
+
+
+MASTER: {
+  BANKS: '/banks'
+}
+
 };

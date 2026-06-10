@@ -10,6 +10,8 @@ import { Category } from "../enums/category.enum";
 import { Language } from "../enums/language.enum";
 import { Proficiency } from "../enums/proficiency.enum";
 
+import {Portfolio} from "./portfolio.model";
+
 export interface Registration {
   id: string;
   email: string;
@@ -85,12 +87,26 @@ export interface FreelancerProfile {
   };
   location: ProfileLocation;
   availability: (Availability | string)[];
+  hourlyRate?: number;
   verification: ProfileVerification;
   socialLinks: ProfileSocialLink[];
   languages: ProfileLanguage[];
   createdAt?: string;
   updatedAt?: string;
+  contractCount?: number;
+  completedContractsCount?: number;
+  status?: 'active' | 'inactive';
 }
+
+export interface FreelancerProfileResponse {
+  success: boolean;
+  profile: FreelancerProfile;
+  portfolio: Portfolio[];
+}
+
+
+
+
 
 export interface ClientProfile {
   id?: string;

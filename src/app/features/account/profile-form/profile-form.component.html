@@ -343,17 +343,119 @@
                 <!-- Input Fields Grid -->
                 <div class="row g-3">
                   <div class="col-sm-6">
-                    <app-input label="Bank Name" [(ngModel)]="bankDetails.bankName" placeholder="e.g. HDFC Bank" icon="bi-bank" [required]="true" [disabled]="isPaymentVerified"></app-input>
-                  </div>
+<app-input
+  type="select"
+  label="Bank Name"
+  [options]="bankOptions"
+  [(ngModel)]="bankDetails.bankCode"
+  [required]="true"
+  [disabled]="isPaymentVerified">
+</app-input>                  </div>
                   <div class="col-sm-6">
                     <app-input label="Account Holder Name" [(ngModel)]="bankDetails.holderName" placeholder="e.g. John Doe" icon="bi-person" [required]="true" [disabled]="isPaymentVerified"></app-input>
                   </div>
                   <div class="col-sm-6">
-                    <app-input label="Account Number" [(ngModel)]="bankDetails.accountNumber" placeholder="Enter account number" icon="bi-card-list" [required]="true" [disabled]="isPaymentVerified"></app-input>
-                  </div>
+<app-input
+  label="Account Number"
+  [(ngModel)]="bankDetails.accountNumber"
+  placeholder="Enter account number"
+  [required]="true">
+</app-input>
+
+@if (
+  bankDetails.accountNumber &&
+  !ValidationHelper.isValidAccountNumber(
+    bankDetails.accountNumber
+  )
+) {
+  <small class="text-danger">
+    Invalid Account Number
+  </small>
+}                  </div>
                   <div class="col-sm-6">
-                    <app-input label="IFSC Code" [(ngModel)]="bankDetails.ifsc" placeholder="e.g. HDFC0000123" icon="bi-shield-check" [required]="true" [disabled]="isPaymentVerified"></app-input>
-                  </div>
+<app-input
+  label="IFSC Code"
+  [(ngModel)]="bankDetails.ifsc"
+  placeholder="HDFC0000123"
+  [required]="true">
+</app-input>
+
+@if (
+  bankDetails.ifsc &&
+  !ValidationHelper.isValidIFSC(bankDetails.ifsc)
+) {
+  <small class="text-danger">
+    Invalid IFSC Code
+  </small>
+}                  </div>
+
+                  <div class="col-sm-6">
+<app-input
+  label="PAN Number"
+  [(ngModel)]="bankDetails.panNumber"
+  placeholder="ABCDE1234F"
+  [required]="true">
+</app-input>
+
+@if (
+  bankDetails.panNumber &&
+  !PanHelper.isValid(bankDetails.panNumber)
+) {
+  <small class="text-danger">
+    Invalid PAN Number
+  </small>
+}
+</div>
+
+<div class="col-sm-6">
+<app-input
+  label="Aadhaar Number"
+  [(ngModel)]="bankDetails.aadhaarNumber"
+  placeholder="123456789012"
+  [required]="true">
+</app-input>
+
+@if (
+  bankDetails.aadhaarNumber &&
+  !AadhaarHelper.isValid(bankDetails.aadhaarNumber)
+) {
+  <small class="text-danger">
+    Invalid Aadhaar Number
+  </small>
+}
+</div>
+
+
+<div class="col-md-6">
+  <app-file-upload
+    label="PAN Card"
+    variant="dragdrop"
+    [bucketKey]="userRole === 'client'
+      ? BucketKey.ClientData
+      : BucketKey.FreelancerData"
+    [uploadSection]="UploadSection.PanCard"
+    accept=".pdf,.jpg,.jpeg,.png"
+    [maxSizeMb]="5"
+    (uploadSuccess)="bankDetails.panCardUrl = $event">
+  </app-file-upload>
+</div>
+
+
+
+<div class="col-md-6">
+  <app-file-upload
+    label="Aadhaar Card"
+    variant="dragdrop"
+    [bucketKey]="userRole === 'client'
+      ? BucketKey.ClientData
+      : BucketKey.FreelancerData"
+    [uploadSection]="UploadSection.AadhaarCard"
+    accept=".pdf,.jpg,.jpeg,.png"
+    [maxSizeMb]="5"
+    (uploadSuccess)="bankDetails.aadhaarCardUrl = $event">
+  </app-file-upload>
+</div>
+
                 </div>
 
                 <!-- Legality Preview & Checkbox -->
