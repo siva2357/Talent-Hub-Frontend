@@ -2,27 +2,50 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { AdminService, SupportRequest } from '../../../../../core/services/admin.service';
+
+import { SupportService } from '../../../../../core/services/support.service';
+
+import {
+  SupportRequest
+} from '../../../../../core/model/support-request.model';
+import { FilePreviewComponent } from "../../../../../shared/components/file-preview/file-preview.component";
 
 @Component({
   selector: 'app-support-requests',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    FilePreviewComponent
+],
   templateUrl: './support-requests.component.html',
   styleUrl: './support-requests.component.css'
 })
 export class SupportRequestsComponent implements OnInit {
-  private adminService = inject(AdminService);
+
+  private supportService = inject(SupportService);
   private toastr = inject(ToastrService);
 
   requests: SupportRequest[] = [];
   filteredRequests: SupportRequest[] = [];
-  
+
   searchTerm = '';
-  statusFilter: 'All' | 'Pending' | 'Resolved' | 'Unresolved' = 'All';
-  userTypeFilter: 'All' | 'Client' | 'Freelancer' = 'All';
+
+  statusFilter:
+    | 'All'
+    | 'Open'
+    | 'WaitingForAdmin'
+    | 'WaitingForUser'
+    | 'Resolved'
+    | 'Closed' = 'All';
+
+  userTypeFilter:
+    | 'All'
+    | 'Client'
+    | 'Freelancer' = 'All';
 
   selectedRequest: SupportRequest | null = null;
+
   replyText = '';
 
   ngOnInit(): void {
@@ -30,105 +53,248 @@ export class SupportRequestsComponent implements OnInit {
   }
 
   loadRequests(): void {
-    this.adminService.getSupportRequests().subscribe({
-      next: (data) => {
-        this.requests = data;
+
+    this.supportService.getAllTickets().subscribe({
+      next: (tickets) => {
+
+        this.requests = tickets;
+
         this.applyFilters();
+      },
+
+      error: (error) => {
+
+        console.error(error);
+
+        this.toastr.error(
+          'Failed to load support tickets',
+          'Support Desk'
+        );
       }
     });
   }
 
-  onSearch(event: any): void {
-    this.searchTerm = event.target.value;
+  onSearch(event: Event): void {
+
+    const input =
+      event.target as HTMLInputElement;
+
+    this.searchTerm = input.value;
+
     this.applyFilters();
   }
 
-  onFilterStatus(status: 'All' | 'Pending' | 'Resolved' | 'Unresolved'): void {
+  onFilterStatus(
+    status:
+      | 'All'
+      | 'Open'
+      | 'WaitingForAdmin'
+      | 'WaitingForUser'
+      | 'Resolved'
+      | 'Closed'
+  ): void {
+
     this.statusFilter = status;
+
     this.applyFilters();
   }
 
-  onFilterUserType(userType: 'All' | 'Client' | 'Freelancer'): void {
+  onFilterUserType(
+    userType:
+      | 'All'
+      | 'Client'
+      | 'Freelancer'
+  ): void {
+
     this.userTypeFilter = userType;
+
     this.applyFilters();
   }
 
   applyFilters(): void {
-    this.filteredRequests = this.requests.filter(r => {
-      const matchesSearch = r.userName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                            r.subject.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                            r.message.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                            r.id.toLowerCase().includes(this.searchTerm.toLowerCase());
 
-      const matchesStatus = this.statusFilter === 'All' || r.status === this.statusFilter;
-      const matchesUserType = this.userTypeFilter === 'All' || r.userType === this.userTypeFilter;
+    const search =
+      this.searchTerm.toLowerCase();
 
-      return matchesSearch && matchesStatus && matchesUserType;
-    });
+    this.filteredRequests =
+      this.requests.filter(ticket => {
 
-    // Auto-select first request if active list has items, otherwise clear selection
-    if (this.filteredRequests.length > 0) {
-      if (!this.selectedRequest || !this.filteredRequests.some(r => r.id === this.selectedRequest!.id)) {
-        this.selectedRequest = this.filteredRequests[0];
-      } else {
-        const updatedSelected = this.filteredRequests.find(r => r.id === this.selectedRequest!.id);
-        if (updatedSelected) {
-          this.selectedRequest = updatedSelected;
-        }
-      }
-    } else {
+        const matchesSearch =
+          ticket.id.toLowerCase().includes(search) ||
+          ticket.userName.toLowerCase().includes(search) ||
+          ticket.userEmail.toLowerCase().includes(search) ||
+          ticket.message.toLowerCase().includes(search);
+
+        const matchesStatus =
+          this.statusFilter === 'All' ||
+          ticket.status === this.statusFilter;
+
+        const matchesUserType =
+          this.userTypeFilter === 'All' ||
+          ticket.userType === this.userTypeFilter;
+
+        return (
+          matchesSearch &&
+          matchesStatus &&
+          matchesUserType
+        );
+      });
+
+    if (!this.filteredRequests.length) {
+
       this.selectedRequest = null;
-    }
-  }
 
-  changeRequestStatus(id: string, status: 'Pending' | 'Resolved' | 'Unresolved'): void {
-    if (status === 'Resolved') {
-      this.toastr.warning('Tickets can only be resolved by direct user feedback.', 'Support Desk');
       return;
     }
-    this.adminService.updateSupportRequestStatus(id, status).subscribe({
-      next: () => {
-        this.toastr.info(`Ticket status marked as ${status}`, 'Support Desk');
-        this.loadRequests();
-      },
-      error: (err) => {
-        this.toastr.error('Failed to update ticket status', 'Support Desk');
-        console.error(err);
-      }
-    });
+
+    if (
+      !this.selectedRequest ||
+      !this.filteredRequests.some(
+        ticket =>
+          ticket.id ===
+          this.selectedRequest?.id
+      )
+    ) {
+
+      this.selectedRequest =
+        this.filteredRequests[0];
+
+      return;
+    }
+
+    const updatedTicket =
+      this.filteredRequests.find(
+        ticket =>
+          ticket.id ===
+          this.selectedRequest?.id
+      );
+
+    if (updatedTicket) {
+
+      this.selectedRequest =
+        updatedTicket;
+    }
   }
 
-  selectRequest(request: SupportRequest): void {
+  selectRequest(
+    request: SupportRequest
+  ): void {
+
     this.selectedRequest = request;
+
     this.replyText = '';
   }
 
   submitReply(): void {
-    if (!this.selectedRequest || !this.replyText.trim()) return;
 
-    this.adminService.replyToSupportRequest(this.selectedRequest.id, this.replyText.trim()).subscribe({
-      next: () => {
-        this.toastr.success('Reply sent successfully. Ticket marked as Pending.', 'Support Desk');
+    if (
+      !this.selectedRequest ||
+      !this.replyText.trim()
+    ) {
+      return;
+    }
+
+    this.supportService.adminReplyToTicket(
+      this.selectedRequest.id,
+      {
+        message: this.replyText.trim()
+      }
+    ).subscribe({
+
+      next: (response) => {
+
         this.replyText = '';
+
+        this.toastr.success(
+          response.message,
+          'Support Desk'
+        );
+
         this.loadRequests();
       },
-      error: (err) => {
-        this.toastr.error('Failed to send reply', 'Support Desk');
-        console.error(err);
+
+      error: (error) => {
+
+        console.error(error);
+
+        this.toastr.error(
+          'Failed to send reply',
+          'Support Desk'
+        );
       }
     });
   }
 
-  simulateUserFeedback(feedbackText: string): void {
-    if (!this.selectedRequest) return;
-    this.adminService.submitUserFeedbackAndResolve(this.selectedRequest.id, feedbackText).subscribe({
-      next: () => {
-        this.toastr.success('Simulated user feedback submitted. Ticket resolved.', 'Support Desk');
+  updateStatus(
+    status:
+      | 'Open'
+      | 'WaitingForAdmin'
+      | 'WaitingForUser'
+      | 'Resolved'
+      | 'Closed'
+  ): void {
+
+    if (!this.selectedRequest) {
+      return;
+    }
+
+    this.supportService.updateTicketStatus(
+      this.selectedRequest.id,
+      {
+        status
+      }
+    ).subscribe({
+
+      next: (response) => {
+
+        this.toastr.success(
+          response.message,
+          'Support Desk'
+        );
+
         this.loadRequests();
       },
-      error: (err) => {
-        this.toastr.error('Failed to simulate feedback', 'Support Desk');
-        console.error(err);
+
+      error: (error) => {
+
+        console.error(error);
+
+        this.toastr.error(
+          'Failed to update status',
+          'Support Desk'
+        );
+      }
+    });
+  }
+
+  closeTicket(): void {
+
+    if (!this.selectedRequest) {
+      return;
+    }
+
+    this.supportService.closeTicket(
+      this.selectedRequest.id
+    ).subscribe({
+
+      next: (response) => {
+
+        this.toastr.success(
+          response.message,
+          'Support Desk'
+        );
+
+        this.loadRequests();
+      },
+
+      error: (error) => {
+
+        console.error(error);
+
+        this.toastr.error(
+          'Failed to close ticket',
+          'Support Desk'
+        );
       }
     });
   }

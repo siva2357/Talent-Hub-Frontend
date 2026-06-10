@@ -29,15 +29,12 @@ export const API_ENDPOINTS = {
   },
 
   PORTFOLIO: {
-  CREATE: '/portfolio',
-  MY: '/portfolio/my',
-  FREELANCER: (freelancerId: string) =>
-    `/portfolio/freelancer/${freelancerId}`,
-  UPDATE: (portfolioId: string) =>
-    `/portfolio/${portfolioId}`,
-  DELETE: (portfolioId: string) =>
-    `/portfolio/${portfolioId}`,
-},
+    CREATE: '/portfolio',
+    MY: '/portfolio/my',
+    FREELANCER: (freelancerId: string) => `/portfolio/freelancer/${freelancerId}`,
+    UPDATE: (portfolioId: string) => `/portfolio/${portfolioId}`,
+    DELETE: (portfolioId: string) => `/portfolio/${portfolioId}`,
+  },
 
   // Upload Endpoints
   UPLOADS: {
@@ -122,10 +119,13 @@ export const API_ENDPOINTS = {
   SUPPORT: {
     CREATE_TICKET: '/support/tickets',
     GET_MY_TICKETS: '/support/tickets',
+    GET_TICKET_BY_ID: (id: string) => `/support/tickets/${id}`,
+    USER_REPLY: (id: string) => `/support/tickets/${id}/reply`,
+    RESOLVE_TICKET: (id: string) => `/support/tickets/${id}/resolve`,
     GET_ALL_TICKETS: '/support/admin/tickets',
+    ADMIN_REPLY: (id: string) => `/support/admin/tickets/${id}/reply`,
     UPDATE_STATUS: (id: string) => `/support/admin/tickets/${id}/status`,
-    REPLY: (id: string) => `/support/admin/tickets/${id}/reply`,
-    FEEDBACK: (id: string) => `/support/tickets/${id}/feedback`,
+    CLOSE_TICKET: (id: string) => `/support/admin/tickets/${id}/close`,
   },
 
   // Admin Endpoints
@@ -149,9 +149,7 @@ export const API_ENDPOINTS = {
     ADMIN_BY_ID: (id: string) => `/blogs/admin/${id}`,
   },
 
-
-MASTER: {
-  BANKS: '/banks'
-}
-
+  MASTER: {
+    BANKS: '/banks',
+  },
 };

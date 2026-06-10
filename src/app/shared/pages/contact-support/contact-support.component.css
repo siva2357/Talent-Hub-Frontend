@@ -393,3 +393,277 @@
         font-size: 16px;
     }
 }
+
+
+.ticket-card-premium {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  padding: 1.25rem;
+  transition: .3s;
+}
+
+.ticket-card-premium:hover {
+  transform: translateY(-3px);
+  border-color: rgba(99,102,241,.4);
+}
+
+.ticket-card-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:1rem;
+}
+
+.ticket-id {
+  font-size:.75rem;
+  color:#8b9cfb;
+  font-weight:700;
+  display:block;
+  margin-bottom:.5rem;
+}
+
+.status-badge {
+  padding:.4rem .9rem;
+  border-radius:999px;
+  font-size:.75rem;
+  font-weight:600;
+}
+
+.status-badge.open {
+  background:#2563eb22;
+  color:#60a5fa;
+}
+
+.status-badge.progress {
+  background:#f59e0b22;
+  color:#fbbf24;
+}
+
+.status-badge.resolved {
+  background:#10b98122;
+  color:#34d399;
+}
+
+.status-badge.closed {
+  background:#6b728022;
+  color:#d1d5db;
+}
+
+.ticket-card-footer {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:1rem;
+  padding-top:1rem;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+
+.ticket-meta {
+  display:flex;
+  gap:1rem;
+  color:#9ca3af;
+}
+
+.btn-view-ticket {
+  border:none;
+  background:#4f46e5;
+  color:white;
+  border-radius:10px;
+  padding:.65rem 1rem;
+}
+
+.empty-ticket-state {
+  text-align:center;
+  padding:5rem 2rem;
+}
+
+.empty-ticket-state i {
+  font-size:4rem;
+  color:#6366f1;
+}
+
+.ticket-counter {
+  padding:.5rem 1rem;
+  border-radius:999px;
+  background:rgba(99,102,241,.15);
+  color:#a5b4fc;
+}
+
+.support-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 100;
+}
+
+.support-tabs button {
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.03);
+  color: #94a3b8;
+  padding: .9rem 1.5rem;
+  border-radius: 14px;
+  font-weight: 600;
+  transition: all .25s ease;
+  cursor: pointer;
+  min-width: 160px;
+}
+
+.support-tabs button:hover {
+  color: white;
+  border-color: rgba(59,130,246,.4);
+  transform: translateY(-2px);
+}
+
+.support-tabs button.active {
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #7c3aed
+  );
+  color: white;
+  border-color: transparent;
+  box-shadow:
+    0 10px 30px rgba(37,99,235,.25);
+}
+.glass-card,
+.ticket-details-card {
+  background: rgba(17,24,39,.55);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px;
+  padding: 1.5rem;
+}
+
+.ticket-list-item {
+  padding: 1rem;
+  border-radius: 16px;
+  cursor: pointer;
+  margin-bottom: .85rem;
+  background: rgba(255,255,255,.03);
+  border: 1px solid transparent;
+  transition: .3s;
+}
+
+.ticket-list-item:hover {
+  transform: translateY(-2px);
+}
+
+.ticket-list-item.active {
+  border-color: #3b82f6;
+  background: rgba(59,130,246,.08);
+}
+
+.ticket-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: .75rem;
+}
+
+.ticket-id {
+  color: #60a5fa;
+  font-weight: 700;
+  font-size: .85rem;
+}
+
+.ticket-subject {
+  color: white;
+  margin-bottom: .75rem;
+}
+
+.ticket-meta {
+  display: flex;
+  gap: 1rem;
+  color: #94a3b8;
+  font-size: .8rem;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.ticket-id-large {
+  color: #60a5fa;
+  display: block;
+  margin-bottom: .5rem;
+  font-weight: 700;
+}
+
+.ticket-user-meta {
+  color: #94a3b8;
+}
+
+.timeline-message {
+  margin-bottom: 1.5rem;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: .5rem;
+  color: #94a3b8;
+  font-size: .8rem;
+}
+
+.message-bubble {
+  padding: 1rem;
+  border-radius: 16px;
+  background: rgba(255,255,255,.04);
+}
+
+.timeline-message.admin .message-bubble {
+  border-left: 4px solid #3b82f6;
+}
+
+.status-open {
+  background: rgba(59,130,246,.15);
+  color: #60a5fa;
+}
+
+.status-admin {
+  background: rgba(245,158,11,.15);
+  color: #fbbf24;
+}
+
+.status-user {
+  background: rgba(14,165,233,.15);
+  color: #38bdf8;
+}
+
+.status-resolved {
+  background: rgba(16,185,129,.15);
+  color: #34d399;
+}
+
+.status-closed {
+  background: rgba(107,114,128,.15);
+  color: #d1d5db;
+}
+
+.status-pill {
+  padding: .45rem .9rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+.support-tabs {
+  position: relative;
+  z-index: 100;
+}
+
+.support-wrapper {
+  position: relative;
+  z-index: 10;
+}
+
+.support-grid-overlay,
+.support-orb {
+  pointer-events: none;
+}

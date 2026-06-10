@@ -3,11 +3,13 @@ export enum BucketKey {
   FreelancerData = 'FREELANCER_DATA',
   AdminCollection = 'ADMIN_COLLECTION'
 }
+
 export enum UploadSection {
   ProfilePhoto = 'PROFILE_PHOTO',
   Portfolio = 'PORTFOLIO',
   ContractFiles = 'CONTRACT_FILES',
   BlogMedia = 'BLOG_MEDIA',
   AadhaarCard = 'AADHAAR_CARD',
-  PanCard = 'PAN_CARD'
+  PanCard = 'PAN_CARD',
+  SupportRequest='SUPPORT_REQUEST'
 }

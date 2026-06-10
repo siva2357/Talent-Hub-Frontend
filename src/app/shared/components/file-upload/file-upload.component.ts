@@ -5,6 +5,8 @@ import { UploadService } from '../../../core/services/upload.service';
 import { BucketKey, UploadSection } from '../../../core/enums/upload.enum';
 import { FilePreviewComponent } from '../file-preview/file-preview.component';
 
+import { SimpleChanges, OnChanges } from '@angular/core';
+
 @Component({
   selector: 'app-file-upload',
   standalone: true,
@@ -19,7 +21,7 @@ import { FilePreviewComponent } from '../file-preview/file-preview.component';
     }
   ]
 })
-export class FileUploadComponent implements ControlValueAccessor {
+export class FileUploadComponent implements ControlValueAccessor , OnChanges {
   private uploadService = inject(UploadService);
 
   @Input() variant: 'avatar' | 'dragdrop' = 'dragdrop';
@@ -27,16 +29,20 @@ export class FileUploadComponent implements ControlValueAccessor {
   @Input() placeholder: string = 'Drag & drop your file here or click to browse';
   @Input() accept: string = '';
   @Input() maxSizeMb: number = 5;
-  @Input() bucketKey: BucketKey = BucketKey.FreelancerData;
-  @Input() uploadSection: UploadSection = UploadSection.ProfilePhoto;
+  @Input() bucketKey: string = '';
+  @Input() uploadSection: string = '';
   @Input() required: boolean = false;
   @Input() disabled: boolean = false;
+  @Input() resetTrigger = 0;
 
   @Output() uploadSuccess = new EventEmitter<string>();
   @Output() uploadSuccessDetailed = new EventEmitter<{ url: string; fileName: string; fileSize: string; fileType: string }>();
   @Output() uploadStart = new EventEmitter<void>();
   @Output() uploadError = new EventEmitter<string>();
   @Output() fileRemoved = new EventEmitter<void>();
+
+  @Input() replaceExisting = false;
+  @Input() subfolder = '';
 
   // Internal state
   value: string | null = null;
@@ -89,6 +95,26 @@ export class FileUploadComponent implements ControlValueAccessor {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+  if (changes['resetTrigger'] && !changes['resetTrigger'].firstChange) {
+    this.clearUpload();
+  }
+}
+
+clearUpload(): void {
+  this.value = null;
+  this.errorMessage = null;
+
+  this.onChange(null);
+
+  const fileInput = document.getElementById(
+    this.fileInputId
+  ) as HTMLInputElement;
+
+  if (fileInput) {
+    fileInput.value = '';
+  }
+}
   // Drag and Drop handlers
   onDragOver(event: DragEvent): void {
     if (this.disabled || this.isUploading) return;
@@ -129,7 +155,13 @@ export class FileUploadComponent implements ControlValueAccessor {
     this.errorMessage = null;
     this.uploadStart.emit();
 
-    this.uploadService.uploadFile(file, this.bucketKey, this.uploadSection, true).subscribe({
+    this.uploadService.uploadFile(
+  file,
+  this.bucketKey,
+  this.uploadSection,
+  this.replaceExisting,
+   this.subfolder
+).subscribe({
       next: (res) => {
         this.isUploading = false;
         if (res.success && res.url) {

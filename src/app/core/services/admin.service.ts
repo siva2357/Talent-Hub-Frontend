@@ -58,25 +58,6 @@ export interface SystemReport {
   size: string;
 }
 
-export interface SupportRequestReply {
-  sender: 'Admin' | 'User';
-  message: string;
-  timestamp: string;
-}
-
-export interface SupportRequest {
-  id: string;
-  userType: 'Client' | 'Freelancer';
-  userName: string;
-  userEmail: string;
-  subject: string;
-  message: string;
-  attachments?: { name: string; url: string }[];
-  status: 'Pending' | 'Resolved' | 'Unresolved';
-  createdDate: string;
-  replies?: SupportRequestReply[];
-}
-
 
 @Injectable({
   providedIn: 'root'
@@ -209,37 +190,7 @@ export class AdminService {
     });
   }
 
-  // Support Requests API
-  getSupportRequests(): Observable<SupportRequest[]> {
-    return this.http.get<SupportRequest[]>(
-      `${this.baseUrl}${API_ENDPOINTS.SUPPORT.GET_ALL_TICKETS}`,
-      this.getHeaders()
-    );
-  }
 
-  updateSupportRequestStatus(id: string, status: 'Pending' | 'Resolved' | 'Unresolved'): Observable<any> {
-    return this.http.patch<any>(
-      `${this.baseUrl}${API_ENDPOINTS.SUPPORT.UPDATE_STATUS(id)}`,
-      { status },
-      this.getHeaders()
-    );
-  }
-
-  replyToSupportRequest(id: string, message: string): Observable<any> {
-    return this.http.post<any>(
-      `${this.baseUrl}${API_ENDPOINTS.SUPPORT.REPLY(id)}`,
-      { message },
-      this.getHeaders()
-    );
-  }
-
-  submitUserFeedbackAndResolve(id: string, message: string): Observable<any> {
-    return this.http.post<any>(
-      `${this.baseUrl}${API_ENDPOINTS.SUPPORT.FEEDBACK(id)}`,
-      { feedbackText: message },
-      this.getHeaders()
-    );
-  }
 
 
 }
