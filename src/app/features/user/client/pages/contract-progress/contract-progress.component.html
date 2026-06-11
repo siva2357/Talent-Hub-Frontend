@@ -374,8 +374,11 @@
             <app-file-upload
               label="Requirements / References"
               variant="dragdrop"
-             [bucketKey]="userRole === 'client' ? BucketKey.ClientData : BucketKey.FreelancerData"
-              [uploadSection]="UploadSection.ContractFiles"
+  accept="image/*,.pdf"
+  [maxSizeMb]="10"
+              [bucketKey]="bucketKey"
+               [replaceExisting]="false"
+              [uploadSection]="uploadSection"
               [(ngModel)]="tempUploadUrl"
               name="phaseUpload"
               (uploadSuccessDetailed)="onFileUploaded($event)">

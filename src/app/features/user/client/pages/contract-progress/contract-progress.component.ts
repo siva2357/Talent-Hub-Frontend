@@ -9,6 +9,7 @@ import { FilePreviewComponent } from '../../../../../shared/components/file-prev
 import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
 import { AddPhaseFormDto } from '../../../../../core/DTOs/contract-diary.dto';
 import { Attachment, Diary } from '../../../../../core/model/contract-diary.model';
+import { AuthService } from '../../../../../core/services/auth.service';
 
 
 @Component({
@@ -20,6 +21,7 @@ import { Attachment, Diary } from '../../../../../core/model/contract-diary.mode
 })
 export class ContractProgressComponent implements OnInit {
   private diaryService = inject(ContractDiaryService);
+  private authService = inject(AuthService);
 newPhase!: AddPhaseFormDto
 diaries: Diary[] = [];
   isLoading = true;
@@ -30,9 +32,35 @@ diaries: Diary[] = [];
   addingPhase: Record<string, boolean> = {};
   showAddPhaseModal = false;
 selectedDiaryId: string | null = null;
-  BucketKey = BucketKey;
-  UploadSection = UploadSection;
+  bucketKey: BucketKey = BucketKey.ClientData;
+  readonly uploadSection = UploadSection.ContractFiles;
   tempUploadUrl: string | null = null;
+  isRefreshing = false;
+
+  
+
+
+ngOnInit(): void {
+
+  const role = this.authService.currentUser()?.role?.toLowerCase();
+
+  if (role !== 'client') {
+    throw new Error('Only clients can access contract progress');
+  }
+
+  this.newPhase = {
+    name: '',
+    description: '',
+    deadline: '',
+    amount: null,
+    clientAttachments: []
+  };
+
+  this.fetchDiaries();
+}
+
+
+
 
 onFileUploaded(
   fileInfo: {
@@ -74,43 +102,43 @@ removeAttachment(
 
 }
 
-ngOnInit(): void {
 
-this.newPhase = {
 
-  name: '',
+fetchDiaries(): void {
 
-  description: '',
+  this.isRefreshing = true;
 
-  deadline: '',
+  this.diaryService.getClientDiaries().subscribe({
 
-  amount: null,
+    next: (res: any) => {
 
-  clientAttachments: []
+      this.diaries =
+        (res.diaries || []).filter(
+          (d: any) =>
+            d.contractId &&
+            (d.contractId.funded || 0) > 0
+        );
 
-};
+      if (
+        this.diaries.length > 0 &&
+        !this.expandedDiaryId
+      ) {
+        this.expandedDiaryId =
+          this.diaries[0]._id;
+      }
 
-  this.fetchDiaries();
+      this.isLoading = false;
+      this.isRefreshing = false;
+    },
+
+    error: () => {
+      this.isLoading = false;
+      this.isRefreshing = false;
+    }
+
+  });
 
 }
-
-  fetchDiaries(): void {
-    this.isLoading = true;
-    this.diaryService.getClientDiaries().subscribe({
-      next: (res: any) => {
-        this.diaries = (res.diaries || []).filter((d: any) => d.contractId && (d.contractId.funded || 0) > 0);
-        if (this.diaries.length > 0) {
-          this.expandedDiaryId = this.diaries[0]._id;
-        }
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Failed to fetch client diaries:', err);
-        this.diaries = [];
-        this.isLoading = false;
-      }
-    });
-  }
 
 
 
