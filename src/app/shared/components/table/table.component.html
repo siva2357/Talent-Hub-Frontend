@@ -11,15 +11,17 @@
     [rowHeight]="55"
     [limit]="pageSize"
     [messages]="{
-      emptyMessage: 'No records found'
+      emptyMessage: 'No data available'
     }"
     (activate)="onActivate($event)">
 
     @for (column of columns; track column.prop) {
 
-      <ngx-datatable-column
-        [name]="column.name"
-        [prop]="column.prop">
+<ngx-datatable-column
+  [name]="column.name!"
+  [prop]="column.prop!"
+  [width]="column.width || 150"
+  [sortable]="column.sortable ?? true">
 
         <ng-template
           ngx-datatable-cell-template
@@ -31,16 +33,44 @@
               *ngTemplateOutlet="
                 column.cellTemplate;
                 context: {
-                  $implicit: row
+                  $implicit: row,
+                  row: row
                 }
               ">
             </ng-container>
 
           } @else {
 
-            {{ row[column.prop] }}
+            {{ row[column.prop!] }}
 
           }
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+    }
+
+    @if (actionTemplate) {
+
+      <ngx-datatable-column
+        name="Actions"
+        [sortable]="false"
+        [width]="120">
+
+        <ng-template
+          ngx-datatable-cell-template
+          let-row="row">
+
+          <ng-container
+            *ngTemplateOutlet="
+              actionTemplate;
+              context: {
+                $implicit: row,
+                row: row
+              }
+            ">
+          </ng-container>
 
         </ng-template>
 

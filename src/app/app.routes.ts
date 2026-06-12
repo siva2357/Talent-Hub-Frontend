@@ -22,13 +22,9 @@ import { RegistrationComponent } from './features/account/registration/registrat
 // User Layout & Features
 import { UserLayoutComponent } from './core/layouts/user-layout/user-layout.component';
 
-
 import { UserProfileComponent } from './shared/pages/user-profile/user-profile.component';
 import { AccountSettingsComponent } from './shared/pages/account-settings/account-settings.component';
-import { ChatComponent } from './shared/pages/chat/chat.component';
 import { ContactSupportComponent } from './shared/pages/contact-support/contact-support.component';
-import { InterviewSetupComponent } from './shared/pages/interview-setup/interview-setup.component';
-import { InterviewRoomComponent } from './shared/pages/interview-room/interview-room.component';
 import { NotFoundComponent } from './shared/pages/not-found/not-found.component';
 
 // Freelancer Pages
@@ -172,10 +168,7 @@ export const routes: Routes = [
     children: [
       { path: 'profile', component: UserProfileComponent },
       { path: 'settings', component: AccountSettingsComponent },
-      { path: 'chat', component: ChatComponent },
       { path: 'contact-support', component: ContactSupportComponent },
-      { path: 'interview-setup', component: InterviewSetupComponent },
-      { path: 'interview-room', component: InterviewRoomComponent },
       { path: 'legal-contract/:id', component: LegalContractComponent },
       { path: 'legal-form/:contractId', component: LegalFormComponent },
       { path: 'payment-gateway', component: PaymentGatewayComponent },

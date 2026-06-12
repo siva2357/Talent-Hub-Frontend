@@ -1,296 +1,214 @@
 <div class="blog-post-page p-3 p-md-4 p-xl-5">
   <div class="container-fluid max-w-7xl mx-auto">
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-5">
+    <div class="blog-header-card">
+
       <div>
-        <h2 class="text-white fw-bold mb-1">Public Blog Publisher ✍️</h2>
-        <p class="text-secondary mb-0">Write articles, manage publication releases, and view platform blogs in a table
-          ledger.</p>
+        <h2 class="mb-2"> Public Blog Publisher ✍️</h2>
+        <p class="mb-0"> Write articles, manage publication releases, and view platform blogs. </p>
       </div>
-      <div>
-        <button class="btn btn-primary d-flex align-items-center gap-2" (click)="openCreateForm()">
-          <i class="bi bi-plus-lg"></i> Post New Blog
-        </button>
+
+      <button class="create-blog-btn" (click)="openCreateForm()">
+        <i class="bi bi-plus-lg"></i>
+        <span>New Blog</span>
+      </button>
+
+    </div>
+
+    @if (loadingPosts) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+      <p class="mt-3 text-white">
+        Loading blogs...
+      </p>
+    </div>
+    }
+
+    @else {
+    <div class="d-none d-lg-block">
+      <div class="table-section">
+        <app-table [rows]="rows" [columns]="columns" [actionTemplate]="actionTemplate"></app-table>
       </div>
     </div>
 
-    <!-- Table View: Table Format (Always Visible) -->
-    <!-- Table View -->
-    <div class="glass rounded-4 overflow-hidden border border-white border-opacity-5">
-      <div class="table-responsive">
-        <table class="table table-dark table-hover mb-0 align-middle custom-table">
+    <div class="d-lg-none">
+      <div class="row g-3">
+        @for (row of rows; track row.id) {
+        <div class="col-12">
+          <div class="blog-card">
 
-          <thead>
-            <tr class="text-secondary">
-              <th class="py-3 ps-4" style="width:80px">#</th>
-              <th class="py-3">Article</th>
-              <th class="py-3" style="width:180px">Category</th>
-              <th class="py-3" style="width:180px">Created</th>
-              <th class="py-3" style="width:120px">Status</th>
-              <th class="py-3 pe-4 text-end" style="width:180px">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-
-            @if (posts.length === 0) {
-            <tr>
-              <td colspan="6" class="text-center py-5 text-secondary">
-                <i class="bi bi-file-earmark-text fs-1 d-block mb-3 opacity-50"></i>
-                No blog articles found
-              </td>
-            </tr>
-            } @else {
-
-            @for (post of posts; track post._id; let idx = $index) {
-
-            <tr class="border-bottom border-white border-opacity-5">
-
-              <!-- Index -->
-              <td class="ps-4">
-                <span class="fw-semibold text-primary">
-                  {{ idx + 1 }}
-                </span>
-              </td>
-
-              <!-- Blog Info -->
-              <td>
-                <div class="d-flex align-items-center gap-3">
-
-                  <div style="width: 70px; min-width: 70px;">
-
-                    @if (post.mediaUrl) {
-
-                    <app-file-preview [url]="post.mediaUrl" [fileName]="post.title" [disabled]="true">
-                    </app-file-preview>
-
-                    } @else {
-
-                    <div
-                      class="d-flex align-items-center justify-content-center bg-dark rounded border border-secondary"
-                      style="height: 60px;">
-
-                      <i class="bi bi-file-earmark-text text-secondary"></i>
-
-                    </div>
-
-                    }
-
-                  </div>
-
-                  <div class="flex-grow-1">
-
-                    <div class="text-white fw-semibold">
-                      {{ post.title }}
-                    </div>
-
-                    <small class="text-secondary d-block text-truncate" style="max-width: 350px;"
-                      innerHTML="{{ post.description }}"> </small>
-
-                  </div>
-
-                </div>
-              </td>
-
-              <!-- Category -->
-              <td>
-                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">
-
-                  {{ post.category }}
-
-                </span>
-              </td>
-
-              <!-- Created Date -->
-              <td>
-                <span class="text-secondary small">
-                  {{ post.createdAt | date:'dd MMM yyyy' }}
-                </span>
-              </td>
-
-              <!-- Status -->
-              <td>
-
-                <span class="badge px-3 py-2" [ngClass]="{
-                    'bg-success-subtle text-success': post.status === 'Published',
-                    'bg-warning-subtle text-warning': post.status === 'Draft'
-                  }">
-
-                  {{ post.status }}
-
-                </span>
-
-              </td>
-
-              <!-- Actions -->
-              <td class="pe-4 text-end">
-
-                <div class="dropdown">
-
-                  <button class="btn btn-sm btn-outline-light border-0" type="button" data-bs-toggle="dropdown">
-
-                    <i class="bi bi-three-dots-vertical"></i>
-
-                  </button>
-
-                  <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-
-                    <li>
-                      <button class="dropdown-item" type="button" (click)="editPost(post)">
-
-                        <i class="bi bi-pencil-square me-2"></i>
-                        Edit
-
-                      </button>
-                    </li>
-
-                    <li>
-                      <button class="dropdown-item text-danger" type="button" (click)="deletePost(post._id)">
-
-                        <i class="bi bi-trash me-2"></i>
-                        Delete
-
-                      </button>
-                    </li>
-
-                  </ul>
-
-                </div>
-
-              </td>
-
-            </tr>
-
-            }
-
-            }
-
-          </tbody>
-
-        </table>
-      </div>
-    </div>
-    <!-- Modal Form View: Create/Edit Post -->
-    @if (isFormOpen) {
-    <div class="custom-modal-backdrop d-flex align-items-center justify-content-center">
-      <div class="glass modal-card rounded-4 p-4 p-md-5 position-relative border border-white border-opacity-10 shadow"
-        style="max-width: 800px; width: 90%;">
-        <button class="btn-close btn-close-white position-absolute top-0 end-0 m-3 animate-fade"
-          (click)="closeFormModal()"></button>
-
-        <h4 class="text-white fw-bold mb-4">{{ isEditing ? 'Edit Blog Article' : 'Draft New Blog Article' }}</h4>
-
-        <form (ngSubmit)="onSubmit()">
-          <div class="row g-4">
-
-            <!-- Title -->
-            <div class="col-12">
-              <app-input label="Article Title" placeholder="Enter article title" [(ngModel)]="title" name="title"
-                [required]="true">
-              </app-input>
+            <div class="d-flex justify-content-between mb-3">
+              <span class="badge bg-primary">{{ row.category }}</span>
+              <span class="badge" [class.bg-success]="row.status === 'Published'"
+                [class.bg-secondary]="row.status !== 'Published'">{{ row.status }}</span>
             </div>
 
-            <!-- Description -->
-            <!-- Blog Content -->
-            <div class="col-12">
+            <h6 class="text-white fw-bold mb-2">{{ row.title }}</h6>
+            <p class="text-secondary small mb-3">{{ row.createdAt | date:'mediumDate' }}</p>
 
-              <app-rich-text-editor label="Blog Content" placeholder="Write your blog content..."
-                [(ngModel)]="description" name="description" [required]="true">
-
-              </app-rich-text-editor>
-
-            </div>
-
-            <!-- Category -->
-            <div class="col-md-6">
-              <app-input type="select" label="Category" [(ngModel)]="category" name="category"
-                [options]="categoryOptions">
-              </app-input>
-            </div>
-
-            <!-- Status -->
-            <div class="col-md-6">
-              <app-input type="select" label="Status" [(ngModel)]="status" name="status" [options]="[
-          { label: 'Published', value: 'Published' },
-          { label: 'Draft', value: 'Draft' }
-        ]">
-              </app-input>
-            </div>
-
-            <!-- Media Upload -->
-            <div class="col-12">
-              <app-file-upload label="Featured Image / Video" accept="image/*,video/*" [(ngModel)]="mediaUrl"
-                name="mediaUrl" [bucketKey]="bucketKey" [uploadSection]="uploadSection">
-              </app-file-upload>
-            </div>
-
-            <!-- Buttons -->
-            <div class="col-12 d-flex justify-content-end gap-3">
-
-              <app-button variant="outline" type="button" (click)="closeFormModal()">
-                Cancel
-              </app-button>
-
-              <app-button variant="primary" type="submit">
-                {{ isEditing ? 'Update Blog' : 'Create Blog' }}
-              </app-button>
-
+            <div class="d-flex gap-2">
+              <app-button variant="outline" size="sm" customClass="flex-fill" (click)="editPost(row.post)"><i
+                  class="bi bi-pencil-square"></i>Edit</app-button>
+              <app-button variant="danger" size="sm" customClass="flex-fill" (click)="deletePost(row.id)"> <i
+                  class="bi bi-trash"></i> Delete</app-button>
             </div>
 
           </div>
-        </form>
+
+        </div>
+        }
       </div>
     </div>
+
     }
+
+    <ng-template #actionTemplate let-row>
+
+      <div class="action-menu">
+
+        <button class="action-btn" (click)="toggleMenu(row.id, $event)">
+          <i class="bi bi-three-dots-vertical"></i>
+        </button>
+
+        @if (openMenuId === row.id) {
+
+        <div class="action-dropdown">
+
+          <app-button variant="outline" size="sm" customClass="w-100 justify-content-start"
+            (click)="editPost(row.post)">
+            <i class="bi bi-pencil-square"></i>
+            Edit Blog
+          </app-button>
+
+          <app-button variant="danger" size="sm" customClass="w-100 justify-content-start mt-2"
+            (click)="deletePost(row.id)">
+            <i class="bi bi-trash"></i> Delete Blog
+          </app-button>
+
+        </div>
+
+        }
+
+      </div>
+
+    </ng-template>
 
   </div>
 </div>
 
 
-<app-table
-  [rows]="rows"
-  [columns]="columns">
-</app-table>
+@if (isFormOpen) {
+<div class="custom-modal-backdrop d-flex align-items-center justify-content-center">
 
-<ng-template
-  #actionTemplate
-  let-row>
+  <div class="glass modal-card rounded-4 p-4 p-md-5 position-relative border border-white border-opacity-10 shadow"
+    style="max-width: 800px; width: 90%;">
 
-  <div class="action-menu">
-
-    <button
-      class="action-btn"
-      (click)="toggleMenu(row.id, $event)">
-      ⋮
+    <button class="btn-close btn-close-white position-absolute top-0 end-0 m-3 animate-fade" (click)="closeFormModal()">
     </button>
 
-    @if (openMenuId === row.id) {
+    <h4 class="text-white fw-bold mb-4">
+      {{ isEditing ? 'Edit Blog Article' : 'Draft New Blog Article' }}
+    </h4>
 
-      <div class="action-dropdown">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-        <button (click)="view(row)">
-          View
-        </button>
+      <div class="row g-4">
 
-        <button (click)="edit(row)">
-          Edit
-        </button>
+        <!-- Title -->
+        <div class="col-12">
 
-        <button (click)="publish(row)">
-          Publish
-        </button>
+          <app-input label="Article Title" placeholder="Enter article title" formControlName="title" [required]="true">
+          </app-input>
 
-        <button
-          class="text-danger"
-          (click)="delete(row)">
-          Delete
-        </button>
+          @if (getError('title')) {
+          <div class="text-danger small mt-1">
+            {{ getError('title') }}
+          </div>
+          }
+
+        </div>
+
+        <!-- Description -->
+        <div class="col-12">
+
+          <app-rich-text-editor label="Blog Content" placeholder="Write your blog content..."
+            formControlName="description" [required]="true">
+          </app-rich-text-editor>
+
+          @if (getError('description')) {
+          <div class="text-danger small mt-1">
+            {{ getError('description') }}
+          </div>
+          }
+
+        </div>
+
+        <!-- Category -->
+        <div class="col-md-6">
+
+          <app-input type="select" label="Category" formControlName="category" [options]="categoryOptions">
+          </app-input>
+
+          @if (getError('category')) {
+          <div class="text-danger small mt-1">
+            {{ getError('category') }}
+          </div>
+          }
+        </div>
+
+        <!-- Status -->
+        <div class="col-md-6">
+
+          <app-input type="select" label="Status" formControlName="status" [options]="statusOptions">
+          </app-input>
+
+          @if (getError('status')) {
+          <div class="text-danger small mt-1">
+            {{ getError('status') }}
+          </div>
+          }
+
+        </div>
+
+        <!-- Media -->
+        <div class="col-12">
+
+          <app-file-upload label="Featured Image / Video" accept="image/*,video/*" formControlName="mediaUrl"
+            [replaceExisting]="true" [bucketKey]="bucketKey" [uploadSection]="uploadSection">
+          </app-file-upload>
+
+        </div>
+
+        @if (form.get('mediaUrl')?.value) {
+
+        <div class="col-12 mt-3">
+
+          <app-file-preview [url]="form.get('mediaUrl')?.value">
+          </app-file-preview>
+
+        </div>
+
+        }
+        <!-- Buttons -->
+        <div class="col-12 d-flex justify-content-end gap-3">
+
+          <app-button variant="outline" type="button" (click)="closeFormModal()">
+            Cancel
+          </app-button>
+
+          <app-button variant="primary" type="submit">
+
+            {{ isEditing ? 'Update Blog' : 'Create Blog' }}
+
+          </app-button>
+
+        </div>
 
       </div>
 
-    }
+    </form>
 
   </div>
 
-</ng-template>
+</div>
+}
