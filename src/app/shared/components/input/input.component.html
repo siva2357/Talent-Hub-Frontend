@@ -16,20 +16,33 @@
     <!-- INPUT TYPES -->
     @switch (type) {
     @case ('select') {
-    <select class="form-select glass" [class.ps-5]="icon" [disabled]="disabled" (change)="handleInput($event)"
-      (blur)="onTouched()">
-      @if (placeholder) {
-      <option value="" disabled selected hidden>{{ placeholder }}</option>
+    <div class="multiselect-container glass rounded-3" [class.ps-5]="icon" [class.dropdown-active]="dropdownOpen">
+      <div class="selection-trigger d-flex align-items-center justify-content-between cursor-pointer"
+        (click)="toggleDropdown()">
+        <div class="selected-text">
+          <span [class.opacity-50]="!value" class="text-sm">{{ getSelectedLabel() }}</span>
+        </div>
+        <i class="bi bi-chevron-down dropdown-arrow" [class.rotated]="dropdownOpen"></i>
+      </div>
+
+      @if (dropdownOpen) {
+      <div class="multiselect-dropdown-overlay" (click)="toggleDropdown()"></div>
+      <div class="multiselect-dropdown-list p-2 shadow-lg">
+        @for (opt of options; track opt.value) {
+        <div class="option-item d-flex align-items-center gap-3 p-2 rounded hover-bg-white-opacity cursor-pointer"
+          [class.selected-option]="isSelected(opt.value)" (click)="selectOption(opt.value); $event.stopPropagation()">
+          <span class="text-sm" [class.text-primary]="isSelected(opt.value)">{{ opt.label }}</span>
+        </div>
+        }
+      </div>
       }
-      @for (opt of options; track opt.value) {
-      <option [value]="opt.value" [selected]="value === opt.value" class="bg-dark text-white">{{ opt.label }}</option>
-      }
-    </select>
+    </div>
     }
 
     @case ('multiselect') {
     <div class="multiselect-container glass rounded-3" [class.ps-5]="icon" [class.dropdown-active]="dropdownOpen">
-      <div class="selection-trigger d-flex align-items-center justify-content-between cursor-pointer" (click)="toggleDropdown()">
+      <div class="selection-trigger d-flex align-items-center justify-content-between cursor-pointer"
+        (click)="toggleDropdown()">
         <div class="selected-text">
           <span class="placeholder opacity-50 text-sm">{{ placeholder || 'Select Categories' }}</span>
         </div>
@@ -45,7 +58,7 @@
           (click)="toggleOption(opt.value); $event.stopPropagation()">
           <div class="custom-checkbox" [class.checked]="isSelected(opt.value)">
             @if (isSelected(opt.value)) {
-              <i class="bi bi-check-lg"></i>
+            <i class="bi bi-check-lg"></i>
             }
           </div>
           <span class="text-sm">{{ opt.label }}</span>
@@ -62,13 +75,14 @@
     }
 
     @default {
-    <input [type]="inputType" class="form-control glass" [class.ps-5]="icon" [class.pe-5]="showPasswordToggle" [placeholder]="placeholder"
-      [disabled]="disabled" [value]="value" (input)="handleInput($event)" (blur)="onTouched()">
-    
+    <input [type]="inputType" class="form-control glass" [class.ps-5]="icon" [class.pe-5]="showPasswordToggle"
+      [placeholder]="placeholder" [disabled]="disabled" [value]="value" (input)="handleInput($event)"
+      (blur)="onTouched()">
+
     @if (type === 'password' && showPasswordToggle) {
-    <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword" 
-       (click)="togglePasswordVisibility()"
-       class="bi position-absolute end-0 top-50 translate-middle-y me-3 cursor-pointer opacity-50 hover-opacity-100"></i>
+    <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"
+      (click)="togglePasswordVisibility()"
+      class="bi position-absolute end-0 top-50 translate-middle-y me-3 cursor-pointer opacity-50 hover-opacity-100"></i>
     }
     }
     }
@@ -76,8 +90,10 @@
 
   <!-- ERROR MESSAGE -->
   @if (error && mode === 'form') {
-  <div class="error-message text-danger text-xxs mt-1 ps-1">
+  <div class="error-message text-danger  mt-1 ps-1" style="font-size: 14px;">
     <i class="bi bi-exclamation-circle me-1"></i> {{ error }}
   </div>
   }
+
+
 </div>

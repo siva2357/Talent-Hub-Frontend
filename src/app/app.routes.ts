@@ -19,9 +19,64 @@ import { ResetPasswordComponent } from './features/account/reset-password/reset-
 import { ProfileFormComponent } from './features/account/profile-form/profile-form.component';
 import { RegistrationComponent } from './features/account/registration/registration.component';
 
+// User Layout & Features
+import { UserLayoutComponent } from './core/layouts/user-layout/user-layout.component';
+
+
+import { UserProfileComponent } from './shared/pages/user-profile/user-profile.component';
+import { AccountSettingsComponent } from './shared/pages/account-settings/account-settings.component';
+import { ChatComponent } from './shared/pages/chat/chat.component';
+import { ContactSupportComponent } from './shared/pages/contact-support/contact-support.component';
+import { InterviewSetupComponent } from './shared/pages/interview-setup/interview-setup.component';
+import { InterviewRoomComponent } from './shared/pages/interview-room/interview-room.component';
+import { NotFoundComponent } from './shared/pages/not-found/not-found.component';
+
+// Freelancer Pages
+import { FreelancerDashboardComponent } from './features/user/freelancer/pages/freelancer-dashboard/freelancer-dashboard.component';
+import { ProposalsComponent } from './features/user/freelancer/pages/proposals/proposals.component';
+import { ActiveContractsComponent } from './features/user/freelancer/pages/active-contracts/active-contracts.component';
+import { ContractDiaryComponent } from './features/user/freelancer/pages/contract-diary/contract-diary.component';
+import { PortfolioComponent } from './features/user/freelancer/pages/portfolio/portfolio.component';
+import { FinanceOverviewComponent } from './features/user/freelancer/pages/finance-overview/finance-overview.component';
+import { FinanceReportComponent } from './features/user/freelancer/pages/finance-report/finance-report.component';
+
+
 // Error/Utility Components
 import { AccessDeniedComponent } from './shared/pages/access-denied/access-denied.component';
-import { NotFoundComponent } from './shared/pages/not-found/not-found.component';
+import { FindContractsComponent } from './features/user/freelancer/pages/find-contracts/find-contracts.component';
+import { SavedContractsComponent } from './features/user/freelancer/pages/saved-contracts/saved-contracts.component';
+import { ContractDetailsComponent } from './features/user/freelancer/pages/contract-details/contract-details.component';
+import { LegalContractComponent } from './features/user/freelancer/pages/legal-contract/legal-contract.component';
+
+// Client Pages
+import { ClientDashboardComponent } from './features/user/client/pages/client-dashboard/client-dashboard.component';
+import { YourContractsComponent } from './features/user/client/pages/your-contracts/your-contracts.component';
+import { ContractProposalsComponent } from './features/user/client/pages/contract-proposals/contract-proposals.component';
+import { ContractProgressComponent } from './features/user/client/pages/contract-progress/contract-progress.component';
+import { SearchTalentComponent } from './features/user/client/pages/search-talent/search-talent.component';
+import { TalentProfileComponent } from './features/user/client/pages/talent-profile/talent-profile.component';
+import { SavedTalentComponent } from './features/user/client/pages/saved-talent/saved-talent.component';
+import { PendingOffersComponent } from './features/user/client/pages/pending-offers/pending-offers.component';
+import { HiredTalentComponent } from './features/user/client/pages/hired-talent/hired-talent.component';
+import { FinancialSummaryComponent } from './features/user/client/pages/financial-summary/financial-summary.component';
+import { PaymentGatewayComponent } from './features/user/client/pages/payment-gateway/payment-gateway.component';
+import { TransactionHistoryComponent } from './features/user/client/pages/transaction-history/transaction-history.component';
+
+import { ContractFormComponent } from './features/user/client/pages/contract-form/contract-form.component';
+import { ContractViewDetailsComponent } from './features/user/client/pages/contract-view-details/contract-view-details.component';
+import { ProjectDetailsComponent } from './features/user/client/pages/project-details/project-details.component';
+import { ContractProfileComponent } from './features/user/client/pages/contract-profile/contract-profile.component';
+import { LegalFormComponent } from './features/user/client/pages/legal-form/legal-form.component';
+
+// Admin Components
+import { AdminComponent } from './features/user/admin/admin.component';
+import { AdminDashboardComponent } from './features/user/admin/pages/admin-dashboard/admin-dashboard.component';
+import { ClientListComponent } from './features/user/admin/pages/client-list/client-list.component';
+import { FreelancerListComponent } from './features/user/admin/pages/freelancer-list/freelancer-list.component';
+import { AdminFinancialSummaryComponent } from './features/user/admin/pages/financial-summary/financial-summary.component';
+import { AdminReportsComponent } from './features/user/admin/pages/reports/reports.component';
+import { SupportRequestsComponent } from './features/user/admin/pages/support-requests/support-requests.component';
+import { BlogPostComponent } from './features/user/admin/pages/blog-post/blog-post.component';
 
 export const routes: Routes = [
   // Public Routes (With Navbar and Footer)
@@ -36,7 +91,8 @@ export const routes: Routes = [
       { path: 'services', component: ServicesComponent },
       { path: 'about-us', component: AboutUsComponent },
       { path: 'blog', component: BlogComponent },
-      { path: 'blog-details/:slug', component: BlogDetailsComponent },
+      { path: 'blog-details/:id', component: BlogDetailsComponent },
+
     ]
   },
 
@@ -53,6 +109,77 @@ export const routes: Routes = [
       { path: 'profile-form', component: ProfileFormComponent },
       { path: 'registration', component: RegistrationComponent },
       { path: 'access-denied', component: AccessDeniedComponent },
+    ]
+  },
+
+  // User Dashboard Routes (With User Navbar)
+  {
+    path: 'user', component: UserLayoutComponent,
+    children: [
+      { path: '', redirectTo: '/account/signin', pathMatch: 'full' },
+
+      // Client Pages
+      { path: 'client-dashboard', component: ClientDashboardComponent },
+
+      { path: 'your-contracts', component: YourContractsComponent },
+      { path: 'contract-form', component: ContractFormComponent },
+      { path: 'contract-view-details', component: ContractViewDetailsComponent },
+      { path: 'contract-proposals', component: ContractProposalsComponent },
+      { path: 'contract-progress', component: ContractProgressComponent },
+
+      { path: 'search-talent', component: SearchTalentComponent },
+      { path: 'talent-profile/:id', component: TalentProfileComponent },
+      { path: 'project-details/:id', component: ProjectDetailsComponent },
+      { path: 'contract-profile/:id', component: ContractProfileComponent },
+      { path: 'saved-talent', component: SavedTalentComponent },
+      { path: 'hired-talent', component: HiredTalentComponent },
+
+      { path: 'financial-summary', component: FinancialSummaryComponent },
+      { path: 'transaction-history', component: TransactionHistoryComponent },
+
+
+
+
+      // Freelancer Page
+      { path: 'my-dashboard', component: FreelancerDashboardComponent },
+      { path: 'find-contracts', component: FindContractsComponent },
+      { path: 'contract-details', component: ContractDetailsComponent },
+      { path: 'saved-contracts', component: SavedContractsComponent },
+      { path: 'proposals', component: ProposalsComponent },
+      { path: 'offers', component: ProposalsComponent, data: { defaultTab: 'offers' } },
+      { path: 'active-contracts', component: ActiveContractsComponent },
+      { path: 'contract-diary', component: ContractDiaryComponent },
+      { path: 'finance-overview', component: FinanceOverviewComponent },
+      { path: 'finance-report', component: FinanceReportComponent },
+
+      { path: 'portfolio', component: PortfolioComponent },
+
+      // Admin Routes
+      { path: 'admin', redirectTo: 'admin/dashboard', pathMatch: 'full' },
+      { path: 'admin/dashboard', component: AdminDashboardComponent },
+      { path: 'admin/clients', component: ClientListComponent },
+      { path: 'admin/freelancers', component: FreelancerListComponent },
+      { path: 'admin/finances', component: AdminFinancialSummaryComponent },
+      { path: 'admin/reports', component: AdminReportsComponent },
+      { path: 'admin/support', component: SupportRequestsComponent },
+      { path: 'admin/blog', component: BlogPostComponent }
+    ]
+  },
+
+  // Independent User Utility Routes (Without User Navbar)
+  {
+    path: 'user',
+    children: [
+      { path: 'profile', component: UserProfileComponent },
+      { path: 'settings', component: AccountSettingsComponent },
+      { path: 'chat', component: ChatComponent },
+      { path: 'contact-support', component: ContactSupportComponent },
+      { path: 'interview-setup', component: InterviewSetupComponent },
+      { path: 'interview-room', component: InterviewRoomComponent },
+      { path: 'legal-contract/:id', component: LegalContractComponent },
+      { path: 'legal-form/:contractId', component: LegalFormComponent },
+      { path: 'payment-gateway', component: PaymentGatewayComponent },
+      { path: 'payment_gateway', component: PaymentGatewayComponent },
     ]
   },
 

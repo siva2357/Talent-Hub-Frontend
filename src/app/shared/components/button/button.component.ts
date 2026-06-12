@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostBinding } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -14,11 +14,17 @@ export class ButtonComponent {
   @Input() type: 'button' | 'submit' = 'button';
   @Input() customClass: string = '';
   @Input() disabled: boolean = false;
+  @Input() loading: boolean = false;
   @Input() fontSize: string = '14px';
+
+  @HostBinding('class.w-100')
+  get isFullWidth(): boolean {
+    return this.customClass.includes('w-100');
+  }
 
   get buttonClasses(): string {
     const variantClass = `btn-${this.variant}`;
     const sizeClass = `btn-${this.size}`;
-    return `${variantClass} ${sizeClass} ${this.customClass}`;
+    return `btn transition-all d-inline-flex align-items-center justify-content-center gap-2 ${variantClass} ${sizeClass} ${this.customClass}`;
   }
 }

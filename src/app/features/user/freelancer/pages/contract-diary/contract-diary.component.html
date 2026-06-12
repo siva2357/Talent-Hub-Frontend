@@ -1,0 +1,346 @@
+<div class="contract-diary-page pb-5">
+    <div class="container py-4">
+
+        <!-- Header Section -->
+        <div class="mb-5">
+            <h2 class="text-white fw-bold mb-1">Contract <span class="text-primary">Diary</span></h2>
+            <p class="text-secondary mb-0">Track your milestone progress and submit updates to your client.</p>
+        </div>
+
+        <!-- Diaries -->
+        @if (diaries.length > 0) {
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                @for (diary of diaries; track diary._id) {
+                <div class="diary-accordion-item glass rounded-4 overflow-hidden mb-4">
+
+                    <!-- Accordion Header -->
+                    <div class="accordion-header p-4 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 cursor-pointer"
+                        (click)="toggleDiary(diary._id)">
+                        <div class="d-flex align-items-center gap-4 flex-grow-1">
+                            <div class="contract-info">
+                                <h5 class="text-white fw-bold mb-1">
+                                    {{ diary.contractId.contractTitle || 'Contract' }}
+                                </h5>
+                                <div class="d-flex flex-wrap gap-3 mt-2">
+                                    <div class="badge-item">
+                                        <i class="bi bi-calendar-event me-2"></i>
+                                        {{ formatDate(diary.contractId.contractStartDate) }} –
+                                        {{ formatDate(diary.contractId.contractEndDate) }}
+                                    </div>
+                                    <div class="badge-item">
+                                        <i class="bi bi-layers me-2"></i>
+                                        {{ diary.phases.length }} Phases
+                                    </div>
+                                    <div class="badge-item">
+                                        <i class="bi bi-currency-rupee me-2"></i>
+                                        ₹{{ getTotalBudget(diary) | number }} Total
+                                    </div>
+                                    <div class="badge-item">
+                                        <i class="bi bi-person me-2"></i>
+                                        {{ diary.clientId?.registrationDetails?.fullName || 'Client' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between w-100 w-md-auto gap-4 mt-2 mt-md-0">
+                            <span class="status-badge"
+                                [ngClass]="diary.overallStatus === 'completed' ? 'approved' : 'in-progress'">
+                                {{ diary.overallStatus === 'completed' ? 'Completed' : 'Active Phase' }}
+                            </span>
+                            <i class="bi bi-chevron-down text-secondary fs-5 transition-transform"
+                                [class.rotate-180]="expandedDiaryId === diary._id"></i>
+                        </div>
+                    </div>
+
+                    <!-- Accordion Body -->
+                    @if (expandedDiaryId === diary._id) {
+                    <div class="accordion-body p-4 border-top border-white border-opacity-5">
+                        <h6 class="text-white fw-bold mb-4">Evolutionary Progress Tracker</h6>
+
+                        @if (!isContractActive(diary)) {
+                        <div class="alert glass border-warning border-opacity-25 text-warning rounded-4 p-3 d-flex align-items-center gap-3 mb-4">
+                            <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+                            <div>
+                                <h6 class="fw-bold mb-1">Upcoming Contract Locked</h6>
+                                <p class="mb-0 small">This contract is scheduled to start on {{ formatDate(diary.contractId.contractStartDate) }}. Work milestones, starting phases, and updates will be locked until the start date.</p>
+                            </div>
+                        </div>
+                        }
+
+                        @if (diary.phases.length === 0) {
+                        <div class="text-center py-4 glass rounded-4 border-dashed">
+                            <i class="bi bi-hourglass text-secondary fs-3 opacity-25 d-block mb-2"></i>
+                            <p class="text-secondary small mb-0">No phases added yet. Waiting for client to set up milestones.</p>
+                        </div>
+                        } @else {
+                        <div class="step-tracker">
+
+                            @for (phase of diary.phases; track phase._id) {
+                            <div class="step-item" [ngClass]="phase.status">
+                                <div class="step-marker">
+                                    <i class="bi" [ngClass]="getStatusIcon(phase.status)"></i>
+                                </div>
+                                <div class="step-content pb-4">
+
+                                    <!-- Phase Header -->
+                                    <div class="d-flex justify-content-between align-items-center mb-1 flex-wrap gap-2">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <h6 class="text-white fw-bold mb-0">{{ phase.name }}</h6>
+                                            @if (phase.deadline) {
+                                            <div class="deadline-badge ms-2"
+                                                [class.overdue-badge]="phase.status === 'overdue'">
+                                                <i class="bi me-1"
+                                                    [ngClass]="phase.status === 'overdue' ? 'bi-alarm text-danger blink' : 'bi-clock text-secondary'"></i>
+                                                <span class="text-xxs fw-bold"
+                                                    [ngClass]="phase.status === 'overdue' ? 'text-danger blink' : 'text-secondary'">
+                                                    {{ phase.status === 'overdue' ? 'OVERDUE: ' : '' }}{{ formatDate(phase.deadline) }}
+                                                </span>
+                                            </div>
+                                            }
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if (phase.amount > 0) {
+                                            <span class="text-white fw-bold small">₹{{ phase.amount | number }}</span>
+                                            }
+                                            <span class="status-badge" [ngClass]="phase.status">
+                                                {{ phase.status | titlecase }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Phase Description -->
+                                    @if (phase.description) {
+                                    <p class="text-secondary small mb-3">{{ phase.description }}</p>
+                                    }
+
+                                    <!-- Client Phase Requirements / Attachments -->
+                                    @if (phase.clientAttachments && phase.clientAttachments.length > 0) {
+                                    <div class="mb-3">
+                                        <h6 class="text-white text-xxs fw-bold mb-2 opacity-50">REQUIREMENT FILES</h6>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            @for (file of phase.clientAttachments; track file._id) {
+                                                <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true"></app-file-preview>
+                                            }
+                                        </div>
+                                    </div>
+                                    }
+
+                                    <!-- Client Feedback (changes-requested) -->
+                                  @if (
+  phase.status === 'changes-requested' &&
+  getLatestFeedback(phase)
+){
+                                    <div class="action-area glass p-3 rounded-3 mb-3 border-warning border-opacity-25">
+                                        <h6 class="text-warning text-xxs fw-bold mb-2">
+                                            <i class="bi bi-chat-left-text me-1"></i>CLIENT FEEDBACK
+                                        </h6>
+                                        <p class="text-white small mb-0">{{ getLatestFeedback(phase) }}</p>
+                                    </div>
+                                    }
+
+                                    <!-- Approved Info -->
+                                    @if (phase.status === 'approved') {
+                                    <div class="text-xxs text-success mb-2">
+                                        <i class="bi bi-check-circle me-1"></i>
+                                        Approved {{ formatDate(phase.approvedAt) }}
+                                    </div>
+                                    }
+
+                                    <!-- Attachments -->
+                                    @if (
+  getLatestAttachments(phase).length > 0
+){
+                                    <div class="media-previews mb-3">
+                                        <h6 class="text-white text-xxs fw-bold mb-2 opacity-50">ATTACHED FILES</h6>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            @for (
+  file of getLatestAttachments(phase);
+  track file._id
+) {
+                                                <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true"></app-file-preview>
+                                            }
+                                        </div>
+                                    </div>
+                                    }
+
+                                    <!-- Action Area: Start Phase -->
+                                    @if (canStart(phase)) {
+                                    <div class="action-area glass p-3 rounded-3 mb-3">
+                                        <h6 class="text-white text-xxs fw-bold mb-3">START THIS PHASE</h6>
+                                        <app-button variant="brand" size="sm"
+                                            [disabled]="submitting[phase._id] || !isContractActive(diary)"
+                                            (click)="startPhase(diary._id, phase._id)">
+                                            <i class="bi bi-play-fill me-1"></i>
+                                            {{ submitting[phase._id] ? 'Starting...' : 'Start Phase' }}
+                                        </app-button>
+                                    </div>
+                                    }
+
+                      @if (canSubmit(phase)) {
+<div class="action-area glass p-3 rounded-3 mb-3">
+
+    <h6 class="text-white text-xxs fw-bold mb-3">
+        SUBMIT PROGRESS UPDATE
+    </h6>
+
+    <app-button
+        variant="brand"
+        size="sm"
+        [disabled]="!isContractActive(diary)"
+        (click)="openSubmitModal(diary._id, phase)">
+
+        <i class="bi bi-send me-1"></i>
+        Open Submission Form
+
+    </app-button>
+
+</div>
+}
+
+                                </div>
+                            </div>
+                            }
+
+                        </div>
+                        }
+                    </div>
+                    }
+
+                </div>
+                }
+
+            </div>
+        </div>
+        } @else {
+        <!-- Empty State -->
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="text-center py-5">
+                    <div class="empty-state glass p-5 rounded-5 border-dashed">
+                        <i class="bi bi-journal-text fs-1 text-secondary opacity-25 mb-3 d-block"></i>
+                        <h4 class="text-white fw-bold">No diary records yet</h4>
+                        <p class="text-secondary mb-4">
+                            Once a client accepts your contract and initializes the diary, it will appear here.
+                        </p>
+                        <a routerLink="/user/proposals" [queryParams]="{tab: 'offers'}">
+                            <app-button variant="outline" size="sm">View Your Offers</app-button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+
+    </div>
+</div>
+
+
+
+
+@if (showSubmitModal && selectedPhase) {
+
+<div
+  class="modal fade show"
+  tabindex="-1"
+  style="display:block;background:rgba(0,0,0,.7)">
+
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+
+    <div class="modal-content bg-dark border-secondary">
+
+      <div class="modal-header">
+
+        <h5 class="text-white">
+          Submit Phase Update
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="closeSubmitModal()">
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <textarea
+          rows="4"
+          class="form-control mb-3"
+          [(ngModel)]="phaseNotes[selectedPhase._id]"
+          placeholder="Describe your progress">
+        </textarea>
+
+        <app-file-upload
+          label="Proof of Work"
+          variant="dragdrop"
+          [bucketKey]="BucketKey.FreelancerData"
+          [uploadSection]="UploadSection.ContractFiles"
+          [(ngModel)]="tempUploadUrls[selectedPhase._id]"
+          name="submitUpload"
+          (uploadSuccessDetailed)="onFileUploaded(selectedPhase._id, $event)">
+        </app-file-upload>
+
+        @if (uploadedFiles[selectedPhase._id]?.length) {
+
+        <div class="row g-2 mt-3">
+
+          @for (
+            file of uploadedFiles[selectedPhase._id];
+            track $index
+          ) {
+
+          <div class="col-12">
+
+            <app-file-preview
+              [url]="file.fileUrl"
+              [fileName]="file.fileName"
+              (remove)="removeAttachment(selectedPhase._id, $index)">
+            </app-file-preview>
+
+          </div>
+
+          }
+
+        </div>
+
+        }
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeSubmitModal()">
+
+          Cancel
+
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="submitting[selectedPhase._id]"
+          (click)="submitUpdate(selectedDiaryId!, selectedPhase._id)">
+
+          {{
+            submitting[selectedPhase._id]
+              ? 'Submitting...'
+              : 'Submit Update'
+          }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+}

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { InputComponent } from '../../../shared/components/input/input.component';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
 import { inject } from '@angular/core';
 
@@ -12,15 +11,20 @@ import { inject } from '@angular/core';
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css',
 })
+
 export class SignupComponent {
   private router = inject(Router);
-  selectedRole: 'freelancer' | 'client' | null = 'freelancer';
+  selectedRole!: string
 
   selectRole(role: 'freelancer' | 'client'): void {
     this.selectedRole = role;
   }
 
   onStartRegistration(): void {
-    this.router.navigate(['/account/registration']);
+    if (this.selectedRole) {
+      this.router.navigate(['/account/registration'], {
+        queryParams: { role: this.selectedRole }
+      });
+    }
   }
 }

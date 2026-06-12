@@ -1,0 +1,115 @@
+<div class="search-talent-page p-3 p-md-4 p-xl-5">
+  <div class="container-fluid max-w-7xl mx-auto">
+
+    <!-- GET TO KNOW YOUR TALENTS SECTION -->
+    <section class="profiles-section mb-5">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-4">
+        <div>
+          <h3 class="text-white fw-bold mb-3 h4">Get to know your Talents</h3>
+          <p class="text-secondary text-lg mb-0">Discover skilled professionals and find the perfect match for your
+            projects.</p>
+        </div>
+        <div class="d-flex gap-4 profile-legend">
+          <div class="d-flex align-items-center gap-2">
+            <span class="dot bg-danger"></span>
+            <span class="text-xs text-secondary">Low (25-45)</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="dot bg-warning"></span>
+            <span class="text-xs text-secondary">Medium (55-75)</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="dot bg-success"></span>
+            <span class="text-xs text-secondary">High (75-100)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Horizontal Filters Bar -->
+      <div class="glass p-3 rounded-4 mb-5">
+        <div class="row g-3 align-items-center">
+          <div class="col-12 col-md-4">
+            <app-input
+              type="text"
+              placeholder="Search by skills, title, or name..."
+              icon="bi-search"
+              [(ngModel)]="searchQuery"
+              (keyup.enter)="applyFilters()">
+            </app-input>
+          </div>
+          <div class="col-12 col-md-3">
+            <app-input
+              type="select"
+              [(ngModel)]="selectedCategory"
+              [options]="categoryOptions"
+              icon="bi-grid">
+            </app-input>
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="row g-2 align-items-center">
+              <div class="col-6">
+                <app-input
+                  type="number"
+                  placeholder="Min $"
+                  [(ngModel)]="minRate"
+                  icon="bi-currency-dollar">
+                </app-input>
+              </div>
+              <div class="col-6">
+                <app-input
+                  type="number"
+                  placeholder="Max $"
+                  [(ngModel)]="maxRate"
+                  icon="bi-currency-dollar">
+                </app-input>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-2">
+            <app-button variant="primary" customClass="w-100 rounded-pill py-2.5" (click)="applyFilters()">
+              Apply Filters
+            </app-button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        @if (talents.length === 0) {
+        <div class="col-12 text-center py-5">
+          <h4 class="text-white fw-bold mb-2">No talents found</h4>
+          <p class="text-secondary">Try adjusting your filters or search terms.</p>
+        </div>
+        } @else {
+        @for (talent of talents; track talent.id) {
+        <div class="col-lg-4 col-md-6">
+          <app-talent-card
+            [name]="talent.name"
+            [avatar]="talent.avatar"
+            [location]="talent.location"
+            [role]="talent.role"
+            [performance]="talent.performance"
+            [performanceTier]="talent.performanceTier"
+            [skills]="talent.skills"
+            [stats]="talent.stats"
+            [statusClass]="talent.status === 'active' ? 'bg-success' : 'bg-danger'"
+            [statusLabel]="talent.status === 'active' ? 'Online' : 'Offline'"
+            (nameClick)="viewProfile(talent.id)">
+            <div actions class="d-flex gap-2">
+              <app-button variant="outline" size="sm" customClass="px-2 border-opacity-25 border-white"
+                (click)="toggleSaveTalent(talent.id)">
+                <i class="bi"
+                  [ngClass]="isSaved(talent.id) ? 'bi-bookmark-fill text-primary' : 'bi-bookmark text-white'"></i>
+              </app-button>
+              <app-button variant="primary" size="sm" customClass="px-3 rounded-3" (click)="viewProfile(talent.id)">
+                View Profile &rarr;
+              </app-button>
+            </div>
+          </app-talent-card>
+        </div>
+        }
+        }
+      </div>
+
+    </section>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<div class="dropdown">
+    <button class="btn btn-link icon-btn shadow-none no-caret" type="button" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        <i class="bi bi-bell fs-4"></i>
+        @if (notifications.length > 0) {
+        <span class="icon-badge">{{ notifications.length }}</span>
+        }
+    </button>
+    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-0 mt-2 notification-dropdown">
+        <li class="px-3 py-3 border-bottom border-white border-opacity-10 d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-2">
+                <h6 class="mb-0 text-white fw-bold">Notifications</h6>
+                @if (notifications.length > 0) {
+                <span class="badge bg-primary rounded-pill"
+                    style="font-size: 10px; padding: 4px 8px;">{{ notifications.length }}</span>
+                }
+            </div>
+            <div class="d-flex gap-2">
+                @if (notifications.length > 0) {
+                <button class="btn btn-link text-primary p-0 text-decoration-none smaller fw-bold"
+                    (click)="markAllAsRead($event)">
+                    Mark all read
+                </button>
+                <span class="text-secondary smaller">|</span>
+                <button class="btn btn-link text-danger p-0 text-decoration-none smaller fw-bold"
+                    (click)="clearAll($event)">
+                    Clear all
+                </button>
+                }
+            </div>
+        </li>
+        <div class="notification-list" style="max-height: 380px; overflow-y: auto;">
+            @if (notifications.length === 0) {
+            <div class="text-center py-4 px-3">
+                <div class="mb-2">
+                    <i class="bi bi-bell-slash fs-2 text-secondary opacity-25"></i>
+                </div>
+                <h6 class="text-white fw-bold mb-1" style="font-size: 0.95rem;">No Notifications Received</h6>
+                <p class="text-secondary smaller mb-0 px-2" style="font-size: 0.75rem;">We'll notify you when something important happens.</p>
+            </div>
+            } @else {
+            @for (notif of visibleNotifications; track notif._id) {
+            <li class="position-relative notification-item animate-fade-in" [class.unread]="!notif.read">
+                <a class="dropdown-item p-3 border-bottom border-white border-opacity-5" href="javascript:void(0)" (click)="markAsRead(notif._id, $event)">
+                    <div class="d-flex gap-3 pe-4">
+                        <div class="notif-icon-box" [class]="getNotificationClass(notif.title)">
+                            <i class="bi" [class]="getNotificationIcon(notif.title)"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="text-white small mb-1 fw-medium">{{ notif.title }}</p>
+                            <p class="text-secondary smaller mb-1" style="line-height: 1.3;">{{ notif.message }}</p>
+                            <p class="text-secondary smaller mb-0" style="font-size: 10px;">{{ notif.createdAt | date:'shortTime' }}</p>
+                        </div>
+                    </div>
+                </a>
+                <button class="btn btn-link text-secondary delete-btn position-absolute top-50 translate-middle-y end-0 me-3" (click)="deleteNotification(notif._id, $event)" title="Delete notification">
+                    <i class="bi bi-trash smaller"></i>
+                </button>
+            </li>
+            }
+            }
+        </div>
+        @if (notifications.length > 4) {
+        <li class="p-1 text-center">
+            <button class="btn btn-link text-primary text-decoration-none smaller fw-bold py-2 w-100"
+                (click)="toggleShowAll($event)">
+                {{ showAllNotifications ? 'View Less' : 'View More' }}
+            </button>
+        </li>
+        }
+    </ul>
+</div>

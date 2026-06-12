@@ -1,215 +1,202 @@
 <div class="profile-container">
-  <div class="profile-layout">
-    <!-- SIDEBAR NAVIGATION -->
-    <aside class="profile-sidebar glass">
-      <div class="sidebar-header">
-        <a routerLink="/account/signin" class="back-link">
+  <div class="profile-layout justify-content-center">
+    <div class="w-100" style="max-width: 1100px; margin: 0 auto;">
+
+      <!-- BACK TO LOGIN -->
+      <div class="mb-4">
+        <a routerLink="/account/signin" class="back-link d-inline-flex align-items-center gap-2">
           <i class="bi bi-arrow-left"></i> Back to Login
         </a>
       </div>
 
-      <nav class="sidebar-nav">
-        @for (section of currentSections; track section.id; let i = $index) {
-        <div class="nav-item" [class.active]="activeSection === section.id" (click)="scrollToSection(section.id)">
-          <div class="nav-icon-wrapper">
-            <i [class]="'bi ' + section.icon"></i>
+      <!-- MAIN CONTENT AREA -->
+      <main class="profile-content">
+        <!-- CONTENT HEADER -->
+        <header class="content-header mb-5">
+          <div class="header-main mt-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-2">
+              <h4 class="text-3xl fw-bold text-white mb-0">{{ userRole | titlecase }} Profile Form</h4>
+            </div>
+
+            <p class="text-md opacity-60 mb-0">
+              @if (userRole === 'freelancer') {
+              Complete your profile to showcase your skills and get discovered by clients.
+              } @else {
+              Complete your profile to get the best experience and start hiring top talent.
+              }
+            </p>
           </div>
-          <div class="nav-text">
-            <span class="nav-label">{{ section.label }}</span>
-            <span class="nav-sub">{{ section.sub }}</span>
+
+          <!-- PROGRESS INDICATOR -->
+          <div class="progress-wrapper">
+            <div class="progress-circle">
+              <svg viewBox="0 0 36 36" class="circular-chart">
+                <path class="circle-bg"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="circle" [style.stroke-dasharray]="progress + ', 100'"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <text x="18" y="20.35" class="percentage">{{ progress }}%</text>
+              </svg>
+            </div>
+            <div class="progress-info">
+              <span class="progress-label">Profile Progress</span>
+              <span class="progress-desc">Complete all sections</span>
+            </div>
           </div>
+        </header>
+
+        <!-- SUBMIT ERROR ALERT -->
+        @if (submitError) {
+        <div class="alert alert-danger py-2 px-3 mb-4 text-sm d-flex align-items-center gap-2">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span>{{ submitError }}</span>
         </div>
         }
-      </nav>
-    </aside>
 
-    <!-- MAIN CONTENT AREA -->
-    <main class="profile-content">
-      <!-- CONTENT HEADER -->
-      <header class="content-header mb-5">
-        <div class="header-main w-100 mt-4">
-          <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-2">
-            <h4 class="text-3xl fw-bold text-white mb-0">{{ userRole | titlecase }} Profile</h4>
-            <div class="role-switch-container">
-              <app-button (click)="toggleRole()" variant="outline" size="sm">
-                Switch to {{ userRole === 'freelancer' ? 'Client' : 'Freelancer' }}
-              </app-button>
+        <!-- FORM SECTIONS -->
+        <div class="form-sections-container">
+          <!-- 1. PERSONAL INFORMATION (COMMON) -->
+          <section id="basic" class="form-section glass mb-4 p-4">
+            <div class="section-header d-flex align-items-center gap-3 mb-4">
+              <div class="section-number">1</div>
+              <h2 class="text-2xl fw-bold text-white mb-0">Personal Information</h2>
             </div>
-          </div>
 
-          <p class="text-md opacity-60 mb-0">
+            <div class="row g-4">
+              <div class="col-lg-4 text-center">
+                <app-file-upload variant="avatar" [replaceExisting]="true" [(ngModel)]="profilePhotoPreview"
+                  [bucketKey]="userRole === 'client' ? BucketKey.ClientData : BucketKey.FreelancerData"
+                  [uploadSection]="UploadSection.ProfilePhoto" (uploadSuccess)="onProfilePhotoUploaded($event)">
+                </app-file-upload>
+
+              </div>
+              <div class="col-lg-8">
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <app-input label="Full Name" [value]="prefilledData.fullName" [disabled]="true"
+                      [required]="true"></app-input>
+                  </div>
+                  <div class="col-sm-6">
+                    <app-input label="Email" [value]="prefilledData.email" [disabled]="true" [required]="true"
+                      icon="bi-envelope"></app-input>
+                  </div>
+                  <div class="col-sm-6">
+                    <app-input label="Username" placeholder="Enter username" [required]="true"
+                      [(ngModel)]="username"></app-input>
+                  </div>
+                  <div class="col-sm-6">
+                    <app-input type="select" label="Gender" [options]="genderOptions" placeholder="Select"
+                      [required]="true" [(ngModel)]="gender"></app-input>
+                  </div>
+
+                  @if (userRole === 'freelancer') {
+                  <div class="col-12">
+                    <app-input label="Professional Headline" placeholder="Example: Angular Developer, UI/UX Designer"
+                      [required]="true" [(ngModel)]="professionalHeadline"></app-input>
+                  </div>
+                  }
+
+                  <div class="col-12">
+                    <app-input type="textarea" label="Short Bio" placeholder="Tell us about yourself..."
+                      [required]="true" [(ngModel)]="shortBio"></app-input>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 2. PROFESSIONAL DETAILS (ROLE-BASED) -->
+          <section id="professional" class="form-section glass mb-4 p-4" [class.high-z]="isProfessionalDropdownOpen">
+            <div class="section-header d-flex align-items-center gap-3 mb-4">
+              <div class="section-number">2</div>
+              <h2 class="text-2xl fw-bold text-white mb-0">Professional Details</h2>
+            </div>
+
             @if (userRole === 'freelancer') {
-            Complete your profile to showcase your skills and get discovered by clients.
+            <div class="row g-4">
+              <div class="col-md-4">
+                <app-input type="multiselect" label="Categories" [options]="categoryOptions"
+                  placeholder="Select Categories" [(ngModel)]="selectedCategories" icon="bi-grid"
+                  (dropdownStateChange)="isProfessionalDropdownOpen = $event"></app-input>
+                <div class="chips-display d-flex flex-wrap gap-2 mt-3">
+                  @for (catValue of selectedCategories; track catValue) {
+                  <app-chip [label]="getCategoryLabel(catValue)" (remove)="removeCategoryByValue(catValue)"></app-chip>
+                  }
+                </div>
+              </div>
+              <div class="col-md-8">
+                <app-input label="Skills" placeholder="Type a skill and press Enter" [(ngModel)]="currentSkill"
+                  (keydown.enter)="addSkill(currentSkill)" icon="bi-lightning-charge"></app-input>
+                <div class="chips-display d-flex flex-wrap gap-2 mt-3">
+                  @for (skill of skills; track $index) {
+                  <app-chip [label]="skill" variant="secondary" (remove)="removeSkill($index)"></app-chip>
+                  }
+                </div>
+              </div>
+            </div>
             } @else {
-            Complete your profile to get the best experience and start hiring top talent.
-            }
-          </p>
-        </div>
-
-        <!-- PROGRESS INDICATOR -->
-        <div class="progress-wrapper">
-          <div class="progress-circle">
-            <svg viewBox="0 0 36 36" class="circular-chart">
-              <path class="circle-bg"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <path class="circle" [style.stroke-dasharray]="progress + ', 100'"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <text x="18" y="20.35" class="percentage">{{ progress }}%</text>
-            </svg>
-          </div>
-          <div class="progress-info">
-            <span class="progress-label">Profile Progress</span>
-            <span class="progress-desc">Complete all sections</span>
-          </div>
-        </div>
-      </header>
-
-      <!-- FORM SECTIONS -->
-      <div class="form-sections-container">
-        <!-- 1. PERSONAL INFORMATION (COMMON) -->
-        <section id="basic" class="form-section glass mb-4 p-4">
-          <div class="section-header d-flex align-items-center gap-3 mb-4">
-            <div class="section-number">1</div>
-            <h2 class="text-2xl fw-bold text-white mb-0">Personal Information</h2>
-          </div>
-
-          <div class="row g-4">
-            <div class="col-lg-4 text-center">
-              <div class="profile-pic-upload">
-                <div class="position-relative">
-                  <div class="pic-placeholder" (click)="triggerFileUpload()">
-                    <i class="bi bi-person" style="font-size: 5rem;"></i>
-                  </div>
-                  <div class="camera-btn-abs" (click)="triggerFileUpload()">
-                    <i class="bi bi-camera-fill"></i>
-                  </div>
-                </div>
-                <input type="file" id="profilePicInput" class="d-none" (change)="onFileSelected($event)"
-                  accept="image/*">
-                <p class="text-xs opacity-50 mt-3">JPG, PNG up to 5MB</p>
-              </div>
-            </div>
-            <div class="col-lg-8">
+            <div class="mb-4">
+              <label class="form-label text-white opacity-80 mb-3">Client Type</label>
               <div class="row g-3">
-                <div class="col-sm-6">
-                  <app-input label="Full Name" [value]="prefilledData.fullName" [disabled]="true"
-                    [required]="true"></app-input>
-                </div>
-                <div class="col-sm-6">
-                  <app-input label="Email" [value]="prefilledData.email" [disabled]="true" [required]="true"
-                    icon="bi-envelope"></app-input>
-                </div>
-                <div class="col-sm-6">
-                  <app-input label="Username" placeholder="Enter username" [required]="true"></app-input>
-                </div>
-                <div class="col-sm-6">
-                  <app-input type="select" label="Gender" [options]="genderOptions" placeholder="Select"
-                    [required]="true" [(ngModel)]="gender"></app-input>
-                </div>
-
-                @if (userRole === 'freelancer') {
-                <div class="col-12">
-                  <app-input label="Professional Headline" placeholder="Example: Angular Developer, UI/UX Designer"
-                    [required]="true"></app-input>
-                </div>
-                }
-
-                <div class="col-12">
-                  <app-input type="textarea" label="Short Bio" placeholder="Tell us about yourself..."
-                    [required]="true"></app-input>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- 2. PROFESSIONAL DETAILS (ROLE-BASED) -->
-        <section id="professional" class="form-section glass mb-4 p-4" [class.high-z]="isProfessionalDropdownOpen">
-          <div class="section-header d-flex align-items-center gap-3 mb-4">
-            <div class="section-number">2</div>
-            <h2 class="text-2xl fw-bold text-white mb-0">Professional Details</h2>
-          </div>
-
-          @if (userRole === 'freelancer') {
-          <div class="row g-4">
-            <div class="col-12">
-              <app-input type="multiselect" label="Categories" [options]="categoryOptions"
-                placeholder="Select Categories" [(ngModel)]="selectedCategories" icon="bi-grid"
-                (dropdownStateChange)="isProfessionalDropdownOpen = $event"></app-input>
-              <div class="chips-display d-flex flex-wrap gap-2 mt-3">
-                @for (catValue of selectedCategories; track catValue) {
-                <app-chip [label]="getCategoryLabel(catValue)" (remove)="removeCategoryByValue(catValue)"></app-chip>
-                }
-              </div>
-            </div>
-            <div class="col-12">
-              <app-input label="Skills" placeholder="Type a skill and press Enter" [(ngModel)]="currentSkill"
-                (keydown.enter)="addSkill(currentSkill)" icon="bi-lightning-charge"></app-input>
-              <div class="chips-display d-flex flex-wrap gap-2 mt-3">
-                @for (skill of skills; track $index) {
-                <app-chip [label]="skill" variant="secondary" (remove)="removeSkill($index)"></app-chip>
-                }
-              </div>
-            </div>
-          </div>
-          } @else {
-          <div class="mb-4">
-            <label class="form-label text-white opacity-80 mb-3">Client Type</label>
-            <div class="row g-3">
-              @for (type of ['individual', 'startup', 'agency', 'business']; track type) {
-              <div class="col-6 col-md-3">
-                <div class="radio-card role-card-v" [class.active]="clientType === type"
-                  (click)="setSelection('clientType', type)">
-                  <div class="radio-check position-absolute top-2 end-2"></div>
-                  <div class="role-icon-box mb-2">
-                    <i class="bi"
-                      [class]="type === 'individual' ? 'bi-person' : type === 'startup' ? 'bi-rocket' : type === 'agency' ? 'bi-briefcase' : 'bi-buildings'"></i>
+                @for (type of clientTypes; track type) {
+                <div class="col-6 col-md-3">
+                  <div class="radio-card role-card-v" [class.active]="clientType === type"
+                    (click)="setSelection('clientType', type)">
+                    <div class="radio-check position-absolute top-2 end-2"></div>
+                    <div class="role-icon-box mb-2">
+                      <i class="bi"
+                        [class]="type === ClientType.Individual ? 'bi-person' : type === ClientType.Startup ? 'bi-rocket' : type === ClientType.Agency ? 'bi-briefcase' : 'bi-buildings'"></i>
+                    </div>
+                    <h4 class="text-sm fw-bold text-white mb-0">{{ type }}</h4>
                   </div>
-                  <h4 class="text-sm fw-bold text-white mb-0">{{ type | titlecase }}</h4>
                 </div>
+                }
               </div>
-              }
             </div>
-          </div>
-          <div class="row g-4">
-            <div class="col-md-6">
-              <app-input label="Website" placeholder="https://..." icon="bi-globe"></app-input>
+            @if (clientType !== 'Individual') {
+            <div class="row g-4 mb-4">
+              <div class="col-md-6">
+                <app-input label="Website" placeholder="https://..." icon="bi-globe" [(ngModel)]="website"
+                  [required]="true"></app-input>
+              </div>
+              <div class="col-md-6">
+                <app-input type="select" label="Industry" [options]="industryOptions" placeholder="Select industry"
+                  [(ngModel)]="industry" [required]="true"></app-input>
+              </div>
             </div>
-            <div class="col-md-6">
-              <app-input type="select" label="Industry" [options]="industryOptions"
-                placeholder="Select industry"></app-input>
-            </div>
-          </div>
-          }
-        </section>
+            }
+            }
+          </section>
 
-        <!-- 3. LOCATION (COMMON) -->
-        <section id="location" class="form-section glass mb-4 p-4">
-          <div class="section-header d-flex align-items-center gap-3 mb-4">
-            <div class="section-number">3</div>
-            <h2 class="text-2xl fw-bold text-white mb-0">Location</h2>
-          </div>
-          <div class="row g-4">
-            <div class="col-sm-4">
-              <app-input type="select" label="Country" [options]="countryOptions" placeholder="Select"></app-input>
+          <!-- 3. LOCATION (COMMON) -->
+          <section id="location" class="form-section glass mb-4 p-4">
+            <div class="section-header d-flex align-items-center gap-3 mb-4">
+              <div class="section-number">3</div>
+              <h2 class="text-2xl fw-bold text-white mb-0">Location</h2>
             </div>
-            <div class="col-sm-4">
-              <app-input label="City" placeholder="City"></app-input>
+            <div class="row g-4">
+              <div class="col-sm-4">
+                <app-input type="select" label="Country" [options]="countryOptions" placeholder="Select"
+                  [(ngModel)]="country"></app-input>
+              </div>
+              <div class="col-sm-4">
+                <app-input label="City" placeholder="City" [(ngModel)]="city"></app-input>
+              </div>
+              <div class="col-sm-4">
+                <app-input type="select" label="Timezone" [options]="timezoneOptions" placeholder="Select"
+                  [(ngModel)]="timezone"></app-input>
+              </div>
             </div>
-            <div class="col-sm-4">
-              <app-input type="select" label="Timezone" [options]="timezoneOptions" placeholder="Select"></app-input>
-            </div>
-          </div>
-        </section>
+          </section>
 
-        <!-- 4. AVAILABILITY (FREELANCER ONLY) -->
-        @if (userRole === 'freelancer') {
-        <section id="availability" class="form-section glass mb-4 p-4">
-          <div class="section-header d-flex align-items-center gap-3 mb-4">
-            <div class="section-number">4</div>
-            <h2 class="text-2xl fw-bold text-white mb-0">Availability</h2>
-          </div>
-            <div class="col-12">
+          <!-- 4. AVAILABILITY (FREELANCER ONLY) -->
+          @if (userRole === 'freelancer') {
+          <section id="availability" class="form-section glass mb-4 p-4">
+            <div class="section-header d-flex align-items-center gap-3 mb-4">
+              <div class="section-number">4</div>
+              <h2 class="text-2xl fw-bold text-white mb-0">Availability</h2>
+            </div>
+            <div class="col-12 mb-4">
               <label class="form-label text-white opacity-80 mb-3">Available For Work</label>
               <div class="availability-toggle-group d-flex flex-nowrap gap-2">
                 @for (opt of availabilityOptions; track opt.value) {
@@ -219,106 +206,399 @@
                 </div>
                 }
               </div>
-            @if (availabilityType === 'other') {
-            <div class="mt-3">
-              <app-input label="Specify Availability" placeholder="e.g. Weekends only" icon="bi-clock"></app-input>
             </div>
-            }
-          </div>
-        </section>
-        }
+            <div class="col-12">
+              <label class="form-label text-white opacity-80 mb-3">Hourly Rate (USD / hr)</label>
+              <div class="row">
+                <div class="col-sm-6 col-md-4">
+                  <app-input type="text" placeholder="Enter hourly rate" icon="bi-currency-dollar"
+                    [(ngModel)]="hourlyRate"></app-input>
+                </div>
+              </div>
+            </div>
+          </section>
+          }
 
-        <!-- 5. VERIFICATION (COMMON) -->
-        <section id="verification" class="form-section glass mb-4 p-4">
-          <div class="section-header d-flex align-items-center gap-3 mb-4">
-            <div class="section-number">{{ userRole === 'freelancer' ? '5' : '4' }}</div>
-            <h2 class="text-2xl fw-bold text-white mb-0">Verification</h2>
-          </div>
-          <div class="row g-3">
-            <div class="col-md-6">
-              <div class="verification-card p-3">
-                <div class="d-flex gap-3">
-                  <div class="mail-icon-box"><i class="bi bi-envelope"></i></div>
-                  <div>
-                    <span class="verify-label-lg d-block opacity-50 mb-1">Email Address</span>
-                    <p class="email-value-text mb-2">{{ prefilledData.email }}</p>
-                    <div class="verified-badge d-inline-flex py-1 px-3" style="font-size: 12px;">
-                      <i class="bi bi-check-circle-fill me-2"></i> Verified
+          <!-- 5. VERIFICATION (COMMON) -->
+          <section id="verification" class="form-section glass mb-4 p-4">
+            <div class="section-header d-flex align-items-center gap-3 mb-4">
+              <div class="section-number">{{ userRole === 'freelancer' ? '5' : '4' }}</div>
+              <h2 class="text-2xl fw-bold text-white mb-0">Verification</h2>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="verification-card p-3">
+                  <div class="d-flex gap-3 align-items-center">
+                    <div class="mail-icon-box"><i class="bi bi-envelope"></i></div>
+                    <div class="flex-grow-1">
+                      <span class="verify-label-lg d-block opacity-50 mb-1">Email Address</span>
+                      <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
+                        <p class="email-value-text mb-0">{{ prefilledData.email }}</p>
+                        <div
+                          class="verified-badge d-inline-flex py-1 px-3 flex-shrink-0 align-items-center justify-content-center"
+                          style="height: 32px; font-size: 12px; background: rgba(34, 197, 94, 0.1); color: #22c55e; border-radius: 8px; border: 1px solid rgba(34, 197, 94, 0.2);">
+                          <i class="bi bi-check-circle-fill me-2"></i> Verified
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="verification-card p-3">
-                <span class="phone-label-box mb-3 d-block opacity-50">Phone Number</span>
-                <div class="phone-input-container d-flex align-items-center gap-2 mb-3">
-                  <div class="country-code-pill flex-shrink-0">
-                    <img src="https://flagcdn.com/w20/in.png" width="20" alt="IN">
-                    <span class="text-sm ms-2">+91</span>
+              <div class="col-md-6">
+                <div class="verification-card p-3">
+                  <span class="phone-label-box mb-3 d-block opacity-50">Phone Number</span>
+                  <div class="phone-input-container d-flex align-items-center gap-2 mb-3">
+                    <div class="country-code-pill flex-shrink-0">
+                      <img src="https://flagcdn.com/w20/in.png" width="20" alt="IN">
+                      <span class="text-sm ms-2">+91</span>
+                    </div>
+                    <div class="flex-grow-1">
+                      <app-input placeholder="Enter Phone" icon="bi-phone" [(ngModel)]="phoneNumber"
+                        [disabled]="isPhoneVerified"></app-input>
+                    </div>
+
+                    @if (isPhoneVerified) {
+                     <div class="d-flex align-items-center gap-2 flex-wrap flex-shrink-0">
+                       <div
+                         class="verified-badge d-inline-flex py-1 px-3 align-items-center justify-content-center"
+                         style="height: 48px; font-size: 12px; background: rgba(34, 197, 94, 0.1); color: #22c55e; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.2);">
+                         <i class="bi bi-check-circle-fill me-2"></i> Verified
+                       </div>
+                       <button (click)="isPhoneVerified = false" class="btn btn-sm btn-link text-primary-light p-0 text-decoration-none" style="font-size: 13px;">
+                         <i class="bi bi-pencil me-1"></i> Edit
+                       </button>
+                     </div>
+                    } @else {
+                    @if (!showPhoneOtpInput) {
+                    <app-button variant="outline" size="md" (click)="sendPhoneOTP()"
+                      [disabled]="isSendingPhoneOtp || !phoneNumber" class="flex-shrink-0">
+                      @if (isSendingPhoneOtp) { Sending... } @else { Send OTP }
+                    </app-button>
+                    }
+                    }
                   </div>
-                  <div class="flex-grow-1">
-                    <app-input placeholder="Enter Phone" icon="bi-phone"></app-input>
+
+                  @if (!isPhoneVerified && showPhoneOtpInput) {
+                  <div class="phone-otp-verification mt-3 mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                      <div class="flex-grow-1">
+                        <app-input placeholder="Enter 6-digit SMS OTP" icon="bi-shield-lock"
+                          [(ngModel)]="phoneOtpCode"></app-input>
+                      </div>
+                      <div class="flex-shrink-0 d-flex gap-2">
+                        <app-button variant="primary" size="md" (click)="verifyPhoneOTP()"
+                          [disabled]="isVerifyingPhone">Verify Code</app-button>
+                        <app-button variant="outline" size="md" (click)="sendPhoneOTP()"
+                          [disabled]="isSendingPhoneOtp">Resend</app-button>
+                      </div>
+                    </div>
+                    @if (phoneOtpError) {
+                    <p class="text-danger text-xs mt-1 mb-0">{{ phoneOtpError }}</p>
+                    }
+                    @if (phoneOtpSuccessMessage) {
+                    <p class="text-success text-xs mt-1 mb-0">{{ phoneOtpSuccessMessage }}</p>
+                    }
+                  </div>
+                  }
+
+                  @if (!isPhoneVerified && !showPhoneOtpInput && phoneOtpError) {
+                  <p class="text-danger text-xs mb-2">{{ phoneOtpError }}</p>
+                  }
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PAYMENT VERIFICATION SECTION (COMMON) -->
+          <section id="payment" class="form-section glass mb-4 p-4">
+            <div class="section-header d-flex align-items-center gap-3 mb-4">
+              <div class="section-number">{{ userRole === 'freelancer' ? '6' : '5' }}</div>
+              <h2 class="text-2xl fw-bold text-white mb-0">
+                {{ userRole === 'client' ? 'Payment Verification' : 'Payment & Payout Setup' }}
+              </h2>
+            </div>
+
+            <div class="row g-4">
+              <div class="col-12 text-start">
+                <p class="text-xs text-white-50 mb-3">
+                  Link your bank account to authorize payments and enable contract milestones. Accept the legality terms to complete verification.
+                </p>
+
+                <!-- Status Badge -->
+                <div class="mb-4">
+                  <span class="badge py-2 px-3 rounded-pill text-xs font-semibold"
+                    [class.bg-danger-glow]="!isPaymentVerified && !isLinkingBank"
+                    [class.bg-warning-glow]="isLinkingBank"
+                    [class.bg-success-glow]="isPaymentVerified">
+                    @if (!isPaymentVerified && !isLinkingBank) {
+                      <i class="bi bi-x-circle-fill me-1 text-danger"></i> Unverified / Unlinked
+                    } @else if (isLinkingBank) {
+                      <i class="bi bi-clock-history me-1 text-warning animate-spin"></i> Verifying Bank Account...
+                    } @else if (isPaymentVerified) {
+                      <i class="bi bi-check-circle-fill me-1 text-success animate-pulse"></i> Verified & Linked Successfully
+                    }
+                  </span>
+                </div>
+
+                <!-- Input Fields Grid -->
+                <div class="row g-3">
+                  <div class="col-sm-6">
+<app-input
+  type="select"
+  label="Bank Name"
+  [options]="bankOptions"
+  [(ngModel)]="bankDetails.bankCode"
+  [required]="true"
+  [disabled]="isPaymentVerified">
+</app-input>                  </div>
+                  <div class="col-sm-6">
+                    <app-input label="Account Holder Name" [(ngModel)]="bankDetails.holderName" placeholder="e.g. John Doe" icon="bi-person" [required]="true" [disabled]="isPaymentVerified"></app-input>
+                  </div>
+                  <div class="col-sm-6">
+<app-input
+  label="Account Number"
+  [(ngModel)]="bankDetails.accountNumber"
+  placeholder="Enter account number"
+  [required]="true">
+</app-input>
+
+@if (
+  bankDetails.accountNumber &&
+  !ValidationHelper.isValidAccountNumber(
+    bankDetails.accountNumber
+  )
+) {
+  <small class="text-danger">
+    Invalid Account Number
+  </small>
+}                  </div>
+                  <div class="col-sm-6">
+<app-input
+  label="IFSC Code"
+  [(ngModel)]="bankDetails.ifsc"
+  placeholder="HDFC0000123"
+  [required]="true">
+</app-input>
+
+@if (
+  bankDetails.ifsc &&
+  !ValidationHelper.isValidIFSC(bankDetails.ifsc)
+) {
+  <small class="text-danger">
+    Invalid IFSC Code
+  </small>
+}                  </div>
+
+                  <div class="col-sm-6">
+<app-input
+  label="PAN Number"
+  [(ngModel)]="bankDetails.panNumber"
+  placeholder="ABCDE1234F"
+  [required]="true">
+</app-input>
+
+@if (
+  bankDetails.panNumber &&
+  !PanHelper.isValid(bankDetails.panNumber)
+) {
+  <small class="text-danger">
+    Invalid PAN Number
+  </small>
+}
+</div>
+
+<div class="col-sm-6">
+<app-input
+  label="Aadhaar Number"
+  [(ngModel)]="bankDetails.aadhaarNumber"
+  placeholder="123456789012"
+  [required]="true">
+</app-input>
+
+@if (
+  bankDetails.aadhaarNumber &&
+  bankDetails.aadhaarNumber.length > 0 &&
+  bankDetails.aadhaarNumber.length < 12
+) {
+  <small class="text-danger">
+    Aadhaar must be 12 digits
+  </small>
+}
+</div>
+
+
+<div class="col-md-6">
+  <app-file-upload
+    label="PAN Card"
+    variant="dragdrop"
+    [replaceExisting]="true"
+    [bucketKey]="userRole === 'client'
+      ? BucketKey.ClientData
+      : BucketKey.FreelancerData"
+    [uploadSection]="UploadSection.PanCard"
+    accept=".pdf,.jpg,.jpeg,.png"
+    [maxSizeMb]="5"
+    (uploadSuccess)="bankDetails.panCardUrl = $event">
+  </app-file-upload>
+</div>
+
+
+
+<div class="col-md-6">
+  <app-file-upload
+    label="Aadhaar Card"
+    variant="dragdrop"
+   [replaceExisting]="true"
+    [bucketKey]="userRole === 'client'
+      ? BucketKey.ClientData
+      : BucketKey.FreelancerData"
+    [uploadSection]="UploadSection.AadhaarCard"
+    accept=".pdf,.jpg,.jpeg,.png"
+    [maxSizeMb]="5"
+    (uploadSuccess)="bankDetails.aadhaarCardUrl = $event">
+  </app-file-upload>
+</div>
+
+                </div>
+
+                <!-- Legality Preview & Checkbox -->
+                <div class="payment-card-panel p-4 rounded-4 border-glass bg-black-20 mt-4 text-start">
+                  <h5 class="text-xs fw-bold text-white mb-2 uppercase-label">Payment & Legality Terms Preview</h5>
+                  <textarea class="form-control text-white p-3 rounded-3 text-xs w-100 mb-3" 
+                            style="background: rgba(13, 17, 24, 0.45); border: 1px solid rgba(255, 255, 255, 0.05); resize: none;" 
+                            rows="3" readonly>By checking the box below, you explicitly authorize Talent-Hub to act as an escrow agent for contract milestone funds, agree to the platform service fees (2.5%), and certify that the linked bank account information is legally registered to you. This linkage serves as a binding digital agreement.</textarea>
+                  
+                  <div class="form-check custom-check text-start">
+                    <input class="form-check-input cursor-pointer" type="checkbox" id="acceptLegalityCheck"
+                      [(ngModel)]="legalityAccepted" [disabled]="isPaymentVerified" style="width: 1.5em; height: 1.5em;">
+                    <label class="form-check-label text-sm text-white-50 ms-2 cursor-pointer" for="acceptLegalityCheck">
+                      I accept the Escrow participant terms, payout legalities, and platform service agreements.
+                    </label>
                   </div>
                 </div>
-                <app-button variant="outline" size="sm">Send OTP</app-button>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        <!-- 6. SOCIAL LINKS (COMMON) -->
-        <section id="social" class="form-section glass mb-4 p-4">
-          <div class="section-header d-flex align-items-center gap-3 mb-4">
-            <div class="section-number">{{ userRole === 'freelancer' ? '6' : '5' }}</div>
-            <h2 class="text-2xl fw-bold text-white mb-0">Social Links</h2>
-          </div>
-          @if (savedSocialLinks.length < 5) { <div class="social-link-row mt-3">
-            <div class="row g-3 align-items-end">
-              <div class="col-sm-3">
-                <app-input type="select" label="Platform" [options]="platformOptions" [(ngModel)]="currentLink.platform"
-                  placeholder="Select"></app-input>
-              </div>
-              <div class="col-sm-7">
-                <app-input label="Profile URL" [(ngModel)]="currentLink.url" placeholder="https://..."
-                  icon="bi-link"></app-input>
-              </div>
-              <div class="col-sm-2">
-                <app-button (click)="saveSocialLink()" variant="primary" size="md"
-                  [disabled]="!currentLink.url || !currentLink.platform" class="w-100">Add</app-button>
-              </div>
-            </div>
-      </div>
-      }
-      <div class="connected-links-area mt-4">
-        @for (link of savedSocialLinks; track $index) {
-        <div class="connected-card mb-2">
-          <div class="d-flex align-items-center gap-3 w-100 flex-wrap">
-            <div class="social-icon-box"><i [class]="'bi ' + getPlatformIcon(link.platform)"></i></div>
-            <div class="flex-grow-1">
-              <h6 class="text-white mb-0">{{ link.platform | titlecase }}</h6>
-              <p class="text-xs opacity-50 mb-0 text-truncate" style="max-width: 200px;">{{ link.url }}</p>
-            </div>
-            <div class="d-flex gap-2">
-              <div class="action-btn-box edit" (click)="openEditModal($index)"><i class="bi bi-pencil"></i></div>
-              <div class="action-btn-box delete" (click)="removeSocialLink($index)"><i class="bi bi-trash"></i></div>
-            </div>
-          </div>
-        </div>
-        }
-      </div>
-      </section>
-  </div>
+                <!-- Link Button -->
+                @if (!isPaymentVerified) {
+                 <app-button
+  variant="primary"
+  size="md"
+  (click)="verifyPaymentDetails()"
+  class="w-100 mt-4"
+  [disabled]="!canVerifyPayment"
+  [loading]="isLinkingBank">
 
-  <!-- FOOTER -->
-  <footer class="form-footer mt-5 pb-5">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-      <app-button variant="outline" size="md">Cancel</app-button>
-      <app-button variant="primary" (click)="onSaveAndContinue()" size="md" customClass="btn-save-continue">Save &
-        Continue</app-button>
+  Link & Verify Bank Details
+
+</app-button>
+                }
+              </div>
+            </div>
+          </section>
+
+          <!-- 6. SOCIAL LINKS & LANGUAGES (COMMON) -->
+          <section id="social" class="form-section glass mb-4 p-4">
+            <div class="section-header d-flex align-items-center gap-3 mb-4">
+              <div class="section-number">{{ userRole === 'freelancer' ? '7' : '6' }}</div>
+              <h2 class="text-2xl fw-bold text-white mb-0">Social Links & Languages</h2>
+            </div>
+
+            <div class="subsection-header mb-3">
+              <h3 class="text-lg fw-bold text-white mb-1">Social Profiles</h3>
+              <p class="text-xs opacity-50 mb-0">Connect your professional profiles and personal website.</p>
+            </div>
+
+            @if (savedSocialLinks.length < 5) {
+            <div class="social-link-row mt-3">
+              <div class="row g-3 align-items-end">
+                <div class="col-sm-3">
+                  <app-input type="select" label="Platform" [options]="platformOptions"
+                    [(ngModel)]="currentLink.platform" placeholder="Select"></app-input>
+                </div>
+                <div class="col-sm-7">
+                  <app-input label="Profile URL" [(ngModel)]="currentLink.url" placeholder="https://..."
+                    icon="bi-link"></app-input>
+                </div>
+                <div class="col-sm-2">
+                  <app-button (click)="saveSocialLink()" variant="primary" size="md"
+                    [disabled]="!currentLink.url || !currentLink.platform" class="w-100">Add</app-button>
+                </div>
+              </div>
+            </div>
+            }
+
+            <div class="connected-links-area mt-4">
+              @for (link of savedSocialLinks; track $index) {
+              <div class="connected-card mb-2">
+                <div class="d-flex align-items-center gap-3 w-100 flex-wrap">
+                  <div class="social-icon-box"><i [class]="'bi ' + getPlatformIcon(link.platform)"></i></div>
+                  <div class="flex-grow-1">
+                    <h6 class="text-white mb-0">{{ link.platform | titlecase }}</h6>
+                    <p class="text-xs opacity-50 mb-0 text-truncate" style="max-width: 200px;">{{ link.url }}</p>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <div class="action-btn-box edit" (click)="openEditModal($index)"><i class="bi bi-pencil"></i></div>
+                    <div class="action-btn-box delete" (click)="removeSocialLink($index)"><i class="bi bi-trash"></i></div>
+                  </div>
+                </div>
+              </div>
+              }
+            </div>
+
+            <!-- LANGUAGES SUBSECTION -->
+            <hr class="my-4 opacity-10" style="border-color: rgba(255, 255, 255, 0.15)">
+            
+            <div class="subsection-header mb-3">
+              <h3 class="text-lg fw-bold text-white mb-1">Languages</h3>
+              <p class="text-xs opacity-50 mb-0">Add languages you speak and your proficiency level.</p>
+            </div>
+
+            <div class="social-link-row mt-3">
+              <div class="row g-3 align-items-end">
+                <div class="col-sm-5">
+                  <app-input type="select" label="Language" [options]="languageOptions"
+                    [(ngModel)]="currentLanguage.language" placeholder="Select Language" icon="bi-translate"></app-input>
+                </div>
+                <div class="col-sm-5">
+                  <app-input type="select" label="Proficiency" [options]="proficiencyOptions"
+                    [(ngModel)]="currentLanguage.proficiency" placeholder="Select Proficiency" icon="bi-bar-chart"></app-input>
+                </div>
+                <div class="col-sm-2">
+                  <app-button (click)="addLanguage()" variant="primary" size="md"
+                    [disabled]="!currentLanguage.language || !currentLanguage.proficiency" class="w-100">Add</app-button>
+                </div>
+              </div>
+            </div>
+
+            <div class="connected-links-area mt-4">
+              @for (lang of savedLanguages; track $index) {
+              <div class="connected-card mb-2">
+                <div class="d-flex align-items-center gap-3 w-100 flex-wrap">
+                  <div class="social-icon-box"><i class="bi bi-translate"></i></div>
+                  <div class="flex-grow-1">
+                    <h6 class="text-white mb-0">{{ lang.language | titlecase }}</h6>
+                    <p class="text-xs opacity-50 mb-0">{{ lang.proficiency | titlecase }}</p>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <div class="action-btn-box edit" (click)="openEditLangModal($index)"><i class="bi bi-pencil"></i></div>
+                    <div class="action-btn-box delete" (click)="removeLanguage($index)"><i class="bi bi-trash"></i></div>
+                  </div>
+                </div>
+              </div>
+              }
+            </div>
+          </section>
     </div>
-  </footer>
-  </main>
+
+    <!-- FOOTER -->
+    <footer class="form-footer mt-5 pb-5">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <app-button variant="outline" size="md">Cancel</app-button>
+        <app-button variant="primary" (click)="onSaveAndContinue()" size="md" [disabled]="isLoading"
+          [loading]="isLoading" customClass="btn-save-continue">Save & Continue</app-button>
+      </div>
+    </footer>
+    </main>
+  </div>
 </div>
 
 <!-- MODAL -->
@@ -335,6 +615,29 @@
     <div class="d-flex gap-3">
       <app-button (click)="closeEditModal()" variant="outline" class="flex-grow-1">Cancel</app-button>
       <app-button (click)="updateSocialLink()" variant="primary" class="flex-grow-1">Update</app-button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- CONNECTED PROFILE LANGUAGE EDITING MODAL Overlay -->
+@if (isEditLangModalOpen) {
+<div
+  class="edit-modal-overlay d-flex align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100" style="z-index: 1060;">
+  <div class="edit-modal-content p-4 rounded-4 border-glass bg-card-dark text-start animate-fade-in"
+    style="width: 100%; max-width: 480px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="text-white fw-bold mb-0 text-capitalize">Edit {{ editingLangData.language | titlecase }} Proficiency</h4>
+      <button (click)="closeEditLangModal()" class="btn-close btn-close-white shadow-none"></button>
+    </div>
+    <div class="mb-4">
+      <app-input type="select" label="Proficiency Level" [options]="proficiencyOptions"
+        [(ngModel)]="editingLangData.proficiency" placeholder="Select Proficiency"
+        icon="bi-bar-chart"></app-input>
+    </div>
+    <div class="d-flex gap-3">
+      <app-button (click)="closeEditLangModal()" variant="outline" class="flex-grow-1">Cancel</app-button>
+      <app-button (click)="updateLanguage()" variant="primary" class="flex-grow-1">Save Changes</app-button>
     </div>
   </div>
 </div>

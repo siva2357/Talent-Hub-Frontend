@@ -1,0 +1,30 @@
+<div class="file-preview-card glass-preview rounded-3 p-3 position-relative d-flex align-items-center gap-3">
+  <!-- IMAGE PREVIEW -->
+  @if (isImage) {
+    <div class="preview-thumbnail overflow-hidden rounded-2 border border-light-opacity">
+      <img [src]="url" alt="Preview Image" class="w-100 h-100 object-fit-cover">
+    </div>
+  } @else {
+    <!-- FILE ICON PREVIEW -->
+    <div class="preview-icon-box rounded-2 d-flex align-items-center justify-content-center border border-light-opacity">
+      <i class="bi" [class]="fileIcon"></i>
+    </div>
+  }
+
+  <!-- FILE INFORMATION -->
+  <!-- <div class="file-info flex-grow-1 min-w-0">
+    <p class="file-name text-white mb-0 text-sm fw-medium text-truncate" [title]="parsedFileName">
+      {{ parsedFileName }}
+    </p>
+    <a [href]="url" target="_blank" class="view-link text-xs opacity-60 hover-opacity-100 text-decoration-none">
+      <i class="bi bi-eye-fill me-1"></i> View File
+    </a>
+  </div> -->
+
+  <!-- REMOVE BUTTON -->
+  @if (!disabled) {
+    <button type="button" class="remove-btn btn-close-custom d-flex align-items-center justify-content-center" (click)="onRemove($event)">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  }
+</div>

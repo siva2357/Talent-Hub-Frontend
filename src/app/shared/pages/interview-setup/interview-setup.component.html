@@ -1,0 +1,144 @@
+<div class="setup-page min-vh-100 d-flex flex-column text-white p-3 p-md-5 bg-dark">
+  <div class="container my-auto">
+    <!-- Header -->
+    <div class="text-center mb-5">
+      <h1 class="fw-bold text-white mb-2" style="font-size: 2.5rem; letter-spacing: -0.5px;">Lobby & Device Setup</h1>
+      <p class="text-secondary mb-0">Configure your camera and microphone before entering the interview room</p>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="row g-4 align-items-stretch justify-content-center">
+      
+      <!-- Video Preview Card -->
+      <div class="col-lg-6">
+        <div class="glass rounded-4 p-4 h-100 d-flex flex-column justify-content-between position-relative overflow-hidden" style="border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); backdrop-filter: blur(20px);">
+          
+          <!-- Live Preview Window -->
+          <div class="preview-container rounded-3 overflow-hidden position-relative mb-4">
+            <!-- Video tag -->
+            <video #previewVideo autoplay playsinline muted 
+              class="w-100 h-100 position-absolute start-0 top-0" 
+              style="object-fit: cover;"
+              [class.d-none]="!cameraEnabled || hasMediaError || isLoading">
+            </video>
+
+            <!-- Camera Off Placeholder -->
+            <div class="camera-off position-absolute w-100 h-100 start-0 top-0 d-flex flex-column align-items-center justify-content-center bg-dark"
+              *ngIf="!cameraEnabled && !hasMediaError && !isLoading">
+              <div class="rounded-circle bg-secondary bg-opacity-25 p-4 mb-3 d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                <i class="bi bi-camera-video-off text-secondary" style="font-size: 2.5rem;"></i>
+              </div>
+              <p class="text-secondary fw-semibold mb-0">Camera is turned off</p>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div class="position-absolute w-100 h-100 start-0 top-0 d-flex flex-column align-items-center justify-content-center bg-dark"
+              *ngIf="isLoading && !hasMediaError">
+              <div class="spinner-border text-primary mb-3" role="status"></div>
+              <p class="text-secondary mb-0">Initializing media devices...</p>
+            </div>
+
+            <!-- Permission / Error Screen -->
+            <div class="camera-placeholder position-absolute w-100 h-100 start-0 top-0 d-flex flex-column align-items-center justify-content-center bg-dark px-4 text-center"
+              *ngIf="hasMediaError && !isLoading">
+              <i class="bi bi-exclamation-triangle text-warning mb-3" style="font-size: 2.5rem;"></i>
+              <h6 class="text-white fw-bold mb-2">Camera / Mic Access Blocked</h6>
+              <p class="text-secondary small mb-3">Please check browser permissions or connect a camera/microphone to continue.</p>
+              <button class="btn btn-sm btn-outline-light rounded-pill px-3" (click)="startCamera()">
+                <i class="bi bi-arrow-clockwise me-1"></i> Retry Connection
+              </button>
+            </div>
+
+            <!-- Live Badge Overlay -->
+            <span class="live-badge position-absolute top-3 start-3 badge bg-danger text-uppercase px-2.5 py-1 rounded" *ngIf="cameraEnabled && !hasMediaError && !isLoading">
+              <span class="d-inline-block rounded-circle bg-white me-1.5 animate-pulse" style="width: 6px; height: 6px; vertical-align: middle;"></span> Live Setup
+            </span>
+          </div>
+
+          <!-- Controls Panel -->
+          <div class="d-flex align-items-center justify-content-center gap-3">
+            <!-- Mic Button -->
+            <button class="control-btn" [class.off]="!micEnabled" (click)="toggleMic()" [title]="micEnabled ? 'Mute Mic' : 'Unmute Mic'">
+              <i class="bi" [class.bi-mic-fill]="micEnabled" [class.bi-mic-mute-fill]="!micEnabled"></i>
+            </button>
+            
+            <!-- Camera Button -->
+            <button class="control-btn" [class.off]="!cameraEnabled" (click)="toggleCamera()" [title]="cameraEnabled ? 'Turn Off Cam' : 'Turn On Cam'">
+              <i class="bi" [class.bi-camera-video-fill]="cameraEnabled" [class.bi-camera-video-off-fill]="!cameraEnabled"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Meeting Details Card -->
+      <div class="col-lg-6">
+        <div class="glass rounded-4 p-4 h-100 d-flex flex-column justify-content-between" style="border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); backdrop-filter: blur(20px);">
+          
+          <!-- Details Section -->
+          <div>
+            <div class="mb-4">
+              <span class="badge rounded-pill bg-primary bg-opacity-25 text-primary px-3 py-1.5 fw-semibold mb-3">
+                <i class="bi bi-shield-check me-1"></i> Secured Meeting Room
+              </span>
+              <h3 class="fw-bold text-white mb-2">{{ applicationData?.interview?.title || 'Technical Interview Session' }}</h3>
+              <p class="text-secondary small mb-0">{{ applicationData?.interview?.description || 'Reviewing application proposal, core skills evaluation, and terms discussion.' }}</p>
+            </div>
+
+            <!-- Details List -->
+            <div class="d-flex flex-column gap-3 mb-4">
+              <!-- Scheduled Time -->
+              <div class="d-flex align-items-center gap-3 p-3 rounded-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                <div class="icon-circle smaller bg-info bg-opacity-10 text-info">
+                  <i class="bi bi-calendar-event"></i>
+                </div>
+                <div>
+                  <div class="text-secondary text-uppercase fw-bold smaller" style="letter-spacing: 0.5px;">Scheduled Date</div>
+                  <div class="fw-bold text-white small">{{ applicationData?.interview?.date ? (applicationData.interview.date | date:'medium') : 'Scheduled Shortly' }}</div>
+                </div>
+              </div>
+
+              <!-- Roles / Participants -->
+              <div class="row g-2">
+                <!-- Host Details -->
+                <div class="col-sm-6">
+                  <div class="p-3 rounded-3 h-100" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                    <span class="text-secondary text-uppercase fw-bold smaller d-block mb-1" style="letter-spacing: 0.5px;">Your Role</span>
+                    <span class="fw-bold text-white d-block text-truncate small">{{ currentUser?.registrationDetails?.fullName }}</span>
+                    <span class="badge bg-secondary bg-opacity-25 text-secondary text-xxs mt-1">{{ currentUser?.role }}</span>
+                  </div>
+                </div>
+
+                <!-- Attendee Details -->
+                <div class="col-sm-6">
+                  <div class="p-3 rounded-3 h-100" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                    <span class="text-secondary text-uppercase fw-bold smaller d-block mb-1" style="letter-spacing: 0.5px;">Other Attendee</span>
+                    <span class="fw-bold text-white d-block text-truncate small">{{ otherParticipantName }}</span>
+                    <span class="badge bg-info bg-opacity-25 text-info text-xxs mt-1">{{ otherParticipantRole }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Join Action -->
+          <div>
+            <button class="btn btn-primary btn-lg w-100 rounded-pill py-3 fw-bold shadow-glow-primary transition-all duration-300" 
+              (click)="joinMeeting()" 
+              [disabled]="isLoading">
+              <i class="bi bi-camera-video me-2"></i> Join Interview Room
+            </button>
+            <div class="text-center mt-3">
+              <a [routerLink]="currentUser?.role?.toLowerCase() === 'client' ? '/user/contract-proposals' : '/user/proposals'" 
+                class="text-secondary text-decoration-none small hover-white">
+                <i class="bi bi-arrow-left me-1"></i> Return to Proposals
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

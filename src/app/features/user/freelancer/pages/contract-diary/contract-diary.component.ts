@@ -1,0 +1,314 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { ButtonComponent } from '../../../../../shared/components/button/button.component';
+import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
+import { FileUploadComponent } from '../../../../../shared/components/file-upload/file-upload.component';
+import { FilePreviewComponent } from '../../../../../shared/components/file-preview/file-preview.component';
+import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
+import { Attachment, Diary, Phase, Revision } from '../../../../../core/model/contract-diary.model';
+import { finalize } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-contract-diary',
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent, FileUploadComponent, FilePreviewComponent],
+  templateUrl: './contract-diary.component.html',
+  styleUrl: './contract-diary.component.css'
+})
+export class ContractDiaryComponent implements OnInit {
+  private diaryService = inject(ContractDiaryService);
+
+  diaries: Diary[] = [];
+  isLoading = true;
+  expandedDiaryId: string | null = null;
+
+  // Submission state per phase
+  phaseNotes: Record<string, string> = {};
+  submitting: Record<string, boolean> = {};
+  showSubmitModal = false;
+
+selectedDiaryId: string | null = null;
+
+selectedPhase: Phase | null = null;
+
+
+  BucketKey = BucketKey;
+  UploadSection = UploadSection;
+  tempUploadUrls: Record<string, string | null> = {};
+  uploadedFiles: Record<string, Attachment[]> = {};
+
+
+
+  openSubmitModal(
+  diaryId: string,
+  phase: Phase
+): void {
+
+  this.selectedDiaryId = diaryId;
+
+  this.selectedPhase = phase;
+
+  this.phaseNotes[phase._id] ??= '';
+
+  this.uploadedFiles[phase._id] ??= [];
+
+  this.showSubmitModal = true;
+
+  document.body.classList.add(
+    'modal-open'
+  );
+
+}
+
+
+closeSubmitModal(): void {
+
+  this.showSubmitModal = false;
+
+  this.selectedDiaryId = null;
+
+  this.selectedPhase = null;
+
+  document.body.classList.remove(
+    'modal-open'
+  );
+
+}
+
+onFileUploaded(
+  phaseId: string,
+  fileInfo: {
+    url: string;
+    fileName: string;
+    fileType: string;
+    fileSize: string;
+  }
+): void {
+    if (!this.uploadedFiles[phaseId]) {
+      this.uploadedFiles[phaseId] = [];
+    }
+    this.uploadedFiles[phaseId].push({
+      fileName: fileInfo.fileName,
+      fileUrl: fileInfo.url,
+      fileType: fileInfo.fileType,
+      fileSize: fileInfo.fileSize
+    });
+    this.tempUploadUrls[phaseId] = null;
+  }
+
+  removeAttachment(phaseId: string, index: number): void {
+    if (this.uploadedFiles[phaseId]) {
+      this.uploadedFiles[phaseId].splice(index, 1);
+    }
+  }
+
+  ngOnInit(): void {
+    this.fetchDiaries();
+  }
+
+  fetchDiaries(): void {
+    this.isLoading = true;
+    this.diaryService.getFreelancerDiaries().subscribe({
+      next: (res: any) => {
+        this.diaries = (res.diaries || []).filter((d: any) => d.contractId && (d.contractId.funded || 0) > 0);
+        if (this.diaries.length > 0) {
+          this.expandedDiaryId = this.diaries[0]._id;
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch diaries:', err);
+        this.diaries = [];
+        this.isLoading = false;
+      }
+    });
+  }
+
+  getLatestRevision(
+  phase: Phase
+): Revision | null {
+
+  if (!phase.revisions?.length) {
+    return null;
+  }
+
+  return phase.revisions[
+    phase.revisions.length - 1
+  ];
+
+}
+
+getLatestNote(
+  phase: Phase
+): string {
+
+  return this.getLatestRevision(
+    phase
+  )?.freelancerNote || '';
+
+}
+
+getLatestFeedback(
+  phase: Phase
+): string {
+
+  return this.getLatestRevision(
+    phase
+  )?.clientFeedback || '';
+
+}
+
+
+getLatestAttachments(
+  phase: Phase
+): Attachment[] {
+
+  return this.getLatestRevision(
+    phase
+  )?.attachments || [];
+
+}
+
+hasRevision(
+  phase: Phase
+): boolean {
+
+  return !!phase.revisions?.length;
+
+}
+
+  toggleDiary(id: string): void {
+    this.expandedDiaryId = this.expandedDiaryId === id ? null : id;
+  }
+
+  startPhase(diaryId: string, phaseId: string): void {
+    this.submitting[phaseId] = true;
+    this.diaryService.startPhase(diaryId, phaseId).subscribe({
+      next: () => { this.fetchDiaries(); this.submitting[phaseId] = false; },
+      error: () => { this.submitting[phaseId] = false; }
+    });
+  }
+
+
+
+submitUpdate(
+  diaryId: string,
+  phaseId: string
+): void {
+
+  const note =
+    this.phaseNotes[phaseId]?.trim() || '';
+
+  const files =
+    this.uploadedFiles[phaseId] || [];
+
+  if (!note && files.length === 0) {
+    return;
+  }
+
+  this.submitting[phaseId] = true;
+
+  this.diaryService.submitPhaseUpdate(
+    diaryId,
+    phaseId,
+    {
+      freelancerNote: note,
+      attachments: files
+    }
+  )
+  .pipe(
+    finalize(() => {
+      this.submitting[phaseId] = false;
+    })
+  )
+  .subscribe({
+
+    next: () => {
+
+      this.phaseNotes[phaseId] = '';
+      this.uploadedFiles[phaseId] = [];
+      this.tempUploadUrls[phaseId] = null;
+
+      this.closeSubmitModal();
+
+      this.fetchDiaries();
+
+    },
+
+    error: (err) => {
+      console.error(err);
+    }
+
+  });
+
+}
+  getFileIcon(fileType: string): string {
+    if (!fileType) return 'bi-file-earmark-fill';
+    if (fileType.includes('pdf'))   return 'bi-file-earmark-pdf-fill text-danger';
+    if (fileType.includes('image')) return 'bi-file-earmark-image-fill text-info';
+    if (fileType.includes('video')) return 'bi-play-btn-fill text-primary';
+    if (fileType.includes('zip'))   return 'bi-file-earmark-zip-fill text-success';
+    return 'bi-file-earmark-fill text-secondary';
+  }
+
+  getStatusIcon(status: string): string {
+    switch (status) {
+      case 'approved':          return 'bi-check-lg';
+      case 'changes-requested': return 'bi-exclamation-triangle-fill';
+      case 'submitted':         return 'bi-send-fill';
+      case 'in-progress':       return 'bi-hourglass-split';
+      case 'overdue':           return 'bi-clock-history';
+      default:                  return 'bi-circle';
+    }
+  }
+
+canStart(
+  phase: Phase
+): boolean {
+
+  return phase.status === 'pending';
+
+}
+
+  canSubmit(phase: Phase): boolean {
+    return phase.status === 'in-progress' || phase.status === 'changes-requested';
+  }
+
+  formatDate(date: string | undefined | null): string {
+    if (!date) return 'TBD';
+    return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  getTotalBudget(diary: Diary): number {
+    return diary.contractId.estimatedBudget || 0;
+  }
+
+  trackByPhase(
+  index: number,
+  phase: Phase
+): string {
+
+  return phase._id;
+
+}
+
+
+trackByDiary(
+  index: number,
+  diary: Diary
+): string {
+
+  return diary._id;
+
+}
+  isContractActive(diary: Diary): boolean {
+    if (!diary.contractId?.contractStartDate) return true;
+    const start = new Date(diary.contractId.contractStartDate);
+    start.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today.getTime() >= start.getTime();
+  }
+}

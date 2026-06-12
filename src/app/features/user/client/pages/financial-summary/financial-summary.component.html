@@ -1,0 +1,243 @@
+<div class="financials-page p-3 p-md-4 p-xl-5">
+    <div class="container-fluid max-w-7xl mx-auto">
+
+        <!-- Page Header -->
+        <div
+            class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-5">
+            <div>
+                <h2 class="text-white fw-bold mb-1">Financial Summary</h2>
+                <p class="text-secondary small mb-0">Track project milestones, lifetime spending, and invoice summaries.
+                </p>
+            </div>
+        </div>
+
+        <!-- Summary Statistics Row -->
+        <div class="row g-4 mb-5">
+            <!-- Total Lifetime Spent Card -->
+            <div class="col-12 col-md-4">
+                <div
+                    class="financial-card glass-dark px-4 py-4 rounded-4 border border-success-glow glow-success h-100 position-relative overflow-hidden d-flex flex-column justify-content-between">
+                    <div class="card-mesh-glow bg-success"></div>
+                    <div class="position-relative z-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="text-success text-uppercase fw-bold ls-1"
+                                style="font-size: 10px; letter-spacing: 1px;">Total Lifetime Spent</span>
+                            <div
+                                class="card-icon-wrapper rounded-circle d-flex align-items-center justify-content-center bg-success bg-opacity-10 border border-success border-opacity-30">
+                                <i class="bi bi-graph-up-arrow text-success"></i>
+                            </div>
+                        </div>
+                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-2">₹{{ totalSpent | number:'1.2-2' }}</h2>
+                    </div>
+                    <div class="position-relative z-3">
+                        <div class="small text-secondary-light d-flex align-items-center gap-2">
+                            <span class="pulse-dot-success"></span>
+                            <span>Spending limits on track</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Escrow Balance Card -->
+            <div class="col-12 col-md-4">
+                <div
+                    class="financial-card glass-dark px-4 py-4 rounded-4 border border-warning-glow glow-warning h-100 position-relative overflow-hidden d-flex flex-column justify-content-between">
+                    <div class="card-mesh-glow bg-warning"></div>
+                    <div class="position-relative z-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="text-warning text-uppercase fw-bold ls-1"
+                                style="font-size: 10px; letter-spacing: 1px;">Escrow Balance</span>
+                            <div
+                                class="card-icon-wrapper rounded-circle d-flex align-items-center justify-content-center bg-warning bg-opacity-10 border border-warning border-opacity-30">
+                                <i class="bi bi-shield-check text-warning"></i>
+                            </div>
+                        </div>
+                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-2">₹{{ upcomingPayments | number:'1.2-2' }}</h2>
+                    </div>
+                    <div class="position-relative z-3">
+                        <div class="small text-secondary-light d-flex align-items-center gap-2">
+                            <span class="pulse-dot-warning"></span>
+                            <span>Funds securely held in escrow</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Platform Fees Paid Card -->
+            <div class="col-12 col-md-4">
+                <div
+                    class="financial-card glass-dark px-4 py-4 rounded-4 border border-info-glow glow-info h-100 position-relative overflow-hidden d-flex flex-column justify-content-between">
+                    <div class="card-mesh-glow bg-info"></div>
+                    <div class="position-relative z-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="text-info text-uppercase fw-bold ls-1"
+                                style="font-size: 10px; letter-spacing: 1px;">Platform Fees Paid</span>
+                            <div
+                                class="card-icon-wrapper rounded-circle d-flex align-items-center justify-content-center bg-info bg-opacity-10 border border-info border-opacity-30">
+                                <i class="bi bi-percent text-info"></i>
+                            </div>
+                        </div>
+                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-2">₹{{ platformFeesPaid | number:'1.2-2' }}</h2>
+                    </div>
+                    <div class="position-relative z-3">
+                        <div class="small text-secondary-light d-flex align-items-center gap-2">
+                            <span class="pulse-dot-info"></span>
+                            <span>10% platform tax included</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter and Search Controls -->
+        <div class="glass-dark p-4 rounded-4 border border-white border-opacity-5 mb-4">
+            <div class="row g-3 align-items-center justify-content-between">
+                <!-- Search bar -->
+                <div class="col-12 col-md-5">
+                    <div class="position-relative">
+                        <i class="bi bi-search position-absolute top-50 start-3 translate-middle-y text-secondary"></i>
+                        <input type="text"
+                            class="form-control bg-black bg-opacity-40 border border-white border-opacity-10 text-white rounded-3 py-2.5 ps-5 shadow-none custom-input"
+                            placeholder="Search contract name, ID or freelancer..." [(ngModel)]="searchQuery"
+                            (input)="applyFilters()">
+                    </div>
+                </div>
+                <!-- Status tabs -->
+                <div class="col-12 col-md-7 d-flex flex-wrap justify-content-md-end gap-2">
+                    <button class="btn btn-sm rounded-3 px-3 py-2 fw-medium transition-all"
+                        [class.btn-primary]="statusFilter === 'All'"
+                        [class.btn-outline-secondary]="statusFilter !== 'All'"
+                        [class.text-white]="statusFilter !== 'All'" (click)="statusFilter = 'All'; applyFilters()">All
+                        Transactions</button>
+                    <button class="btn btn-sm rounded-3 px-3 py-2 fw-medium transition-all"
+                        [class.btn-success]="statusFilter === 'Paid'"
+                        [class.btn-outline-secondary]="statusFilter !== 'Paid'"
+                        [class.text-white]="statusFilter !== 'Paid'"
+                        (click)="statusFilter = 'Paid'; applyFilters()">Paid</button>
+
+                    <button class="btn btn-sm rounded-3 px-3 py-2 fw-medium transition-all"
+                        [class.btn-warning]="statusFilter === 'Pending'"
+                        [class.btn-outline-secondary]="statusFilter !== 'Pending'"
+                        [class.text-white]="statusFilter !== 'Pending'"
+                        (click)="statusFilter = 'Pending'; applyFilters()">Pending</button>
+                    <button class="btn btn-sm rounded-3 px-3 py-2 fw-medium transition-all"
+                        [class.btn-danger]="statusFilter === 'Payment Failed'"
+                        [class.btn-outline-secondary]="statusFilter !== 'Payment Failed'"
+                        [class.text-white]="statusFilter !== 'Payment Failed'"
+                        (click)="statusFilter = 'Payment Failed'; applyFilters()">Payment Failed</button>
+                    <button class="btn btn-sm btn-outline-secondary text-white rounded-3 px-3 py-2"
+                        (click)="resetFilters()">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Financial Transactions Table -->
+        <div class="glass-dark overflow-hidden rounded-4 border border-white border-opacity-5">
+            <div class="table-responsive">
+                <table class="table table-dark mb-0 align-middle custom-table">
+                    <thead>
+                        <tr>
+                            <th class="ps-4 py-3 text-secondary" style="font-size: 15px;">Contract Title</th>
+                            <th class="py-3 text-secondary" style="font-size: 15px;">Contract Type</th>
+                            <th class="py-3 text-secondary" style="font-size: 15px;">Contract Subject</th>
+                            <th class="py-3 text-secondary" style="font-size: 15px;">Budget Type</th>
+                            <th class="py-3 text-secondary" style="font-size: 15px;">Estimated Budget</th>
+                            <th class="py-3 text-secondary" style="font-size: 15px;">Start Date</th>
+                            <th class="py-3 text-secondary" style="font-size: 15px;">End Date</th>
+                            <th class="py-3 text-secondary text-center" style="font-size: 15px;">Status</th>
+                            <th class="py-3 text-secondary text-center" style="font-size: 15px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (inv of filteredInvoices; track inv.id) {
+                        <tr class="transition-all table-row-hover">
+                            <!-- Contract Title -->
+                            <td class="ps-4 py-4">
+                                <h6 class="text-white fw-bold mb-0 fs-6">{{ inv.title }}</h6>
+                            </td>
+                            <!-- Contract Type -->
+                            <td class="py-4">
+                                <span class="badge border border-info border-opacity-10 text-info py-1 px-2.5"
+                                    style="font-size: 12px; background: rgba(13, 202, 240, 0.05) !important;">
+                                    {{ inv.contractType }}
+                                </span>
+                            </td>
+                            <!-- Contract Subject -->
+                            <td class="py-4">
+                                <span class="badge border border-primary border-opacity-10 text-primary-light py-1 px-2.5"
+                                    style="font-size: 12px; background: rgba(13, 110, 253, 0.05) !important;">
+                                    {{ inv.contractSubject }}
+                                </span>
+                            </td>
+                            <!-- Budget Type -->
+                            <td class="py-4 text-white-50 fw-medium">
+                                {{ inv.type }}
+                            </td>
+                            <!-- Estimated Budget -->
+                            <td class="py-4 text-success fw-bold">
+                                ₹{{ (inv.estimatedBudget || 0) | number:'1.2-2' }}
+                            </td>
+                            <!-- Start Date -->
+                            <td class="py-4 text-secondary-light">
+                                <i class="bi bi-calendar-event me-2 opacity-50"></i>
+                                {{ inv.startDate | date:'MMM d, y' }}
+                            </td>
+                            <!-- End Date -->
+                            <td class="py-4 text-secondary-light">
+                                <i class="bi bi-calendar-check me-2 opacity-50"></i>
+                                {{ inv.endDate | date:'MMM d, y' }}
+                            </td>
+                            <!-- Status -->
+                            <td class="py-4 text-center">
+                                <span class="badge rounded-pill px-3 py-2 fw-medium text-capitalize shadow-sm"
+                                    [ngClass]="{
+                                           'badge-status-paid': inv.status === 'Paid',
+                                           'badge-status-pending': inv.status === 'Pending',
+                                           'badge-status-failed': inv.status === 'Payment Failed'
+                                       }">
+                                    {{ inv.status }}
+                                </span>
+                            </td>
+                            <!-- Actions Dropdown -->
+                            <td class="py-4 text-center">
+                                <div class="dropdown">
+                                    <button class="btn btn-link text-white-50 p-0 border-0 no-caret dropdown-toggle" type="button" [id]="'actions-' + inv.id" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical fs-5"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end glass-dropdown border border-white border-opacity-10 py-1" [attr.aria-labelledby]="'actions-' + inv.id">
+                                        @if (inv.remainingAmount > 0 && inv.status !== 'Payment Failed') {
+                                        <li>
+                                            <button class="dropdown-item text-white py-2 px-3 d-flex align-items-center gap-2" (click)="fundContract(inv)">
+                                                <i class="bi bi-credit-card-2-front text-primary"></i>
+                                                <span>Pay / Fund</span>
+                                            </button>
+                                        </li>
+                                        }
+                                        <li>
+                                            <button class="dropdown-item text-white py-2 px-3 d-flex align-items-center gap-2" (click)="downloadInvoice(inv)">
+                                                <i class="bi bi-file-earmark-arrow-down text-primary-light"></i>
+                                                <span>Invoice</span>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        } @empty {
+                        <tr>
+                            <td colspan="10" class="text-center py-5">
+                                <div
+                                    class="p-4 rounded-4 bg-white bg-opacity-5 d-inline-block border border-white border-opacity-5">
+                                    <i class="bi bi-folder2-open text-secondary fs-1 mb-3"></i>
+                                    <p class="text-secondary mb-0">No transaction invoices found matching current criteria.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

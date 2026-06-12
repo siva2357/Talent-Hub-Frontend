@@ -1,0 +1,194 @@
+.dashboard-container {
+    padding: 2rem;
+    min-width: 1200px;
+}
+
+/* Glassmorphism Base */
+.glass-dark {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+}
+
+.glass-light {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+}
+
+/* Welcome Section */
+.welcome-section {
+    background: linear-gradient(135deg, rgba(42, 128, 255, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%) !important;
+}
+
+.glow-orb-top {
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(42, 128, 255, 0.2), transparent 70%);
+    filter: blur(50px);
+    pointer-events: none;
+}
+
+.avatar-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    padding: 4px;
+    background: linear-gradient(135deg, var(--brand-400), transparent);
+}
+
+.avatar-large img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Stat Cards - Reference Image Style */
+.stat-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+    animation: fadeIn 0.5s ease-out forwards;
+    background: rgba(13, 17, 23, 0.6) !important;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Glowing Accents */
+.border-accent-blue { border: 1px solid rgba(42, 128, 255, 0.15); }
+.border-accent-green { border: 1px solid rgba(16, 185, 129, 0.15); }
+.border-accent-purple { border: 1px solid rgba(168, 85, 247, 0.15); }
+.border-accent-gold { border: 1px solid rgba(245, 158, 11, 0.15); }
+
+/* Glow Effects */
+.card-glow-blue, .card-glow-green, .card-glow-purple, .card-glow-gold {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.1;
+    z-index: -1;
+    transition: opacity 0.4s ease;
+}
+
+.stat-card:hover .card-glow-blue, 
+.stat-card:hover .card-glow-green, 
+.stat-card:hover .card-glow-purple, 
+.stat-card:hover .card-glow-gold {
+    opacity: 0.25;
+}
+
+.card-glow-blue { background: #2a80ff; }
+.card-glow-green { background: #10b981; }
+.card-glow-purple { background: #a855f7; }
+.card-glow-gold { background: #f59e0b; }
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* User Requested Unified Blue Theme */
+.icon-box-blue { 
+    background-color: rgba(42, 128, 255, 0.1) !important; 
+    border: 1px solid rgba(42, 128, 255, 0.3) !important;
+    color: #2A80FF !important; 
+}
+
+/* User Requested Unified Info Badge */
+.badge-custom-info {
+    background-color: rgba(6, 182, 212, 0.15) !important;
+    color: #06B6D4 !important;
+    border: 1px solid rgba(6, 182, 212, 0.25) !important;
+    padding: 0.35em 0.65em;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.1s; }
+.stat-card:nth-child(2) { animation-delay: 0.2s; }
+.stat-card:nth-child(3) { animation-delay: 0.3s; }
+.stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+
+/* Timeline */
+.activity-timeline::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 10px;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, rgba(42, 128, 255, 0.3), transparent);
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Quick Actions */
+.hover-glass:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(42, 128, 255, 0.4) !important;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Professional Tip Card */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--brand-600) 0%, var(--brand-800) 100%) !important;
+}
+
+.tip-decoration {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    font-size: 8rem;
+    color: rgba(255, 255, 255, 0.05);
+    transform: rotate(-15deg);
+    pointer-events: none;
+}
+
+/* Typography & Helpers */
+.fw-black { font-weight: 900; }
+.ls-2 { letter-spacing: 2px; }
+.ls-n2 { letter-spacing: -2px; }
+.ls-n1 { letter-spacing: -1px; }
+
+.shadow-primary {
+    box-shadow: 0 10px 25px rgba(42, 128, 255, 0.4) !important;
+}
+
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 1400px) {
+    .dashboard-container {
+        min-width: auto;
+    }
+}

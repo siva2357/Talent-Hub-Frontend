@@ -45,7 +45,7 @@
     </div>
 
     <div class="auth-action text-center">
-      <app-button variant="primary" size="md" (click)="onStartRegistration()" customClass="px-5 py-2 d-inline-flex align-items-center justify-content-center gap-3">
+      <app-button variant="primary" size="md" (click)="onStartRegistration()" [disabled]="!selectedRole" customClass="px-5 py-2 d-inline-flex align-items-center justify-content-center gap-3">
         <i class="bi bi-arrow-right-circle text-xl"></i>
         <span class="text-lg">Start Registration</span>
       </app-button>

@@ -1,0 +1,221 @@
+<div class="payment-page p-3 p-md-4 p-xl-5">
+    <div class="container-fluid max-w-lg mx-auto">
+
+        <!-- Initial Screen -->
+        @if (paymentState === 'initial') {
+        <div class="payment-card glass-dark p-4 p-md-5 rounded-4 border border-primary-glow glow-primary">
+            <div class="card-mesh-glow bg-primary"></div>
+            
+            <div class="text-center mb-4 position-relative z-3">
+                <div class="gateway-logo mx-auto mb-3 d-flex align-items-center justify-content-center bg-primary bg-opacity-10 border border-primary border-opacity-30 rounded-circle" style="width: 64px; height: 64px;">
+                    <i class="bi bi-shield-lock-fill text-primary fs-3"></i>
+                </div>
+                <h3 class="text-white fw-bold">{{ contractId ? 'Fund Contract' : 'Secure Payment Gateway' }}</h3>
+                <p class="text-secondary small">{{ contractId ? 'Contract: ' + contractTitle : 'Authorized Razorpay Payment Gateway Portal' }}</p>
+            </div>
+
+            <!-- Error message -->
+            @if (errorMessage) {
+            <div class="p-3 mb-4 d-flex align-items-center gap-2 rounded-3 border border-danger border-opacity-20 small"
+                style="background: rgba(220, 53, 69, 0.1); color: #dc3545 !important;">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span>{{ errorMessage }}</span>
+            </div>
+            }
+
+            <div class="position-relative z-3">
+                <!-- Amount Input -->
+                <div class="mb-4">
+                    <label class="text-primary text-uppercase fw-bold ls-1 mb-2 d-block" style="font-size: 10px; letter-spacing: 1px;">{{ contractId ? 'Funding Amount (INR)' : 'Deposit Amount (INR)' }}</label>
+                    <div class="position-relative">
+                        <span class="position-absolute top-50 start-3 translate-middle-y text-secondary fs-5">₹</span>
+                        <input type="number"
+                            class="form-control bg-black bg-opacity-40 border border-white border-opacity-10 text-white rounded-3 py-3 ps-5 fs-4 fw-bold shadow-none custom-input"
+                            [disabled]="!!contractId"
+                            [(ngModel)]="depositAmount">
+                    </div>
+                </div>
+
+                <!-- Secure Gateway Notice -->
+                <div class="p-3 rounded-3 border border-primary border-opacity-20 mb-4 text-start"
+                    style="background: rgba(13, 110, 253, 0.05); backdrop-filter: blur(5px);">
+                    <div class="d-flex gap-3 align-items-start">
+                        <div class="text-primary mt-0.5">
+                            <i class="bi bi-shield-check fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-white fw-bold mb-1" style="font-size: 13px;">Secure Razorpay Checkout</h6>
+                            <p class="text-secondary mb-0" style="font-size: 11.5px; line-height: 1.4;">
+                                Select your payment instrument (Credit/Debit Card, UPI, Wallets, or Netbanking) directly within the secure Razorpay popup window.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Pricing Breakdown -->
+                <div class="p-3 rounded-3 mb-4" style="background: rgba(0, 0, 0, 0.35); border: 1.5px solid rgba(255, 255, 255, 0.05);">
+                    @if (contractId) {
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-secondary small">Base Funding Amount:</span>
+                        <span class="text-white fw-bold small">₹{{ depositAmount | number:'1.2-2' }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-secondary small">Platform Fee (10%):</span>
+                        <span class="text-warning fw-bold small">₹{{ depositAmount * 0.10 | number:'1.2-2' }}</span>
+                    </div>
+                    } @else {
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-secondary small">Processing & Gateway Fee:</span>
+                        <span class="text-success fw-bold small">Free (₹0.00)</span>
+                    </div>
+                    }
+                    <div class="d-flex justify-content-between border-top border-white border-opacity-10 pt-2">
+                        <span class="text-white fw-bold">Total Amount to Charge:</span>
+                        <span class="text-white fw-extrabold">₹{{ (contractId ? depositAmount * 1.10 : depositAmount) | number:'1.2-2' }}</span>
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <button type="button" class="btn btn-primary rounded-3 w-100 py-3 d-flex align-items-center justify-content-center gap-2 shadow-primary fw-bold transition-all mb-2"
+                    [disabled]="depositAmount <= 0" (click)="initiatePayment()">
+                    <i class="bi bi-credit-card-2-front-fill"></i>
+                    <span>Confirm & Pay via Razorpay</span>
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary border-white border-opacity-10 text-white rounded-3 w-100 py-2.5 fw-bold transition-all"
+                    (click)="goBack()">
+                    Cancel Transaction
+                </button>
+            </div>
+        </div>
+        }
+
+        <!-- Processing Screen -->
+        @if (paymentState === 'processing') {
+        <div class="payment-card glass-dark p-5 rounded-4 border border-warning-glow glow-warning text-center">
+            <div class="card-mesh-glow bg-warning"></div>
+            <div class="position-relative z-3">
+                <div class="spinner-wrapper mb-4">
+                    <div class="spinner-border text-warning" style="width: 4rem; height: 4rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <h3 class="text-white fw-bold mb-2">{{ contractId ? 'Processing Contract Funding' : 'Processing Secure Payment' }}</h3>
+                <p class="text-secondary-light">Connecting to Razorpay secure servers. Please wait...</p>
+                <div class="p-3 rounded-3 mt-4 d-inline-block text-start" style="background: rgba(0, 0, 0, 0.35); border: 1.5px solid rgba(255, 255, 255, 0.05); max-width: 320px;">
+                    <div class="small text-secondary mb-1">Order ID Generated:</div>
+                    <div class="font-monospace text-warning small mb-2">{{ orderId || 'Generating...' }}</div>
+                    @if (isSandbox) {
+                    <div class="p-2 mb-0 rounded-3 small border border-info border-opacity-20"
+                        style="background: rgba(13, 202, 240, 0.1); color: #0dcaf0 !important;">
+                        <i class="bi bi-info-circle me-1"></i> Sandbox simulator auto-verifying payment...
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+        }
+
+        <!-- Success Screen -->
+        @if (paymentState === 'success') {
+        <div class="payment-card glass-dark p-4 p-md-5 rounded-4 border border-success-glow glow-success">
+            <div class="card-mesh-glow bg-success"></div>
+            
+            <div class="text-center mb-4 position-relative z-3">
+                <div class="gateway-logo mx-auto mb-3 d-flex align-items-center justify-content-center bg-success bg-opacity-10 border border-success border-opacity-30 rounded-circle animate-pop" style="width: 64px; height: 64px;">
+                    <i class="bi bi-check-circle-fill text-success fs-3"></i>
+                </div>
+                <h3 class="text-white fw-bold">{{ contractId ? 'Contract Funded Successfully' : 'Payment Successful' }}</h3>
+                <p class="text-success small">{{ contractId ? 'Escrow Released & Updated' : 'Funds Credited Successfully' }}</p>
+            </div>
+
+            <div class="position-relative z-3">
+                <!-- Transaction receipt content -->
+                <div class="p-4 rounded-4 bg-black bg-opacity-40 border border-white border-opacity-5 mb-4">
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Invoice Number</span>
+                        <span class="text-white fw-bold font-monospace small">{{ invoiceNumber }}</span>
+                    </div>
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Transaction ID</span>
+                        <span class="text-white fw-bold font-monospace small">{{ paymentId }}</span>
+                    </div>
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Order ID</span>
+                        <span class="text-white fw-bold font-monospace small">{{ orderId }}</span>
+                    </div>
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Payment Gateway</span>
+                        <span class="text-white fw-bold small">Razorpay</span>
+                    </div>
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Payment Date</span>
+                        <span class="text-white fw-bold small">{{ paymentDate }}</span>
+                    </div>
+                    @if (contractId) {
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Base Amount</span>
+                        <span class="text-white fw-bold small">₹{{ depositAmount | number:'1.2-2' }}</span>
+                    </div>
+                    <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
+                        <span class="text-secondary small">Platform Fee (10%)</span>
+                        <span class="text-warning fw-bold small">₹{{ depositAmount * 0.10 | number:'1.2-2' }}</span>
+                    </div>
+                    }
+                    <div class="receipt-item d-flex justify-content-between pt-1">
+                        <span class="text-white fw-bold">{{ contractId ? 'Total Amount Charged' : 'Amount Credited' }}</span>
+                        <span class="text-success fw-extrabold fs-5">₹{{ (contractId ? depositAmount * 1.10 : depositAmount) | number:'1.2-2' }}</span>
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <button type="button" class="btn btn-success rounded-3 w-100 py-3 d-flex align-items-center justify-content-center gap-2 shadow-success fw-bold transition-all mb-2 text-white"
+                    (click)="downloadInvoice()">
+                    <i class="bi bi-file-earmark-arrow-down-fill"></i>
+                    <span>Download Invoice</span>
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary border-white border-opacity-10 text-white rounded-3 w-100 py-2.5 fw-bold transition-all"
+                    (click)="goBack()">
+                    Go to Financial Summary
+                </button>
+            </div>
+        </div>
+        }
+
+        <!-- Failed Screen -->
+        @if (paymentState === 'failed') {
+        <div class="payment-card glass-dark p-4 p-md-5 rounded-4 border border-danger-glow glow-danger">
+            <div class="card-mesh-glow bg-danger"></div>
+            
+            <div class="text-center mb-4 position-relative z-3">
+                <div class="gateway-logo mx-auto mb-3 d-flex align-items-center justify-content-center bg-danger bg-opacity-10 border border-danger border-opacity-30 rounded-circle animate-shake" style="width: 64px; height: 64px;">
+                    <i class="bi bi-x-circle-fill text-danger fs-3"></i>
+                </div>
+                <h3 class="text-white fw-bold">Payment Failed</h3>
+                <p class="text-danger small">Transaction Cancelled or Rejected</p>
+            </div>
+
+            <div class="position-relative z-3">
+                <div class="p-3 mb-4 rounded-3 text-center border border-danger border-opacity-20 small"
+                    style="background: rgba(220, 53, 69, 0.1); color: #dc3545 !important;">
+                    {{ errorMessage || 'We were unable to verify your payment. Please try again.' }}
+                </div>
+
+                <!-- Action buttons -->
+                <button type="button" class="btn btn-danger rounded-3 w-100 py-3 d-flex align-items-center justify-content-center gap-2 shadow-danger fw-bold transition-all mb-2 text-white"
+                    (click)="paymentState = 'initial'; errorMessage = ''">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    <span>Try Again</span>
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary border-white border-opacity-10 text-white rounded-3 w-100 py-2.5 fw-bold transition-all"
+                    (click)="goBack()">
+                    Back to Financial Summary
+                </button>
+            </div>
+        </div>
+        }
+
+    </div>
+</div>

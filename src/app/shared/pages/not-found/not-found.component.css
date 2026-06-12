@@ -1,0 +1,239 @@
+.error-page-container {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #05070a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 60px 20px;
+}
+
+/* BACKGROUND DECORATIONS */
+.blob {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(42, 128, 255, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(100px);
+  z-index: 1;
+}
+
+.blob-1 {
+  top: -200px;
+  left: -100px;
+}
+
+.blob-2 {
+  bottom: -200px;
+  right: -100px;
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+}
+
+.blob-3 {
+  top: 20%;
+  left: 40%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(42, 128, 255, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+}
+
+.error-content-wrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 1s ease-out;
+}
+
+/* LOGO */
+.logo-img {
+  height: 50px;
+  width: auto;
+}
+
+/* 404 TEXT */
+.huge-404-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.text-404 {
+  font-size: 100px;
+  font-weight: 900;
+  margin: 0;
+  line-height: 1;
+  background: linear-gradient(135deg, #00d2ff 20%, #3a7bd5 60%, #9333ea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -5px;
+}
+
+.text-404-blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 180px;
+  font-weight: 900;
+  margin: 0;
+  line-height: 1;
+  color: #3a7bd5;
+  filter: blur(40px);
+  opacity: 0.4;
+  z-index: -1;
+  letter-spacing: -5px;
+}
+
+/* TITLES */
+.error-subtitle {
+  font-size: 36px;
+  font-weight: 800;
+  color: white;
+}
+
+.error-desc {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+}
+
+.text-brand {
+  color: var(--brand-400);
+}
+
+/* ILLUSTRATION */
+.not-found-illustration {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.signpost-wrapper {
+  position: relative;
+  width: 300px;
+  height: 100%;
+}
+
+.signpost {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sign-top {
+  background: rgba(42, 128, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(42, 128, 255, 0.3);
+  padding: 12px 24px;
+  border-radius: 12px 100px 100px 12px;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  transform: rotate(-2deg);
+}
+
+.sign-pole {
+  width: 12px;
+  height: 80px;
+  background: linear-gradient(to bottom, #1e293b, #0f172a);
+  border-radius: 2px;
+}
+
+.paper-plane {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  font-size: 24px;
+  color: #3a7bd5;
+  animation: planeFloat 3s ease-in-out infinite;
+}
+
+.ground-deco {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.plant {
+  width: 20px;
+  height: 40px;
+  background: linear-gradient(to top, #312e81, #4338ca);
+  border-radius: 50% 50% 0 0;
+  opacity: 0.5;
+}
+
+/* LINKS */
+.support-link {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.support-link:hover {
+  color: white;
+}
+
+/* ANIMATIONS */
+@keyframes planeFloat {
+
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate(15px, -15px) rotate(10deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+
+  .text-404,
+  .text-404-blur {
+    font-size: 120px;
+  }
+
+  .error-subtitle {
+    font-size: 28px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .action-buttons app-button {
+    width: 100%;
+  }
+}

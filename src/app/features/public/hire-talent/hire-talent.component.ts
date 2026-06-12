@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../../../shared/components/button/button.component';
+import { TalentCardComponent } from '../../../shared/components/talent-card/talent-card.component';
 
 @Component({
   selector: 'app-hire-talent',
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule, ButtonComponent, TalentCardComponent],
   templateUrl: './hire-talent.component.html',
   styleUrl: './hire-talent.component.css'
 })
@@ -208,5 +209,14 @@ export class HireTalentComponent {
       isAvailable: true
     }
   ];
+
+  getTalentStats(talent: any): any[] {
+    return [
+      { value: `$${talent.hourlyRate}/hr`, label: 'Rate' },
+      { value: talent.projectsCount, label: 'Projects' },
+      { value: talent.rating, label: 'Rating' },
+      { value: talent.totalHours.toLocaleString('en-US'), label: 'Hours' }
+    ];
+  }
 }
 

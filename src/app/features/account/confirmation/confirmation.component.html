@@ -1,9 +1,4 @@
-<div class="status-toggle position-fixed top-0 end-0 p-3" style="z-index: 1000;">
-    <button (click)="toggleRole()" class="btn btn-sm btn-outline-light opacity-30 hover-opacity-100">
-        Switch to {{ role === 'freelancer' ? 'Client' : 'Freelancer' }} Preview
-    </button>
-</div>
-
+@if (isSuccess) {
 <section class="full-page-section success-bg">
     <!-- BACKGROUND BLOBS -->
     <div class="blob blob-1"></div>
@@ -55,9 +50,9 @@
         </div>
     </div>
 </section>
-
+} @else {
 <!-- ERROR STATE SECTION -->
-<section class="full-page-section error-bg">
+<section class="full-page-section error-bg" style="margin-top: 0;">
     <!-- BACKGROUND BLOBS -->
     <div class="blob blob-3"></div>
 
@@ -87,7 +82,7 @@
                 </div>
                 <div>
                     <p class="text-xs opacity-50 mb-0">Email Address</p>
-                    <p class="text-md fw-medium mb-0">joh****n@gmaicpems</p>
+                    <p class="text-md fw-medium mb-0">{{ email || 'your email' }}</p>
                 </div>
             </div>
         </div>
@@ -111,3 +106,4 @@
         </div>
     </div>
 </section>
+}

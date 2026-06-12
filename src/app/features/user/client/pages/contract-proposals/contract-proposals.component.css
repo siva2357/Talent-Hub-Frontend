@@ -1,0 +1,368 @@
+.contract-proposals-page {
+  background: transparent;
+  min-height: 100vh;
+}
+
+.max-w-7xl {
+  max-width: 1440px;
+}
+
+/* Glassmorphism system */
+.glass {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Outer Contract Accordion */
+.contract-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.contract-card.expanded {
+  background: rgba(255, 255, 255, 0.03) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.contract-header {
+  transition: background-color 0.2s ease;
+}
+
+.contract-header:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.expand-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.collapse-transition {
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+/* Proposal Applicant Card */
+.proposal-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid #1A73E8 !important;
+}
+
+/* Soft Badges */
+.badge-primary-soft {
+  background-color: rgba(26, 115, 232, 0.15) !important;
+  color: #3b82f6 !important;
+  border: 1px solid rgba(26, 115, 232, 0.3) !important;
+}
+
+/* Avatar Wrapper */
+.avatar-wrapper .status-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  bottom: 2px;
+  right: 2px;
+}
+
+/* Match Rings */
+.ring-wrapper {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.ring-wrapper.high {
+  border-top-color: #198754;
+  border-right-color: #198754;
+  border-left-color: #198754;
+  box-shadow: 0 0 8px rgba(25, 135, 84, 0.2);
+}
+
+.ring-wrapper.medium {
+  border-top-color: #ffc107;
+  border-right-color: #ffc107;
+  box-shadow: 0 0 8px rgba(255, 193, 7, 0.2);
+}
+
+.ring-wrapper.low {
+  border-top-color: #dc3545;
+  box-shadow: 0 0 8px rgba(220, 53, 69, 0.2);
+}
+
+.pitch-text {
+  line-height: 1.6;
+  max-height: 72px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* Skills Pill Badges */
+.badge-skill {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 5px 11px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+}
+
+.badge-skill:hover {
+  background: rgba(26, 115, 232, 0.1);
+  color: #1A73E8;
+  border-color: #1A73E8;
+}
+
+/* 5-Step Hiring Stepper Timeline */
+.stepper-track {
+  height: 24px;
+}
+
+/* Inactive connecting line */
+.stepper-track::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  z-index: 1;
+}
+
+/* Animated active progress overlay line */
+.stepper-line {
+  top: 10px;
+  height: 2px;
+  background: linear-gradient(90deg, #1A73E8, #198754);
+  z-index: 2;
+  width: 0;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stepper-line.progress-20 { width: 20%; }
+.stepper-line.progress-40 { width: 40%; }
+.stepper-line.progress-60 { width: 60%; }
+.stepper-line.progress-80 { width: 80%; }
+.stepper-line.progress-100 { width: 100%; }
+
+/* Step Nodes */
+.step-node .node-dot {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  flex-shrink: 0 !important;
+  background: #18181b !important;
+  border: 2px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.step-node .node-dot i {
+  font-size: 10px;
+  display: none;
+}
+
+.step-node.active .node-dot {
+  border-color: #1A73E8 !important;
+  background: #1A73E8 !important;
+  box-shadow: 0 0 10px rgba(26, 115, 232, 0.5) !important;
+}
+
+.step-node.completed .node-dot {
+  border-color: #198754 !important;
+  background: #198754 !important;
+  box-shadow: 0 0 10px rgba(25, 135, 84, 0.4) !important;
+}
+
+.step-node.completed .node-dot i {
+  display: block;
+}
+
+.step-node .step-label {
+  font-weight: 500;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+.step-node.active .step-label {
+  color: #1A73E8 !important;
+}
+
+.step-node.active.rejected-node .step-label {
+  color: #dc3545 !important;
+}
+
+.step-node.active .node-dot.node-dot-rejected {
+  border-color: #dc3545 !important;
+  background: #dc3545 !important;
+  box-shadow: 0 0 10px rgba(220, 53, 69, 0.5) !important;
+}
+
+.step-node.active .node-dot.node-dot-rejected i {
+  display: block !important;
+}
+
+.step-node.completed .step-label {
+  color: #198754 !important;
+}
+
+/* Update Phase Button (Outline Accent Style) */
+.update-phase-btn {
+  border: 1px solid #3b82f6 !important;
+  color: #3b82f6 !important;
+  background-color: transparent !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.update-phase-btn:hover:not(:disabled) {
+  background-color: rgba(26, 115, 232, 0.1) !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 12px rgba(26, 115, 232, 0.25);
+  transform: translateY(-1px);
+}
+
+.update-phase-btn:disabled {
+  border: 1px solid rgba(59, 130, 246, 0.2) !important;
+  color: rgba(59, 130, 246, 0.35) !important;
+  background-color: transparent !important;
+  cursor: not-allowed;
+  box-shadow: none !important;
+}
+
+/* Premium Recruitment Status Badge Below Stepper */
+.badge-status {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px;
+  display: inline-block;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  font-size: 11px !important;
+  letter-spacing: 0.5px;
+}
+
+.badge-status-applied {
+  border-color: rgba(26, 115, 232, 0.4) !important;
+  color: #3b82f6 !important;
+  background: rgba(26, 115, 232, 0.08) !important;
+}
+
+.badge-status-shortlisted {
+  border-color: rgba(13, 202, 240, 0.4) !important;
+  color: #0dcaf0 !important;
+  background: rgba(13, 202, 240, 0.08) !important;
+}
+
+.badge-status-assessment {
+  border-color: rgba(255, 193, 7, 0.4) !important;
+  color: #ffc107 !important;
+  background: rgba(255, 193, 7, 0.08) !important;
+}
+
+.badge-status-interview {
+  border-color: rgba(23, 162, 184, 0.4) !important;
+  color: #17a2b8 !important;
+  background: rgba(23, 162, 184, 0.08) !important;
+}
+
+.badge-status-hired {
+  border-color: rgba(25, 135, 84, 0.4) !important;
+  color: #198754 !important;
+  background: rgba(25, 135, 84, 0.08) !important;
+  box-shadow: 0 0 15px rgba(25, 135, 84, 0.15) !important;
+}
+
+.badge-status-rejected {
+  border-color: rgba(220, 53, 69, 0.4) !important;
+  color: #dc3545 !important;
+  background: rgba(220, 53, 69, 0.08) !important;
+}
+
+
+
+/* Hover effect for outline buttons */
+.btn-outline-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+
+
+/* Custom Tooltip Styling */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translate(-50%, 10px) scale(0.9);
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  width: max-content;
+  max-width: 220px;
+  white-space: normal;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 9999;
+}
+
+[data-tooltip]::after {
+  content: "";
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translate(-50%, 10px) scale(0.9);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #0f172a transparent transparent transparent;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 9999;
+}
+
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}

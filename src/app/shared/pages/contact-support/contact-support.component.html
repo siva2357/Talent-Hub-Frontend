@@ -1,0 +1,610 @@
+<div class="support-container animate-fade-in text-start position-relative">
+  <!-- Cinematic Ambient Background Glows -->
+  <div class="support-orb orb-1 position-absolute"></div>
+  <div class="support-orb orb-2 position-absolute"></div>
+  <div class="support-grid-overlay position-absolute w-100 h-100 top-0 start-0"></div>
+    <!-- TOP CINEMATIC HEADER -->
+    <header class="support-header d-flex align-items-center gap-3 mb-5">
+      <!-- Floating Navigation Back Arrow -->
+      <a [routerLink]="getDashboardLink()" class="btn-back-nav rounded-circle d-flex align-items-center justify-content-center" title="Back to Dashboard">
+        <i class="bi bi-arrow-left"></i>
+      </a>
+      <div>
+        <h1 class="support-title fw-bold mb-1 text-white">System & Escalation Support</h1>
+        <p class="text-sm opacity-60 mb-0">Open an official verification ticket directly to the Talent-Hub admin operations core.</p>
+      </div>
+    </header>
+    <div class="support-tabs">
+
+  <button
+    [class.active]="activeTab === 'create'"
+    (click)="activeTab='create'">
+
+    Create Ticket
+  </button>
+
+  <button
+    [class.active]="activeTab === 'tickets'"
+    (click)="activeTab='tickets'; loadMyTickets()">
+
+    My Tickets
+  </button>
+
+</div>
+
+
+
+@if(activeTab === 'create') {
+  <div class="support-wrapper position-relative z-3">
+
+
+    <!-- SPLIT LAYOUT -->
+    <div class="row g-5 align-items-start">
+      <!-- LEFT SIDEBAR: SLA & SUPPORT STATISTICS -->
+      <aside class="col-12 col-lg-4 col-xl-3.5">
+        <div class="sidebar-panel rounded-4 border-glass bg-card-dark">
+          <!-- Live Service Analytics -->
+          <div class="support-stats-box text-start">
+            <span class="text-xs fw-bold uppercase-label text-secondary d-block mb-3">Service Statistics</span>
+            
+            <div class="d-flex flex-column gap-3">
+              <div class="stat-row p-3 rounded-3 border-glass bg-black-20 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-clock-history text-primary-light"></i>
+                  <span class="text-xs text-white-50">SLA Response Speed</span>
+                </div>
+                <span class="font-monospace text-xs fw-bold text-success-light">&lt; 15 mins</span>
+              </div>
+
+              <div class="stat-row p-3 rounded-3 border-glass bg-black-20 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-activity text-success-light"></i>
+                  <span class="text-xs text-white-50">Platform Status</span>
+                </div>
+                <span class="font-monospace text-xs fw-bold text-success-light">99.98% Online</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Help Lines & Direct Escalations -->
+          <div class="escalations-block text-start border-top-glass pt-4">
+            <span class="text-xs fw-bold uppercase-label text-secondary d-block mb-3">Operational Policies</span>
+            <div class="policy-card p-3 rounded-3 border-glass bg-black-20 mb-3 text-xs lh-relaxed text-white-50">
+              <i class="bi bi-shield-fill-check text-primary-light me-1"></i>
+              All ticket issues are processed under strict escrow agreement guidelines and logged directly on our admin database.
+            </div>
+            
+            <!-- Quick Link buttons -->
+            <div class="d-flex flex-column gap-2">
+              <a href="mailto:escalations@talenthub.io" class="btn-escalation p-2.5 rounded-3 text-center text-xs fw-semibold text-decoration-none border-glass bg-black-20 text-white-50 hover-white">
+                <i class="bi bi-envelope-at me-2"></i> Email Corporate Support
+              </a>
+              <a routerLink="/user/chat" class="btn-escalation p-2.5 rounded-3 text-center text-xs fw-semibold text-decoration-none border-glass bg-black-20 text-white-50 hover-white">
+                <i class="bi bi-chat-left-dots me-2"></i> Speak with Live Moderator
+              </a>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- RIGHT PANEL: TICKET INITIATION WIZARD -->
+      <main class="col-12 col-lg-8 col-xl-8.5">
+        <div class="support-content-card p-4 p-md-5 rounded-4 border-glass bg-card-dark position-relative overflow-hidden">
+          <div class="card-neon-top-bar position-absolute top-0 start-0 w-100 header-neon-bar"></div>
+
+          <div class="ticket-form-wizard d-flex flex-column gap-4.5">
+            <!-- STEP 1: SELECT CORE MODULE CATEGORY -->
+            <section class="wizard-step">
+              <div class="section-title-box d-flex align-items-center gap-2 mb-3.5">
+                <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">1</div>
+                <h2 class="text-lg fw-bold text-white mb-0">Select Impacted Platform Phase</h2>
+              </div>
+
+              <!-- GRID OF CATEGORY CARDS -->
+              <div class="row g-4">
+                @for (cat of categories; track cat.id) {
+                <div class="col-12 col-sm-6 col-md-4">
+                  <div class="category-card border-glass text-start cursor-pointer h-100"
+                       [class.active]="selectedCategoryId === cat.id"
+                       (click)="selectCategory(cat.id)">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="category-icon-bullet rounded-3 d-flex align-items-center justify-content-center">
+                        <i [class]="'bi ' + cat.icon"></i>
+                      </div>
+                      <div class="selection-indicator-ring"></div>
+                    </div>
+                    <div class="mt-auto">
+                      <h4 class="text-sm fw-bold text-white mb-2">{{ cat.label }}</h4>
+                      <p class="text-xs opacity-50 mb-0 lh-relaxed">{{ cat.description }}</p>
+                    </div>
+                  </div>
+                </div>
+                }
+              </div>
+            </section>
+
+            <!-- STEP 2: DYNAMIC SUBCATEGORY SELECTOR (CONDITIONAL) -->
+            @if (selectedCategoryId) {
+            <section class="wizard-step animate-fade-in pt-3 border-top-glass">
+              <div class="section-title-box d-flex align-items-center gap-2 mb-3.5">
+                <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">2</div>
+                <h2 class="text-lg fw-bold text-white mb-0">Specify the Nature of Your Dispute</h2>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-12 col-md-8 text-start">
+                  <label class="form-label text-white opacity-80 text-xs uppercase-label mb-2">Detailed Issue Subcategory</label>
+                  <div class="custom-dropdown-capsule position-relative">
+                    <select class="form-select custom-select-box p-3 rounded-3 border-glass bg-black-20 text-sm text-white" 
+                            [(ngModel)]="selectedSubcategoryValue" 
+                            id="issueSubcategorySelect">
+                      <option value="" disabled selected>-- Select specific subcategory issue --</option>
+                      @for (sub of activeCategory?.subcategories; track sub.value) {
+                      <option [value]="sub.value">{{ sub.label }}</option>
+                      }
+                    </select>
+                    <i class="bi bi-chevron-down select-arrow-abs text-white position-absolute pointer-events-none"></i>
+                  </div>
+                </div>
+              </div>
+            </section>
+            }
+
+            <!-- STEP 3: DETAILED DESCRIPTION -->
+            <section class="wizard-step pt-3 border-top-glass">
+              <div class="section-title-box d-flex align-items-center gap-2 mb-3.5">
+                <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">3</div>
+                <h2 class="text-lg fw-bold text-white mb-0">Describe the Issue Context</h2>
+              </div>
+
+              <div class="row">
+                <div class="col-12">
+                  <app-input type="textarea" 
+                             label="Issue Description (Minimum 10 characters)" 
+                             [(ngModel)]="issueDescription" 
+                             placeholder="Provide step-by-step actions that caused the error, transaction IDs, or contract reference codes..." 
+                             [required]="true"></app-input>
+                </div>
+              </div>
+            </section>
+
+            <!-- STEP 4: SCREENSHOT REFERENCE VERIFICATIONS -->
+<section class="wizard-step pt-3 border-top-glass">
+  <div class="section-title-box d-flex align-items-center gap-2 mb-3.5">
+    <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">4</div>
+    <h2 class="text-lg fw-bold text-white mb-0">
+      Attach Verification Screenshots (Optional)
+    </h2>
+  </div>
+
+<app-file-upload
+  label="Support Evidence"
+  variant="dragdrop"
+  accept="image/*,.pdf"
+  [maxSizeMb]="10"
+  [bucketKey]="bucketKey"
+  [replaceExisting]="false"
+  [uploadSection]="uploadSection"
+  [resetTrigger]="uploadResetTrigger"
+  (uploadSuccessDetailed)="onAttachmentUploaded($event)">
+</app-file-upload>
+
+  @if (uploadedAttachments.length > 0) {
+    <div class="mt-4">
+      <div
+        class="border-glass rounded-3 p-3 mb-2"
+        *ngFor="let file of uploadedAttachments">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="text-white text-sm">
+            {{ file.name }}
+          </span>
+
+          <i class="bi bi-check-circle-fill text-success"></i>
+        </div>
+
+      </div>
+    </div>
+  }
+</section>
+
+            <!-- SUBMIT FOOTER BAR -->
+            <footer class="wizard-footer border-top-glass pt-4 mt-3 pb-2 d-flex justify-content-between align-items-center flex-wrap gap-3">
+              <a [routerLink]="getDashboardLink()" class="text-decoration-none text-secondary-light hover-white">
+                <i class="bi bi-arrow-left me-1"></i> Return to Dashboard
+              </a>
+              <app-button variant="primary" 
+                          (click)="submitTicket()" 
+                          size="md" 
+                          [disabled]="!isFormValid"
+                          customClass="btn-save-continue">
+                Submit Escalation Ticket
+              </app-button>
+            </footer>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+}
+
+
+@if(activeTab === 'tickets') {
+
+<div class="row g-4">
+
+  <!-- LEFT PANEL -->
+  <div class="col-lg-4">
+
+    <div class="glass-card">
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h4 class="mb-0">
+          My Tickets
+        </h4>
+
+        <span class="ticket-counter">
+          {{ tickets.length }}
+        </span>
+
+      </div>
+
+      @for(ticket of tickets; track ticket._id){
+
+      <div
+        class="ticket-list-item"
+        [class.active]="selectedTicket?._id === ticket._id"
+        (click)="selectTicket(ticket)">
+
+        <div class="ticket-top">
+
+          <span class="ticket-id">
+            {{ ticket.ticketId }}
+          </span>
+
+          <span
+            class="status-pill"
+            [ngClass]="getStatusClass(ticket.status)">
+
+            {{ ticket.status }}
+
+          </span>
+
+        </div>
+
+        <h6 class="ticket-subject">
+          {{ ticket.subject }}
+        </h6>
+
+        <div class="ticket-meta">
+
+          <span>
+            <i class="bi bi-chat-left-text"></i>
+            {{ ticket.replies.length }}
+          </span>
+
+          <span>
+            <i class="bi bi-paperclip"></i>
+            {{ ticket.attachments.length }}
+          </span>
+
+        </div>
+
+        <small>
+          {{ ticket.createdAt | date:'medium' }}
+        </small>
+
+      </div>
+
+      }
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT PANEL -->
+
+  <div class="col-lg-8">
+
+    @if(selectedTicket){
+
+    <div class="ticket-details-card">
+
+      <!-- HEADER -->
+
+      <div class="ticket-header">
+
+        <div>
+
+          <span class="ticket-id-large">
+
+            {{ selectedTicket.ticketId }}
+
+          </span>
+
+          <h3 class="mb-1">
+
+            {{ selectedTicket.subject }}
+
+          </h3>
+
+          <div class="ticket-user-meta">
+
+            {{ selectedTicket.userName }}
+            •
+            {{ selectedTicket.userEmail }}
+
+          </div>
+
+        </div>
+
+        <span
+          class="status-pill"
+          [ngClass]="getStatusClass(selectedTicket.status)">
+
+          {{ selectedTicket.status }}
+
+        </span>
+
+      </div>
+
+      <!-- STATUS INFO -->
+
+<div
+  class="ticket-status-banner"
+  [ngClass]="getStatusClass(selectedTicket.status)">
+
+  @switch(selectedTicket.status) {
+
+    @case('Open') {
+
+      <span>
+        Ticket submitted successfully. Support team will review it soon.
+      </span>
+
+    }
+
+    @case('WaitingForAdmin') {
+
+      <span>
+        You replied to this ticket. Waiting for support team response.
+      </span>
+
+    }
+
+    @case('WaitingForUser') {
+
+      <span>
+        Support team replied. Please review their response.
+      </span>
+
+    }
+
+    @case('Resolved') {
+
+      <span>
+        Support team believes this issue is resolved.
+        Confirm if the issue is fixed.
+      </span>
+
+    }
+
+    @case('Closed') {
+
+      <span>
+        Ticket closed successfully.
+      </span>
+
+    }
+
+  }
+
+</div>
+
+      <!-- CONVERSATION -->
+
+      <div class="conversation-thread">
+
+        <!-- ORIGINAL MESSAGE -->
+
+        <div class="timeline-message user">
+
+          <div class="timeline-header">
+
+            <strong>
+              You
+            </strong>
+
+            <span>
+              {{ selectedTicket.createdAt | date:'medium' }}
+            </span>
+
+          </div>
+
+          <div class="message-bubble">
+
+            {{ selectedTicket.message }}
+
+          </div>
+
+          @if(selectedTicket.attachments.length){
+
+          <div class="attachments mt-3">
+
+            @for(file of selectedTicket.attachments; track file.url){
+
+            <app-file-preview
+              [url]="file.url"
+              [fileName]="file.name"
+              [disabled]="true">
+            </app-file-preview>
+
+            }
+
+          </div>
+
+          }
+
+        </div>
+
+        <!-- REPLIES -->
+
+        @for(reply of selectedTicket.replies; track $index){
+
+        <div
+          class="timeline-message"
+          [class.admin]="reply.sender === 'Admin'"
+          [class.user]="reply.sender !== 'Admin'">
+
+          <div class="timeline-header">
+
+            <strong>
+
+              {{ reply.sender }}
+
+            </strong>
+
+            <span>
+
+              {{ reply.timestamp | date:'medium' }}
+
+            </span>
+
+          </div>
+
+          <div class="message-bubble">
+
+            {{ reply.message }}
+
+          </div>
+
+        </div>
+
+        }
+
+      </div>
+
+      <!-- RESOLUTION ACTIONS -->
+
+@if(
+  selectedTicket.status !== 'Closed' &&
+  selectedTicket.status !== 'Resolved'
+){
+
+<div class="mt-3 text-end">
+
+  <button
+    class="btn btn-success"
+    (click)="confirmResolution()">
+
+    <i class="bi bi-check-circle me-2"></i>
+
+    Mark Issue Resolved
+
+  </button>
+
+</div>
+
+}
+
+      <!-- USER REPLY -->
+
+      @if(selectedTicket.status !== 'Closed'){
+
+      <div class="reply-box mt-4">
+
+        <h5 class="mb-3">
+
+          Reply to Support Team
+
+        </h5>
+
+        <textarea
+          rows="4"
+          class="form-control"
+          [(ngModel)]="replyMessage"
+          placeholder="Write your response...">
+        </textarea>
+
+        <div class="mt-3 text-end">
+
+          <button
+            class="btn btn-primary"
+            [disabled]="!replyMessage.trim()"
+            (click)="sendReply()">
+
+            <i class="bi bi-send me-2"></i>
+
+            Send Reply
+
+          </button>
+
+        </div>
+
+      </div>
+
+      }
+
+    </div>
+
+    } @else {
+
+    <div class="empty-state">
+
+      <i class="bi bi-chat-square-text"></i>
+
+      <h4>
+        Select a Ticket
+      </h4>
+
+      <p>
+        Choose a support ticket to view the conversation.
+      </p>
+
+    </div>
+
+    }
+
+  </div>
+
+</div>
+
+}
+
+</div>
+
+
+
+
+
+
+
+<!-- CONNECTED SUCCESS CONFIRMATION MODAL OVERLAY -->
+@if (isSuccessModalOpen) {
+<div class="success-modal-overlay d-flex align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100 z-5">
+  <div class="success-modal-content p-5 rounded-4 border-glass bg-card-dark text-center animate-fade-in" style="width: 100%; max-width: 480px;">
+    <!-- Large Glowing success icon -->
+    <div class="success-shield-pulse rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4 text-success-light">
+      <i class="bi bi-shield-fill-check fs-2"></i>
+    </div>
+    
+    <h3 class="text-white fw-bold mb-2">Dispute Ticket Logged</h3>
+    <p class="text-sm opacity-60 mb-4 px-2">Your escalation request was logged on our central database. Support operations has been alerted and will respond in under 15 minutes.</p>
+    
+    <!-- Ticket ID display capsule -->
+    <div class="ticket-id-capsule p-3 rounded-3 border-glass bg-black-20 mb-4.5 d-flex flex-column gap-1">
+      <span class="text-secondary text-xs uppercase-label">Assigned Support Ticket ID</span>
+      <span class="font-monospace text-lg fw-extrabold text-primary-light">{{ generatedTicketId }}</span>
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex gap-3">
+      <app-button (click)="closeSuccessModal()" variant="primary" class="w-100">
+        Ack & File Another Ticket
+      </app-button>
+    </div>
+  </div>
+</div>
+}

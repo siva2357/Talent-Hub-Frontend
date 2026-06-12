@@ -1,0 +1,258 @@
+.finance-management-container {
+    padding: 2rem;
+    min-width: 1200px;
+}
+
+.filter-section {
+    position: relative;
+    z-index: 100;
+}
+
+/* Glassmorphism Base */
+.glass-dark {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+}
+
+/* Stats Cards */
+.mgmt-summary-card {
+    transition: all 0.3s ease;
+    border-width: 2px !important;
+}
+
+.mgmt-summary-card:hover {
+    transform: translateY(-5px);
+}
+
+.glow-primary {
+    box-shadow: 0 10px 30px rgba(42, 128, 255, 0.15);
+}
+
+.glow-success {
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
+}
+
+.glow-warning {
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15);
+}
+
+/* Table Styling */
+.mgmt-table-section {
+    background: rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(20px);
+    border-radius: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.table thead th {
+    background: rgba(42, 128, 255, 0.2) !important;
+    color: white !important;
+    font-weight: 700 !important;
+    padding: 1rem !important;
+    border: none !important;
+    white-space: nowrap;
+}
+
+.table-dark * {
+    font-size: 14px !important;
+}
+
+.table tbody tr {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03) !important;
+}
+
+.table tbody tr:last-child {
+    border-bottom: none !important;
+}
+
+/* Badges */
+.badge {
+    padding: 6px 10px;
+    font-weight: 500;
+    font-size: 11px;
+}
+
+/* Actions Dropdown */
+.dropdown-menu {
+    min-width: 180px;
+    z-index: 1100;
+    background: rgba(13, 17, 23, 0.95) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dropdown-item {
+    transition: all 0.2s;
+    font-size: 14px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    background: transparent !important;
+    padding: 0.6rem 1rem !important;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: white !important;
+}
+
+.dropdown-item i {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+/* Transitions */
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+/* Modal Adjustments (Inheriting from Global Premium Modal System) */
+.modal-content.glass-dark {
+    background: rgba(13, 17, 23, 0.95) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+
+
+/* Hide Scrollbar while maintaining functionality */
+.modal-dialog-scrollable .modal-content,
+.modal-body {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.modal-dialog-scrollable .modal-content::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari and Opera */
+}
+
+.modal-backdrop {
+    z-index: 9999998 !important;
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(10px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.modal {
+    z-index: 9999999 !important;
+}
+
+
+/* High Visibility & Vivid Mode */
+.modal-content.glass-dark {
+    background: #0a0d12 !important;
+    /* Ultra-dark solid base for zero bleed */
+    border: 1px solid rgba(42, 128, 255, 0.8) !important;
+    /* High intensity brand border */
+    box-shadow: 0 0 80px rgba(0, 0, 0, 0.9), 0 0 30px rgba(42, 128, 255, 0.4) !important;
+}
+
+.amount-card {
+    background: linear-gradient(145deg, rgba(42, 128, 255, 0.6) 0%, rgba(13, 17, 23, 0.95) 100%);
+    backdrop-filter: blur(30px);
+    border: 2px solid rgba(42, 128, 255, 1) !important;
+    box-shadow: 0 0 60px rgba(42, 128, 255, 0.5), inset 0 0 20px rgba(42, 128, 255, 0.2);
+}
+
+.amount-display {
+    font-size: 1.5rem !important;
+    color: #FFFFFF !important;
+    text-shadow: 0 0 25px rgba(42, 128, 255, 1), 0 0 10px rgba(255, 255, 255, 0.5);
+    font-weight: 900 !important;
+}
+
+.hover-glass {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.hover-glass:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(42, 128, 255, 0.5) !important;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(42, 128, 255, 0.2);
+}
+
+.pulse-dot {
+    width: 10px;
+    height: 10px;
+    background: #3B82F6;
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(59, 130, 246, 1);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.9);
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+    }
+
+    70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 12px rgba(59, 130, 246, 0);
+    }
+
+    100% {
+        transform: scale(0.9);
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+}
+
+.shadow-primary {
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4) !important;
+}
+
+.ls-n1 {
+    letter-spacing: -1px;
+}
+
+.ls-n2 {
+    letter-spacing: -2px;
+}
+
+.text-primary-light {
+    color: #A3C8FF;
+}
+
+.bg-gradient-brand-subtle {
+    background: linear-gradient(135deg, rgba(42, 128, 255, 0.15) 0%, transparent 100%);
+}
+
+/* Premium Checkbox & Button Polish */
+.custom-checkbox {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    border: 1.5px solid rgba(42, 128, 255, 0.8) !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
+}
+
+.custom-checkbox:checked {
+    background-color: #2A80FF !important;
+    border-color: #2A80FF !important;
+    box-shadow: 0 0 15px rgba(42, 128, 255, 0.6);
+}
+
+app-button[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+}

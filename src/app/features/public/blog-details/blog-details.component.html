@@ -1,136 +1,189 @@
 <main class="bg-black text-white min-vh-100 pb-5">
-  <!-- ARTICLE HERO -->
-  <section class="article-hero section-padding position-relative overflow-hidden">
-    <div class="hero-glow"></div>
-    <div class="container position-relative z-1">
-      <div class="row justify-content-center">
-        <div class="col-lg-10">
-          <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb mb-0">
-              <li class="breadcrumb-item"><a routerLink="/blog" class="text-brand text-decoration-none">Blog</a></li>
-              <li class="breadcrumb-item active text-secondary" aria-current="page">{{post?.category}}</li>
-            </ol>
-          </nav>
-          <h1 class="display-4 fw-bold mb-4">{{post?.title}}</h1>
 
-          <div class="d-flex align-items-center gap-4 py-4 border-top border-bottom border-white border-opacity-10">
-            <div class="d-flex gap-4">
+  @if (isLoading) {
+
+    <div class="text-center py-5 my-5">
+      <div class="spinner-border text-brand" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+  } @else if (error) {
+
+    <div class="container py-5 my-5 text-center">
+
+      <div class="glass border border-danger border-opacity-10 rounded-5 p-5 shadow-lg">
+
+        <div class="text-danger mb-4">
+          <i class="bi bi-exclamation-octagon fs-1"></i>
+        </div>
+
+        <h4 class="text-white fw-bold mb-3">
+          Blog Not Found
+        </h4>
+
+        <p class="text-secondary mb-4">
+          {{ error }}
+        </p>
+
+        <app-button
+          variant="brand"
+          routerLink="/blog">
+
+          Back To Blog
+
+        </app-button>
+
+      </div>
+
+    </div>
+
+  } @else if (post) {
+
+    <!-- HERO -->
+    <section class="article-hero section-padding position-relative overflow-hidden">
+
+      <div class="hero-glow"></div>
+
+      <div class="container position-relative z-1">
+
+        <div class="row justify-content-center">
+
+          <div class="col-lg-10">
+
+            <nav aria-label="breadcrumb" class="mb-4">
+
+              <ol class="breadcrumb mb-0">
+
+                <li class="breadcrumb-item">
+                  <a
+                    routerLink="/blog"
+                    class="text-brand text-decoration-none">
+
+                    Blog
+
+                  </a>
+                </li>
+
+                <li
+                  class="breadcrumb-item active text-secondary"
+                  aria-current="page">
+
+                  {{ post.category }}
+
+                </li>
+
+              </ol>
+
+            </nav>
+
+            <h1 class="display-4 fw-bold mb-4">
+              {{ post.title }}
+            </h1>
+
+            <div class="d-flex flex-wrap gap-4 py-4 border-top border-bottom border-white border-opacity-10">
+
               <div class="text-xs text-secondary">
-                <div class="fw-bold text-white mb-1">Published on</div>
-                {{post?.date}}
+
+                <div class="fw-bold text-white mb-1">
+                  Published
+                </div>
+
+                {{ post.createdAt | date:'dd MMM yyyy' }}
+
               </div>
+
               <div class="text-xs text-secondary">
-                <div class="fw-bold text-white mb-1">Read time</div>
-                {{post?.readTime}}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ARTICLE CONTENT -->
-  <section class="article-content-section py-5">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="article-featured-image-wrapper rounded-5 overflow-hidden mb-5 glass p-3">
-            <img [src]="post?.image" [alt]="post?.title" class="img-fluid rounded-4 w-100">
-          </div>
-
-          <div class="article-body" [innerHTML]="post?.content">
-          </div>
-
-          <!-- TAGS & SHARE -->
-          <div
-            class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4 mt-5 pt-5 border-top border-white border-opacity-10">
-            <div class="d-flex gap-2 align-items-center">
-              <span class="text-xs text-secondary me-2">Tags:</span>
-              <span class="badge bg-dark border border-white border-opacity-10 px-3 py-2 rounded-pill text-xs">AI</span>
-              <span
-                class="badge bg-dark border border-white border-opacity-10 px-3 py-2 rounded-pill text-xs">Technology</span>
-              <span
-                class="badge bg-dark border border-white border-opacity-10 px-3 py-2 rounded-pill text-xs">Future</span>
-            </div>
-            <div class="d-flex gap-3 align-items-center">
-              <span class="text-xs text-secondary">Share:</span>
-              <button class="btn btn-dark btn-sm rounded-circle p-2 border border-white border-opacity-10"><i
-                  class="bi bi-twitter-x"></i></button>
-              <button class="btn btn-dark btn-sm rounded-circle p-2 border border-white border-opacity-10"><i
-                  class="bi bi-linkedin"></i></button>
-              <button class="btn btn-dark btn-sm rounded-circle p-2 border border-white border-opacity-10"><i
-                  class="bi bi-facebook"></i></button>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="col-lg-8">
-          <!-- COMMENTS SECTION -->
-          <div class="comments-section mt-5 pt-5 border-top border-white border-opacity-10">
-            <h3 class="fw-bold mb-4">Comments (1)</h3>
-
-            <!-- Comment Form -->
-            <div class="comment-form glass p-4 rounded-4 mb-5">
-              <h5 class="fw-bold mb-3">Leave a comment</h5>
-              <div class="mb-3">
-                <textarea class="form-control bg-transparent border-white border-opacity-10 text-white shadow-none"
-                  rows="4" placeholder="Share your thoughts..."></textarea>
-              </div>
-              <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                  <input type="text"
-                    class="form-control bg-transparent border-white border-opacity-10 text-white shadow-none"
-                    placeholder="Your Name">
+                <div class="fw-bold text-white mb-1">
+                  Updated
                 </div>
-                <div class="col-md-6">
-                  <input type="email"
-                    class="form-control bg-transparent border-white border-opacity-10 text-white shadow-none"
-                    placeholder="Your Email">
-                </div>
+
+                {{ post.updatedAt | date:'dd MMM yyyy' }}
+
               </div>
-              <app-button variant="brand" size="sm">Post Comment</app-button>
+
+              <div class="text-xs text-secondary">
+
+                <div class="fw-bold text-white mb-1">
+                  Read Time
+                </div>
+
+                {{ getReadTime(post.description) }} min read
+
+              </div>
+
             </div>
 
-            <!-- Comment List -->
-            <div class="comment-list d-grid gap-4">
-              <div class="comment-item d-flex gap-3">
-                <img src="assets/images/profiles/avatar-2.jpg" alt="User" class="rounded-circle"
-                  style="width: 48px; height: 48px; object-fit: cover;">
-                <div class="flex-grow-1">
-                  <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6 class="fw-bold mb-0">Alex Johnson</h6>
-                    <span class="text-xxs text-secondary">2 days ago</span>
-                  </div>
-                  <p class="text-sm text-secondary mb-2">This is an incredibly insightful article. The way AI is being
-                    integrated into Talent Hub seems like a game-changer for freelancers.</p>
-                  <button class="btn btn-link text-brand text-xs p-0 text-decoration-none fw-bold">Reply</button>
-                </div>
-              </div>
-            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- RELATED POSTS -->
-  <section class="related-posts section-padding">
-    <div class="container">
-      <h2 class="fw-bold mb-5 text-center">Related Articles</h2>
-      <div class="row g-4 justify-content-center">
-        <div class="col-lg-4">
-          <!-- Small card version -->
-          <div class="blog-card-sm glass p-4 rounded-4 h-100">
-            <h5 class="fw-bold mb-3 h6">Our Service: A Comprehensive Guide to Talent Hub</h5>
-            <p class="text-xs text-secondary mb-3">Discover the full suite of tools and services designed to empower
-              freelancers...</p>
-            <a routerLink="/blog-details/our-service-comprehensive-guide"
-              class="text-brand text-xs fw-bold text-decoration-none">Read More &rarr;</a>
-          </div>
         </div>
+
       </div>
-    </div>
-  </section>
+
+    </section>
+
+    <!-- CONTENT -->
+    <section class="article-content-section py-5">
+
+      <div class="container">
+
+        <div class="row justify-content-center">
+
+          <div class="col-lg-8">
+
+            <!-- Featured Media -->
+
+            @if (post.mediaUrl) {
+
+              <div class="article-featured-image-wrapper rounded-5 overflow-hidden mb-5 glass p-3">
+
+                <img
+                  [src]="post.mediaUrl"
+                  [alt]="post.title"
+                  class="img-fluid rounded-4 w-100">
+
+              </div>
+
+            }
+
+            <!-- Category -->
+
+            <div class="mb-4">
+
+              <span class="badge bg-primary px-3 py-2">
+
+                {{ post.category }}
+
+              </span>
+
+            </div>
+
+            <!-- Description -->
+
+            <div class="article-body glass rounded-4 p-4 p-lg-5">
+
+              <h3 class="fw-bold mb-4">
+                Overview
+              </h3>
+
+              <p class="lead text-secondary lh-lg mb-0" innerHTML="{{ post.description }}">
+
+
+              </p>
+
+            </div>
+
+
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+
 </main>

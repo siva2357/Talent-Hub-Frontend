@@ -1,0 +1,252 @@
+<div class="find-contracts-page pb-5">
+  <div class="container py-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <h2 class="text-white fw-bold mb-1">Find Your Next <span class="text-primary">Contract</span></h2>
+        <p class="text-secondary mb-0">Browse through hundreds of high-quality opportunities.</p>
+      </div>
+      <div class="d-flex gap-3">
+        <div class="search-box glass rounded-pill px-4 py-2 d-flex align-items-center">
+          <i class="bi bi-search text-secondary me-3"></i>
+          <input type="text" [(ngModel)]="searchQuery" placeholder="Search contracts, skills..."
+            class="bg-transparent border-0 text-white shadow-none w-100">
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Sidebar Filters -->
+      <aside class="col-lg-3">
+        <div class="filters-card glass p-4 rounded-4 sticky-top" style="top: 100px; z-index: 1;">
+          <h5 class="text-white fw-bold mb-4">Filters</h5>
+
+          <div class="filter-group mb-4">
+            <label class="text-secondary small mb-2 d-block">Category</label>
+            <select class="form-select glass text-white border-0 shadow-none" [(ngModel)]="selectedCategory">
+              @for (cat of categories; track cat) {
+              <option [value]="cat" class="bg-dark">{{cat}}</option>
+              }
+            </select>
+          </div>
+
+          <div class="filter-group mb-4">
+            <label class="text-secondary small mb-2 d-block">Experience Level</label>
+            @for (level of experienceLevels; track level) {
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="radio" [name]="'expLevel'" [id]="'level'+level" [value]="level"
+                [(ngModel)]="selectedLevel">
+              <label class="form-check-label text-white small cursor-pointer" [for]="'level'+level">
+                {{level}}
+              </label>
+            </div>
+            }
+          </div>
+
+          <div class="filter-group mb-4">
+            <label class="text-secondary small mb-2 d-block">Budget Range</label>
+            <div class="d-flex align-items-center gap-2">
+              <input type="number" class="form-control glass text-white border-0 py-2 small" placeholder="Min">
+              <span class="text-secondary">-</span>
+              <input type="number" class="form-control glass text-white border-0 py-2 small" placeholder="Max">
+            </div>
+          </div>
+
+          <div class="filter-group mb-4">
+            <label class="text-secondary small mb-2 d-block">Contract Type</label>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="fixedType">
+              <label class="form-check-label text-white small" for="fixedType">Fixed Price</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="hourlyType">
+              <label class="form-check-label text-white small" for="hourlyType">Hourly</label>
+            </div>
+          </div>
+
+          <button class="btn btn-outline-primary w-100 mt-2 py-2 rounded-3 small fw-bold">Reset All Filters</button>
+        </div>
+      </aside>
+
+      <!-- Main Content: Contracts Grid -->
+<!-- Main Content: Contracts Grid -->
+<main class="col-lg-9">
+
+  <div class="row g-4">
+
+    @for (contract of filteredContracts; track contract._id) {
+
+    <div class="col-lg-6 col-md-6">
+
+      <div class="contract-card glass p-4 rounded-4 h-100 d-flex flex-column">
+
+        <!-- Top Info -->
+        <div class="d-flex justify-content-between align-items-start mb-4">
+
+          <div class="d-flex align-items-center gap-3">
+
+            <div>
+
+              <h5 class="fw-bold mb-2 h6">
+                {{ contract.contractTitle }}
+              </h5>
+
+              <div class="d-flex gap-2 flex-wrap">
+
+                <span
+                  class="badge-type"
+                  [ngClass]="
+                    contract.budgetType === 'Fixed Price'
+                      ? 'fixed'
+                      : 'hourly'
+                  "
+                >
+                  {{ contract.budgetType }}
+                </span>
+
+                @if (contract.contractType) {
+                  <span class="badge-tag category">
+                    {{ contract.contractType }}
+                  </span>
+                }
+                @if (contract.contractSubject) {
+                  <span class="badge-tag subject">
+                    {{ contract.contractSubject }}
+                  </span>
+                }
+
+              </div>
+
+            </div>
+
+          </div>
+
+  <button
+  class="btn-save"
+  [class.saved]="contract.hasSaved"
+  (click)="saveContract(contract._id)"
+>
+
+  @if(contract.hasSaved){
+
+    <i class="bi bi-bookmark-fill"></i>
+
+  } @else {
+
+    <i class="bi bi-bookmark"></i>
+
+  }
+
+</button>
+
+        </div>
+
+        <!-- Description -->
+        <p class="text-sm text-secondary mb-4 flex-grow-1" [innerHTML]="contract.contractDescription"></p>
+
+        <!-- Future Tech Stack -->
+        
+        <div class="d-flex flex-wrap gap-2 mb-4">
+
+          @for (tech of contract.techStack; track tech) {
+
+          <span class="tech-tag">
+            {{ tech }}
+          </span>
+
+          }
+
+        </div>
+       
+
+        <!-- Stats -->
+        <div class="pt-4 border-top border-white border-opacity-10 mt-auto">
+
+          <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div class="contract-stat">
+
+              <div class="text-white fw-bold">
+
+                ₹{{ contract.estimatedBudget }}
+
+              </div>
+
+              <div class="text-xxs text-secondary">
+
+                Budget
+
+              </div>
+
+            </div>
+
+            <div class="contract-stat text-end">
+
+              <div class="text-white fw-bold">
+
+                <i class="bi bi-calendar-event me-1"></i>
+
+                {{ contract.totalDuration  }}
+
+              </div>
+
+              <div class="text-xxs text-secondary">
+
+                {{ contract.contractStartDate | date:'mediumDate' }}  -  {{ contract.contractEndDate | date:'mediumDate' }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+<app-button
+  variant="brand"
+  size="sm"
+  customClass="w-100 py-2"
+  (click)="viewContract(contract._id)"
+>
+  Apply Now →
+</app-button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    } @empty {
+
+    <div class="col-12 text-center py-5">
+
+      <div class="empty-state glass p-5 rounded-5">
+
+        <i class="bi bi-search fs-1 text-secondary opacity-25 mb-3 d-block"></i>
+
+        <h4 class="text-white">
+          No contracts found
+        </h4>
+
+        <p class="text-secondary">
+          Try adjusting your filters or search query.
+        </p>
+
+        <button
+          (click)="searchQuery = ''"
+          class="btn btn-primary px-4 mt-2"
+        >
+          Clear All
+        </button>
+
+      </div>
+
+    </div>
+
+    }
+
+  </div>
+
+</main>
+    </div>
+  </div>
+</div>
