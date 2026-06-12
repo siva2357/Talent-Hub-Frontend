@@ -765,10 +765,28 @@ const paymentDetails = {
     });
   }
 
+
+
+  get canVerifyPayment(): boolean {
+  return !!(
+    this.bankDetails.bankCode &&
+    this.bankDetails.holderName &&
+    this.bankDetails.accountNumber &&
+    this.bankDetails.ifsc &&
+    this.bankDetails.panNumber &&
+    this.bankDetails.aadhaarNumber &&
+    this.bankDetails.panCardUrl &&
+    this.bankDetails.aadhaarCardUrl &&
+    this.legalityAccepted &&
+    !this.isLinkingBank
+  );
+}
+
+
 verifyPaymentDetails(): void {
 
   const {
-    bankName,
+    bankCode,
     holderName,
     accountNumber,
     ifsc,
@@ -779,7 +797,7 @@ verifyPaymentDetails(): void {
   } = this.bankDetails;
 
   if (
-    !bankName ||
+    !bankCode ||
     !holderName ||
     !accountNumber ||
     !ifsc ||
@@ -787,6 +805,26 @@ verifyPaymentDetails(): void {
     !aadhaarNumber
   ) {
     alert('Please complete all payment and KYC fields.');
+    return;
+  }
+
+  if (!ValidationHelper.isValidAccountNumber(accountNumber)) {
+    alert('Please enter a valid account number.');
+    return;
+  }
+
+  if (!ValidationHelper.isValidIFSC(ifsc)) {
+    alert('Please enter a valid IFSC code.');
+    return;
+  }
+
+  if (!PanHelper.isValid(panNumber)) {
+    alert('Please enter a valid PAN number.');
+    return;
+  }
+
+  if (!AadhaarHelper.isValid(aadhaarNumber)) {
+    alert('Please enter a valid Aadhaar number.');
     return;
   }
 
@@ -810,8 +848,14 @@ verifyPaymentDetails(): void {
   setTimeout(() => {
 
     this.isLinkingBank = false;
-
     this.isPaymentVerified = true;
+
+    const selectedBank = this.banks.find(
+      b => b.code === bankCode
+    );
+
+    this.bankDetails.bankName =
+      selectedBank?.name || '';
 
     alert(
       'Payment details and KYC documents submitted successfully.'

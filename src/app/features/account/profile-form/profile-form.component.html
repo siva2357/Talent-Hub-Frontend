@@ -64,7 +64,7 @@
 
             <div class="row g-4">
               <div class="col-lg-4 text-center">
-                <app-file-upload variant="avatar" [(ngModel)]="profilePhotoPreview"
+                <app-file-upload variant="avatar" [replaceExisting]="true" [(ngModel)]="profilePhotoPreview"
                   [bucketKey]="userRole === 'client' ? BucketKey.ClientData : BucketKey.FreelancerData"
                   [uploadSection]="UploadSection.ProfilePhoto" (uploadSuccess)="onProfilePhotoUploaded($event)">
                 </app-file-upload>
@@ -417,10 +417,11 @@
 
 @if (
   bankDetails.aadhaarNumber &&
-  !AadhaarHelper.isValid(bankDetails.aadhaarNumber)
+  bankDetails.aadhaarNumber.length > 0 &&
+  bankDetails.aadhaarNumber.length < 12
 ) {
   <small class="text-danger">
-    Invalid Aadhaar Number
+    Aadhaar must be 12 digits
   </small>
 }
 </div>
@@ -430,6 +431,7 @@
   <app-file-upload
     label="PAN Card"
     variant="dragdrop"
+    [replaceExisting]="true"
     [bucketKey]="userRole === 'client'
       ? BucketKey.ClientData
       : BucketKey.FreelancerData"
@@ -446,6 +448,7 @@
   <app-file-upload
     label="Aadhaar Card"
     variant="dragdrop"
+   [replaceExisting]="true"
     [bucketKey]="userRole === 'client'
       ? BucketKey.ClientData
       : BucketKey.FreelancerData"
@@ -476,11 +479,17 @@
 
                 <!-- Link Button -->
                 @if (!isPaymentVerified) {
-                  <app-button variant="primary" size="md" (click)="verifyPaymentDetails()" class="w-100 mt-4"
-                    [disabled]="!bankDetails.bankName || !bankDetails.holderName || !bankDetails.accountNumber || !bankDetails.ifsc || !legalityAccepted || isLinkingBank"
-                    [loading]="isLinkingBank">
-                    Link & Verify Bank Details
-                  </app-button>
+                 <app-button
+  variant="primary"
+  size="md"
+  (click)="verifyPaymentDetails()"
+  class="w-100 mt-4"
+  [disabled]="!canVerifyPayment"
+  [loading]="isLinkingBank">
+
+  Link & Verify Bank Details
+
+</app-button>
                 }
               </div>
             </div>

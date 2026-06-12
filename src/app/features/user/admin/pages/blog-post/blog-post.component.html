@@ -246,3 +246,51 @@
 
   </div>
 </div>
+
+
+<app-table
+  [rows]="rows"
+  [columns]="columns">
+</app-table>
+
+<ng-template
+  #actionTemplate
+  let-row>
+
+  <div class="action-menu">
+
+    <button
+      class="action-btn"
+      (click)="toggleMenu(row.id, $event)">
+      ⋮
+    </button>
+
+    @if (openMenuId === row.id) {
+
+      <div class="action-dropdown">
+
+        <button (click)="view(row)">
+          View
+        </button>
+
+        <button (click)="edit(row)">
+          Edit
+        </button>
+
+        <button (click)="publish(row)">
+          Publish
+        </button>
+
+        <button
+          class="text-danger"
+          (click)="delete(row)">
+          Delete
+        </button>
+
+      </div>
+
+    }
+
+  </div>
+
+</ng-template>

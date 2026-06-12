@@ -1,0 +1,80 @@
+<div class="table-wrapper">
+
+  <ngx-datatable
+    #table
+    class="bootstrap dark-table"
+    [rows]="rows"
+    [loadingIndicator]="loading"
+    [columnMode]="'force'"
+    [headerHeight]="50"
+    [footerHeight]="70"
+    [rowHeight]="55"
+    [limit]="pageSize"
+    [messages]="{
+      emptyMessage: 'No records found'
+    }"
+    (activate)="onActivate($event)">
+
+    @for (column of columns; track column.prop) {
+
+      <ngx-datatable-column
+        [name]="column.name"
+        [prop]="column.prop">
+
+        <ng-template
+          ngx-datatable-cell-template
+          let-row="row">
+
+          @if (column.cellTemplate) {
+
+            <ng-container
+              *ngTemplateOutlet="
+                column.cellTemplate;
+                context: {
+                  $implicit: row
+                }
+              ">
+            </ng-container>
+
+          } @else {
+
+            {{ row[column.prop] }}
+
+          }
+
+        </ng-template>
+
+      </ngx-datatable-column>
+
+    }
+
+  </ngx-datatable>
+
+  <div class="table-footer-toolbar">
+
+    <div class="page-size-wrapper">
+
+      <span>Show</span>
+
+      <select
+        class="page-size-select"
+        [(ngModel)]="pageSize"
+        (ngModelChange)="onPageSizeChange()">
+
+        @for (size of pageSizeOptions; track size) {
+
+          <option [ngValue]="size">
+            {{ size }}
+          </option>
+
+        }
+
+      </select>
+
+      <span>entries</span>
+
+    </div>
+
+  </div>
+
+</div>

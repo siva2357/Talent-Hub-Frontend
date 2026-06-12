@@ -1,0 +1,193 @@
+:host {
+  display: block;
+}
+
+/* =====================================
+   WRAPPER
+===================================== */
+
+.table-wrapper {
+  position: relative;
+}
+
+/* =====================================
+   TABLE
+===================================== */
+
+::ng-deep .ngx-datatable {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+}
+
+/* =====================================
+   HEADER
+===================================== */
+
+::ng-deep .ngx-datatable .datatable-header {
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+::ng-deep .ngx-datatable .datatable-header-cell {
+  color: var(--text-secondary) !important;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+/* =====================================
+   BODY
+===================================== */
+
+::ng-deep .ngx-datatable .datatable-body-row {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  transition: all 0.2s ease;
+}
+
+::ng-deep .ngx-datatable .datatable-body-row:hover {
+  background: rgba(59,130,246,0.08) !important;
+}
+
+::ng-deep .ngx-datatable .datatable-body-cell {
+  color: var(--text-primary);
+  font-size: 14px;
+
+}
+
+/* =====================================
+   FOOTER
+===================================== */
+
+::ng-deep .ngx-datatable .datatable-footer {
+  background: transparent !important;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+::ng-deep .ngx-datatable .page-count {
+  display: none !important;
+}
+
+::ng-deep .ngx-datatable .datatable-footer-inner {
+  width: 100% !important;
+  padding-right: 20px;
+
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+}
+
+/* =====================================
+   PAGINATION
+===================================== */
+
+::ng-deep .ngx-datatable .datatable-pager {
+  margin-left: auto !important;
+}
+
+::ng-deep .ngx-datatable .datatable-pager ul {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+::ng-deep .ngx-datatable .datatable-pager li {
+  margin: 0 !important;
+}
+
+::ng-deep .ngx-datatable .datatable-pager li a {
+  width: 42px !important;
+  height: 42px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border-radius: 12px !important;
+
+  background: rgba(255,255,255,0.05);
+  color: var(--text-primary) !important;
+
+  transition: all 0.2s ease;
+}
+
+::ng-deep .ngx-datatable .datatable-pager li a:hover {
+  background: rgba(255,255,255,0.10);
+}
+
+::ng-deep .ngx-datatable .datatable-pager .active a {
+  background: var(--brand-500) !important;
+  color: #fff !important;
+}
+
+::ng-deep .ngx-datatable .datatable-pager .disabled a {
+  opacity: .4;
+}
+
+/* =====================================
+   PAGE SIZE
+===================================== */
+
+.table-footer-toolbar {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  z-index: 5;
+}
+
+.page-size-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.page-size-select {
+  width: 90px;
+  height: 42px;
+
+  padding: 0 12px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+
+  background: rgba(255,255,255,0.05);
+  color: white;
+
+  outline: none;
+  cursor: pointer;
+}
+
+.page-size-select:focus {
+  border-color: var(--brand-500);
+}
+
+.page-size-select option {
+  background: #111827;
+  color: white;
+}
+
+
+
+::ng-deep .datatable-row-wrapper {
+  overflow: visible !important;
+}
+
+::ng-deep .datatable-body-row {
+  overflow: visible !important;
+}
+
+::ng-deep .datatable-body-cell {
+  overflow: visible !important;
+}
+
+::ng-deep .datatable-body {
+  overflow: visible !important;
+}
+
+::ng-deep .ngx-datatable {
+  overflow: visible !important;
+}

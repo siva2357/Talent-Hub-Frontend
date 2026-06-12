@@ -91,3 +91,83 @@
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
+
+
+
+.action-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255,255,255,.06);
+  color: #fff;
+  cursor: pointer;
+}
+
+/* DROPDOWN */
+
+.action-dropdown {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 8px);
+
+  width: 160px;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #111827;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+
+  z-index: 99999;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.action-dropdown button {
+  display: block !important;
+
+  width: 100% !important;
+
+  padding: 12px 14px;
+
+  border: none;
+  background: transparent;
+
+  text-align: left;
+
+  color: #fff;
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+.action-dropdown button:hover {
+  background: rgba(255,255,255,.05);
+}
+
+.action-dropdown .text-danger {
+  color: #ef4444;
+}
+
+
+:host ::ng-deep .action-menu {
+  position: relative;
+  display: inline-block;
+}
+
+:host ::ng-deep .action-dropdown {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+:host ::ng-deep .action-dropdown button {
+  display: block !important;
+  width: 100% !important;
+}
