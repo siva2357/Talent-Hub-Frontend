@@ -93,26 +93,31 @@
   transform: translateY(-1px);
 }
 
+.action-menu {
+  position: relative;
+}
+
 .action-dropdown {
   position: absolute;
 
-  top: 100%;
-  right: 0;
+  top: 0;
 
-  margin-top: 8px;
-  min-width: 180px;
+left: calc(100% + 12px);
+  min-width: 150px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 
   background: #0f172a;
-
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255,255,255,.08);
   border-radius: 12px;
 
   padding: 8px;
 
-  z-index: 9999999;
-
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  z-index: 999999;
 }
+
 
 .action-dropdown button {
   width: 100%;

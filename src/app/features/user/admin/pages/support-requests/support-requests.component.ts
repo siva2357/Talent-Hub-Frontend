@@ -2,13 +2,10 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-
 import { SupportService } from '../../../../../core/services/support.service';
-
-import {
-  SupportRequest
-} from '../../../../../core/model/support-request.model';
+import { SupportRequest} from '../../../../../core/model/support-request.model';
 import { FilePreviewComponent } from "../../../../../shared/components/file-preview/file-preview.component";
+import { InputComponent } from "../../../../../shared/components/input/input.component";
 
 @Component({
   selector: 'app-support-requests',
@@ -16,7 +13,8 @@ import { FilePreviewComponent } from "../../../../../shared/components/file-prev
   imports: [
     CommonModule,
     FormsModule,
-    FilePreviewComponent
+    FilePreviewComponent,
+    InputComponent
 ],
   templateUrl: './support-requests.component.html',
   styleUrl: './support-requests.component.css'
@@ -44,6 +42,24 @@ export class SupportRequestsComponent implements OnInit {
     | 'Client'
     | 'Freelancer' = 'All';
 
+    statusOptions = [
+  { label: 'All Status', value: 'All' },
+  { label: 'Open', value: 'Open' },
+  { label: 'Waiting For Admin', value: 'WaitingForAdmin' },
+  { label: 'Waiting For User', value: 'WaitingForUser' },
+  { label: 'Resolved', value: 'Resolved' },
+  { label: 'Closed', value: 'Closed' }
+];
+
+userTypeOptions = [
+  { label: 'All Users', value: 'All' },
+  { label: 'Client', value: 'Client' },
+  { label: 'Freelancer', value: 'Freelancer' }
+];
+
+isLoading = true;
+
+
   selectedRequest: SupportRequest | null = null;
 
   replyText = '';
@@ -52,27 +68,33 @@ export class SupportRequestsComponent implements OnInit {
     this.loadRequests();
   }
 
-  loadRequests(): void {
+loadRequests(): void {
 
-    this.supportService.getAllTickets().subscribe({
-      next: (tickets) => {
+  this.isLoading = true;
 
-        this.requests = tickets;
+  this.supportService.getAllTickets().subscribe({
+    next: (tickets) => {
 
-        this.applyFilters();
-      },
+      this.requests = tickets;
 
-      error: (error) => {
+      this.applyFilters();
 
-        console.error(error);
+      this.isLoading = false;
+    },
 
-        this.toastr.error(
-          'Failed to load support tickets',
-          'Support Desk'
-        );
-      }
-    });
-  }
+    error: (error) => {
+
+      console.error(error);
+
+      this.isLoading = false;
+
+      this.toastr.error(
+        'Failed to load support tickets',
+        'Support Desk'
+      );
+    }
+  });
+}
 
   onSearch(event: Event): void {
 

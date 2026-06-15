@@ -62,6 +62,7 @@ export class Table {
     if (
       event.type === 'click' &&
       event.row
+      
     ) {
       this.rowClicked.emit(event.row);
     }

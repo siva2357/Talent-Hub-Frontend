@@ -1,11 +1,15 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, HostListener, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService, FreelancerData } from '../../../../../core/services/admin.service';
+import { Table } from "../../../../../shared/components/table/table.component";
+import { ButtonComponent } from "../../../../../shared/components/button/button.component";
+import { InputComponent } from "../../../../../shared/components/input/input.component";
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-freelancer-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Table, ButtonComponent, InputComponent,FormsModule],
   templateUrl: './freelancer-list.component.html',
   styleUrl: './freelancer-list.component.css'
 })
@@ -84,4 +88,83 @@ export class FreelancerListComponent implements OnInit {
   closeProfileModal(): void {
     this.selectedFreelancer = null;
   }
+
+
+
+    @ViewChild('freelancerTemplate', { static: true })
+freelancerTemplate!: TemplateRef<any>;
+
+@ViewChild('statusTemplate', { static: true })
+statusTemplate!: TemplateRef<any>;
+
+@ViewChild('actionTemplate', { static: true })
+actionTemplate!: TemplateRef<any>;
+
+columns: any[] = [];
+
+ngAfterViewInit(): void {
+
+this.columns = [
+  {
+    name: 'Freelancer',
+    prop: 'name',
+    width: 280,
+    cellTemplate: this.freelancerTemplate
+  },
+  {
+    name: 'Email',
+    prop: 'email',
+    width: 280
+  },
+  {
+    name: 'Phone',
+    prop: 'phoneNumber',
+    width: 180
+  },
+  {
+    name: 'Title',
+    prop: 'title',
+    width: 220
+  },
+  {
+    name: 'Hourly Rate',
+    prop: 'hourlyRate',
+    width: 150
+  },
+  {
+    name: 'Status',
+    prop: 'status',
+    width: 140,
+    cellTemplate: this.statusTemplate
+  }
+];
+
+}
+
+
+  statusOptions = [
+  { label: 'All', value: 'All' },
+  { label: 'Active', value: 'Active' },
+  { label: 'Suspended', value: 'Suspended' },
+  { label: 'Blocked', value: 'Blocked' },
+  { label: 'Deactivated', value: 'Deactivated' }
+];
+
+openMenuId: number | string | null = null;
+
+toggleMenu(id: number | string, event: Event): void {
+  event.stopPropagation();
+
+  this.openMenuId =
+    this.openMenuId === id
+      ? null
+      : id;
+}
+
+@HostListener('document:click')
+closeMenu(): void {
+  this.openMenuId = null;
+}
+
+
 }
