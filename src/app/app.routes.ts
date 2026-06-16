@@ -116,13 +116,11 @@ export const routes: Routes = [
 
       // Client Pages
       { path: 'client-dashboard', component: ClientDashboardComponent },
-
       { path: 'your-contracts', component: YourContractsComponent },
       { path: 'contract-form', component: ContractFormComponent },
       { path: 'contract-view-details', component: ContractViewDetailsComponent },
       { path: 'contract-proposals', component: ContractProposalsComponent },
       { path: 'contract-progress', component: ContractProgressComponent },
-
       { path: 'search-talent', component: SearchTalentComponent },
       { path: 'talent-profile/:id', component: TalentProfileComponent },
       { path: 'project-details/:id', component: ProjectDetailsComponent },

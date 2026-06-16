@@ -21,10 +21,11 @@
     
     @if (performanceTier) {
       <div class="performance-ring text-start">
-        <div class="ring-wrapper ms-0 mb-1" [ngClass]="performanceTier.toLowerCase()"
-          style="cursor: help;" data-tooltip="Please start contract to level up score and better hiring">
-          <span class="percent text-white">{{ performance }}%</span>
-        </div>
+   <div class="ring-wrapper ms-0 mb-1" [ngClass]="performanceTier.toLowerCase()">
+  <span class="percent text-white">
+    {{ performanceTier === 'New' ? 'NEW' : performance + '%' }}
+  </span>
+</div>
         <div class="fw-bold text-xs" [ngClass]="{
                 'text-success': performanceTier === 'High',
                 'text-warning': performanceTier === 'Medium',

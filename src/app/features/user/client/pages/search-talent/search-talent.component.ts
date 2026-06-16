@@ -6,11 +6,13 @@ import { ProfileService } from '../../../../../core/services/profile.service';
 import { InputComponent } from '../../../../../shared/components/input/input.component';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { TalentCardComponent } from '../../../../../shared/components/talent-card/talent-card.component';
+import { Category } from '../../../../../core/enums/category.enum';
+import { ChipComponent } from "../../../../../shared/components/chip/chip.component";
 
 @Component({
   selector: 'app-search-talent',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputComponent, ButtonComponent, TalentCardComponent],
+  imports: [CommonModule, FormsModule, InputComponent, ButtonComponent, TalentCardComponent, ChipComponent],
   templateUrl: './search-talent.component.html',
   styleUrl: './search-talent.component.css'
 })
@@ -22,13 +24,23 @@ export class SearchTalentComponent implements OnInit {
   selectedCategory = 'All Categories';
   minRate: number | null = null;
   maxRate: number | null = null;
+  selectedPerformance = 'All';
 
-  categoryOptions = [
-    { label: 'All Categories', value: 'All Categories' },
-    { label: 'UI/UX Design', value: 'UI/UX Design' },
-    { label: 'Full Stack Development', value: 'Full Stack Development' },
-    { label: 'Data Science', value: 'Data Science' }
-  ];
+categoryOptions = [
+  { label: 'All Categories', value: 'All Categories' },
+  ...Object.values(Category).map(category => ({
+    label: category,
+    value: category
+  }))
+];
+
+performanceOptions = [
+  { label: 'All Performance', value: 'All' },
+  { label: 'New', value: 'New' },
+  { label: 'High', value: 'High' },
+  { label: 'Medium', value: 'Medium' },
+  { label: 'Low', value: 'Low' }
+];
 
   talents: any[] = [];
   savedTalentsSet = new Set<string>();
@@ -38,16 +50,26 @@ export class SearchTalentComponent implements OnInit {
     this.loadSavedTalents();
   }
 
-  loadTalents(): void {
-    this.profileService.getFreelancers().subscribe({
-      next: (res) => {
-        if (res.success && res.freelancers) {
-          this.talents = res.freelancers.map((f: any) => this.mapTalentFields(f));
-        }
-      },
-      error: (err) => console.error('Error loading freelancers:', err)
-    });
-  }
+loadTalents(): void {
+  this.profileService.getFreelancers().subscribe({
+    next: (response) => {
+      let talents = (response.items || []).map(f =>
+        this.mapTalentFields(f)
+      );
+
+      if (this.selectedPerformance !== 'All') {
+        talents = talents.filter(
+          talent => talent.performanceTier === this.selectedPerformance
+        );
+      }
+
+      this.talents = talents;
+    },
+    error: (err) => {
+      console.error('Error loading freelancers:', err);
+    }
+  });
+}
 
   loadSavedTalents(): void {
     this.profileService.getSavedTalents().subscribe({
@@ -63,24 +85,68 @@ export class SearchTalentComponent implements OnInit {
     });
   }
 
-  applyFilters(): void {
-    const params: any = {};
-    if (this.searchQuery.trim()) params.search = this.searchQuery;
-    if (this.selectedCategory && this.selectedCategory !== 'All Categories') {
-      params.category = this.selectedCategory;
-    }
-    if (this.minRate !== null) params.minRate = this.minRate;
-    if (this.maxRate !== null) params.maxRate = this.maxRate;
+applyFilters(): void {
+  this.appliedSearchQuery = this.searchQuery;
+  this.appliedCategory = this.selectedCategory;
+  this.appliedPerformance = this.selectedPerformance;
+  this.appliedMinRate = this.minRate;
+  this.appliedMaxRate = this.maxRate;
 
-    this.profileService.getFreelancers(params).subscribe({
-      next: (res) => {
-        if (res.success && res.freelancers) {
-          this.talents = res.freelancers.map((f: any) => this.mapTalentFields(f));
-        }
-      },
-      error: (err) => console.error('Error filtering freelancers:', err)
-    });
+  const params: any = {};
+
+  if (this.searchQuery.trim()) {
+    params.search = this.searchQuery;
   }
+
+  if (this.selectedCategory !== 'All Categories') {
+    params.category = this.selectedCategory;
+  }
+
+  if (this.minRate !== null) {
+    params.minRate = this.minRate;
+  }
+
+  if (this.maxRate !== null) {
+    params.maxRate = this.maxRate;
+  }
+
+  this.profileService.getFreelancers(params).subscribe({
+    next: (res) => {
+      if (res.success) {
+        let talents = (res.items || []).map(f =>
+          this.mapTalentFields(f)
+        );
+
+        if (this.selectedPerformance !== 'All') {
+          talents = talents.filter(
+            talent => talent.performanceTier === this.selectedPerformance
+          );
+        }
+
+        this.talents = talents;
+      }
+    },
+    error: (err) => {
+      console.error('Error filtering freelancers:', err);
+    }
+  });
+}
+
+  resetFilters(): void {
+  this.searchQuery = '';
+  this.selectedCategory = 'All Categories';
+  this.selectedPerformance = 'All';
+  this.minRate = null;
+  this.maxRate = null;
+
+  this.appliedSearchQuery = '';
+  this.appliedCategory = 'All Categories';
+  this.appliedPerformance = 'All';
+  this.appliedMinRate = null;
+  this.appliedMaxRate = null;
+
+  this.loadTalents();
+}
 
   isSaved(talentId: string): boolean {
     return this.savedTalentsSet.has(talentId);
@@ -113,46 +179,81 @@ export class SearchTalentComponent implements OnInit {
   }
 
   mapTalentFields(freelancer: any): any {
-    const hasContracts = (freelancer.contractCount || 0) > 0;
-    const idHash = freelancer._id ? freelancer._id.toString().split('').reduce((sum: number, char: string) => sum + char.charCodeAt(0), 0) : 10;
-    
-    const rating = hasContracts ? (4.5 + (idHash % 5) / 10).toFixed(1) : '0.0';
-    const projectsCount = freelancer.contractCount || 0;
-    const totalHours = hasContracts ? (100 + (idHash % 10) * 150) : 0;
-    
-    const completedCount = freelancer.completedContractsCount || 0;
-    const performance = Math.min(100, completedCount * 10);
-    
-    let performanceTier = 'Low';
-    if (performance >= 80) {
-      performanceTier = 'High';
-    } else if (performance >= 40) {
-      performanceTier = 'Medium';
-    } else {
-      performanceTier = 'Low';
-    }
+    const activeContracts = freelancer.activeContracts || 0;
+const completedContracts = freelancer.completedContracts || 0;
+let performance = Math.min(100, completedContracts * 10);
+let performanceTier = 'New';
 
-    return {
-      id: freelancer._id,
-      name: freelancer.basicInformation?.fullName || 'Freelancer',
-      role: freelancer.basicInformation?.professionalHeadline || 'Freelancer Professional',
-      location: freelancer.location ? `${freelancer.location.city || ''}, ${freelancer.location.country || ''}`.replace(/^,\s*/, '').trim() || 'Remote' : 'Remote',
-      avatar: freelancer.basicInformation?.profilePhoto || '/assets/images/profiles/avatar-1.jpg',
-      performance,
-      performanceTier,
-      skills: freelancer.professionalDetails?.skills || [],
-      hourlyRate: freelancer.hourlyRate || 50,
-      projectsCount,
-      rating,
-      totalHours,
-      isAvailable: true,
-      status: freelancer.status || 'inactive',
-      stats: [
-        { value: `$${freelancer.hourlyRate || 50}/hr`, label: 'Rate' },
-        { value: projectsCount, label: 'Contracts' },
-        { value: rating, label: 'Rating' },
-        { value: totalHours.toLocaleString('en-US'), label: 'Hours' }
-      ]
-    };
+if (performance > 0 && performance <= 40) {
+  performanceTier = 'Low';
+} else if (performance > 40 && performance <= 70) {
+  performanceTier = 'Medium';
+} else if (performance > 70) {
+  performanceTier = 'High';
+}
+
+return {
+  id: freelancer._id,
+  name: freelancer.fullName || 'Freelancer',
+  role: freelancer.professionalHeadline || 'Freelancer Professional',
+  location: `${freelancer.city || ''}, ${freelancer.country || ''}`
+    .replace(/^,\s*/, '')
+    .trim() || 'Remote',
+  avatar: freelancer.profilePhoto || '/assets/images/profiles/avatar-1.jpg',
+
+  performance,
+  performanceTier,
+
+  skills: freelancer.skills || [],
+  hourlyRate: freelancer.hourlyRate || 50,
+
+  activeContracts,
+  completedContracts,
+
+  isAvailable: true,
+  status: freelancer.status || 'inactive',
+
+  stats: [
+    { value: `$${freelancer.hourlyRate || 50}/hr`, label: 'Rate' },
+    { value: completedContracts, label: 'Completed' },
+    { value: freelancer.availability?.[0] || 'N/A',label: 'Availability'},
+    { value: freelancer.gender ? freelancer.gender.charAt(0).toUpperCase() + freelancer.gender.slice(1) : 'N/A', label: 'Gender'}
+  ]
+};
   }
+
+
+  removeSearch(): void {
+  this.searchQuery = '';
+  this.applyFilters();
+}
+
+removeCategory(): void {
+  this.selectedCategory = 'All Categories';
+  this.applyFilters();
+}
+
+removePerformance(): void {
+  this.selectedPerformance = 'All';
+  this.applyFilters();
+}
+
+removeMinRate(): void {
+  this.minRate = null;
+  this.applyFilters();
+}
+
+removeMaxRate(): void {
+  this.maxRate = null;
+  this.applyFilters();
+}
+
+
+appliedSearchQuery = '';
+appliedCategory = 'All Categories';
+appliedPerformance = 'All';
+appliedMinRate: number | null = null;
+appliedMaxRate: number | null = null;
+
+
 }

@@ -1,204 +1,255 @@
-.talent-profile-page { background: transparent; min-height: 100vh; }
-.max-w-5xl { max-width: 1100px; }
-.z-index-top { z-index: 1000 !important; }
+/* ==========================================
+   PROFILE COVER + BACK BUTTON
+========================================== */
 
 .profile-cover {
-  height: 280px;
-  width: 100%;
+  min-height: 220px;
+  position: relative;
 }
 
-.cover-overlay {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.6) 100%);
+.z-index-top {
+  z-index: 9999 !important;
 }
+
+.profile-cover button,
+.profile-cover a,
+.profile-cover app-button {
+  position: relative;
+  z-index: 9999;
+}
+
+/* ==========================================
+   PROFILE CONTAINER
+========================================== */
 
 .profile-container-overlap {
-  margin-top: -100px;
+  margin-top: -120px;
   position: relative;
   z-index: 10;
 }
 
-.back-link-floating {
-  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-  font-weight: 600;
-  transition: all 0.3s ease;
+/* ==========================================
+   PROFILE HEADER
+========================================== */
+
+.profile-header-card {
+  position: relative;
+  overflow: hidden;
 }
-.back-link-floating:hover { transform: translateX(-5px); opacity: 0.8; }
 
-.glass { background: rgba(255, 255, 255, 0.02) !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; backdrop-filter: blur(20px); }
-.glass-vivid { background: rgba(0, 0, 0, 0.4) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; backdrop-filter: blur(10px); }
+.profile-header-layout {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
 
-.text-xxs { font-size: 10px; }
-.smaller { font-size: 12px; }
+/* ==========================================
+   AVATAR
+========================================== */
+
+.avatar-wrapper {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+}
+
+.profile-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+/* ==========================================
+   STATUS INDICATOR
+========================================== */
 
 .status-indicator-lg {
-  width: 24px;
-  height: 24px;
+  position: absolute;
+
+  width: 12px;
+  height: 12px;
+
+  right: 12px;
+  bottom: 14px;
+
   border-radius: 50%;
-  border: 4px solid #000;
-  bottom: 8px;
-  right: 8px;
+
+  background: #94a3b8;
+  box-shadow: 0 0 0 3px #0f172a;
+
+  z-index: 20;
 }
 
-.pill-badge {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 6px 16px;
-  border-radius: 100px;
-  font-size: 13px;
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.bg-success,
+.bg-danger {
+  background: #94a3b8 !important;
 }
 
-.ring-wrapper-lg {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 8px solid rgba(255, 255, 255, 0.05);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ==========================================
+   PROFILE INFO
+========================================== */
+
+.profile-info {
+  flex: 1;
+  min-width: 0;
 }
-.ring-wrapper-lg.high { border-top-color: #198754; border-right-color: #198754; border-left-color: #198754; }
 
-.stat-icon { width: 40px; height: 40px; background: rgba(255, 255, 255, 0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-
-.skill-badge-lg {
-  background: rgba(255, 255, 255, 0.03);
-  padding: 10px 18px;
-  border-radius: 12px;
-  font-size: 13px;
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  display: flex;
-  align-items: center;
-  transition: all 0.3s ease;
+.profile-name {
+  color: #fff;
+  line-height: 1.2;
+  word-break: break-word;
 }
-.skill-badge-lg:hover { background: rgba(26, 115, 232, 0.1); border-color: #1A73E8; }
 
-.timeline-icon-box { width: 48px; height: 48px; }
-.bg-purple { background: #9333ea !important; }
+.profile-location {
+  color: rgba(255, 255, 255, 0.65);
+  word-break: break-word;
+}
 
-.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.profile-title {
+  color: rgba(255, 255, 255, 0.8);
+  word-break: break-word;
+}
 
-/* Performance Bar */
-.performance-bar {
-  height: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 100px;
-  display: flex;
+/* ==========================================
+   STATS CARD
+========================================== */
+
+.stats-card .row > div {
   position: relative;
-  overflow: visible;
 }
-.bar-segment { height: 100%; flex-grow: 1; }
-.bar-segment.low { background: #dc3545; border-top-left-radius: 100px; border-bottom-left-radius: 100px; opacity: 0.3; }
-.bar-segment.medium { background: #ffc107; opacity: 0.3; }
-.bar-segment.high { background: #198754; border-top-right-radius: 100px; border-bottom-right-radius: 100px; opacity: 0.3; }
-
-.bar-indicator {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 14px;
-  height: 14px;
-  background: white;
-  border: 2px solid #198754;
-  border-radius: 50%;
-  box-shadow: 0 0 10px rgba(25, 135, 84, 0.5);
-  z-index: 2;
-}
-
-.calendar-icon-box { background: rgba(26, 115, 232, 0.1); }
-.language-pill { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
-
-/* Social Links */
-.social-link { transition: all 0.3s ease; }
-.social-link:hover { background: rgba(255, 255, 255, 0.05) !important; border-color: #1A73E8 !important; transform: translateX(5px); }
-.social-icon-box { width: 32px; height: 32px; }
-
-.bg-linkedin { background: #0077b5 !important; }
-.bg-behance { background: #053eff !important; }
-.bg-dribbble { background: #ea4c89 !important; }
-.bg-twitter { background: #000000 !important; } /* X / Twitter */
-
-/* Portfolio */
-.portfolio-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-.portfolio-card:hover { transform: translateY(-10px); border-color: #1A73E8 !important; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-
-.portfolio-image-wrapper { height: 200px; position: relative; overflow: hidden; }
-.portfolio-overlay {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  backdrop-filter: blur(4px);
-}
-.portfolio-card:hover .portfolio-overlay { opacity: 1; }
 
 @media (min-width: 768px) {
-  .border-end-md { border-right: 1px solid rgba(255, 255, 255, 0.1) !important; }
+  .stats-card .row > div:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 15%;
+    width: 1px;
+    height: 70%;
+    background: rgba(255, 255, 255, 0.08);
+  }
 }
 
-/* Custom Tooltip Styling */
-[data-tooltip] {
-  position: relative;
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 991px) {
+
+  .profile-header-layout {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-info {
+    width: 100%;
+  }
+
+  .profile-info .d-flex {
+    justify-content: center !important;
+  }
 }
 
-[data-tooltip]::before {
-  content: attr(data-tooltip);
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 767px) {
+
+  .profile-container-overlap {
+    margin-top: -80px;
+  }
+
+  .glass {
+    padding: 1.25rem !important;
+  }
+
+  .avatar-wrapper {
+    width: 110px;
+    height: 110px;
+  }
+
+/* ==========================================
+   STATUS INDICATOR
+========================================== */
+
+.status-indicator-lg {
   position: absolute;
-  bottom: 125%;
-  left: 50%;
-  transform: translate(-50%, 10px) scale(0.9);
-  background: #0f172a;
-  color: #f8fafc;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1.4;
-  text-align: center;
-  width: max-content;
-  max-width: 220px;
-  white-space: normal;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  z-index: 9999;
+
+  width: 14px;
+  height: 14px;
+
+  right: 10px;
+  bottom: 12px;
+
+  border-radius: 50%;
+
+  border: 2px solid #000000;
+  z-index: 20;
 }
 
-[data-tooltip]::after {
-  content: "";
-  position: absolute;
-  bottom: 105%;
-  left: 50%;
-  transform: translate(-50%, 10px) scale(0.9);
-  border-width: 6px;
-  border-style: solid;
-  border-color: #0f172a transparent transparent transparent;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  z-index: 9999;
+.bg-success {
+  background: #22c55e !important;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
 }
 
-[data-tooltip]:hover::before,
-[data-tooltip]:hover::after {
-  opacity: 1;
-  transform: translate(-50%, 0) scale(1);
+.bg-danger {
+  background: #ef4444 !important;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
 }
 
-/* Hide scrollbar on modal container while retaining scroll ability */
-.modal-card {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
+  .profile-name,
+  .profile-info h1 {
+    font-size: 1.5rem !important;
+  }
+
+  .profile-location {
+    font-size: 0.875rem;
+  }
+
+  .profile-title {
+    font-size: 0.95rem;
+  }
+
+  .stat-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .smaller {
+    font-size: 11px;
+  }
 }
-.modal-card::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
+
+@media (max-width: 480px) {
+
+  .avatar-wrapper {
+    width: 90px;
+    height: 90px;
+  }
+
+  .status-indicator-lg {
+    width: 8px;
+    height: 8px;
+    right: 8px;
+    bottom: 10px;
+    box-shadow: 0 0 0 2px #0f172a;
+  }
+
+  .profile-name,
+  .profile-info h1 {
+    font-size: 1.25rem !important;
+  }
+
+  .glass {
+    border-radius: 20px !important;
+  }
 }

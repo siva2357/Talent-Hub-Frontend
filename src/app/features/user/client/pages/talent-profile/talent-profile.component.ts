@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { ProfileService } from '../../../../../core/services/profile.service';
+import { TalentProfile } from '../../../../../core/model/talents.model';
 
 @Component({
   selector: 'app-talent-profile',
@@ -47,16 +48,17 @@ loadProfile(id: string): void {
   this.profileService.getFreelancerProfileById(id).subscribe({
     next: (res) => {
 
-      if (!res.success || !res.profile) {
+      const payload = res.data;
+
+      if (!payload?.success || !payload.profile) {
         this.router.navigate(['/user/search-talent']);
         return;
       }
 
       this.talent = this.mapProfileFields(
-        res.profile,
-        res.portfolio || []
+        payload.profile,
+        payload.portfolio || []
       );
-
     },
     error: (err) => {
       console.error('Error loading freelancer profile:', err);
@@ -101,30 +103,28 @@ loadProfile(id: string): void {
   }
 
 mapProfileFields(
-  freelancer: any,
+  freelancer: TalentProfile,
   portfolio: any[]
 ): any {
 
-  const socialLinks =
-    freelancer.socialLinks?.map((s: any) => ({
-      name: s.platform,
-      icon: `bi-${s.platform.toLowerCase()}`,
-      url: s.profileUrl,
-      handle: s.profileUrl
-    })) || [];
+  const socialLinks = (freelancer.socialLinks || []).map(s => ({
+    name: s.platform.charAt(0).toUpperCase() + s.platform.slice(1),
+    icon: `bi-${s.platform.toLowerCase()}`,
+    url: s.profileUrl,
+    handle: s.profileUrl
+  }));
 
-  const languages =
-    freelancer.languages?.map((l: any) => ({
-      name: l.language,
-      level: l.proficiency
-    })) || [];
+  const languages = (freelancer.languages || []).map(l => ({
+    name: l.language,
+    level: l.proficiency
+  }));
 
   const availability =
     freelancer.availability?.length
       ? freelancer.availability.join(', ')
       : 'Not Available';
 
-  const realPortfolio = portfolio.map((item: any) => ({
+  const realPortfolio = (portfolio || []).map((item: any) => ({
     id: item._id,
     title: item.title,
     description: item.description || '',
@@ -135,33 +135,45 @@ mapProfileFields(
     projectUrl: item.projectUrl || ''
   }));
 
+const performance =
+  freelancer.completedContracts > 0
+    ? Math.min(
+        100,
+        Math.round(
+          (freelancer.completedContracts /
+            (freelancer.completedContracts + freelancer.activeContracts)
+          ) * 100
+        )
+      )
+    : 0;
+
+let performanceTier = 'New Freelancer';
+
+if (performance >= 75) {
+  performanceTier = 'High';
+} else if (performance >= 50) {
+  performanceTier = 'Medium';
+} else if (performance > 0) {
+  performanceTier = 'Low';
+}
   return {
+    name: freelancer.fullName || '',
 
-    name:
-      freelancer.basicInformation?.fullName || '',
+    title: freelancer.professionalHeadline || '',
 
-    title:
-      freelancer.basicInformation?.professionalHeadline || '',
+    location: `${freelancer.city || ''}, ${freelancer.country || ''}`
+      .replace(/^,\s*/, '')
+      .trim(),
 
-    location:
-      `${freelancer.location?.city || ''}, ${freelancer.location?.country || ''}`
-        .replace(/^,\s*/, '')
-        .trim(),
+    avatar: freelancer.profilePhoto || '',
 
-    avatar:
-      freelancer.basicInformation?.profilePhoto || '',
+    coverImage: freelancer.profilePhoto || '',
 
-    coverImage:
-      freelancer.basicInformation?.profilePhoto || '',
+    bio: freelancer.shortBio || '',
 
-    bio:
-      freelancer.basicInformation?.shortBio || '',
+    skills: freelancer.skills || [],
 
-    skills:
-      freelancer.professionalDetails?.skills || [],
-
-    hourlyRate:
-      freelancer.hourlyRate || 0,
+    hourlyRate: freelancer.hourlyRate || 0,
 
     availability,
 
@@ -171,39 +183,35 @@ mapProfileFields(
 
     portfolio: realPortfolio,
 
-    projects:
-      freelancer.contractCount || 0,
+     activeContracts: freelancer.activeContracts || 0,
+  completedContracts: freelancer.completedContracts || 0,
+  gender: freelancer.gender
+    ? freelancer.gender.charAt(0).toUpperCase() + freelancer.gender.slice(1)
+    : 'N/A',
 
-    completedContracts:
-      freelancer.completedContractsCount || 0,
-
-    status:
-      freelancer.status || 'inactive',
+    status: freelancer.status || 'inactive',
 
     contractHistory: [],
 
-    performance: 0,
+    performance,
 
-    performanceTier:
-      freelancer.contractCount > 0
-        ? 'Active'
-        : 'New',
+    performanceTier,
 
     rating:
-      freelancer.contractCount > 0
+      freelancer.completedContracts > 0
         ? 'Available'
         : 'N/A',
 
     hoursWorked: 'N/A',
 
     experience:
-      freelancer.contractCount > 0
-        ? `${freelancer.contractCount} Contracts`
+      freelancer.activeContracts > 0
+        ? `${freelancer.activeContracts} Contracts`
         : 'New Freelancer',
 
     jobSuccess:
-      freelancer.completedContractsCount > 0
-        ? `${freelancer.completedContractsCount} Completed`
+      freelancer.completedContracts > 0
+        ? `${freelancer.completedContracts} Completed`
         : 'N/A'
   };
 }
