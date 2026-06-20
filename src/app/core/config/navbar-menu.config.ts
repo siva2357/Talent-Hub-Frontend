@@ -84,6 +84,8 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
       'your-contracts',
       'contract-proposals',
       'contract-progress',
+      'contract-proposals',
+      'hired-talent'
     ],
     subItems: [
       {
@@ -91,12 +93,6 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
         description: 'View and manage all your active client contracts.',
         icon: 'bi bi-briefcase',
         route: '/user/your-contracts',
-      },
-      {
-        label: 'Proposals',
-        description: 'Review proposals submitted by freelancers.',
-        icon: 'bi bi-file-earmark-text',
-        route: '/user/contract-proposals',
       },
       {
         label: 'Contract Progress',
@@ -113,8 +109,6 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
     activePaths: [
       'search-talent',
       'saved-talent',
-      'pending-offers',
-      'hired-talent',
       'talent-profile',
     ],
     subItems: [
@@ -129,13 +123,7 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
         description: 'Manage your bookmarked freelancer profiles.',
         icon: 'bi bi-bookmark-heart',
         route: '/user/saved-talent',
-      },
-      {
-        label: 'Hired & Offers',
-        description: 'Manage active hires and track sent contract offers.',
-        icon: 'bi bi-people',
-        route: '/user/hired-talent',
-      },
+      }
     ],
   },
 

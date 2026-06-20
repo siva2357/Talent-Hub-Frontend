@@ -10,6 +10,7 @@ import { ChipComponent } from '../../../../../shared/components/chip/chip.compon
 import { ContractService } from '../../../../../core/services/contract.service';
 
 import { Contract } from '../../../../../core/model/contract.model';
+import { Table } from "../../../../../shared/components/table/table.component";
 
 @Component({
   selector: 'app-your-contracts',
@@ -20,8 +21,9 @@ import { Contract } from '../../../../../core/model/contract.model';
     InputComponent,
     ButtonComponent,
     FormsModule,
-    ChipComponent
-  ],
+    ChipComponent,
+    Table
+],
   templateUrl: './your-contracts.component.html',
   styleUrl: './your-contracts.component.css'
 })
@@ -66,6 +68,34 @@ export class YourContractsComponent implements OnInit {
     }
   ];
 
+budgetTypeFilter = '';
+contractTypeFilter = '';
+
+contractTypeOptions = [
+  { label: 'All Contract Types', value: '' },
+  { label: 'Frontend', value: 'Frontend' },
+  { label: 'Backend', value: 'Backend' },
+  { label: 'Full Stack', value: 'Full Stack' },
+  { label: 'Mobile', value: 'Mobile' },
+  { label: 'UI/UX', value: 'UI/UX' }
+];
+
+budgetTypeOptions = [
+  {
+    label: 'All Budget Types',
+    value: ''
+  },
+  {
+    label: 'Fixed Price',
+    value: 'Fixed Price'
+  },
+  {
+    label: 'Hourly',
+    value: 'Hourly'
+  }
+];
+
+
   constructor(
     private router: Router,
     private contractService: ContractService
@@ -80,6 +110,60 @@ export class YourContractsComponent implements OnInit {
     this.getMyContracts();
 
   }
+
+
+  contractColumns = [
+  {
+    name: 'Contract',
+    prop: 'contractTitle'
+  },
+  {
+    name: 'Type',
+    prop: 'contractType'
+  },
+  {
+    name: 'Budget',
+    prop: 'estimatedBudget'
+  },
+  {
+    name: 'Status',
+    prop: 'status'
+  },
+  {
+    name: 'Start Date',
+    prop: 'contractStartDate'
+  }
+];
+
+viewApplicants(id: string): void {
+
+  this.router.navigate(
+    ['/user/contract-proposals'],
+    {
+      queryParams: {
+        contractId: id
+      }
+    }
+  );
+
+}
+
+openActionId: string | null = null;
+
+toggleActionMenu(id: string): void {
+
+  this.openActionId =
+    this.openActionId === id
+      ? null
+      : id;
+
+}
+
+closeActionMenu(): void {
+
+  this.openActionId = null;
+
+}
 
   // ========================================
   // GET MY CONTRACTS
@@ -116,32 +200,31 @@ export class YourContractsComponent implements OnInit {
   // ========================================
   // FILTERED CONTRACTS
   // ========================================
+get filteredContracts(): Contract[] {
 
-  get filteredContracts(): Contract[] {
+  return this.contracts.filter(contract => {
 
-    return this.contracts.filter((contract) => {
+    const statusMatch =
+      !this.statusFilter ||
+      contract.status === this.statusFilter;
 
-      const matchesStatus =
+    const budgetMatch =
+      !this.budgetTypeFilter ||
+      contract.budgetType === this.budgetTypeFilter;
 
-        !this.appliedStatus ||
+    const typeMatch =
+      !this.contractTypeFilter ||
+      contract.contractType === this.contractTypeFilter;
 
-        contract.status === this.appliedStatus;
+    return (
+      statusMatch &&
+      budgetMatch &&
+      typeMatch
+    );
 
-      const matchesSearch =
+  });
 
-        !this.appliedSearch ||
-
-        contract.contractTitle
-          ?.toLowerCase()
-          .includes(
-            this.appliedSearch.toLowerCase()
-          );
-
-      return matchesStatus && matchesSearch;
-
-    });
-
-  }
+}
 
   // ========================================
   // APPLY FILTERS
@@ -154,6 +237,14 @@ export class YourContractsComponent implements OnInit {
     this.appliedStatus = this.statusFilter;
 
   }
+
+removeBudgetTypeFilter(): void {
+  this.budgetTypeFilter = '';
+}
+
+removeContractTypeFilter(): void {
+  this.contractTypeFilter = '';
+}
 
   // ========================================
   // RESET FILTERS
@@ -254,6 +345,21 @@ viewContract(id: string): void {
     {
       queryParams: {
         id: id
+      }
+    }
+  );
+
+}
+
+
+
+viewHiredTalents(id: string): void {
+
+  this.router.navigate(
+    ['/user/hired-talent'],
+    {
+      queryParams: {
+        contractId: id
       }
     }
   );

@@ -52,7 +52,6 @@ import { ContractProgressComponent } from './features/user/client/pages/contract
 import { SearchTalentComponent } from './features/user/client/pages/search-talent/search-talent.component';
 import { TalentProfileComponent } from './features/user/client/pages/talent-profile/talent-profile.component';
 import { SavedTalentComponent } from './features/user/client/pages/saved-talent/saved-talent.component';
-import { PendingOffersComponent } from './features/user/client/pages/pending-offers/pending-offers.component';
 import { HiredTalentComponent } from './features/user/client/pages/hired-talent/hired-talent.component';
 import { FinancialSummaryComponent } from './features/user/client/pages/financial-summary/financial-summary.component';
 import { PaymentGatewayComponent } from './features/user/client/pages/payment-gateway/payment-gateway.component';
@@ -64,8 +63,7 @@ import { ProjectDetailsComponent } from './features/user/client/pages/project-de
 import { ContractProfileComponent } from './features/user/client/pages/contract-profile/contract-profile.component';
 import { LegalFormComponent } from './features/user/client/pages/legal-form/legal-form.component';
 
-// Admin Components
-import { AdminComponent } from './features/user/admin/admin.component';
+
 import { AdminDashboardComponent } from './features/user/admin/pages/admin-dashboard/admin-dashboard.component';
 import { ClientListComponent } from './features/user/admin/pages/client-list/client-list.component';
 import { FreelancerListComponent } from './features/user/admin/pages/freelancer-list/freelancer-list.component';
@@ -127,7 +125,6 @@ export const routes: Routes = [
       { path: 'contract-profile/:id', component: ContractProfileComponent },
       { path: 'saved-talent', component: SavedTalentComponent },
       { path: 'hired-talent', component: HiredTalentComponent },
-
       { path: 'financial-summary', component: FinancialSummaryComponent },
       { path: 'transaction-history', component: TransactionHistoryComponent },
 

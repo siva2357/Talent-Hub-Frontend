@@ -1,4 +1,5 @@
 <div class="contract-proposals-page p-3 p-md-4 p-xl-5">
+
     <div class="container-fluid max-w-7xl mx-auto">
 
         <!-- Header -->
@@ -11,186 +12,276 @@
         </div>
 
         <!-- Filters Bar -->
-        <div class="glass p-3 rounded-4 mb-5">
-            <div class="row g-3 align-items-center">
-                <div class="col-12 col-md-8">
-                    <div class="d-flex align-items-center gap-3 px-2">
-                        <i class="bi bi-search text-secondary"></i>
-                        <input type="text"
-                            class="form-control bg-transparent border-0 text-white shadow-none search-input"
-                            placeholder="Search applicants by name, role, or specific skills..."
-                            [(ngModel)]="searchQuery">
-                    </div>
+        <div class="glass filter-toolbar p-3 p-md-4 rounded-4 mb-3">
+
+            <div class="row g-3 align-items-end">
+
+                <!-- Availability -->
+                <div class="col-lg-2 col-md-6">
+                    <app-input mode="filter" type="select" placeholder="Availability" [(ngModel)]="selectedAvailability"
+                        [options]="availabilityOptions">
+                    </app-input>
                 </div>
-                <div class="col-12 col-md-4 text-md-end text-center">
-                    <span class="text-secondary small fw-medium">Filtering bids across all active contracts</span>
+
+                <!-- Budget -->
+                <div class="col-lg-2 col-md-6">
+                    <app-input mode="filter" type="select" placeholder="Budget Type" [(ngModel)]="selectedBudgetType"
+                        [options]="budgetTypeOptions">
+                    </app-input>
                 </div>
+
+                <!-- Gender -->
+                <div class="col-lg-2 col-md-6">
+                    <app-input mode="filter" type="select" placeholder="Gender" [(ngModel)]="selectedGender"
+                        [options]="genderOptions">
+                    </app-input>
+                </div>
+
+                <!-- Languages -->
+                <div class="col-lg-3 col-md-6">
+                    <app-input mode="filter" type="multiselect" placeholder="Languages" [(ngModel)]="selectedLanguages"
+                        [options]="languageOptions">
+                    </app-input>
+                </div>
+
+                <!-- Apply -->
+                <div class="col-lg-auto col-md-6">
+                    <app-button variant="primary" customClass="w-100" (click)="applyFilters()">
+
+                        <i class="bi bi-funnel-fill me-2"></i>
+                        Apply
+
+                    </app-button>
+                </div>
+
+                <!-- Clear -->
+                <div class="col-lg-auto col-md-6">
+                    <app-button variant="outline" customClass="w-100" (click)="clearFilters()">
+
+                        <i class="bi bi-x-circle me-2"></i>
+                        Clear
+
+                    </app-button>
+                </div>
+
             </div>
+
         </div>
 
-        <!-- Accordion Group -->
-        <div class="contracts-accordion">
-            @for (contract of contractApplicants; track contract._id) {
-            <div class="contract-card glass mb-4 rounded-4 overflow-hidden transition-all duration-300"
-                [class.expanded]="expandedContractId === contract._id"
-                [class.border-primary]="expandedContractId === contract._id">
+        <!-- Active Filters -->
+        @if(activeFilters.length){
 
-                <!-- Accordion Trigger Header -->
-                <div class="contract-header p-4 cursor-pointer" (click)="toggleContract(contract._id)">
-                    <div class="d-flex justify-content-between align-items-center gap-3 mb-4">
+        <div class="d-flex flex-wrap gap-2 mb-4">
+
+            @for(filter of activeFilters; track filter.key){
+
+            <app-chip [label]="filter.label" variant="primary" [removable]="true" (remove)="removeFilter(filter.key)">
+            </app-chip>
+
+            }
+
+        </div>
+
+        }
+        @if( contractId){
+
+        <div class="row justify-content-center g-4">
+
+            @for (
+            proposal of getFilteredProposals(applicants);
+            track proposal.applicationId
+            ){
+            <div class=" col-12">
+
+                <div class="proposal-card glass rounded-4 p-5">
+
+                    <!-- Header -->
+                    <div class="d-flex align-items-center mb-3">
+
+                        <img [src]="proposal.freelancer.profilePhoto" class="rounded-circle me-3" width="60" height="60"
+                            style="object-fit:cover" />
+
                         <div class="flex-grow-1">
-                            <div class="d-flex align-items-center gap-3 flex-wrap">
-                                <h5 class="text-white fw-bold mb-0" style="font-size: 16px;">{{contract.contractTitle}}
-                                </h5>
-                                <span class="badge rounded-pill px-3 py-1 fw-medium badge-primary-soft">
-                                    {{contract.totalApplicants}} Applications</span>
-                            </div>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <div class="expand-icon d-flex align-items-center justify-content-center rounded-circle"
-                                [class.rotate-180]="expandedContractId === contract._id">
-                                <i class="bi bi-chevron-down text-white"></i>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Metadata Grid -->
-                    <div class="row g-3">
-                        <div class="col-6 col-md-3">
-                            <p class="text-secondary text-uppercase mb-1"
-                                style="font-size: 10px; letter-spacing: 0.5px;">Contract Type</p>
-                            <p class="text-white fw-bold mb-0" style="font-size: 14px;">{{contract.contractType}}</p>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <p class="text-secondary text-uppercase mb-1"
-                                style="font-size: 10px; letter-spacing: 0.5px;">Budget Limit</p>
-                            <p class="text-white fw-bold mb-0" style="font-size: 14px;">${{contract.estimatedBudget}}
+                            <h6 class="text-white mb-1">
+                                {{ proposal.freelancer.fullName }}
+                            </h6>
+
+                            <p class="text-info mb-1" style="font-size: 13px;">
+                                {{ proposal.freelancer.professionalHeadline }}
                             </p>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <p class="text-secondary text-uppercase mb-1"
-                                style="font-size: 10px; letter-spacing: 0.5px;">Est. Start Date</p>
-                            <p class="text-white fw-medium mb-0" style="font-size: 14px;">{{contract.contractStartDate |
-                                date: 'dd-MM-yyyy'}}</p>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <p class="text-secondary text-uppercase mb-1"
-                                style="font-size: 10px; letter-spacing: 0.5px;">Target End Date</p>
-                            <p class="text-white fw-medium mb-0" style="font-size: 14px;">{{contract.contractEndDate |
-                                date: 'dd-MM-yyyy'}}</p>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Accordion Body: Proposal Cards Grid -->
-                <div class="contract-body collapse-transition"
-                    [style.maxHeight]="expandedContractId === contract._id ? '2500px' : '0px'"
-                    [style.opacity]="expandedContractId === contract._id ? '1' : '0'">
-                    <div class="p-3 p-md-4 border-top border-white border-opacity-10 bg-dark bg-opacity-25">
+                            <small class="text-secondary">
+                                <i class="bi bi-geo-alt me-1"></i>
+                                {{ proposal.freelancer.city }},
+                                {{ proposal.freelancer.country }}
+                            </small>
 
-                        <div class="row g-4 ">
-                            @for (proposal of getFilteredProposals(contract.applicants); track proposal.applicationId){
-                            <div class="col-xl-4 col-md-6 mb-4">
-                                <app-talent-card [name]="proposal.freelancer.fullName"
-                                    [avatar]="proposal.freelancer.profilePhoto"
-                                    [location]="proposal.freelancer.city + ', ' + proposal.freelancer.country"
-                                    [role]="proposal.freelancer.professionalHeadline"
-                                    [performance]="proposal.performance" [performanceTier]="proposal.performanceTier"
-                                    [skills]="proposal.freelancer.skills" [stats]="proposal.stats"
-                                    statusClass="bg-success"
-                                    [cardClass]="proposal.applicationStatus === 'shortlisted' ? 'accepted-card' : proposal.applicationStatus === 'rejected' ? 'declined-card' : ''">
-
-                                    <div badges class="text-start mt-3 mb-3">
-                                        <span class="badge px-3 py-2 fw-medium badge-status"
-                                            [class.badge-status-applied]="proposal.applicationStatus === 'application received'"
-                                            [class.badge-status-shortlisted]="proposal.applicationStatus === 'application shortlisted'"
-                                            [class.badge-status-assessment]="proposal.applicationStatus === 'assessment scheduled' || proposal.applicationStatus === 'assessment completed'"
-                                            [class.badge-status-interview]="proposal.applicationStatus === 'interview scheduled' || proposal.applicationStatus === 'interview completed'"
-                                            [class.badge-status-hired]="proposal.applicationStatus === 'shortlisted'"
-                                            [class.badge-status-rejected]="proposal.applicationStatus === 'rejected'">
-                                            Current Status: {{ getStatusLabel(proposal.applicationStatus) }}
-                                        </span>
-                                    </div>
-
-                                    <div actions
-                                        class="row g-2 w-100 m-0 pt-3 border-top border-white border-opacity-10 mt-auto">
-                                        @if (proposal.applicationStatus === 'interview scheduled') {
-                                        <div class="col-12 ps-0 pe-0 mb-2">
-                                            <a [routerLink]="['/user/interview-setup']"
-                                                [queryParams]="{ id: proposal.applicationId }"
-                                                class="text-decoration-none">
-                                                <button
-                                                    class="btn btn-info btn-sm rounded-3 w-100 fw-medium text-white transition-all duration-300"
-                                                    style="height: 38px; font-size: 13px; background-color: #0dcaf0; border-color: #0dcaf0;">
-                                                    <i class="bi bi-camera-video me-1"></i> Join Interview
-                                                </button>
-                                            </a>
-                                        </div>
-                                        }
-
-                                        <!-- View Profile Button -->
-                                        <div class="col-12 col-sm-5 ps-0 pe-sm-1 pe-0">
-                                            <button
-                                                class="btn btn-outline-secondary btn-sm rounded-3 w-100 fw-medium text-white border-white border-opacity-25 transition-all duration-300"
-                                                style="font-size: 13px; height: 38px;">
-                                                View Profile
-                                            </button>
-                                        </div>
-
-                                        <!-- Update Phase Button -->
-                                        <div class="col-12 col-sm-7 pe-0 ps-sm-1 ps-0">
-                                            <button class="btn btn-outline-primary btn-sm rounded-3 w-100 fw-medium "
-                                                (click)="openRecruitmentModal(proposal)"
-                                                [disabled]="proposal.applicationStatus === 'rejected' || proposal.applicationStatus === 'shortlisted'"
-                                                style="height: 38px; font-size: 13px; white-space: nowrap;">
-                                                Update Recruitment Phase
-                                            </button>
-                                        </div>
-                                    </div>
-                                </app-talent-card>
-                            </div>
-                            } @empty {
-                            <div class="col-12 text-center py-5">
-                                <div class="glass p-5 rounded-4 d-inline-block">
-                                    <i class="bi bi-file-earmark-x text-secondary fs-1 mb-3"></i>
-                                    <p class="text-secondary mb-0">No applicant proposals match your current criteria.
-                                    </p>
-                                </div>
-                            </div>
-                            }
                         </div>
 
                     </div>
+
+
+                    <!-- Bio -->
+                    <p class="text-secondary small mb-4">
+
+                        {{ proposal.freelancer.shortBio }}
+
+                    </p>
+
+                    <div class="small text-secondary mb-2">
+                        Professional Details
+                    </div>
+
+                    <div class="mb-3 d-flex flex-wrap gap-2">
+
+                        <span class="badge bg-dark border border-secondary px-3 py-2">
+                            <i class="bi bi-cash-stack me-1 text-success"></i>
+                            Rate: ₹{{ proposal.freelancer.hourlyRate }}/hr
+                        </span>
+
+                        <span class="badge bg-dark border border-secondary px-3 py-2">
+                            <i class="bi bi-check-circle me-1 text-info"></i>
+                            Completed: {{ proposal.freelancer.completedContractsCount }}
+                        </span>
+
+                        <span class="badge bg-dark border border-secondary px-3 py-2 text-capitalize">
+                            <i class="bi bi-clock-history me-1 text-warning"></i>
+                            {{ proposal.freelancer.availability?.[0] }}
+                        </span>
+
+                        <span class="badge bg-dark border border-secondary px-3 py-2 text-capitalize">
+                            <i class="bi bi-person me-1 text-primary"></i>
+                            {{ proposal.freelancer.gender || 'N/A' }}
+                        </span>
+
+                    </div>
+                    <!-- Skills -->
+                    <div class="small text-secondary mb-2">
+                        Skills
+                    </div>
+
+                    <div class="mb-4">
+                        @for(skill of proposal.freelancer.skills; track skill){
+                        <span class="badge bg-dark border border-secondary me-2 mb-2">
+                            {{ skill }}
+                        </span>
+                        }
+                    </div>
+
+
+<div class="d-flex gap-2 mt-auto">
+
+    <app-button size="sm" variant="outline" type="button" customClass=" rounded-3"
+        (click)="viewProfile(proposal.freelancer._id)">
+        <i class="bi bi-person-circle"></i> View Profile
+    </app-button>
+
+@if(
+  proposal.applicationStatus !== 'shortlisted' &&
+  proposal.applicationStatus !== 'rejected'
+){
+
+<app-button
+    size="sm"
+    type="button"
+    variant="primary"
+    customClass="rounded-3"
+    (click)="openRecruitmentModal(proposal)">
+
+    <i class="bi bi-briefcase-fill"></i>
+    Recruitment
+
+</app-button>
+
+}
+
+@if(proposal.applicationStatus === 'shortlisted'){
+
+<span class="badge badge-success align-self-center" style="font-size: 14px;">
+    <i class="bi bi-person-check-fill me-1"></i>
+    Candidate Hired
+</span>
+
+}
+
+@if(proposal.applicationStatus === 'rejected'){
+
+<span class="badge badge-danger align-self-center" style="font-size: 14px;">
+    <i class="bi bi-person-x-fill me-1"></i>
+    Candidate Rejected
+</span>
+
+}
+
+    @if(proposal.applicationStatus === 'shortlisted'){
+
+    @if(proposal.offerStatus === 'none'){
+
+    <app-button size="sm" variant="success" type="button" customClass="flex-fill rounded-3"
+        (click)="sendOffer(proposal)">
+        <i class="bi bi-send-fill"></i> Send Offer
+    </app-button>
+
+    }
+
+    @if(proposal.offerStatus === 'sent'){
+
+    <app-button size="sm" variant="warning" type="button" customClass="flex-fill rounded-3" [disabled]="true">
+        <i class="bi bi-clock-history"></i> Offer Letter Sent
+    </app-button>
+
+    }
+
+    @if(proposal.offerStatus === 'accepted'){
+    <span class="badge badge-success align-self-center" style="font-size: 14px;">
+        <i class="bi bi-check-circle-fill me-1"></i> Offer Accepted
+    </span>
+    }
+
+    @if(proposal.offerStatus === 'declined'){
+    <span class="badge badge-danger align-self-center" style="font-size: 14px;">
+        <i class="bi bi-x-circle-fill me-1"></i> Offer Declined
+    </span>
+    }
+
+    }
+
+</div>
+
                 </div>
+
 
             </div>
             } @empty {
-            <div class="text-center p-5 border border-white border-opacity-10 rounded-4 glass">
-                <i class="bi bi-folder-x text-secondary fs-1 mb-3"></i>
-                <p class="text-secondary mb-0">No active contracts sourcing candidates.</p>
+            <div class="col-12 text-center py-5">
+                <div class="glass p-5 rounded-4 d-inline-block">
+                    <i class="bi bi-file-earmark-x text-secondary fs-1 mb-3"></i>
+                    <p class="text-secondary mb-0">No applicant proposals match your current criteria.
+                    </p>
+                </div>
             </div>
             }
         </div>
 
+
+
+
+        } @else {
+        <div class="text-center p-5 border border-white border-opacity-10 rounded-4 glass">
+            <i class="bi bi-folder-x text-secondary fs-1 mb-3"></i>
+            <p class="text-secondary mb-0">No active contracts sourcing candidates.</p>
+        </div>
+        }
+
     </div>
-</div>
 
 
+    <!-- ======================================== -->
+    <!-- Recruitment Modal -->
+    <!-- ======================================== -->
 
-
-
-
-
-
-
-
-
-
-<!-- ======================================== -->
-<!-- Recruitment Modal -->
-<!-- ======================================== -->
-
-<div class="modal fade" id="recruitmentModal" tabindex="-1" [class.show]="showRecruitmentModal" [style.display]="
+    <div class="modal fade" id="recruitmentModal" tabindex="-1" [class.show]="showRecruitmentModal" [style.display]="
     showRecruitmentModal
       ? 'block'
       : 'none'
@@ -198,112 +289,115 @@
     !showRecruitmentModal
   ">
 
-    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered">
 
-        <div class="modal-content bg-dark border border-secondary rounded-4 overflow-hidden">
+            <div class="modal-content bg-dark border border-secondary rounded-4 overflow-hidden">
 
-            <!-- Header -->
-            <div class="modal-header border-secondary border-opacity-50">
-                <div>
-                    <h5 class="modal-title text-white fw-bold">Recruitment Workflow</h5>
-                    <p class="text-secondary small mb-0">Update candidate recruitment stage</p>
-                </div>
-                <button type="button" class="btn-close btn-close-white" (click)="closeModal()"></button>
-            </div>
-
-            <!-- Body -->
-            <div class="modal-body p-4">
-
-                @if(selectedProposal) {
-                <!-- Freelancer Profile Summary -->
-                @if(selectedProposal.freelancer) {
-                <div class="d-flex align-items-center gap-3 mb-4 pb-4 border-bottom border-secondary border-opacity-50">
-                    <img [src]="selectedProposal.freelancer.profilePhoto || 'assets/default-avatar.png'" alt="Profile"
-                        class="rounded-circle" width="60" height="60" style="object-fit: cover;">
+                <!-- Header -->
+                <div class="modal-header border-secondary border-opacity-50">
                     <div>
-                        <h6 class="text-white fw-bold mb-1">{{selectedProposal.freelancer.fullName}}</h6>
-                        <p class="text-secondary small mb-1">{{selectedProposal.freelancer.professionalHeadline}}</p>
-                        <span
-                            class="badge badge-primary-soft">{{getStatusLabel(selectedProposal.applicationStatus)}}</span>
+                        <h5 class="modal-title text-white fw-bold">Recruitment Workflow</h5>
+                        <p class="text-secondary small mb-0">Update candidate recruitment stage</p>
                     </div>
+                    <button type="button" class="btn-close btn-close-white" (click)="closeModal()"></button>
                 </div>
-                }
 
-                <!-- Dynamic Action Selection -->
-                @if (getAvailableActions().length > 0) {
-                <div class="mb-4">
-                    <app-input type="select" label="Next Action" [(ngModel)]="nextAction"
-                        [options]="getAvailableActions()">
-                    </app-input>
-                </div>
-                } @else {
-                <div class="alert alert-secondary bg-secondary bg-opacity-10 border-secondary text-white mb-4">
-                    This application has reached a final stage ({{getStatusLabel(selectedProposal.applicationStatus)}}).
-                    No further actions can be taken.
-                </div>
-                }
+                <!-- Body -->
+                <div class="modal-body p-4">
 
-                <!-- Assessment Form -->
-                @if(nextAction === 'schedule-assessment'){
-                <div
-                    class="d-flex flex-column gap-3 p-3 rounded bg-secondary bg-opacity-10 border border-secondary border-opacity-50">
-                    <app-input type="text" label="Assessment Title" placeholder="e.g. Frontend Architecture Assessment"
-                        [(ngModel)]="assessmentForm.title">
-                    </app-input>
-                    <app-input type="textarea" label="Assessment Description" placeholder="Enter assessment details..."
-                        [(ngModel)]="assessmentForm.description">
-                    </app-input>
-                    <app-input type="date" label="Assessment Deadline / Date" [(ngModel)]="assessmentForm.date">
-                    </app-input>
-                </div>
-                }
-
-                <!-- Interview Form -->
-                @if(nextAction === 'schedule-interview'){
-                <div
-                    class="d-flex flex-column gap-3 p-3 rounded bg-info bg-opacity-10 border border-info border-opacity-25">
-                    <app-input type="text" label="Interview Title" placeholder="e.g. Technical Interview Round 1"
-                        [(ngModel)]="interviewForm.title">
-                    </app-input>
-                    <app-input type="textarea" label="Interview Details (Link / Instructions)"
-                        placeholder="Enter meeting link or location..." [(ngModel)]="interviewForm.description">
-                    </app-input>
-                    <app-input type="date" label="Interview Date & Time" [(ngModel)]="interviewForm.date">
-                    </app-input>
-                </div>
-                }
-                }
-
-            </div>
-
-            <!-- Footer -->
-            <div class="modal-footer border-secondary border-opacity-50">
-                <app-button variant="outline" customClass="rounded-3 px-4 text-white border-white border-opacity-25"
-                    (click)="closeModal()">
-                    Close
-                </app-button>
-                @if (getAvailableActions().length > 0) {
-                <app-button variant="primary" customClass="rounded-3 px-4 shadow-glow-primary"
-                    [disabled]="isSubmitting || !nextAction" (click)="submitRecruitmentAction()">
-                    @if(isSubmitting){
-                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    @if(selectedProposal) {
+                    <!-- Freelancer Profile Summary -->
+                    @if(selectedProposal.freelancer) {
+                    <div
+                        class="d-flex align-items-center gap-3 mb-4 pb-4 border-bottom border-secondary border-opacity-50">
+                        <img [src]="selectedProposal.freelancer.profilePhoto || 'assets/default-avatar.png'"
+                            alt="Profile" class="rounded-circle" width="60" height="60" style="object-fit: cover;">
+                        <div>
+                            <h6 class="text-white fw-bold mb-1">{{selectedProposal.freelancer.fullName}}</h6>
+                            <p class="text-secondary small mb-1">{{selectedProposal.freelancer.professionalHeadline}}
+                            </p>
+                            <span
+                                class="badge badge-primary-soft">{{getStatusLabel(selectedProposal.applicationStatus)}}</span>
+                        </div>
+                    </div>
                     }
-                    Submit Update
-                </app-button>
-                }
+
+                    <!-- Dynamic Action Selection -->
+                    @if (getAvailableActions().length > 0) {
+                    <div class="mb-4">
+                        <app-input type="select" label="Next Action" [(ngModel)]="nextAction"
+                            [options]="getAvailableActions()">
+                        </app-input>
+                    </div>
+                    } @else {
+                    <div class="alert alert-secondary bg-secondary bg-opacity-10 border-secondary text-white mb-4">
+                        This application has reached a final stage
+                        ({{getStatusLabel(selectedProposal.applicationStatus)}}).
+                        No further actions can be taken.
+                    </div>
+                    }
+
+                    <!-- Assessment Form -->
+                    @if(nextAction === 'schedule-assessment'){
+                    <div
+                        class="d-flex flex-column gap-3 p-3 rounded bg-secondary bg-opacity-10 border border-secondary border-opacity-50">
+                        <app-input type="text" label="Assessment Title"
+                            placeholder="e.g. Frontend Architecture Assessment" [(ngModel)]="assessmentForm.title">
+                        </app-input>
+                        <app-input type="textarea" label="Assessment Description"
+                            placeholder="Enter assessment details..." [(ngModel)]="assessmentForm.description">
+                        </app-input>
+                        <app-input type="date" label="Assessment Deadline / Date" [(ngModel)]="assessmentForm.date">
+                        </app-input>
+                    </div>
+                    }
+
+                    <!-- Interview Form -->
+                    @if(nextAction === 'schedule-interview'){
+                    <div
+                        class="d-flex flex-column gap-3 p-3 rounded bg-info bg-opacity-10 border border-info border-opacity-25">
+                        <app-input type="text" label="Interview Title" placeholder="e.g. Technical Interview Round 1"
+                            [(ngModel)]="interviewForm.title">
+                        </app-input>
+                        <app-input type="textarea" label="Interview Details (Link / Instructions)"
+                            placeholder="Enter meeting link or location..." [(ngModel)]="interviewForm.description">
+                        </app-input>
+                        <app-input type="date" label="Interview Date & Time" [(ngModel)]="interviewForm.date">
+                        </app-input>
+                    </div>
+                    }
+                    }
+
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer border-secondary border-opacity-50">
+                    <app-button variant="outline" customClass="rounded-3 px-4 text-white border-white border-opacity-25"
+                        (click)="closeModal()">
+                        Close
+                    </app-button>
+                    @if (getAvailableActions().length > 0) {
+                    <app-button variant="primary" customClass="rounded-3 px-4 shadow-glow-primary"
+                        [disabled]="isSubmitting || !nextAction" (click)="submitRecruitmentAction()">
+                        @if(isSubmitting){
+                        <span class="spinner-border spinner-border-sm me-2"></span>
+                        }
+                        Submit Update
+                    </app-button>
+                    }
+                </div>
+
             </div>
 
         </div>
 
     </div>
 
-</div>
+    <!-- Modal Backdrop -->
 
-<!-- Modal Backdrop -->
+    @if(showRecruitmentModal){
 
-@if(showRecruitmentModal){
+    <div class="modal-backdrop fade show">
+    </div>
 
-<div class="modal-backdrop fade show">
-</div>
-
-}
+    }
