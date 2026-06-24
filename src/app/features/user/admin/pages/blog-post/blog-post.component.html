@@ -27,7 +27,7 @@
     @else {
     <div class="d-none d-lg-block">
       <div class="table-section">
-        <app-table [rows]="rows" [columns]="columns" [actionTemplate]="actionTemplate"></app-table>
+        <app-table [rows]="rows" [columns]="columns"></app-table>
       </div>
     </div>
 
@@ -38,13 +38,15 @@
           <div class="blog-card">
 
             <div class="d-flex justify-content-between mb-3">
-              <span class="badge bg-primary">{{ row.category }}</span>
-              <span class="badge" [class.bg-success]="row.status === 'Published'"
-                [class.bg-secondary]="row.status !== 'Published'">{{ row.status }}</span>
+              <app-badge variant="primary">{{ row.category }}</app-badge>
+              <app-badge
+                [variant]="row.status === 'Published' ? 'success' : row.status === 'Draft' ? 'warning' : 'danger'">
+                {{ row.status }}
+              </app-badge>
             </div>
 
             <h6 class="text-white fw-bold mb-2">{{ row.title }}</h6>
-            <p class="text-secondary small mb-3">{{ row.createdAt | date:'mediumDate' }}</p>
+            <p class="text-secondary small mb-3">{{ DateTimeHelper.toLocalString(row.createdAt, true) }}</p>
 
             <div class="d-flex gap-2">
               <app-button variant="outline" size="sm" customClass="flex-fill" (click)="editPost(row.post)"><i

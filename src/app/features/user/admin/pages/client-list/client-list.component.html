@@ -47,8 +47,7 @@
 
   <app-table
     [rows]="filteredClients"
-    [columns]="columns"
-    [actionTemplate]="actionTemplate">
+    [columns]="columns">
   </app-table>
 
 </div>
@@ -161,46 +160,21 @@
 
 <ng-template #statusTemplate let-row>
 
-  <span
-    class="badge"
-    [class.badge-success]="row.status === 'Active'"
-    [class.badge-danger]="row.status === 'Blocked' || row.status === 'Suspended'"
-    [class.badge-warning]="row.status === 'Deactivated'">
-
+  <app-badge
+    [variant]="
+      row.status === 'Active' ? 'success' :
+      (row.status === 'Blocked' || row.status === 'Suspended') ? 'danger' :
+      row.status === 'Deactivated' ? 'warning' : 'primary'
+    ">
     {{ row.status }}
-
-  </span>
+  </app-badge>
 
 </ng-template>
 
 <ng-template #actionTemplate let-row>
-
-  <div class="action-menu">
-
-    <button
-      class="action-btn"
-      (click)="toggleMenu(row.id, $event)">
-
-      <i class="bi bi-three-dots-vertical"></i>
-
-    </button>
-
-    @if (openMenuId === row.id) {
-
-      <div class="action-dropdown">
-
-         <app-button variant="outline" size="sm" customClass=" w-100 justify-content-start"
-            (click)="viewProfile(row)">
-            <i class="bi bi-eye"></i>
-          View Profile
-          </app-button>
-
-      </div>
-
-    }
-
-  </div>
-
+  <app-button variant="outline" size="sm" (click)="viewProfile(row)">
+    <i class="bi bi-eye me-2"></i> View
+  </app-button>
 </ng-template>
 
 
@@ -227,7 +201,7 @@
             </div>
             <div class="col-6">
               <span class="smaller-label d-block text-uppercase tracking-wider">Joined Date</span>
-              <span class="text-white fw-medium">{{selectedClient.joinedDate | date:'mediumDate'}}</span>
+              <span class="text-white fw-medium">{{ DateTimeHelper.toLocalString(selectedClient.joinedDate, true) }}</span>
             </div>
             <div class="col-6">
               <span class="smaller-label d-block text-uppercase tracking-wider">Total Contracts</span>
@@ -239,12 +213,14 @@
             </div>
             <div class="col-12">
               <span class="smaller-label d-block text-uppercase tracking-wider">Access Status</span>
-              <span class="badge mt-1" 
-                    [class.badge-success]="selectedClient.status === 'Active'" 
-                    [class.badge-danger]="selectedClient.status === 'Suspended' || selectedClient.status === 'Blocked'"
-                    [class.badge-warning]="selectedClient.status === 'Deactivated'">
-                {{selectedClient.status}}
-              </span>
+              <app-badge customClass="mt-1"
+                    [variant]="
+                      selectedClient.status === 'Active' ? 'success' :
+                      (selectedClient.status === 'Suspended' || selectedClient.status === 'Blocked') ? 'danger' :
+                      selectedClient.status === 'Deactivated' ? 'warning' : 'primary'
+                    ">
+                  {{ selectedClient.status }}
+              </app-badge>
             </div>
           </div>
 

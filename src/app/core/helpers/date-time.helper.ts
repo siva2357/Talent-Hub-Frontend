@@ -6,15 +6,16 @@ export class DateTimeHelper {
 	public static DEFAULT_SERVER_TIME_FORMAT: string = 'HH:mm';
 	public static DEFAULT_LOCAL_FORMAT: string = 'DD-MM-YYYY HH:mm';
 
-	private static toUtc(dateTime: Date): moment.Moment {
+	private static toUtc(dateTime: any): moment.Moment {
 		return moment(dateTime).utc();
 	}
 
-	private static toLocal(datetime: Date): moment.Moment {
+	private static toLocal(datetime: any): moment.Moment {
 		return moment(datetime);
 	}
 
-	public static toLocalString(datetime: Date, isDefault?: boolean, format?: string): string {
+	public static toLocalString(datetime: any, isDefault?: boolean, format?: string): string {
+		if (!datetime) return 'N/A';
 		if (format) return DateTimeHelper.toLocal(datetime).format(format);
 		else if (isDefault) return DateTimeHelper.toLocal(datetime).format('MMM DD, YYYY');
 		else return DateTimeHelper.toLocal(datetime).format(); //ISO-8601

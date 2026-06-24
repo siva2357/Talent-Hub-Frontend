@@ -15,6 +15,7 @@ import { BucketKey, UploadSection } from '../../../core/enums/upload.enum';
 import { CreateSupportTicketDto } from '../../../core/DTOs/support-ticket.dto';
 import { SupportAttachment, SupportRequest, UploadedFileEvent } from '../../../core/model/support-request.model';
 import { FilePreviewComponent } from "../../components/file-preview/file-preview.component";
+import { DateTimeHelper } from '../../../core/helpers/date-time.helper';
 
 interface Subcategory {
   label: string;
@@ -46,6 +47,8 @@ interface SupportCategory {
   styleUrl: './contact-support.component.css',
 })
 export class ContactSupportComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
   private authService = inject(AuthService);
   private supportService = inject(SupportService);
 

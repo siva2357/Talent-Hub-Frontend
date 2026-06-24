@@ -1,21 +1,25 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, AfterViewInit, inject, ViewChild, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
+import { Table } from '../../../../../shared/components/table/table.component';
+import { TableColumn } from '../../../../../core/model/table.interface';
 import { FinanceService } from '../../../../../core/services/finance.service';
-import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-finance-overview',
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule, ButtonComponent, Table, FormsModule],
   templateUrl: './finance-overview.component.html',
   styleUrl: './finance-overview.component.css'
 })
-export class FinanceOverviewComponent implements OnInit {
+export class FinanceOverviewComponent implements OnInit, AfterViewInit {
+  DateTimeHelper = DateTimeHelper;
+
   private router = inject(Router);
   private financeService = inject(FinanceService);
-  private diaryService = inject(ContractDiaryService);
 
   // Financial Stats
   totalEarnings = 0;
@@ -27,9 +31,32 @@ export class FinanceOverviewComponent implements OnInit {
   selectedContract: any = null;
   isLoading = true;
 
+  // Withdrawal logic
+  selectedWithdrawItem: any = null;
+  showWithdrawModal: boolean = false;
+  agreeToTerms: boolean = false;
+
+  @ViewChild('nameTemplate', { static: true }) nameTemplate!: TemplateRef<any>;
+  @ViewChild('dateTemplate', { static: true }) dateTemplate!: TemplateRef<any>;
+  @ViewChild('statusTemplate', { static: true }) statusTemplate!: TemplateRef<any>;
+  @ViewChild('amountTemplate', { static: true }) amountTemplate!: TemplateRef<any>;
+  @ViewChild('actionTemplate', { static: true }) actionTemplate!: TemplateRef<any>;
+
+  phaseColumns: TableColumn[] = [];
+
   ngOnInit() {
+    this.phaseColumns = [
+      { name: 'Phase Description', prop: 'name', cellTemplate: this.nameTemplate },
+      { name: 'Release Date', prop: 'date', cellTemplate: this.dateTemplate },
+      { name: 'Status', prop: 'status', cellTemplate: this.statusTemplate },
+      { name: 'Amount', prop: 'amount', cellTemplate: this.amountTemplate },
+      { name: 'Action', prop: 'action', cellTemplate: this.actionTemplate }
+    ];
     this.loadStats();
     this.loadContracts();
+  }
+
+  ngAfterViewInit() {
   }
 
   loadStats() {
@@ -50,54 +77,23 @@ export class FinanceOverviewComponent implements OnInit {
 
   loadContracts() {
     this.isLoading = true;
-    this.diaryService.getFreelancerDiaries().subscribe({
+    this.financeService.getFreelancerReport().subscribe({
       next: (res: any) => {
-        if (res.success && res.diaries) {
-          this.contracts = res.diaries.map((diary: any) => {
-            const approvedPhases = (diary.phases || []).filter((p: any) => p.status === 'approved');
-            const totalEarned = approvedPhases.reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
-            
-            // Find latest payment date
-            let lastPaymentDate = '-';
-            if (approvedPhases.length > 0) {
-              const sorted = approvedPhases.sort((a: any, b: any) => new Date(b.approvedAt).getTime() - new Date(a.approvedAt).getTime());
-              lastPaymentDate = new Date(sorted[0].approvedAt).toLocaleDateString();
-            }
-
-            const mappedPhases = (diary.phases || []).map((p: any) => {
-              let mappedStatus = 'Pending';
-              if (p.status === 'approved') mappedStatus = 'Paid';
-              else if (p.status === 'submitted') mappedStatus = 'In Review';
-              else if (p.status === 'changes-requested') mappedStatus = 'Changes Requested';
-              else if (p.status === 'in-progress') mappedStatus = 'In Progress';
-
-              return {
-                name: p.name,
-                amount: p.amount || 0,
-                status: mappedStatus,
-                date: p.approvedAt ? new Date(p.approvedAt).toLocaleDateString() : '-'
-              };
-            });
-
-            let mappedStatus = 'Ongoing';
-            if (diary.overallStatus === 'completed') mappedStatus = 'Completed';
-            else if (diary.overallStatus === 'cancelled') mappedStatus = 'Cancelled';
-
-            return {
-              title: diary.contractId?.contractTitle || 'Contract',
-              client: diary.clientId?.registrationDetails?.fullName || 'Client',
-              totalEarned,
-              lastPaymentDate,
-              status: mappedStatus,
-              type: diary.contractId?.budgetType || 'Fixed Price',
-              phases: mappedPhases
+        if (res.success && res.report) {
+          this.contracts = res.report.map((item: any) => {
+            const contractObj = {
+              ...item,
+              totalEarned: item.earned,
+              lastPaymentDate: item.lastPaymentDate || '-'
             };
+            contractObj.phases = (item.phases || []).map((p: any) => ({ ...p, parentContract: contractObj }));
+            return contractObj;
           });
         }
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Failed to load freelancer contract details:', err);
+        console.error('Failed to load freelancer finance report:', err);
         this.isLoading = false;
       }
     });
@@ -108,14 +104,56 @@ export class FinanceOverviewComponent implements OnInit {
   }
 
   viewStatements() {
-    this.router.navigate(['/user/finance-report']);
+    // Navigate to a dedicated statements page or trigger statement download logic
+    // We will keep it as an action that opens the first contract's statement for now,
+    // or you can implement a global download button
   }
 
   viewAllTransactions() {
-    this.router.navigate(['/user/finance-report']);
+    // The unified page shows all transactions now.
   }
 
-  withdraw() {
-    this.router.navigate(['/user/finance-report']);
+  withdrawPhase(contract: any, phase: any) {
+    if (contract.balance >= phase.amount) {
+      this.selectedWithdrawItem = {
+        balance: phase.amount,
+        contractId: contract.contractId,
+        isPhase: true,
+        phaseName: phase.name,
+        title: contract.title,
+        client: contract.client,
+        type: contract.type,
+        budget: contract.budget
+      };
+      this.showWithdrawModal = true;
+      this.agreeToTerms = false;
+    }
+  }
+
+  closeModal() {
+    this.showWithdrawModal = false;
+    this.selectedWithdrawItem = null;
+    this.agreeToTerms = false;
+  }
+
+  confirmWithdrawal() {
+    if (this.selectedWithdrawItem && this.agreeToTerms) {
+      const amount = this.selectedWithdrawItem.balance;
+      const contractId = this.selectedWithdrawItem.contractId;
+
+      this.financeService.withdraw(amount, contractId).subscribe({
+        next: (res: any) => {
+          if (res.success) {
+            alert(`Withdrawal request for ₹${amount.toFixed(2)} processed successfully!`);
+            this.loadStats();
+            this.loadContracts();
+            this.closeModal();
+          }
+        },
+        error: (err) => {
+          alert('Withdrawal request failed: ' + (err.error?.message || 'Error occurred'));
+        }
+      });
+    }
   }
 }

@@ -9,21 +9,24 @@ import { FilePreviewComponent } from '../../../../../shared/components/file-prev
 import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
 import { Attachment, Diary, Phase, Revision } from '../../../../../core/model/contract-diary.model';
 import { finalize } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { RichTextEditorComponent } from '../../../../../shared/components/rich-text-editor/rich-text-editor.component';
+
 
 @Component({
   selector: 'app-contract-diary',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent, FileUploadComponent, FilePreviewComponent],
+  imports: [CommonModule, FormsModule, RouterModule,RichTextEditorComponent, ButtonComponent, FileUploadComponent, FilePreviewComponent],
   templateUrl: './contract-diary.component.html',
   styleUrl: './contract-diary.component.css'
 })
 export class ContractDiaryComponent implements OnInit {
   private diaryService = inject(ContractDiaryService);
+  private route = inject(ActivatedRoute);
 
-  diaries: Diary[] = [];
   isLoading = true;
-  expandedDiaryId: string | null = null;
-
+diary: Diary | null = null;
+contractId = '';
   // Submission state per phase
   phaseNotes: Record<string, string> = {};
   submitting: Record<string, boolean> = {};
@@ -39,7 +42,16 @@ selectedPhase: Phase | null = null;
   tempUploadUrls: Record<string, string | null> = {};
   uploadedFiles: Record<string, Attachment[]> = {};
 
+getRevisionNumber(
+  phase: Phase,
+  revision: Revision
+): number {
 
+  return phase.revisions.findIndex(
+    r => r._id === revision._id
+  ) + 1;
+
+}
 
   openSubmitModal(
   diaryId: string,
@@ -104,27 +116,56 @@ onFileUploaded(
     }
   }
 
-  ngOnInit(): void {
+ngOnInit(): void {
+
+  this.contractId =
+    this.route.snapshot.queryParamMap.get(
+      'contractId'
+    ) || '';
+
+  if (this.contractId) {
     this.fetchDiaries();
   }
 
-  fetchDiaries(): void {
-    this.isLoading = true;
-    this.diaryService.getFreelancerDiaries().subscribe({
-      next: (res: any) => {
-        this.diaries = (res.diaries || []).filter((d: any) => d.contractId && (d.contractId.funded || 0) > 0);
-        if (this.diaries.length > 0) {
-          this.expandedDiaryId = this.diaries[0]._id;
-        }
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Failed to fetch diaries:', err);
-        this.diaries = [];
-        this.isLoading = false;
-      }
-    });
+}
+
+
+
+
+fetchDiaries(): void {
+
+  if (!this.contractId) {
+    this.diary = null;
+    return;
   }
+
+  this.isLoading = true;
+
+  this.diaryService
+    .getFreelancerDiaries(this.contractId)
+    .subscribe({
+
+      next: (res: any) => {
+
+        this.diary = res.diary || null;
+
+        this.isLoading = false;
+
+      },
+
+      error: (err) => {
+
+        console.error(err);
+
+        this.diary = null;
+
+        this.isLoading = false;
+
+      }
+
+    });
+
+}
 
   getLatestRevision(
   phase: Phase
@@ -179,9 +220,7 @@ hasRevision(
 
 }
 
-  toggleDiary(id: string): void {
-    this.expandedDiaryId = this.expandedDiaryId === id ? null : id;
-  }
+
 
   startPhase(diaryId: string, phaseId: string): void {
     this.submitting[phaseId] = true;
@@ -295,14 +334,6 @@ canStart(
 }
 
 
-trackByDiary(
-  index: number,
-  diary: Diary
-): string {
-
-  return diary._id;
-
-}
   isContractActive(diary: Diary): boolean {
     if (!diary.contractId?.contractStartDate) return true;
     const start = new Date(diary.contractId.contractStartDate);

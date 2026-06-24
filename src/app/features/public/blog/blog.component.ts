@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 
 import { BlogService } from '../../../core/services/blog.service';
 import { Blog } from '../../../core/model/blog.model';
+import { DateTimeHelper } from '../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-blog',
@@ -16,6 +17,8 @@ import { Blog } from '../../../core/model/blog.model';
   styleUrls: ['./blog.component.css']
 })
 export class BlogComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
 
   private blogService = inject(BlogService);
 

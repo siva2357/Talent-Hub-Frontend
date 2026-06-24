@@ -12,17 +12,21 @@ import { FileUploadComponent } from '../../../../../shared/components/file-uploa
 import { RichTextEditorComponent } from '../../../../../shared/components/rich-text-editor/rich-text-editor.component';
 import { Table } from '../../../../../shared/components/table/table.component';
 import { FilePreviewComponent } from "../../../../../shared/components/file-preview/file-preview.component";
+import { BadgeComponent } from '../../../../../shared/components/badge/badge.component';
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-blog-post',
   standalone: true,
-  imports: [ CommonModule, ReactiveFormsModule, ButtonComponent, InputComponent, FileUploadComponent, RichTextEditorComponent, Table, FilePreviewComponent],
+  imports: [CommonModule, ReactiveFormsModule, ButtonComponent, InputComponent, FileUploadComponent, RichTextEditorComponent, Table, FilePreviewComponent, BadgeComponent],
   templateUrl: './blog-post.component.html',
   styleUrl: './blog-post.component.css'
 })
 
 
 export class BlogPostComponent implements OnInit, AfterViewInit {
+  DateTimeHelper = DateTimeHelper;
+
   private fb = inject(FormBuilder);
   private blogService = inject(BlogService);
   private toastr = inject(ToastrService);
@@ -160,7 +164,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
     this.saving = true;
     if (this.isEditing) {
       const dto: UpdateBlogDto = this.form.getRawValue();
-      this.blogService.updateBlog( this.editId, dto).subscribe({
+      this.blogService.updateBlog(this.editId, dto).subscribe({
         next: () => {
           this.saving = false;
           this.toastr.success(
@@ -246,9 +250,9 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
     });
   }
 
-  toggleMenu( id: string, event: Event): void {
+  toggleMenu(id: string, event: Event): void {
     event.stopPropagation();
-    this.openMenuId = this.openMenuId === id ? null: id;
+    this.openMenuId = this.openMenuId === id ? null : id;
   }
 
   resetForm(): void {
@@ -267,5 +271,5 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
     this.isEditing = false;
     this.isFormOpen = false;
   }
-  
+
 }

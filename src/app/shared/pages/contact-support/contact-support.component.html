@@ -293,7 +293,7 @@
         </div>
 
         <small>
-          {{ ticket.createdAt | date:'medium' }}
+          {{ DateTimeHelper.toLocalString(ticket.createdAt, false, 'MMM DD, YYYY, h:mm:ss A') }}
         </small>
 
       </div>
@@ -418,7 +418,7 @@
             </strong>
 
             <span>
-              {{ selectedTicket.createdAt | date:'medium' }}
+              {{ DateTimeHelper.toLocalString(selectedTicket.createdAt, false, 'MMM DD, YYYY, h:mm:ss A') }}
             </span>
 
           </div>
@@ -468,7 +468,7 @@
 
             <span>
 
-              {{ reply.timestamp | date:'medium' }}
+              {{ DateTimeHelper.toLocalString(reply.timestamp, false, 'MMM DD, YYYY, h:mm:ss A') }}
 
             </span>
 

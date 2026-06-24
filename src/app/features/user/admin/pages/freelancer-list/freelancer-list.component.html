@@ -48,8 +48,7 @@
 
   <app-table
     [rows]="filteredFreelancers"
-    [columns]="columns"
-    [actionTemplate]="actionTemplate">
+    [columns]="columns">
   </app-table>
 
 </div>
@@ -171,46 +170,21 @@
 
 <ng-template #statusTemplate let-row>
 
-  <span
-    class="badge"
-    [class.badge-success]="row.status === 'Active'"
-    [class.badge-danger]="row.status === 'Blocked' || row.status === 'Suspended'"
-    [class.badge-warning]="row.status === 'Deactivated'">
-
+  <app-badge
+    [variant]="
+      row.status === 'Active' ? 'success' :
+      (row.status === 'Blocked' || row.status === 'Suspended') ? 'danger' :
+      row.status === 'Deactivated' ? 'warning' : 'primary'
+    ">
     {{ row.status }}
-
-  </span>
+  </app-badge>
 
 </ng-template>
 
 <ng-template #actionTemplate let-row>
-
-  <div class="action-menu">
-
-    <button
-      class="action-btn"
-      (click)="toggleMenu(row.id, $event)">
-
-      <i class="bi bi-three-dots-vertical"></i>
-
-    </button>
-
-    @if (openMenuId === row.id) {
-
-      <div class="action-dropdown">
-
-         <app-button variant="outline" size="sm" customClass=" w-100 justify-content-start"
-            (click)="viewProfile(row)">
-            <i class="bi bi-eye"></i>
-          View Profile
-          </app-button>
-
-      </div>
-
-    }
-
-  </div>
-
+  <app-button variant="outline" size="sm" (click)="viewProfile(row)">
+    <i class="bi bi-eye me-2"></i> View
+  </app-button>
 </ng-template>
 
 
@@ -237,7 +211,7 @@
             </div>
             <div class="col-6">
               <span class="smaller-label d-block text-uppercase tracking-wider">Joined Date</span>
-              <span class="text-white fw-medium">{{selectedFreelancer.joinedDate | date:'mediumDate'}}</span>
+              <span class="text-white fw-medium">{{ DateTimeHelper.toLocalString(selectedFreelancer.joinedDate, true) }}</span>
             </div>
             <div class="col-6">
               <span class="smaller-label d-block text-uppercase tracking-wider">Hourly Rate</span>
@@ -265,12 +239,14 @@
             </div>
             <div class="col-12">
               <span class="smaller-label d-block text-uppercase tracking-wider">Account Status</span>
-              <span class="badge mt-1" 
-                    [class.badge-success]="selectedFreelancer.status === 'Active'" 
-                    [class.badge-warning]="selectedFreelancer.status === 'Pending Approval' || selectedFreelancer.status === 'Deactivated'"
-                    [class.badge-danger]="selectedFreelancer.status === 'Suspended' || selectedFreelancer.status === 'Blocked'">
-                {{selectedFreelancer.status}}
-              </span>
+              <app-badge customClass="mt-1"
+                    [variant]="
+                      selectedFreelancer.status === 'Active' ? 'success' :
+                      (selectedFreelancer.status === 'Pending Approval' || selectedFreelancer.status === 'Deactivated') ? 'warning' :
+                      (selectedFreelancer.status === 'Suspended' || selectedFreelancer.status === 'Blocked') ? 'danger' : 'primary'
+                    ">
+                  {{ selectedFreelancer.status }}
+              </app-badge>
             </div>
           </div>
 

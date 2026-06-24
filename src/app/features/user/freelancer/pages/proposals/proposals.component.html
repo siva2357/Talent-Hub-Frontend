@@ -165,7 +165,7 @@
                         @if(proposal.assessment.description) {
                           <p class="text-secondary smaller mb-1 mt-1">{{proposal.assessment.description}}</p>
                         }
-                        <p class="text-secondary smaller mb-0">Deadline: <span class="text-danger">{{proposal.assessment.date | date:'short'}}</span></p>
+                        <p class="text-secondary smaller mb-0">Deadline: <span class="text-danger">{{ DateTimeHelper.toLocalString(proposal.assessment.date, false, 'M/D/YY, h:mm A') }}</span></p>
                         
                         @if (proposal.status.toLowerCase() === 'assessment completed') {
                         <span class="badge bg-success bg-opacity-10 text-success mt-2">Completed</span>
@@ -187,7 +187,7 @@
                         @if(proposal.interview.description) {
                           <p class="text-secondary smaller mb-1 mt-1">{{proposal.interview.description}}</p>
                         }
-                        <p class="text-info smaller mb-0"><i class="bi bi-clock me-1"></i> {{proposal.interview.date | date:'short'}}</p>
+                        <p class="text-info smaller mb-0"><i class="bi bi-clock me-1"></i> {{ DateTimeHelper.toLocalString(proposal.interview.date, false, 'M/D/YY, h:mm A') }}</p>
                         
                         @if (proposal.status.toLowerCase() === 'interview completed') {
                           <span class="badge bg-success bg-opacity-10 text-success mt-2">Completed</span>

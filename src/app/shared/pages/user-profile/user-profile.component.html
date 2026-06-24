@@ -71,7 +71,7 @@
                             </span>
                             <span class="d-flex align-items-center gap-2 info-chip">
                                 <i class="bi bi-calendar3-event text-primary-light"></i>
-                                <span>Joined {{ ((profile?.createdAt || user?.createdAt) | date:'mediumDate') || 'No Date' }}</span>
+                                <span>Joined {{ (profile?.createdAt || user?.createdAt) ? DateTimeHelper.toLocalString(profile?.createdAt || user?.createdAt, true) : 'No Date' }}</span>
                             </span>
                         </div>
 
@@ -224,7 +224,7 @@
                                     <div class="d-flex flex-column">
                                         <span class="text-secondary-light font-xs text-uppercase ls-1">End Date</span>
                                         <span class="text-white fw-semibold font-monospace font-xs mt-1">
-                                            {{ contract.contractEndDate | date:'mediumDate' }}
+                                            {{ DateTimeHelper.toLocalString(contract.contractEndDate, true) }}
                                         </span>
                                     </div>
                                 </div>
@@ -531,7 +531,7 @@
 
                                 <h6 class="text-white mb-0 mt-1">
 
-                                    {{ contract.contractStartDate | date:'mediumDate' }}
+                                    {{ DateTimeHelper.toLocalString(contract.contractStartDate, true) }}
 
                                 </h6>
 
@@ -545,7 +545,7 @@
 
                                 <h6 class="text-white mb-0 mt-1">
 
-                                    {{ contract.contractEndDate | date:'mediumDate' }}
+                                    {{ DateTimeHelper.toLocalString(contract.contractEndDate, true) }}
 
                                 </h6>
 
@@ -568,7 +568,7 @@
 
                         <h6 class="text-white fw-semibold mb-0 mt-1">
 
-                            {{ contract.createdAt | date:'mediumDate' }}
+                            {{ DateTimeHelper.toLocalString(contract.createdAt, true) }}
 
                         </h6>
 

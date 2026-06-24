@@ -87,12 +87,15 @@
 
               <div class="d-flex justify-content-between align-items-start mb-2">
                 <span class="text-primary fw-mono fw-semibold small">{{req.id}}</span>
-                <span class="badge" [class.badge-primary]="req.status === 'Open'"
-                  [class.badge-warning]="req.status === 'WaitingForAdmin'"
-                  [class.badge-info]="req.status === 'WaitingForUser'" [class.badge-success]="req.status === 'Resolved'"
-                  [class.badge-secondary]="req.status === 'Closed'">
-                  {{req.status}}
-                </span>
+                <app-badge
+                  [variant]="
+                    req.status === 'Open' ? 'primary' :
+                    req.status === 'WaitingForAdmin' ? 'warning' :
+                    req.status === 'WaitingForUser' ? 'info' :
+                    req.status === 'Resolved' ? 'success' : 'secondary'
+                  ">
+                  {{ req.status }}
+                </app-badge>
               </div>
 
               <h6 class="text-white fw-bold mb-1 text-truncate">{{req.subject}}</h6>
@@ -101,14 +104,13 @@
               <div
                 class="d-flex justify-content-between align-items-center pt-2 border-top border-white border-opacity-5">
                 <div class="d-flex align-items-center gap-2">
-                  <span class="badge" [class.bg-info]="req.userType === 'Client'"
-                    [class.bg-success]="req.userType === 'Freelancer'">
-                    {{req.userType}}
-                  </span>
+                  <app-badge [variant]="req.userType === 'Client' ? 'info' : 'success'">
+                    {{ req.userType }}
+                  </app-badge>
                   <span class="text-white opacity-75 small text-truncate"
                     style="max-width: 130px;">{{req.userName}}</span>
                 </div>
-                <span class="text-secondary smaller opacity-75">{{req.createdDate | date:'mediumDate'}}</span>
+                <span class="text-secondary smaller opacity-75">{{ DateTimeHelper.toLocalString(req.createdDate, true) }}</span>
               </div>
             </div>
             }
@@ -142,26 +144,27 @@
           <div
             class="d-flex align-items-start justify-content-between border-bottom border-white border-opacity-10 pb-3 mb-3">
             <div>
-              <span class="badge mb-2 me-2" [class.bg-info]="selectedRequest.userType === 'Client'"
-                [class.bg-success]="selectedRequest.userType === 'Freelancer'">
-                {{selectedRequest.userType}}
-              </span>
+              <app-badge customClass="mb-2 me-2" [variant]="selectedRequest.userType === 'Client' ? 'info' : 'success'">
+                {{ selectedRequest.userType }}
+              </app-badge>
               <span class="text-secondary small fw-mono">ID: <span
                   class="text-primary">{{selectedRequest.id}}</span></span>
               <h4 class="text-white fw-bold mt-1 mb-0">{{selectedRequest.subject}}</h4>
               <p class="text-secondary small mb-0 mt-1">Submitted by <span
                   class="text-white fw-semibold">{{selectedRequest.userName}}</span> ({{selectedRequest.userEmail}})
                 &bull;
-                {{selectedRequest.createdDate | date:'mediumDate'}}</p>
+                {{ DateTimeHelper.toLocalString(selectedRequest.createdDate, true) }}</p>
             </div>
             <div class="d-flex flex-column align-items-end gap-2">
-              <span class="badge" [class.badge-primary]="selectedRequest.status === 'Open'"
-                [class.badge-warning]="selectedRequest.status === 'WaitingForAdmin'"
-                [class.badge-info]="selectedRequest.status === 'WaitingForUser'"
-                [class.badge-success]="selectedRequest.status === 'Resolved'"
-                [class.badge-secondary]="selectedRequest.status === 'Closed'">
-                {{selectedRequest.status}}
-              </span>
+              <app-badge
+                [variant]="
+                  selectedRequest.status === 'Open' ? 'primary' :
+                  selectedRequest.status === 'WaitingForAdmin' ? 'warning' :
+                  selectedRequest.status === 'WaitingForUser' ? 'info' :
+                  selectedRequest.status === 'Resolved' ? 'success' : 'secondary'
+                ">
+                {{ selectedRequest.status }}
+              </app-badge>
             </div>
           </div>
 
@@ -200,7 +203,7 @@
                   }
                   <div class="d-flex align-items-center gap-1 justify-content-end mt-1">
                     <span class="text-secondary smaller opacity-70">{{selectedRequest.userName}} &bull;
-                      {{selectedRequest.createdDate | date:'mediumDate'}}</span>
+                      {{ DateTimeHelper.toLocalString(selectedRequest.createdDate, true) }}</span>
                   </div>
                 </div>
               </div>
@@ -315,15 +318,15 @@
 
             </div>
 
-            <span class="badge px-3 py-2" [class.bg-primary]="selectedRequest.status === 'Open'"
-              [class.bg-warning]="selectedRequest.status === 'WaitingForAdmin'"
-              [class.bg-info]="selectedRequest.status === 'WaitingForUser'"
-              [class.bg-success]="selectedRequest.status === 'Resolved'"
-              [class.bg-secondary]="selectedRequest.status === 'Closed'">
-
-              {{ selectedRequest.status }}
-
-            </span>
+            <app-badge customClass="px-3 py-2"
+                [variant]="
+                  selectedRequest.status === 'Open' ? 'primary' :
+                  selectedRequest.status === 'WaitingForAdmin' ? 'warning' :
+                  selectedRequest.status === 'WaitingForUser' ? 'info' :
+                  selectedRequest.status === 'Resolved' ? 'success' : 'secondary'
+                ">
+              Current Status: {{ selectedRequest.status }}
+            </app-badge>
 
           </div>
 

@@ -41,7 +41,7 @@ export class Table {
 
   @Input() loading = false;
 
-  @Input() actionTemplate?: TemplateRef<any>;
+
 
   @Output() rowClicked = new EventEmitter<TableRow>();
 

@@ -28,6 +28,14 @@ export class FinanceService {
     return this.http.get(`${this.baseUrl}${API_ENDPOINTS.FINANCE.TRANSACTIONS}`, this.getHeaders());
   }
 
+  getContractTransactions(): Observable<any> {
+    return this.http.get(`${this.baseUrl}${API_ENDPOINTS.FINANCE.CONTRACT_TRANSACTIONS}`, this.getHeaders());
+  }
+
+  getFreelancerReport(): Observable<any> {
+    return this.http.get(`${this.baseUrl}${API_ENDPOINTS.FINANCE.FREELANCER_REPORT}`, this.getHeaders());
+  }
+
   getInvoices(): Observable<any> {
     return this.http.get(`${this.baseUrl}${API_ENDPOINTS.FINANCE.INVOICES}`, this.getHeaders());
   }

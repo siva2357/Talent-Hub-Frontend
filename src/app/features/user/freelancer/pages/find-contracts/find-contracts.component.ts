@@ -8,6 +8,7 @@ import { ButtonComponent } from "../../../../../shared/components/button/button.
 import { ContractService } from '../../../../../core/services/contract.service';
 
 import { Contract } from '../../../../../core/model/contract.model';
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-find-contracts',
@@ -23,6 +24,8 @@ import { Contract } from '../../../../../core/model/contract.model';
 })
 
 export class FindContractsComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
 
   private contractService = inject(ContractService);
   private router = inject(Router)

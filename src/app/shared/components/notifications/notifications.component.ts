@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../../core/services/notification.service';
 import { AppNotification } from '../../../core/model/notification.model';
+import { DateTimeHelper } from '../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-notifications',
@@ -11,6 +12,8 @@ import { AppNotification } from '../../../core/model/notification.model';
   styleUrl: './notifications.component.css'
 })
 export class NotificationsComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
   private notificationService = inject(NotificationService);
 
   notifications: AppNotification[] = [];

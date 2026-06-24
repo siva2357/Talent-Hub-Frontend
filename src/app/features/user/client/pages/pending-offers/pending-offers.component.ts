@@ -2,6 +2,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-pending-offers',
@@ -10,6 +11,8 @@ import { Component } from '@angular/core';
   styleUrl: './pending-offers.component.css'
 })
 export class PendingOffersComponent {
+  DateTimeHelper = DateTimeHelper;
+
   searchQuery: string = '';
   statusFilter: string = 'All Status';
   typeFilter: string = 'All Types';

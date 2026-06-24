@@ -5,15 +5,22 @@ import { ButtonComponent } from '../../../../../shared/components/button/button.
 import { ApplicationService } from '../../../../../core/services/application.service';
 
 interface ActiveContract {
-  id: string;
+  id: string; // applicationId
+  contractId: string; // actual contractId
+
   contractTitle: string;
   client: string;
   clientInitials: string;
+
   budget: string;
   contractType: 'Fixed Price' | 'Hourly';
+
   techStack: string[];
+
   startDate: string;
+
   status: 'in-progress' | 'upcoming';
+
   description: string;
 }
 
@@ -39,9 +46,9 @@ export class ActiveContractsComponent implements OnInit {
     this.applicationService.getFreelancerOffers().subscribe({
       next: (res: any) => {
         if (res.success && res.offers) {
-          // Only show accepted offers as active contracts
+          // Only show accepted offers as active contracts that are not completed
           this.contracts = res.offers
-            .filter((offer: any) => offer.status === 'Accepted')
+            .filter((offer: any) => offer.status === 'Accepted' && offer.contractStatus !== 'completed')
             .map((offer: any) => {
               const name = offer.client || 'Client';
               const initials = name
@@ -57,17 +64,23 @@ export class ActiveContractsComponent implements OnInit {
               const isStarted = !isNaN(start.getTime()) && start <= now;
 
               return {
-                id: offer.id,
-                contractTitle: offer.contractTitle,
-                client: name,
-                clientInitials: initials,
-                budget: offer.budget,
-                contractType: offer.contractType,
-                techStack: offer.techStack || [],
-                startDate: startDate,
-                status: isStarted ? 'in-progress' : 'upcoming',
-                description: offer.description || ''
-              } as ActiveContract;
+  id: offer.id,
+  contractId: offer.contractId,
+
+  contractTitle: offer.contractTitle,
+  client: name,
+  clientInitials: initials,
+
+  budget: offer.budget,
+  contractType: offer.contractType,
+
+  techStack: offer.techStack || [],
+
+  startDate,
+  status: isStarted ? 'in-progress' : 'upcoming',
+
+  description: offer.description || ''
+} as ActiveContract;
             });
         } else {
           this.contracts = [];

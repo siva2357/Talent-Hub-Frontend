@@ -80,7 +80,13 @@ ngOnInit(): void {
       name: 'Offer',
       prop: 'offerStatus'
     }
-  ];
+  ,
+    {
+      name: 'Actions',
+      prop: 'actions',
+      sortable: false,
+      cellTemplate: this.actionTemplate
+    }];
 
   this.contractId =
     this.route.snapshot.queryParamMap.get('contractId') || '';

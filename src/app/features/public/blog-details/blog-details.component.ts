@@ -6,6 +6,7 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
 
 import { BlogService } from '../../../core/services/blog.service';
 import { Blog } from '../../../core/model/blog.model';
+import { DateTimeHelper } from '../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-blog-details',
@@ -19,6 +20,8 @@ import { Blog } from '../../../core/model/blog.model';
   styleUrls: ['./blog-details.component.css']
 })
 export class BlogDetailsComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
 
   private route = inject(ActivatedRoute);
   private blogService = inject(BlogService);

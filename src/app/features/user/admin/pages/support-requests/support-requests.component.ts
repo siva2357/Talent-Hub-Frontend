@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { SupportService } from '../../../../../core/services/support.service';
-import { SupportRequest} from '../../../../../core/model/support-request.model';
+import { SupportRequest } from '../../../../../core/model/support-request.model';
 import { FilePreviewComponent } from "../../../../../shared/components/file-preview/file-preview.component";
 import { InputComponent } from "../../../../../shared/components/input/input.component";
+import { BadgeComponent } from "../../../../../shared/components/badge/badge.component";
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-support-requests',
@@ -14,12 +16,15 @@ import { InputComponent } from "../../../../../shared/components/input/input.com
     CommonModule,
     FormsModule,
     FilePreviewComponent,
-    InputComponent
-],
+    InputComponent,
+    BadgeComponent
+  ],
   templateUrl: './support-requests.component.html',
   styleUrl: './support-requests.component.css'
 })
 export class SupportRequestsComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
 
   private supportService = inject(SupportService);
   private toastr = inject(ToastrService);
@@ -42,22 +47,22 @@ export class SupportRequestsComponent implements OnInit {
     | 'Client'
     | 'Freelancer' = 'All';
 
-    statusOptions = [
-  { label: 'All Status', value: 'All' },
-  { label: 'Open', value: 'Open' },
-  { label: 'Waiting For Admin', value: 'WaitingForAdmin' },
-  { label: 'Waiting For User', value: 'WaitingForUser' },
-  { label: 'Resolved', value: 'Resolved' },
-  { label: 'Closed', value: 'Closed' }
-];
+  statusOptions = [
+    { label: 'All Status', value: 'All' },
+    { label: 'Open', value: 'Open' },
+    { label: 'Waiting For Admin', value: 'WaitingForAdmin' },
+    { label: 'Waiting For User', value: 'WaitingForUser' },
+    { label: 'Resolved', value: 'Resolved' },
+    { label: 'Closed', value: 'Closed' }
+  ];
 
-userTypeOptions = [
-  { label: 'All Users', value: 'All' },
-  { label: 'Client', value: 'Client' },
-  { label: 'Freelancer', value: 'Freelancer' }
-];
+  userTypeOptions = [
+    { label: 'All Users', value: 'All' },
+    { label: 'Client', value: 'Client' },
+    { label: 'Freelancer', value: 'Freelancer' }
+  ];
 
-isLoading = true;
+  isLoading = true;
 
 
   selectedRequest: SupportRequest | null = null;
@@ -68,33 +73,33 @@ isLoading = true;
     this.loadRequests();
   }
 
-loadRequests(): void {
+  loadRequests(): void {
 
-  this.isLoading = true;
+    this.isLoading = true;
 
-  this.supportService.getAllTickets().subscribe({
-    next: (tickets) => {
+    this.supportService.getAllTickets().subscribe({
+      next: (tickets) => {
 
-      this.requests = tickets;
+        this.requests = tickets;
 
-      this.applyFilters();
+        this.applyFilters();
 
-      this.isLoading = false;
-    },
+        this.isLoading = false;
+      },
 
-    error: (error) => {
+      error: (error) => {
 
-      console.error(error);
+        console.error(error);
 
-      this.isLoading = false;
+        this.isLoading = false;
 
-      this.toastr.error(
-        'Failed to load support tickets',
-        'Support Desk'
-      );
-    }
-  });
-}
+        this.toastr.error(
+          'Failed to load support tickets',
+          'Support Desk'
+        );
+      }
+    });
+  }
 
   onSearch(event: Event): void {
 

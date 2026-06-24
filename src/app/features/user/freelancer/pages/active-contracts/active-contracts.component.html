@@ -54,7 +54,7 @@
 
                                      <div class="d-flex gap-2 flex-wrap">
                                          @if (contract.status === 'in-progress') {
-                                             <a [routerLink]="['/user/contract-diary']" class="text-decoration-none">
+                                             <a [routerLink]="['/user/contract-diary']" [queryParams]="{ contractId: contract.contractId }"class="text-decoration-none">
                                                  <app-button variant="brand" size="sm">
                                                      Open Work Diary
                                                  </app-button>

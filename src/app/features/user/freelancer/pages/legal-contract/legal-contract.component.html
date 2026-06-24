@@ -50,7 +50,7 @@
                                 <p class="text-secondary small">
                                     <strong>Contract Title:</strong> {{offerData.contractId?.contractTitle}}<br>
                                     <strong>Value:</strong> ${{offerData.contractId?.estimatedBudget}} ({{offerData.contractId?.budgetType}})<br>
-                                    <strong>Timeline:</strong> Starts {{offerData.contractId?.contractStartDate | date:'MMM d, yyyy'}} to {{offerData.contractId?.contractEndDate | date:'MMM d, yyyy'}}
+                                    <strong>Timeline:</strong> Starts {{ DateTimeHelper.toLocalString(offerData.contractId?.contractStartDate, false, 'MMM D, YYYY') }} to {{ DateTimeHelper.toLocalString(offerData.contractId?.contractEndDate, false, 'MMM D, YYYY') }}
                                 </p>
                             </div>
 

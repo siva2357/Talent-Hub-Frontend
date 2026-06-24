@@ -54,10 +54,12 @@ export const API_ENDPOINTS = {
   FINANCE: {
     STATS: '/finance/stats',
     TRANSACTIONS: '/finance/transactions',
+    CONTRACT_TRANSACTIONS: '/finance/contract-transactions',
     INVOICES: '/finance/invoices',
     RAZORPAY_ORDER: '/finance/razorpay/order',
     RAZORPAY_VERIFY: '/finance/razorpay/verify',
     WITHDRAW: '/finance/withdraw',
+    FREELANCER_REPORT: '/finance/freelancer-report',
   },
 
   // Dashboard Endpoints
@@ -82,19 +84,19 @@ export const API_ENDPOINTS = {
   },
 
   // Contract Diary Endpoints
-  CONTRACT_DIARY: {
-    BASE: '/contract-diary',
-    PHASES: (diaryId: string) => `/contract-diary/${diaryId}/phases`,
-    REVIEW_PHASE: (diaryId: string, phaseId: string) =>
-      `/contract-diary/${diaryId}/phases/${phaseId}/review`,
-    MY_DIARIES: '/contract-diary/my-diaries',
-    MY_DIARY: '/contract-diary/my-diary',
-    START_PHASE: (diaryId: string, phaseId: string) =>
-      `/contract-diary/${diaryId}/phases/${phaseId}/start`,
-    SUBMIT_PHASE: (diaryId: string, phaseId: string) =>
-      `/contract-diary/${diaryId}/phases/${phaseId}/submit`,
-    ITEM: (diaryId: string) => `/contract-diary/${diaryId}`,
-  },
+CONTRACT_DIARY: {
+  BASE: '/contract-diary',
+  MY_DIARIES: '/contract-diary/my-diaries',
+  MY_DIARY: (contractId: string) =>`/contract-diary/my-diary/${contractId}`,
+  MY_DIARIES_FREELANCER: '/contract-diary/my-diaries-freelancer',
+  BY_CONTRACT: (contractId: string) =>`/contract-diary/contract/${contractId}`,
+  ITEM: (diaryId: string) =>`/contract-diary/${diaryId}`,
+  PHASES: (diaryId: string) =>`/contract-diary/${diaryId}/phases`,
+  REVIEW_PHASE: (diaryId: string,phaseId: string) =>`/contract-diary/${diaryId}/phases/${phaseId}/review`,
+  START_PHASE: ( diaryId: string, phaseId: string) =>`/contract-diary/${diaryId}/phases/${phaseId}/start`,
+  SUBMIT_PHASE: ( diaryId: string, phaseId: string) =>`/contract-diary/${diaryId}/phases/${phaseId}/submit`,
+},
+
 
   // Application Endpoints
   APPLICATIONS: {

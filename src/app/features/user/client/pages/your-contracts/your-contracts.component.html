@@ -14,86 +14,102 @@
     </div>
 
 
-<div class="glass filter-toolbar p-4 rounded-4 border-white border-opacity-10 mb-4">
-  <div class="row g-3 align-items-end">
+        <!-- Filter and Search Controls -->
+        <div class="glass-dark p-3 p-md-4 rounded-4 border border-white border-opacity-5 mb-4 position-relative" style="z-index: 10;">
+            <div class="row g-3 align-items-center">
+                <!-- Search -->
+                <div class="col-12 col-md-3">
+                    <app-input
+                        type="text"
+                        mode="filter"
+                        icon="bi bi-search"
+                        placeholder="Search contracts..."
+                        [(ngModel)]="pendingSearchQuery">
+                    </app-input>
+                </div>
 
-    <div class="col-lg-3 col-md-6">
-      <app-input mode="filter" type="select" label="Status" placeholder="All Statuses" [options]="statusOptions"
-        [(ngModel)]="statusFilter">
-      </app-input>
-    </div>
+                <!-- Status Dropdown -->
+                <div class="col-12 col-md-2">
+                    <app-input
+                        type="select"
+                        mode="filter"
+                        [options]="statusOptions"
+                        placeholder="Status"
+                        [(ngModel)]="pendingStatusFilter">
+                    </app-input>
+                </div>
 
-    <div class="col-lg-3 col-md-6">
-      <app-input mode="filter" type="select" label="Budget Type" placeholder="All Budget Types"
-        [options]="budgetTypeOptions" [(ngModel)]="budgetTypeFilter">
-      </app-input>
-    </div>
+                <!-- Budget Type Dropdown -->
+                <div class="col-12 col-md-2">
+                    <app-input
+                        type="select"
+                        mode="filter"
+                        [options]="budgetTypeOptions"
+                        placeholder="Budget Type"
+                        [(ngModel)]="pendingBudgetTypeFilter">
+                    </app-input>
+                </div>
 
-    <div class="col-lg-3 col-md-6">
-      <app-input mode="filter" type="select" label="Contract Type" placeholder="All Contract Types"
-        [options]="contractTypeOptions" [(ngModel)]="contractTypeFilter">
-      </app-input>
-    </div>
+                <!-- Contract Type Dropdown -->
+                <div class="col-12 col-md-2">
+                    <app-input
+                        type="select"
+                        mode="filter"
+                        [options]="contractTypeOptions"
+                        placeholder="Contract Type"
+                        [(ngModel)]="pendingContractTypeFilter">
+                    </app-input>
+                </div>
 
-    <div class="col-lg-3 col-md-6">
+                <div class="col-12 col-md-12 col-lg-auto ms-lg-auto d-flex align-items-center gap-2 mt-3 mt-lg-0 justify-content-start justify-content-lg-end">
+                    <app-button variant="primary" size="md" (click)="applyFiltersBtn()">Apply</app-button>
+                    <app-button variant="outline" size="md" (click)="resetFilters()">Reset</app-button>
+                </div>
+            </div>
 
-      <div class="d-flex gap-2">
+            <!-- Active Filter Chips -->
+            @if (searchQuery || statusFilter || budgetTypeFilter || contractTypeFilter) {
+                <div class="d-flex align-items-center flex-wrap gap-2 mt-3 pt-3 border-top border-white border-opacity-5">
+                    <span class="text-secondary small fw-bold text-uppercase me-2" style="font-size: 11px; letter-spacing: 0.5px;">Active Filters:</span>
+                    
+                    @if (searchQuery) {
+                        <app-chip 
+                            [label]="'Search: ' + searchQuery" 
+                            variant="primary" 
+                            [removable]="true" 
+                            (remove)="removeSearchChip()">
+                        </app-chip>
+                    }
+                    
+                    @if (statusFilter) {
+                        <app-chip 
+                            [label]="'Status: ' + statusFilter" 
+                            variant="primary" 
+                            [removable]="true" 
+                            (remove)="removeStatusChip()">
+                        </app-chip>
+                    }
 
-        <app-button variant="primary" customClass="flex-fill w-100" (click)="applyFilters()">
+                    @if (budgetTypeFilter) {
+                        <app-chip 
+                            [label]="'Budget: ' + budgetTypeFilter" 
+                            variant="primary" 
+                            [removable]="true" 
+                            (remove)="removeBudgetTypeChip()">
+                        </app-chip>
+                    }
 
-          Apply
-
-        </app-button>
-
-        <app-button variant="dark" customClass="flex-fill w-100" (click)="resetFilters()">
-
-          Reset
-
-        </app-button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  @if (
-  statusFilter ||
-  budgetTypeFilter ||
-  contractTypeFilter
-  ) {
-
-  <div class="pt-3 border-top border-white border-opacity-10">
-
-    <div class="d-flex flex-wrap gap-2">
-
-      @if (statusFilter) {
-
-      <app-chip [label]="'Status: ' + statusFilter" variant="primary" (remove)="removeStatusFilter()">
-      </app-chip>
-
-      }
-
-      @if (budgetTypeFilter) {
-
-      <app-chip [label]="'Budget: ' + budgetTypeFilter" variant="primary" (remove)="removeBudgetTypeFilter()">
-      </app-chip>
-
-      }
-
-      @if (contractTypeFilter) {
-
-      <app-chip [label]="'Type: ' + contractTypeFilter" variant="primary" (remove)="removeContractTypeFilter()">
-      </app-chip>
-
-      }
-
-    </div>
-
-  </div>
-
-  }
-</div>
+                    @if (contractTypeFilter) {
+                        <app-chip 
+                            [label]="'Type: ' + contractTypeFilter" 
+                            variant="primary" 
+                            [removable]="true" 
+                            (remove)="removeContractTypeChip()">
+                        </app-chip>
+                    }
+                </div>
+            }
+        </div>
 
 
 
@@ -114,16 +130,19 @@
 
   @else {
 
-    <div class="glass rounded-4 p-3">
+    <div class="glass-dark rounded-4 p-0 p-md-3 border border-white border-opacity-5">
 
-      <app-table
-        [rows]="filteredContracts"
-        [columns]="contractColumns"
-        [loading]="loading"
-        [actionTemplate]="actionTemplate">
 
-      </app-table>
 
+        <div class="table-responsive-wrapper">
+            <div class="table-min-width">
+              <app-table
+                [rows]="filteredContracts"
+                [columns]="contractColumns"
+                [loading]="loading">
+              </app-table>
+            </div>
+        </div>
     </div>
 
   }
@@ -137,79 +156,86 @@
 
 
 
+<ng-template #titleTemplate let-row>
+    <div class="fw-semibold text-white text-truncate" style="max-width: 250px;" title="{{ row.contractTitle }}">
+        {{ row.contractTitle }}
+    </div>
+</ng-template>
+
+<ng-template #dateTemplate let-value="value">
+    <span class="text-nowrap">{{ DateTimeHelper.toLocalString(value, false, 'MMM D, YYYY') }}</span>
+</ng-template>
+
+<ng-template #budgetTemplate let-value="value">
+    <span class="text-success fw-bold text-nowrap">
+        ₹{{ value | number:'1.2-2' }}
+    </span>
+</ng-template>
+
+<ng-template #statusTemplate let-value="value">
+    <app-badge
+        [variant]="
+            value === 'completed' ? 'success' :
+            value === 'pending' ? 'warning' :
+            (value === 'payment failed' || value === 'cancelled') ? 'danger' :
+            value === 'in progress' ? 'primary' : 'secondary'
+        "
+        customClass="rounded-pill px-3 py-2 text-capitalize text-nowrap">
+        {{ value }}
+    </app-badge>
+</ng-template>
+
 <ng-template #actionTemplate let-row>
-
   <div class="action-dropdown">
-
-    <button
-      type="button"
-      class="action-trigger"
-      (click)="toggleActionMenu(row._id)">
-
+    <app-button
+      variant="outline"
+      size="sm"
+      customClass="border-0 px-2"
+      (click)="toggleActionMenu($event, row)">
       <i class="bi bi-three-dots-vertical"></i>
+    </app-button>
+  </div>
+</ng-template>
 
-    </button>
+<!-- Action Menu (Rendered outside table) -->
+@if(activeActionRow){
+  <div class="action-menu glass"
+       [style.position]="'absolute'"
+       [style.top.px]="menuTop"
+       [style.left.px]="menuLeft"
+       style="z-index: 9999; width: 220px;">
 
-    @if(openActionId === row._id){
+    <div class="action-item" (click)="viewContract(activeActionRow._id); closeActionMenu()">
+      <i class="bi bi-eye"></i>
+      <span>View Contract</span>
+    </div>
 
-      <div
-        class="action-overlay"
-        (click)="closeActionMenu()">
-      </div>
+    <div class="action-item" (click)="viewApplicants(activeActionRow._id); closeActionMenu()">
+      <i class="bi bi-people"></i>
+      <span>Applicants</span>
+    </div>
 
-      <div class="action-menu glass">
+    <div class="action-item" (click)="viewHiredTalents(activeActionRow._id); closeActionMenu()">
+      <i class="bi bi-people"></i>
+      <span>View Hired Talents</span>
+    </div>
 
-        <div
-          class="action-item"
-          (click)="viewContract(row._id)">
+    <div class="action-item" (click)="viewContractDiary(activeActionRow._id); closeActionMenu()">
+      <i class="bi bi-people"></i>
+      <span>View Contract Progress</span>
+    </div>
 
-          <i class="bi bi-eye"></i>
-          <span>View Contract</span>
+    <div class="action-item" (click)="editContract(activeActionRow._id); closeActionMenu()">
+      <i class="bi bi-pencil"></i>
+      <span>Edit</span>
+    </div>
 
-        </div>
+    <div class="action-divider"></div>
 
-        <div
-          class="action-item"
-          (click)="viewApplicants(row._id)">
-
-          <i class="bi bi-people"></i>
-          <span>Applicants</span>
-
-        </div>
-
-        <div
-          class="action-item"
-          (click)="viewHiredTalents(row._id)">
-
-          <i class="bi bi-people"></i>
-          <span>View Hired Talents</span>
-
-        </div>
-
-        <div
-          class="action-item"
-          (click)="editContract(row._id)">
-
-          <i class="bi bi-pencil"></i>
-          <span>Edit</span>
-
-        </div>
-
-        <div class="action-divider"></div>
-
-        <div
-          class="action-item danger"
-          (click)="deleteContract(row._id)">
-
-          <i class="bi bi-trash"></i>
-          <span>Delete</span>
-
-        </div>
-
-      </div>
-
-    }
+    <div class="action-item danger" (click)="deleteContract(activeActionRow._id); closeActionMenu()">
+      <i class="bi bi-trash"></i>
+      <span>Delete</span>
+    </div>
 
   </div>
-
-</ng-template>
+}

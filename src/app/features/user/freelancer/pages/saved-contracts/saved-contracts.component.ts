@@ -4,6 +4,7 @@ import { RouterModule, Router } from '@angular/router';
 import { ButtonComponent } from "../../../../../shared/components/button/button.component";
 import { ContractService } from '../../../../../core/services/contract.service';
 import { Contract } from '../../../../../core/model/contract.model';
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-saved-contracts',
@@ -13,6 +14,8 @@ import { Contract } from '../../../../../core/model/contract.model';
   styleUrl: './saved-contracts.component.css'
 })
 export class SavedContractsComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
   private contractService = inject(ContractService);
   private router = inject(Router);
 

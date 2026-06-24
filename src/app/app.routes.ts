@@ -34,7 +34,6 @@ import { ActiveContractsComponent } from './features/user/freelancer/pages/activ
 import { ContractDiaryComponent } from './features/user/freelancer/pages/contract-diary/contract-diary.component';
 import { PortfolioComponent } from './features/user/freelancer/pages/portfolio/portfolio.component';
 import { FinanceOverviewComponent } from './features/user/freelancer/pages/finance-overview/finance-overview.component';
-import { FinanceReportComponent } from './features/user/freelancer/pages/finance-report/finance-report.component';
 
 
 // Error/Utility Components
@@ -141,7 +140,6 @@ export const routes: Routes = [
       { path: 'active-contracts', component: ActiveContractsComponent },
       { path: 'contract-diary', component: ContractDiaryComponent },
       { path: 'finance-overview', component: FinanceOverviewComponent },
-      { path: 'finance-report', component: FinanceReportComponent },
 
       { path: 'portfolio', component: PortfolioComponent },
 

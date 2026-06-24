@@ -209,7 +209,7 @@
                     </div>
                     <p class="text-secondary small mb-0">{{report.description}}</p>
                     <span class="text-secondary smaller opacity-75 mt-1 d-inline-block">
-                      <i class="bi bi-calendar-event me-1"></i> Generated: {{report.generatedDate | date:'mediumDate'}} &bull; <i class="bi bi-hdd me-1"></i> {{report.size}}
+                      <i class="bi bi-calendar-event me-1"></i> Generated: {{ DateTimeHelper.toLocalString(report.generatedDate, true) }} &bull; <i class="bi bi-hdd me-1"></i> {{report.size}}
                     </span>
                   </div>
                 </div>

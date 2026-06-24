@@ -4,6 +4,7 @@ import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { ApplicationService } from '../../../../../core/services/application.service';
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-legal-contract',
@@ -13,6 +14,8 @@ import { ApplicationService } from '../../../../../core/services/application.ser
   styleUrl: './legal-contract.component.css'
 })
 export class LegalContractComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private applicationService = inject(ApplicationService);
