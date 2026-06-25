@@ -220,24 +220,32 @@ getAppliedContracts(): Observable<AppliedContractsResponse> {
   // ========================================
   // Get Contract Applicants
   // ========================================
-  getContractApplicants(): Observable<any> {
-    return this.http.get(
-      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.APPLICANTS}`,
-      {
-        headers: this.getHeaders()
-      }
-    );
+getContractApplicants(contractId?: string): Observable<any> {
+
+  let params: any = {};
+
+  if (contractId) {
+    params.contractId = contractId;
   }
+
+  return this.http.get(
+    `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.APPLICANTS}`,
+    {
+      headers: this.getHeaders(),
+      params
+    }
+  );
+}
 
   // ========================================
   // Get Hired Talents
   // ========================================
-  getHiredTalents(): Observable<any> {
-    return this.http.get(
-      `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.HIRED}`,
-      {
-        headers: this.getHeaders()
-      }
-    );
-  }
+getHiredTalents(contractId: string): Observable<any> {
+  return this.http.get(
+    `${this.baseUrl}${API_ENDPOINTS.CONTRACTS.HIRED}/${contractId}`,
+    {
+      headers: this.getHeaders()
+    }
+  );
+}
 }

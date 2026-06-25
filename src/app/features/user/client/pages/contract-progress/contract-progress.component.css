@@ -1,117 +1,260 @@
-.progress-page { 
-  background: transparent; 
-  min-height: 100vh; 
-}
-.max-w-7xl { 
-  max-width: 1440px; 
+.progress-page {
+  min-height: 100vh;
 }
 
-/* Glassmorphism System */
-.glass { 
-  background: rgba(255, 255, 255, 0.02); 
-  border: 1px solid rgba(255, 255, 255, 0.05); 
-  backdrop-filter: blur(20px); 
+.max-w-7xl {
+  max-width: 1440px;
+}
+
+/* ==========================================
+   Glass System
+========================================== */
+
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
 
-/* Transitions & Interactions */
-.transition-all { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-.duration-300 { transition-duration: 300ms; }
-.cursor-pointer { cursor: pointer; }
-
-/* Contract Card & Accordion */
-.contract-card:hover {
-  background: rgba(255, 255, 255, 0.04);
-}
-.contract-card.expanded {
-  background: rgba(255, 255, 255, 0.03);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+.border-dashed {
+  border: 2px dashed rgba(255, 255, 255, 0.12);
 }
 
-.contract-body {
-  overflow: hidden;
-  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+/* ==========================================
+   Contract Header
+========================================== */
+
+.contract-description {
+  max-width: 900px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-/* Expand Icon */
-.expand-icon {
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.05);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.contract-card:hover .expand-icon {
-  background: rgba(255, 255, 255, 0.1);
-}
-.rotate-180 {
-  transform: rotate(180deg);
+.contract-description p {
+  margin-bottom: 0;
 }
 
-/* Timeline System */
-.timeline-item { position: relative; }
-.timeline-item:last-child { padding-bottom: 0 !important; }
-.timeline-item:last-child .status-line { display: none; }
 
-.timeline-status { 
-  position: relative; 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-}
-.status-dot { 
-  width: 16px; 
-  height: 16px; 
-  border-radius: 50%; 
-  border: 4px solid rgba(0,0,0,0.5); 
-  z-index: 2; 
-  background-color: var(--bs-secondary); /* default fallback */
-}
-.status-line { 
-  position: absolute; 
-  top: 16px; 
-  bottom: 0; 
-  width: 2px; 
-  background: rgba(255,255,255,0.1); 
-  z-index: 1; 
+/* ==========================================
+   Summary Cards
+========================================== */
+
+.glass h4 {
+  font-weight: 700;
 }
 
-/* Vivid Glow Effects */
-.shadow-glow.bg-success { box-shadow: 0 0 12px rgba(16, 185, 129, 0.6); }
-.shadow-glow.bg-primary { box-shadow: 0 0 12px rgba(26, 115, 232, 0.6); }
-.shadow-glow.bg-secondary { box-shadow: 0 0 8px rgba(108, 117, 125, 0.4); border-color: rgba(255,255,255,0.1); background-color: transparent !important;}
-
-/* Custom Soft Badges */
-.badge-success-soft {
-  background-color: rgba(16, 185, 129, 0.15) !important;
-  color: #34d399 !important;
-  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+.glass small {
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
 }
 
-.badge-primary-soft {
-  background-color: rgba(26, 115, 232, 0.15) !important;
-  color: #60a5fa !important;
-  border: 1px solid rgba(26, 115, 232, 0.3) !important;
+.row.g-3 .glass {
+  height: 100%;
+  transition: all 0.25s ease;
 }
 
-.badge-secondary-soft {
-  background-color: rgba(108, 117, 125, 0.15) !important;
-  color: #9ca3af !important;
-  border: 1px solid rgba(108, 117, 125, 0.3) !important;
+.row.g-3 .glass:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Typography Overrides */
-.contract-header, 
-.contract-header h4, 
-.contract-header h5, 
-.contract-header p, 
-.contract-header span {
-  font-size: 16px !important;
+/* ==========================================
+   Freelancer Card
+========================================== */
+
+.rounded-circle.bg-primary {
+  flex-shrink: 0;
 }
 
-.contract-body, 
-.contract-body h5, 
-.contract-body h6, 
-.contract-body p, 
-.contract-body span {
-  font-size: 14px !important;
+.rounded-circle i {
+  line-height: 1;
+}
+
+/* ==========================================
+   Empty State
+========================================== */
+
+.empty-state,
+.glass.text-center {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.empty-state i,
+.glass.text-center i {
+  opacity: .7;
+}
+
+/* ==========================================
+   Modal
+========================================== */
+
+.modal-content {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.modal-header,
+.modal-footer {
+  background: transparent;
+}
+
+.modal-body label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+
+
+
+
+.contract-meta-item {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  color: rgba(255,255,255,.7);
+  font-size: .9rem;
+}
+
+.contract-meta-item i {
+  font-size: 1rem;
+}
+
+.contract-meta-item span:last-child {
+  color: #fff;
+  font-weight: 500;
+}
+
+.freelancer-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(13, 110, 253, 0.12);
+  border: 1px solid rgba(13, 110, 253, 0.2);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.freelancer-avatar i {
+  font-size: 1.75rem;
+  color: #0d6efd;
+}
+
+
+.timeline {
+  position: relative;
+}
+
+.timeline-item {
+  position: relative;
+}
+
+.timeline-status {
+  position: relative;
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.status-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-top: 6px;
+}
+
+.status-line {
+  position: absolute;
+  top: 24px;
+  left: 6px;
+  width: 2px;
+  height: calc(100% - 12px);
+  background: rgba(255,255,255,.08);
+}
+
+.timeline-item:last-child .status-line {
+  display: none;
+}
+
+.timeline-content {
+  min-width: 0;
+}
+
+
+.phase-card {
+  transition: all .25s ease;
+}
+
+.phase-card:hover {
+  border-color: rgba(255,255,255,.15);
+  transform: translateY(-2px);
+}
+
+
+.contract-status {
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .4px;
+}
+
+.empty-state-icon {
+  font-size: 4rem;
+  opacity: .25;
+}
+
+
+
+/* ==========================================
+   Scrollbars
+========================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.15);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width: 768px) {
+
+  .progress-page {
+    padding-bottom: 100px;
+  }
+
+  .glass {
+    border-radius: 20px !important;
+  }
+
+  h4 {
+    font-size: 1.15rem;
+  }
+
+  h5 {
+    font-size: 1rem;
+  }
+
+  .modal-dialog {
+    margin: 1rem;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .col-6 {
+    width: 100%;
+  }
+
 }

@@ -49,7 +49,7 @@
                         <div class="flex-grow-1">
                             <p class="text-white small mb-1 fw-medium">{{ notif.title }}</p>
                             <p class="text-secondary smaller mb-1" style="line-height: 1.3;">{{ notif.message }}</p>
-                            <p class="text-secondary smaller mb-0" style="font-size: 10px;">{{ notif.createdAt | date:'shortTime' }}</p>
+                            <p class="text-secondary smaller mb-0" style="font-size: 10px;">{{ DateTimeHelper.toLocalString(notif.createdAt, false, 'h:mm A') }}</p>
                         </div>
                     </div>
                 </a>

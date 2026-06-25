@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 export interface CompletedContract {
   contractId: string;
@@ -22,6 +23,8 @@ export interface CompletedContract {
   styleUrl: './spending-activities.component.css'
 })
 export class SpendingActivitiesComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
   private diaryService = inject(ContractDiaryService);
 
   contracts: CompletedContract[] = [];

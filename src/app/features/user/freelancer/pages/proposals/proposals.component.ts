@@ -8,6 +8,7 @@ import { ChipComponent } from '../../../../../shared/components/chip/chip.compon
 import { ContractService } from '../../../../../core/services/contract.service';
 import { ApplicationService } from '../../../../../core/services/application.service';
 import { AppliedApplication, AppliedContractsResponse, Proposal } from '../../../../../core/model/proposal.modal';
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 interface ActiveFilter {
   id: string;
   label: string;
@@ -22,6 +23,8 @@ interface ActiveFilter {
   styleUrl: './proposals.component.css'
 })
 export class ProposalsComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
   private contractService = inject(ContractService);
   private applicationService = inject(ApplicationService);
   private route = inject(ActivatedRoute);

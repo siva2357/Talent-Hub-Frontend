@@ -3,14 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { UploadService } from '../../../core/services/upload.service';
 import { BucketKey, UploadSection } from '../../../core/enums/upload.enum';
-import { FilePreviewComponent } from '../file-preview/file-preview.component';
 
 import { SimpleChanges, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'app-file-upload',
   standalone: true,
-  imports: [CommonModule, FilePreviewComponent],
+  imports: [CommonModule],
   templateUrl: './file-upload.component.html',
   styleUrl: './file-upload.component.css',
   providers: [

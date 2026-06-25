@@ -6,13 +6,9 @@
             <p class="text-secondary mb-0">Track your earnings, payments, and withdrawals</p>
         </div>
         <div class="d-flex gap-3">
-            <app-button variant="secondary" size="md" customClass="px-4 py-2 rounded-3 border border-white border-opacity-10" (click)="viewStatements()">
+            <app-button variant="outline" size="sm" customClass="rounded-pill" (click)="viewStatements()">
                 <i class="bi bi-file-earmark-bar-graph me-2"></i>
                 Statements
-            </app-button>
-            <app-button variant="brand" size="md" customClass="px-4 py-2 rounded-3 shadow-glow" (click)="withdraw()">
-                <i class="bi bi-wallet2 me-2"></i>
-                Withdraw Funds
             </app-button>
         </div>
     </div>
@@ -23,7 +19,8 @@
         <div class="col-xl-3 col-md-6">
             <div class="stat-card glass-dark p-4 rounded-4 border-accent-blue position-relative overflow-hidden">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div class="stat-icon icon-box-blue rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                    <div class="stat-icon icon-box-blue rounded-3 d-flex align-items-center justify-content-center"
+                        style="width: 48px; height: 48px;">
                         <i class="bi bi-currency-rupee fs-4"></i>
                     </div>
                     <div class="badge badge-custom-info px-2" style="font-size: 10px;">+12%</div>
@@ -38,12 +35,14 @@
         <div class="col-xl-3 col-md-6">
             <div class="stat-card glass-dark p-4 rounded-4 border-accent-blue position-relative overflow-hidden">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div class="stat-icon icon-box-blue rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                    <div class="stat-icon icon-box-blue rounded-3 d-flex align-items-center justify-content-center"
+                        style="width: 48px; height: 48px;">
                         <i class="bi bi-percent fs-4"></i>
                     </div>
                     <div class="badge badge-custom-info px-2" style="font-size: 10px;">DEDUCTED</div>
                 </div>
-                <h6 class="text-secondary text-uppercase fw-bold mb-2 ls-1" style="font-size: 11px;">Platform Fees Deducted</h6>
+                <h6 class="text-secondary text-uppercase fw-bold mb-2 ls-1" style="font-size: 11px;">Platform Fees
+                    Deducted</h6>
                 <h3 class="text-white fw-bold mb-0">₹{{ platformFeesDeducted | number:'1.2-2' }}</h3>
                 <div class="card-glow-blue"></div>
             </div>
@@ -53,12 +52,14 @@
         <div class="col-xl-3 col-md-6">
             <div class="stat-card glass-dark p-4 rounded-4 border-accent-blue position-relative overflow-hidden">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div class="stat-icon icon-box-blue rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                    <div class="stat-icon icon-box-blue rounded-3 d-flex align-items-center justify-content-center"
+                        style="width: 48px; height: 48px;">
                         <i class="bi bi-cash-stack fs-4"></i>
                     </div>
                     <div class="badge badge-custom-info px-2" style="font-size: 10px;">DIRECT DEPOSIT</div>
                 </div>
-                <h6 class="text-secondary text-uppercase fw-bold mb-2 ls-1" style="font-size: 11px;">Amount Withdrawn</h6>
+                <h6 class="text-secondary text-uppercase fw-bold mb-2 ls-1" style="font-size: 11px;">Amount Withdrawn
+                </h6>
                 <h3 class="text-white fw-bold mb-0">₹{{ amountWithdrawn | number:'1.2-2' }}</h3>
                 <div class="card-glow-blue"></div>
             </div>
@@ -68,12 +69,14 @@
         <div class="col-xl-3 col-md-6">
             <div class="stat-card glass-dark p-4 rounded-4 border-accent-blue position-relative overflow-hidden">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div class="stat-icon icon-box-blue rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                    <div class="stat-icon icon-box-blue rounded-3 d-flex align-items-center justify-content-center"
+                        style="width: 48px; height: 48px;">
                         <i class="bi bi-piggy-bank fs-4"></i>
                     </div>
                     <div class="badge badge-custom-info px-2" style="font-size: 10px;">AVAILABLE</div>
                 </div>
-                <h6 class="text-secondary text-uppercase fw-bold mb-2 ls-1" style="font-size: 11px;">Balance in Account</h6>
+                <h6 class="text-secondary text-uppercase fw-bold mb-2 ls-1" style="font-size: 11px;">Balance in Account
+                </h6>
                 <h3 class="text-white fw-bold mb-0">₹{{ balanceLeft | number:'1.2-2' }}</h3>
                 <div class="card-glow-blue"></div>
             </div>
@@ -82,104 +85,262 @@
 
     <!-- Contract List Section -->
     <!-- Contract List Section -->
-    <div class="finance-list-section rounded-4 overflow-hidden" style="background: #0f1115; border: 1px solid rgba(255,255,255,0.05);">
-        <!-- Solid Blue Header -->
-        <div class="p-4 d-flex justify-content-between align-items-center border-bottom border-white border-opacity-10" style="background-color: #2563eb;">
+    <div class="finance-list-section rounded-4 overflow-hidden"
+        style="background: #0f1115; border: 1px solid rgba(255,255,255,0.05);">
+        <!-- Section Header -->
+        <div class="p-4 d-flex justify-content-between align-items-center border-bottom border-white border-opacity-10"
+            style="background: rgba(255, 255, 255, 0.03);">
             <h5 class="text-white fw-bold mb-0">Contract Earning History</h5>
         </div>
 
         <div class="list-container">
             @for (contract of contracts; track contract.title) {
-                <div class="list-item-wrapper" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <div class="list-item p-4 transition-all cursor-pointer hover-bg-darker" 
-                         [class.active-item]="selectedContract === contract"
-                         (click)="toggleContractDetails(contract)">
-                        <div class="row align-items-center g-3 g-md-0">
-                            <div class="col-12 col-md-4 col-lg-5 mb-2 mb-md-0">
-                                <div class="d-flex align-items-center gap-3">
-                                    <i class="bi" [ngClass]="selectedContract === contract ? 'bi-chevron-down text-secondary' : 'bi-chevron-right text-secondary'" style="font-size: 0.8rem;"></i>
+            <div class="list-item-wrapper" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div class="list-item p-4 transition-all cursor-pointer hover-bg-darker"
+                    [class.active-item]="selectedContract === contract" (click)="toggleContractDetails(contract)">
+                    <div class="row align-items-center g-3 g-md-0">
+                        <div class="col-12 col-md-3 col-lg-3 mb-2 mb-md-0">
+                            <div class="d-flex align-items-center gap-3 h-100">
+                                <i class="bi"
+                                    [ngClass]="selectedContract === contract ? 'bi-chevron-down text-secondary' : 'bi-chevron-right text-secondary'"
+                                    style="font-size: 0.8rem;"></i>
+                                <div>
+                                    <div class="text-secondary text-uppercase mb-1"
+                                        style="font-size: 10px; letter-spacing: 0.5px;">Contract Title</div>
+                                    <h6 class="text-white fw-bold mb-0" style="font-size: 15px;">{{ contract.title }}
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-2 col-lg-2">
+                            <div class="text-secondary text-uppercase mb-1"
+                                style="font-size: 10px; letter-spacing: 0.5px;">Budget Type</div>
+                            <div class="fw-bold text-primary" style="font-size: 15px;">{{ contract.type }}</div>
+                        </div>
+                        <div class="col-6 col-md-2 col-lg-2">
+                            <div class="text-secondary text-uppercase mb-1"
+                                style="font-size: 10px; letter-spacing: 0.5px;">Status</div>
+                            <div class="fw-bold" style="font-size: 15px;"
+                                [ngClass]="contract.status === 'Completed' ? 'text-success' : 'text-primary'">{{
+                                contract.status }}</div>
+                        </div>
+                        <div class="col-6 col-md-3 col-lg-3">
+                            <div class="text-secondary text-uppercase mb-1"
+                                style="font-size: 10px; letter-spacing: 0.5px;">Total Earned</div>
+                            <div class="text-white fw-bold" style="font-size: 15px;">${{ contract.totalEarned |
+                                number:'1.2-2' }}</div>
+                        </div>
+                        <div class="col-6 col-md-2 col-lg-2">
+                            <div class="text-secondary text-uppercase mb-1"
+                                style="font-size: 10px; letter-spacing: 0.5px;">Balance</div>
+                            <div class="text-white fw-bold mb-2" style="font-size: 15px;"
+                                [ngClass]="{'text-success': contract.balance > 0}">₹{{ contract.balance | number:'1.2-2'
+                                }}</div>
+                            @if (contract.balance > 0) {
+                                <app-button 
+                                    variant="brand" 
+                                    size="sm" 
+                                    customClass="rounded-pill px-2 py-1 border border-white border-opacity-10 text-white" 
+                                    fontSize="10px"
+                                    [disabled]="contract.status?.toLowerCase() !== 'completed' && contract.status?.toLowerCase() !== 'cancelled'"
+                                    (click)="$event.stopPropagation(); withdrawContractBalance(contract)">
+                                    <i class="bi bi-wallet2 me-1"></i> Withdraw
+                                </app-button>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase Breakdown (Conditional) -->
+                @if (selectedContract === contract) {
+                <div class="phase-breakdown px-4 px-md-5 py-4 animate-in"
+                    style="background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.02);">
+                    <div class="mb-4 d-flex align-items-center gap-2">
+                        <div class="h-px bg-primary opacity-50" style="width: 20px;"></div>
+                        <span class="text-primary text-uppercase fw-bold text-xxs ls-1">Payment Phase Breakdown</span>
+                    </div>
+
+                    <div class="phase-list px-1 px-md-3">
+                        <app-table [rows]="contract.phases" [columns]="phaseColumns" [loading]="isLoading"></app-table>
+                    </div>
+                </div>
+                }
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Table Cell Templates for Phase Breakdown -->
+<ng-template #nameTemplate let-row="row">
+    <span class="text-white fw-medium" style="font-size: 13.5px;">{{ row.name }}</span>
+</ng-template>
+
+<ng-template #dateTemplate let-row="row">
+    <span class="text-secondary small" style="font-size: 12.5px;">{{ DateTimeHelper.toLocalString(row.date, true)
+        }}</span>
+</ng-template>
+
+<ng-template #statusTemplate let-row="row">
+    <div class="d-flex align-items-center gap-2">
+        <div class="status-dot" [ngClass]="{
+                        'bg-success': row.status === 'Paid',
+                        'bg-warning': row.status === 'In Review',
+                        'bg-primary': row.status === 'Pending'
+                    }"></div>
+        <span class="text-secondary small" style="font-size: 12.5px;">{{ row.status }}</span>
+    </div>
+</ng-template>
+
+<ng-template #amountTemplate let-row="row">
+    <div class="fw-bold">
+        <span style="font-size: 13.5px;" [ngClass]="row.status === 'Paid' ? 'text-success' : 'text-white'">${{
+            row.amount | number:'1.2-2' }}</span>
+    </div>
+</ng-template>
+
+<ng-template #actionTemplate let-row="row">
+    <div class="d-flex justify-content-center">
+        @if (row.status === 'Paid') {
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1 rounded-pill" style="font-size: 11px;">
+                <i class="bi bi-check-circle-fill me-1"></i> Released
+            </span>
+        } @else {
+            <span class="text-secondary small">-</span>
+        }
+    </div>
+</ng-template>
+
+<!-- Withdrawal Modal -->
+@if (showWithdrawModal) {
+<div class="modal fade" [class.show]="showWithdrawModal" [class.d-block]="showWithdrawModal" tabindex="-1"
+    role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content glass-dark border border-white border-opacity-10 shadow-lg"
+            style="background: rgba(13, 17, 23, 0.98) !important;">
+            <!-- Header with subtle glow -->
+            <div class="modal-header border-bottom border-white border-opacity-10 p-4 bg-gradient-brand-subtle">
+                <h5 class="modal-title text-white fw-bold d-flex align-items-center gap-3">
+                    <div class="p-2 rounded-3 bg-primary border border-primary border-opacity-50 d-flex align-items-center justify-content-center shadow-lg"
+                        style="width: 48px; height: 48px;">
+                        <i class="bi bi-wallet2 text-white fs-3"></i>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <span style="font-size: 1.15rem;">Confirm Withdrawal</span>
+                        <span class="text-secondary small fw-normal d-flex align-items-center gap-2">
+                            <i class="bi bi-info-circle"></i>
+                            Verify transaction details before proceeding
+                        </span>
+                    </div>
+                </h5>
+                <button type="button" class="btn-close btn-close-white shadow-none opacity-50 hover-opacity-100"
+                    (click)="closeModal()" aria-label="Close"></button>
+            </div>
+
+            @if (selectedWithdrawItem) {
+            <div class="modal-body p-4">
+                <div class="row g-4">
+                    <div class="col-md-7">
+                        <div class="mb-4">
+                            <label class="text-primary text-uppercase fw-bold ls-2 mb-2 d-flex align-items-center gap-2"
+                                style="font-size: 12px;">
+                                <i class="bi bi-shield-check fs-5"></i>
+                                <span>Contract Audit</span>
+                            </label>
+                            <h4 class="text-white fw-bold mb-1 ls-n1">{{ selectedWithdrawItem.title }}</h4>
+                            <div class="d-flex align-items-center gap-2 text-secondary">
+                                <i class="bi bi-building"></i>
+                                <span class="fw-medium">{{ selectedWithdrawItem.client }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div
+                                    class="p-3 rounded-4 glass border border-white border-opacity-5 transition-all hover-glass d-flex align-items-center gap-3 h-100">
+                                    <div class="icon-box bg-dark bg-opacity-25 text-info rounded-circle d-flex align-items-center justify-content-center"
+                                        style="width: 42px; height: 42px;">
+                                        <i class="bi bi-briefcase-fill fs-5"></i>
+                                    </div>
                                     <div>
-                                        <h6 class="text-white fw-bold mb-1" style="font-size: 15px;">{{ contract.title }}</h6>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <span class="text-secondary" style="font-size: 12px;">{{ contract.client }}</span>
-                                            <span class="badge px-2 py-1" style="font-size: 9px; background: rgba(42, 128, 255, 0.1); color: #2A80FF; border-radius: 4px;">{{ contract.type }}</span>
-                                        </div>
+                                        <div class="text-secondary small text-uppercase ls-1 mb-1"
+                                            style="font-size: 10px;">Type</div>
+                                        <div class="text-white fw-bold h6 mb-0 text-nowrap">{{ selectedWithdrawItem.type
+                                            }}</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-3 col-lg-3">
-                                <div class="text-secondary text-uppercase mb-1" style="font-size: 10px; letter-spacing: 0.5px;">Total Earned</div>
-                                <div class="text-white fw-bold" style="font-size: 15px;">${{ contract.totalEarned | number:'1.2-2' }}</div>
-                            </div>
-                            <div class="col-6 col-md-3 col-lg-2">
-                                <div class="text-secondary text-uppercase mb-1" style="font-size: 10px; letter-spacing: 0.5px;">Last Payment</div>
-                                <div class="text-white" style="font-size: 13px;">{{ contract.lastPaymentDate !== '-' ? (contract.lastPaymentDate | date:'mediumDate') : 'Pending' }}</div>
-                            </div>
-                            <div class="col-12 col-md-2 col-lg-2 text-md-end mt-2 mt-md-0">
-                                <span class="badge rounded-pill px-3 py-1.5 fw-medium" 
-                                      [ngStyle]="contract.status === 'Completed' ? 
-                                      {'background': 'rgba(16, 185, 129, 0.1)', 'color': '#10b981'} : 
-                                      {'background': 'rgba(42, 128, 255, 0.1)', 'color': '#2A80FF'}">
-                                    {{ contract.status }}
-                                </span>
+                            <div class="col-6">
+                                <div
+                                    class="p-3 rounded-4 glass border border-white border-opacity-5 transition-all hover-glass d-flex align-items-center gap-3 h-100">
+                                    <div class="icon-box bg-dark bg-opacity-25 text-success rounded-circle d-flex align-items-center justify-content-center"
+                                        style="width: 42px; height: 42px;">
+                                        <i class="bi bi-piggy-bank-fill fs-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-secondary small text-uppercase ls-1 mb-1"
+                                            style="font-size: 10px;">Total Budget</div>
+                                        <div class="text-white fw-bold h6 mb-0 text-nowrap">₹{{
+                                            selectedWithdrawItem.budget | number:'1.2-2' }}</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Phase Breakdown (Conditional) -->
-                    @if (selectedContract === contract) {
-                        <div class="phase-breakdown px-4 px-md-5 py-4 animate-in" style="background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.02);">
-                            <div class="mb-4 d-flex align-items-center gap-2">
-                                <div class="h-px bg-primary opacity-50" style="width: 20px;"></div>
-                                <span class="text-primary text-uppercase fw-bold text-xxs ls-1">Payment Phase Breakdown</span>
-                            </div>
-                            
-                            <div class="phase-list px-1 px-md-3">
-                                <!-- Table Header -->
-                                <div class="row pb-3 mb-2 text-secondary text-uppercase fw-bold d-none d-md-flex" style="font-size: 10px; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                    <div class="col-5">Phase Description</div>
-                                    <div class="col-3">Release Date</div>
-                                    <div class="col-2">Status</div>
-                                    <div class="col-2 text-end">Amount</div>
+                    <div class="col-md-5">
+                        <div class="position-relative h-100">
+                            <div class="amount-glow-backdrop"></div>
+                            <div
+                                class="amount-card p-4 rounded-4 border border-primary border-opacity-30 d-flex flex-column justify-content-center align-items-center text-center shadow-2xl h-100">
+                                <div class="text-primary-light text-uppercase fw-extrabold ls-2 mb-2 d-flex align-items-center gap-2"
+                                    style="font-size: 11px;">
+                                    <i class="bi bi-currency-rupee fs-5"></i>
+                                    <span>Withdrawal Amount</span>
                                 </div>
-
-                                <!-- Table Body (Rows) -->
-                                @for (phase of contract.phases; track phase.name) {
-                                    <div class="row py-3 align-items-center g-2 g-md-0" style="border-bottom: 1px solid rgba(255,255,255,0.03);">
-                                        <div class="col-12 col-md-5 mb-1 mb-md-0">
-                                            <span class="text-white fw-medium" style="font-size: 13.5px;">{{ phase.name }}</span>
-                                        </div>
-                                        <div class="col-4 col-md-3">
-                                            <span class="text-secondary small" style="font-size: 12.5px;">{{ phase.date }}</span>
-                                        </div>
-                                        <div class="col-4 col-md-2">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="status-dot" [ngClass]="{
-                                                    'bg-success': phase.status === 'Paid',
-                                                    'bg-warning': phase.status === 'In Review',
-                                                    'bg-primary': phase.status === 'Pending'
-                                                }"></div>
-                                                <span class="text-secondary small" style="font-size: 12.5px;">{{ phase.status }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-4 col-md-2 text-end text-success fw-bold">
-                                            <span style="font-size: 13.5px;">${{ phase.amount | number:'1.2-2' }}</span>
-                                        </div>
-                                    </div>
-                                }
+                                <div class="amount-display text-white fw-extrabold mb-1 ls-n2"
+                                    style="font-size: 1.5rem;">
+                                    ₹{{ selectedWithdrawItem.balance | number:'1.2-2' }}
+                                </div>
+                                <div class="text-secondary small mb-2">
+                                    Platform Fee (7.5%): -₹{{ selectedWithdrawItem.balance * 0.075 | number:'1.2-2' }}
+                                </div>
+                                <div class="text-success fw-bold mb-1">
+                                    Net to Receive: ₹{{ selectedWithdrawItem.balance * 0.925 | number:'1.2-2' }}
+                                </div>
                             </div>
                         </div>
-                    }
+                    </div>
                 </div>
+                <!-- Terms Checkbox -->
+                <div class="mt-4 pt-4 border-top border-white border-opacity-10">
+                    <div class="form-check m-0 p-0 d-flex align-items-center gap-2">
+                        <input id="termsCheckbox"
+                            class="form-check-input shadow-none m-0 cursor-pointer bg-dark border-secondary"
+                            type="checkbox" [(ngModel)]="agreeToTerms" style="width: 1.1em; height: 1.1em;">
+                        <label for="termsCheckbox"
+                            class="form-check-label text-white-50 small cursor-pointer m-0 lh-base user-select-none">
+                            I agree to the terms and conditions for withdrawal.
+                        </label>
+                    </div>
+                </div>
+            </div>
             }
-        </div>
 
-        <!-- Footer Button Area -->
-        <div class="p-4 d-flex justify-content-center" style="background: #0a0c0f;">
-            <button class="btn btn-light rounded-pill px-4 py-2 d-flex align-items-center gap-2 fw-medium" style="font-size: 14px; background-color: #f1f5f9; color: #475569; border: none;" (click)="viewAllTransactions()">
-                View All Transactions
-                <i class="bi bi-arrow-right"></i>
-            </button>
+            <div
+                class="modal-footer flex-column align-items-stretch border-top border-white border-opacity-10 p-4 bg-black bg-opacity-40">
+                <div class="d-flex justify-content-end gap-3">
+                    <app-button variant="dark" customClass="fw-bold border border-white border-opacity-10"
+                        (click)="closeModal()">Cancel</app-button>
+                    <app-button variant="brand" customClass="fw-bold" [disabled]="!agreeToTerms"
+                        (click)="confirmWithdrawal()">
+                        <i class="bi bi-shield-check me-2"></i> Confirm & Process
+                    </app-button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<!-- Backdrop -->
+<div class="modal-backdrop fade show" (click)="closeModal()"></div>
+}

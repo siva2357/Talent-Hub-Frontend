@@ -3,13 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
 import { FinanceService } from '../../../../../core/services/finance.service';
+import { InputComponent } from '../../../../../shared/components/input/input.component';
+import { ButtonComponent } from '../../../../../shared/components/button/button.component';
+import { ChipComponent } from '../../../../../shared/components/chip/chip.component';
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 export interface Milestone {
   id: string;
   title: string;
   date: string;
   amount: number;
-  status: 'Completed' | 'In Progress' | 'Review' | 'Pending' | 'Rejected';
+  status: string;
   invoiceId?: string;
 }
 
@@ -21,23 +25,39 @@ export interface ContractTransactions {
   type: string;
   budget: number;
   totalTransacted: number;
-  currentPhase: 'Funded' | 'In Progress' | 'Review' | 'Released' | 'Rejected';
   milestones: Milestone[];
 }
 
 @Component({
   selector: 'app-transaction-history',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule, 
+    FormsModule,
+    InputComponent,
+    ButtonComponent,
+    ChipComponent
+  ],
   templateUrl: './transaction-history.component.html',
   styleUrl: './transaction-history.component.css'
 })
 export class TransactionHistoryComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
   private diaryService = inject(ContractDiaryService);
   private financeService = inject(FinanceService);
 
   searchQuery = '';
   typeFilter = 'All';
+  pendingSearchQuery = '';
+  pendingTypeFilter = 'All';
+  
+  typeOptions = [
+    { label: 'All Types', value: 'All' },
+    { label: 'Hourly', value: 'Hourly' },
+    { label: 'Fixed Price', value: 'Fixed Price' }
+  ];
+
   expandedContractId: string | null = null;
 
   contracts: ContractTransactions[] = [];
@@ -48,23 +68,17 @@ export class TransactionHistoryComponent implements OnInit {
   }
 
   loadDiaries() {
-    this.diaryService.getClientDiaries().subscribe({
+    this.financeService.getContractTransactions().subscribe({
       next: (res: any) => {
         if (res.success && res.diaries) {
           this.contracts = res.diaries.map((diary: any) => {
             const mappedMilestones = (diary.phases || []).map((p: any) => {
-              let mappedStatus: 'Completed' | 'In Progress' | 'Review' | 'Pending' | 'Rejected' = 'Pending';
-              if (p.status === 'approved') mappedStatus = 'Completed';
-              else if (p.status === 'in-progress') mappedStatus = 'In Progress';
-              else if (p.status === 'submitted') mappedStatus = 'Review';
-              else if (p.status === 'changes-requested' || p.status === 'overdue') mappedStatus = 'Rejected';
-
               return {
                 id: p._id,
                 title: p.name,
                 date: p.deadline || '',
                 amount: p.amount || 0,
-                status: mappedStatus,
+                status: p.status,
                 invoiceId: p.status === 'approved' ? `TXN-${p._id.substring(p._id.length - 6).toUpperCase()}` : undefined
               };
             });
@@ -72,16 +86,6 @@ export class TransactionHistoryComponent implements OnInit {
             const totalTransacted = (diary.phases || [])
               .filter((p: any) => p.status === 'approved')
               .reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
-
-            let mappedPhase: 'Funded' | 'In Progress' | 'Review' | 'Released' | 'Rejected' = 'Funded';
-            if (diary.overallStatus === 'in-progress') {
-              const hasReview = mappedMilestones.some((m: Milestone) => m.status === 'Review');
-              mappedPhase = hasReview ? 'Review' : 'In Progress';
-            } else if (diary.overallStatus === 'completed') {
-              mappedPhase = 'Released';
-            } else if (diary.overallStatus === 'cancelled') {
-              mappedPhase = 'Rejected';
-            }
 
             return {
               diaryId: diary._id,
@@ -91,7 +95,6 @@ export class TransactionHistoryComponent implements OnInit {
               type: diary.contractId?.budgetType || 'Fixed Price',
               budget: diary.contractId?.estimatedBudget || 0,
               totalTransacted,
-              currentPhase: mappedPhase,
               milestones: mappedMilestones
             };
           });
@@ -123,6 +126,26 @@ export class TransactionHistoryComponent implements OnInit {
   resetFilters() {
     this.searchQuery = '';
     this.typeFilter = 'All';
+    this.pendingSearchQuery = '';
+    this.pendingTypeFilter = 'All';
+    this.applyFilters();
+  }
+
+  applyFiltersBtn() {
+    this.searchQuery = this.pendingSearchQuery;
+    this.typeFilter = this.pendingTypeFilter;
+    this.applyFilters();
+  }
+
+  removeSearchChip() {
+    this.searchQuery = '';
+    this.pendingSearchQuery = '';
+    this.applyFilters();
+  }
+
+  removeTypeChip() {
+    this.typeFilter = 'All';
+    this.pendingTypeFilter = 'All';
     this.applyFilters();
   }
 
@@ -141,7 +164,7 @@ export class TransactionHistoryComponent implements OnInit {
 
   getLatestCompletedMilestone(c: ContractTransactions): Milestone | undefined {
     for (let i = c.milestones.length - 1; i >= 0; i--) {
-      if (c.milestones[i].status === 'Completed') {
+      if (c.milestones[i].status === 'approved') {
         return c.milestones[i];
       }
     }
@@ -149,7 +172,7 @@ export class TransactionHistoryComponent implements OnInit {
   }
 
   releaseMilestonePayment(c: ContractTransactions, m: Milestone) {
-    if (m.status === 'Completed') {
+    if (m.status === 'approved') {
       alert('This milestone payment has already been released!');
       return;
     }
@@ -200,4 +223,3 @@ export class TransactionHistoryComponent implements OnInit {
     URL.revokeObjectURL(link.href);
   }
 }
-

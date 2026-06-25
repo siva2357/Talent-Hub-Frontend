@@ -18,14 +18,6 @@ export class ContractDiaryService {
     };
   }
 
-  // ============================================================
-  // CLIENT
-  // ============================================================
-
-  /** Initialize a new diary with phases for an accepted application */
-  initializeDiary(data: { applicationId: string; phases: any[] }): Observable<any> {
-    return this.http.post(`${this.baseUrl}${API_ENDPOINTS.CONTRACT_DIARY.BASE}`, data, this.getHeaders());
-  }
 
   /** Add a single phase to an existing diary */
   addPhase(diaryId: string, phase: { name: string; description?: string; deadline?: string; amount?: number; clientAttachments?: any[] }): Observable<any> {
@@ -37,6 +29,19 @@ export class ContractDiaryService {
     return this.http.put(`${this.baseUrl}${API_ENDPOINTS.CONTRACT_DIARY.REVIEW_PHASE(diaryId, phaseId)}`, { action, clientFeedback }, this.getHeaders());
   }
 
+
+getDiaryByContractId(
+  contractId: string
+): Observable<any> {
+
+  return this.http.get(
+    `${this.baseUrl}${API_ENDPOINTS.CONTRACT_DIARY.BY_CONTRACT(
+      contractId
+    )}`,
+    this.getHeaders()
+  );
+
+}
   /** Get all diaries for the logged-in client */
   getClientDiaries(): Observable<any> {
     return this.http.get(`${this.baseUrl}${API_ENDPOINTS.CONTRACT_DIARY.MY_DIARIES}`, this.getHeaders());
@@ -46,10 +51,24 @@ export class ContractDiaryService {
   // FREELANCER
   // ============================================================
 
-  /** Get all diaries assigned to the logged-in freelancer */
-  getFreelancerDiaries(): Observable<any> {
-    return this.http.get(`${this.baseUrl}${API_ENDPOINTS.CONTRACT_DIARY.MY_DIARY}`, this.getHeaders());
-  }
+/** Get freelancer diary by contract id */
+getFreelancerDiaries(
+  contractId: string
+): Observable<any> {
+
+  return this.http.get(
+    `${this.baseUrl}${API_ENDPOINTS.CONTRACT_DIARY.MY_DIARY(contractId)}`,
+    this.getHeaders()
+  );
+
+}
+
+getFreelancerAllDiaries(): Observable<any> {
+  return this.http.get(
+    `${this.baseUrl}${API_ENDPOINTS.CONTRACT_DIARY.MY_DIARIES_FREELANCER}`,
+    this.getHeaders()
+  );
+}
 
   /** Start a phase (mark as in-progress) */
   startPhase(diaryId: string, phaseId: string): Observable<any> {

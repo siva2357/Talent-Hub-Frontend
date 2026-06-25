@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ContractService } from '../../../../../core/services/contract.service';
 
 import { Contract } from '../../../../../core/model/contract.model';
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-contract-view-details',
@@ -14,6 +15,8 @@ import { Contract } from '../../../../../core/model/contract.model';
   styleUrl: './contract-view-details.component.css'
 })
 export class ContractViewDetailsComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
 
   loading: boolean = false;
 

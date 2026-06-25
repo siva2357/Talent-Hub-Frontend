@@ -2,9 +2,6 @@
   @if (talent) {
     <!-- Profile Cover Image -->
     <div class="profile-cover position-relative">
-      <img src="./assets/logo/AI intelligence.png" class="w-100 h-100 object-fit-cover">
-      <div class="cover-overlay"></div>
-
       <!-- Back Navigation (Pinned Top-Left) -->
       <div class="position-absolute top-0 start-0 p-4 z-index-top">
         <app-button variant="outline" size="sm" customClass="rounded-3 border-opacity-25 text-white shadow-lg glass-vivid"
@@ -16,115 +13,122 @@
     </div>
 
     <div class="container max-w-5xl mx-auto pb-5 mb-5 profile-container-overlap">
-      <!-- Profile Header -->
-      <div class="glass p-4 p-md-5 rounded-4 mb-4 border-white border-opacity-10">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-start gap-4">
-          <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start gap-4">
-            <div class="avatar-wrapper position-relative">
-              <img [src]="talent.avatar" [alt]="talent.name" class="rounded-circle border border-3 border-dark shadow-lg"
-                style="width: 140px; height: 140px; object-fit: cover;">
-              <span class="status-indicator-lg position-absolute" [ngClass]="{
-                    'bg-success': talent.performanceTier === 'High',
-                    'bg-warning': talent.performanceTier === 'Medium',
-                    'bg-danger': talent.performanceTier === 'Low',
-                    'bg-secondary': talent.performanceTier === 'New' || talent.performanceTier === 'N/A'
-                  }"></span>
-            </div>
-            <div class="text-center text-md-start pt-2">
-              <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-3 mb-2">
-                <h1 class="text-white fw-bold mb-0 h2">{{talent.name}}</h1>
-                <button class="btn btn-outline-light btn-sm rounded-3 px-2 border-opacity-25 border-white" (click)="toggleSaveTalent()">
-                  <i class="bi" [ngClass]="isSavedTalent ? 'bi-bookmark-fill text-primary' : 'bi-bookmark text-white'"></i>
-                </button>
-              </div>
-              <div
-                class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 text-secondary mb-2">
-                <i class="bi bi-geo-alt"></i>
-                <span>{{talent.location}}</span>
-              </div>
-              <p class="text-secondary mb-3">{{talent.title}}</p>
-              <div class="d-flex gap-2 justify-content-center justify-content-md-start mb-4">
-                <span class="pill-badge"><i class="bi bi-star-fill text-warning me-2"></i> {{talent.rating}} Rating</span>
-                <span class="pill-badge"><i class="bi bi-briefcase me-2"></i> {{talent.projects}} Projects</span>
-              </div>
+<div class="glass p-4 p-md-5 rounded-4 mb-4 border-white border-opacity-10">
 
-              <!-- Trust Badges -->
-              <div class="d-flex flex-wrap gap-4 mt-auto pt-4 border-top border-white border-opacity-5">
-                <div class="d-flex align-items-center gap-2">
-                  <i class="bi bi-award-fill text-warning fs-5"></i>
-                  <div class="d-flex flex-column">
-                    <span class="text-white fw-bold smaller">Top Rated Plus</span>
-                    <span class="text-secondary text-xxs">Platform Badge</span>
-                  </div>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                  <i class="bi bi-patch-check-fill text-primary fs-5"></i>
-                  <div class="d-flex flex-column">
-                    <span class="text-white fw-bold smaller">100%</span>
-                    <span class="text-secondary text-xxs">Verified</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+  <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start gap-4">
 
-          <div class="performance-overview text-center text-md-end d-flex flex-column h-100">
-            <div class="ring-container-lg mb-2">
-              <div class="ring-wrapper-lg" [ngClass]="talent.performanceTier.toLowerCase()"
-                   style="cursor: help;" data-tooltip="Please start contract to level up score and better hiring">
-                <span class="percent text-white h4 fw-bold mb-0">{{talent.performance}}%</span>
-              </div>
-            </div>
-            <div class="fw-bold h5 mb-1" [ngClass]="{
-                  'text-success': talent.performanceTier === 'High',
-                  'text-warning': talent.performanceTier === 'Medium',
-                  'text-danger': talent.performanceTier === 'Low',
-                  'text-secondary': talent.performanceTier === 'New' || talent.performanceTier === 'N/A'
-                }">{{talent.performanceTier}}</div>
-            <div class="text-secondary small">Performance</div>
+    <div class="avatar-wrapper position-relative">
 
-            <div class="mt-4 pt-4">
-              <app-button variant="primary" size="md" routerLink="/user/chat">
-                Message Me
-              </app-button>
-            </div>
-          </div>
-        </div>
+      <img
+        [src]="talent.avatar"
+        [alt]="talent.name"
+        class="rounded-circle border border-3 border-dark shadow-lg profile-avatar">
+
+<span
+  class="status-indicator-lg position-absolute"
+  [ngClass]="{
+    'bg-success': talent.status?.toLowerCase() === 'active',
+    'bg-danger': talent.status?.toLowerCase() === 'inactive'
+  }">
+</span>
+
+    </div>
+
+    <div class="flex-grow-1 text-center text-md-start">
+
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-start gap-2 mb-2">
+
+        <h1 class="text-white fw-bold mb-0 profile-name">
+          {{talent.name}}
+        </h1>
+
+        <button
+          class="btn btn-outline-light btn-sm rounded-3 px-2"
+          (click)="toggleSaveTalent()">
+
+          <i
+            class="bi"
+            [ngClass]="isSavedTalent
+              ? 'bi-bookmark-fill text-primary'
+              : 'bi-bookmark text-white'">
+          </i>
+
+        </button>
+
       </div>
 
+      <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 text-secondary mb-2">
+        <i class="bi bi-geo-alt"></i>
+        <span>{{talent.location}}</span>
+      </div>
+
+      <p class="text-secondary mb-0">
+        {{talent.title}}
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
       <!-- Stats Bar -->
-      <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
-        <div class="row g-4 text-center">
-          <div class="col-6 col-md-3 border-end border-white border-opacity-10">
-            <div class="d-flex flex-column align-items-center">
-              <div class="stat-icon mb-2"><i class="bi bi-currency-dollar text-white"></i></div>
-              <div class="text-white fw-bold h5 mb-0">${{talent.hourlyRate}}/hr</div>
-              <div class="text-secondary smaller">Hourly Rate</div>
-            </div>
-          </div>
-          <div class="col-6 col-md-3 border-end-md border-white border-opacity-10">
-            <div class="d-flex flex-column align-items-center">
-              <div class="stat-icon mb-2"><i class="bi bi-clock text-white"></i></div>
-              <div class="text-white fw-bold h5 mb-0">{{talent.hoursWorked}}</div>
-              <div class="text-secondary smaller">Hours Worked</div>
-            </div>
-          </div>
-          <div class="col-6 col-md-3 border-end border-white border-opacity-10">
-            <div class="d-flex flex-column align-items-center">
-              <div class="stat-icon mb-2"><i class="bi bi-calendar-check text-white"></i></div>
-              <div class="text-white fw-bold h5 mb-0">{{talent.experience}}</div>
-              <div class="text-secondary smaller">Experience</div>
-            </div>
-          </div>
-          <div class="col-6 col-md-3">
-            <div class="d-flex flex-column align-items-center">
-              <div class="stat-icon mb-2"><i class="bi bi-person-check text-white"></i></div>
-              <div class="text-white fw-bold h5 mb-0">{{talent.jobSuccess}}</div>
-              <div class="text-secondary smaller">Job Success</div>
-            </div>
-          </div>
+<div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
+  <div class="row g-4 text-center">
+
+    <!-- Hourly Rate -->
+    <div class="col-6 col-md-3 border-end border-white border-opacity-10">
+      <div class="d-flex flex-column align-items-center">
+        <div class="stat-icon mb-2">
+          <i class="bi bi-currency-dollar text-white"></i>
         </div>
+        <div class="text-white fw-bold h5 mb-0">
+          ${{ talent.hourlyRate }}/hr
+        </div>
+        <div class="text-secondary smaller">Hourly Rate</div>
       </div>
+    </div>
+
+    <!-- Active Contracts -->
+    <div class="col-6 col-md-3 border-end border-white border-opacity-10">
+      <div class="d-flex flex-column align-items-center">
+        <div class="stat-icon mb-2">
+          <i class="bi bi-briefcase text-white"></i>
+        </div>
+        <div class="text-white fw-bold h5 mb-0">
+          {{ talent.activeContracts }}
+        </div>
+        <div class="text-secondary smaller">Active Contracts</div>
+      </div>
+    </div>
+
+    <!-- Completed Contracts -->
+    <div class="col-6 col-md-3 border-end border-white border-opacity-10">
+      <div class="d-flex flex-column align-items-center">
+        <div class="stat-icon mb-2">
+          <i class="bi bi-check-circle text-white"></i>
+        </div>
+        <div class="text-white fw-bold h5 mb-0">
+          {{ talent.completedContracts }}
+        </div>
+        <div class="text-secondary smaller">Completed Contracts</div>
+      </div>
+    </div>
+
+    <!-- Gender -->
+    <div class="col-6 col-md-3">
+      <div class="d-flex flex-column align-items-center">
+        <div class="stat-icon mb-2">
+          <i class="bi bi-gender-ambiguous text-white"></i>
+        </div>
+        <div class="text-white fw-bold h5 mb-0">
+          {{ talent.gender || 'N/A' }}
+        </div>
+        <div class="text-secondary smaller">Gender</div>
+      </div>
+    </div>
+
+  </div>
+</div>
 
       <!-- Main Grid -->
       <div class="row g-4">
@@ -154,77 +158,222 @@
           </div>
 
           <!-- Contract History (Replaced Experience) -->
-          <div class="glass p-4 rounded-4 border-white border-opacity-10">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <h5 class="text-white fw-bold mb-0">Contract History</h5>
-            </div>
-            <div class="experience-timeline">
-              @for (contract of talent.contractHistory; track contract.role) {
-              <div class="timeline-item d-flex gap-3 pb-4 mb-4 border-bottom border-white border-opacity-5">
-                <div
-                  class="timeline-icon-box {{contract.color}} rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
-                  <i class="bi {{contract.icon}} text-white fs-5"></i>
-                </div>
-                <div class="flex-grow-1">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                      <h6 class="text-white fw-bold mb-1">{{contract.role}}</h6>
-                      <p class="text-secondary smaller mb-1">{{contract.company}} • <span
-                          class="text-white">{{contract.amount}}</span></p>
-                      <p class="text-secondary smaller mb-2">{{contract.duration}}</p>
-                    </div>
-                    <div class="d-flex align-items-center gap-1">
-                      <i class="bi bi-star-fill text-warning smaller"></i>
-                      <span class="text-white smaller fw-bold">{{contract.rating}}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              }
-            </div>
+   <div class="glass p-4 rounded-4 border-white border-opacity-10">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="text-white fw-bold mb-0">
+      Contract History
+    </h5>
+  </div>
+
+  @if (talent.contractHistory?.length > 0) {
+
+    <div class="experience-timeline">
+
+      @for (contract of talent.contractHistory; track contract.role) {
+
+        <div
+          class="timeline-item d-flex gap-3 pb-4 mb-4 border-bottom border-white border-opacity-5">
+
+          <div
+            class="timeline-icon-box {{contract.color}} rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
+
+            <i class="bi {{contract.icon}} text-white fs-5"></i>
+
           </div>
+
+          <div class="flex-grow-1">
+
+            <div class="d-flex justify-content-between align-items-start">
+
+              <div>
+                <h6 class="text-white fw-bold mb-1">
+                  {{contract.role}}
+                </h6>
+
+                <p class="text-secondary smaller mb-1">
+                  {{contract.company}}
+                  •
+                  <span class="text-white">
+                    {{contract.amount}}
+                  </span>
+                </p>
+
+                <p class="text-secondary smaller mb-2">
+                  {{contract.duration}}
+                </p>
+              </div>
+
+              <div class="d-flex align-items-center gap-1">
+                <i class="bi bi-star-fill text-warning smaller"></i>
+                <span class="text-white smaller fw-bold">
+                  {{contract.rating}}
+                </span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  } @else {
+
+    <!-- Empty State -->
+
+    <div class="text-center py-5">
+
+      <div class="mb-3">
+        <i class="bi bi-briefcase fs-1 text-secondary opacity-50"></i>
+      </div>
+
+      <h6 class="text-white fw-bold mb-2">
+        No Contract History Yet
+      </h6>
+
+      <p class="text-secondary small mb-0">
+        This talent hasn't completed any contracts yet.
+      </p>
+
+    </div>
+
+  }
+
+</div>
         </div>
 
         <!-- Right Column -->
         <div class="col-12 col-lg-5">
           <!-- Performance Score -->
-          <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
-            <div class="d-flex align-items-center gap-2 mb-4">
-              <h5 class="text-white fw-bold mb-0">Performance Score</h5>
-              <i class="bi bi-question-circle text-secondary smaller"></i>
-            </div>
-            <div class="d-flex align-items-center gap-2 mb-3" style="cursor: help;" data-tooltip="Please start contract to level up score and better hiring">
-              <span class="fw-bold h4 mb-0" [ngClass]="{
-                    'text-success': talent.performanceTier === 'High',
-                    'text-warning': talent.performanceTier === 'Medium',
-                    'text-danger': talent.performanceTier === 'Low',
-                    'text-secondary': talent.performanceTier === 'New' || talent.performanceTier === 'N/A'
-                  }">{{talent.performance}}%</span>
-              <span class="smaller fw-bold" [ngClass]="{
-                    'text-success': talent.performanceTier === 'High',
-                    'text-warning': talent.performanceTier === 'Medium',
-                    'text-danger': talent.performanceTier === 'Low',
-                    'text-secondary': talent.performanceTier === 'New' || talent.performanceTier === 'N/A'
-                  }">{{talent.performanceTier}} Performance</span>
-            </div>
-            <div class="performance-bar-container mb-4">
-              <div class="performance-bar">
-                <div class="bar-segment low"></div>
-                <div class="bar-segment medium"></div>
-                <div class="bar-segment high"></div>
-                <div class="bar-indicator" [style.left.%]="talent.performance"></div>
-              </div>
-            </div>
-            <p class="text-secondary smaller mb-4">This talent's score represents contract consistency, milestone approvals, and client ratings.</p>
-            <div class="d-flex justify-content-between">
-              <div class="d-flex align-items-center gap-1"><span class="dot bg-danger"></span> <span
-                  class="text-secondary text-xxs">Low (25-45)</span></div>
-              <div class="d-flex align-items-center gap-1"><span class="dot bg-warning"></span> <span
-                  class="text-secondary text-xxs">Medium (55-75)</span></div>
-              <div class="d-flex align-items-center gap-1"><span class="dot bg-success"></span> <span
-                  class="text-secondary text-xxs">High (75-100)</span></div>
-            </div>
-          </div>
+          <!-- Performance Score -->
+<div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
+
+  <div class="d-flex align-items-center gap-2 mb-4">
+    <h5 class="text-white fw-bold mb-0">
+      Performance Score
+    </h5>
+
+    <i
+      class="bi bi-question-circle text-secondary smaller"
+      title="Based on completed contracts, client ratings and successful project delivery">
+    </i>
+  </div>
+
+  @if (talent.activeContracts === 0 && talent.completedContracts === 0) {
+
+    <!-- Empty State -->
+    <div class="text-center py-4">
+
+      <div class="mb-3">
+        <i class="bi bi-graph-up-arrow fs-1 text-secondary opacity-50"></i>
+      </div>
+
+      <h6 class="text-white fw-bold mb-2">
+        No Performance Data Yet
+      </h6>
+
+      <p class="text-secondary smaller mb-4">
+        Performance metrics will appear after completing contracts and receiving client feedback.
+      </p>
+
+      <div class="glass rounded-3 p-3 border border-white border-opacity-10">
+        <div class="text-secondary text-xxs text-uppercase mb-1">
+          Current Status
+        </div>
+
+        <div class="text-primary fw-semibold">
+          New Freelancer
+        </div>
+      </div>
+
+    </div>
+
+  } @else {
+
+    <!-- Score -->
+    <div
+      class="d-flex align-items-center gap-2 mb-3"
+      style="cursor: help;"
+      data-tooltip="Performance is calculated using completed contracts and client satisfaction">
+
+      <span
+        class="fw-bold h3 mb-0"
+        [ngClass]="{
+          'text-success': talent.performanceTier === 'High',
+          'text-warning': talent.performanceTier === 'Medium',
+          'text-danger': talent.performanceTier === 'Low'
+        }">
+
+        {{ talent.performance }}%
+
+      </span>
+
+      <span
+        class="fw-bold"
+        [ngClass]="{
+          'text-success': talent.performanceTier === 'High',
+          'text-warning': talent.performanceTier === 'Medium',
+          'text-danger': talent.performanceTier === 'Low'
+        }">
+
+        {{ talent.performanceTier }} Performance
+
+      </span>
+
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="performance-bar-container mb-4">
+      <div class="performance-bar">
+
+        <div class="bar-segment low"></div>
+        <div class="bar-segment medium"></div>
+        <div class="bar-segment high"></div>
+
+        <div
+          class="bar-indicator"
+          [style.left.%]="talent.performance">
+        </div>
+
+      </div>
+    </div>
+
+    <p class="text-secondary smaller mb-4">
+      This score reflects contract completion, delivery consistency, and client satisfaction.
+    </p>
+
+    <div class="d-flex justify-content-between">
+
+      <div class="d-flex align-items-center gap-1">
+        <span class="dot bg-danger"></span>
+        <span class="text-secondary text-xxs">
+          Low
+        </span>
+      </div>
+
+      <div class="d-flex align-items-center gap-1">
+        <span class="dot bg-warning"></span>
+        <span class="text-secondary text-xxs">
+          Medium
+        </span>
+      </div>
+
+      <div class="d-flex align-items-center gap-1">
+        <span class="dot bg-success"></span>
+        <span class="text-secondary text-xxs">
+          High
+        </span>
+      </div>
+
+    </div>
+
+  }
+
+</div>
 
           <!-- Availability -->
           <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
@@ -245,94 +394,248 @@
           </div>
 
           <!-- Languages -->
-          <div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
-            <h5 class="text-white fw-bold mb-4">Languages</h5>
-            <div class="d-flex flex-wrap gap-2">
-              @for (lang of talent.languages; track lang.name) {
-              <div class="language-pill glass px-3 py-2 rounded-3 border-white border-opacity-10">
-                <span class="text-white smaller fw-medium">{{lang.name}}</span>
-                <span class="text-success smaller ms-2">{{lang.level}}</span>
-              </div>
-              }
-            </div>
-          </div>
+<!-- Languages -->
+<div class="glass p-4 rounded-4 mb-4 border-white border-opacity-10">
+  <h5 class="text-white fw-bold mb-4">Languages</h5>
+
+  <div class="d-flex flex-column gap-3">
+
+    @for (lang of talent.languages; track lang.name) {
+      <div
+        class="d-flex justify-content-between align-items-center px-3 py-3 rounded-3 glass border border-white border-opacity-10">
+
+        <span class="text-white fw-semibold">
+          {{ lang.name }}
+        </span>
+
+        <span
+          class="badge rounded-pill px-3 py-2 language-badge"
+          [ngClass]="{
+            'badge-basic': lang.level === 'basic',
+            'badge-conversational': lang.level === 'conversational',
+            'badge-professional': lang.level === 'professional',
+            'badge-native': lang.level === 'native'
+          }">
+
+          {{ lang.level | titlecase }}
+
+        </span>
+
+      </div>
+    }
+
+  </div>
+</div>
 
           <!-- Social Media Profile Card -->
-          <div class="glass p-4 rounded-4 border-white border-opacity-10">
-            <h5 class="text-white fw-bold mb-4">Connect with {{talent.name}}</h5>
-            <div class="d-grid gap-3">
-              @for (social of talent.socialMedia; track social.name) {
-              <a [href]="social.url" target="_blank"
-                class="social-link glass d-flex align-items-center justify-content-between p-3 rounded-3 text-decoration-none border-white border-opacity-5">
-                <div class="d-flex align-items-center gap-3">
-                  <div class="social-icon-box rounded-2 d-flex align-items-center justify-content-center shadow-sm"
-                    [ngClass]="{
-                         'bg-linkedin': social.name === 'LinkedIn',
-                         'bg-behance': social.name === 'Behance',
-                         'bg-dribbble': social.name === 'Dribbble',
-                         'bg-twitter': social.name === 'Twitter'
-                       }">
-                    <i class="bi {{social.icon}} text-white"></i>
-                  </div>
-                  <span class="text-white smaller fw-medium">{{social.name}}</span>
-                </div>
-                <span class="text-secondary smaller">{{social.handle}}</span>
-              </a>
-              }
+<div class="glass p-4 rounded-4 border-white border-opacity-10">
+
+  <h5 class="text-white fw-bold mb-4">
+    Connect with {{ talent.name }}
+  </h5>
+
+  @if (talent.socialMedia?.length) {
+
+    <div class="d-flex flex-column gap-3">
+
+      @for (social of talent.socialMedia; track social.name) {
+
+        <a
+          [href]="social.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-card text-decoration-none">
+
+          <div class="d-flex align-items-center">
+
+            <!-- Icon -->
+            <div class="social-icon me-3">
+              <i class="bi {{ social.icon }}"></i>
             </div>
+
+            <!-- Content -->
+            <div class="flex-grow-1 overflow-hidden">
+
+              <div class="text-white fw-semibold mb-1">
+                {{ social.name }}
+              </div>
+
+              <div class="social-url">
+                {{ social.url }}
+              </div>
+
+            </div>
+
+            <!-- External Link -->
+            <div class="ms-3 flex-shrink-0">
+              <i class="bi bi-box-arrow-up-right text-secondary social-arrow"></i>
+            </div>
+
           </div>
+
+        </a>
+
+      }
+
+    </div>
+
+  } @else {
+
+    <div class="text-center py-4">
+
+      <div class="mb-3">
+        <i class="bi bi-share fs-1 text-secondary opacity-50"></i>
+      </div>
+
+      <h6 class="text-white fw-semibold mb-2">
+        No Social Profiles Added
+      </h6>
+
+      <p class="text-secondary small mb-0">
+        This talent has not added any social media profiles yet.
+      </p>
+
+    </div>
+
+  }
+
+</div>
         </div>
       </div>
 
       <!-- Portfolio Section (Full Column) (NEW) -->
-      <div class="row mt-4">
-        <div class="col-12">
-          <div class="glass p-4 p-md-5 rounded-4 border-white border-opacity-10">
-            <div class="d-flex justify-content-between align-items-center mb-5">
-              <div>
-                <h4 class="text-white fw-bold mb-1">Project Portfolio</h4>
-                <p class="text-secondary smaller mb-0">High-performance deliverables and creative solutions.</p>
-              </div>
-            </div>
+<!-- Portfolio Section -->
+<div class="row mt-4">
+  <div class="col-12">
 
-            <div class="row g-4">
-              @for (item of talent.portfolio; track item.id) {
-              <div class="col-12 col-md-4">
-                <div class="portfolio-card glass overflow-hidden rounded-4 h-100 border-white border-opacity-5 pointer hover-blue-border" 
-                     (click)="openPortfolioDetail(item)"
-                     style="cursor: pointer; transition: all 0.3s ease;">
-                  <div class="portfolio-image-wrapper bg-black position-relative" style="height: 180px; overflow: hidden;">
-                    @if (item.media && item.media.length > 0) {
-                      @if (item.media[0].mediaType === 'image') {
-                        <img [src]="item.media[0].url" class="w-100 h-100 object-fit-cover" [alt]="item.title">
-                      } @else {
-                        <video [src]="item.media[0].url" class="w-100 h-100 object-fit-cover" autoplay muted loop playsinline></video>
-                      }
-                    } @else {
-                      <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-secondary opacity-50">
-                        <i class="bi bi-image fs-2 mb-1"></i>
-                        <span class="smaller">No Preview Media</span>
-                      </div>
-                    }
-                  </div>
-                  <div class="p-4">
-                    <span class="text-primary text-xxs fw-bold text-uppercase mb-2 d-block">{{item.category}}</span>
-                    <h6 class="text-white fw-bold mb-3">{{item.title}}</h6>
-                    <div class="d-flex align-items-center justify-content-between">
-                      <div class="d-flex align-items-center gap-2">
-                        <i class="bi bi-graph-up-arrow text-success smaller"></i>
-                        <span class="text-success text-xxs fw-bold">{{item.performance}}</span>
-                      </div>
-                      <span class="text-primary-light smaller fw-semibold">Explore <i class="bi bi-arrow-right-short"></i></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              }
-            </div>
-          </div>
+    <div class="glass p-4 p-md-5 rounded-4 border-white border-opacity-10">
+
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+          <h4 class="text-white fw-bold mb-1">
+            Project Portfolio
+          </h4>
+          <p class="text-secondary smaller mb-0">
+            High-performance deliverables and creative solutions.
+          </p>
         </div>
       </div>
+
+      @if (talent.portfolio?.length > 0) {
+
+        <div class="row g-4">
+
+          @for (item of talent.portfolio; track item.id) {
+
+            <div class="col-12 col-md-6 col-xl-4">
+
+              <div
+                class="portfolio-card glass overflow-hidden rounded-4 h-100 border-white border-opacity-5 hover-blue-border"
+                (click)="openPortfolioDetail(item)"
+                style="cursor:pointer; transition:all .3s ease;">
+
+                <!-- Preview -->
+                <div
+                  class="portfolio-image-wrapper bg-black position-relative"
+                  style="height:180px; overflow:hidden;">
+
+                  @if (item.media?.length > 0) {
+
+                    @if (item.media[0].mediaType === 'image') {
+
+                      <img
+                        [src]="item.media[0].url"
+                        [alt]="item.title"
+                        class="w-100 h-100 object-fit-cover">
+
+                    } @else {
+
+                      <video
+                        [src]="item.media[0].url"
+                        class="w-100 h-100 object-fit-cover"
+                        autoplay
+                        muted
+                        loop
+                        playsinline>
+                      </video>
+
+                    }
+
+                  } @else {
+
+                    <div
+                      class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-secondary opacity-50">
+
+                      <i class="bi bi-image fs-1 mb-2"></i>
+
+                      <span class="small">
+                        No Preview Available
+                      </span>
+
+                    </div>
+
+                  }
+
+                </div>
+
+                <!-- Content -->
+                <div class="p-4">
+
+                  <span class="text-primary text-uppercase small fw-bold d-block mb-2">
+                    {{ item.category }}
+                  </span>
+
+                  <h6 class="text-white fw-bold mb-2">
+                    {{ item.title }}
+                  </h6>
+
+                  <p class="text-secondary small mb-3">
+                    {{ item.description || 'No description available.' }}
+                  </p>
+
+                  <div class="d-flex justify-content-end">
+                    <span class="text-primary fw-semibold">
+                      View Details
+                      <i class="bi bi-arrow-right-short"></i>
+                    </span>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      } @else {
+
+        <!-- Empty State -->
+
+        <div class="text-center py-5">
+
+          <div class="mb-4">
+            <i class="bi bi-folder2-open fs-1 text-secondary opacity-50"></i>
+          </div>
+
+          <h5 class="text-white fw-bold mb-2">
+            No Portfolio Added Yet
+          </h5>
+
+          <p class="text-secondary mb-0">
+            This talent has not uploaded any portfolio projects yet.
+          </p>
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+</div>
 
     </div>
 

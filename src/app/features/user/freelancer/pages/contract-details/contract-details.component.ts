@@ -7,6 +7,7 @@ import { ButtonComponent } from '../../../../../shared/components/button/button.
 import { ContractService } from '../../../../../core/services/contract.service';
 
 import { Contract } from '../../../../../core/model/contract.model';
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-contract-details',
@@ -20,6 +21,8 @@ import { Contract } from '../../../../../core/model/contract.model';
   styleUrl: './contract-details.component.css'
 })
 export class ContractDetailsComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
 
   contractId: string = '';
 

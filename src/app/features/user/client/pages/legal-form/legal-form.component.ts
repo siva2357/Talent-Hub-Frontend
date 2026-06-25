@@ -6,6 +6,7 @@ import { ContractService } from '../../../../../core/services/contract.service';
 import { ApplicationService } from '../../../../../core/services/application.service';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { InputComponent } from '../../../../../shared/components/input/input.component';
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-legal-form',
@@ -15,6 +16,8 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
   styleUrl: './legal-form.component.css'
 })
 export class LegalFormComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private contractService = inject(ContractService);

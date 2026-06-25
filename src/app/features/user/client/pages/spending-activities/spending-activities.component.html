@@ -115,7 +115,7 @@
                                 <td class="py-4 text-center text-white-50" style="font-size: 13.5px;">
                                     <div class="d-inline-flex align-items-center gap-2">
                                         <i class="bi bi-calendar-event text-secondary opacity-75" style="font-size: 12px;"></i>
-                                        <span>{{ c.startDate | date:'MMM d, y' }}</span>
+                                        <span>{{ DateTimeHelper.toLocalString(c.startDate, false, 'MMM D, YYYY') }}</span>
                                     </div>
                                 </td>
 
@@ -123,7 +123,7 @@
                                 <td class="py-4 text-center text-white-50" style="font-size: 13.5px;">
                                     <div class="d-inline-flex align-items-center gap-2">
                                         <i class="bi bi-calendar-check text-secondary opacity-75" style="font-size: 12px;"></i>
-                                        <span>{{ c.endDate | date:'MMM d, y' }}</span>
+                                        <span>{{ DateTimeHelper.toLocalString(c.endDate, false, 'MMM D, YYYY') }}</span>
                                     </div>
                                 </td>
 

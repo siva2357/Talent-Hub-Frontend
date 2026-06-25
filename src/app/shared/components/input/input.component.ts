@@ -1,8 +1,12 @@
 import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule, FormsModule,NgControl } from '@angular/forms';
 
 
+import {
+  Optional,
+  Self
+} from '@angular/core';
 @Component({
   selector: 'app-input',
   standalone: true,
@@ -18,6 +22,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule, FormsModu
   ]
 })
 export class InputComponent implements ControlValueAccessor {
+  @Input() value: any = '';
   @Input() type: 'text' | 'email' | 'number' | 'password' | 'date' | 'datetime-local' | 'select' | 'multiselect' | 'textarea' = 'text';
   @Input() label: string = '';
   @Input() placeholder: string = '';
@@ -29,7 +34,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() required: boolean = false;
   @Input() disabled: boolean = false;
   @Input() showPasswordToggle: boolean = false;
-  @Input() value: any = '';
+
 
   @Output() dropdownStateChange = new EventEmitter<boolean>();
 
@@ -60,37 +65,47 @@ export class InputComponent implements ControlValueAccessor {
     this.onChange(val);
   }
 
-  toggleDropdown(): void {
-    if (!this.disabled) {
-      this.dropdownOpen = !this.dropdownOpen;
-      this.dropdownStateChange.emit(this.dropdownOpen);
+toggleDropdown(): void {
+  if (!this.disabled) {
+    this.dropdownOpen = !this.dropdownOpen;
+    this.dropdownStateChange.emit(this.dropdownOpen);
+
+    if (!this.dropdownOpen) {
+      this.onTouched();
     }
   }
+}
 
-  toggleOption(optionValue: any): void {
-    if (this.type !== 'multiselect') return;
+toggleOption(optionValue: any): void {
+  if (this.type !== 'multiselect') return;
 
-    if (!Array.isArray(this.value)) {
-      this.value = [];
-    }
-
-    const index = this.value.indexOf(optionValue);
-    if (index > -1) {
-      this.value.splice(index, 1);
-    } else {
-      this.value.push(optionValue);
-    }
-
-    this.onChange([...this.value]);
+  if (!Array.isArray(this.value)) {
+    this.value = [];
   }
 
-  selectOption(optionValue: any): void {
-    if (this.type !== 'select') return;
-    this.value = optionValue;
-    this.onChange(this.value);
-    this.dropdownOpen = false;
-    this.dropdownStateChange.emit(false);
+  const index = this.value.indexOf(optionValue);
+
+  if (index > -1) {
+    this.value.splice(index, 1);
+  } else {
+    this.value.push(optionValue);
   }
+
+  this.onChange([...this.value]);
+  this.onTouched();
+}
+
+selectOption(optionValue: any): void {
+  if (this.type !== 'select') return;
+
+  this.value = optionValue;
+
+  this.onChange(this.value);
+  this.onTouched();
+
+  this.dropdownOpen = false;
+  this.dropdownStateChange.emit(false);
+}
 
   getSelectedLabel(): string {
     if (this.type === 'multiselect') {

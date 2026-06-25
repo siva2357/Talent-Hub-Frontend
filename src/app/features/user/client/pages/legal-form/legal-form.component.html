@@ -43,7 +43,7 @@
                 <h5 class="text-white fw-bold mb-1" style="font-size: 16px;">{{contractData.contractTitle}}</h5>
                 <div class="d-flex gap-3 text-secondary text-xs mt-2">
                   <span><i class="bi bi-cash me-1"></i>{{contractData.budgetType}}: ${{contractData.estimatedBudget}}</span>
-                  <span><i class="bi bi-calendar me-1"></i>Starts: {{contractData.contractStartDate | date:'dd-MM-yyyy'}}</span>
+                  <span><i class="bi bi-calendar me-1"></i>Starts: {{ DateTimeHelper.toLocalString(contractData.contractStartDate, false, 'DD-MM-YYYY') }}</span>
                 </div>
               </div>
             </div>

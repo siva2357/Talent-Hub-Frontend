@@ -12,15 +12,12 @@ import { FormsModule } from '@angular/forms';
 
 import {
   DatatableComponent,
-  NgxDatatableModule
+  NgxDatatableModule,
+  TableColumn
 } from '@swimlane/ngx-datatable';
+import { TableRow } from '../../../core/model/table.interface';
 
-export interface TableColumn {
-  name: string;
-  prop: string;
-  width?: number;
-  cellTemplate?: TemplateRef<any>;
-}
+
 
 @Component({
   selector: 'app-table',
@@ -38,19 +35,21 @@ export class Table {
   @ViewChild('table')
   table!: DatatableComponent;
 
-  @Input() rows: Record<string, any>[] = [];
+  @Input() rows: TableRow[] = [];
 
   @Input() columns: TableColumn[] = [];
 
   @Input() loading = false;
 
-  @Output() rowClicked = new EventEmitter<any>();
+
+
+  @Output() rowClicked = new EventEmitter<TableRow>();
 
   @Output() pageSizeChanged = new EventEmitter<number>();
 
-  pageSize = 5;
+  pageSize = 10;
 
-  pageSizeOptions = [
+  readonly pageSizeOptions = [
     5,
     10,
     25,
@@ -63,6 +62,7 @@ export class Table {
     if (
       event.type === 'click' &&
       event.row
+      
     ) {
       this.rowClicked.emit(event.row);
     }
@@ -71,11 +71,11 @@ export class Table {
 
   onPageSizeChange(): void {
 
-    if (this.table) {
-      this.table.offset = 0;
-    }
+    this.table.offset = 0;
 
-    this.pageSizeChanged.emit(this.pageSize);
+    this.pageSizeChanged.emit(
+      this.pageSize
+    );
 
   }
 

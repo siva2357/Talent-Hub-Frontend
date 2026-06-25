@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -10,23 +10,30 @@ import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum'
 import { AddPhaseFormDto } from '../../../../../core/DTOs/contract-diary.dto';
 import { Attachment, Diary } from '../../../../../core/model/contract-diary.model';
 import { AuthService } from '../../../../../core/services/auth.service';
+import { ActivatedRoute } from '@angular/router';
+import { InputComponent } from '../../../../../shared/components/input/input.component';
+import { RichTextEditorComponent } from '../../../../../shared/components/rich-text-editor/rich-text-editor.component';
 
 
 @Component({
   selector: 'app-contract-progress',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent, FileUploadComponent, FilePreviewComponent],
+  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent,InputComponent,RichTextEditorComponent, FileUploadComponent, FilePreviewComponent],
   templateUrl: './contract-progress.component.html',
   styleUrl: './contract-progress.component.css'
 })
 export class ContractProgressComponent implements OnInit {
   private diaryService = inject(ContractDiaryService);
   private authService = inject(AuthService);
+  private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
+
+  contractId: string = '';
+
+
 newPhase!: AddPhaseFormDto
-diaries: Diary[] = [];
   isLoading = true;
    userRole: 'freelancer' | 'client' = 'freelancer';
-  expandedDiaryId: string | null = null;
   feedbackText: Record<string, string> = {};
   reviewing: Record<string, boolean> = {};
   addingPhase: Record<string, boolean> = {};
@@ -35,17 +42,43 @@ selectedDiaryId: string | null = null;
   bucketKey: BucketKey = BucketKey.ClientData;
   readonly uploadSection = UploadSection.ContractFiles;
   tempUploadUrl: string | null = null;
-  isRefreshing = false;
 
-  
+  diary: Diary | null = null;
+
+contract: any = null;
+
+
+getLatestRevision(phase: any) {
+  return phase.revisions?.length
+    ? phase.revisions[phase.revisions.length - 1]
+    : null;
+}
+
+getLatestNote(phase: any) {
+  return this.getLatestRevision(phase)?.freelancerNote || '';
+}
+
+getLatestAttachments(phase: any) {
+  return this.getLatestRevision(phase)?.attachments || [];
+}
+
+getLatestSubmissionDate(phase: any) {
+  return this.getLatestRevision(phase)?.submittedAt;
+}
+
 
 
 ngOnInit(): void {
 
-  const role = this.authService.currentUser()?.role?.toLowerCase();
+  const role = this.authService
+    .currentUser()
+    ?.role
+    ?.toLowerCase();
 
   if (role !== 'client') {
-    throw new Error('Only clients can access contract progress');
+    throw new Error(
+      'Only clients can access contract progress'
+    );
   }
 
   this.newPhase = {
@@ -56,10 +89,95 @@ ngOnInit(): void {
     clientAttachments: []
   };
 
-  this.fetchDiaries();
+  this.route.queryParamMap.subscribe(params => {
+
+    this.contractId =
+      params.get('contractId') || '';
+
+    if (!this.contractId) {
+
+      this.isLoading = false;
+
+      this.contract = null;
+
+      this.diary = null;
+
+      return;
+
+    }
+
+    this.fetchContractDiary();
+
+  });
+
 }
 
 
+fetchContractDiary(
+  phaseId?: string
+): void {
+
+  if (!this.contractId) {
+    return;
+  }
+
+  this.isLoading = true;
+
+  this.diaryService
+    .getDiaryByContractId(
+      this.contractId
+    )
+    .subscribe({
+
+      next: (res: any) => {
+
+        console.log(
+          'Statuses:',
+          res.diary?.phases?.map(
+            (p: any) => ({
+              id: p._id,
+              status: p.status
+            })
+          )
+        );
+
+        this.contract =
+          res.contract || null;
+
+        this.diary =
+          res.diary || null;
+
+        this.isLoading = false;
+
+        if (phaseId) {
+          this.reviewing[phaseId] = false;
+        }
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err) => {
+
+        console.error(
+          'Failed to load contract diary',
+          err
+        );
+
+        this.contract = null;
+
+        this.diary = null;
+
+        this.isLoading = false;
+
+        if (phaseId) {
+          this.reviewing[phaseId] = false;
+        }
+
+      }
+
+    });
+
+}
 
 
 onFileUploaded(
@@ -104,43 +222,6 @@ removeAttachment(
 
 
 
-fetchDiaries(): void {
-
-  this.isRefreshing = true;
-
-  this.diaryService.getClientDiaries().subscribe({
-
-    next: (res: any) => {
-
-      this.diaries =
-        (res.diaries || []).filter(
-          (d: any) =>
-            d.contractId &&
-            (d.contractId.funded || 0) > 0
-        );
-
-      if (
-        this.diaries.length > 0 &&
-        !this.expandedDiaryId
-      ) {
-        this.expandedDiaryId =
-          this.diaries[0]._id;
-      }
-
-      this.isLoading = false;
-      this.isRefreshing = false;
-    },
-
-    error: () => {
-      this.isLoading = false;
-      this.isRefreshing = false;
-    }
-
-  });
-
-}
-
-
 
   openAddPhaseModal(
   diaryId: string
@@ -153,6 +234,8 @@ fetchDiaries(): void {
   document.body.classList.add(
     'modal-open'
   );
+  
+  this.cdr.detectChanges();
 
 }
 
@@ -176,45 +259,86 @@ closeAddPhaseModal(): void {
     'modal-open'
   );
 
+  this.cdr.detectChanges();
+
 }
 
-  toggleDiary(id: string): void {
-    this.expandedDiaryId = this.expandedDiaryId === id ? null : id;
-  }
 
-  approvePhase(diaryId: string, phaseId: string): void {
-    this.reviewing[phaseId] = true;
-    this.diaryService.reviewPhase(diaryId, phaseId, 'approve').subscribe({
-      next: (res: any) => {
-        alert(res.message || 'Phase approved and payment released successfully!');
-        this.fetchDiaries();
-        this.reviewing[phaseId] = false;
+approvePhase(
+  diaryId: string,
+  phaseId: string
+): void {
+
+  this.reviewing[phaseId] = true;
+
+  this.diaryService
+    .reviewPhase(
+      diaryId,
+      phaseId,
+      'approve'
+    )
+    .subscribe({
+
+      next: () => {
+
+        this.fetchContractDiary(
+          phaseId
+        );
+
       },
-      error: (err) => {
-        alert(err.error?.message || 'Failed to approve phase.');
-        this.reviewing[phaseId] = false;
-      }
-    });
-  }
 
-  requestChanges(diaryId: string, phaseId: string): void {
-    const feedback = this.feedbackText[phaseId] || '';
-    this.reviewing[phaseId] = true;
-    this.diaryService.reviewPhase(diaryId, phaseId, 'request-changes', feedback).subscribe({
-      next: (res: any) => {
-        alert(res.message || 'Changes requested successfully.');
+      error: () => {
+
+        this.reviewing[phaseId] = false;
+
+      }
+
+    });
+
+}
+
+requestChanges(
+  diaryId: string,
+  phaseId: string
+): void {
+
+  const feedback =
+    this.feedbackText[phaseId] || '';
+
+  this.reviewing[phaseId] = true;
+
+  this.diaryService
+    .reviewPhase(
+      diaryId,
+      phaseId,
+      'request-changes',
+      feedback
+    )
+    .subscribe({
+
+      next: () => {
+
         this.feedbackText[phaseId] = '';
-        this.fetchDiaries();
-        this.reviewing[phaseId] = false;
-      },
-      error: (err) => {
-        alert(err.error?.message || 'Failed to request changes.');
-        this.reviewing[phaseId] = false;
-      }
-    });
-  }
 
-addPhase(diaryId: string): void {
+        this.fetchContractDiary(
+          phaseId
+        );
+
+      },
+
+      error: () => {
+
+        this.reviewing[phaseId] = false;
+
+      }
+
+    });
+
+}
+
+addPhase(
+  diaryId: string
+): void {
 
   if (!this.newPhase.name.trim()) {
     return;
@@ -222,69 +346,59 @@ addPhase(diaryId: string): void {
 
   this.addingPhase[diaryId] = true;
 
-  this.diaryService.addPhase(
-    diaryId,
-    {
-      name: this.newPhase.name,
-      description: this.newPhase.description,
-      deadline:
-        this.newPhase.deadline || undefined,
-      amount:
-        this.newPhase.amount || 0,
-      clientAttachments:
-        this.newPhase.clientAttachments
-    }
-  ).subscribe({
+  this.diaryService
+    .addPhase(
+      diaryId,
+      {
+        name: this.newPhase.name,
+        description: this.newPhase.description,
+        deadline:
+          this.newPhase.deadline || undefined,
+        amount:
+          this.newPhase.amount || 0,
+        clientAttachments:
+          this.newPhase.clientAttachments
+      }
+    )
+    .subscribe({
 
-    next: (res: any) => {
+      next: (res: any) => {
 
-      alert(
-        res.message ||
-        'Phase added successfully.'
-      );
+        alert(
+          res.message ||
+          'Phase added successfully.'
+        );
 
-      // reset form
+        this.newPhase = {
+          name: '',
+          description: '',
+          deadline: '',
+          amount: null,
+          clientAttachments: []
+        };
 
-      this.newPhase = {
+        this.tempUploadUrl = null;
 
-        name: '',
+        this.closeAddPhaseModal();
 
-        description: '',
+        this.fetchContractDiary();
+        this.addingPhase[diaryId] = false;
+        this.cdr.detectChanges();
 
-        deadline: '',
+      },
 
-        amount: null,
+      error: (err) => {
 
-        clientAttachments: []
+        alert(
+          err.error?.message ||
+          'Failed to add phase.'
+        );
 
-      };
+        this.addingPhase[diaryId] = false;
 
-      this.tempUploadUrl = null;
+      }
 
-      // close bootstrap modal
-
-      this.closeAddPhaseModal();
-
-      // refresh data
-
-      this.fetchDiaries();
-
-      this.addingPhase[diaryId] = false;
-
-    },
-
-    error: (err) => {
-
-      alert(
-        err.error?.message ||
-        'Failed to add phase.'
-      );
-
-      this.addingPhase[diaryId] = false;
-
-    }
-
-  });
+    });
 
 }
 

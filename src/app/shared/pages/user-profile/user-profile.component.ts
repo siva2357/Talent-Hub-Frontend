@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProfileService } from '../../../core/services/profile.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { DateTimeHelper } from '../../../core/helpers/date-time.helper';
 
 
 @Component({
@@ -13,6 +14,7 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrl: './user-profile.component.css'
 })
 export class UserProfileComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
 
   private profileService = inject(ProfileService);
     private authService = inject(AuthService);

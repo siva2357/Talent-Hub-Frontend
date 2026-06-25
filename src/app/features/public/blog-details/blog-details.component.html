@@ -89,7 +89,7 @@
                   Published
                 </div>
 
-                {{ post.createdAt | date:'dd MMM yyyy' }}
+                {{ DateTimeHelper.toLocalString(post.createdAt, false, 'DD MMM YYYY') }}
 
               </div>
 
@@ -99,7 +99,7 @@
                   Updated
                 </div>
 
-                {{ post.updatedAt | date:'dd MMM yyyy' }}
+                {{ DateTimeHelper.toLocalString(post.updatedAt, false, 'DD MMM YYYY') }}
 
               </div>
 

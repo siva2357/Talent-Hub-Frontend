@@ -4,8 +4,9 @@ import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
 import { AuthService } from './auth.service';
-import { FreelancerProfile, ClientProfile, FreelancerProfileResponse } from '../model/user.model';
+import { ClientProfile, FreelancerProfile, FreelancerProfileResponse } from '../model/user.model';
 import { Contract } from '../model/contract.model';
+import { FreelancerListResponse, TalentProfileResponse } from '../model/talents.model';
 
 @Injectable({
   providedIn: 'root'
@@ -105,18 +106,28 @@ getBanks(): Observable<{
   /**
    * Fetches all freelancer profiles from the database matching the given filter criteria.
    */
-  getFreelancers(params?: { search?: string; category?: string; minRate?: number; maxRate?: number }): Observable<{ success: boolean; freelancers: any[] }> {
-    return this.http.get<{ success: boolean; freelancers: any[] }>(`${this.baseUrl}${API_ENDPOINTS.PROFILE.FREELANCERS}`, { params: params as any });
+getFreelancers(
+  params?: {
+    search?: string;
+    category?: string;
+    minRate?: number;
+    maxRate?: number;
   }
+): Observable<FreelancerListResponse> {
+  return this.http.get<FreelancerListResponse>(
+    `${this.baseUrl}${API_ENDPOINTS.PROFILE.FREELANCERS}`,
+    { params: params as any }
+  );
+}
 
   /**
    * Fetches a specific freelancer profile by ID.
    */
 getFreelancerProfileById(
   id: string
-): Observable<FreelancerProfileResponse> {
+): Observable<TalentProfileResponse> {
 
-  return this.http.get<FreelancerProfileResponse>(
+  return this.http.get<TalentProfileResponse>(
     `${this.baseUrl}${API_ENDPOINTS.PROFILE.FREELANCER(id)}`
   );
 

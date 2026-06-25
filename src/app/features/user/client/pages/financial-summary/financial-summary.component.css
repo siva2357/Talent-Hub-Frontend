@@ -1,5 +1,4 @@
 .financials-page {
-    background: transparent;
     min-height: 100vh;
 }
 
@@ -7,30 +6,27 @@
     max-width: 1440px;
 }
 
-/* Glassmorphism Dark Theme Panel */
 .glass-dark {
-    background: rgba(10, 13, 18, 0.4) !important;
+    background: rgba(10, 13, 18, 0.4);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Financial Stat Cards */
 .financial-card {
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(10, 13, 18, 0.6) !important;
+    background: rgba(10, 13, 18, 0.6);
+    transition: all .35s ease;
 }
 
 .financial-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6) !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .6);
 }
 
 .financial-card:hover .card-icon-wrapper {
     transform: scale(1.1) rotate(5deg);
 }
 
-/* Mesh Gradients */
 .card-mesh-glow {
     position: absolute;
     top: -50px;
@@ -39,65 +35,76 @@
     height: 150px;
     border-radius: 50%;
     filter: blur(80px);
-    opacity: 0.15;
-    z-index: 1;
+    opacity: .15;
     pointer-events: none;
-    transition: all 0.35s ease;
+    transition: all .35s ease;
 }
 
 .financial-card:hover .card-mesh-glow {
-    opacity: 0.3;
+    opacity: .3;
     transform: scale(1.2);
 }
 
-/* Icon wrapper */
 .card-icon-wrapper {
     width: 38px;
     height: 38px;
     min-width: 38px;
     min-height: 38px;
-    transition: all 0.3s ease;
+    transition: all .3s ease;
 }
 
 .card-icon-wrapper i {
     font-size: 1.15rem;
 }
 
-/* Glow classes */
-.border-primary-glow {
-    border-color: rgba(42, 128, 255, 0.35) !important;
-}
-
 .border-success-glow {
-    border-color: rgba(25, 135, 84, 0.35) !important;
+    border-color: rgba(25, 135, 84, .35) !important;
 }
 
 .border-warning-glow {
-    border-color: rgba(255, 193, 7, 0.35) !important;
+    border-color: rgba(255, 193, 7, .35) !important;
 }
 
 .border-info-glow {
-    border-color: rgba(13, 202, 240, 0.35) !important;
-}
-
-.glow-primary {
-    box-shadow: 0 10px 30px rgba(42, 128, 255, 0.08);
+    border-color: rgba(13, 202, 240, .35) !important;
 }
 
 .glow-success {
-    box-shadow: 0 10px 30px rgba(25, 135, 84, 0.05);
+    box-shadow: 0 10px 30px rgba(25, 135, 84, .05);
 }
 
 .glow-warning {
-    box-shadow: 0 10px 30px rgba(255, 193, 7, 0.05);
+    box-shadow: 0 10px 30px rgba(255, 193, 7, .05);
 }
 
 .glow-info {
-    box-shadow: 0 10px 30px rgba(13, 202, 240, 0.05);
+    box-shadow: 0 10px 30px rgba(13, 202, 240, .05);
 }
 
-/* Pulse Dots inside cards */
-.pulse-dot-success, .pulse-dot-warning, .pulse-dot-info {
+.custom-input {
+    background: rgba(0, 0, 0, .3);
+    border: 1px solid rgba(255, 255, 255, .1);
+}
+
+.custom-input:focus {
+    border-color: #2A80FF;
+    box-shadow: 0 0 15px rgba(42, 128, 255, .25);
+}
+
+.text-secondary-light {
+    color: rgba(255, 255, 255, .5);
+}
+
+.ls-1 {
+    letter-spacing: .5px;
+}
+
+
+
+
+.pulse-dot-success,
+.pulse-dot-warning,
+.pulse-dot-info {
     width: 8px;
     height: 8px;
     border-radius: 50%;
@@ -106,216 +113,70 @@
 
 .pulse-dot-success {
     background: #198754;
-    box-shadow: 0 0 8px rgba(25, 135, 84, 0.8);
-    animation: pulse-success-anim 2s infinite;
 }
 
 .pulse-dot-warning {
     background: #ffc107;
-    box-shadow: 0 0 8px rgba(255, 193, 7, 0.8);
-    animation: pulse-warning-anim 2s infinite;
 }
 
 .pulse-dot-info {
     background: #0dcaf0;
-    box-shadow: 0 0 8px rgba(13, 202, 240, 0.8);
-    animation: pulse-info-anim 2s infinite;
 }
 
-@keyframes pulse-success-anim {
-    0% { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.7); }
-    70% { box-shadow: 0 0 0 6px rgba(25, 135, 84, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0); }
+
+.glass-dropdown {
+    background: rgba(10, 13, 18, .95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 12px;
+    min-width: 180px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .5);
 }
 
-@keyframes pulse-warning-anim {
-    0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); }
-    70% { box-shadow: 0 0 0 6px rgba(255, 193, 7, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
-}
 
-@keyframes pulse-info-anim {
-    0% { box-shadow: 0 0 0 0 rgba(13, 202, 240, 0.7); }
-    70% { box-shadow: 0 0 0 6px rgba(13, 202, 240, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(13, 202, 240, 0); }
-}
-
-/* Premium Inputs */
-.custom-input {
-    background: rgba(0, 0, 0, 0.3) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
-    transition: all 0.25s ease;
-}
-
-.custom-input:focus {
-    border-color: #2A80FF !important;
-    box-shadow: 0 0 15px rgba(42, 128, 255, 0.25) !important;
-}
-
-/* Custom Premium Table Layout */
-.custom-table {
-    background: transparent !important;
-    min-width: 1300px;
-}
-
-.custom-table thead th {
-    background: rgba(42, 128, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 0.75) !important;
-    font-weight: 700 !important;
-    border: none !important;
-    padding: 1.15rem 1rem !important;
-    white-space: nowrap;
-    font-size: 16px !important;
-}
-
-.custom-table tbody tr {
-    background: transparent !important;
-    border-bottom: 1.5px solid rgba(255, 255, 255, 0.03) !important;
-    transition: all 0.3s ease;
-}
-
-.custom-table tbody td {
-    font-size: 14px !important;
-    white-space: nowrap;
-}
-
-.custom-table tbody tr:hover {
-    background: rgba(42, 128, 255, 0.03) !important;
-    box-shadow: inset 3px 0 0 #2A80FF;
-}
-
-.custom-table tbody tr:last-child {
-    border-bottom: none !important;
-}
-
-/* Freelancer Avatar */
-.freelancer-avatar {
-    text-shadow: 0 0 10px rgba(42, 128, 255, 0.4);
-}
-
-/* Glowing Status Badges */
 .badge-status-paid {
-    background: rgba(25, 135, 84, 0.1) !important;
-    color: #198754 !important;
-    border: 1.5px solid rgba(25, 135, 84, 0.25) !important;
-    box-shadow: 0 0 15px rgba(25, 135, 84, 0.15) !important;
-}
-
-.badge-status-processed {
-    background: rgba(13, 110, 253, 0.1) !important;
-    color: #0d6efd !important;
-    border: 1.5px solid rgba(13, 110, 253, 0.25) !important;
-    box-shadow: 0 0 15px rgba(13, 110, 253, 0.15) !important;
+    background: rgba(25, 135, 84, .1);
+    color: #198754;
+    border: 1px solid rgba(25, 135, 84, .25);
 }
 
 .badge-status-pending {
-    background: rgba(255, 193, 7, 0.1) !important;
-    color: #ffc107 !important;
-    border: 1.5px solid rgba(255, 193, 7, 0.25) !important;
-    box-shadow: 0 0 15px rgba(255, 193, 7, 0.15) !important;
+    background: rgba(255, 193, 7, .1);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, .25);
 }
 
 .badge-status-failed {
-    background: rgba(220, 53, 69, 0.1) !important;
-    color: #dc3545 !important;
-    border: 1.5px solid rgba(220, 53, 69, 0.25) !important;
-    box-shadow: 0 0 15px rgba(220, 53, 69, 0.15) !important;
+    background: rgba(220, 53, 69, .1);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, .25);
 }
 
-/* Download Action Button styling */
-.download-action-btn {
-    transition: all 0.25s ease;
-    border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-.download-action-btn:hover {
-    background: rgba(42, 128, 255, 0.1) !important;
-    border-color: #2A80FF !important;
-    color: #FFFFFF !important;
-    transform: scale(1.03);
-}
-
-/* Deposit Modal Styles */
-.modal-content.glass-dark {
-    background: #0a0d12 !important;
-    border: 1.5px solid rgba(42, 128, 255, 0.6) !important;
-    box-shadow: 0 0 80px rgba(0, 0, 0, 0.95), 0 0 30px rgba(42, 128, 255, 0.3) !important;
-}
-
-.payment-method-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1.5px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-.payment-method-card:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(42, 128, 255, 0.3) !important;
-}
-
-.payment-method-card.active {
-    background: rgba(42, 128, 255, 0.15) !important;
-    border-color: #2A80FF !important;
-    box-shadow: 0 0 15px rgba(42, 128, 255, 0.25) !important;
-}
-
-.payment-method-card.active i {
-    color: #2A80FF !important;
-}
-
-.modal-backdrop {
-    z-index: 9999998 !important;
-    background-color: rgba(0, 0, 0, 0.85) !important;
-    backdrop-filter: blur(10px);
-}
-
-.modal {
-    z-index: 9999999 !important;
-}
-
-/* Glow Shadow utilities */
-.shadow-primary {
-    box-shadow: 0 8px 24px rgba(42, 128, 255, 0.35) !important;
-}
-
-.ls-1 {
-    letter-spacing: 0.5px;
-}
-
-.text-secondary-light {
-    color: rgba(255, 255, 255, 0.5) !important;
-}
-
-.font-monospace {
-    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
-}
-
-/* Premium Glass Dropdown Menu */
-.glass-dropdown {
-    background: rgba(10, 13, 18, 0.95) !important;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
-    border-radius: 12px !important;
-    min-width: 140px !important;
-    z-index: 10000;
-}
-
-.glass-dropdown .dropdown-item {
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    background: transparent !important;
-    transition: all 0.2s ease;
-    border: none !important;
-    text-align: left;
+.table-responsive-wrapper {
     width: 100%;
+    overflow-x: auto;
+    /* Optional: custom scrollbar for horizontal scrolling */
 }
 
-.glass-dropdown .dropdown-item:hover {
-    background: rgba(42, 128, 255, 0.12) !important;
-    color: #ffffff !important;
+.table-responsive-wrapper::-webkit-scrollbar {
+    height: 6px;
 }
 
-.no-caret::after {
-    display: none !important;
+.table-responsive-wrapper::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 4px;
+}
+
+.table-responsive-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+.table-responsive-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.table-min-width {
+    min-width: 900px;
 }

@@ -44,11 +44,7 @@
 
   <!-- DRAG & DROP VARIANT -->
   @if (variant === 'dragdrop') {
-    @if (value) {
-      <!-- Render the reusable file-preview component -->
-      <app-file-preview [url]="value" [disabled]="disabled" (remove)="removeFile()"></app-file-preview>
-    } @else {
-      <!-- Drop Area -->
+
       <div class="dragdrop-zone rounded-3 p-4 d-flex flex-column align-items-center justify-content-center gap-2 cursor-pointer transition-all"
            [class.dragover]="isDragOver"
            [class.uploading]="isUploading"
@@ -76,5 +72,5 @@
         </div>
       }
     }
-  }
+
 </div>

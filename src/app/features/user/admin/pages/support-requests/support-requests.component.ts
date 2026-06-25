@@ -2,13 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-
 import { SupportService } from '../../../../../core/services/support.service';
-
-import {
-  SupportRequest
-} from '../../../../../core/model/support-request.model';
+import { SupportRequest } from '../../../../../core/model/support-request.model';
 import { FilePreviewComponent } from "../../../../../shared/components/file-preview/file-preview.component";
+import { InputComponent } from "../../../../../shared/components/input/input.component";
+import { BadgeComponent } from "../../../../../shared/components/badge/badge.component";
+import { ButtonComponent } from "../../../../../shared/components/button/button.component";
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-support-requests',
@@ -16,12 +16,17 @@ import { FilePreviewComponent } from "../../../../../shared/components/file-prev
   imports: [
     CommonModule,
     FormsModule,
-    FilePreviewComponent
-],
+    FilePreviewComponent,
+    InputComponent,
+    BadgeComponent,
+    ButtonComponent
+  ],
   templateUrl: './support-requests.component.html',
   styleUrl: './support-requests.component.css'
 })
 export class SupportRequestsComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
 
   private supportService = inject(SupportService);
   private toastr = inject(ToastrService);
@@ -44,6 +49,24 @@ export class SupportRequestsComponent implements OnInit {
     | 'Client'
     | 'Freelancer' = 'All';
 
+  statusOptions = [
+    { label: 'All Status', value: 'All' },
+    { label: 'Open', value: 'Open' },
+    { label: 'Waiting For Admin', value: 'WaitingForAdmin' },
+    { label: 'Waiting For User', value: 'WaitingForUser' },
+    { label: 'Resolved', value: 'Resolved' },
+    { label: 'Closed', value: 'Closed' }
+  ];
+
+  userTypeOptions = [
+    { label: 'All Users', value: 'All' },
+    { label: 'Client', value: 'Client' },
+    { label: 'Freelancer', value: 'Freelancer' }
+  ];
+
+  isLoading = true;
+
+
   selectedRequest: SupportRequest | null = null;
 
   replyText = '';
@@ -54,17 +77,23 @@ export class SupportRequestsComponent implements OnInit {
 
   loadRequests(): void {
 
+    this.isLoading = true;
+
     this.supportService.getAllTickets().subscribe({
       next: (tickets) => {
 
         this.requests = tickets;
 
         this.applyFilters();
+
+        this.isLoading = false;
       },
 
       error: (error) => {
 
         console.error(error);
+
+        this.isLoading = false;
 
         this.toastr.error(
           'Failed to load support tickets',

@@ -83,7 +83,7 @@
 
             <span class="text-xxs text-secondary">
               <i class="bi bi-calendar3 me-1"></i>
-              {{ post.createdAt | date:'dd MMM yyyy' }}
+              {{ DateTimeHelper.toLocalString(post.createdAt, false, 'DD MMM YYYY') }}
             </span>
 
             <span class="text-xxs text-secondary">

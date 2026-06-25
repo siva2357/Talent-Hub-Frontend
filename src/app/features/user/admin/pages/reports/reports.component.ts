@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { AdminService, SystemReport, TransactionData, ClientData, FreelancerData } from '../../../../../core/services/admin.service';
+import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 @Component({
   selector: 'app-admin-reports',
@@ -11,6 +12,8 @@ import { AdminService, SystemReport, TransactionData, ClientData, FreelancerData
   styleUrl: './reports.component.css'
 })
 export class AdminReportsComponent implements OnInit {
+  DateTimeHelper = DateTimeHelper;
+
   private adminService = inject(AdminService);
   private toastr = inject(ToastrService);
 
