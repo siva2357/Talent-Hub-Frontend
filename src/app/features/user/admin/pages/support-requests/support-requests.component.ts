@@ -7,6 +7,7 @@ import { SupportRequest } from '../../../../../core/model/support-request.model'
 import { FilePreviewComponent } from "../../../../../shared/components/file-preview/file-preview.component";
 import { InputComponent } from "../../../../../shared/components/input/input.component";
 import { BadgeComponent } from "../../../../../shared/components/badge/badge.component";
+import { ButtonComponent } from "../../../../../shared/components/button/button.component";
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
 @Component({
@@ -17,7 +18,8 @@ import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
     FormsModule,
     FilePreviewComponent,
     InputComponent,
-    BadgeComponent
+    BadgeComponent,
+    ButtonComponent
   ],
   templateUrl: './support-requests.component.html',
   styleUrl: './support-requests.component.css'

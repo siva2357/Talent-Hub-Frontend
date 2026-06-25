@@ -137,7 +137,7 @@ export const routes: Routes = [
       { path: 'saved-contracts', component: SavedContractsComponent },
       { path: 'proposals', component: ProposalsComponent },
       { path: 'offers', component: ProposalsComponent, data: { defaultTab: 'offers' } },
-      { path: 'active-contracts', component: ActiveContractsComponent },
+      { path: 'contracts', component: ActiveContractsComponent },
       { path: 'contract-diary', component: ContractDiaryComponent },
       { path: 'finance-overview', component: FinanceOverviewComponent },
 

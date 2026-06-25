@@ -238,15 +238,31 @@
 
   <div class="d-flex justify-content-center">
 
-    <app-button
-      variant="primary"
-      size="sm"
-      (click)="openAddPhaseModal(diary._id)">
+    @if (contract && !contract.funded) {
 
-      <i class="bi bi-plus-circle"></i>
-      Create First Phase
+      <div class="alert glass border-warning border-opacity-25 text-warning rounded-4 p-4 text-start mb-0 max-w-lg mx-auto">
+        <h6 class="fw-bold mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>Escrow Funding Required</h6>
+        <p class="small mb-4 text-white-50">You must fund this contract before you can issue phases to your freelancer. Please visit your financial summary to deposit funds into escrow securely.</p>
+        <a routerLink="/user/financial-summary" class="text-decoration-none d-block text-center">
+          <app-button variant="brand" size="sm" customClass="w-100">
+            <i class="bi bi-credit-card-2-front me-2"></i>Fund Contract
+          </app-button>
+        </a>
+      </div>
 
-    </app-button>
+    } @else {
+
+      <app-button
+        variant="primary"
+        size="sm"
+        (click)="openAddPhaseModal(diary._id)">
+
+        <i class="bi bi-plus-circle"></i>
+        Create First Phase
+
+      </app-button>
+
+    }
 
   </div>
 

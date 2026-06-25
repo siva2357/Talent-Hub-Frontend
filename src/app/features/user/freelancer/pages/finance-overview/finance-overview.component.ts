@@ -113,13 +113,13 @@ export class FinanceOverviewComponent implements OnInit, AfterViewInit {
     // The unified page shows all transactions now.
   }
 
-  withdrawPhase(contract: any, phase: any) {
-    if (contract.balance >= phase.amount) {
+  withdrawContractBalance(contract: any) {
+    if (contract.balance > 0) {
       this.selectedWithdrawItem = {
-        balance: phase.amount,
+        balance: contract.balance,
         contractId: contract.contractId,
-        isPhase: true,
-        phaseName: phase.name,
+        isPhase: false,
+        phaseName: 'Final Contract Withdrawal',
         title: contract.title,
         client: contract.client,
         type: contract.type,

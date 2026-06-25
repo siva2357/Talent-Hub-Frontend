@@ -19,7 +19,7 @@ interface ActiveContract {
 
   startDate: string;
 
-  status: 'in-progress' | 'upcoming';
+  status: 'in-progress' | 'upcoming' | 'completed';
 
   description: string;
 }
@@ -35,7 +35,18 @@ export class ActiveContractsComponent implements OnInit {
   private applicationService = inject(ApplicationService);
 
   contracts: ActiveContract[] = [];
+  currentTab: 'active' | 'completed' = 'active';
   isLoading = true;
+
+  get filteredContracts(): ActiveContract[] {
+    return this.contracts.filter(c => {
+      if (this.currentTab === 'active') {
+        return c.status === 'in-progress' || c.status === 'upcoming';
+      } else {
+        return c.status === 'completed';
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.fetchActiveContracts();
@@ -48,7 +59,7 @@ export class ActiveContractsComponent implements OnInit {
         if (res.success && res.offers) {
           // Only show accepted offers as active contracts that are not completed
           this.contracts = res.offers
-            .filter((offer: any) => offer.status === 'Accepted' && offer.contractStatus !== 'completed')
+            .filter((offer: any) => offer.status === 'Accepted')
             .map((offer: any) => {
               const name = offer.client || 'Client';
               const initials = name
@@ -77,7 +88,7 @@ export class ActiveContractsComponent implements OnInit {
   techStack: offer.techStack || [],
 
   startDate,
-  status: isStarted ? 'in-progress' : 'upcoming',
+  status: (offer.contractStatus && offer.contractStatus.toLowerCase() === 'completed') ? 'completed' : (isStarted ? 'in-progress' : 'upcoming'),
 
   description: offer.description || ''
 } as ActiveContract;

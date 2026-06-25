@@ -133,9 +133,20 @@
                         <div class="col-6 col-md-2 col-lg-2">
                             <div class="text-secondary text-uppercase mb-1"
                                 style="font-size: 10px; letter-spacing: 0.5px;">Balance</div>
-                            <div class="text-white fw-bold" style="font-size: 15px;"
+                            <div class="text-white fw-bold mb-2" style="font-size: 15px;"
                                 [ngClass]="{'text-success': contract.balance > 0}">₹{{ contract.balance | number:'1.2-2'
                                 }}</div>
+                            @if (contract.balance > 0) {
+                                <app-button 
+                                    variant="brand" 
+                                    size="sm" 
+                                    customClass="rounded-pill px-2 py-1 border border-white border-opacity-10 text-white" 
+                                    fontSize="10px"
+                                    [disabled]="contract.status?.toLowerCase() !== 'completed' && contract.status?.toLowerCase() !== 'cancelled'"
+                                    (click)="$event.stopPropagation(); withdrawContractBalance(contract)">
+                                    <i class="bi bi-wallet2 me-1"></i> Withdraw
+                                </app-button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -191,20 +202,11 @@
 <ng-template #actionTemplate let-row="row">
     <div class="d-flex justify-content-center">
         @if (row.status === 'Paid') {
-        @if (row.parentContract.balance >= row.amount) {
-        <app-button variant="primary" size="sm" customClass="rounded-pill px-3" fontSize="12px"
-            (click)="withdrawPhase(row.parentContract, row)">
-            <i class="bi bi-wallet2 me-1"></i> Withdraw
-        </app-button>
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1 rounded-pill" style="font-size: 11px;">
+                <i class="bi bi-check-circle-fill me-1"></i> Released
+            </span>
         } @else {
-        <app-button variant="primary" size="sm"
-            customClass="rounded-pill px-3 border border-white border-opacity-10 text-white-50" fontSize="12px"
-            [disabled]="true">
-            <i class="bi bi-check2-circle me-1"></i> Withdrawn
-        </app-button>
-        }
-        } @else {
-        <span class="text-secondary small">-</span>
+            <span class="text-secondary small">-</span>
         }
     </div>
 </ng-template>

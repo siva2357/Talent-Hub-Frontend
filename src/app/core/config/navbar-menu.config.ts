@@ -177,8 +177,8 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
   {
     label: 'Contract Management',
     roles: [UserRole.FREELANCER],
-    activePaths: ['active-contracts'],
-    route: '/user/active-contracts',
+    activePaths: ['contracts'],
+    route: '/user/contracts',
   },
 
   {

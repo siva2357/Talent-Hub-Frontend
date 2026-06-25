@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
@@ -23,6 +23,7 @@ import { RichTextEditorComponent } from '../../../../../shared/components/rich-t
 export class ContractDiaryComponent implements OnInit {
   private diaryService = inject(ContractDiaryService);
   private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
 
   isLoading = true;
 diary: Diary | null = null;
@@ -72,6 +73,8 @@ getRevisionNumber(
     'modal-open'
   );
 
+  this.cdr.detectChanges();
+
 }
 
 
@@ -86,6 +89,8 @@ closeSubmitModal(): void {
   document.body.classList.remove(
     'modal-open'
   );
+
+  this.cdr.detectChanges();
 
 }
 
@@ -132,7 +137,7 @@ ngOnInit(): void {
 
 
 
-fetchDiaries(): void {
+fetchDiaries(callback?: () => void): void {
 
   if (!this.contractId) {
     this.diary = null;
@@ -150,6 +155,8 @@ fetchDiaries(): void {
         this.diary = res.diary || null;
 
         this.isLoading = false;
+        this.cdr.detectChanges();
+        if (callback) callback();
 
       },
 
@@ -160,6 +167,7 @@ fetchDiaries(): void {
         this.diary = null;
 
         this.isLoading = false;
+        if (callback) callback();
 
       }
 
@@ -225,7 +233,11 @@ hasRevision(
   startPhase(diaryId: string, phaseId: string): void {
     this.submitting[phaseId] = true;
     this.diaryService.startPhase(diaryId, phaseId).subscribe({
-      next: () => { this.fetchDiaries(); this.submitting[phaseId] = false; },
+      next: () => { 
+        this.fetchDiaries(() => {
+          this.submitting[phaseId] = false;
+        }); 
+      },
       error: () => { this.submitting[phaseId] = false; }
     });
   }
@@ -257,11 +269,6 @@ submitUpdate(
       attachments: files
     }
   )
-  .pipe(
-    finalize(() => {
-      this.submitting[phaseId] = false;
-    })
-  )
   .subscribe({
 
     next: () => {
@@ -272,12 +279,15 @@ submitUpdate(
 
       this.closeSubmitModal();
 
-      this.fetchDiaries();
+      this.fetchDiaries(() => {
+        this.submitting[phaseId] = false;
+      });
 
     },
 
     error: (err) => {
       console.error(err);
+      this.submitting[phaseId] = false;
     }
 
   });

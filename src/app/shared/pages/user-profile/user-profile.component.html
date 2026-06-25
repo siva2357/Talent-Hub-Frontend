@@ -170,16 +170,17 @@
                             <div class="section-indicator rounded-pill"></div>
                             <h4 class="text-white fw-bold mb-0 text-lg font-headline">My Contract Diary</h4>
                         </div>
-                        <span class="badge badge-completed-count py-1.5 px-3 rounded-pill text-xs font-semibold">
-                            {{ diaries.length || 0 }} Completed Contracts
-                        </span>
                     </div>
 
                     <div class="d-flex flex-column gap-3.5">
                         @for (contract of diaries; track contract._id) {
                         <div
                             class="contract-ledger-row p-4 rounded-4 border-glass position-relative overflow-hidden bg-card-dark text-start d-flex flex-column gap-3 mb-4">
-                            <div class="contract-status-bar position-absolute h-100 bg-success"></div>
+                            <div class="contract-status-bar position-absolute h-100" [ngClass]="{
+                                'bg-success': contract.status === 'completed',
+                                'bg-warning': contract.status === 'in-progress' || contract.status === 'in progress' || contract.status === 'active' || contract.status === 'pending',
+                                'bg-danger': contract.status === 'closed'
+                            }"></div>
 
                             <div
                                 class="d-flex align-items-start align-items-md-center justify-content-between flex-wrap gap-3 position-relative z-2">
@@ -207,9 +208,8 @@
                                     <div class="d-flex flex-column text-start text-md-end">
                                         <span class="text-secondary-light font-xs text-uppercase ls-1">Status</span>
                                         <span class="text-capitalize font-sm mt-0.5 fw-semibold" [ngClass]="{
-                                            'text-warning': contract.status === 'pending',
-                                            'text-success-light': contract.status === 'in progress' || contract.status === 'active',
-                                            'text-info': contract.status === 'completed',
+                                            'text-warning': contract.status === 'in-progress' || contract.status === 'in progress' || contract.status === 'active' || contract.status === 'pending',
+                                            'text-success': contract.status === 'completed',
                                             'text-danger': contract.status === 'closed'
                                         }">
                                             {{ contract.status }}

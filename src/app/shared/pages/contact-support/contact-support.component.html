@@ -134,17 +134,12 @@
               <div class="row g-3">
                 <div class="col-12 col-md-8 text-start">
                   <label class="form-label text-white opacity-80 text-xs uppercase-label mb-2">Detailed Issue Subcategory</label>
-                  <div class="custom-dropdown-capsule position-relative">
-                    <select class="form-select custom-select-box p-3 rounded-3 border-glass bg-black-20 text-sm text-white" 
-                            [(ngModel)]="selectedSubcategoryValue" 
-                            id="issueSubcategorySelect">
-                      <option value="" disabled selected>-- Select specific subcategory issue --</option>
-                      @for (sub of activeCategory?.subcategories; track sub.value) {
-                      <option [value]="sub.value">{{ sub.label }}</option>
-                      }
-                    </select>
-                    <i class="bi bi-chevron-down select-arrow-abs text-white position-absolute pointer-events-none"></i>
-                  </div>
+                    <app-input 
+                        type="select" 
+                        [options]="activeCategory?.subcategories || []"
+                        [(ngModel)]="selectedSubcategoryValue" 
+                        placeholder="-- Select specific subcategory issue --">
+                    </app-input>
                 </div>
               </div>
             </section>
@@ -216,7 +211,8 @@
               <app-button variant="primary" 
                           (click)="submitTicket()" 
                           size="md" 
-                          [disabled]="!isFormValid"
+                          [disabled]="!isFormValid || isSubmitting"
+                          [loading]="isSubmitting"
                           customClass="btn-save-continue">
                 Submit Escalation Ticket
               </app-button>
@@ -495,15 +491,15 @@
 
 <div class="mt-3 text-end">
 
-  <button
-    class="btn btn-success"
+  <app-button
+    variant="success"
     (click)="confirmResolution()">
 
     <i class="bi bi-check-circle me-2"></i>
 
     Mark Issue Resolved
 
-  </button>
+  </app-button>
 
 </div>
 
@@ -521,17 +517,17 @@
 
         </h5>
 
-        <textarea
-          rows="4"
-          class="form-control"
+        <app-input
+          type="textarea"
           [(ngModel)]="replyMessage"
-          placeholder="Write your response...">
-        </textarea>
+          placeholder="Write your response..."
+          [required]="true">
+        </app-input>
 
         <div class="mt-3 text-end">
 
-          <button
-            class="btn btn-primary"
+          <app-button
+            variant="primary"
             [disabled]="!replyMessage.trim()"
             (click)="sendReply()">
 
@@ -539,7 +535,7 @@
 
             Send Reply
 
-          </button>
+          </app-button>
 
         </div>
 

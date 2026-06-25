@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -26,6 +26,7 @@ export class ContractProgressComponent implements OnInit {
   private diaryService = inject(ContractDiaryService);
   private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
 
   contractId: string = '';
 
@@ -152,6 +153,7 @@ fetchContractDiary(
           this.reviewing[phaseId] = false;
         }
 
+        this.cdr.detectChanges();
       },
 
       error: (err) => {
@@ -232,6 +234,8 @@ removeAttachment(
   document.body.classList.add(
     'modal-open'
   );
+  
+  this.cdr.detectChanges();
 
 }
 
@@ -254,6 +258,8 @@ closeAddPhaseModal(): void {
   document.body.classList.remove(
     'modal-open'
   );
+
+  this.cdr.detectChanges();
 
 }
 
@@ -376,6 +382,8 @@ addPhase(
         this.closeAddPhaseModal();
 
         this.fetchContractDiary();
+        this.addingPhase[diaryId] = false;
+        this.cdr.detectChanges();
 
       },
 

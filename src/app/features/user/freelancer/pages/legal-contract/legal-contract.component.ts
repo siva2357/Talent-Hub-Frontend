@@ -146,7 +146,7 @@ export class LegalContractComponent implements OnInit {
       next: (res) => {
         alert("Contract accepted, signed, and activated successfully!");
         this.isSigning = false;
-        this.router.navigate(['/user/active-contracts']);
+        this.router.navigate(['/user/contracts']);
       },
       error: (err) => {
         console.error("Error signing contract:", err);

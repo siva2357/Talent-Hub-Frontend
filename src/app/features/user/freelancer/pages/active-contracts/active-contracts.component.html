@@ -2,8 +2,24 @@
     <div class="container py-4">
         <!-- Header Section -->
         <div class="mb-5">
-            <h2 class="text-white fw-bold mb-1">Active <span class="text-primary">Contracts</span></h2>
-            <p class="text-secondary mb-0">Manage your ongoing projects and track your performance.</p>
+            <h2 class="text-white fw-bold mb-1">Your <span class="text-primary">Contracts</span></h2>
+            <p class="text-secondary mb-0">Manage your ongoing and completed projects.</p>
+        </div>
+
+        <!-- Custom Tabs -->
+        <div class="d-flex mb-4 custom-tabs gap-3 border-bottom border-white border-opacity-10 pb-2">
+            <button 
+                class="tab-btn fw-semibold" 
+                [class.active]="currentTab === 'active'"
+                (click)="currentTab = 'active'">
+                Active Contracts
+            </button>
+            <button 
+                class="tab-btn fw-semibold" 
+                [class.active]="currentTab === 'completed'"
+                (click)="currentTab = 'completed'">
+                Completed
+            </button>
         </div>
 
         <!-- Loading State -->
@@ -15,9 +31,9 @@
             </div>
         } @else {
 
-            @if (contracts.length > 0) {
+            @if (filteredContracts.length > 0) {
                 <div class="row g-4">
-                    @for (contract of contracts; track contract.id) {
+                    @for (contract of filteredContracts; track contract.id) {
                     <div class="col-12">
                         <div class="contract-card glass p-4 rounded-4" [class.frozen]="contract.status === 'upcoming'">
 
@@ -36,8 +52,9 @@
                                         <span class="badge-type" [class]="contract.contractType === 'Fixed Price' ? 'fixed' : 'hourly'">
                                             {{ contract.contractType }}
                                         </span>
-                                        <span class="status-badge" [class]="contract.status === 'in-progress' ? 'in-progress' : 'upcoming'">
-                                            {{ contract.status === 'in-progress' ? 'In Progress' : 'Upcoming' }}
+                                        <span class="status-badge" [class]="contract.status === 'in-progress' ? 'in-progress' : (contract.status === 'completed' ? 'completed' : 'upcoming')"
+                                              [ngClass]="{'bg-success text-white border-success': contract.status === 'completed'}">
+                                            {{ contract.status === 'in-progress' ? 'In Progress' : (contract.status === 'completed' ? 'Completed' : 'Upcoming') }}
                                         </span>
                                     </div>
 
@@ -53,7 +70,7 @@
                                     </div>
 
                                      <div class="d-flex gap-2 flex-wrap">
-                                         @if (contract.status === 'in-progress') {
+                                         @if (contract.status === 'in-progress' || contract.status === 'completed') {
                                              <a [routerLink]="['/user/contract-diary']" [queryParams]="{ contractId: contract.contractId }"class="text-decoration-none">
                                                  <app-button variant="brand" size="sm">
                                                      Open Work Diary
@@ -80,14 +97,16 @@
                                             </div>
                                         </div>
 
-                                        @if (contract.status === 'in-progress') {
+                                        @if (contract.status === 'in-progress' || contract.status === 'completed') {
                                             <div class="start-info p-3 rounded-3 mb-4 started">
                                                 <div class="d-flex align-items-center gap-2 mb-1">
-                                                    <i class="bi bi-play-circle-fill"></i>
+                                                    <i class="bi" [ngClass]="contract.status === 'completed' ? 'bi-check-circle-fill text-success' : 'bi-play-circle-fill'"></i>
                                                     <span class="small fw-bold">Start Date</span>
                                                 </div>
                                                 <div class="small">{{ contract.startDate }}</div>
-                                                <div class="text-xxs mt-2 opacity-75">Contract is currently active.</div>
+                                                <div class="text-xxs mt-2 opacity-75">
+                                                    {{ contract.status === 'completed' ? 'Contract has been completed.' : 'Contract is currently active.' }}
+                                                </div>
                                             </div>
                                         } @else {
                                             <div class="start-info p-3 rounded-3 mb-4 not-started">
@@ -107,20 +126,12 @@
                     }
                 </div>
             } @else {
-                <!-- Empty State -->
-                <div class="row justify-content-center">
-                    <div class="col-lg-6">
-                        <div class="text-center py-5">
-                            <div class="empty-state glass p-5 rounded-5 border-dashed">
-                                <i class="bi bi-briefcase fs-1 text-secondary opacity-25 mb-3 d-block"></i>
-                                <h4 class="text-white fw-bold">No active contracts yet</h4>
-                                <p class="text-secondary mb-4">Accept a contract offer to see it listed here.</p>
-                                <a routerLink="/user/proposals" [queryParams]="{tab: 'offers'}">
-                                    <app-button variant="brand">View Your Offers</app-button>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                <div class="text-center py-5 glass rounded-4 border border-white border-opacity-10">
+                    <i class="bi bi-briefcase text-secondary display-1 mb-3"></i>
+                    <h4 class="text-white fw-bold">No {{ currentTab === 'active' ? 'active' : 'completed' }} contracts yet</h4>
+                    <p class="text-secondary mb-0">
+                        {{ currentTab === 'active' ? 'When you accept an offer, your active contracts will appear here.' : 'When you complete a contract, it will appear here.' }}
+                    </p>
                 </div>
             }
 
