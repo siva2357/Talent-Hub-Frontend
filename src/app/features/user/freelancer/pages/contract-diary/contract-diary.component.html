@@ -399,6 +399,7 @@
 </div>
 
       <!-- Body -->
+      <form [formGroup]="submitPhaseForm" (ngSubmit)="submitUpdate(selectedDiaryId!, selectedPhase._id)">
 
       <div class="modal-body">
 
@@ -409,7 +410,7 @@
           <app-rich-text-editor
             label="Progress Update"
             placeholder="Describe completed work, deliverables, blockers and next steps"
-            [(ngModel)]="phaseNotes[selectedPhase._id]">
+            formControlName="freelancerNote">
 
           </app-rich-text-editor>
 
@@ -424,8 +425,6 @@
             variant="dragdrop"
             [bucketKey]="BucketKey.FreelancerData"
             [uploadSection]="UploadSection.ContractFiles"
-            [(ngModel)]="tempUploadUrls[selectedPhase._id]"
-            name="submitUpload"
             (uploadSuccessDetailed)="onFileUploaded(selectedPhase._id, $event)">
 
           </app-file-upload>
@@ -493,18 +492,16 @@
         <app-button
           variant="brand"
           size="sm"
+          type="submit"
           [loading]="submitting[selectedPhase._id]"
-          [disabled]="submitting[selectedPhase._id]"
-          (click)="submitUpdate(
-            selectedDiaryId!,
-            selectedPhase._id
-          )">
+          [disabled]="submitPhaseForm.invalid || submitting[selectedPhase._id]">
 
           Submit Update
 
         </app-button>
 
       </div>
+      </form>
 
     </div>
 

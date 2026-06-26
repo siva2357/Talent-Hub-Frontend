@@ -9,11 +9,7 @@ import { ContractService } from '../../../../../core/services/contract.service';
 import { ApplicationService } from '../../../../../core/services/application.service';
 import { AppliedApplication, AppliedContractsResponse, Proposal } from '../../../../../core/model/proposal.modal';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
-interface ActiveFilter {
-  id: string;
-  label: string;
-  type: 'search' | 'date' | 'budget' | 'status';
-}
+import { ActiveFilter } from '../../../../../core/model/freelancer.model';
 
 @Component({
   selector: 'app-proposals',

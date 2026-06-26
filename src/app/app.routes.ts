@@ -21,6 +21,7 @@ import { RegistrationComponent } from './features/account/registration/registrat
 
 // User Layout & Features
 import { UserLayoutComponent } from './core/layouts/user-layout/user-layout.component';
+import { AdminLayoutComponent } from './core/layouts/admin-layout/admin-layout.component';
 
 import { UserProfileComponent } from './shared/pages/user-profile/user-profile.component';
 import { AccountSettingsComponent } from './shared/pages/account-settings/account-settings.component';
@@ -141,17 +142,22 @@ export const routes: Routes = [
       { path: 'contract-diary', component: ContractDiaryComponent },
       { path: 'finance-overview', component: FinanceOverviewComponent },
 
-      { path: 'portfolio', component: PortfolioComponent },
+      { path: 'portfolio', component: PortfolioComponent }
+    ]
+  },
 
-      // Admin Routes
-      { path: 'admin', redirectTo: 'admin/dashboard', pathMatch: 'full' },
-      { path: 'admin/dashboard', component: AdminDashboardComponent },
-      { path: 'admin/clients', component: ClientListComponent },
-      { path: 'admin/freelancers', component: FreelancerListComponent },
-      { path: 'admin/finances', component: AdminFinancialSummaryComponent },
-      { path: 'admin/reports', component: AdminReportsComponent },
-      { path: 'admin/support', component: SupportRequestsComponent },
-      { path: 'admin/blog', component: BlogPostComponent }
+  // Admin Layout Routes (With Admin Sidebar)
+  {
+    path: 'user/admin', component: AdminLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: AdminDashboardComponent },
+      { path: 'clients', component: ClientListComponent },
+      { path: 'freelancers', component: FreelancerListComponent },
+      { path: 'finances', component: AdminFinancialSummaryComponent },
+      { path: 'reports', component: AdminReportsComponent },
+      { path: 'support', component: SupportRequestsComponent },
+      { path: 'blog', component: BlogPostComponent }
     ]
   },
 

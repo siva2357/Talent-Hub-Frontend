@@ -228,19 +228,19 @@
 
       <li class="nav-item mb-3">
 
-        <div class="nav-link text-white fw-semibold" [class.text-accent]="isModuleActive(menu.activePaths)">
+        <div class="nav-link text-white fw-semibold fs-5" [class.text-accent]="isModuleActive(menu.activePaths)">
 
           {{ menu.label }}
 
         </div>
 
-        <ul class="navbar-nav ms-3 gap-1">
+        <ul class="navbar-nav ms-3 gap-2 mt-2">
 
           @for (item of menu.subItems; track item.route) {
 
           <li class="nav-item">
 
-            <a class="nav-link text-white opacity-75" style="font-size:13px" [routerLink]="item.route"
+            <a class="nav-link text-white opacity-75 fs-6" [routerLink]="item.route"
               [queryParams]="item.queryParams || {}" routerLinkActive="active-link" data-bs-dismiss="offcanvas">
 
               <i [class]="item.icon + ' me-2'"></i>
@@ -264,7 +264,7 @@
 
       <li class="nav-item mb-2">
 
-        <a class="nav-link text-white fw-semibold" [routerLink]="menu.route" routerLinkActive="active-module"
+        <a class="nav-link text-white fw-semibold fs-5" [routerLink]="menu.route" routerLinkActive="active-module"
           data-bs-dismiss="offcanvas">
 
           {{ menu.label }}
@@ -278,80 +278,6 @@
       }
 
     </ul>
-
-    <!-- Quick Actions -->
-
-    <div class="mobile-quick-actions mt-4 pt-4 border-top border-white border-opacity-10">
-
-      <!-- AI -->
-
-      <a routerLink="/user/ai" data-bs-dismiss="offcanvas"
-        class="mobile-action-card text-decoration-none mb-3 d-flex align-items-center justify-content-between">
-
-        <div class="d-flex align-items-center gap-3">
-
-          <div class="mobile-action-icon ai-bg">
-            <i class="bi bi-stars"></i>
-          </div>
-
-          <div>
-
-            <h6 class="text-white mb-1 fw-semibold">
-              AI Intelligence
-            </h6>
-
-            <p class="text-secondary mb-0 smaller">
-              Smart AI powered tools
-            </p>
-
-          </div>
-
-        </div>
-
-        <i class="bi bi-chevron-right text-secondary"></i>
-
-      </a>
-
-      <!-- Messages -->
-
-      @if (userRole !== UserRole.ADMIN) {
-
-      <a routerLink="/user/chat" data-bs-dismiss="offcanvas"
-        class="mobile-action-card text-decoration-none mb-3 d-flex align-items-center justify-content-between">
-
-        <div class="d-flex align-items-center gap-3">
-
-          <div class="mobile-action-icon chat-bg position-relative">
-
-            <i class="bi bi-chat-dots"></i>
-
-            <span class="mobile-badge">
-              3
-            </span>
-
-          </div>
-
-          <div>
-
-            <h6 class="text-white mb-1 fw-semibold">
-              Messages
-            </h6>
-
-            <p class="text-secondary mb-0 smaller">
-              Open conversations
-            </p>
-
-          </div>
-
-        </div>
-
-        <i class="bi bi-chevron-right text-secondary"></i>
-
-      </a>
-
-      }
-
-    </div>
 
   </div>
 

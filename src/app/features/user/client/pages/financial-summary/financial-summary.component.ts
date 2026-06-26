@@ -11,20 +11,7 @@ import { InputComponent } from "../../../../../shared/components/input/input.com
 import { ChipComponent } from "../../../../../shared/components/chip/chip.component";
 import { BadgeComponent } from '../../../../../shared/components/badge/badge.component';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
-
-export interface Invoice {
-  id: string;
-  title: string;
-  startDate: string;
-  endDate: string;
-  amount: number;
-  estimatedBudget?: number;
-  status: string;
-  type: string;
-  contractType?: string;
-  contractSubject?: string;
-  remainingAmount: number;
-}
+import { Invoice } from '../../../../../core/model/client.model';
 
 @Component({
   selector: 'app-financial-summary',

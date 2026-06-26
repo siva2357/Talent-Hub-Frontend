@@ -10,6 +10,7 @@ import { ProfileService } from '../../../core/services/profile.service';
 import { UploadService } from '../../../core/services/upload.service';
 import { BucketKey, UploadSection } from '../../../core/enums/upload.enum';
 import { FileUploadComponent } from '../../../shared/components/file-upload/file-upload.component';
+import { FilePreviewComponent } from '../../../shared/components/file-preview/file-preview.component';
 import { Gender } from '../../../core/enums/gender.enum';
 import { Availability } from '../../../core/enums/availability.enum';
 import { ClientType } from '../../../core/enums/client-type.enum';
@@ -29,7 +30,7 @@ import { AadhaarHelper } from '../../../core/helpers/aadhaar.helper';
 @Component({
   selector: 'app-profile-form',
   standalone: true,
-  imports: [CommonModule, RouterLink, InputComponent, ButtonComponent, ChipComponent, TitleCasePipe, FormsModule, FileUploadComponent],
+  imports: [CommonModule, RouterLink, InputComponent, ButtonComponent, ChipComponent, TitleCasePipe, FormsModule, FileUploadComponent, FilePreviewComponent],
   templateUrl: './profile-form.component.html',
   styleUrl: './profile-form.component.css',
 })
@@ -478,13 +479,14 @@ isValidAadhaar(): boolean {
         alert(`Please enter a valid ${this.currentLink.platform} URL.`);
         return;
       }
-      this.savedSocialLinks.push({ ...this.currentLink, status: 'Connected' });
+      this.savedSocialLinks = [...this.savedSocialLinks, { ...this.currentLink, status: 'Connected' }];
       this.currentLink = { platform: '', url: '' };
     }
   }
 
   removeSocialLink(index: number): void {
     this.savedSocialLinks.splice(index, 1);
+    this.savedSocialLinks = [...this.savedSocialLinks];
   }
 
   addLanguage(): void {
@@ -492,8 +494,9 @@ isValidAadhaar(): boolean {
       const index = this.savedLanguages.findIndex(l => l.language === this.currentLanguage.language);
       if (index > -1) {
         this.savedLanguages[index].proficiency = this.currentLanguage.proficiency;
+        this.savedLanguages = [...this.savedLanguages];
       } else {
-        this.savedLanguages.push({ ...this.currentLanguage });
+        this.savedLanguages = [...this.savedLanguages, { ...this.currentLanguage }];
       }
       this.currentLanguage = { language: '', proficiency: '' };
     }
@@ -501,6 +504,7 @@ isValidAadhaar(): boolean {
 
   removeLanguage(index: number): void {
     this.savedLanguages.splice(index, 1);
+    this.savedLanguages = [...this.savedLanguages];
   }
 
   openEditLangModal(index: number): void {

@@ -353,7 +353,7 @@ addPhase(
         name: this.newPhase.name,
         description: this.newPhase.description,
         deadline:
-          this.newPhase.deadline || undefined,
+          this.newPhase.deadline || '',
         amount:
           this.newPhase.amount || 0,
         clientAttachments:

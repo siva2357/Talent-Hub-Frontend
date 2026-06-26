@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
+import { AddPhaseFormDto, SubmitPhaseWorkDto } from '../DTOs/contract-diary.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class ContractDiaryService {
 
 
   /** Add a single phase to an existing diary */
-  addPhase(diaryId: string, phase: { name: string; description?: string; deadline?: string; amount?: number; clientAttachments?: any[] }): Observable<any> {
+  addPhase(diaryId: string, phase: AddPhaseFormDto): Observable<any> {
     return this.http.post(`${this.baseUrl}${API_ENDPOINTS.CONTRACT_DIARY.PHASES(diaryId)}`, phase, this.getHeaders());
   }
 
@@ -76,7 +77,7 @@ getFreelancerAllDiaries(): Observable<any> {
   }
 
   /** Submit a phase update with notes and file attachments */
-  submitPhaseUpdate(diaryId: string, phaseId: string, data: { freelancerNote?: string; attachments?: any[] }): Observable<any> {
+  submitPhaseUpdate(diaryId: string, phaseId: string, data: SubmitPhaseWorkDto): Observable<any> {
     return this.http.put(`${this.baseUrl}${API_ENDPOINTS.CONTRACT_DIARY.SUBMIT_PHASE(diaryId, phaseId)}`, data, this.getHeaders());
   }
 

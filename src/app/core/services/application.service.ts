@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { API_ENDPOINTS } from '../constants/api-endpoints.constant';
 import { AuthService } from './auth.service';
+import { SendOfferDto, ScheduleAssessmentDto, AssessmentResultDto, ScheduleInterviewDto, InterviewResultDto } from '../DTOs/application.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -64,7 +65,7 @@ export class ApplicationService {
   // Schedule Assessment
   // ========================================
 
-  scheduleAssessment(applicationId: string, data: any): Observable<any> {
+  scheduleAssessment(applicationId: string, data: ScheduleAssessmentDto): Observable<any> {
     return this.http.put(
       `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.ASSESSMENT(applicationId)}`,
       data,
@@ -76,7 +77,7 @@ export class ApplicationService {
   // Assessment Result
   // ========================================
 
-  assessmentResult(applicationId: string, data: any): Observable<any> {
+  assessmentResult(applicationId: string, data: AssessmentResultDto): Observable<any> {
     return this.http.put(
       `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.ASSESSMENT_RESULT(applicationId)}`,
       data,
@@ -88,7 +89,7 @@ export class ApplicationService {
   // Schedule Interview
   // ========================================
 
-  scheduleInterview(applicationId: string, data: any): Observable<any> {
+  scheduleInterview(applicationId: string, data: ScheduleInterviewDto): Observable<any> {
     return this.http.put(
       `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.INTERVIEW(applicationId)}`,
       data,
@@ -100,7 +101,7 @@ export class ApplicationService {
   // Interview Result
   // ========================================
 
-  interviewResult(applicationId: string, data: any): Observable<any> {
+  interviewResult(applicationId: string, data: InterviewResultDto): Observable<any> {
     return this.http.put(
       `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.INTERVIEW_RESULT(applicationId)}`,
       data,
@@ -136,7 +137,7 @@ export class ApplicationService {
   // Send Offer (Client)
   // ========================================
 
-  sendOffer(applicationId: string, data: { scopeOfWork: string, additionalTerms: string }): Observable<any> {
+  sendOffer(applicationId: string, data: SendOfferDto): Observable<any> {
     return this.http.put(
       `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.SEND_OFFER(applicationId)}`,
       data,

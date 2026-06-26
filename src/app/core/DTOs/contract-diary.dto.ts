@@ -14,3 +14,12 @@ export interface AddPhaseFormDto {
   clientAttachments: Attachment[];
 
 }
+
+export interface SubmitPhaseWorkDto {
+  freelancerNote: string;
+  attachments: Attachment[];
+}
+
+export interface SubmitFeedbackDto {
+  clientFeedback: string;
+}

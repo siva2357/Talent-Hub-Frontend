@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { PortfolioService } from '../../../../../core/services/portfolio.service';
 import { Portfolio, PortfolioMedia } from '../../../../../core/model/portfolio.model';
@@ -22,6 +22,7 @@ import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum'
     ButtonComponent,
     InputComponent,
     FilePreviewComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: './portfolio.component.html',
   styleUrl: './portfolio.component.css',
@@ -30,6 +31,8 @@ export class PortfolioComponent implements OnInit {
   private portfolioService = inject(PortfolioService);
   private toastr = inject(ToastrService);
 
+  private fb = inject(FormBuilder);
+
   BucketKey = BucketKey;
   UploadSection = UploadSection;
   isSaving = false;
@@ -37,19 +40,27 @@ export class PortfolioComponent implements OnInit {
   isFormOpen = false;
 
   // Form Fields
+  portfolioForm!: FormGroup;
   isEditing = false;
   editId = '';
-  title = '';
-  description = '';
-  role = '';
-  projectType = '';
-  techInput = ''; // Comma-separated list e.g. "Angular, TypeScript, CSS"
-  projectUrl = '';
   mediaItems: PortfolioMedia[] = [];
   tempUploadUrl: string | null = null;
+  showUploader = false;
 
   ngOnInit(): void {
+    this.initForm();
     this.loadPortfolio();
+  }
+
+  initForm(): void {
+    this.portfolioForm = this.fb.group({
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      role: ['', Validators.required],
+      projectType: ['', Validators.required],
+      techInput: ['', Validators.required], // Comma-separated list e.g. "Angular, TypeScript, CSS"
+      projectUrl: ['']
+    });
   }
 
   loadPortfolio(): void {
@@ -76,33 +87,27 @@ export class PortfolioComponent implements OnInit {
     this.isFormOpen = true;
   }
 
-  showUploader = false;
-
   onSubmit(): void {
-    if (
-      !this.title.trim() ||
-      !this.description.trim() ||
-      !this.role.trim() ||
-      !this.projectType.trim() ||
-      !this.techInput.trim()
-    ) {
+    if (this.portfolioForm.invalid) {
+      this.portfolioForm.markAllAsTouched();
       this.toastr.warning('Please fill in all required fields.', 'My Portfolio');
       return;
     }
 
-    const techArray = this.techInput
+    const formValues = this.portfolioForm.value;
+    const techArray = formValues.techInput
       .split(',')
-      .map((t) => t.trim())
-      .filter((t) => t.length > 0);
+      .map((t: string) => t.trim())
+      .filter((t: string) => t.length > 0);
 
     const payload = {
-      title: this.title,
-      description: this.description,
-      role: this.role,
-      projectType: this.projectType,
+      title: formValues.title,
+      description: formValues.description,
+      role: formValues.role,
+      projectType: formValues.projectType,
       tags: techArray,
       media: this.mediaItems,
-      projectUrl: this.projectUrl || undefined,
+      projectUrl: formValues.projectUrl || undefined,
     };
 
     if (this.isEditing) {
@@ -150,20 +155,19 @@ export class PortfolioComponent implements OnInit {
 
   editItem(item: Portfolio): void {
     this.isEditing = true;
-
     this.editId = item._id || '';
 
-    this.title = item.title;
-    this.description = item.description;
-    this.role = item.role;
-    this.projectType = item.projectType || '';
-    this.techInput = item.tags.join(', ');
-    this.projectUrl = item.projectUrl || '';
+    this.portfolioForm.patchValue({
+      title: item.title,
+      description: item.description,
+      role: item.role,
+      projectType: item.projectType || '',
+      techInput: item.tags.join(', '),
+      projectUrl: item.projectUrl || ''
+    });
 
     this.mediaItems = [...item.media];
-
     this.showUploader = false;
-
     this.isFormOpen = true;
   }
 
@@ -211,17 +215,19 @@ export class PortfolioComponent implements OnInit {
   resetForm(): void {
     this.isEditing = false;
     this.editId = '';
-    this.title = '';
-    this.description = '';
-    this.role = '';
-    this.projectType = '';
-
-    this.techInput = '';
-
-    this.projectUrl = '';
+    
+    if (this.portfolioForm) {
+      this.portfolioForm.reset({
+        title: '',
+        description: '',
+        role: '',
+        projectType: '',
+        techInput: '',
+        projectUrl: ''
+      });
+    }
 
     this.mediaItems = [];
-
     this.showUploader = false;
   }
 

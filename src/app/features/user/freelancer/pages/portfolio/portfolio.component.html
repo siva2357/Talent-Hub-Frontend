@@ -128,19 +128,19 @@
 
         <h4 class="text-white fw-bold mb-4">{{ isEditing ? 'Edit Portfolio Project' : 'Add Portfolio Project' }}</h4>
 
-        <form (ngSubmit)="onSubmit()">
+        <form [formGroup]="portfolioForm" (ngSubmit)="onSubmit()">
           <div class="row g-3">
             <!-- Project Title -->
             <div class="col-12 col-md-6">
               <app-input type="text" label="Project Title" placeholder="e.g., Real-time Analytics Dashboard"
-                name="title" [(ngModel)]="title" [required]="true">
+                formControlName="title" [required]="true">
               </app-input>
             </div>
 
             <!-- Project Category / Type -->
             <div class="col-12 col-md-6">
               <app-input type="text" label="Project Category / Type"
-                placeholder="e.g., Web Application, Mobile App, UI Design" name="projectType" [(ngModel)]="projectType"
+                placeholder="e.g., Web Application, Mobile App, UI Design" formControlName="projectType"
                 [required]="true">
               </app-input>
             </div>
@@ -148,14 +148,14 @@
             <!-- Role / Contribution -->
             <div class="col-12 col-md-6">
               <app-input type="text" label="Your Role / Contribution"
-                placeholder="e.g., Frontend Lead, Fullstack Architect" name="role" [(ngModel)]="role" [required]="true">
+                placeholder="e.g., Frontend Lead, Fullstack Architect" formControlName="role" [required]="true">
               </app-input>
             </div>
 
             <!-- Tech Stack (Comma Separated) -->
             <div class="col-12 col-md-6">
               <app-input type="text" label="Technologies Used (Comma-separated)"
-                placeholder="e.g., Angular, TypeScript, Bootstrap 5" name="techInput" [(ngModel)]="techInput"
+                placeholder="e.g., Angular, TypeScript, Bootstrap 5" formControlName="techInput"
                 [required]="true">
               </app-input>
             </div>
@@ -163,7 +163,7 @@
             <!-- Project Link / URL -->
             <div class="col-12">
               <app-input type="text" label="Project URL / GitHub Link"
-                placeholder="e.g., https://github.com/myusername/project" name="projectUrl" [(ngModel)]="projectUrl">
+                placeholder="e.g., https://github.com/myusername/project" formControlName="projectUrl">
               </app-input>
             </div>
 
@@ -207,8 +207,8 @@
               @if (!isEditing || showUploader) {
 
               <app-file-upload label="Project Showcase Media" variant="dragdrop" [bucketKey]="BucketKey.FreelancerData"
-                [uploadSection]="UploadSection.Portfolio" accept="image/*,video/*" [(ngModel)]="tempUploadUrl"
-                name="tempUpload" (uploadSuccess)="onUploadSuccess($event)">
+                [uploadSection]="UploadSection.Portfolio" accept="image/*,video/*"
+                (uploadSuccess)="onUploadSuccess($event)">
               </app-file-upload>
 
               }
@@ -219,7 +219,7 @@
             <div class="col-12">
               <label class="text-secondary small text-uppercase tracking-wider mb-2">Project Description *</label>
               <app-rich-text-editor placeholder="Describe the scope, challenges solved, and deliverables..."
-                name="description" [(ngModel)]="description" [required]="true"></app-rich-text-editor>
+                formControlName="description" [required]="true"></app-rich-text-editor>
             </div>
 
             <!-- Buttons -->
@@ -228,7 +228,7 @@
                 (click)="closeFormModal()">
                 Cancel
               </app-button>
-              <app-button type="submit" variant="primary" customClass="px-5 py-2 rounded-3 text-white">
+              <app-button type="submit" variant="primary" customClass="px-5 py-2 rounded-3 text-white" [disabled]="portfolioForm.invalid">
                 <i class="bi bi-cloud-upload me-2"></i> {{ isEditing ? 'Save Changes' : 'Add Project' }}
               </app-button>
             </div>

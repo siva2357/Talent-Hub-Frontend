@@ -1,0 +1,64 @@
+<aside class="admin-sidebar" [class.collapsed]="isCollapsed">
+  <div class="sidebar-header">
+    <div class="logo-container">
+      <img src="assets/logo/website-logo.png" alt="Website Logo" class="sidebar-logo" *ngIf="!isCollapsed">
+    </div>
+    <button class="toggle-btn" (click)="toggleSidebar.emit()" aria-label="Toggle Sidebar">
+      <i class="bi bi-list" style="font-size: 1.5rem;"></i>
+    </button>
+  </div>
+
+  <div class="user-profile" *ngIf="!isCollapsed">
+    <div class="avatar-container">
+      <img *ngIf="profilePhotoUrl()" [src]="profilePhotoUrl()" alt="Admin Avatar" class="avatar">
+      <div *ngIf="!profilePhotoUrl()" class="avatar-initials">{{ userInitials }}</div>
+    </div>
+    <div class="user-info">
+      <h6 class="user-name">{{ displayName }}</h6>
+      <span class="user-role">Administrator</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <ng-container *ngFor="let item of adminMenuItems">
+        <!-- Main items without sub-items -->
+        <li class="nav-item" *ngIf="!item.subItems">
+          <a class="nav-link" [routerLink]="item.route" routerLinkActive="active"
+            [routerLinkActiveOptions]="{exact: true}">
+            <i class="bi nav-icon" [ngClass]="item.icon || 'bi-speedometer2'"></i>
+            <span class="nav-label" *ngIf="!isCollapsed">{{ item.label }}</span>
+            <span class="tooltip-label" *ngIf="isCollapsed">{{ item.label }}</span>
+          </a>
+        </li>
+
+        <!-- Items with sub-items -->
+        <li class="nav-item has-submenu" *ngIf="item.subItems">
+          <div class="nav-link submenu-header" [class.active-parent]="isModuleActive(item.activePaths)">
+            <i class="bi nav-icon" [ngClass]="item.icon || 'bi-folder'"></i>
+            <span class="nav-label" *ngIf="!isCollapsed">{{ item.label }}</span>
+          </div>
+
+          <ul class="submenu" [class.collapsed-submenu]="isCollapsed">
+            <!-- Header for the tooltip menu -->
+            <li class="submenu-title" *ngIf="isCollapsed">{{ item.label }}</li>
+            <li class="sub-item" *ngFor="let sub of item.subItems">
+              <a class="sub-link" [routerLink]="sub.route" routerLinkActive="active">
+                <i class="bi nav-icon" [ngClass]="sub.icon || 'bi-dash'"></i>
+                <span class="sub-label">{{ sub.label }}</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ng-container>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="javascript:void(0)" class="nav-link text-danger" (click)="logout()">
+      <i class="bi bi-box-arrow-left nav-icon"></i>
+      <span class="nav-label" *ngIf="!isCollapsed">Logout</span>
+      <span class="tooltip-label" *ngIf="isCollapsed">Logout</span>
+    </a>
+  </div>
+</aside>

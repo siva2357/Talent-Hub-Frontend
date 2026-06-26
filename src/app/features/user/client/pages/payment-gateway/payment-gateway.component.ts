@@ -1,13 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FinanceService } from '../../../../../core/services/finance.service';
 
 @Component({
   selector: 'app-payment-gateway',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './payment-gateway.component.html',
   styleUrl: './payment-gateway.component.css'
 })
@@ -20,11 +20,15 @@ export class PaymentGatewayComponent implements OnInit {
   paymentState: 'initial' | 'processing' | 'success' | 'failed' = 'initial';
 
   // Payment configuration
-  depositAmount = 1000;
-  depositMethod = 'card';
+  paymentForm!: FormGroup;
+  private fb = inject(FormBuilder);
   errorMessage = '';
   contractId = '';
   contractTitle = '';
+
+  get depositAmountValue(): number {
+    return this.paymentForm?.value?.depositAmount || 0;
+  }
 
   // Order Details
   orderId = '';
@@ -37,13 +41,14 @@ export class PaymentGatewayComponent implements OnInit {
   paymentDate = '';
 
   ngOnInit() {
+    this.initForm();
     this.loadRazorpayScript();
     
     // Read optional amount query parameter
     this.route.queryParams.subscribe(params => {
       const amountParam = parseFloat(params['amount']);
       if (amountParam && amountParam > 0) {
-        this.depositAmount = amountParam;
+        this.paymentForm.patchValue({ depositAmount: amountParam });
       }
       if (params['contractId']) {
         this.contractId = params['contractId'];
@@ -51,6 +56,13 @@ export class PaymentGatewayComponent implements OnInit {
       if (params['contractTitle']) {
         this.contractTitle = params['contractTitle'];
       }
+    });
+  }
+
+  initForm(): void {
+    this.paymentForm = this.fb.group({
+      depositAmount: [1000, [Validators.required, Validators.min(1)]],
+      depositMethod: ['card', Validators.required]
     });
   }
 
@@ -69,16 +81,18 @@ export class PaymentGatewayComponent implements OnInit {
   }
 
   initiatePayment() {
-    if (this.depositAmount <= 0) {
+    if (this.paymentForm.invalid) {
       this.errorMessage = 'Please enter a valid deposit amount greater than zero.';
       return;
     }
+    
+    const depositAmount = this.paymentForm.value.depositAmount;
     
     this.paymentState = 'processing';
     this.errorMessage = '';
 
     // Calculate total amount to charge: includes 10% platform fee if contractId is set
-    const totalAmount = this.contractId ? this.depositAmount * 1.10 : this.depositAmount;
+    const totalAmount = this.contractId ? depositAmount * 1.10 : depositAmount;
 
     // Step 1: Create Order on Backend
     this.financeService.createRazorpayOrder(totalAmount).subscribe({
@@ -207,13 +221,16 @@ export class PaymentGatewayComponent implements OnInit {
       } catch (e) {}
     }
 
+    const depositAmount = this.paymentForm?.value?.depositAmount || 0;
+    const depositMethod = this.paymentForm?.value?.depositMethod || 'card';
+
     const description = this.contractId
       ? `Contract Funding - ID: ${this.contractId} (${this.contractTitle})`
       : 'Wallet Deposit / Account Funding';
 
-    const baseAmountStr = this.contractId ? `Base Amount       : ₹${this.depositAmount.toFixed(2)}` : `Amount            : ₹${this.depositAmount.toFixed(2)}`;
-    const platformFeeStr = this.contractId ? `Platform Fee (10%): ₹${(this.depositAmount * 0.10).toFixed(2)}` : 'Processing Fee    : ₹0.00';
-    const totalAmount = this.contractId ? this.depositAmount * 1.10 : this.depositAmount;
+    const baseAmountStr = this.contractId ? `Base Amount       : ₹${depositAmount.toFixed(2)}` : `Amount            : ₹${depositAmount.toFixed(2)}`;
+    const platformFeeStr = this.contractId ? `Platform Fee (10%): ₹${(depositAmount * 0.10).toFixed(2)}` : 'Processing Fee    : ₹0.00';
+    const totalAmount = this.contractId ? depositAmount * 1.10 : depositAmount;
 
     const receiptContent = `==================================================
 TALENT HUB OFFICIAL TRANSACTION INVOICE
@@ -223,7 +240,7 @@ Order Reference   : ${this.orderId}
 Transaction ID    : ${this.paymentId}
 Payment Date      : ${this.paymentDate}
 Payment Gateway   : Razorpay Secure${this.isSandbox ? ' (SANDBOX)' : ''}
-Payment Method    : ${this.depositMethod.toUpperCase()}
+Payment Method    : ${depositMethod.toUpperCase()}
 
 CLIENT INFORMATION:
 ------------------

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
@@ -16,7 +16,7 @@ import { RichTextEditorComponent } from '../../../../../shared/components/rich-t
 @Component({
   selector: 'app-contract-diary',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule,RichTextEditorComponent, ButtonComponent, FileUploadComponent, FilePreviewComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule,RichTextEditorComponent, ButtonComponent, FileUploadComponent, FilePreviewComponent],
   templateUrl: './contract-diary.component.html',
   styleUrl: './contract-diary.component.css'
 })
@@ -24,12 +24,13 @@ export class ContractDiaryComponent implements OnInit {
   private diaryService = inject(ContractDiaryService);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
+  private fb = inject(FormBuilder);
 
   isLoading = true;
 diary: Diary | null = null;
 contractId = '';
   // Submission state per phase
-  phaseNotes: Record<string, string> = {};
+  submitPhaseForm!: FormGroup;
   submitting: Record<string, boolean> = {};
   showSubmitModal = false;
 
@@ -63,7 +64,7 @@ getRevisionNumber(
 
   this.selectedPhase = phase;
 
-  this.phaseNotes[phase._id] ??= '';
+  this.submitPhaseForm.reset({ freelancerNote: '' });
 
   this.uploadedFiles[phase._id] ??= [];
 
@@ -131,6 +132,10 @@ ngOnInit(): void {
   if (this.contractId) {
     this.fetchDiaries();
   }
+
+  this.submitPhaseForm = this.fb.group({
+    freelancerNote: ['', Validators.required]
+  });
 
 }
 
@@ -249,13 +254,13 @@ submitUpdate(
   phaseId: string
 ): void {
 
-  const note =
-    this.phaseNotes[phaseId]?.trim() || '';
+  const note = this.submitPhaseForm.value.freelancerNote?.trim() || '';
 
   const files =
     this.uploadedFiles[phaseId] || [];
 
-  if (!note && files.length === 0) {
+  if (this.submitPhaseForm.invalid && files.length === 0) {
+    this.submitPhaseForm.markAllAsTouched();
     return;
   }
 
@@ -273,7 +278,7 @@ submitUpdate(
 
     next: () => {
 
-      this.phaseNotes[phaseId] = '';
+      this.submitPhaseForm.reset({ freelancerNote: '' });
       this.uploadedFiles[phaseId] = [];
       this.tempUploadUrls[phaseId] = null;
 

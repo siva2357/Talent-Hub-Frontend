@@ -339,32 +339,32 @@
 
                     <!-- Assessment Form -->
                     @if(nextAction === 'schedule-assessment'){
-                    <div
+                    <form [formGroup]="assessmentFormGroup"
                         class="d-flex flex-column gap-3 p-3 rounded bg-secondary bg-opacity-10 border border-secondary border-opacity-50">
                         <app-input type="text" label="Assessment Title"
-                            placeholder="e.g. Frontend Architecture Assessment" [(ngModel)]="assessmentForm.title">
+                            placeholder="e.g. Frontend Architecture Assessment" formControlName="title">
                         </app-input>
                         <app-input type="textarea" label="Assessment Description"
-                            placeholder="Enter assessment details..." [(ngModel)]="assessmentForm.description">
+                            placeholder="Enter assessment details..." formControlName="description">
                         </app-input>
-                        <app-input type="date" label="Assessment Deadline / Date" [(ngModel)]="assessmentForm.date">
+                        <app-input type="date" label="Assessment Deadline / Date" formControlName="date">
                         </app-input>
-                    </div>
+                    </form>
                     }
 
                     <!-- Interview Form -->
                     @if(nextAction === 'schedule-interview'){
-                    <div
+                    <form [formGroup]="interviewFormGroup"
                         class="d-flex flex-column gap-3 p-3 rounded bg-info bg-opacity-10 border border-info border-opacity-25">
                         <app-input type="text" label="Interview Title" placeholder="e.g. Technical Interview Round 1"
-                            [(ngModel)]="interviewForm.title">
+                            formControlName="title">
                         </app-input>
                         <app-input type="textarea" label="Interview Details (Link / Instructions)"
-                            placeholder="Enter meeting link or location..." [(ngModel)]="interviewForm.description">
+                            placeholder="Enter meeting link or location..." formControlName="description">
                         </app-input>
-                        <app-input type="date" label="Interview Date & Time" [(ngModel)]="interviewForm.date">
+                        <app-input type="date" label="Interview Date & Time" formControlName="date">
                         </app-input>
-                    </div>
+                    </form>
                     }
                     }
 
@@ -378,7 +378,7 @@
                     </app-button>
                     @if (getAvailableActions().length > 0) {
                     <app-button variant="primary" customClass="rounded-3 px-4 shadow-glow-primary"
-                        [disabled]="isSubmitting || !nextAction" (click)="submitRecruitmentAction()">
+                        [disabled]="isSubmitting || !nextAction || (nextAction === 'schedule-assessment' && assessmentFormGroup.invalid) || (nextAction === 'schedule-interview' && interviewFormGroup.invalid)" (click)="submitRecruitmentAction()">
                         @if(isSubmitting){
                         <span class="spinner-border spinner-border-sm me-2"></span>
                         }

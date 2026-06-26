@@ -4,24 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { DashboardService } from '../../../../../core/services/dashboard.service';
 
-interface DashboardStat {
-  label: string;
-  value: string | number;
-  trend: string;
-  trendType: 'up' | 'down' | 'neutral';
-  icon: string;
-  color: 'blue' | 'green' | 'purple' | 'gold';
-  statusText?: string;
-}
-
-interface RecentActivity {
-  id: number;
-  title: string;
-  description: string;
-  time: string;
-  icon: string;
-  status: 'completed' | 'pending' | 'urgent';
-}
+import { DashboardStat, RecentActivity } from '../../../../../core/model/freelancer.model';
 
 @Component({
   selector: 'app-freelancer-dashboard',

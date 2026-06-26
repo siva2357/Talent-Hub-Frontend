@@ -8,25 +8,7 @@ import { ButtonComponent } from '../../../../../shared/components/button/button.
 import { ChipComponent } from '../../../../../shared/components/chip/chip.component';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
-export interface Milestone {
-  id: string;
-  title: string;
-  date: string;
-  amount: number;
-  status: string;
-  invoiceId?: string;
-}
-
-export interface ContractTransactions {
-  diaryId: string;
-  contractId: string;
-  title: string;
-  freelancer: string;
-  type: string;
-  budget: number;
-  totalTransacted: number;
-  milestones: Milestone[];
-}
+import { Milestone, ContractTransactions } from '../../../../../core/model/client.model';
 
 @Component({
   selector: 'app-transaction-history',

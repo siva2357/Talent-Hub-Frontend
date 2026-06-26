@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ContractService } from '../../../../../core/services/contract.service';
 import { ApplicationService } from '../../../../../core/services/application.service';
@@ -16,7 +16,7 @@ import { ChipComponent } from "../../../../../shared/components/chip/chip.compon
 @Component({
   selector: 'app-contract-proposals',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, InputComponent, ButtonComponent, ChipComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, InputComponent, ButtonComponent, ChipComponent],
   templateUrl: './contract-proposals.component.html',
   styleUrl: './contract-proposals.component.css'
 })
@@ -28,8 +28,8 @@ export class ContractProposalsComponent implements OnInit {
   isSubmitting = false;
   selectedProposal: any = null;
   nextAction: string = '';
-  assessmentForm = { title: '', description: '', date: '' };
-  interviewForm = { title: '', description: '', date: '' };
+  assessmentFormGroup!: FormGroup;
+  interviewFormGroup!: FormGroup;
   rejectionReason = '';
 
 selectedAvailability = ''; 
@@ -40,13 +40,25 @@ selectedLanguages: string[] = [];
 
 applicants: any[] = [];
 
-  constructor(private contractService: ContractService, private applicationService: ApplicationService,  private route: ActivatedRoute) { }
+  constructor(private contractService: ContractService, private applicationService: ApplicationService,  private route: ActivatedRoute, private fb: FormBuilder) { }
 
 ngOnInit(): void {
 
   this.route.queryParamMap.subscribe(params => {
     this.contractId = params.get('contractId');
     this.getApplicants();
+  });
+
+  this.assessmentFormGroup = this.fb.group({
+    title: ['', Validators.required],
+    description: ['', Validators.required],
+    date: ['', Validators.required]
+  });
+
+  this.interviewFormGroup = this.fb.group({
+    title: ['', Validators.required],
+    description: ['', Validators.required],
+    date: ['', Validators.required]
   });
 
 }
@@ -375,8 +387,8 @@ clearFilters(): void {
   openRecruitmentModal(proposal: any): void {
     this.selectedProposal = proposal;
     this.nextAction = '';
-    this.assessmentForm = { title: '', description: '', date: '' };
-    this.interviewForm = { title: '', description: '', date: '' };
+    this.assessmentFormGroup.reset();
+    this.interviewFormGroup.reset();
     const actions = this.getAvailableActions();
     if (actions.length > 0) {
       this.nextAction = actions[0].value;
@@ -425,7 +437,12 @@ clearFilters(): void {
         break;
 
       case 'schedule-assessment':
-        this.applicationService.scheduleAssessment( id,this.assessmentForm).subscribe({
+        if (this.assessmentFormGroup.invalid) {
+          this.assessmentFormGroup.markAllAsTouched();
+          this.isSubmitting = false;
+          return;
+        }
+        this.applicationService.scheduleAssessment( id,this.assessmentFormGroup.value).subscribe({
             next: () => {
               this.handleSuccess();
             },
@@ -459,20 +476,24 @@ break;
         break;
 
       case 'schedule-interview':
-        this.applicationService.scheduleInterview( id, this.interviewForm ).subscribe({
+        if (this.interviewFormGroup.invalid) {
+          this.interviewFormGroup.markAllAsTouched();
+          this.isSubmitting = false;
+          return;
+        }
+        this.applicationService.scheduleInterview( id,this.interviewFormGroup.value).subscribe({
             next: () => {
               this.handleSuccess();
             },
             error: (err) => {
               this.handleError(err);
             }
-
           });
 
         break;
 
       case 'complete-interview':
-        this.applicationService.interviewResult( id,{ feedback: ''}).subscribe({
+        this.applicationService.interviewResult( id,{ result: 'passed'}).subscribe({
             next: () => {
               this.handleSuccess();
             },

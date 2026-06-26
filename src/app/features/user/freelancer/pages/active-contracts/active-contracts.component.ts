@@ -4,25 +4,7 @@ import { RouterLink } from '@angular/router';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { ApplicationService } from '../../../../../core/services/application.service';
 
-interface ActiveContract {
-  id: string; // applicationId
-  contractId: string; // actual contractId
-
-  contractTitle: string;
-  client: string;
-  clientInitials: string;
-
-  budget: string;
-  contractType: 'Fixed Price' | 'Hourly';
-
-  techStack: string[];
-
-  startDate: string;
-
-  status: 'in-progress' | 'upcoming' | 'completed';
-
-  description: string;
-}
+import { ActiveContract } from '../../../../../core/model/freelancer.model';
 
 @Component({
   selector: 'app-active-contracts',

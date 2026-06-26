@@ -23,7 +23,7 @@
             </div>
             }
 
-            <div class="position-relative z-3">
+            <form class="position-relative z-3" [formGroup]="paymentForm">
                 <!-- Amount Input -->
                 <div class="mb-4">
                     <label class="text-primary text-uppercase fw-bold ls-1 mb-2 d-block" style="font-size: 10px; letter-spacing: 1px;">{{ contractId ? 'Funding Amount (INR)' : 'Deposit Amount (INR)' }}</label>
@@ -32,7 +32,7 @@
                         <input type="number"
                             class="form-control bg-black bg-opacity-40 border border-white border-opacity-10 text-white rounded-3 py-3 ps-5 fs-4 fw-bold shadow-none custom-input"
                             [disabled]="!!contractId"
-                            [(ngModel)]="depositAmount">
+                            formControlName="depositAmount">
                     </div>
                 </div>
 
@@ -57,11 +57,11 @@
                     @if (contractId) {
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-secondary small">Base Funding Amount:</span>
-                        <span class="text-white fw-bold small">₹{{ depositAmount | number:'1.2-2' }}</span>
+                        <span class="text-white fw-bold small">₹{{ depositAmountValue | number:'1.2-2' }}</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-secondary small">Platform Fee (10%):</span>
-                        <span class="text-warning fw-bold small">₹{{ depositAmount * 0.10 | number:'1.2-2' }}</span>
+                        <span class="text-warning fw-bold small">₹{{ depositAmountValue * 0.10 | number:'1.2-2' }}</span>
                     </div>
                     } @else {
                     <div class="d-flex justify-content-between mb-2">
@@ -71,13 +71,13 @@
                     }
                     <div class="d-flex justify-content-between border-top border-white border-opacity-10 pt-2">
                         <span class="text-white fw-bold">Total Amount to Charge:</span>
-                        <span class="text-white fw-extrabold">₹{{ (contractId ? depositAmount * 1.10 : depositAmount) | number:'1.2-2' }}</span>
+                        <span class="text-white fw-extrabold">₹{{ (contractId ? depositAmountValue * 1.10 : depositAmountValue) | number:'1.2-2' }}</span>
                     </div>
                 </div>
 
                 <!-- Action buttons -->
                 <button type="button" class="btn btn-primary rounded-3 w-100 py-3 d-flex align-items-center justify-content-center gap-2 shadow-primary fw-bold transition-all mb-2"
-                    [disabled]="depositAmount <= 0" (click)="initiatePayment()">
+                    [disabled]="paymentForm.invalid" (click)="initiatePayment()">
                     <i class="bi bi-credit-card-2-front-fill"></i>
                     <span>Confirm & Pay via Razorpay</span>
                 </button>
@@ -86,7 +86,7 @@
                     (click)="goBack()">
                     Cancel Transaction
                 </button>
-            </div>
+            </form>
         </div>
         }
 
@@ -155,16 +155,16 @@
                     @if (contractId) {
                     <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
                         <span class="text-secondary small">Base Amount</span>
-                        <span class="text-white fw-bold small">₹{{ depositAmount | number:'1.2-2' }}</span>
+                        <span class="text-white fw-bold small">₹{{ paymentForm.value.depositAmount | number:'1.2-2' }}</span>
                     </div>
                     <div class="receipt-item d-flex justify-content-between mb-3 border-bottom border-white border-opacity-5 pb-2">
                         <span class="text-secondary small">Platform Fee (10%)</span>
-                        <span class="text-warning fw-bold small">₹{{ depositAmount * 0.10 | number:'1.2-2' }}</span>
+                        <span class="text-warning fw-bold small">₹{{ paymentForm.value.depositAmount * 0.10 | number:'1.2-2' }}</span>
                     </div>
                     }
                     <div class="receipt-item d-flex justify-content-between pt-1">
                         <span class="text-white fw-bold">{{ contractId ? 'Total Amount Charged' : 'Amount Credited' }}</span>
-                        <span class="text-success fw-extrabold fs-5">₹{{ (contractId ? depositAmount * 1.10 : depositAmount) | number:'1.2-2' }}</span>
+                        <span class="text-success fw-extrabold fs-5">₹{{ (contractId ? paymentForm.value.depositAmount * 1.10 : paymentForm.value.depositAmount) | number:'1.2-2' }}</span>
                     </div>
                 </div>
 

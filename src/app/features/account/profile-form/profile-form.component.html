@@ -252,9 +252,10 @@
                       <img src="https://flagcdn.com/w20/in.png" width="20" alt="IN">
                       <span class="text-sm ms-2">+91</span>
                     </div>
-                    <div class="flex-grow-1">
-                      <app-input placeholder="Enter Phone" icon="bi-phone" [(ngModel)]="phoneNumber"
-                        [disabled]="isPhoneVerified"></app-input>
+                    <div class="flex-grow-1 position-relative">
+                      <i class="bi bi-phone position-absolute top-50 translate-middle-y text-white-50" style="left: 16px;"></i>
+                      <input type="text" class="form-control glass text-white w-100" style="padding-left: 42px; height: 48px;" 
+                        placeholder="Enter Phone" [(ngModel)]="phoneNumber" [disabled]="isPhoneVerified">
                     </div>
 
                     @if (isPhoneVerified) {
@@ -281,9 +282,10 @@
                   @if (!isPhoneVerified && showPhoneOtpInput) {
                   <div class="phone-otp-verification mt-3 mb-3">
                     <div class="d-flex align-items-center gap-2">
-                      <div class="flex-grow-1">
-                        <app-input placeholder="Enter 6-digit SMS OTP" icon="bi-shield-lock"
-                          [(ngModel)]="phoneOtpCode"></app-input>
+                      <div class="flex-grow-1 position-relative">
+                        <i class="bi bi-shield-lock position-absolute top-50 translate-middle-y text-white-50" style="left: 16px;"></i>
+                        <input type="text" class="form-control glass text-white w-100" style="padding-left: 42px; height: 48px;" 
+                          placeholder="Enter 6-digit SMS OTP" [(ngModel)]="phoneOtpCode">
                       </div>
                       <div class="flex-shrink-0 d-flex gap-2">
                         <app-button variant="primary" size="md" (click)="verifyPhoneOTP()"
@@ -428,35 +430,49 @@
 
 
 <div class="col-md-6">
-  <app-file-upload
-    label="PAN Card"
-    variant="dragdrop"
-    [replaceExisting]="true"
-    [bucketKey]="userRole === 'client'
-      ? BucketKey.ClientData
-      : BucketKey.FreelancerData"
-    [uploadSection]="UploadSection.PanCard"
-    accept=".pdf,.jpg,.jpeg,.png"
-    [maxSizeMb]="5"
-    (uploadSuccess)="bankDetails.panCardUrl = $event">
-  </app-file-upload>
+  @if (!bankDetails.panCardUrl) {
+    <app-file-upload
+      label="PAN Card"
+      variant="dragdrop"
+      [replaceExisting]="true"
+      [bucketKey]="userRole === 'client' ? BucketKey.ClientData : BucketKey.FreelancerData"
+      [uploadSection]="UploadSection.PanCard"
+      accept=".pdf,.jpg,.jpeg,.png"
+      [maxSizeMb]="5"
+      (uploadSuccess)="bankDetails.panCardUrl = $event">
+    </app-file-upload>
+  } @else {
+    <label class="form-label text-white opacity-80">PAN Card</label>
+    <app-file-preview 
+      [url]="bankDetails.panCardUrl" 
+      fileName="PAN Card Document"
+      (remove)="bankDetails.panCardUrl = ''">
+    </app-file-preview>
+  }
 </div>
 
 
 
 <div class="col-md-6">
-  <app-file-upload
-    label="Aadhaar Card"
-    variant="dragdrop"
-   [replaceExisting]="true"
-    [bucketKey]="userRole === 'client'
-      ? BucketKey.ClientData
-      : BucketKey.FreelancerData"
-    [uploadSection]="UploadSection.AadhaarCard"
-    accept=".pdf,.jpg,.jpeg,.png"
-    [maxSizeMb]="5"
-    (uploadSuccess)="bankDetails.aadhaarCardUrl = $event">
-  </app-file-upload>
+  @if (!bankDetails.aadhaarCardUrl) {
+    <app-file-upload
+      label="Aadhaar Card"
+      variant="dragdrop"
+      [replaceExisting]="true"
+      [bucketKey]="userRole === 'client' ? BucketKey.ClientData : BucketKey.FreelancerData"
+      [uploadSection]="UploadSection.AadhaarCard"
+      accept=".pdf,.jpg,.jpeg,.png"
+      [maxSizeMb]="5"
+      (uploadSuccess)="bankDetails.aadhaarCardUrl = $event">
+    </app-file-upload>
+  } @else {
+    <label class="form-label text-white opacity-80">Aadhaar Card</label>
+    <app-file-preview 
+      [url]="bankDetails.aadhaarCardUrl" 
+      fileName="Aadhaar Card Document"
+      (remove)="bankDetails.aadhaarCardUrl = ''">
+    </app-file-preview>
+  }
 </div>
 
                 </div>
@@ -588,11 +604,18 @@
             </div>
           </section>
     </div>
+    
+    @if (submitError) {
+      <div class="alert alert-danger mt-4 d-flex align-items-center gap-2 border-danger bg-danger bg-opacity-10 text-danger" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <div>{{ submitError }}</div>
+      </div>
+    }
 
     <!-- FOOTER -->
     <footer class="form-footer mt-5 pb-5">
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-        <app-button variant="outline" size="md">Cancel</app-button>
+        <app-button variant="outline" size="md" routerLink="/user/admin/dashboard">Cancel</app-button>
         <app-button variant="primary" (click)="onSaveAndContinue()" size="md" [disabled]="isLoading"
           [loading]="isLoading" customClass="btn-save-continue">Save & Continue</app-button>
       </div>

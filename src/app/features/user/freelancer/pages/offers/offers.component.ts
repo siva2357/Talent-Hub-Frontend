@@ -4,20 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { ApplicationService } from '../../../../../core/services/application.service';
 
-interface Offer {
-  id: string;
-  contractTitle: string;
-  client: string;
-  date: string;
-  budget: string;
-  contractType: 'Fixed Price' | 'Hourly';
-  level: 'Entry' | 'Intermediate' | 'Expert';
-  description: string;
-  techStack: string[];
-  expiresIn: string;
-  startDate: string;
-  status: 'Pending' | 'Accepted' | 'Declined';
-}
+import { Offer } from '../../../../../core/model/freelancer.model';
 
 @Component({
   selector: 'app-offers',
