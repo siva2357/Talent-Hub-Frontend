@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { ProfileService } from '../../../../../core/services/profile.service';
@@ -15,18 +16,19 @@ import { TalentCardComponent } from '../../../../../shared/components/talent-car
 export class SavedTalentComponent implements OnInit {
   private profileService = inject(ProfileService);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
-  savedTalents: any[] = [];
+  savedTalents = signal<any[]>([]);
 
   ngOnInit(): void {
     this.loadSavedTalents();
   }
 
   loadSavedTalents(): void {
-    this.profileService.getSavedTalents().subscribe({
+    this.profileService.getSavedTalents().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         if (res.success && res.savedTalents) {
-          this.savedTalents = res.savedTalents.map((t: any) => this.mapTalentFields(t));
+          this.savedTalents.set(res.savedTalents.map((t: any) => this.mapTalentFields(t)));
         }
       },
       error: (err) => console.error('Error loading saved talents:', err)
@@ -35,11 +37,11 @@ export class SavedTalentComponent implements OnInit {
 
   unsaveTalent(talentId: string, event: Event): void {
     event.stopPropagation();
-    this.profileService.unsaveTalent(talentId).subscribe({
+    this.profileService.unsaveTalent(talentId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         if (res.success) {
           // Remove from local list
-          this.savedTalents = this.savedTalents.filter(t => t.id !== talentId);
+          this.savedTalents.update(list => list.filter(t => t.id !== talentId));
         }
       },
       error: (err) => console.error('Error unsaving talent:', err)

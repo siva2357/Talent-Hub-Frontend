@@ -1,271 +1,150 @@
-<div class="contract-proposals-page p-3 p-md-4 p-xl-5">
-
-    <div class="container-fluid max-w-7xl mx-auto">
+<div class="contract-proposals-page py-4">
+    <div class="container-fluid max-w-7xl mx-auto px-2 px-md-4">
 
         <!-- Header -->
-        <div class="mb-5 d-flex justify-content-between align-items-center">
+        <div class="mb-4 d-flex justify-content-between align-items-center">
             <div>
-                <h3 class="text-white fw-bold mb-3 h4">Contract Proposals</h3>
-                <p class="text-secondary mb-0">Manage incoming bids, conduct assessments, schedule interviews, and
-                    finalize your project hires.</p>
+                <h4 class="text-white fw-bold mb-1">Contract Proposals</h4>
+                <p class="text-secondary mb-0" style="font-size: 14px;">Manage incoming bids, conduct assessments,
+                    schedule interviews, and finalize your project hires.</p>
             </div>
         </div>
 
         <!-- Filters Bar -->
-        <div class="glass filter-toolbar p-3 p-md-4 rounded-4 mb-3">
-
-            <div class="row g-3 align-items-end">
+        <div class="glass-dark p-2 mb-4 position-relative" style="z-index: 10;">
+            <div class="row g-3 align-items-center">
+                <!-- Search -->
+                <div class="col-12 col-lg-2">
+                    <app-input mode="filter" type="text" placeholder="Search applicants..."
+                        [(ngModel)]="pendingSearchQuery">
+                    </app-input>
+                </div>
 
                 <!-- Availability -->
-                <div class="col-lg-2 col-md-6">
-                    <app-input mode="filter" type="select" placeholder="Availability" [(ngModel)]="selectedAvailability"
-                        [options]="availabilityOptions">
+                <div class="col-12 col-md-3 col-lg-2">
+                    <app-input mode="filter" type="select" placeholder="Availability"
+                        [(ngModel)]="pendingSelectedAvailability" [options]="availabilityOptions">
                     </app-input>
                 </div>
 
                 <!-- Budget -->
-                <div class="col-lg-2 col-md-6">
-                    <app-input mode="filter" type="select" placeholder="Budget Type" [(ngModel)]="selectedBudgetType"
-                        [options]="budgetTypeOptions">
+                <div class="col-12 col-md-3 col-lg-2">
+                    <app-input mode="filter" type="select" placeholder="Budget Type"
+                        [(ngModel)]="pendingSelectedBudgetType" [options]="budgetTypeOptions">
                     </app-input>
                 </div>
 
                 <!-- Gender -->
-                <div class="col-lg-2 col-md-6">
-                    <app-input mode="filter" type="select" placeholder="Gender" [(ngModel)]="selectedGender"
+                <div class="col-12 col-md-3 col-lg-2">
+                    <app-input mode="filter" type="select" placeholder="Gender" [(ngModel)]="pendingSelectedGender"
                         [options]="genderOptions">
                     </app-input>
                 </div>
 
                 <!-- Languages -->
-                <div class="col-lg-3 col-md-6">
-                    <app-input mode="filter" type="multiselect" placeholder="Languages" [(ngModel)]="selectedLanguages"
-                        [options]="languageOptions">
+                <div class="col-12 col-md-3 col-lg-2">
+                    <app-input mode="filter" type="multiselect" placeholder="Languages"
+                        [(ngModel)]="pendingSelectedLanguages" [options]="languageOptions">
                     </app-input>
                 </div>
 
-                <!-- Apply -->
-                <div class="col-lg-auto col-md-6">
-                    <app-button variant="primary" customClass="w-100" (click)="applyFilters()">
-
-                        <i class="bi bi-funnel-fill me-2"></i>
-                        Apply
-
-                    </app-button>
+                <!-- Buttons -->
+                <div
+                    class="col-12 col-lg-2 d-flex align-items-center gap-2 justify-content-start justify-content-lg-end">
+                    <app-button variant="primary" size="md" customClass="w-100"
+                        (click)="applyFilters()">Apply</app-button>
+                    <app-button variant="outline" size="md" customClass="w-100"
+                        (click)="clearFilters()">Clear</app-button>
                 </div>
-
-                <!-- Clear -->
-                <div class="col-lg-auto col-md-6">
-                    <app-button variant="outline" customClass="w-100" (click)="clearFilters()">
-
-                        <i class="bi bi-x-circle me-2"></i>
-                        Clear
-
-                    </app-button>
-                </div>
-
             </div>
 
-        </div>
-
-        <!-- Active Filters -->
-        @if(activeFilters.length){
-
-        <div class="d-flex flex-wrap gap-2 mb-4">
-
-            @for(filter of activeFilters; track filter.key){
-
-            <app-chip [label]="filter.label" variant="primary" [removable]="true" (remove)="removeFilter(filter.key)">
-            </app-chip>
-
+            <!-- Active Filter Chips -->
+            @if(activeFilters().length) {
+            <div class="d-flex align-items-center flex-wrap gap-2 mt-3 pt-3 border-top border-white border-opacity-5">
+                <span class="text-secondary small fw-bold text-uppercase me-2"
+                    style="font-size: 11px; letter-spacing: 0.5px;">Active Filters:</span>
+                @for(filter of activeFilters(); track filter.key) {
+                <app-chip [label]="filter.label" variant="primary" [removable]="true"
+                    (remove)="removeFilter(filter.key)"></app-chip>
+                }
+            </div>
             }
-
         </div>
 
-        }
-        @if( contractId){
+        @if(contractId()) {
 
-        <div class="row justify-content-center g-4">
+        <div class="col-12">
+            @if(isLoading() && applicants().length === 0) {
+            <!-- Loading State -->
+            <div class="glass-dark rounded-0 p-0 p-md-3 border border-primary border-opacity-5 d-none d-lg-block">
+                <div class="table-responsive-wrapper">
+                    <div class="table-min-width">
+                        <app-table [rows]="[]" [columns]="proposalColumns" [loading]="true"></app-table>
+                    </div>
+                </div>
+            </div>
+            <div class="d-block d-lg-none mt-4 text-center p-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            } @else {
 
-            @for (
-            proposal of getFilteredProposals(applicants);
-            track proposal.applicationId
-            ){
-            <div class=" col-12">
+            @defer (on viewport) {
+            <!-- Desktop Table View (Will show empty state if rows are empty) -->
+            <div class="glass-dark mt-4 p-2 d-none d-lg-block">
+                <div class="table-responsive-wrapper">
+                    <div class="table-min-width">
+                        <app-table [rows]="filteredProposals()" [columns]="proposalColumns"></app-table>
+                    </div>
+                </div>
+            </div>
 
-                <div class="proposal-card glass rounded-4 p-5">
+            <!-- Mobile Card View -->
+            <div class="row g-4 d-flex d-lg-none mt-2">
+                @if (filteredProposals().length > 0) {
+                @for (proposal of filteredProposals(); track proposal.applicationId) {
+                <div class="col-12">
+                    <div class="glass-dark rounded-4 p-3 p-md-4">
+                        <ng-container *ngTemplateOutlet="freelancerTemplate; context: { row: proposal }"></ng-container>
 
-                    <!-- Header -->
-                    <div class="d-flex align-items-center mb-3">
+                        <p class="text-secondary small my-3">{{ proposal.freelancer.shortBio | slice:0:150 }}...</p>
 
-                        <img [src]="proposal.freelancer.profilePhoto" class="rounded-circle me-3" width="60" height="60"
-                            style="object-fit:cover" />
-
-                        <div class="flex-grow-1">
-
-                            <h6 class="text-white mb-1">
-                                {{ proposal.freelancer.fullName }}
-                            </h6>
-
-                            <p class="text-info mb-1" style="font-size: 13px;">
-                                {{ proposal.freelancer.professionalHeadline }}
-                            </p>
-
-                            <small class="text-secondary">
-                                <i class="bi bi-geo-alt me-1"></i>
-                                {{ proposal.freelancer.city }},
-                                {{ proposal.freelancer.country }}
-                            </small>
-
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <ng-container *ngTemplateOutlet="rateTemplate; context: { row: proposal }"></ng-container>
+                            <span class="badge bg-dark border border-secondary px-3 py-2 text-capitalize">
+                                <i class="bi bi-clock-history me-1 text-warning"></i> {{
+                                proposal.freelancer.availability?.[0] }}
+                            </span>
                         </div>
 
+                        <div class="mb-3">
+                            <ng-container *ngTemplateOutlet="statusTemplate; context: { row: proposal }"></ng-container>
+                        </div>
+
+                        <ng-container *ngTemplateOutlet="actionTemplate; context: { row: proposal }"></ng-container>
                     </div>
-
-
-                    <!-- Bio -->
-                    <p class="text-secondary small mb-4">
-
-                        {{ proposal.freelancer.shortBio }}
-
-                    </p>
-
-                    <div class="small text-secondary mb-2">
-                        Professional Details
-                    </div>
-
-                    <div class="mb-3 d-flex flex-wrap gap-2">
-
-                        <span class="badge bg-dark border border-secondary px-3 py-2">
-                            <i class="bi bi-cash-stack me-1 text-success"></i>
-                            Rate: ₹{{ proposal.freelancer.hourlyRate }}/hr
-                        </span>
-
-                        <span class="badge bg-dark border border-secondary px-3 py-2">
-                            <i class="bi bi-check-circle me-1 text-info"></i>
-                            Completed: {{ proposal.freelancer.completedContractsCount }}
-                        </span>
-
-                        <span class="badge bg-dark border border-secondary px-3 py-2 text-capitalize">
-                            <i class="bi bi-clock-history me-1 text-warning"></i>
-                            {{ proposal.freelancer.availability?.[0] }}
-                        </span>
-
-                        <span class="badge bg-dark border border-secondary px-3 py-2 text-capitalize">
-                            <i class="bi bi-person me-1 text-primary"></i>
-                            {{ proposal.freelancer.gender || 'N/A' }}
-                        </span>
-
-                    </div>
-                    <!-- Skills -->
-                    <div class="small text-secondary mb-2">
-                        Skills
-                    </div>
-
-                    <div class="mb-4">
-                        @for(skill of proposal.freelancer.skills; track skill){
-                        <span class="badge bg-dark border border-secondary me-2 mb-2">
-                            {{ skill }}
-                        </span>
-                        }
-                    </div>
-
-
-<div class="d-flex gap-2 mt-auto">
-
-    <app-button size="sm" variant="outline" type="button" customClass=" rounded-3"
-        (click)="viewProfile(proposal.freelancer._id)">
-        <i class="bi bi-person-circle"></i> View Profile
-    </app-button>
-
-@if(
-  proposal.applicationStatus !== 'shortlisted' &&
-  proposal.applicationStatus !== 'rejected'
-){
-
-<app-button
-    size="sm"
-    type="button"
-    variant="primary"
-    customClass="rounded-3"
-    (click)="openRecruitmentModal(proposal)">
-
-    <i class="bi bi-briefcase-fill"></i>
-    Recruitment
-
-</app-button>
-
-}
-
-@if(proposal.applicationStatus === 'shortlisted'){
-
-<span class="badge badge-success align-self-center" style="font-size: 14px;">
-    <i class="bi bi-person-check-fill me-1"></i>
-    Candidate Hired
-</span>
-
-}
-
-@if(proposal.applicationStatus === 'rejected'){
-
-<span class="badge badge-danger align-self-center" style="font-size: 14px;">
-    <i class="bi bi-person-x-fill me-1"></i>
-    Candidate Rejected
-</span>
-
-}
-
-    @if(proposal.applicationStatus === 'shortlisted'){
-
-    @if(proposal.offerStatus === 'none'){
-
-    <app-button size="sm" variant="success" type="button" customClass="flex-fill rounded-3"
-        (click)="sendOffer(proposal)">
-        <i class="bi bi-send-fill"></i> Send Offer
-    </app-button>
-
-    }
-
-    @if(proposal.offerStatus === 'sent'){
-
-    <app-button size="sm" variant="warning" type="button" customClass="flex-fill rounded-3" [disabled]="true">
-        <i class="bi bi-clock-history"></i> Offer Letter Sent
-    </app-button>
-
-    }
-
-    @if(proposal.offerStatus === 'accepted'){
-    <span class="badge badge-success align-self-center" style="font-size: 14px;">
-        <i class="bi bi-check-circle-fill me-1"></i> Offer Accepted
-    </span>
-    }
-
-    @if(proposal.offerStatus === 'declined'){
-    <span class="badge badge-danger align-self-center" style="font-size: 14px;">
-        <i class="bi bi-x-circle-fill me-1"></i> Offer Declined
-    </span>
-    }
-
-    }
-
-</div>
-
                 </div>
-
-
+                }
+                } @else {
+                <div class="col-12 text-center py-5">
+                    <div class="glass p-5 rounded-4 d-inline-block">
+                        <i class="bi bi-file-earmark-x text-secondary fs-1 mb-3"></i>
+                        <p class="text-secondary mb-0">No applicant proposals match your current criteria.</p>
+                    </div>
+                </div>
+                }
             </div>
-            } @empty {
-            <div class="col-12 text-center py-5">
-                <div class="glass p-5 rounded-4 d-inline-block">
-                    <i class="bi bi-file-earmark-x text-secondary fs-1 mb-3"></i>
-                    <p class="text-secondary mb-0">No applicant proposals match your current criteria.
-                    </p>
+            } @placeholder {
+            <div class="text-center p-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading Proposals...</span>
                 </div>
             </div>
             }
+
+            }
         </div>
-
-
-
 
         } @else {
         <div class="text-center p-5 border border-white border-opacity-10 rounded-4 glass">
@@ -273,26 +152,110 @@
             <p class="text-secondary mb-0">No active contracts sourcing candidates.</p>
         </div>
         }
-
     </div>
 
+    <!-- ======================================== -->
+    <!-- Table Cell Templates -->
+    <!-- ======================================== -->
+
+    <ng-template #freelancerTemplate let-row="row">
+        <div class="d-flex align-items-center">
+            <img [src]="row.freelancer.profilePhoto || 'assets/default-avatar.png'" class="rounded-circle me-3"
+                width="40" height="40" style="object-fit:cover; border: 1px solid rgba(255,255,255,0.1);" />
+            <div class="flex-grow-1 min-w-0">
+                <h6 class="text-white mb-0 text-truncate fw-semibold">{{ row.freelancer.fullName }}</h6>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #rateTemplate let-row="row">
+        <span class="fw-bold text-nowrap">₹{{ row.freelancer.hourlyRate }}/hr</span>
+    </ng-template>
+
+    <ng-template #completedJobsTemplate let-row="row">
+        <span class="fw-bold">{{ row.freelancer.completedContractsCount || 0 }}</span>
+    </ng-template>
+
+    <ng-template #statusTemplate let-row="row">
+        <app-badge [variant]="getStatusBadgeVariant(row.applicationStatus)"
+            customClass="w-auto d-inline-flex align-items-center">
+            <i class="bi me-1" [ngClass]="getStatusIcon(row.applicationStatus)"></i> {{
+            getStatusLabel(row.applicationStatus) }}
+        </app-badge>
+    </ng-template>
+
+    <ng-template #actionTemplate let-row="row">
+        <div class="action-dropdown">
+            <button class="action-trigger" (click)="toggleActionMenu($event, row)">
+                <i class="bi bi-three-dots-vertical"></i>
+            </button>
+        </div>
+    </ng-template>
+
+    <!-- Action Menu (Rendered outside table) -->
+    @if(activeActionRow()) {
+    <div class="action-menu glass" [style.position]="'fixed'" [style.top.px]="menuTop()" [style.left.px]="menuLeft()"
+        style="z-index: 9999; width: 220px;">
+        <div class="action-item" (click)="viewProfile(activeActionRow().freelancer._id); closeActionMenu()">
+            <i class="bi bi-person-circle"></i>
+            <span>View Profile</span>
+        </div>
+
+        @if(activeActionRow().applicationStatus !== 'shortlisted' && activeActionRow().applicationStatus !== 'rejected')
+        {
+        <div class="action-item" (click)="openRecruitmentModal(activeActionRow()); closeActionMenu()">
+            <i class="bi bi-briefcase-fill"></i>
+            <span>Recruitment</span>
+        </div>
+        }
+
+        @if(activeActionRow().applicationStatus === 'shortlisted') {
+        @if(activeActionRow().offerStatus === 'none') {
+        <div class="action-item text-success" (click)="sendOffer(activeActionRow()); closeActionMenu()">
+            <i class="bi bi-send-fill"></i>
+            <span>Send Offer</span>
+        </div>
+        } @else if(activeActionRow().offerStatus === 'sent') {
+        <div class="action-item text-warning" style="pointer-events: none; opacity: 0.7;">
+            <i class="bi bi-clock-history"></i>
+            <span>Offer Sent</span>
+        </div>
+        } @else if(activeActionRow().offerStatus === 'accepted') {
+        <div class="action-item text-success" style="pointer-events: none; opacity: 0.7;">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>Offer Accepted</span>
+        </div>
+        } @else if(activeActionRow().offerStatus === 'declined') {
+        <div class="action-item text-danger" style="pointer-events: none; opacity: 0.7;">
+            <i class="bi bi-x-circle-fill"></i>
+            <span>Offer Declined</span>
+        </div>
+        }
+        }
+
+        @if(activeActionRow().applicationStatus === 'rejected') {
+        <div class="action-item text-danger" style="pointer-events: none; opacity: 0.7;">
+            <i class="bi bi-person-x-fill"></i>
+            <span>Rejected</span>
+        </div>
+        }
+    </div>
+    }
 
     <!-- ======================================== -->
     <!-- Recruitment Modal -->
     <!-- ======================================== -->
 
-    <div class="modal fade" id="recruitmentModal" tabindex="-1" [class.show]="showRecruitmentModal" [style.display]="
-    showRecruitmentModal
-      ? 'block'
-      : 'none'
-  " [attr.aria-hidden]="
-    !showRecruitmentModal
-  ">
+    @if(showRecruitmentModal()) {
+    <div class="modal-backdrop fade show" style="z-index: 10400;"></div>
+    }
 
-        <div class="modal-dialog modal-dialog-centered">
-
-            <div class="modal-content bg-dark border border-secondary rounded-4 overflow-hidden">
-
+    <div class="modal fade" id="recruitmentModal" tabindex="-1" [class.show]="showRecruitmentModal()"
+        [style.display]="showRecruitmentModal() ? 'block' : 'none'" [attr.aria-hidden]="!showRecruitmentModal()"
+        style="z-index: 10500;" (mousedown)="closeModalIfTarget($event)">
+        <div class="modal-dialog">
+            <div class="modal-content glass border border-white border-opacity-10 rounded-4 overflow-hidden"
+                style="background: #0f172a; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
                 <!-- Header -->
                 <div class="modal-header border-secondary border-opacity-50">
                     <div>
@@ -304,100 +267,75 @@
 
                 <!-- Body -->
                 <div class="modal-body p-4">
-
-                    @if(selectedProposal) {
-                    <!-- Freelancer Profile Summary -->
-                    @if(selectedProposal.freelancer) {
+                    @if(selectedProposal()) {
+                    @if(selectedProposal().freelancer) {
                     <div
                         class="d-flex align-items-center gap-3 mb-4 pb-4 border-bottom border-secondary border-opacity-50">
-                        <img [src]="selectedProposal.freelancer.profilePhoto || 'assets/default-avatar.png'"
+                        <img [src]="selectedProposal().freelancer.profilePhoto || 'assets/default-avatar.png'"
                             alt="Profile" class="rounded-circle" width="60" height="60" style="object-fit: cover;">
                         <div>
-                            <h6 class="text-white fw-bold mb-1">{{selectedProposal.freelancer.fullName}}</h6>
-                            <p class="text-secondary small mb-1">{{selectedProposal.freelancer.professionalHeadline}}
+                            <h6 class="text-white fw-bold mb-1">{{selectedProposal().freelancer.fullName}}</h6>
+                            <p class="text-secondary small mb-1">{{selectedProposal().freelancer.professionalHeadline}}
                             </p>
-                            <span
-                                class="badge badge-primary-soft">{{getStatusLabel(selectedProposal.applicationStatus)}}</span>
+                            <app-badge [variant]="getStatusBadgeVariant(selectedProposal().applicationStatus)">
+                                <i class="bi me-1" [ngClass]="getStatusIcon(selectedProposal().applicationStatus)"></i>
+                                {{getStatusLabel(selectedProposal().applicationStatus)}}
+                            </app-badge>
                         </div>
                     </div>
                     }
 
-                    <!-- Dynamic Action Selection -->
                     @if (getAvailableActions().length > 0) {
                     <div class="mb-4">
-                        <app-input type="select" label="Next Action" [(ngModel)]="nextAction"
-                            [options]="getAvailableActions()">
+                        <app-input type="select" label="Next Action" [ngModel]="nextAction()"
+                            (ngModelChange)="nextAction.set($event)" [options]="getAvailableActions()">
                         </app-input>
                     </div>
                     } @else {
                     <div class="alert alert-secondary bg-secondary bg-opacity-10 border-secondary text-white mb-4">
-                        This application has reached a final stage
-                        ({{getStatusLabel(selectedProposal.applicationStatus)}}).
-                        No further actions can be taken.
+                        This application has reached a final stage. No further actions can be taken.
                     </div>
                     }
 
                     <!-- Assessment Form -->
-                    @if(nextAction === 'schedule-assessment'){
+                    @if(nextAction() === 'schedule-assessment') {
                     <form [formGroup]="assessmentFormGroup"
                         class="d-flex flex-column gap-3 p-3 rounded bg-secondary bg-opacity-10 border border-secondary border-opacity-50">
-                        <app-input type="text" label="Assessment Title"
-                            placeholder="e.g. Frontend Architecture Assessment" formControlName="title">
-                        </app-input>
+                        <app-input type="text" label="Assessment Title" formControlName="title"></app-input>
                         <app-input type="textarea" label="Assessment Description"
-                            placeholder="Enter assessment details..." formControlName="description">
-                        </app-input>
-                        <app-input type="date" label="Assessment Deadline / Date" formControlName="date">
-                        </app-input>
+                            formControlName="description"></app-input>
+                        <app-input type="date" label="Assessment Deadline" formControlName="date"></app-input>
                     </form>
                     }
 
                     <!-- Interview Form -->
-                    @if(nextAction === 'schedule-interview'){
+                    @if(nextAction() === 'schedule-interview') {
                     <form [formGroup]="interviewFormGroup"
                         class="d-flex flex-column gap-3 p-3 rounded bg-info bg-opacity-10 border border-info border-opacity-25">
-                        <app-input type="text" label="Interview Title" placeholder="e.g. Technical Interview Round 1"
-                            formControlName="title">
-                        </app-input>
-                        <app-input type="textarea" label="Interview Details (Link / Instructions)"
-                            placeholder="Enter meeting link or location..." formControlName="description">
-                        </app-input>
-                        <app-input type="date" label="Interview Date & Time" formControlName="date">
-                        </app-input>
+                        <app-input type="text" label="Interview Title" formControlName="title"></app-input>
+                        <app-input type="textarea" label="Interview Details" formControlName="description"></app-input>
+                        <app-input type="date" label="Interview Date & Time" formControlName="date"></app-input>
                     </form>
                     }
                     }
-
                 </div>
 
                 <!-- Footer -->
                 <div class="modal-footer border-secondary border-opacity-50">
                     <app-button variant="outline" customClass="rounded-3 px-4 text-white border-white border-opacity-25"
-                        (click)="closeModal()">
-                        Close
-                    </app-button>
+                        (click)="closeModal()" [disabled]="isSubmitting()">Close</app-button>
                     @if (getAvailableActions().length > 0) {
                     <app-button variant="primary" customClass="rounded-3 px-4 shadow-glow-primary"
-                        [disabled]="isSubmitting || !nextAction || (nextAction === 'schedule-assessment' && assessmentFormGroup.invalid) || (nextAction === 'schedule-interview' && interviewFormGroup.invalid)" (click)="submitRecruitmentAction()">
-                        @if(isSubmitting){
-                        <span class="spinner-border spinner-border-sm me-2"></span>
-                        }
+                        [loading]="isSubmitting()"
+                        [disabled]="!nextAction() || (nextAction() === 'schedule-assessment' && assessmentFormGroup.invalid) || (nextAction() === 'schedule-interview' && interviewFormGroup.invalid)"
+                        (click)="submitRecruitmentAction()">
                         Submit Update
                     </app-button>
                     }
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
-    <!-- Modal Backdrop -->
 
-    @if(showRecruitmentModal){
-
-    <div class="modal-backdrop fade show">
-    </div>
-
-    }
+</div>

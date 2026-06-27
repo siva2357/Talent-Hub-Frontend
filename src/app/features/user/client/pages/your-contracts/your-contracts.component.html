@@ -2,15 +2,10 @@
 
   <div class="container-fluid max-w-7xl mx-auto px-2 px-md-4">
 
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-4">
-      <div>
-        <h3 class="text-white fw-bold mb-2 h4">Your Contracts</h3>
-        <p class="text-secondary text-lg mb-0">Manage your active, completed, and draft contracts in one place.</p>
-      </div>
-      <app-button variant="primary" size="md" routerLink="/user/contract-form">
-        <i class="bi bi-plus-lg"></i>
-        Post Contract
-      </app-button>
+    <div class="mb-4 text-start">
+      <h4 class="text-white fw-bold mb-1">Your Contracts</h4>
+      <p class="text-secondary mb-0" style="font-size: 14px;">Manage your active, completed, and draft contracts in one
+        place.</p>
     </div>
 
 
@@ -83,6 +78,14 @@
       }
     </div>
 
+    <!-- Post Contract Button (Above Table/Cards) -->
+    <div class="d-flex justify-content-end  mt-3">
+      <app-button variant="primary" size="sm" routerLink="/user/contract-form">
+        <i class="bi bi-plus-lg me-1"></i>
+        Post Contract
+      </app-button>
+    </div>
+
     <div class="col-12">
 
       @if (loading() && contracts().length === 0) {
@@ -138,7 +141,15 @@
       <div class="glass-dark  mt-5  p-2   d-none d-lg-block">
         <div class="table-responsive-wrapper">
           <div class="table-min-width">
+            @defer (on viewport) {
             <app-table [rows]="filteredContracts()" [columns]="contractColumns" [loading]="loading()"></app-table>
+            } @placeholder {
+            <div class="text-center p-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading table...</span>
+              </div>
+            </div>
+            }
           </div>
         </div>
       </div>
@@ -148,17 +159,17 @@
         <div class="row g-3">
           @for(contract of filteredContracts().slice(0, displayCount()); track contract._id) {
           <div class="col-12 col-md-6">
+            @defer (on viewport) {
             <div
               class="glass-dark border border-white border-opacity-5 rounded-4 p-3 p-md-4 h-100 position-relative d-flex flex-column">
               <div class="d-flex justify-content-between align-items-start mb-4">
                 <div class="text-truncate" title="{{ contract.contractTitle }}">
-                  <span class="text-white fw-bold" style="font-size: 14px;">Contract Title :</span><span
+                  <span class="text-white fw-bold" style="font-size: 14px;">Contract Title : </span><span
                     class="text-secondary fw-normal ms-1" style="font-size: 13px;">{{ contract.contractTitle }}</span>
                 </div>
-                <app-button variant="outline" size="sm" customClass="border-0 px-2"
-                  (click)="toggleActionMenu($event, contract)">
+                <button class="action-trigger" (click)="toggleActionMenu($event, contract)">
                   <i class="bi bi-three-dots-vertical"></i>
-                </app-button>
+                </button>
               </div>
 
               <div class="mb-auto">
@@ -214,6 +225,11 @@
                 </app-badge>
               </div>
             </div>
+            } @placeholder {
+            <div class="glass-dark border border-white border-opacity-5 rounded-4 p-5 text-center h-100">
+              <div class="spinner-border text-secondary" role="status"></div>
+            </div>
+            }
           </div>
           }
         </div>
@@ -258,15 +274,15 @@
 
 <ng-template #actionTemplate let-row>
   <div class="action-dropdown">
-    <app-button variant="outline" size="sm" customClass="border-0 px-2" (click)="toggleActionMenu($event, row)">
+    <button class="action-trigger" (click)="toggleActionMenu($event, row)">
       <i class="bi bi-three-dots-vertical"></i>
-    </app-button>
+    </button>
   </div>
 </ng-template>
 
 <!-- Action Menu (Rendered outside table) -->
 @if(activeActionRow){
-<div class="action-menu glass" [style.position]="'absolute'" [style.top.px]="menuTop" [style.left.px]="menuLeft"
+<div class="action-menu glass" [style.position]="'fixed'" [style.top.px]="menuTop" [style.left.px]="menuLeft"
   style="z-index: 9999; width: 220px;">
 
   <div class="action-item" (click)="viewContract(activeActionRow._id); closeActionMenu()">

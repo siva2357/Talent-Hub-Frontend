@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
@@ -28,9 +29,10 @@ export class TransactionHistoryComponent implements OnInit {
 
   private diaryService = inject(ContractDiaryService);
   private financeService = inject(FinanceService);
+  private destroyRef = inject(DestroyRef);
 
-  searchQuery = '';
-  typeFilter = 'All';
+  searchQuery = signal('');
+  typeFilter = signal('All');
   pendingSearchQuery = '';
   pendingTypeFilter = 'All';
   
@@ -40,20 +42,33 @@ export class TransactionHistoryComponent implements OnInit {
     { label: 'Fixed Price', value: 'Fixed Price' }
   ];
 
-  expandedContractId: string | null = null;
+  expandedContractId = signal<string | null>(null);
 
-  contracts: ContractTransactions[] = [];
-  filteredContracts: ContractTransactions[] = [];
+  contracts = signal<ContractTransactions[]>([]);
+  
+  filteredContracts = computed(() => {
+    return this.contracts().filter(c => {
+      const q = this.searchQuery().toLowerCase();
+      const matchesSearch = c.title.toLowerCase().includes(q) ||
+                            c.contractId.toLowerCase().includes(q) ||
+                            c.freelancer.toLowerCase().includes(q);
+      
+      const t = this.typeFilter();
+      const matchesType = t === 'All' || c.type === t;
+
+      return matchesSearch && matchesType;
+    });
+  });
 
   ngOnInit() {
     this.loadDiaries();
   }
 
   loadDiaries() {
-    this.financeService.getContractTransactions().subscribe({
+    this.financeService.getContractTransactions().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         if (res.success && res.diaries) {
-          this.contracts = res.diaries.map((diary: any) => {
+          const loadedContracts = res.diaries.map((diary: any) => {
             const mappedMilestones = (diary.phases || []).map((p: any) => {
               return {
                 id: p._id,
@@ -81,10 +96,11 @@ export class TransactionHistoryComponent implements OnInit {
             };
           });
 
-          if (this.contracts.length > 0 && !this.expandedContractId) {
-            this.expandedContractId = this.contracts[0].contractId;
+          this.contracts.set(loadedContracts);
+
+          if (this.contracts().length > 0 && !this.expandedContractId()) {
+            this.expandedContractId.set(this.contracts()[0].contractId);
           }
-          this.applyFilters();
         }
       },
       error: (err) => {
@@ -93,49 +109,33 @@ export class TransactionHistoryComponent implements OnInit {
     });
   }
 
-  applyFilters() {
-    this.filteredContracts = this.contracts.filter(c => {
-      const matchesSearch = c.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                            c.contractId.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                            c.freelancer.toLowerCase().includes(this.searchQuery.toLowerCase());
-      
-      const matchesType = this.typeFilter === 'All' || c.type === this.typeFilter;
-
-      return matchesSearch && matchesType;
-    });
-  }
-
   resetFilters() {
-    this.searchQuery = '';
-    this.typeFilter = 'All';
+    this.searchQuery.set('');
+    this.typeFilter.set('All');
     this.pendingSearchQuery = '';
     this.pendingTypeFilter = 'All';
-    this.applyFilters();
   }
 
   applyFiltersBtn() {
-    this.searchQuery = this.pendingSearchQuery;
-    this.typeFilter = this.pendingTypeFilter;
-    this.applyFilters();
+    this.searchQuery.set(this.pendingSearchQuery);
+    this.typeFilter.set(this.pendingTypeFilter);
   }
 
   removeSearchChip() {
-    this.searchQuery = '';
+    this.searchQuery.set('');
     this.pendingSearchQuery = '';
-    this.applyFilters();
   }
 
   removeTypeChip() {
-    this.typeFilter = 'All';
+    this.typeFilter.set('All');
     this.pendingTypeFilter = 'All';
-    this.applyFilters();
   }
 
   toggleContract(contractId: string) {
-    if (this.expandedContractId === contractId) {
-      this.expandedContractId = null;
+    if (this.expandedContractId() === contractId) {
+      this.expandedContractId.set(null);
     } else {
-      this.expandedContractId = contractId;
+      this.expandedContractId.set(contractId);
     }
   }
 

@@ -1,23 +1,24 @@
-<div class="contract-form-page p-3 p-md-4 p-xl-5 position-relative">
+<div class="contract-form-page py-4">
 
-  <a routerLink="/user/your-contracts"
-    class="btn-back-nav rounded-circle d-flex align-items-center justify-content-center position-absolute top-0 start-0 m-4 shadow-lg z-3"
-    title="Back to Contracts">
-    <i class="bi bi-arrow-left fs-4"></i>
-  </a>
+  <div class="container-fluid max-w-4xl mx-auto px-2 px-md-4">
 
-  <div class="container max-w-4xl mx-auto">
+    <!-- HEADER -->
+    <div class="d-flex align-items-center mb-4 gap-3">
+      <a routerLink="/user/your-contracts"
+        class="btn-back-nav rounded-circle d-flex flex-shrink-0 align-items-center justify-content-center shadow-lg"
+        title="Back to Contracts" style="width: 45px; height: 45px;">
+        <i class="bi bi-arrow-left fs-4"></i>
+      </a>
 
-
-    <div class="mb-5 text-center text-md-start">
-      <h2 class="text-white fw-bold mb-2">
-        {{ mode() === 'create'? 'Create New Contract' : 'Update Contract' }}
-      </h2>
-      <p class="text-secondary mb-0"> Fill all contract details properly.</p>
+      <div class="text-start">
+        <h5 class="text-white fw-bold mb-1 ">
+          {{ mode() === 'create'? 'Create New Contract' : 'Update Contract' }}
+        </h5>
+        <p class="text-secondary mb-0" style="font-size: 14px;"> Fill all contract details properly.</p>
+      </div>
     </div>
 
-    <!-- FORM -->
-    <form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="glass p-4 p-md-5 rounded-4 shadow-lg">
+    <form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="glass p-3 p-md-5 rounded-4 shadow-lg">
 
       <div class="row g-4">
 
@@ -76,11 +77,13 @@
 
         <div class="col-12 pt-3">
 
-          <div class="d-flex justify-content-between align-items-center gap-3">
-            <app-button type="button" variant="outline" size="sm" customClass="rounded-3 py-3 px-4 "
+          <div class="d-flex justify-content-between gap-2 gap-md-3">
+            <app-button type="button" variant="outline" size="sm"
+              customClass="rounded-3 py-2 px-2 py-md-3 px-md-4 w-100" style="font-size: 13px;"
               routerLink="/user/your-contracts"> {{ mode() === 'create' ? 'Cancel' : 'Discard Changes'}} </app-button>
-            <app-button type="submit" variant="primary" size="sm" customClass="rounded-3 py-3 px-4 "
-              [loading]="loading()">{{ mode() === 'create' ? 'Post Contract' : 'Update Contract'}}</app-button>
+            <app-button type="submit" variant="primary" size="sm"
+              customClass="rounded-3 py-2 px-2 py-md-3 px-md-4 w-100" style="font-size: 13px;" [loading]="loading()">{{
+              mode() === 'create' ? 'Post Contract' : 'Update Contract'}}</app-button>
           </div>
 
         </div>

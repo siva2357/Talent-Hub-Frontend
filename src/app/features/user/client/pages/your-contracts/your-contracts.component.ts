@@ -107,9 +107,6 @@ export class YourContractsComponent implements OnInit {
     this.getMyContracts();
   }
 
-  ngOnDestroy(): void {
-  }
-
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
     if (this.activeActionRow) {
@@ -182,8 +179,8 @@ export class YourContractsComponent implements OnInit {
       this.activeActionRow = row;
       const target = (event.currentTarget as HTMLElement).closest('app-button') || event.currentTarget as HTMLElement;
       const rect = target.getBoundingClientRect();
-      this.menuTop = rect.bottom + window.scrollY + 8;
-      this.menuLeft = rect.right + window.scrollX - 220;
+      this.menuTop = rect.bottom + 8;
+      this.menuLeft = rect.right - 220;
     }
   }
 

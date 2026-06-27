@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -19,6 +20,7 @@ import { ChipComponent } from "../../../../../shared/components/chip/chip.compon
 export class SearchTalentComponent implements OnInit {
   private profileService = inject(ProfileService);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
   searchQuery = '';
   selectedCategory = 'All Categories';
@@ -42,7 +44,8 @@ performanceOptions = [
   { label: 'Low', value: 'Low' }
 ];
 
-  talents: any[] = [];
+  talents = signal<any[]>([]);
+  isLoading = signal(true);
   savedTalentsSet = new Set<string>();
 
   ngOnInit(): void {
@@ -51,7 +54,7 @@ performanceOptions = [
   }
 
 loadTalents(): void {
-  this.profileService.getFreelancers().subscribe({
+  this.profileService.getFreelancers().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
     next: (response) => {
       let talents = (response.items || []).map(f =>
         this.mapTalentFields(f)
@@ -63,7 +66,8 @@ loadTalents(): void {
         );
       }
 
-      this.talents = talents;
+      this.talents.set(talents);
+      this.isLoading.set(false);
     },
     error: (err) => {
       console.error('Error loading freelancers:', err);
@@ -72,7 +76,7 @@ loadTalents(): void {
 }
 
   loadSavedTalents(): void {
-    this.profileService.getSavedTalents().subscribe({
+    this.profileService.getSavedTalents().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res) => {
         if (res.success && res.savedTalents) {
           this.savedTalentsSet.clear();
@@ -110,7 +114,7 @@ applyFilters(): void {
     params.maxRate = this.maxRate;
   }
 
-  this.profileService.getFreelancers(params).subscribe({
+  this.profileService.getFreelancers(params).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
     next: (res) => {
       if (res.success) {
         let talents = (res.items || []).map(f =>
@@ -123,7 +127,8 @@ applyFilters(): void {
           );
         }
 
-        this.talents = talents;
+        this.talents.set(talents);
+      this.isLoading.set(false);
       }
     },
     error: (err) => {
@@ -154,7 +159,7 @@ applyFilters(): void {
 
   toggleSaveTalent(talentId: string): void {
     if (this.savedTalentsSet.has(talentId)) {
-      this.profileService.unsaveTalent(talentId).subscribe({
+      this.profileService.unsaveTalent(talentId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res) => {
           if (res.success) {
             this.savedTalentsSet.delete(talentId);
@@ -163,7 +168,7 @@ applyFilters(): void {
         error: (err) => console.error('Error unsaving talent:', err)
       });
     } else {
-      this.profileService.saveTalent(talentId).subscribe({
+      this.profileService.saveTalent(talentId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res) => {
           if (res.success) {
             this.savedTalentsSet.add(talentId);

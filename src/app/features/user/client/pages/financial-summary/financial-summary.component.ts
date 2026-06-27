@@ -1,5 +1,6 @@
 
-import { Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, inject, signal, DestroyRef, HostListener } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -34,12 +35,13 @@ export class FinancialSummaryComponent implements OnInit {
   private financeService = inject(FinanceService);
   private contractService = inject(ContractService);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
   // Summary Stats
-  totalBalance = 0;
-  totalSpent = 0;
-  upcomingPayments = 0;
-  platformFeesPaid = 0;
+  totalBalance = signal(0);
+  totalSpent = signal(0);
+  upcomingPayments = signal(0);
+  platformFeesPaid = signal(0);
 
   // Search & Filter state
   searchQuery = '';
@@ -59,8 +61,8 @@ export class FinancialSummaryComponent implements OnInit {
   columns: any[] = [];
 
   // Rich Transaction Invoices Data
-  invoices: Invoice[] = [];
-  filteredInvoices: Invoice[] = [];
+  invoices = signal<Invoice[]>([]);
+  filteredInvoices = signal<Invoice[]>([]);
 
   @ViewChild('titleTemplate', { static: true })
   titleTemplate!: TemplateRef<any>;
@@ -109,13 +111,13 @@ export class FinancialSummaryComponent implements OnInit {
 
 
   loadStats() {
-    this.financeService.getStats().subscribe({
+    this.financeService.getStats().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         if (res.success && res.stats) {
-          this.totalBalance = res.stats.totalBalance || 0;
-          this.totalSpent = res.stats.totalSpent || 0;
-          this.upcomingPayments = res.stats.upcomingPayments || 0;
-          this.platformFeesPaid = res.stats.platformFeesPaid || 0;
+          this.totalBalance.set(res.stats.totalBalance || 0);
+          this.totalSpent.set(res.stats.totalSpent || 0);
+          this.upcomingPayments.set(res.stats.upcomingPayments || 0);
+          this.platformFeesPaid.set(res.stats.platformFeesPaid || 0);
         }
       },
       error: (err) => {
@@ -125,10 +127,10 @@ export class FinancialSummaryComponent implements OnInit {
   }
 
   loadInvoices() {
-    this.contractService.getMyContracts().subscribe({
+    this.contractService.getMyContracts().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         if (res.success && res.contracts) {
-          this.invoices = res.contracts.map((contract: any) => {
+          this.invoices.set(res.contracts.map((contract: any) => {
             const budget = contract.estimatedBudget || 0;
             const spent = contract.spent || 0;
 
@@ -154,7 +156,7 @@ export class FinancialSummaryComponent implements OnInit {
               contractSubject: contract.contractSubject || 'N/A',
               remainingAmount: remainingAmount
             };
-          });
+          }));
           this.applyFilters();
         }
       },
@@ -165,14 +167,14 @@ export class FinancialSummaryComponent implements OnInit {
   }
 
   applyFilters() {
-    this.filteredInvoices = this.invoices.filter(inv => {
+    this.filteredInvoices.set(this.invoices().filter(inv => {
       const matchesSearch = inv.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
         inv.id.toLowerCase().includes(this.searchQuery.toLowerCase());
 
       const matchesStatus = this.statusFilter === 'All' || inv.status === this.statusFilter;
 
       return matchesSearch && matchesStatus;
-    });
+    }));
   }
 
   resetFilters() {
@@ -204,7 +206,7 @@ export class FinancialSummaryComponent implements OnInit {
   downloadInvoice(inv: Invoice) {
     console.log('Fetching invoice details for Contract ID:', inv.id);
 
-    this.financeService.getInvoices().subscribe({
+    this.financeService.getInvoices().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         if (res.success && res.invoices) {
           const matchingTxn = res.invoices.find((txn: any) =>
@@ -231,6 +233,51 @@ export class FinancialSummaryComponent implements OnInit {
   openDeposit() {
     if (this.fundAmount > 0) {
       this.router.navigate(['/user/payment-gateway'], { queryParams: { amount: this.fundAmount } });
+    }
+  }
+
+  activeActionRow: Invoice | null = null;
+  menuTop: number = 0;
+  menuLeft: number = 0;
+
+  toggleActionMenu(event: MouseEvent, row: Invoice): void {
+    event.stopPropagation();
+    if (this.activeActionRow && this.activeActionRow.id === row.id) {
+      this.closeActionMenu();
+    } else {
+      this.activeActionRow = row;
+      const target = (event.currentTarget as HTMLElement).closest('.action-trigger') || event.currentTarget as HTMLElement;
+      const rect = target.getBoundingClientRect();
+      this.menuTop = rect.bottom + 8;
+      this.menuLeft = rect.right - 220;
+    }
+  }
+
+  closeActionMenu(): void {
+    this.activeActionRow = null;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.activeActionRow) {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.action-menu') && !target.closest('.action-dropdown')) {
+        this.closeActionMenu();
+      }
+    }
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll(event: Event): void {
+    if (this.activeActionRow) {
+      this.closeActionMenu();
+    }
+  }
+
+  @HostListener('document:scroll', ['$event'])
+  onScroll(event: Event): void {
+    if (this.activeActionRow) {
+      this.closeActionMenu();
     }
   }
 

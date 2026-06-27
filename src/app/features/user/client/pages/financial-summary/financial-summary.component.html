@@ -27,7 +27,8 @@
                                 <i class="bi bi-graph-up-arrow text-success"></i>
                             </div>
                         </div>
-                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-3 fs-xl-2 text-truncate" title="₹{{ totalSpent | number:'1.2-2' }}">₹{{ totalSpent | number:'1.2-2' }}</h2>
+                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-3 fs-xl-2 text-truncate"
+                            title="₹{{ totalSpent() | number:'1.2-2' }}">₹{{ totalSpent() | number:'1.2-2' }}</h2>
                     </div>
                     <div class="position-relative z-3 mt-auto">
                         <div class="small text-secondary-light d-flex align-items-center gap-2">
@@ -51,7 +52,9 @@
                                 <i class="bi bi-shield-check text-warning"></i>
                             </div>
                         </div>
-                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-3 fs-xl-2 text-truncate" title="₹{{ upcomingPayments | number:'1.2-2' }}">₹{{ upcomingPayments | number:'1.2-2' }}</h2>
+                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-3 fs-xl-2 text-truncate"
+                            title="₹{{ upcomingPayments() | number:'1.2-2' }}">₹{{ upcomingPayments() | number:'1.2-2'
+                            }}</h2>
                     </div>
                     <div class="position-relative z-3 mt-auto">
                         <div class="small text-secondary-light d-flex align-items-center gap-2">
@@ -75,7 +78,9 @@
                                 <i class="bi bi-percent text-info"></i>
                             </div>
                         </div>
-                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-3 fs-xl-2 text-truncate" title="₹{{ platformFeesPaid | number:'1.2-2' }}">₹{{ platformFeesPaid | number:'1.2-2' }}</h2>
+                        <h2 class="text-white fw-extrabold mt-3 mb-4 fs-3 fs-xl-2 text-truncate"
+                            title="₹{{ platformFeesPaid() | number:'1.2-2' }}">₹{{ platformFeesPaid() | number:'1.2-2'
+                            }}</h2>
                     </div>
                     <div class="position-relative z-3 mt-auto">
                         <div class="small text-secondary-light d-flex align-items-center gap-2">
@@ -88,31 +93,25 @@
         </div>
 
         <!-- Filter and Search Controls -->
-        <div class="glass-dark p-3 p-md-4 rounded-4 border border-white border-opacity-5 mb-4 position-relative" style="z-index: 10;">
+        <div class="glass-dark p-3 p-md-4 rounded-4 border-0 mb-4 position-relative"
+            style="z-index: 10;">
             <div class="row g-3 align-items-center">
                 <!-- Search -->
                 <div class="col-12 col-md-5 col-lg-4">
-                    <app-input
-                        type="text"
-                        mode="filter"
-                        icon="bi bi-search"
-                        placeholder="Search contract name, ID or freelancer..."
-                        [(ngModel)]="pendingSearchQuery">
+                    <app-input type="text" mode="filter" icon="bi bi-search"
+                        placeholder="Search contract name, ID or freelancer..." [(ngModel)]="pendingSearchQuery">
                     </app-input>
                 </div>
 
                 <!-- Status Dropdown -->
                 <div class="col-12 col-md-4 col-lg-3">
-                    <app-input
-                        type="select"
-                        mode="filter"
-                        [options]="statusOptions"
-                        placeholder="Filter by Status"
+                    <app-input type="select" mode="filter" [options]="statusOptions" placeholder="Filter by Status"
                         [(ngModel)]="pendingStatusFilter">
                     </app-input>
                 </div>
 
-                <div class="col-12 col-md-12 col-lg-auto ms-lg-auto d-flex align-items-center gap-2 mt-3 mt-lg-0 justify-content-start justify-content-lg-end">
+                <div
+                    class="col-12 col-md-12 col-lg-auto ms-lg-auto d-flex align-items-center gap-2 mt-3 mt-lg-0 justify-content-start justify-content-lg-end">
                     <app-button variant="primary" size="md" (click)="applyFiltersBtn()">Apply</app-button>
                     <app-button variant="outline" size="md" (click)="resetFilters()">Reset</app-button>
                 </div>
@@ -120,27 +119,22 @@
 
             <!-- Active Filter Chips -->
             @if (searchQuery || statusFilter !== 'All') {
-                <div class="d-flex align-items-center flex-wrap gap-2 mt-3 pt-3 border-top border-white border-opacity-5">
-                    <span class="text-secondary small fw-bold text-uppercase me-2" style="font-size: 11px; letter-spacing: 0.5px;">Active Filters:</span>
-                    
-                    @if (searchQuery) {
-                        <app-chip 
-                            [label]="'Search: ' + searchQuery" 
-                            variant="primary" 
-                            [removable]="true" 
-                            (remove)="removeSearchChip()">
-                        </app-chip>
-                    }
-                    
-                    @if (statusFilter !== 'All') {
-                        <app-chip 
-                            [label]="'Status: ' + statusFilter" 
-                            variant="primary" 
-                            [removable]="true" 
-                            (remove)="removeStatusChip()">
-                        </app-chip>
-                    }
-                </div>
+            <div class="d-flex align-items-center flex-wrap gap-2 mt-3 pt-3 border-top border-white border-opacity-5">
+                <span class="text-secondary small fw-bold text-uppercase me-2"
+                    style="font-size: 11px; letter-spacing: 0.5px;">Active Filters:</span>
+
+                @if (searchQuery) {
+                <app-chip [label]="'Search: ' + searchQuery" variant="primary" [removable]="true"
+                    (remove)="removeSearchChip()">
+                </app-chip>
+                }
+
+                @if (statusFilter !== 'All') {
+                <app-chip [label]="'Status: ' + statusFilter" variant="primary" [removable]="true"
+                    (remove)="removeStatusChip()">
+                </app-chip>
+                }
+            </div>
             }
         </div>
 
@@ -148,103 +142,77 @@
 
 
         <ng-template #titleTemplate let-row>
-  <div class="fw-semibold text-white text-truncate" style="max-width: 200px;" title="{{ row.title }}">
-    {{ row.title }}
-  </div>
-</ng-template>
+            <div class="fw-semibold text-white text-truncate" style="max-width: 200px;" title="{{ row.title }}">
+                {{ row.title }}
+            </div>
+        </ng-template>
 
-<ng-template #budgetTemplate let-row>
-  <span class="text-success fw-bold text-nowrap">
-    ₹{{ row.estimatedBudget | number:'1.2-2' }}
-  </span>
-</ng-template>
+        <ng-template #budgetTemplate let-row>
+            <span class="text-success fw-bold text-nowrap">
+                ₹{{ row.estimatedBudget | number:'1.2-2' }}
+            </span>
+        </ng-template>
 
-<ng-template #dateTemplate let-row>
-  <span class="text-nowrap">{{ DateTimeHelper.toLocalString(row.startDate, false, 'MMM D, YYYY') }}</span>
-</ng-template>
+        <ng-template #dateTemplate let-row>
+            <span class="text-nowrap">{{ DateTimeHelper.toLocalString(row.startDate, false, 'MMM D, YYYY') }}</span>
+        </ng-template>
 
-<ng-template #statusTemplate let-row>
-  <app-badge
-    [variant]="
+        <ng-template #statusTemplate let-row>
+            <app-badge [variant]="
       row.status === 'completed' ? 'success' :
       row.status === 'pending' ? 'warning' :
       (row.status === 'payment failed' || row.status === 'cancelled') ? 'danger' :
       row.status === 'in progress' ? 'primary' : 'secondary'
-    "
-    customClass="rounded-pill px-3 py-2 text-capitalize text-nowrap">
-    {{ row.status }}
-  </app-badge>
-</ng-template>
+    " customClass="rounded-pill px-3 py-2 text-capitalize text-nowrap">
+                {{ row.status }}
+            </app-badge>
+        </ng-template>
 
 
 
-<ng-template #actionTemplate let-row>
+        <ng-template #actionTemplate let-row>
+            <div class="action-dropdown" style="position: relative;">
+                <button class="action-trigger" (click)="toggleActionMenu($event, row)">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
 
-  <div class="dropdown">
-
-    <app-button
-      variant="outline"
-      size="sm"
-      customClass="border-0 px-2"
-      data-bs-toggle="dropdown">
-
-      <i class="bi bi-three-dots-vertical"></i>
-
-    </app-button>
-
-    <ul class="dropdown-menu dropdown-menu-end glass-dropdown">
-
-      @if (row.remainingAmount > 0) {
-
-<li class="px-2 py-1">
-
-  <app-button
-    variant="primary"
-    size="sm"
-    customClass="w-100 justify-content-start"
-    (click)="fundContract(row)">
-
-    <i class="bi bi-credit-card-2-front me-2"></i>
-    Pay / Fund
-
-  </app-button>
-
-</li>
-      }
-
-<li class="px-2 py-1">
-
-  <app-button
-    variant="outline"
-    size="sm"
-    customClass="w-100 justify-content-start"
-    (click)="downloadInvoice(row)">
-
-    <i class="bi bi-file-earmark-arrow-down me-2"></i>
-    Invoice
-
-  </app-button>
-
-</li>
-
-    </ul>
-
-  </div>
-
-</ng-template>
+                <!-- Action Menu (Rendered inline to stay attached to button) -->
+                @if(activeActionRow && activeActionRow.id === row.id){
+                <div class="action-menu glass" style="position: absolute; top: calc(100% + 4px); right: 0; z-index: 9999; width: 180px;">
+                    @if (row.remainingAmount > 0) {
+                    <div class="action-item" (click)="fundContract(row); closeActionMenu()">
+                        <i class="bi bi-credit-card-2-front"></i>
+                        <span>Pay / Fund</span>
+                    </div>
+                    } @else {
+                    <div class="action-item" (click)="downloadInvoice(row); closeActionMenu()">
+                        <i class="bi bi-file-earmark-arrow-down"></i>
+                        <span>Invoice</span>
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+        </ng-template>
 
 
 
-<div class="glass-dark rounded-4 p-0 p-md-3 border border-white border-opacity-5">
-    <div class="table-responsive-wrapper">
-        <div class="table-min-width">
-            <app-table
-                [rows]="filteredInvoices"
-                [columns]="columns">
-            </app-table>
+        @defer (on viewport) {
+        <div class="mb-4">
+            <div class="table-responsive-wrapper">
+                <div class="table-min-width">
+                    <app-table [rows]="filteredInvoices()" [columns]="columns">
+                    </app-table>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+        } @placeholder {
+        <div class="text-center p-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        }
 
 
     </div>

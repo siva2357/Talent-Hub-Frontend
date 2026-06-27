@@ -1,4 +1,6 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, DestroyRef } from '@angular/core';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -13,12 +15,13 @@ import { AuthService } from '../../../../../core/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { InputComponent } from '../../../../../shared/components/input/input.component';
 import { RichTextEditorComponent } from '../../../../../shared/components/rich-text-editor/rich-text-editor.component';
+import { BadgeComponent } from '../../../../../shared/components/badge/badge.component';
 
 
 @Component({
   selector: 'app-contract-progress',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent,InputComponent,RichTextEditorComponent, FileUploadComponent, FilePreviewComponent],
+  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent,InputComponent,RichTextEditorComponent, FileUploadComponent, FilePreviewComponent, BadgeComponent, ReactiveFormsModule],
   templateUrl: './contract-progress.component.html',
   styleUrl: './contract-progress.component.css'
 })
@@ -26,26 +29,32 @@ export class ContractProgressComponent implements OnInit {
   private diaryService = inject(ContractDiaryService);
   private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
-  private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
 
-  contractId: string = '';
+  contractId = signal<string>('');
 
 
-newPhase!: AddPhaseFormDto
-  isLoading = true;
+phaseForm = new FormGroup({
+    name: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
+    deadline: new FormControl('', Validators.required),
+    amount: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
+    clientAttachments: new FormControl<Attachment[]>([])
+  });
+  isLoading = signal(true);
    userRole: 'freelancer' | 'client' = 'freelancer';
   feedbackText: Record<string, string> = {};
   reviewing: Record<string, boolean> = {};
   addingPhase: Record<string, boolean> = {};
-  showAddPhaseModal = false;
-selectedDiaryId: string | null = null;
+  showAddPhaseModal = signal(false);
+selectedDiaryId = signal<string | null>(null);
   bucketKey: BucketKey = BucketKey.ClientData;
   readonly uploadSection = UploadSection.ContractFiles;
-  tempUploadUrl: string | null = null;
+  tempUploadUrl = signal<string | null>(null);
 
-  diary: Diary | null = null;
+  diary = signal<Diary | null>(null);
 
-contract: any = null;
+contract = signal<any>(null);
 
 
 getLatestRevision(phase: any) {
@@ -81,26 +90,19 @@ ngOnInit(): void {
     );
   }
 
-  this.newPhase = {
-    name: '',
-    description: '',
-    deadline: '',
-    amount: null,
-    clientAttachments: []
-  };
+  this.phaseForm.reset({ clientAttachments: [] });
 
-  this.route.queryParamMap.subscribe(params => {
+  this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
 
-    this.contractId =
-      params.get('contractId') || '';
+    this.contractId.set(params.get('contractId') || '');
 
-    if (!this.contractId) {
+    if (!this.contractId()) {
 
-      this.isLoading = false;
+      this.isLoading.set(false);
 
-      this.contract = null;
+      this.contract.set(null);
 
-      this.diary = null;
+      this.diary.set(null);
 
       return;
 
@@ -117,16 +119,17 @@ fetchContractDiary(
   phaseId?: string
 ): void {
 
-  if (!this.contractId) {
+  if (!this.contractId()) {
     return;
   }
 
-  this.isLoading = true;
+  this.isLoading = signal(true);
 
   this.diaryService
     .getDiaryByContractId(
-      this.contractId
+      this.contractId()
     )
+    .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe({
 
       next: (res: any) => {
@@ -141,19 +144,17 @@ fetchContractDiary(
           )
         );
 
-        this.contract =
-          res.contract || null;
+        this.contract.set(res.contract || null);
 
-        this.diary =
-          res.diary || null;
+        this.diary.set(res.diary || null);
 
-        this.isLoading = false;
+        this.isLoading.set(false);
 
         if (phaseId) {
           this.reviewing[phaseId] = false;
         }
 
-        this.cdr.detectChanges();
+        
       },
 
       error: (err) => {
@@ -163,11 +164,11 @@ fetchContractDiary(
           err
         );
 
-        this.contract = null;
+        this.contract.set(null);
 
-        this.diary = null;
+        this.diary.set(null);
 
-        this.isLoading = false;
+        this.isLoading.set(false);
 
         if (phaseId) {
           this.reviewing[phaseId] = false;
@@ -201,11 +202,10 @@ onFileUploaded(
 
   };
 
-  this.newPhase.clientAttachments.push(
-    attachment
-  );
+  const attachments = this.phaseForm.value.clientAttachments || [];
+  this.phaseForm.patchValue({ clientAttachments: [...attachments, attachment] });
 
-  this.tempUploadUrl = null;
+  this.tempUploadUrl.set(null);
 
 }
 
@@ -213,10 +213,9 @@ removeAttachment(
   index: number
 ): void {
 
-  this.newPhase.clientAttachments.splice(
-    index,
-    1
-  );
+  const attachments = [...(this.phaseForm.value.clientAttachments || [])];
+  attachments.splice(index, 1);
+  this.phaseForm.patchValue({ clientAttachments: attachments });
 
 }
 
@@ -227,39 +226,33 @@ removeAttachment(
   diaryId: string
 ): void {
 
-  this.selectedDiaryId = diaryId;
+  this.selectedDiaryId.set(diaryId);
 
-  this.showAddPhaseModal = true;
+  this.showAddPhaseModal.set(true);
 
   document.body.classList.add(
     'modal-open'
   );
   
-  this.cdr.detectChanges();
+  
 
 }
 
 closeAddPhaseModal(): void {
 
-  this.showAddPhaseModal = false;
+  this.showAddPhaseModal = signal(false);
 
-  this.selectedDiaryId = null;
+  this.selectedDiaryId.set(null);
 
-  this.tempUploadUrl = null;
+  this.tempUploadUrl.set(null);
 
-  this.newPhase = {
-    name: '',
-    description: '',
-    deadline: '',
-    amount: null,
-    clientAttachments: []
-  };
+  this.phaseForm.reset({ clientAttachments: [] });
 
   document.body.classList.remove(
     'modal-open'
   );
 
-  this.cdr.detectChanges();
+  
 
 }
 
@@ -340,9 +333,10 @@ addPhase(
   diaryId: string
 ): void {
 
-  if (!this.newPhase.name.trim()) {
+  if (this.phaseForm.invalid) {
     return;
   }
+  const formValue = this.phaseForm.value;
 
   this.addingPhase[diaryId] = true;
 
@@ -350,14 +344,11 @@ addPhase(
     .addPhase(
       diaryId,
       {
-        name: this.newPhase.name,
-        description: this.newPhase.description,
-        deadline:
-          this.newPhase.deadline || '',
-        amount:
-          this.newPhase.amount || 0,
-        clientAttachments:
-          this.newPhase.clientAttachments
+        name: formValue.name || '',
+        description: formValue.description || '',
+        deadline: formValue.deadline || '',
+        amount: formValue.amount || 0,
+        clientAttachments: formValue.clientAttachments || []
       }
     )
     .subscribe({
@@ -369,21 +360,15 @@ addPhase(
           'Phase added successfully.'
         );
 
-        this.newPhase = {
-          name: '',
-          description: '',
-          deadline: '',
-          amount: null,
-          clientAttachments: []
-        };
+        this.phaseForm.reset({ clientAttachments: [] });
 
-        this.tempUploadUrl = null;
+        this.tempUploadUrl.set(null);
 
         this.closeAddPhaseModal();
 
         this.fetchContractDiary();
         this.addingPhase[diaryId] = false;
-        this.cdr.detectChanges();
+        
 
       },
 
@@ -441,6 +426,21 @@ addPhase(
       case 'changes-requested': return 'bg-danger';
       case 'overdue':           return 'bg-danger';
       default:                  return 'bg-secondary';
+    }
+  }
+
+  getOverallStatusBadgeVariant(status: string): string {
+    return status === 'completed' ? 'success' : 'primary';
+  }
+
+  getPhaseStatusBadgeVariant(status: string): string {
+    switch (status) {
+      case 'approved':          return 'success';
+      case 'in-progress':       return 'primary';
+      case 'submitted':         return 'warning';
+      case 'changes-requested': return 'danger';
+      case 'overdue':           return 'danger';
+      default:                  return 'secondary';
     }
   }
 
