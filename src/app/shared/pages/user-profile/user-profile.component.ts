@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, inject } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProfileService } from '../../../core/services/profile.service';
@@ -22,12 +22,12 @@ export class UserProfileComponent implements OnInit {
 
   currentUser = this.authService.currentUser;
 
-  user: any = null;
-  profile: any = null;
-  contracts: any[] = [];
-  diaries: any[] = [];
-  isLoading = true;
-  selectedPortfolioItem: any = null;
+  user = signal<any>(null);
+  profile = signal<any>(null);
+  contracts = signal<any[]>([]);
+  diaries = signal<any[]>([]);
+  isLoading = signal<boolean>(true);
+  selectedPortfolioItem = signal<any>(null);
 
   isFreelancer = computed(() =>
     this.currentUser()?.role === 'Freelancer'
@@ -37,31 +37,45 @@ export class UserProfileComponent implements OnInit {
     this.currentUser()?.role === 'Client'
   );
 
+  clientJobsPosted = computed(() => this.contracts().length);
+
+  clientHireRate = computed(() => {
+    const total = this.contracts().length;
+    if (total === 0) return 0;
+    // Assuming any contract not pending means someone was hired (e.g. active, in progress, completed, closed)
+    const hired = this.contracts().filter(c => c.status && c.status.toLowerCase() !== 'pending').length;
+    return Math.round((hired / total) * 100);
+  });
+
+  clientTotalInvestments = computed(() => {
+    return this.contracts().reduce((total, c) => total + (c.estimatedBudget || 0), 0);
+  });
+
   ngOnInit(): void {
     this.getProfile();
   }
 
   openPortfolioDetail(item: any): void {
-    this.selectedPortfolioItem = item;
+    this.selectedPortfolioItem.set(item);
   }
 
   closePortfolioDetail(): void {
-    this.selectedPortfolioItem = null;
+    this.selectedPortfolioItem.set(null);
   }
 
 
   getProfile(): void {
     this.profileService.getMyProfile().subscribe({
       next: (res) => {
-        this.user = res.user;
-        this.profile = res.profile;
-        this.contracts = res.contracts || [];
-        this.diaries = res.diaries || [];
-        this.isLoading = false;
+        this.user.set(res.user);
+        this.profile.set(res.profile);
+        this.contracts.set(res.contracts || []);
+        this.diaries.set(res.diaries || []);
+        this.isLoading.set(false);
       },
       error: (err) => {
         console.error(err);
-        this.isLoading = false;
+        this.isLoading.set(false);
       }
     });
   }

@@ -11,10 +11,11 @@ import { Proficiency } from '../../../core/enums/proficiency.enum';
 import { LanguageDto } from '../../../core/DTOs/profile.dto';
 import { ProfileService } from '../../../core/services/profile.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, DestroyRef, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { InputComponent } from '../../components/input/input.component';
 import { ButtonComponent } from '../../components/button/button.component';
 import { ChipComponent } from '../../components/chip/chip.component';
@@ -27,6 +28,7 @@ import { validateSocialLink, RegexPatterns } from '../../../core/regex/patterns'
     CommonModule,
     RouterLink,
     FormsModule,
+    ReactiveFormsModule,
     InputComponent,
     ButtonComponent,
     ChipComponent
@@ -38,9 +40,11 @@ export class AccountSettingsComponent implements OnInit {
   private authService = inject(AuthService);
   private profileService = inject(ProfileService);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
+  private fb = inject(FormBuilder);
 
   // SETTINGS TABS LAYOUT STATE
-  activeTab: 'profile' | 'security' | 'notifications' | 'manage' | 'payment' = 'profile';
+  activeTab = signal<'profile' | 'security' | 'notifications' | 'manage' | 'payment'>('profile');
 
   // ROLE MODE (Embedded Dual-Mode Form)
   get userMode(): 'freelancer' | 'client' {
@@ -51,8 +55,48 @@ export class AccountSettingsComponent implements OnInit {
     return this.authService.currentUser()?.role || 'Freelancer';
   }
 
-  // BACKUP STATE FOR DISCARD/ROLLBACK
-  originalData: any;
+  // FORM GROUPS
+  profileForm: FormGroup = this.fb.group({
+    fullName: ['', Validators.required],
+    email: [{ value: '', disabled: true }, Validators.required],
+    username: ['', Validators.required],
+    bio: ['', Validators.required],
+    gender: ['male', Validators.required],
+    experienceLevel: ['intermediate'],
+    availabilityType: ['full-time'],
+    clientType: ['Individual'],
+    hiringType: ['long-term'],
+    professionalHeadline: [''],
+    hourlyRate: [50],
+    websiteUrl: [''],
+    industry: [''],
+    country: [''],
+    city: [''],
+    timezone: ['IST']
+  });
+
+  securityForm: FormGroup = this.fb.group({
+    currentPassword: ['', Validators.required],
+    newPassword: ['', Validators.required],
+    confirmPassword: ['', Validators.required],
+    twoFactorEnabled: [true]
+  });
+
+  bankForm: FormGroup = this.fb.group({
+    bankName: ['', Validators.required],
+    holderName: ['', Validators.required],
+    accountNumber: ['', Validators.required],
+    ifsc: ['', Validators.required]
+  });
+
+  // UI STATE SIGNALS
+  isEditModalOpen = signal(false);
+  otpSent = signal(false);
+  phoneVerified = signal(false);
+  emailVerified = signal(false);
+  isEditLangModalOpen = signal(false);
+  bankAccountLinked = signal(false);
+  bankAccountVerified = signal(false);
 
   // ACCOUNT DELETION STATE
   confirmDelete: boolean = false;
@@ -60,94 +104,43 @@ export class AccountSettingsComponent implements OnInit {
 
   // Phone OTP state
   otpCode: string = '';
-  otpSent: boolean = false;
-  phoneVerified: boolean = false;
-  emailVerified: boolean = false;
   phoneNumber: string = '';
   profilePhotoUrl: string | null = null;
 
-  // PREFILLED IDENTITY DATA
-  prefilledData = {
-    fullName: '',
-    email: '',
-    username: '',
-    bio: ''
-  };
-
-  // FORM VARIABLES
-  gender: string = 'male';
-  experienceLevel: string = 'intermediate';
-  availabilityType: string = 'full-time';
-  clientType: string = 'Individual';
-  hiringType: string = 'long-term';
-  professionalHeadline: string = '';
-  hourlyRate: number = 50;
-  websiteUrl: string = '';
-  industry: string = '';
-  country: string = '';
-  city: string = '';
-  timezone: string = 'IST';
-
-  // SOCIAL LINKS COLLECTIONS
+  // SOCIAL LINKS & LANGUAGES
   savedSocialLinks: any[] = [];
   currentLink = { platform: '', profileUrl: '' };
-
-  isEditModalOpen: boolean = false;
   editingLinkIndex: number = -1;
   editingLinkData = { platform: '', profileUrl: '' };
 
-  isEditLangModalOpen: boolean = false;
+  savedLanguages: LanguageDto[] = [];
+  currentLanguage = { language: '', proficiency: '' };
   editingLangIndex: number = -1;
   editingLangData = { language: '', proficiency: '' };
 
-  // LANGUAGES COLLECTIONS
-  savedLanguages: LanguageDto[] = [];
-  currentLanguage = { language: '', proficiency: '' };
-
-  // BANK ACCOUNT LINKING & VERIFICATION STATE
-  bankAccountLinked: boolean = false;
-  bankAccountVerified: boolean = false;
   bankVerificationStatus: 'unlinked' | 'pending' | 'verified' = 'unlinked';
-  bankDetails = {
-    bankName: '',
-    holderName: '',
-    accountNumber: '',
-    ifsc: ''
-  };
 
-  // CLIENT WALLET ESCROW STATE
+  // WALLET & AGREEMENTS
   escrowBalance: number = 0;
   depositAmount: number = 0;
-
-  // FREELANCER WALLET EARNINGS STATE
   availableBalance: number = 0;
   withdrawAmount: number = 0;
-
-  // SIMULATED AGREEMENTS DATA
   paymentAgreements: any[] = [];
 
-  // CATEGORIES & SKILLS COLLECTIONS
+  // CATEGORIES & SKILLS
   selectedCategories: string[] = [];
   selectedCategoryInput: string = '';
   skills: string[] = [];
   currentSkill: string = '';
 
-  // SECURITY FORM FIELDS
-  securityData = {
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-    twoFactorEnabled: true
-  };
-
-  // NOTIFICATION SWITCH PREFERENCES
-  notificationPreferences = {
-    emailAlerts: true,
-    browserPings: true,
-    smsReceipts: false,
-    marketingEmails: false,
-    securityAlerts: true
-  };
+  // NOTIFICATIONS
+  notificationForm: FormGroup = this.fb.group({
+    emailAlerts: [true],
+    browserPings: [true],
+    smsReceipts: [false],
+    marketingEmails: [false],
+    securityAlerts: [true]
+  });
 
   // DROPDOWN OPTIONS DATA
   platformOptions = [
@@ -233,7 +226,7 @@ export class AccountSettingsComponent implements OnInit {
     const savedNotifs = localStorage.getItem('th_notif_prefs');
     if (savedNotifs) {
       try {
-        this.notificationPreferences = JSON.parse(savedNotifs);
+        this.notificationForm.patchValue(JSON.parse(savedNotifs));
       } catch (e) {
         // Keep defaults
       }
@@ -243,50 +236,53 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   loadProfileData(): void {
-    this.profileService.getMyProfile().subscribe({
+    this.profileService.getMyProfile().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (res: any) => {
         if (res.success) {
           const u = res.user || {};
           const p = res.profile || {};
           const basic = p.basicInformation || {};
 
-          this.prefilledData = {
+          this.profileForm.patchValue({
             fullName: basic.fullName || u.fullName || '',
             email: basic.email || u.email || '',
             username: basic.username || (u.email ? u.email.split('@')[0] : ''),
-            bio: basic.shortBio || ''
-          };
+            bio: basic.shortBio || '',
+            gender: basic.gender || 'male',
+            country: p.location?.country || 'IN',
+            city: p.location?.city || '',
+            timezone: p.location?.timezone || 'IST',
+            professionalHeadline: basic.professionalHeadline || '',
+            hourlyRate: p.hourlyRate || 50,
+            availabilityType: p.availability?.[0] || 'full-time',
+            clientType: p.professionalDetails?.clientType ? p.professionalDetails.clientType.charAt(0).toUpperCase() + p.professionalDetails.clientType.slice(1) : 'Individual',
+            websiteUrl: p.professionalDetails?.website || '',
+            industry: p.professionalDetails?.industry || 'tech'
+          });
 
-          this.emailVerified = u.emailVerified || false;
-          this.phoneVerified = u.mobileVerification || p.verification?.phoneNumber || false;
+          this.emailVerified.set(u.emailVerified || false);
+          this.phoneVerified.set(u.mobileVerification || p.verification?.phoneNumber || false);
           this.phoneNumber = u.phoneNumber || '';
           this.profilePhotoUrl = basic.profilePhoto || null;
           this.savedLanguages = p.languages || [];
 
           const pay = p.paymentDetails || {};
-          this.bankDetails = {
+          this.bankForm.patchValue({
             bankName: pay.bankName || '',
             holderName: pay.holderName || '',
             accountNumber: pay.accountNumber || '',
             ifsc: pay.ifsc || ''
-          };
-          this.bankVerificationStatus = pay.status || 'unlinked';
-          this.bankAccountLinked = this.bankVerificationStatus !== 'unlinked';
-          this.bankAccountVerified = this.bankVerificationStatus === 'verified';
+          });
 
-          this.gender = basic.gender || 'male';
-          this.country = p.location?.country || 'IN';
-          this.city = p.location?.city || '';
-          this.timezone = p.location?.timezone || 'IST';
+          this.bankVerificationStatus = pay.status || 'unlinked';
+          this.bankAccountLinked.set(this.bankVerificationStatus !== 'unlinked');
+          this.bankAccountVerified.set(this.bankVerificationStatus === 'verified');
+
           this.savedSocialLinks = p.socialLinks || [];
           this.selectedCategories = p.professionalDetails?.categories || [];
           this.skills = p.professionalDetails?.skills || [];
 
           if (this.userMode === 'freelancer') {
-            this.professionalHeadline = basic.professionalHeadline || '';
-            this.hourlyRate = p.hourlyRate || 50;
-            this.availabilityType = p.availability?.[0] || 'full-time';
-
             // Mock Freelancer initial balances and agreements
             this.availableBalance = 32500;
             this.paymentAgreements = [
@@ -308,11 +304,6 @@ export class AccountSettingsComponent implements OnInit {
               }
             ];
           } else {
-            const loadedType = p.professionalDetails?.clientType || 'Individual';
-            this.clientType = loadedType.charAt(0).toUpperCase() + loadedType.slice(1);
-            this.websiteUrl = p.professionalDetails?.website || '';
-            this.industry = p.professionalDetails?.industry || 'tech';
-
             // Mock Client initial balances and agreements
             this.escrowBalance = 75000;
             this.paymentAgreements = [
@@ -349,11 +340,11 @@ export class AccountSettingsComponent implements OnInit {
   // LOGICAL HANDLERS
 
   setSelection(type: string, value: string): void {
-    if (type === 'experience') this.experienceLevel = value;
-    if (type === 'availability') this.availabilityType = value;
-    if (type === 'clientType') this.clientType = value;
-    if (type === 'hiringType') this.hiringType = value;
-    if (type === 'gender') this.gender = value;
+    if (type === 'experience') this.profileForm.patchValue({ experienceLevel: value });
+    if (type === 'availability') this.profileForm.patchValue({ availabilityType: value });
+    if (type === 'clientType') this.profileForm.patchValue({ clientType: value });
+    if (type === 'hiringType') this.profileForm.patchValue({ hiringType: value });
+    if (type === 'gender') this.profileForm.patchValue({ gender: value });
   }
 
   // CATEGORIES & SKILLS MODIFIERS
@@ -404,11 +395,11 @@ export class AccountSettingsComponent implements OnInit {
   openEditModal(index: number): void {
     this.editingLinkIndex = index;
     this.editingLinkData = { ...this.savedSocialLinks[index] };
-    this.isEditModalOpen = true;
+    this.isEditModalOpen.set(true);
   }
 
   closeEditModal(): void {
-    this.isEditModalOpen = false;
+    this.isEditModalOpen.set(false);
     this.editingLinkIndex = -1;
   }
 
@@ -448,11 +439,11 @@ export class AccountSettingsComponent implements OnInit {
   openEditLangModal(index: number): void {
     this.editingLangIndex = index;
     this.editingLangData = { ...this.savedLanguages[index] };
-    this.isEditLangModalOpen = true;
+    this.isEditLangModalOpen.set(true);
   }
 
   closeEditLangModal(): void {
-    this.isEditLangModalOpen = false;
+    this.isEditLangModalOpen.set(false);
     this.editingLangIndex = -1;
   }
 
@@ -505,7 +496,7 @@ export class AccountSettingsComponent implements OnInit {
     this.profileService.sendPhoneOTP(fullPhone).subscribe({
       next: (res: any) => {
         alert(res.message || 'OTP sent successfully!');
-        this.otpSent = true;
+        this.otpSent.set(true);
       },
       error: (err: any) => {
         alert(err.error?.message || 'Failed to send OTP');
@@ -525,8 +516,8 @@ export class AccountSettingsComponent implements OnInit {
     this.profileService.verifyPhoneOTP(fullPhone, this.otpCode).subscribe({
       next: (res: any) => {
         alert(res.message || 'Phone verified successfully!');
-        this.phoneVerified = true;
-        this.otpSent = false;
+        this.phoneVerified.set(true);
+        this.otpSent.set(false);
         this.otpCode = '';
         this.loadProfileData();
       },
@@ -537,55 +528,19 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   // BACKUP FORM STATE
+  originalProfileData: any;
+  originalBankData: any;
+
   backupData(): void {
-    this.originalData = JSON.parse(JSON.stringify({
-      prefilledData: this.prefilledData,
-      gender: this.gender,
-      experienceLevel: this.experienceLevel,
-      availabilityType: this.availabilityType,
-      clientType: this.clientType,
-      hiringType: this.hiringType,
-      professionalHeadline: this.professionalHeadline,
-      websiteUrl: this.websiteUrl,
-      industry: this.industry,
-      country: this.country,
-      city: this.city,
-      timezone: this.timezone,
-      savedSocialLinks: this.savedSocialLinks,
-      savedLanguages: this.savedLanguages,
-      selectedCategories: this.selectedCategories,
-      skills: this.skills,
-      securityData: this.securityData,
-      notificationPreferences: this.notificationPreferences,
-      profilePhotoUrl: this.profilePhotoUrl,
-      hourlyRate: this.hourlyRate
-    }));
+    this.originalProfileData = this.profileForm.getRawValue();
+    this.originalBankData = this.bankForm.getRawValue();
   }
 
   // ROLLBACK TO BACKUP
   discardChanges(): void {
-    if (this.originalData) {
-      const data = JSON.parse(JSON.stringify(this.originalData));
-      this.prefilledData = data.prefilledData;
-      this.gender = data.gender;
-      this.experienceLevel = data.experienceLevel;
-      this.availabilityType = data.availabilityType;
-      this.clientType = data.clientType;
-      this.hiringType = data.hiringType;
-      this.professionalHeadline = data.professionalHeadline;
-      this.websiteUrl = data.websiteUrl;
-      this.industry = data.industry;
-      this.country = data.country;
-      this.city = data.city;
-      this.timezone = data.timezone;
-      this.savedSocialLinks = data.savedSocialLinks;
-      this.savedLanguages = data.savedLanguages || [];
-      this.selectedCategories = data.selectedCategories;
-      this.skills = data.skills;
-      this.securityData = data.securityData;
-      this.notificationPreferences = data.notificationPreferences;
-      this.profilePhotoUrl = data.profilePhotoUrl;
-      this.hourlyRate = data.hourlyRate || 50;
+    if (this.originalProfileData) {
+      this.profileForm.reset(this.originalProfileData);
+      this.bankForm.reset(this.originalBankData);
       alert('Changes Discarded!');
     }
   }
@@ -610,24 +565,30 @@ export class AccountSettingsComponent implements OnInit {
 
   // GLOBAL SAVE SUBMISSIONS
   saveSettings(): void {
-    if (this.activeTab === 'security') {
-      if (!this.securityData.currentPassword || !this.securityData.newPassword || !this.securityData.confirmPassword) {
-        alert('Please fill all password fields');
+    if (this.activeTab() === 'security') {
+      const sForm = this.securityForm.getRawValue();
+      if (!sForm.currentPassword || !sForm.newPassword || !sForm.confirmPassword) {
+        alert('Please fill out all password fields.');
         return;
       }
-      if (this.securityData.newPassword !== this.securityData.confirmPassword) {
-        alert('New passwords do not match');
+      if (sForm.newPassword !== sForm.confirmPassword) {
+        alert('New passwords do not match.');
         return;
       }
-      this.authService.changePassword({
-        oldPassword: this.securityData.currentPassword,
-        newPassword: this.securityData.newPassword
-      }).subscribe({
+
+      const payload = {
+        oldPassword: sForm.currentPassword,
+        newPassword: sForm.newPassword
+      };
+
+      this.authService.changePassword(payload).subscribe({
         next: (res: any) => {
           alert('Password updated successfully! Redirecting to login...');
-          this.securityData.currentPassword = '';
-          this.securityData.newPassword = '';
-          this.securityData.confirmPassword = '';
+          this.securityForm.patchValue({
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: ''
+          });
           this.authService.logout();
           this.router.navigate(['/account/signin']);
         },
@@ -638,38 +599,40 @@ export class AccountSettingsComponent implements OnInit {
       return;
     }
 
-    if (this.activeTab === 'profile') {
+    if (this.activeTab() === 'profile') {
       // Build request body for profile update
+      const pForm = this.profileForm.getRawValue();
+
       const basicInfo: any = {
-        fullName: this.prefilledData.fullName,
-        email: this.prefilledData.email,
-        username: this.prefilledData.username,
-        gender: this.gender,
-        shortBio: this.prefilledData.bio,
+        fullName: pForm.fullName,
+        email: pForm.email,
+        username: pForm.username,
+        gender: pForm.gender,
+        shortBio: pForm.bio,
         profilePhoto: this.profilePhotoUrl || ''
       };
 
       const location = {
-        country: this.country,
-        city: this.city,
-        timezone: this.timezone
+        country: pForm.country,
+        city: pForm.city,
+        timezone: pForm.timezone
       };
 
       let profDetails: any = {};
       let availability: string[] = [];
 
       if (this.userMode === 'freelancer') {
-        basicInfo.professionalHeadline = this.professionalHeadline;
+        basicInfo.professionalHeadline = pForm.professionalHeadline;
         profDetails = {
           categories: this.selectedCategories,
           skills: this.skills
         };
-        availability = [this.availabilityType];
+        availability = [pForm.availabilityType];
       } else {
         profDetails = {
-          clientType: this.clientType,
-          website: this.clientType === 'Individual' ? '' : this.websiteUrl,
-          industry: this.clientType === 'Individual' ? '' : this.industry
+          clientType: pForm.clientType,
+          website: pForm.clientType === 'Individual' ? '' : pForm.websiteUrl,
+          industry: pForm.clientType === 'Individual' ? '' : pForm.industry
         };
       }
 
@@ -726,7 +689,7 @@ export class AccountSettingsComponent implements OnInit {
         socialLinks: cleanedSocialLinks,
         languages: cleanedLanguages,
         availability: this.userMode === 'freelancer' ? availability : undefined,
-        hourlyRate: this.userMode === 'freelancer' ? Number(this.hourlyRate) : undefined
+        hourlyRate: this.userMode === 'freelancer' ? Number(pForm.hourlyRate) : undefined
       };
 
       this.profileService.updateProfile(payload).subscribe({
@@ -741,7 +704,7 @@ export class AccountSettingsComponent implements OnInit {
       });
     } else {
       // Save notification preferences in local storage so it is persistent
-      localStorage.setItem('th_notif_prefs', JSON.stringify(this.notificationPreferences));
+      localStorage.setItem('th_notif_prefs', JSON.stringify(this.notificationForm.getRawValue()));
       alert('Notification settings saved successfully!');
       this.backupData();
     }
@@ -749,15 +712,16 @@ export class AccountSettingsComponent implements OnInit {
 
   // PAYMENT AGREEMENT HANDLERS
   saveBankDetails(): void {
-    if (this.bankDetails.bankName && this.bankDetails.holderName && this.bankDetails.accountNumber && this.bankDetails.ifsc) {
-      this.bankAccountLinked = true;
+    if (this.bankForm.valid) {
+      this.bankAccountLinked.set(true);
       this.bankVerificationStatus = 'pending';
+      const bForm = this.bankForm.getRawValue();
       const payload = {
         paymentDetails: {
-          bankName: this.bankDetails.bankName,
-          holderName: this.bankDetails.holderName,
-          accountNumber: this.bankDetails.accountNumber,
-          ifsc: this.bankDetails.ifsc,
+          bankName: bForm.bankName,
+          holderName: bForm.holderName,
+          accountNumber: bForm.accountNumber,
+          ifsc: bForm.ifsc,
           status: 'pending',
           verified: false
         }
@@ -777,14 +741,15 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   verifyBankDetails(): void {
-    this.bankAccountVerified = true;
+    this.bankAccountVerified.set(true);
     this.bankVerificationStatus = 'verified';
+    const bForm = this.bankForm.getRawValue();
     const payload = {
       paymentDetails: {
-        bankName: this.bankDetails.bankName,
-        holderName: this.bankDetails.holderName,
-        accountNumber: this.bankDetails.accountNumber,
-        ifsc: this.bankDetails.ifsc,
+        bankName: bForm.bankName,
+        holderName: bForm.holderName,
+        accountNumber: bForm.accountNumber,
+        ifsc: bForm.ifsc,
         status: 'verified',
         verified: true,
         legalityAccepted: true

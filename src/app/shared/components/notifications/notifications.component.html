@@ -2,17 +2,17 @@
     <button class="btn btn-link icon-btn shadow-none no-caret" type="button" data-bs-toggle="dropdown"
         aria-expanded="false">
         <i class="bi bi-bell fs-4"></i>
-        @if (notifications.length > 0) {
-        <span class="icon-badge">{{ notifications.length }}</span>
+        @if (unreadCount > 0) {
+        <span class="icon-badge">{{ unreadCount }}</span>
         }
     </button>
-    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-0 mt-2 notification-dropdown">
-        <li class="px-3 py-3 border-bottom border-white border-opacity-10 d-flex justify-content-between align-items-center">
+    <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-0 mt-2 notification-dropdown">
+        <div class="px-3 py-3 border-bottom border-white border-opacity-10 d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center gap-2">
                 <h6 class="mb-0 text-white fw-bold">Notifications</h6>
-                @if (notifications.length > 0) {
+                @if (unreadCount > 0) {
                 <span class="badge bg-primary rounded-pill"
-                    style="font-size: 10px; padding: 4px 8px;">{{ notifications.length }}</span>
+                    style="font-size: 10px; padding: 4px 8px;">{{ unreadCount }}</span>
                 }
             </div>
             <div class="d-flex gap-2">
@@ -28,7 +28,7 @@
                 </button>
                 }
             </div>
-        </li>
+        </div>
         <div class="notification-list" style="max-height: 380px; overflow-y: auto;">
             @if (notifications.length === 0) {
             <div class="text-center py-4 px-3">
@@ -40,33 +40,41 @@
             </div>
             } @else {
             @for (notif of visibleNotifications; track notif._id) {
-            <li class="position-relative notification-item animate-fade-in" [class.unread]="!notif.read">
-                <a class="dropdown-item p-3 border-bottom border-white border-opacity-5" href="javascript:void(0)" (click)="markAsRead(notif._id, $event)">
-                    <div class="d-flex gap-3 pe-4">
-                        <div class="notif-icon-box" [class]="getNotificationClass(notif.title)">
+            <div class="position-relative notification-item animate-fade-in" [class.unread]="!notif.read">
+                <a class="d-block text-decoration-none px-3 py-2 border-bottom border-white border-opacity-5" href="javascript:void(0)">
+                    
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <div class="notif-icon-box" style="width: 24px; height: 24px; min-width: 24px; font-size: 12px; border-radius: 6px;" [class]="getNotificationClass(notif.title)">
                             <i class="bi" [class]="getNotificationIcon(notif.title)"></i>
                         </div>
-                        <div class="flex-grow-1">
-                            <p class="text-white small mb-1 fw-medium">{{ notif.title }}</p>
-                            <p class="text-secondary smaller mb-1" style="line-height: 1.3;">{{ notif.message }}</p>
-                            <p class="text-secondary smaller mb-0" style="font-size: 10px;">{{ DateTimeHelper.toLocalString(notif.createdAt, false, 'h:mm A') }}</p>
+                        <p class="text-white mb-0 fw-bold" style="font-size: 13px;">{{ notif.title }}</p>
+                    </div>
+                    
+                    <div class="mt-1">
+                        <p class="text-secondary mb-1" style="font-size: 13px; line-height: 1.4; text-align: justify;">{{ notif.message }}</p>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="text-secondary" style="font-size: 12px;">{{ DateTimeHelper.toLocalString(notif.createdAt, false, 'h:mm A') }}</span>
+                            @if (!notif.read) {
+                                <span class="text-secondary opacity-50" style="font-size: 10px;">•</span>
+                                <button class="btn btn-link p-0 text-decoration-none text-primary fw-medium" style="font-size: 12px;" (click)="markAsRead(notif._id, $event)">Mark as read</button>
+                            }
+                            <span class="text-secondary opacity-50" style="font-size: 10px;">•</span>
+                            <button class="btn btn-link p-0 text-decoration-none text-danger fw-medium" style="font-size: 12px;" (click)="deleteNotification(notif._id, $event)">Delete</button>
                         </div>
                     </div>
+
                 </a>
-                <button class="btn btn-link text-secondary delete-btn position-absolute top-50 translate-middle-y end-0 me-3" (click)="deleteNotification(notif._id, $event)" title="Delete notification">
-                    <i class="bi bi-trash smaller"></i>
-                </button>
-            </li>
+            </div>
             }
             }
         </div>
         @if (notifications.length > 4) {
-        <li class="p-1 text-center">
+        <div class="p-1 text-center">
             <button class="btn btn-link text-primary text-decoration-none smaller fw-bold py-2 w-100"
                 (click)="toggleShowAll($event)">
                 {{ showAllNotifications ? 'View Less' : 'View More' }}
             </button>
-        </li>
+        </div>
         }
-    </ul>
+    </div>
 </div>

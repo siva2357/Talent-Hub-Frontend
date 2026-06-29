@@ -21,37 +21,37 @@
     </header>
     <!-- HORIZONTAL TABS BAR (Short tabs, not wide, clean style) -->
     <div class="d-flex justify-content-start gap-2 mb-4 flex-wrap">
-      <button (click)="activeTab = 'profile'"
+      <button (click)="activeTab.set('profile')"
         class="btn-settings-tab d-flex align-items-center gap-2 px-3 py-2.5 rounded-3 border-glass text-white"
-        [class.active]="activeTab === 'profile'">
+        [class.active]="activeTab() === 'profile'">
         <i class="bi bi-person-gear"></i>
         <span class="tab-label fw-semibold text-sm">Profile Details</span>
       </button>
 
-      <button (click)="activeTab = 'security'"
+      <button (click)="activeTab.set('security')"
         class="btn-settings-tab d-flex align-items-center gap-2 px-3 py-2.5 rounded-3 border-glass text-white"
-        [class.active]="activeTab === 'security'">
+        [class.active]="activeTab() === 'security'">
         <i class="bi bi-shield-lock"></i>
         <span class="tab-label fw-semibold text-sm">Security & Password</span>
       </button>
 
-      <button (click)="activeTab = 'notifications'"
+      <button (click)="activeTab.set('notifications')"
         class="btn-settings-tab d-flex align-items-center gap-2 px-3 py-2.5 rounded-3 border-glass text-white"
-        [class.active]="activeTab === 'notifications'">
+        [class.active]="activeTab() === 'notifications'">
         <i class="bi bi-bell"></i>
         <span class="tab-label fw-semibold text-sm">Notifications</span>
       </button>
 
-      <button (click)="activeTab = 'payment'"
+      <button (click)="activeTab.set('payment')"
         class="btn-settings-tab d-flex align-items-center gap-2 px-3 py-2.5 rounded-3 border-glass text-white"
-        [class.active]="activeTab === 'payment'">
+        [class.active]="activeTab() === 'payment'">
         <i class="bi bi-cash-coin"></i>
         <span class="tab-label fw-semibold text-sm">Payment Agreement</span>
       </button>
 
-      <button (click)="activeTab = 'manage'"
+      <button (click)="activeTab.set('manage')"
         class="btn-settings-tab d-flex align-items-center gap-2 px-3 py-2.5 rounded-3 border-glass text-danger"
-        [class.active]="activeTab === 'manage'">
+        [class.active]="activeTab() === 'manage'">
         <i class="bi bi-shield-x"></i>
         <span class="tab-label fw-semibold text-sm">Manage Account</span>
       </button>
@@ -65,8 +65,8 @@
           <div class="card-neon-top-bar position-absolute top-0 start-0 w-100 header-neon-bar"></div>
 
           <!-- TAB 1: INTEGRATED PROFILE DETAILS FORM -->
-          @if (activeTab === 'profile') {
-          <div class="tab-view-profile animate-fade-in d-flex flex-column gap-5">
+          @if (activeTab() === 'profile') {
+          <div class="tab-view-profile animate-fade-in d-flex flex-column gap-5" [formGroup]="profileForm">
             <!-- SECTION A: PERSONAL IDENTITY -->
             <section class="form-section">
               <div class="section-title-box d-flex align-items-center gap-2 mb-4">
@@ -101,26 +101,25 @@
                 <div class="col-lg-9">
                   <div class="row g-3">
                     <div class="col-sm-6">
-                      <app-input label="Full Name" [value]="prefilledData.fullName" [disabled]="true"
-                        [required]="true"></app-input>
+                      <app-input label="Full Name" formControlName="fullName" [required]="true"></app-input>
                     </div>
                     <div class="col-sm-6">
-                      <app-input label="Email Address" [value]="prefilledData.email" [disabled]="true" [required]="true"
+                      <app-input label="Email Address" formControlName="email" [required]="true"
                         icon="bi-envelope"></app-input>
                     </div>
                     <div class="col-sm-6">
-                      <app-input label="Username" [(ngModel)]="prefilledData.username" placeholder="Enter username"
+                      <app-input label="Username" formControlName="username" placeholder="Enter username"
                         [required]="true" icon="bi-person"></app-input>
                     </div>
                     <div class="col-sm-6">
-                      <app-input type="select" label="Gender" [options]="genderOptions" [(ngModel)]="gender"
+                      <app-input type="select" label="Gender" [options]="genderOptions" formControlName="gender"
                         [required]="true"></app-input>
                     </div>
                   </div>
                 </div>
 
                 <div class="col-12 mt-2">
-                  <app-input type="textarea" label="Short Professional Bio" [(ngModel)]="prefilledData.bio"
+                  <app-input type="textarea" label="Short Professional Bio" formControlName="bio"
                     placeholder="Tell the Talent-Hub community about your passion..." [required]="true"></app-input>
                 </div>
               </div>
@@ -138,13 +137,13 @@
               <div class="freelancer-professional-fields d-flex flex-column gap-4">
                 <div class="row g-3">
                   <div class="col-12">
-                    <app-input label="Professional Headline" [(ngModel)]="professionalHeadline"
+                    <app-input label="Professional Headline" formControlName="professionalHeadline"
                       placeholder="Example: Senior Angular Developer" [required]="true"
                       icon="bi-lightning-charge"></app-input>
                   </div>
                   <div class="col-sm-6">
                     <app-input type="select" label="Skills Categories (Select)" [options]="categoryOptions"
-                      [(ngModel)]="selectedCategoryInput" (ngModelChange)="addCategory(selectedCategoryInput)"
+                      [(ngModel)]="selectedCategoryInput" [ngModelOptions]="{standalone: true}" (ngModelChange)="addCategory(selectedCategoryInput)"
                       placeholder="Add Category" icon="bi-grid"></app-input>
                     <div class="chips-display d-flex flex-wrap gap-2 mt-3">
                       @for (cat of selectedCategories; track cat) {
@@ -153,7 +152,7 @@
                     </div>
                   </div>
                   <div class="col-sm-6">
-                    <app-input label="Skills Inventory (Press Enter)" [(ngModel)]="currentSkill"
+                    <app-input label="Skills Inventory (Press Enter)" [(ngModel)]="currentSkill" [ngModelOptions]="{standalone: true}"
                       (keydown.enter)="addSkill(currentSkill)" placeholder="Type a skill and press Enter"
                       icon="bi-lightning"></app-input>
                     <div class="chips-display d-flex flex-wrap gap-2 mt-3">
@@ -176,7 +175,7 @@
                     @for (type of ['Individual', 'Startup', 'Agency', 'Business']; track type) {
                     <div class="col-6 col-sm-3">
                       <div class="radio-card role-card-v rounded-3 position-relative"
-                        [class.active]="clientType === type" (click)="setSelection('clientType', type)">
+                        [class.active]="profileForm.get('clientType')?.value === type" (click)="setSelection('clientType', type)">
                         <div class="radio-check"></div>
                         <div class="role-icon-box mb-2">
                           <i class="bi"
@@ -189,14 +188,14 @@
                   </div>
                 </div>
 
-                @if (clientType !== 'Individual') {
+                @if (profileForm.get('clientType')?.value !== 'Individual') {
                 <div class="row g-3">
                   <div class="col-sm-6">
-                    <app-input label="Corporate Website Link" [(ngModel)]="websiteUrl" placeholder="https://..."
+                    <app-input label="Corporate Website Link" formControlName="websiteUrl" placeholder="https://..."
                       icon="bi-globe" [required]="true"></app-input>
                   </div>
                   <div class="col-sm-6">
-                    <app-input type="select" label="Industry Sector" [options]="industryOptions" [(ngModel)]="industry"
+                    <app-input type="select" label="Industry Sector" [options]="industryOptions" formControlName="industry"
                       icon="bi-briefcase" [required]="true"></app-input>
                   </div>
                 </div>
@@ -214,14 +213,14 @@
 
               <div class="row g-3">
                 <div class="col-sm-4">
-                  <app-input type="select" label="Country" [options]="countryOptions" [(ngModel)]="country"
+                  <app-input type="select" label="Country" [options]="countryOptions" formControlName="country"
                     icon="bi-geo"></app-input>
                 </div>
                 <div class="col-sm-4">
-                  <app-input label="City" [(ngModel)]="city" placeholder="City" icon="bi-geo-alt"></app-input>
+                  <app-input label="City" formControlName="city" placeholder="City" icon="bi-geo-alt"></app-input>
                 </div>
                 <div class="col-sm-4">
-                  <app-input type="select" label="Preferred Timezone" [options]="timezoneOptions" [(ngModel)]="timezone"
+                  <app-input type="select" label="Preferred Timezone" [options]="timezoneOptions" formControlName="timezone"
                     icon="bi-clock"></app-input>
                 </div>
               </div>
@@ -244,14 +243,14 @@
                     @for (opt of availabilityOptions; track opt.value) {
                     <div
                       class="availability-btn py-3 px-4 rounded-3 border-glass bg-black-20 text-center cursor-pointer flex-grow-1"
-                      [class.active]="availabilityType === opt.value" (click)="setSelection('availability', opt.value)">
+                      [class.active]="profileForm.get('availabilityType')?.value === opt.value" (click)="setSelection('availability', opt.value)">
                       <span class="btn-label font-monospace fw-bold text-sm">{{ opt.label }}</span>
                     </div>
                     }
                   </div>
                 </div>
                 <div class="col-12 col-sm-6">
-                  <app-input label="Hourly Rate ($ / hr)" [(ngModel)]="hourlyRate"
+                  <app-input label="Hourly Rate ($ / hr)" formControlName="hourlyRate"
                     placeholder="Example: 50" [required]="true"
                     icon="bi-currency-dollar" type="text"></app-input>
                 </div>
@@ -278,8 +277,8 @@
                     </div>
                     <div>
                       <span class="verify-label-lg d-block opacity-50 mb-1">Email Address</span>
-                      <p class="email-value-text mb-2 font-monospace">{{ prefilledData.email }}</p>
-                      @if (emailVerified) {
+                      <p class="email-value-text mb-2 font-monospace">{{ profileForm.get('email')?.value }}</p>
+                      @if (emailVerified()) {
                       <div
                         class="verified-badge d-inline-flex py-1 px-3 rounded-2 text-xs font-semibold text-success bg-success-glow">
                         <i class="bi bi-check-circle-fill me-2"></i> Verified
@@ -295,7 +294,7 @@
                 </div>
 
                 <div class="col-sm-6">
-                  @if (phoneVerified) {
+                  @if (phoneVerified()) {
                   <div
                     class="verification-card p-4 rounded-3 border-glass bg-black-20 d-flex gap-3 align-items-center h-100">
                     <div
@@ -310,20 +309,20 @@
                           class="verified-badge d-inline-flex py-1 px-3 rounded-2 text-xs font-semibold text-success bg-success-glow">
                           <i class="bi bi-check-circle-fill me-2"></i> Verified
                         </div>
-                        <button (click)="phoneVerified = false" class="btn btn-sm btn-link text-primary-light p-0 text-decoration-none" style="font-size: 13px;">
+                        <button (click)="phoneVerified.set(false)" class="btn btn-sm btn-link text-primary-light p-0 text-decoration-none" style="font-size: 13px;">
                           <i class="bi bi-pencil me-1"></i> Edit
                         </button>
                       </div>
                     </div>
                   </div>
-                  } @else if (otpSent) {
+                  } @else if (otpSent()) {
                   <div
                     class="verification-card p-4 rounded-3 border-glass bg-black-20 d-flex flex-column justify-content-center gap-2 h-100">
                     <span class="phone-label-box text-xs uppercase-label opacity-60">Verify Mobile OTP</span>
                     <p class="text-xs opacity-50 mb-1">OTP sent to {{ phoneNumber }}</p>
                     <div class="phone-input-container d-flex align-items-center gap-2">
                       <div class="flex-grow-1">
-                        <app-input [(ngModel)]="otpCode" placeholder="Enter 6-digit OTP"
+                        <app-input [(ngModel)]="otpCode" [ngModelOptions]="{standalone: true}" placeholder="Enter 6-digit OTP"
                           icon="bi-shield-check"></app-input>
                       </div>
                     </div>
@@ -343,7 +342,7 @@
                         <span class="text-sm fw-semibold">+91</span>
                       </div>
                       <div class="flex-grow-1">
-                        <app-input [(ngModel)]="phoneNumber" placeholder="Enter Phone" icon="bi-phone"></app-input>
+                        <app-input [(ngModel)]="phoneNumber" [ngModelOptions]="{standalone: true}" placeholder="Enter Phone" icon="bi-phone"></app-input>
                       </div>
                     </div>
                     <app-button variant="outline" size="sm" class="align-self-start mt-1" (click)="sendOtp()">Send
@@ -367,10 +366,10 @@
                 <div class="row g-3 align-items-end">
                   <div class="col-sm-4 col-md-3">
                     <app-input type="select" label="Platform" [options]="platformOptions"
-                      [(ngModel)]="currentLink.platform" placeholder="Select"></app-input>
+                      [(ngModel)]="currentLink.platform" [ngModelOptions]="{standalone: true}" placeholder="Select"></app-input>
                   </div>
                   <div class="col-sm-6 col-md-7">
-                    <app-input label="Profile URL" [(ngModel)]="currentLink.profileUrl" placeholder="https://..."
+                    <app-input label="Profile URL" [(ngModel)]="currentLink.profileUrl" [ngModelOptions]="{standalone: true}" placeholder="https://..."
                       icon="bi-link"></app-input>
                   </div>
                   <div class="col-sm-2">
@@ -424,12 +423,12 @@
               <div class="row g-3 align-items-end">
                 <div class="col-sm-5">
                   <app-input type="select" label="Language" [options]="languageOptions"
-                    [(ngModel)]="currentLanguage.language" placeholder="Select Language"
+                    [(ngModel)]="currentLanguage.language" [ngModelOptions]="{standalone: true}" placeholder="Select Language"
                     icon="bi-translate"></app-input>
                 </div>
                 <div class="col-sm-5">
                   <app-input type="select" label="Proficiency" [options]="proficiencyOptions"
-                    [(ngModel)]="currentLanguage.proficiency" placeholder="Select Proficiency"
+                    [(ngModel)]="currentLanguage.proficiency" [ngModelOptions]="{standalone: true}" placeholder="Select Proficiency"
                     icon="bi-bar-chart"></app-input>
                 </div>
                 <div class="col-sm-2">
@@ -482,8 +481,8 @@
         }
 
         <!-- TAB 2: SECURITY & PASSWORDS -->
-        @if (activeTab === 'security') {
-        <div class="tab-view-security animate-fade-in d-flex flex-column gap-4">
+        @if (activeTab() === 'security') {
+        <div class="tab-view-security animate-fade-in d-flex flex-column gap-4" [formGroup]="securityForm">
           <div class="section-title-box d-flex align-items-center gap-2 mb-3">
             <i class="bi bi-shield-lock text-primary-light text-xl"></i>
             <h2 class="text-xl fw-bold text-white mb-0">Credentials & Security Credentials</h2>
@@ -492,15 +491,15 @@
           <!-- Password Form Grid -->
           <div class="row g-3">
             <div class="col-12">
-              <app-input type="password" label="Current Secure Password" [(ngModel)]="securityData.currentPassword"
+              <app-input type="password" label="Current Secure Password" formControlName="currentPassword"
                 placeholder="••••••••••••" icon="bi-key"></app-input>
             </div>
             <div class="col-sm-6">
-              <app-input type="password" label="New Secure Password" [(ngModel)]="securityData.newPassword"
+              <app-input type="password" label="New Secure Password" formControlName="newPassword"
                 placeholder="••••••••••••" icon="bi-shield-check"></app-input>
             </div>
             <div class="col-sm-6">
-              <app-input type="password" label="Confirm New Password" [(ngModel)]="securityData.confirmPassword"
+              <app-input type="password" label="Confirm New Password" formControlName="confirmPassword"
                 placeholder="••••••••••••" icon="bi-shield-check"></app-input>
             </div>
           </div>
@@ -520,7 +519,7 @@
             </div>
             <!-- Toggle switch check -->
             <div class="form-check form-switch custom-check mb-0">
-              <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="securityData.twoFactorEnabled"
+              <input class="form-check-input cursor-pointer" type="checkbox" formControlName="twoFactorEnabled"
                 style="width: 2.8em; height: 1.5em;">
             </div>
           </div>
@@ -537,8 +536,8 @@
         }
 
         <!-- TAB 3: NOTIFICATION PREFERENCES -->
-        @if (activeTab === 'notifications') {
-        <div class="tab-view-notifications animate-fade-in d-flex flex-column gap-4">
+        @if (activeTab() === 'notifications') {
+        <div class="tab-view-notifications animate-fade-in d-flex flex-column gap-4" [formGroup]="notificationForm">
           <div class="section-title-box d-flex align-items-center gap-2 mb-3">
             <i class="bi bi-bell text-primary-light text-xl"></i>
             <h2 class="text-xl fw-bold text-white mb-0">Custom Notifications & Communications</h2>
@@ -562,7 +561,7 @@
               </div>
               <div class="form-check form-switch custom-check">
                 <input class="form-check-input cursor-pointer" type="checkbox"
-                  [(ngModel)]="notificationPreferences.emailAlerts" style="width: 2.5em; height: 1.3em;">
+                  formControlName="emailAlerts" style="width: 2.5em; height: 1.3em;">
               </div>
             </div>
 
@@ -582,7 +581,7 @@
               </div>
               <div class="form-check form-switch custom-check">
                 <input class="form-check-input cursor-pointer" type="checkbox"
-                  [(ngModel)]="notificationPreferences.browserPings" style="width: 2.5em; height: 1.3em;">
+                  formControlName="browserPings" style="width: 2.5em; height: 1.3em;">
               </div>
             </div>
 
@@ -602,7 +601,7 @@
               </div>
               <div class="form-check form-switch custom-check">
                 <input class="form-check-input cursor-pointer" type="checkbox"
-                  [(ngModel)]="notificationPreferences.smsReceipts" style="width: 2.5em; height: 1.3em;">
+                  formControlName="smsReceipts" style="width: 2.5em; height: 1.3em;">
               </div>
             </div>
 
@@ -622,7 +621,7 @@
               </div>
               <div class="form-check form-switch custom-check">
                 <input class="form-check-input cursor-pointer" type="checkbox"
-                  [(ngModel)]="notificationPreferences.marketingEmails" style="width: 2.5em; height: 1.3em;">
+                  formControlName="marketingEmails" style="width: 2.5em; height: 1.3em;">
               </div>
             </div>
           </div>
@@ -640,8 +639,8 @@
 
 
         <!-- TAB 5: PAYMENT AGREEMENT -->
-        @if (activeTab === 'payment') {
-        <div class="tab-view-payment animate-fade-in d-flex flex-column gap-4">
+        @if (activeTab() === 'payment') {
+        <div class="tab-view-payment animate-fade-in d-flex flex-column gap-4" [formGroup]="bankForm">
           <div class="section-title-box d-flex align-items-center justify-content-between flex-wrap gap-3 mb-2">
             <div class="d-flex align-items-center gap-2">
               <i class="bi bi-cash-coin text-primary-light text-xl"></i>
@@ -683,13 +682,13 @@
                   <p class="text-xs text-white-50 mb-4">Link your bank account to enable deposit and contract settlement options.</p>
                   
                   <div class="d-flex flex-column gap-3">
-                    <app-input label="Bank Name" [(ngModel)]="bankDetails.bankName" placeholder="e.g. HDFC Bank" icon="bi-bank" [required]="true"></app-input>
-                    <app-input label="Account Holder Name" [(ngModel)]="bankDetails.holderName" placeholder="e.g. John Doe" icon="bi-person" [required]="true"></app-input>
-                    <app-input label="Account Number" [(ngModel)]="bankDetails.accountNumber" placeholder="Enter bank account number" icon="bi-card-list" [required]="true"></app-input>
-                    <app-input label="IFSC Code" [(ngModel)]="bankDetails.ifsc" placeholder="e.g. HDFC0000123" icon="bi-shield-check" [required]="true"></app-input>
+                    <app-input label="Bank Name" formControlName="bankName" placeholder="e.g. HDFC Bank" icon="bi-bank" [required]="true"></app-input>
+                    <app-input label="Account Holder Name" formControlName="holderName" placeholder="e.g. John Doe" icon="bi-person" [required]="true"></app-input>
+                    <app-input label="Account Number" formControlName="accountNumber" placeholder="Enter bank account number" icon="bi-card-list" [required]="true"></app-input>
+                    <app-input label="IFSC Code" formControlName="ifsc" placeholder="e.g. HDFC0000123" icon="bi-shield-check" [required]="true"></app-input>
                     
                     <app-button variant="primary" size="md" (click)="saveBankDetails()" class="w-100 mt-2"
-                      [disabled]="!bankDetails.bankName || !bankDetails.holderName || !bankDetails.accountNumber || !bankDetails.ifsc">
+                      [disabled]="bankForm.invalid">
                       Link Bank Account
                     </app-button>
                   </div>
@@ -702,10 +701,10 @@
                   </div>
 
                   <div class="d-flex flex-column gap-2 mb-3 bg-card-dark p-3 rounded-3 border-glass">
-                    <div class="d-flex justify-content-between text-xs"><span class="opacity-50">Bank:</span> <span class="fw-semibold text-white">{{ bankDetails.bankName }}</span></div>
-                    <div class="d-flex justify-content-between text-xs"><span class="opacity-50">Holder:</span> <span class="fw-semibold text-white">{{ bankDetails.holderName }}</span></div>
-                    <div class="d-flex justify-content-between text-xs"><span class="opacity-50">Account #:</span> <span class="fw-semibold text-white font-monospace">•••• •••• {{ bankDetails.accountNumber.slice(-4) }}</span></div>
-                    <div class="d-flex justify-content-between text-xs"><span class="opacity-50">IFSC:</span> <span class="fw-semibold text-white font-monospace">{{ bankDetails.ifsc }}</span></div>
+                    <div class="d-flex justify-content-between text-xs"><span class="opacity-50">Bank:</span> <span class="fw-semibold text-white">{{ bankForm.get('bankName')?.value }}</span></div>
+                    <div class="d-flex justify-content-between text-xs"><span class="opacity-50">Holder:</span> <span class="fw-semibold text-white">{{ bankForm.get('holderName')?.value }}</span></div>
+                    <div class="d-flex justify-content-between text-xs"><span class="opacity-50">Account #:</span> <span class="fw-semibold text-white font-monospace">•••• •••• {{ bankForm.get('accountNumber')?.value?.slice(-4) }}</span></div>
+                    <div class="d-flex justify-content-between text-xs"><span class="opacity-50">IFSC:</span> <span class="fw-semibold text-white font-monospace">{{ bankForm.get('ifsc')?.value }}</span></div>
                   </div>
 
                   <app-button variant="primary" size="md" (click)="verifyBankDetails()" class="w-100">
@@ -735,19 +734,19 @@
                       <div class="d-flex flex-column gap-3 bg-card-dark p-4 rounded-3 border-glass h-100 justify-content-center">
                         <div class="d-flex justify-content-between text-xs align-items-center">
                           <span class="opacity-50">Bank Name:</span> 
-                          <span class="fw-semibold text-white">{{ bankDetails.bankName }}</span>
+                          <span class="fw-semibold text-white">{{ bankForm.get('bankName')?.value }}</span>
                         </div>
                         <div class="d-flex justify-content-between text-xs align-items-center">
                           <span class="opacity-50">Holder Name:</span> 
-                          <span class="fw-semibold text-white">{{ bankDetails.holderName }}</span>
+                          <span class="fw-semibold text-white">{{ bankForm.get('holderName')?.value }}</span>
                         </div>
                         <div class="d-flex justify-content-between text-xs align-items-center">
                           <span class="opacity-50">Account Number:</span> 
-                          <span class="fw-semibold text-white font-monospace">•••• •••• {{ bankDetails.accountNumber ? bankDetails.accountNumber.slice(-4) : '••••' }}</span>
+                          <span class="fw-semibold text-white font-monospace">•••• •••• {{ bankForm.get('accountNumber')?.value ? bankForm.get('accountNumber')?.value.slice(-4) : '••••' }}</span>
                         </div>
                         <div class="d-flex justify-content-between text-xs align-items-center">
                           <span class="opacity-50">IFSC Code:</span> 
-                          <span class="fw-semibold text-white font-monospace">{{ bankDetails.ifsc }}</span>
+                          <span class="fw-semibold text-white font-monospace">{{ bankForm.get('ifsc')?.value }}</span>
                         </div>
                       </div>
                     </div>
@@ -763,7 +762,7 @@
                         
                         <!-- Top Row: Bank & Card Type -->
                         <div class="d-flex justify-content-between align-items-center position-relative z-2">
-                          <span class="card-bank-name text-xs fw-bold text-white text-uppercase tracking-wider">{{ bankDetails.bankName || 'BANK' }}</span>
+                          <span class="card-bank-name text-xs fw-bold text-white text-uppercase tracking-wider">{{ bankForm.get('bankName')?.value || 'BANK' }}</span>
                           <span class="badge bg-white-10 border-glass text-xxs px-2 py-1 text-white-50">VIRTUAL CARD</span>
                         </div>
 
@@ -783,7 +782,7 @@
                         <!-- Card Number -->
                         <div class="position-relative z-2">
                           <div class="card-number-display text-md font-monospace text-white tracking-widest mb-3">
-                            ••••  ••••  ••••  {{ bankDetails.accountNumber ? bankDetails.accountNumber.slice(-4) : '••••' }}
+                            ••••  ••••  ••••  {{ bankForm.get('accountNumber')?.value ? bankForm.get('accountNumber')?.value.slice(-4) : '••••' }}
                           </div>
                         </div>
 
@@ -791,11 +790,11 @@
                         <div class="d-flex justify-content-between align-items-end position-relative z-2">
                           <div class="text-start">
                             <div class="card-label-xxs text-white-30 uppercase-label">Card Holder</div>
-                            <div class="card-holder-name text-xs fw-semibold text-white text-uppercase">{{ bankDetails.holderName || 'HOLDER NAME' }}</div>
+                            <div class="card-holder-name text-xs fw-semibold text-white text-uppercase">{{ bankForm.get('holderName')?.value || 'HOLDER NAME' }}</div>
                           </div>
                           <div class="text-end">
                             <div class="card-label-xxs text-white-30 uppercase-label">IFSC Code</div>
-                            <div class="card-ifsc-display text-xxs font-monospace text-white-80">{{ bankDetails.ifsc || 'IFSC' }}</div>
+                            <div class="card-ifsc-display text-xxs font-monospace text-white-80">{{ bankForm.get('ifsc')?.value || 'IFSC' }}</div>
                           </div>
                         </div>
                       </div>
@@ -881,7 +880,7 @@
         }
 
         <!-- TAB 4: SECURE ACCOUNT DELETION (DANGER ZONE) -->
-        @if (activeTab === 'manage') {
+        @if (activeTab() === 'manage') {
         <div class="tab-view-manage animate-fade-in d-flex flex-column gap-4">
           <div class="section-title-box d-flex align-items-center gap-2 mb-3">
             <i class="bi bi-exclamation-triangle-fill text-danger text-xl animate-pulse"></i>
@@ -941,7 +940,7 @@
             class="form-footer border-top-glass pt-4 mt-3 pb-2 d-flex justify-content-between align-items-center flex-wrap gap-3">
             <span class="text-xs opacity-50 text-danger-light">Warning: This action is irreversible.</span>
             <div class="d-flex gap-3">
-              <app-button variant="outline" (click)="activeTab = 'profile'" size="md">Keep Account</app-button>
+              <app-button variant="outline" (click)="activeTab.set('profile')" size="md">Keep Account</app-button>
               <app-button variant="danger" (click)="deleteAccount()" size="md"
                 [disabled]="!confirmDelete || !deleteConfirmPassword">
                 Delete My Account Completely
@@ -959,7 +958,7 @@
 </div>
 
 <!-- CONNECTED PROFILE SOCIAL LINKS EDITING MODAL Overlay -->
-@if (isEditModalOpen) {
+@if (isEditModalOpen()) {
 <div
   class="edit-modal-overlay d-flex align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100">
   <div class="edit-modal-content p-4 rounded-4 border-glass bg-card-dark text-start animate-fade-in"
@@ -981,7 +980,7 @@
 }
 
 <!-- CONNECTED PROFILE LANGUAGE EDITING MODAL Overlay -->
-@if (isEditLangModalOpen) {
+@if (isEditLangModalOpen()) {
 <div
   class="edit-modal-overlay d-flex align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100" style="z-index: 1060;">
   <div class="edit-modal-content p-4 rounded-4 border-glass bg-card-dark text-start animate-fade-in"

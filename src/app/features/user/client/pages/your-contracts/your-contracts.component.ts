@@ -117,8 +117,8 @@ export class YourContractsComponent implements OnInit {
     }
   }
 
-  @HostListener('window:scroll', [])
-  onScroll(): void {
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event?: Event): void {
     // Check if user has scrolled near the bottom of the page
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
       // If we haven't displayed all filtered contracts yet, load 10 more
@@ -177,10 +177,13 @@ export class YourContractsComponent implements OnInit {
       this.closeActionMenu();
     } else {
       this.activeActionRow = row;
-      const target = (event.currentTarget as HTMLElement).closest('app-button') || event.currentTarget as HTMLElement;
+      const target = (event.currentTarget as HTMLElement).closest('.action-trigger') || event.currentTarget as HTMLElement;
       const rect = target.getBoundingClientRect();
-      this.menuTop = rect.bottom + 8;
-      this.menuLeft = rect.right - 220;
+      
+      // Since the menu is absolute and the page can scroll freely,
+      // we can always open it downwards.
+      this.menuTop = rect.bottom + window.scrollY + 8;
+      this.menuLeft = rect.right + window.scrollX - 220;
     }
   }
 

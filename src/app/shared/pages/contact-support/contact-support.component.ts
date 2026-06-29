@@ -1,7 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { InputComponent } from '../../components/input/input.component';
 import { ButtonComponent } from '../../components/button/button.component';
@@ -13,22 +13,10 @@ import { SupportService } from '../../../core/services/support.service';
 import { BucketKey, UploadSection } from '../../../core/enums/upload.enum';
 
 import { CreateSupportTicketDto } from '../../../core/DTOs/support-ticket.dto';
-import { SupportAttachment, SupportRequest, UploadedFileEvent } from '../../../core/model/support-request.model';
+import { SupportAttachment, SupportRequest, UploadedFileEvent, SupportCategory } from '../../../core/model/support-request.model';
 import { FilePreviewComponent } from "../../components/file-preview/file-preview.component";
 import { DateTimeHelper } from '../../../core/helpers/date-time.helper';
 
-interface Subcategory {
-  label: string;
-  value: string;
-}
-
-interface SupportCategory {
-  id: string;
-  label: string;
-  icon: string;
-  description: string;
-  subcategories: Subcategory[];
-}
 
 @Component({
   selector: 'app-contact-support',
@@ -37,7 +25,7 @@ interface SupportCategory {
     CommonModule,
     RouterLink,
     RouterModule,
-    FormsModule,
+    ReactiveFormsModule,
     InputComponent,
     ButtonComponent,
     FileUploadComponent,
@@ -50,36 +38,36 @@ export class ContactSupportComponent implements OnInit {
   DateTimeHelper = DateTimeHelper;
 
   private authService = inject(AuthService);
+  private fb = inject(FormBuilder);
   private supportService = inject(SupportService);
 
   bucketKey: BucketKey = BucketKey.FreelancerData;
-
   readonly uploadSection = UploadSection.SupportRequest;
-replyMessage = '';
-  selectedCategoryId = '';
-  selectedSubcategoryValue = '';
-  issueDescription = '';
 
-  uploadedAttachments: SupportAttachment[] = [];
+  supportForm: FormGroup = this.fb.group({
+    categoryId: ['', Validators.required],
+    subcategoryValue: ['', Validators.required],
+    issueDescription: ['', [Validators.required, Validators.minLength(10)]]
+  });
 
-  generatedTicketId = '';
-uploadResetTrigger = 0;
-  isSuccessModalOpen = false;
-  isSubmitting = false;
+  replyForm: FormGroup = this.fb.group({
+    replyMessage: ['', Validators.required]
+  });
 
-  tickets: SupportRequest[] = [];
-activeTab: 'create' | 'tickets' = 'create';
+  uploadedAttachments = signal<SupportAttachment[]>([]);
+  generatedTicketId = signal('');
+  uploadResetTrigger = signal(0);
+  isSuccessModalOpen = signal(false);
+  isSubmitting = signal(false);
 
-selectedTicket: SupportRequest | null = null;
+  tickets = signal<SupportRequest[]>([]);
+  activeTab = signal<'create' | 'tickets'>('create');
+  selectedTicket = signal<SupportRequest | null>(null);
 
-
-selectTicket(ticket: SupportRequest): void {
-
-  this.selectedTicket = ticket;
-
-  this.replyMessage = '';
-
-}
+  selectTicket(ticket: SupportRequest): void {
+    this.selectedTicket.set(ticket);
+    this.replyForm.reset();
+  }
   
 ngOnInit(): void {
   const role = this.authService.currentUser()?.role?.toLowerCase();
@@ -97,49 +85,32 @@ ngOnInit(): void {
 
 
 loadMyTickets(): void {
-
-  const currentTicketId =
-    this.selectedTicket?.ticketId;
+  const currentTicketId = this.selectedTicket()?.ticketId;
 
   this.supportService.getMyTickets().subscribe({
+    next: (res: any) => {
+      this.tickets.set(res.tickets);
 
-    next: (res) => {
-
-      this.tickets = res.tickets;
-
-      if (!this.tickets.length) {
-
-        this.selectedTicket = null;
-
+      if (!this.tickets().length) {
+        this.selectedTicket.set(null);
         return;
       }
 
       if (currentTicketId) {
-
-        const updatedTicket =
-          this.tickets.find(
-            ticket =>
-              ticket.ticketId ===
-              currentTicketId
-          );
+        const updatedTicket = this.tickets().find(
+          ticket => ticket.ticketId === currentTicketId
+        );
 
         if (updatedTicket) {
-
-          this.selectedTicket =
-            updatedTicket;
-
+          this.selectedTicket.set(updatedTicket);
           return;
         }
       }
 
-      this.selectedTicket =
-        this.tickets[0];
+      this.selectedTicket.set(this.tickets()[0]);
     }
-
   });
-
 }
-
 
 getStatusClass(status: string): string {
 
@@ -306,175 +277,126 @@ getStatusClass(status: string): string {
     },
   ];
 
-  get activeCategory(): SupportCategory | undefined {
-    return this.categories.find((category) => category.id === this.selectedCategoryId);
-  }
-
-  get isFormValid(): boolean {
-    return !!(
-      this.selectedCategoryId &&
-      this.selectedSubcategoryValue &&
-      this.issueDescription.trim().length > 10
-    );
-  }
+  activeCategory = computed(() => {
+    const catId = this.supportForm.get('categoryId')?.value;
+    return this.categories.find((category) => category.id === catId);
+  });
 
   selectCategory(categoryId: string): void {
-    this.selectedCategoryId = categoryId;
-    this.selectedSubcategoryValue = '';
-  }
-
-  onAttachmentUploaded(event: UploadedFileEvent): void {
-    this.uploadedAttachments.push({
-      name: event.fileName,
-      url: event.url,
+    this.supportForm.patchValue({
+      categoryId: categoryId,
+      subcategoryValue: ''
     });
   }
 
+  onAttachmentUploaded(event: UploadedFileEvent): void {
+    this.uploadedAttachments.update(attachments => [...attachments, {
+      name: event.fileName,
+      url: event.url,
+    }]);
+  }
+
   submitTicket(): void {
-    if (!this.isFormValid || this.isSubmitting) {
+    if (this.supportForm.invalid || this.isSubmitting()) {
       return;
     }
 
-    this.isSubmitting = true;
-
-    this.generatedTicketId = this.generateTicketId();
+    this.isSubmitting.set(true);
+    this.generatedTicketId.set(this.generateTicketId());
+    const formValue = this.supportForm.getRawValue();
 
     const ticketData: CreateSupportTicketDto = {
-      ticketId: this.generatedTicketId,
-      category: this.selectedCategoryId,
-      subcategory: this.selectedSubcategoryValue,
-      description: this.issueDescription,
-      attachments: this.uploadedAttachments,
+      ticketId: this.generatedTicketId(),
+      category: formValue.categoryId,
+      subcategory: formValue.subcategoryValue,
+      description: formValue.issueDescription,
+      attachments: this.uploadedAttachments(),
     };
 
     this.supportService.createTicket(ticketData).subscribe({
-      next: (response) => {
-        this.isSubmitting = false;
-
+      next: (response: any) => {
+        this.isSubmitting.set(false);
         if (response.success) {
-          this.isSuccessModalOpen = true;
+          this.isSuccessModalOpen.set(true);
         }
       },
-
-      error: (error) => {
-        this.isSubmitting = false;
-
+      error: (error: any) => {
+        this.isSubmitting.set(false);
         console.error('Failed to submit support ticket', error);
       },
     });
   }
 
   closeSuccessModal(): void {
-    this.isSuccessModalOpen = false;
+    this.isSuccessModalOpen.set(false);
     this.resetForm();
   }
 
   private generateTicketId(): string {
     const randomNumber = Math.floor(1000 + Math.random() * 9000);
-
     const currentYear = new Date().getFullYear();
-
     return `TKT-${currentYear}-${randomNumber}`;
   }
 
-private resetForm(): void {
-  this.selectedCategoryId = '';
-  this.selectedSubcategoryValue = '';
-  this.issueDescription = '';
-  this.uploadedAttachments = [];
-  this.generatedTicketId = '';
-
-  this.uploadResetTrigger++;
-}
+  private resetForm(): void {
+    this.supportForm.reset();
+    this.uploadedAttachments.set([]);
+    this.generatedTicketId.set('');
+    this.uploadResetTrigger.update(val => val + 1);
+  }
 
 
 sendReply(): void {
+  const message = this.replyForm.get('replyMessage')?.value?.trim();
+  const ticket = this.selectedTicket();
 
-  if (
-    !this.selectedTicket ||
-    !this.replyMessage.trim()
-  ) {
+  if (!ticket || !message) {
     return;
   }
 
-  console.log('Ticket ID:', this.selectedTicket.ticketId);
+  console.log('Ticket ID:', ticket.ticketId);
+  console.log('Payload:', { message });
 
-  console.log('Payload:', {
-    message: this.replyMessage.trim()
-  });
-
-  this.supportService.replyToTicket(
-    this.selectedTicket.ticketId,
-    {
-      message: this.replyMessage.trim()
-    }
-  ).subscribe({
-
-    next: (response) => {
-
+  this.supportService.replyToTicket(ticket.ticketId, { message }).subscribe({
+    next: (response: any) => {
       console.log('Reply Success:', response);
-
-      this.replyMessage = '';
-
+      this.replyForm.reset();
       this.loadMyTickets();
-
     },
-
-    error: (error) => {
-
+    error: (error: any) => {
       console.error('Reply Error:', error);
-
     }
-
   });
-
 }
 
-
 confirmResolution(): void {
-
-  if (!this.selectedTicket) {
+  const ticket = this.selectedTicket();
+  if (!ticket) {
     return;
   }
 
-  this.supportService
-    .resolveTicket(
-      this.selectedTicket.ticketId
-    )
-    .subscribe({
-
-      next: () => {
-
-        this.loadMyTickets();
-
-      },
-
-      error: (error) => {
-
-        console.error(error);
-
-      }
-
-    });
-
+  this.supportService.resolveTicket(ticket.ticketId).subscribe({
+    next: () => {
+      this.loadMyTickets();
+    },
+    error: (error: any) => {
+      console.error(error);
+    }
+  });
 }
 
 reopenTicket(): void {
-
-  if (!this.selectedTicket) {
+  const ticket = this.selectedTicket();
+  if (!ticket) {
     return;
   }
 
-  this.replyMessage =
-    'Issue still persists. Please continue investigation.';
+  this.replyForm.patchValue({
+    replyMessage: 'Issue still persists. Please continue investigation.'
+  });
 
-  const textarea =
-    document.querySelector(
-      '.reply-box textarea'
-    ) as HTMLTextAreaElement;
-
+  const textarea = document.querySelector('.reply-box textarea') as HTMLTextAreaElement;
   textarea?.focus();
-
 }
 
 }
