@@ -21,7 +21,6 @@ import { RegistrationComponent } from './features/account/registration/registrat
 
 // User Layout & Features
 import { UserLayoutComponent } from './core/layouts/user-layout/user-layout.component';
-import { AdminLayoutComponent } from './core/layouts/admin-layout/admin-layout.component';
 
 import { UserProfileComponent } from './shared/pages/user-profile/user-profile.component';
 import { AccountSettingsComponent } from './shared/pages/account-settings/account-settings.component';
@@ -143,9 +142,9 @@ export const routes: Routes = [
     ]
   },
 
-  // Admin Layout Routes (With Admin Sidebar)
+  // Admin Routes (Now using standard User Layout)
   {
-    path: 'user/admin', component: AdminLayoutComponent,
+    path: 'user/admin', component: UserLayoutComponent,
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: AdminDashboardComponent },
@@ -163,6 +162,7 @@ export const routes: Routes = [
     path: 'user',
     children: [
       { path: 'profile', component: UserProfileComponent },
+      { path: 'profile/:id', component: UserProfileComponent },
       { path: 'settings', component: AccountSettingsComponent },
       { path: 'contact-support', component: ContactSupportComponent },
       { path: 'legal-contract/:id', component: LegalContractComponent },

@@ -32,11 +32,15 @@ export class ProfileService {
     );
   }
 
-  /**
-   * Retrieves the current user's profile and user status.
-   */
   getMyProfile(): Observable<{ success: boolean; user: any; profile: FreelancerProfile | ClientProfile | null; contracts: Contract[]; diaries?: any[]; }> {
     return this.http.get<{ success: boolean; user: any; profile: FreelancerProfile | ClientProfile | null; contracts: Contract[]; diaries?: any[]; }>(`${this.baseUrl}${API_ENDPOINTS.PROFILE.ME}`);
+  }
+
+  /**
+   * Retrieves a specific user's profile and user status by ID.
+   */
+  getProfileById(userId: string): Observable<{ success: boolean; user: any; profile: FreelancerProfile | ClientProfile | null; contracts: Contract[]; diaries?: any[]; }> {
+    return this.http.get<{ success: boolean; user: any; profile: FreelancerProfile | ClientProfile | null; contracts: Contract[]; diaries?: any[]; }>(`${this.baseUrl}/profile/user/${userId}`);
   }
 
   /**

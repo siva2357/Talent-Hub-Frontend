@@ -25,7 +25,8 @@
 
         <ng-template
           ngx-datatable-cell-template
-          let-row="row">
+          let-row="row"
+          let-rowIndex="rowIndex">
 
           @if (column.cellTemplate) {
 
@@ -35,6 +36,7 @@
                 context: {
                   $implicit: row,
                   row: row,
+                  rowIndex: rowIndex,
                   value: row[column.prop!]
                 }
               ">

@@ -10,12 +10,11 @@ export interface ClientData {
   clientName: string; // Client Contact Name
   email: string;
   phoneNumber: string;
-  spent: number;
   projectsCount: number;
   status: 'Active' | 'Suspended' | 'Blocked' | 'Deactivated';
   joinedDate: string;
-  logoColor: string;
   industry: string;
+  profileImage?: string | null;
 }
 
 export interface FreelancerData {
@@ -23,14 +22,11 @@ export interface FreelancerData {
   name: string;
   email: string;
   phoneNumber: string;
-  skills: string[];
-  hourlyRate: number;
   completedProjects: number;
-  earnings: number;
   status: 'Active' | 'Suspended' | 'Pending Approval' | 'Blocked' | 'Deactivated';
   joinedDate: string;
-  rating: number;
   title: string;
+  profileImage?: string | null;
 }
 
 export interface TransactionData {

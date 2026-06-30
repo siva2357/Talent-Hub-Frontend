@@ -1,4 +1,4 @@
-<div class="financial-summary-page p-3 p-md-4 p-xl-5">
+<div class="financial-summary-page">
   <div class="container-fluid max-w-7xl mx-auto">
 
     <!-- Header -->
@@ -103,6 +103,33 @@
     <div class="d-none d-lg-block">
       <app-table [rows]="filteredTransactions()" [columns]="columns"></app-table>
     </div>
+
+    <!-- Table Cell Templates -->
+    <ng-template #indexTemplate let-rowIndex="rowIndex">
+      <span class="text-secondary fw-semibold">{{ rowIndex + 1 }}</span>
+    </ng-template>
+
+    <ng-template #paymentTemplate let-value="value">
+      <span class="text-white fw-medium">{{ value | currency:'INR':'symbol':'1.0-0' }}</span>
+    </ng-template>
+
+    <ng-template #freelancerPaymentTemplate let-value="value">
+      <span class="text-success fw-bold">{{ value | currency:'INR':'symbol':'1.0-0' }}</span>
+    </ng-template>
+
+    <ng-template #commissionTemplate let-value="value">
+      <span class="text-info fw-bold">{{ value | currency:'INR':'symbol':'1.0-0' }}</span>
+    </ng-template>
+
+    <ng-template #statusTemplate let-value="value">
+      <app-badge [variant]="
+        value === 'Completed' ? 'success' :
+        value === 'Pending' ? 'warning' :
+        value === 'In Progress' ? 'primary' : 'secondary'
+      " customClass="px-2 py-1">
+        {{ value }}
+      </app-badge>
+    </ng-template>
 
     <div class="d-lg-none">
 

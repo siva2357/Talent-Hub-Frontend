@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit, TemplateRef, ViewChild, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AdminService, FreelancerData } from '../../../../../core/services/admin.service';
 import { Table } from "../../../../../shared/components/table/table.component";
 import { ButtonComponent } from "../../../../../shared/components/button/button.component";
@@ -17,6 +18,7 @@ import { BadgeComponent } from '../../../../../shared/components/badge/badge.com
 })
 export class FreelancerListComponent implements OnInit {
   private adminService = inject(AdminService);
+  private router = inject(Router);
   DateTimeHelper = DateTimeHelper;
 
   freelancers = signal<FreelancerData[]>([]);
@@ -27,8 +29,7 @@ export class FreelancerListComponent implements OnInit {
     return this.freelancers().filter(f => {
       const term = this.searchTerm().toLowerCase();
       const matchesSearch = f.name.toLowerCase().includes(term) ||
-        f.email.toLowerCase().includes(term) ||
-        f.skills.some(skill => skill.toLowerCase().includes(term));
+        f.email.toLowerCase().includes(term);
 
       const status = this.statusFilter();
       const matchesStatus = status === 'All' || f.status === status;
@@ -42,13 +43,13 @@ export class FreelancerListComponent implements OnInit {
 
   ngOnInit(): void {
     this.columns = [
-      { name: 'Freelancer', prop: 'name', width: 280, cellTemplate: this.freelancerTemplate },
+      { name: 'Profile Image', prop: 'profileImage', width: 120, cellTemplate: this.profileImageTemplate, sortable: false },
+      { name: 'Full Name', prop: 'name', width: 200 },
       { name: 'Email', prop: 'email', width: 280 },
       { name: 'Phone', prop: 'phoneNumber', width: 180 },
       { name: 'Title', prop: 'title', width: 220 },
-      { name: 'Hourly Rate', prop: 'hourlyRate', width: 150 },
       { name: 'Status', prop: 'status', width: 140, cellTemplate: this.statusTemplate },
-      { name: 'Actions', prop: 'actions', sortable: false, cellTemplate: this.actionTemplate }
+      { name: 'Actions', prop: 'actions', width: 100, sortable: false, cellTemplate: this.actionTemplate }
     ];
     this.loadFreelancers();
   }
@@ -90,15 +91,15 @@ export class FreelancerListComponent implements OnInit {
   }
 
   viewProfile(freelancer: FreelancerData): void {
-    this.selectedFreelancer.set(freelancer);
+    this.router.navigate(['/user/profile', freelancer.id]);
   }
 
   closeProfileModal(): void {
     this.selectedFreelancer.set(null);
   }
 
-  @ViewChild('freelancerTemplate', { static: true })
-  freelancerTemplate!: TemplateRef<any>;
+  @ViewChild('profileImageTemplate', { static: true })
+  profileImageTemplate!: TemplateRef<any>;
 
   @ViewChild('statusTemplate', { static: true })
   statusTemplate!: TemplateRef<any>;
@@ -120,15 +121,34 @@ export class FreelancerListComponent implements OnInit {
     { label: 'Deactivated', value: 'Deactivated' }
   ];
 
-  openMenuId = signal<number | string | null>(null);
+  activeActionRow: FreelancerData | null = null;
+  menuTop: number = 0;
+  menuLeft: number = 0;
 
-  toggleMenu(id: number | string, event: Event): void {
+  toggleActionMenu(event: MouseEvent, row: FreelancerData): void {
     event.stopPropagation();
-    this.openMenuId.update(current => current === id ? null : id);
+    if (this.activeActionRow && this.activeActionRow.id === row.id) {
+      this.closeActionMenu();
+    } else {
+      this.activeActionRow = row;
+      const target = (event.currentTarget as HTMLElement).closest('.action-trigger') || event.currentTarget as HTMLElement;
+      const rect = target.getBoundingClientRect();
+      this.menuTop = rect.bottom + window.scrollY + 8;
+      this.menuLeft = rect.right + window.scrollX - 220;
+    }
   }
 
-  @HostListener('document:click')
-  onDocumentClick(): void {
-    this.openMenuId.set(null);
+  closeActionMenu(): void {
+    this.activeActionRow = null;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event): void {
+    if (this.activeActionRow) {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.action-menu') && !target.closest('.action-trigger')) {
+        this.closeActionMenu();
+      }
+    }
   }
 }
