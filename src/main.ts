@@ -5,6 +5,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { AppComponent } from './app/app.component';
 import { appConfig } from './app/app.config';
 
+console.log('App deployed successfully!');
+
 bootstrapApplication(AppComponent, {
   ...appConfig,
   providers: [
