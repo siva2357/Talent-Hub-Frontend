@@ -21,7 +21,7 @@ import { SocialPlatform } from '../../../core/enums/social-platform.enum';
 import { Category } from '../../../core/enums/category.enum';
 import { Language } from '../../../core/enums/language.enum';
 import { Proficiency } from '../../../core/enums/proficiency.enum';
-import { BasicInformationDto, LocationDto, VerificationDto, SocialLinkDto, LanguageDto, FreelancerProfileDto, ClientProfileDto } from '../../../core/DTOs/profile.dto';
+import { BasicInformationDto, LocationDto, VerificationDto, SocialLinkDto, LanguageDto, FreelancerProfileDto, ClientProfileDto, PaymentDetailsDto } from '../../../core/DTOs/profile.dto';
 import { validateSocialLink, RegexPatterns } from '../../../core/regex/patterns';
 import { ValidationHelper } from '../../../core/helpers/validation.helper';
 import { PanHelper } from '../../../core/helpers/pan.helper';
@@ -40,7 +40,7 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
   private uploadService = inject(UploadService);
   private router = inject(Router);
 
-   ValidationHelper = ValidationHelper;
+  ValidationHelper = ValidationHelper;
   PanHelper = PanHelper;
   AadhaarHelper = AadhaarHelper;
 
@@ -112,7 +112,7 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
   city: string = '';
   timezone: string = '';
   availabilityType: string = 'full-time';
-  hourlyRate: number = 50;
+
   phoneNumber: string = '';
   profilePhotoPreview: string | null = null;
 
@@ -129,20 +129,20 @@ export class ProfileFormComponent implements OnInit, AfterViewInit, OnDestroy {
   isVerifyingPhone = false;
 
   // Bank Account / Payment details state
-bankDetails = {
-  bankCode: '',
-  bankName: '',
+  bankDetails = {
+    bankCode: '',
+    bankName: '',
 
-  holderName: '',
-  accountNumber: '',
-  ifsc: '',
+    holderName: '',
+    accountNumber: '',
+    ifsc: '',
 
-  panNumber: '',
-  aadhaarNumber: '',
+    panNumber: '',
+    aadhaarNumber: '',
 
-  panCardUrl: '',
-  aadhaarCardUrl: ''
-};
+    panCardUrl: '',
+    aadhaarCardUrl: ''
+  };
   isPaymentVerified = false;
   legalityAccepted = false;
   isLinkingBank = false;
@@ -274,56 +274,56 @@ bankDetails = {
       }
     }
 
-      this.loadBanks();
+    this.loadBanks();
 
   }
 
   banks: { code: string; name: string }[] = [];
 
   bankOptions: {
-  label: string;
-  value: string;
-}[] = [];
+    label: string;
+    value: string;
+  }[] = [];
 
-loadBanks(): void {
+  loadBanks(): void {
 
-  this.profileService.getBanks().subscribe({
-    next: (response) => {
+    this.profileService.getBanks().subscribe({
+      next: (response) => {
 
-      if (response.success) {
+        if (response.success) {
 
-        this.banks = response.banks;
+          this.banks = response.banks;
 
-        this.bankOptions = response.banks.map(bank => ({
-          label: bank.name,
-          value: bank.code
-        }));
+          this.bankOptions = response.banks.map(bank => ({
+            label: bank.name,
+            value: bank.code
+          }));
+
+        }
 
       }
+    });
 
-    }
-  });
-
-}
+  }
 
 
   isValidIFSC(): boolean {
-  return ValidationHelper.isValidIFSC(
-    this.bankDetails.ifsc || ''
-  );
-}
+    return ValidationHelper.isValidIFSC(
+      this.bankDetails.ifsc || ''
+    );
+  }
 
-isValidPAN(): boolean {
-  return PanHelper.isValid(
-    this.bankDetails.panNumber || ''
-  );
-}
+  isValidPAN(): boolean {
+    return PanHelper.isValid(
+      this.bankDetails.panNumber || ''
+    );
+  }
 
-isValidAadhaar(): boolean {
-  return AadhaarHelper.isValid(
-    this.bankDetails.aadhaarNumber || ''
-  );
-}
+  isValidAadhaar(): boolean {
+    return AadhaarHelper.isValid(
+      this.bankDetails.aadhaarNumber || ''
+    );
+  }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
@@ -414,13 +414,6 @@ isValidAadhaar(): boolean {
   setSelection(type: string, value: string): void {
     if (type === 'availability') {
       this.availabilityType = value;
-      if (value === 'part-time') {
-        this.hourlyRate = 30;
-      } else if (value === 'full-time') {
-        this.hourlyRate = 50;
-      } else {
-        this.hourlyRate = 20;
-      }
     }
     if (type === 'clientType') {
       this.clientType = value.charAt(0).toUpperCase() + value.slice(1);
@@ -556,6 +549,13 @@ isValidAadhaar(): boolean {
     this.isLoading = true;
     this.submitError = null;
 
+    if (!this.uploadedProfilePhotoUrl && !this.profilePhotoPreview) {
+      this.isLoading = false;
+      this.submitError = 'Profile image is required. Please upload a profile photo.';
+      alert('Profile image is required.');
+      return;
+    }
+
     const formData = new FormData();
 
     const basicInformation: BasicInformationDto = {
@@ -628,25 +628,19 @@ isValidAadhaar(): boolean {
 
     const languages: LanguageDto[] = this.savedLanguages;
 
-const paymentDetails = {
-
-  bankCode: this.bankDetails.bankCode,
-  bankName: this.bankDetails.bankName,
-
-  holderName: this.bankDetails.holderName,
-  accountNumber: this.bankDetails.accountNumber,
-  ifsc: this.bankDetails.ifsc,
-
-  panNumber: this.bankDetails.panNumber,
-  aadhaarNumber: this.bankDetails.aadhaarNumber,
-
-  panCardUrl: this.bankDetails.panCardUrl,
-  aadhaarCardUrl: this.bankDetails.aadhaarCardUrl,
-
-  verified: this.isPaymentVerified,
-  status: this.isPaymentVerified ? 'verified' : 'unlinked',
-  legalityAccepted: this.legalityAccepted
-};
+    const paymentDetails: PaymentDetailsDto = {
+      bankName: this.bankDetails.bankName,
+      holderName: this.bankDetails.holderName,
+      accountNumber: this.bankDetails.accountNumber,
+      ifsc: this.bankDetails.ifsc,
+      panNumber: this.bankDetails.panNumber,
+      aadhaarNumber: this.bankDetails.aadhaarNumber,
+      panCardUrl: this.bankDetails.panCardUrl,
+      aadhaarCardUrl: this.bankDetails.aadhaarCardUrl,
+      verified: this.isPaymentVerified,
+      status: this.isPaymentVerified ? 'verified' : 'unlinked',
+      legalityAccepted: this.legalityAccepted
+    };
 
     if (this.userRole === 'freelancer') {
       const freelancerProfile: FreelancerProfileDto = {
@@ -657,9 +651,11 @@ const paymentDetails = {
         },
         location,
         availability: [this.availabilityType],
-        hourlyRate: this.hourlyRate,
+
         verification,
-        socialLinks
+        socialLinks,
+        languages,
+        paymentDetails
       };
 
       formData.append('basicInformation', JSON.stringify(freelancerProfile.basicInformation));
@@ -668,7 +664,7 @@ const paymentDetails = {
       formData.append('verification', JSON.stringify(freelancerProfile.verification));
       formData.append('socialLinks', JSON.stringify(freelancerProfile.socialLinks));
       formData.append('availability', JSON.stringify(freelancerProfile.availability));
-      formData.append('hourlyRate', this.hourlyRate.toString());
+
       formData.append('languages', JSON.stringify(languages));
       formData.append('paymentDetails', JSON.stringify(paymentDetails));
     } else {
@@ -681,7 +677,8 @@ const paymentDetails = {
         },
         location,
         verification,
-        socialLinks
+        socialLinks,
+        languages
       };
 
       formData.append('basicInformation', JSON.stringify(clientProfile.basicInformation));
@@ -772,100 +769,100 @@ const paymentDetails = {
 
 
   get canVerifyPayment(): boolean {
-  return !!(
-    this.bankDetails.bankCode &&
-    this.bankDetails.holderName &&
-    this.bankDetails.accountNumber &&
-    this.bankDetails.ifsc &&
-    this.bankDetails.panNumber &&
-    this.bankDetails.aadhaarNumber &&
-    this.bankDetails.panCardUrl &&
-    this.bankDetails.aadhaarCardUrl &&
-    this.legalityAccepted &&
-    !this.isLinkingBank
-  );
-}
-
-
-verifyPaymentDetails(): void {
-
-  const {
-    bankCode,
-    holderName,
-    accountNumber,
-    ifsc,
-    panNumber,
-    aadhaarNumber,
-    panCardUrl,
-    aadhaarCardUrl
-  } = this.bankDetails;
-
-  if (
-    !bankCode ||
-    !holderName ||
-    !accountNumber ||
-    !ifsc ||
-    !panNumber ||
-    !aadhaarNumber
-  ) {
-    alert('Please complete all payment and KYC fields.');
-    return;
-  }
-
-  if (!ValidationHelper.isValidAccountNumber(accountNumber)) {
-    alert('Please enter a valid account number.');
-    return;
-  }
-
-  if (!ValidationHelper.isValidIFSC(ifsc)) {
-    alert('Please enter a valid IFSC code.');
-    return;
-  }
-
-  if (!PanHelper.isValid(panNumber)) {
-    alert('Please enter a valid PAN number.');
-    return;
-  }
-
-  if (!AadhaarHelper.isValid(aadhaarNumber)) {
-    alert('Please enter a valid Aadhaar number.');
-    return;
-  }
-
-  if (!panCardUrl) {
-    alert('Please upload your PAN card.');
-    return;
-  }
-
-  if (!aadhaarCardUrl) {
-    alert('Please upload your Aadhaar card.');
-    return;
-  }
-
-  if (!this.legalityAccepted) {
-    alert('Please accept the legality declaration.');
-    return;
-  }
-
-  this.isLinkingBank = true;
-
-  setTimeout(() => {
-
-    this.isLinkingBank = false;
-    this.isPaymentVerified = true;
-
-    const selectedBank = this.banks.find(
-      b => b.code === bankCode
+    return !!(
+      this.bankDetails.bankCode &&
+      this.bankDetails.holderName &&
+      this.bankDetails.accountNumber &&
+      this.bankDetails.ifsc &&
+      this.bankDetails.panNumber &&
+      this.bankDetails.aadhaarNumber &&
+      this.bankDetails.panCardUrl &&
+      this.bankDetails.aadhaarCardUrl &&
+      this.legalityAccepted &&
+      !this.isLinkingBank
     );
+  }
 
-    this.bankDetails.bankName =
-      selectedBank?.name || '';
 
-    alert(
-      'Payment details and KYC documents submitted successfully.'
-    );
+  verifyPaymentDetails(): void {
 
-  }, 1500);
+    const {
+      bankCode,
+      holderName,
+      accountNumber,
+      ifsc,
+      panNumber,
+      aadhaarNumber,
+      panCardUrl,
+      aadhaarCardUrl
+    } = this.bankDetails;
 
-}
+    if (
+      !bankCode ||
+      !holderName ||
+      !accountNumber ||
+      !ifsc ||
+      !panNumber ||
+      !aadhaarNumber
+    ) {
+      alert('Please complete all payment and KYC fields.');
+      return;
+    }
+
+    if (!ValidationHelper.isValidAccountNumber(accountNumber)) {
+      alert('Please enter a valid account number.');
+      return;
+    }
+
+    if (!ValidationHelper.isValidIFSC(ifsc)) {
+      alert('Please enter a valid IFSC code.');
+      return;
+    }
+
+    if (!PanHelper.isValid(panNumber)) {
+      alert('Please enter a valid PAN number.');
+      return;
+    }
+
+    if (!AadhaarHelper.isValid(aadhaarNumber)) {
+      alert('Please enter a valid Aadhaar number.');
+      return;
+    }
+
+    if (!panCardUrl) {
+      alert('Please upload your PAN card.');
+      return;
+    }
+
+    if (!aadhaarCardUrl) {
+      alert('Please upload your Aadhaar card.');
+      return;
+    }
+
+    if (!this.legalityAccepted) {
+      alert('Please accept the legality declaration.');
+      return;
+    }
+
+    this.isLinkingBank = true;
+
+    setTimeout(() => {
+
+      this.isLinkingBank = false;
+      this.isPaymentVerified = true;
+
+      const selectedBank = this.banks.find(
+        b => b.code === bankCode
+      );
+
+      this.bankDetails.bankName =
+        selectedBank?.name || '';
+
+      alert(
+        'Payment details and KYC documents submitted successfully.'
+      );
+
+    }, 1500);
+
+  }
 }

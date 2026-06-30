@@ -249,11 +249,7 @@
                     }
                   </div>
                 </div>
-                <div class="col-12 col-sm-6">
-                  <app-input label="Hourly Rate ($ / hr)" formControlName="hourlyRate"
-                    placeholder="Example: 50" [required]="true"
-                    icon="bi-currency-dollar" type="text"></app-input>
-                </div>
+
               </div>
             </section>
             }
@@ -497,38 +493,25 @@
             <div class="col-sm-6">
               <app-input type="password" label="New Secure Password" formControlName="newPassword"
                 placeholder="••••••••••••" icon="bi-shield-check"></app-input>
+              @if (securityForm.get('newPassword')?.touched && securityForm.get('newPassword')?.hasError('minlength')) {
+                <small class="text-danger mt-1 d-block px-1 text-xs">Password must be at least 8 characters.</small>
+              }
             </div>
             <div class="col-sm-6">
               <app-input type="password" label="Confirm New Password" formControlName="confirmPassword"
                 placeholder="••••••••••••" icon="bi-shield-check"></app-input>
+              @if (securityForm.get('confirmPassword')?.touched && securityForm.hasError('passwordMismatch')) {
+                <small class="text-danger mt-1 d-block px-1 text-xs">Passwords do not match.</small>
+              }
             </div>
           </div>
 
-          <!-- Two-Factor Authentication box -->
-          <div
-            class="security-note p-4 rounded-4 border-glass bg-black-20 d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
-            <div class="d-flex align-items-start gap-3">
-              <div class="mail-icon-box rounded-3 d-flex align-items-center justify-content-center text-success-light">
-                <i class="bi bi-shield-fill-check"></i>
-              </div>
-              <div>
-                <h4 class="text-sm fw-bold text-white mb-1">Two-Factor Authentication (2FA)</h4>
-                <p class="text-xs opacity-50 mb-0 max-w-xl">Require an OTP code from an authenticator app (Google
-                  Authenticator) every time you login to keep your account totally locked.</p>
-              </div>
-            </div>
-            <!-- Toggle switch check -->
-            <div class="form-check form-switch custom-check mb-0">
-              <input class="form-check-input cursor-pointer" type="checkbox" formControlName="twoFactorEnabled"
-                style="width: 2.8em; height: 1.5em;">
-            </div>
-          </div>
 
           <!-- SUBMIT FOOTER BAR -->
           <footer
             class="form-footer border-top-glass pt-4 mt-3 pb-2 d-flex justify-content-between align-items-center flex-wrap gap-3">
             <app-button variant="outline" (click)="discardChanges()" size="md">Discard Changes</app-button>
-            <app-button variant="primary" (click)="saveSettings()" size="md" customClass="btn-save-continue">
+            <app-button variant="primary" (click)="saveSettings()" size="md" [disabled]="isChangingPassword()" [loading]="isChangingPassword()" customClass="btn-save-continue">
               Update Changes
             </app-button>
           </footer>
