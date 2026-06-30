@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AccessDeniedComponent } from './access-denied.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AccessDeniedComponent', () => {
   let component: AccessDeniedComponent;
@@ -8,7 +8,7 @@ describe('AccessDeniedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AccessDeniedComponent]
+      imports: [AccessDeniedComponent, RouterTestingModule]
     })
     .compileComponents();
 

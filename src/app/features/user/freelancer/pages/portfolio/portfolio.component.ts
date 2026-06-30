@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, TemplateRef, ViewChild, HostListener, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -10,6 +10,10 @@ import { ButtonComponent } from '../../../../../shared/components/button/button.
 import { InputComponent } from '../../../../../shared/components/input/input.component';
 import { FilePreviewComponent } from '../../../../../shared/components/file-preview/file-preview.component';
 import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { BehaviorSubject, catchError, of, switchMap } from 'rxjs';
+import { Table } from '../../../../../shared/components/table/table.component';
+import { TableColumn } from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-portfolio',
@@ -23,11 +27,12 @@ import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum'
     InputComponent,
     FilePreviewComponent,
     ReactiveFormsModule,
+    Table
   ],
   templateUrl: './portfolio.component.html',
   styleUrl: './portfolio.component.css',
 })
-export class PortfolioComponent implements OnInit {
+export class PortfolioComponent implements OnInit, AfterViewInit {
   private portfolioService = inject(PortfolioService);
   private toastr = inject(ToastrService);
 
@@ -35,21 +40,65 @@ export class PortfolioComponent implements OnInit {
 
   BucketKey = BucketKey;
   UploadSection = UploadSection;
-  isSaving = false;
-  items: Portfolio[] = [];
-  isFormOpen = false;
+  isSaving = signal(false);
+  isFormOpen = signal(false);
+
+  private refresh$ = new BehaviorSubject<void>(undefined);
+
+  items = toSignal(
+    this.refresh$.pipe(
+      switchMap(() => this.portfolioService.getMyPortfolio()),
+      catchError(err => {
+        console.error(err);
+        return of([]);
+      })
+    ),
+    { initialValue: [] as Portfolio[] }
+  );
 
   // Form Fields
   portfolioForm!: FormGroup;
-  isEditing = false;
-  editId = '';
-  mediaItems: PortfolioMedia[] = [];
-  tempUploadUrl: string | null = null;
-  showUploader = false;
+  isEditing = signal(false);
+  editId = signal('');
+  mediaItems = signal<PortfolioMedia[]>([]);
+  tempUploadUrl = signal<string | null>(null);
+  showUploader = signal(false);
+
+  // Table & Actions
+  @ViewChild('mediaTemplate', { static: true }) mediaTemplate!: TemplateRef<any>;
+  @ViewChild('tagsTemplate', { static: true }) tagsTemplate!: TemplateRef<any>;
+  @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
+
+  columns: TableColumn[] = [];
+  activeActionRow: Portfolio | null = null;
+  menuTop: number = 0;
+  menuLeft: number = 0;
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event) {
+    if (this.activeActionRow) {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.action-dropdown') && !target.closest('.action-menu')) {
+        this.closeActionMenu();
+      }
+    }
+  }
 
   ngOnInit(): void {
     this.initForm();
-    this.loadPortfolio();
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.columns = [
+        { name: 'Media', prop: 'media', cellTemplate: this.mediaTemplate, width: 100, sortable: false },
+        { name: 'Title', prop: 'title', width: 200 },
+        { name: 'Project Type', prop: 'projectType', width: 150 },
+        { name: 'Role', prop: 'role', width: 150 },
+        { name: 'Tech Stack', prop: 'tags', cellTemplate: this.tagsTemplate, width: 250 },
+        { name: 'Actions', prop: 'actions', cellTemplate: this.actionsTemplate, sortable: false, width: 100 }
+      ];
+    });
   }
 
   initForm(): void {
@@ -64,27 +113,13 @@ export class PortfolioComponent implements OnInit {
   }
 
   loadPortfolio(): void {
-    this.portfolioService.getMyPortfolio().subscribe({
-      next: (portfolios) => {
-        console.log('PORTFOLIOS:', portfolios);
-
-        this.items = portfolios;
-
-        console.log('ITEMS:', this.items);
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
+    this.refresh$.next();
   }
   openCreateForm(): void {
     this.resetForm();
-
-    this.isEditing = false;
-
-    this.showUploader = true;
-
-    this.isFormOpen = true;
+    this.isEditing.set(false);
+    this.showUploader.set(true);
+    this.isFormOpen.set(true);
   }
 
   onSubmit(): void {
@@ -94,7 +129,7 @@ export class PortfolioComponent implements OnInit {
       return;
     }
 
-    const formValues = this.portfolioForm.value;
+    const formValues = this.portfolioForm.getRawValue();
     const techArray = formValues.techInput
       .split(',')
       .map((t: string) => t.trim())
@@ -106,26 +141,22 @@ export class PortfolioComponent implements OnInit {
       role: formValues.role,
       projectType: formValues.projectType,
       tags: techArray,
-      media: this.mediaItems,
+      media: this.mediaItems(),
       projectUrl: formValues.projectUrl || undefined,
     };
 
-    if (this.isEditing) {
-      this.portfolioService.updatePortfolio(this.editId, payload).subscribe({
+    if (this.isEditing()) {
+      this.portfolioService.updatePortfolio(this.editId(), payload).subscribe({
         next: () => {
-          this.isSaving = true;
-
+          this.isSaving.set(true);
           this.toastr.success('New portfolio project added!', 'My Portfolio');
-
           this.closeFormModal();
-
           setTimeout(() => {
             this.loadPortfolio();
-
-            this.isSaving = false;
+            this.isSaving.set(false);
           }, 2000);
         },
-        error: (err) => {
+        error: (err: any) => {
           this.toastr.error('Failed to update portfolio project.', 'My Portfolio');
           console.error(err);
         },
@@ -133,19 +164,15 @@ export class PortfolioComponent implements OnInit {
     } else {
       this.portfolioService.createPortfolio(payload).subscribe({
         next: () => {
-          this.isSaving = true;
-
+          this.isSaving.set(true);
           this.toastr.success('Portfolio project updated successfully!', 'My Portfolio');
-
           this.closeFormModal();
-
           setTimeout(() => {
             this.loadPortfolio();
-
-            this.isSaving = false;
+            this.isSaving.set(false);
           }, 2000);
         },
-        error: (err) => {
+        error: (err: any) => {
           this.toastr.error('Failed to add portfolio project.', 'My Portfolio');
           console.error(err);
         },
@@ -154,8 +181,8 @@ export class PortfolioComponent implements OnInit {
   }
 
   editItem(item: Portfolio): void {
-    this.isEditing = true;
-    this.editId = item._id || '';
+    this.isEditing.set(true);
+    this.editId.set(item._id || '');
 
     this.portfolioForm.patchValue({
       title: item.title,
@@ -166,26 +193,23 @@ export class PortfolioComponent implements OnInit {
       projectUrl: item.projectUrl || ''
     });
 
-    this.mediaItems = [...item.media];
-    this.showUploader = false;
-    this.isFormOpen = true;
+    this.mediaItems.set([...item.media]);
+    this.showUploader.set(false);
+    this.isFormOpen.set(true);
   }
 
   deleteItem(id: string): void {
     if (confirm('Are you sure you want to delete this portfolio project?')) {
       this.portfolioService.deletePortfolio(id).subscribe({
         next: () => {
-          this.isSaving = true;
-
+          this.isSaving.set(true);
           this.toastr.success('Project deleted from portfolio.', 'My Portfolio');
-
           setTimeout(() => {
             this.loadPortfolio();
-
-            this.isSaving = false;
+            this.isSaving.set(false);
           }, 2000);
         },
-        error: (err) => {
+        error: (err: any) => {
           this.toastr.error('Failed to delete portfolio project.', 'My Portfolio');
           console.error(err);
         },
@@ -196,11 +220,11 @@ export class PortfolioComponent implements OnInit {
   onUploadSuccess(url: string): void {
     if (!url) return;
     const isVideo = /\.(mp4|webm|ogg|mov|avi|flv|mkv|wmv)/i.test(url);
-    this.mediaItems.push({
+    this.mediaItems.update(items => [...items, {
       mediaType: isVideo ? 'video' : 'image',
       url: url,
-    });
-    this.tempUploadUrl = null; // Reset value so user can upload more files
+    }]);
+    this.tempUploadUrl.set(null); // Reset value so user can upload more files
     this.toastr.success(
       `Added ${isVideo ? 'video' : 'image'} to project showcase.`,
       'Upload Media',
@@ -208,14 +232,14 @@ export class PortfolioComponent implements OnInit {
   }
 
   removeMedia(index: number): void {
-    this.mediaItems.splice(index, 1);
+    this.mediaItems.update(items => items.filter((_, i) => i !== index));
     this.toastr.info('Media attachment removed.', 'Upload Media');
   }
 
   resetForm(): void {
-    this.isEditing = false;
-    this.editId = '';
-    
+    this.isEditing.set(false);
+    this.editId.set('');
+
     if (this.portfolioForm) {
       this.portfolioForm.reset({
         title: '',
@@ -227,12 +251,30 @@ export class PortfolioComponent implements OnInit {
       });
     }
 
-    this.mediaItems = [];
-    this.showUploader = false;
+    this.mediaItems.set([]);
+    this.showUploader.set(false);
   }
 
   closeFormModal(): void {
     this.resetForm();
-    this.isFormOpen = false;
+    this.isFormOpen.set(false);
+  }
+
+  toggleActionMenu(event: MouseEvent, row: Portfolio): void {
+    event.stopPropagation();
+    if (this.activeActionRow && this.activeActionRow._id === row._id) {
+      this.closeActionMenu();
+    } else {
+      this.activeActionRow = row;
+      const target = (event.currentTarget as HTMLElement).closest('.action-trigger') || event.currentTarget as HTMLElement;
+      const rect = target.getBoundingClientRect();
+      
+      this.menuTop = rect.bottom + window.scrollY + 8;
+      this.menuLeft = rect.right + window.scrollX - 220;
+    }
+  }
+
+  closeActionMenu(): void {
+    this.activeActionRow = null;
   }
 }

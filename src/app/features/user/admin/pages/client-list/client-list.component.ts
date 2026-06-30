@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import { Component, HostListener, OnInit, TemplateRef, ViewChild, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService, ClientData } from '../../../../../core/services/admin.service';
 import { Table } from "../../../../../shared/components/table/table.component";
@@ -20,68 +20,71 @@ export class ClientListComponent implements OnInit {
 
   private adminService = inject(AdminService);
 
-  clients: ClientData[] = [];
-  filteredClients: ClientData[] = [];
-  searchTerm = '';
-  statusFilter: 'All' | 'Active' | 'Suspended' | 'Blocked' | 'Deactivated' = 'All';
+  clients = signal<ClientData[]>([]);
+  searchTerm = signal<string>('');
+  statusFilter = signal<'All' | 'Active' | 'Suspended' | 'Blocked' | 'Deactivated'>('All');
+
+  filteredClients = computed(() => {
+    return this.clients().filter(c => {
+      const term = this.searchTerm().toLowerCase();
+      const matchesSearch = c.name.toLowerCase().includes(term) ||
+        c.email.toLowerCase().includes(term);
+
+      const status = this.statusFilter();
+      const matchesStatus = status === 'All' || c.status === status;
+
+      return matchesSearch && matchesStatus;
+    });
+  });
 
   // Modal display variables
-  selectedClient: ClientData | null = null;
+  selectedClient = signal<ClientData | null>(null);
 
   ngOnInit(): void {
+    this.columns = [
+      { name: 'Client', prop: 'clientName', width: 280, cellTemplate: this.clientTemplate },
+      { name: 'Email', prop: 'email', width: 280 },
+      { name: 'Phone', prop: 'phoneNumber', width: 180 },
+      { name: 'Industry', prop: 'industry', width: 180 },
+      { name: 'Spent', prop: 'spent', width: 120 },
+      { name: 'Status', prop: 'status', width: 140, cellTemplate: this.statusTemplate },
+      { name: 'Actions', prop: 'actions', sortable: false, cellTemplate: this.actionTemplate }
+    ];
     this.loadClients();
   }
 
   loadClients(): void {
     this.adminService.getClients().subscribe({
       next: (data) => {
-        this.clients = data;
-        this.applyFilters();
+        this.clients.set(data);
       }
     });
   }
 
-  onSearch(event: any): void {
-    this.searchTerm = event.target.value;
-    this.applyFilters();
-  }
 
   onFilterStatus(status: 'All' | 'Active' | 'Suspended' | 'Blocked' | 'Deactivated'): void {
-    this.statusFilter = status;
-    this.applyFilters();
-  }
-
-  applyFilters(): void {
-    this.filteredClients = this.clients.filter(c => {
-      const matchesSearch = c.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        c.email.toLowerCase().includes(this.searchTerm.toLowerCase());
-
-      const matchesStatus = this.statusFilter === 'All' || c.status === this.statusFilter;
-
-      return matchesSearch && matchesStatus;
-    });
+    this.statusFilter.set(status);
   }
 
   changeClientStatus(id: string, status: 'Active' | 'Suspended' | 'Blocked' | 'Deactivated'): void {
     this.adminService.updateClientStatus(id, status).subscribe({
       next: () => {
         this.loadClients();
-        if (this.selectedClient && this.selectedClient.id === id) {
-          this.selectedClient.status = status;
+        const selected = this.selectedClient();
+        if (selected && selected.id === id) {
+          this.selectedClient.update(c => c ? { ...c, status } : null);
         }
       }
     });
   }
 
   viewProfile(client: ClientData): void {
-    this.selectedClient = client;
+    this.selectedClient.set(client);
   }
 
   closeProfileModal(): void {
-    this.selectedClient = null;
+    this.selectedClient.set(null);
   }
-
-
 
   @ViewChild('clientTemplate', { static: true })
   clientTemplate!: TemplateRef<any>;
@@ -95,43 +98,8 @@ export class ClientListComponent implements OnInit {
   columns: any[] = [];
 
   ngAfterViewInit(): void {
-
-    this.columns = [
-      {
-        name: 'Client',
-        prop: 'clientName',
-        width: 280,
-        cellTemplate: this.clientTemplate
-      },
-      {
-        name: 'Email',
-        prop: 'email',
-        width: 280
-      },
-      {
-        name: 'Phone',
-        prop: 'phoneNumber',
-        width: 180
-      },
-      {
-        name: 'Industry',
-        prop: 'industry',
-        width: 180
-      },
-      {
-        name: 'Spent',
-        prop: 'spent',
-        width: 120
-      },
-      {
-        name: 'Status',
-        prop: 'status',
-        width: 140,
-        cellTemplate: this.statusTemplate
-      }
-    ];
-
   }
+
   statusOptions = [
     { label: 'All', value: 'All' },
     { label: 'Active', value: 'Active' },
@@ -140,21 +108,15 @@ export class ClientListComponent implements OnInit {
     { label: 'Deactivated', value: 'Deactivated' }
   ];
 
-  openMenuId: number | string | null = null;
+  openMenuId = signal<number | string | null>(null);
 
   toggleMenu(id: number | string, event: Event): void {
     event.stopPropagation();
-
-    this.openMenuId =
-      this.openMenuId === id
-        ? null
-        : id;
+    this.openMenuId.update(current => current === id ? null : id);
   }
 
   @HostListener('document:click')
-  closeMenu(): void {
-    this.openMenuId = null;
+  onDocumentClick(): void {
+    this.openMenuId.set(null);
   }
-
-
 }

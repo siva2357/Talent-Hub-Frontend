@@ -20,8 +20,8 @@
           </div>
           <div>
             <p class="text-secondary small fw-medium mb-1 text-uppercase tracking-wide">Total Volume</p>
-            <h3 class="text-white fw-bold mb-0">{{financialStats.totalVolume | currency:'INR':'symbol':'1.0-0'}}</h3>
-            <span class="text-success small"><i class="bi bi-arrow-up-right"></i> {{financialStats.growthPercent}}%
+            <h3 class="text-white fw-bold mb-0">{{financialStats().totalVolume | currency:'INR':'symbol':'1.0-0'}}</h3>
+            <span class="text-success small"><i class="bi bi-arrow-up-right"></i> {{financialStats().growthPercent}}%
               MoM</span>
           </div>
         </div>
@@ -35,7 +35,7 @@
           </div>
           <div>
             <p class="text-secondary small fw-medium mb-1 text-uppercase tracking-wide">Commissions Collected</p>
-            <h3 class="text-white fw-bold mb-0">{{financialStats.platformCommissions | currency:'INR':'symbol':'1.0-0'}}
+            <h3 class="text-white fw-bold mb-0">{{financialStats().platformCommissions | currency:'INR':'symbol':'1.0-0'}}
             </h3>
             <span class="text-secondary smaller opacity-75">10% Platform Flat Fee</span>
           </div>
@@ -50,7 +50,7 @@
           </div>
           <div>
             <p class="text-secondary small fw-medium mb-1 text-uppercase tracking-wide">Escrow held balance</p>
-            <h3 class="text-white fw-bold mb-0">{{financialStats.escrowHeld | currency:'INR':'symbol':'1.0-0'}}</h3>
+            <h3 class="text-white fw-bold mb-0">{{financialStats().escrowHeld | currency:'INR':'symbol':'1.0-0'}}</h3>
             <span class="text-warning small">Awaiting Release</span>
           </div>
         </div>
@@ -64,7 +64,7 @@
           </div>
           <div>
             <p class="text-secondary small fw-medium mb-1 text-uppercase tracking-wide">Audited Growth</p>
-            <h3 class="text-white fw-bold mb-0">+{{financialStats.growthPercent}}%</h3>
+            <h3 class="text-white fw-bold mb-0">+{{financialStats().growthPercent}}%</h3>
             <span class="text-info small">Target Surpassed</span>
           </div>
         </div>
@@ -80,14 +80,8 @@
 
         <div class="col-12 col-md-8 col-lg-9">
 
-          <div class="search-box position-relative">
-
-            <i class="bi bi-search search-icon text-secondary"></i>
-
-            <input type="text" class="form-control bg-glass text-white border-0 ps-5"
-              placeholder="Search Contract, Client, or Freelancer..." (input)="onSearch($event)">
-
-          </div>
+          <app-input type="text" placeholder="Search Contract, Client, or Freelancer..." icon="bi-search" (input)="onSearch($event)">
+          </app-input>
 
         </div>
 
@@ -96,7 +90,7 @@
         <div class="col-12 col-md-4 col-lg-3">
 
           <app-input type="select" mode="filter" icon="bi-funnel" placeholder="Filter Status" [options]="statusOptions"
-            [(ngModel)]="statusFilter" (ngModelChange)="onFilterStatus($event)">
+            [ngModel]="statusFilter()" (ngModelChange)="onFilterStatus($event)">
           </app-input>
 
         </div>
@@ -107,14 +101,14 @@
 
 
     <div class="d-none d-lg-block">
-      <app-table [rows]="filteredTransactions" [columns]="columns"></app-table>
+      <app-table [rows]="filteredTransactions()" [columns]="columns"></app-table>
     </div>
 
     <div class="d-lg-none">
 
       <div class="row g-3">
 
-        @for (tx of filteredTransactions; track tx.id) {
+        @for (tx of filteredTransactions(); track tx.id) {
 
         <div class="col-12 col-md-6">
 

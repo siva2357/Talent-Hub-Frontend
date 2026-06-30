@@ -22,6 +22,7 @@ describe('BlogPostComponent', () => {
 
     mockBlogService = {
       getPosts: jasmine.createSpy('getPosts').and.returnValue(of([])),
+      getAllBlogsAdmin: jasmine.createSpy('getAllBlogsAdmin').and.returnValue(of({ blogs: [] })),
       getPublishedPosts: jasmine.createSpy('getPublishedPosts').and.returnValue(of([])),
       addPost: jasmine.createSpy('addPost'),
       togglePostStatus: jasmine.createSpy('togglePostStatus'),
@@ -46,4 +47,9 @@ describe('BlogPostComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should load blogs on init', () => {
+    expect(mockBlogService.getAllBlogsAdmin).toHaveBeenCalled();
+  });
+
 });

@@ -9,13 +9,12 @@
         <p class="text-secondary mb-0">System-wide monitoring, user management, and transactional reports.</p>
       </div>
       <div class="d-flex gap-3">
-        <button class="btn btn-primary d-flex align-items-center gap-2" routerLink="/user/admin/reports">
+        <app-button variant="primary" routerLink="/user/admin/reports">
           <i class="bi bi-file-earmark-bar-graph"></i> View Analytics
-        </button>
-        <button class="btn btn-outline-light d-flex align-items-center gap-2 bg-glass"
-          routerLink="/user/admin/finances">
+        </app-button>
+        <app-button variant="outline" customClass="text-white border-light bg-glass" routerLink="/user/admin/finances">
           <i class="bi bi-wallet2"></i> Financial Ledger
-        </button>
+        </app-button>
       </div>
     </div>
 
@@ -29,7 +28,7 @@
           </div>
           <div>
             <p class="text-secondary small fw-medium mb-1 text-uppercase tracking-wide">Total Clients</p>
-            <h3 class="text-white fw-bold mb-0">{{stats.totalClients}}</h3>
+            <h3 class="text-white fw-bold mb-0">{{stats().totalClients}}</h3>
           </div>
         </div>
       </div>
@@ -42,7 +41,7 @@
           </div>
           <div>
             <p class="text-secondary small fw-medium mb-1 text-uppercase tracking-wide">Freelancers</p>
-            <h3 class="text-white fw-bold mb-0">{{stats.totalFreelancers}}</h3>
+            <h3 class="text-white fw-bold mb-0">{{stats().totalFreelancers}}</h3>
           </div>
         </div>
       </div>
@@ -55,7 +54,7 @@
           </div>
           <div>
             <p class="text-secondary small fw-medium mb-1 text-uppercase tracking-wide">Active Contracts</p>
-            <h3 class="text-white fw-bold mb-0">{{stats.activeContracts}}</h3>
+            <h3 class="text-white fw-bold mb-0">{{stats().activeContracts}}</h3>
           </div>
         </div>
       </div>
@@ -68,7 +67,7 @@
           </div>
           <div>
             <p class="text-secondary small fw-medium mb-1 text-uppercase tracking-wide">Platform Fee (10%)</p>
-            <h3 class="text-white fw-bold mb-0">{{stats.totalCommissions | currency:'INR':'symbol':'1.0-0'}}</h3>
+            <h3 class="text-white fw-bold mb-0">{{stats().totalCommissions | currency:'INR':'symbol':'1.0-0'}}</h3>
           </div>
         </div>
       </div>
@@ -86,14 +85,14 @@
           </div>
 
           <div class="activity-feed">
-            @if (isLoading) {
+            @if (isLoading()) {
             <div class="text-center py-5">
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
             </div>
             } @else {
-            @for (activity of recentActivities; track activity.id) {
+            @for (activity of recentActivities(); track activity.id) {
             <div class="activity-item d-flex gap-3 pb-4 mb-4 border-bottom border-white border-opacity-10">
               <div class="activity-icon rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
                 [ngClass]="{

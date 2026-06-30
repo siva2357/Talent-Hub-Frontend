@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService, TransactionData } from '../../../../../core/services/admin.service';
 import { TableColumn } from '../../../../../core/model/table.interface';
@@ -19,19 +19,32 @@ import {FormsModule} from '@angular/forms';
 export class AdminFinancialSummaryComponent implements OnInit {
   private adminService = inject(AdminService);
 
-  transactions: TransactionData[] = [];
-  filteredTransactions: TransactionData[] = [];
+  transactions = signal<TransactionData[]>([]);
   columns: TableColumn[] = [];
   // Ledger stats
-  financialStats = {
+  financialStats = signal({
     totalVolume: 0,
     platformCommissions: 0,
     escrowHeld: 0,
     growthPercent: 0
-  };
+  });
 
-  searchTerm = '';
-  statusFilter: 'All' | 'Completed' | 'In Progress' | 'Pending' = 'All';
+  searchTerm = signal('');
+  statusFilter = signal<'All' | 'Completed' | 'In Progress' | 'Pending'>('All');
+
+  filteredTransactions = computed(() => {
+    return this.transactions().filter(t => {
+      const term = this.searchTerm().toLowerCase();
+      const matchesSearch = t.clientName.toLowerCase().includes(term) ||
+                            t.freelancerName.toLowerCase().includes(term) ||
+                            (t.contractTitle || '').toLowerCase().includes(term);
+
+      const status = this.statusFilter();
+      const matchesStatus = status === 'All' || t.status === status;
+
+      return matchesSearch && matchesStatus;
+    });
+  });
 
 
   @ViewChild('paymentTemplate', { static: true })
@@ -55,40 +68,24 @@ ngOnInit(): void {
     // Load ledger stats
     this.adminService.getFinancialStats().subscribe({
       next: (stats) => {
-        this.financialStats = stats;
+        this.financialStats.set(stats);
       }
     });
 
     // Load detailed transactions (contracts data)
     this.adminService.getTransactions().subscribe({
       next: (data) => {
-        this.transactions = data;
-        this.applyFilters();
+        this.transactions.set(data);
       }
     });
   }
 
   onSearch(event: any): void {
-    this.searchTerm = event.target.value;
-    this.applyFilters();
+    this.searchTerm.set(event.target.value);
   }
 
-onFilterStatus(status: string): void {
-  this.statusFilter = status as any;
-  this.applyFilters();
-}
-
-
-  applyFilters(): void {
-    this.filteredTransactions = this.transactions.filter(t => {
-      const matchesSearch = t.clientName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                            t.freelancerName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                            (t.contractTitle || '').toLowerCase().includes(this.searchTerm.toLowerCase());
-
-      const matchesStatus = this.statusFilter === 'All' || t.status === this.statusFilter;
-
-      return matchesSearch && matchesStatus;
-    });
+  onFilterStatus(status: string): void {
+    this.statusFilter.set(status as any);
   }
 
 

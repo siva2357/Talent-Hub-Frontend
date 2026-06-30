@@ -8,7 +8,7 @@
         </div>
 
 
-        @if (diary) {
+        @if (diary(); as diary) {
 
         <div class="glass rounded-4 p-4 mb-4">
 
@@ -47,7 +47,7 @@
         }
 
 
-        @if (diary) {
+        @if (diary(); as diary) {
         <div class="row justify-content-center">
             <div class="col-lg-12">
 
@@ -87,36 +87,29 @@
 
                                 <div class="glass rounded-4 p-4">
 
-<div class="d-flex align-items-center mb-3">
-
+<div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3 mb-4">
     <!-- Left Side -->
-    <div class="d-flex align-items-center gap-4">
-
+    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-3 gap-md-4">
         <h4 class="text-white fw-bold mb-0">
             {{ phase.name }}
         </h4>
-
-        <div class="text-secondary small">
-            <i class="bi bi-calendar-event me-1"></i>
-            Due {{ formatDate(phase.deadline) }}
+        <div class="d-flex flex-wrap gap-3">
+            <div class="text-secondary small">
+                <i class="bi bi-calendar-event me-1"></i>
+                Due {{ formatDate(phase.deadline) }}
+            </div>
+            <div class="text-secondary small">
+                <i class="bi bi-currency-rupee me-1"></i>
+                ₹{{ phase.amount | number }}
+            </div>
         </div>
-
-        <div class="text-secondary small">
-            <i class="bi bi-currency-rupee me-1"></i>
-            ₹{{ phase.amount | number }}
-        </div>
-
     </div>
-
     <!-- Right Side -->
     <span
-        class="status-badge ms-auto"
+        class="status-badge ms-md-auto"
         [ngClass]="phase.status">
-
         {{ phase.status | titlecase }}
-
     </span>
-
 </div>
 
     <!-- Description -->
@@ -344,7 +337,7 @@
 
 
 
-   @if (showSubmitModal && selectedPhase) {
+   @if (showSubmitModal() && selectedPhase(); as selectedPhase) {
 
 <div
   class="modal fade show"
@@ -399,7 +392,7 @@
 </div>
 
       <!-- Body -->
-      <form [formGroup]="submitPhaseForm" (ngSubmit)="submitUpdate(selectedDiaryId!, selectedPhase._id)">
+      <form [formGroup]="submitPhaseForm" (ngSubmit)="submitUpdate(selectedDiaryId()!, selectedPhase._id)">
 
       <div class="modal-body">
 
@@ -433,7 +426,7 @@
 
         <!-- Uploaded Files -->
 
-        @if (uploadedFiles[selectedPhase._id]?.length) {
+        @if (uploadedFiles()[selectedPhase._id]?.length) {
 
         <div class="glass rounded-4 p-3">
 
@@ -448,7 +441,7 @@
           <div class="row g-3">
 
             @for (
-              file of uploadedFiles[selectedPhase._id];
+              file of uploadedFiles()[selectedPhase._id];
               track $index
             ) {
 
@@ -493,8 +486,8 @@
           variant="brand"
           size="sm"
           type="submit"
-          [loading]="submitting[selectedPhase._id]"
-          [disabled]="submitPhaseForm.invalid || submitting[selectedPhase._id]">
+          [loading]="submitting()[selectedPhase._id]"
+          [disabled]="submitPhaseForm.invalid || submitting()[selectedPhase._id]">
 
           Submit Update
 

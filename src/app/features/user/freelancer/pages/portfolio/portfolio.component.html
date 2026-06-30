@@ -20,91 +20,129 @@
 
 
     <!-- Portfolio Grid -->
-    <div class="row g-4">
-      @if (items.length === 0) {
-      <div class="col-12 text-center py-5 text-secondary bg-glass rounded-4">
-        <i class="bi bi-briefcase fs-1 d-block mb-3 opacity-30"></i>
-        Your portfolio is empty. Click "Add Project" to start showcasing your work!
-      </div>
-      } @else {
-      @for (item of items; track item._id) {
-      <div class="col-12 col-md-6 col-xl-4">
-        <div class="glass portfolio-item-card rounded-4 overflow-hidden h-100 d-flex flex-column">
-          <!-- Project Preview Media -->
-          <div class="position-relative overflow-hidden" style="height: 200px; background-color: #0f172a;">
-            @if (item.media && item.media.length > 0) {
-            @if (item.media[0].mediaType === 'image') {
-            <img [src]="item.media[0].url" [alt]="item.title" class="w-100 h-100 object-fit-cover proj-img">
-            } @else {
-            <video [src]="item.media[0].url" class="w-100 h-100 object-fit-cover proj-img" autoplay muted loop
-              playsinline></video>
-            }
-            } @else {
-            <div
-              class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-secondary opacity-50">
-              <i class="bi bi-image fs-1 mb-2"></i>
-              <span class="small">No preview media</span>
-            </div>
-            }
+    <!-- Desktop: Portfolio Table -->
+    <div class="d-none d-lg-block">
+      <app-table [rows]="items()" [columns]="columns" [loading]="isSaving()">
+      </app-table>
+    </div>
 
-            <div class="position-absolute top-0 end-0 m-3">
-              <span class="badge bg-dark bg-opacity-75 text-primary border border-primary border-opacity-25 px-3 py-2">
-                {{item.role}}
-              </span>
-            </div>
-          </div>
+    <!-- Mobile & Tablet: Portfolio Cards -->
+    <div class="d-block d-lg-none mt-4">
+      <div class="row g-4">
+        @if (items().length === 0 && !isSaving()) {
+        <div class="col-12 text-center py-5 text-secondary bg-glass rounded-4">
+          <i class="bi bi-briefcase fs-1 d-block mb-3 opacity-30"></i>
+          Your portfolio is empty. Click "Add Project" to start showcasing your work!
+        </div>
+        }
 
-          <!-- Project Info -->
-          <div class="p-4 d-flex flex-column flex-grow-1">
-            @if (item.projectType) {
-            <span class="text-primary text-uppercase font-size-xs fw-semibold tracking-wider mb-1 d-block"
-              style="font-size: 0.75rem;">
-              {{item.projectType}}
-            </span>
-            }
-            <h5 class="text-white fw-bold mb-2">{{item.title}}</h5>
-            <div class="text-secondary small mb-4 flex-grow-1 lh-relaxed" [innerHTML]="item.description"></div>
-
-            <!-- Tech Badges -->
-            <div class="d-flex flex-wrap gap-2 mb-4">
-              @for (tech of item.tags; track tech) {
-              <span
-                class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1">
-                {{tech}}
-              </span>
+        @for (item of items(); track item._id) {
+        <div class="col-12 col-md-6">
+          <div
+            class="card bg-transparent border border-white border-opacity-10 rounded-4 overflow-hidden h-100 d-flex flex-column glass portfolio-item-card">
+            <!-- Project Preview Media -->
+            <div class="position-relative overflow-hidden bg-dark" style="height: 200px;">
+              @if (item.media && item.media.length > 0) {
+              @if (item.media[0].mediaType === 'image') {
+              <img [src]="item.media[0].url" [alt]="item.title" class="w-100 h-100 object-fit-cover proj-img">
+              } @else {
+              <video [src]="item.media[0].url" class="w-100 h-100 object-fit-cover proj-img" autoplay muted loop
+                playsinline></video>
               }
-            </div>
-
-            <!-- Footer / Actions -->
-            <div
-              class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top border-white border-opacity-5">
-              <div class="d-flex gap-2">
-                <app-button variant="outline" size="sm" customClass="bg-glass border-0 px-3 text-white"
-                  title="Edit Project" (click)="editItem(item)">
-                  <i class="bi bi-pencil me-1"></i> Edit
-                </app-button>
-                <app-button variant="danger" size="sm" customClass="bg-glass border-0 px-2 text-white"
-                  title="Delete Project" (click)="deleteItem(item._id || '')">
-
-                  <i class="bi bi-trash"></i>
-
-                </app-button>
+              } @else {
+              <div
+                class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-secondary opacity-50">
+                <i class="bi bi-image fs-1 mb-2"></i>
+                <span class="small">No preview media</span>
               </div>
-              @if (item.projectUrl) {
-              <a [href]="item.projectUrl" target="_blank"
-                class="btn btn-sm btn-primary rounded-3 px-3 d-flex align-items-center gap-1 text-white">
-                View Project <i class="bi bi-box-arrow-up-right fs-12"></i>
-              </a>
               }
+
+              <div class="position-absolute top-0 end-0 m-3">
+                <span
+                  class="badge bg-dark bg-opacity-75 text-primary border border-primary border-opacity-25 px-3 py-2">
+                  {{item.role}}
+                </span>
+              </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body p-4 d-flex flex-column flex-grow-1">
+              @if (item.projectType) {
+              <span class="text-primary text-uppercase fw-semibold tracking-wider mb-1 d-block"
+                style="font-size: 0.75rem;">
+                {{item.projectType}}
+              </span>
+              }
+              <h5 class="text-white fw-bold mb-2">{{item.title}}</h5>
+              <div class="text-secondary small mb-4 flex-grow-1 lh-relaxed" [innerHTML]="item.description"></div>
+
+              <!-- Tech Badges -->
+              <div class="d-flex flex-wrap gap-2 mb-2">
+                @for (tech of item.tags; track tech) {
+                <span
+                  class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1">
+                  {{tech}}
+                </span>
+                }
+              </div>
+            </div>
+
+            <!-- Card Footer (Actions) -->
+            <div
+              class="card-footer bg-transparent border-top border-white border-opacity-10 p-3 d-flex gap-2 align-items-center">
+              <app-button variant="outline" size="sm" customClass=" border-0 px-3 text-white" title="Edit Project"
+                (click)="editItem(item)">
+                <i class="bi bi-pencil me-1"></i> Edit
+              </app-button>
+              <app-button variant="danger" size="sm" customClass="border-0 px-3 text-white" title="Delete Project"
+                (click)="deleteItem(item._id || '')">
+                <i class="bi bi-trash me-1"></i> Delete
+              </app-button>
             </div>
           </div>
         </div>
+        }
       </div>
-      }
-      }
     </div>
 
-    @if (isSaving) {
+    <!-- Templates for Table -->
+    <ng-template #mediaTemplate let-row="row" let-value="value">
+      @if (value && value.length > 0) {
+      @if (value[0].mediaType === 'image') {
+      <img [src]="value[0].url" [alt]="row.title" class="rounded object-fit-cover" style="width: 50px; height: 50px;">
+      } @else {
+      <video [src]="value[0].url" class="rounded object-fit-cover" style="width: 50px; height: 50px;" muted loop
+        playsinline></video>
+      }
+      } @else {
+      <div class="rounded d-flex align-items-center justify-content-center bg-dark bg-opacity-50 text-secondary"
+        style="width: 50px; height: 50px;">
+        <i class="bi bi-image"></i>
+      </div>
+      }
+    </ng-template>
+
+    <ng-template #tagsTemplate let-value="value">
+      <div class="d-flex flex-wrap gap-1">
+        @for (tech of value; track tech) {
+        <span
+          class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1"
+          style="font-size: 0.65rem;">
+          {{tech}}
+        </span>
+        }
+      </div>
+    </ng-template>
+
+    <ng-template #actionsTemplate let-row="row">
+      <div class="action-dropdown">
+        <button class="action-trigger" (click)="toggleActionMenu($event, row)">
+          <i class="bi bi-three-dots-vertical"></i>
+        </button>
+      </div>
+    </ng-template>
+
+    @if (isSaving()) {
 
     <div class="text-center py-5">
 
@@ -120,13 +158,13 @@
     }
 
     <!-- Modal Form View: Add/Edit Project -->
-    @if (isFormOpen) {
+    @if (isFormOpen()) {
     <div class="custom-modal-backdrop d-flex align-items-center justify-content-center">
       <div class="glass modal-card rounded-4 p-4 p-md-5 position-relative border border-white border-opacity-10 shadow"
         style="max-width: 800px; width: 90%;">
         <button class="btn-close btn-close-white position-absolute top-0 end-0 m-3" (click)="closeFormModal()"></button>
 
-        <h4 class="text-white fw-bold mb-4">{{ isEditing ? 'Edit Portfolio Project' : 'Add Portfolio Project' }}</h4>
+        <h4 class="text-white fw-bold mb-4">{{ isEditing() ? 'Edit Portfolio Project' : 'Add Portfolio Project' }}</h4>
 
         <form [formGroup]="portfolioForm" (ngSubmit)="onSubmit()">
           <div class="row g-3">
@@ -155,8 +193,7 @@
             <!-- Tech Stack (Comma Separated) -->
             <div class="col-12 col-md-6">
               <app-input type="text" label="Technologies Used (Comma-separated)"
-                placeholder="e.g., Angular, TypeScript, Bootstrap 5" formControlName="techInput"
-                [required]="true">
+                placeholder="e.g., Angular, TypeScript, Bootstrap 5" formControlName="techInput" [required]="true">
               </app-input>
             </div>
 
@@ -170,16 +207,20 @@
             <!-- Media Attachment (Images & Videos Showcase) -->
             <div class="col-12">
 
-              @if (mediaItems.length > 0) {
+              @if (mediaItems().length > 0) {
 
               <div class="row g-3 mb-3">
 
-                @for (media of mediaItems; track $index) {
+                @for (media of mediaItems(); track $index) {
 
                 <div class="col-12 col-md-4">
 
+                  @defer (on viewport) {
                   <app-file-preview [url]="media.url" (remove)="removeMedia($index)">
                   </app-file-preview>
+                  } @placeholder {
+                  <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+                  }
 
                 </div>
 
@@ -189,11 +230,11 @@
 
               }
 
-              @if (isEditing && !showUploader) {
+              @if (isEditing() && !showUploader()) {
 
               <div class="mb-3">
 
-                <app-button type="button" variant="outline" (click)="showUploader = true">
+                <app-button type="button" variant="outline" (click)="showUploader.set(true)">
 
                   <i class="bi bi-plus-lg me-2"></i>
                   Add More Media
@@ -204,12 +245,16 @@
 
               }
 
-              @if (!isEditing || showUploader) {
+              @if (!isEditing() || showUploader()) {
 
+              @defer (on viewport) {
               <app-file-upload label="Project Showcase Media" variant="dragdrop" [bucketKey]="BucketKey.FreelancerData"
                 [uploadSection]="UploadSection.Portfolio" accept="image/*,video/*"
                 (uploadSuccess)="onUploadSuccess($event)">
               </app-file-upload>
+              } @placeholder {
+              <div class="spinner-border text-primary" role="status"></div>
+              }
 
               }
 
@@ -218,8 +263,12 @@
             <!-- Project Description -->
             <div class="col-12">
               <label class="text-secondary small text-uppercase tracking-wider mb-2">Project Description *</label>
+              @defer (on viewport) {
               <app-rich-text-editor placeholder="Describe the scope, challenges solved, and deliverables..."
                 formControlName="description" [required]="true"></app-rich-text-editor>
+              } @placeholder {
+              <div class="spinner-border text-primary" role="status"></div>
+              }
             </div>
 
             <!-- Buttons -->
@@ -228,8 +277,9 @@
                 (click)="closeFormModal()">
                 Cancel
               </app-button>
-              <app-button type="submit" variant="primary" customClass="px-5 py-2 rounded-3 text-white" [disabled]="portfolioForm.invalid">
-                <i class="bi bi-cloud-upload me-2"></i> {{ isEditing ? 'Save Changes' : 'Add Project' }}
+              <app-button type="submit" variant="primary" customClass="px-5 py-2 rounded-3 text-white"
+                [disabled]="portfolioForm.invalid">
+                <i class="bi bi-cloud-upload me-2"></i> {{ isEditing() ? 'Save Changes' : 'Add Project' }}
               </app-button>
             </div>
           </div>
@@ -240,3 +290,22 @@
 
   </div>
 </div>
+
+<!-- Action Menu (Rendered outside table container) -->
+@if (activeActionRow) {
+<div class="action-menu glass" [style.position]="'absolute'" [style.top.px]="menuTop" [style.left.px]="menuLeft"
+  style="z-index: 9999; width: 220px;">
+
+  <div class="action-item" (click)="editItem(activeActionRow); closeActionMenu()">
+    <i class="bi bi-pencil"></i>
+    <span>Edit Project</span>
+  </div>
+
+  <div class="action-divider"></div>
+  <div class="action-item" (click)="deleteItem(activeActionRow._id || ''); closeActionMenu()">
+    <i class="bi bi-trash text-danger"></i>
+    <span class="text-danger">Delete Project</span>
+  </div>
+
+</div>
+}

@@ -140,33 +140,15 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
   {
     label: 'Find Contracts',
     roles: [UserRole.FREELANCER],
-    activePaths: [
-      'find-contracts',
-      'saved-contracts',
-      'proposals',
-    ],
-    subItems: [
-      {
-        label: 'Find Contracts',
-        description: 'Browse available jobs and opportunities.',
-        icon: 'bi bi-search',
-        route: '/user/find-contracts',
-      },
-      {
-        label: 'Saved Contracts',
-        description: 'Manage bookmarked opportunities.',
-        icon: 'bi bi-bookmark-heart',
-        route: '/user/saved-contracts',
-      },
-      {
-        label: 'Proposals & Offers',
-        description: 'Track submitted proposals and offers.',
-        icon: 'bi bi-file-earmark-text',
-        route: '/user/proposals',
-      },
-    ],
+    activePaths: ['find-contracts'],
+    route: '/user/find-contracts',
   },
-
+  {
+    label: 'My Proposals & Offers',
+    roles: [UserRole.FREELANCER],
+    activePaths: ['proposals'],
+    route: '/user/proposals',
+  },
   {
     label: 'Contract Management',
     roles: [UserRole.FREELANCER],

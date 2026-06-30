@@ -1,6 +1,6 @@
-<div class="chip-container" [class]="'variant-' + variant">
-  <span class="chip-label">{{ label }}</span>
-  @if (removable) {
+<div class="chip-container" [class]="'variant-' + variant()">
+  <span class="chip-label">{{ label() }}</span>
+  @if (removable()) {
     <button class="chip-remove-btn" (click)="onRemove()" type="button">
       <i class="bi bi-x-lg"></i>
     </button>

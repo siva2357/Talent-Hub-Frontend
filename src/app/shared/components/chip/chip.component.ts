@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,14 +9,14 @@ import { CommonModule } from '@angular/common';
   styleUrl: './chip.component.css'
 })
 export class ChipComponent {
-  @Input() label: string = '';
-  @Input() removable: boolean = true;
-  @Input() variant: 'primary' | 'secondary' | 'outline' = 'primary';
+  label = input<string>('');
+  removable = input<boolean>(true);
+  variant = input<'primary' | 'secondary' | 'outline'>('primary');
   
-  @Output() remove = new EventEmitter<void>();
+  remove = output<void>();
 
   onRemove() {
-    if (this.removable) {
+    if (this.removable()) {
       this.remove.emit();
     }
   }

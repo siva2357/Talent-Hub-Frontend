@@ -7,8 +7,8 @@
             <div class="col-lg-8">
                 <span class="text-primary text-uppercase fw-bold ls-2 mb-3 d-block" style="font-size: 12px;">Freelancer
                     Workspace</span>
-                <h1 class="text-white fw-black display-5 mb-2 ls-n2">{{ getGreeting() }}, {{ freelancerName }}!</h1>
-                <p class="text-secondary lead mb-4 opacity-75">You have {{ activeContractsCount }} active contracts. Ready to take on more?</p>
+                <h1 class="text-white fw-black display-5 mb-2 ls-n2">{{ greeting() }}, {{ freelancerName() }}!</h1>
+                <p class="text-secondary lead mb-4 opacity-75">You have {{ activeContractsCount() }} active contracts. Ready to take on more?</p>
                 <div class="d-flex flex-wrap gap-3">
                     <app-button variant="brand" customClass="px-4 py-2.5 rounded-pill shadow-primary"
                         routerLink="/user/find-contracts">
@@ -22,10 +22,10 @@
             <div class="col-lg-4 d-none d-lg-block text-center">
                 <div class="profile-preview-card p-4 rounded-5 glass-light border border-white border-opacity-10">
                     <div class="avatar-large mx-auto mb-3 shadow-lg border border-primary border-opacity-30">
-                        <img [src]="profilePhoto || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'"
-                            [alt]="freelancerName">
+                        <img [src]="profilePhoto() || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'"
+                            [alt]="freelancerName()">
                     </div>
-                    <h5 class="text-white fw-bold mb-1">{{ freelancerName }}</h5>
+                    <h5 class="text-white fw-bold mb-1">{{ freelancerName() }}</h5>
                     <p class="text-primary small mb-0 fw-semibold">Top Rated Plus</p>
                 </div>
             </div>
@@ -34,7 +34,7 @@
 
     <!-- Stats Grid Section -->
     <div class="row g-4 mb-5">
-        @for (stat of stats; track stat.label) {
+        @for (stat of stats(); track stat.label) {
         <div class="col-xl-3 col-md-6">
             <div class="stat-card glass-dark p-4 rounded-4 position-relative overflow-hidden"
                 [class]="'border-accent-' + stat.color">
@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="activity-timeline">
-                    @for (activity of activities; track activity.id) {
+                    @for (activity of activities(); track activity.id) {
                     <div class="activity-item d-flex gap-4 pb-5 position-relative">
                         <div class="activity-icon-container position-relative z-1">
                             <div class="activity-icon p-2 rounded-circle shadow-sm" [ngClass]="{

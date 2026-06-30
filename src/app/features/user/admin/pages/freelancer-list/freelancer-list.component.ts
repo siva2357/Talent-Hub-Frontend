@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import { Component, HostListener, OnInit, TemplateRef, ViewChild, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService, FreelancerData } from '../../../../../core/services/admin.service';
 import { Table } from "../../../../../shared/components/table/table.component";
@@ -16,57 +16,62 @@ import { BadgeComponent } from '../../../../../shared/components/badge/badge.com
   styleUrl: './freelancer-list.component.css'
 })
 export class FreelancerListComponent implements OnInit {
-  private adminService = inject(AdminService)
+  private adminService = inject(AdminService);
   DateTimeHelper = DateTimeHelper;
-  freelancers: FreelancerData[] = [];
-  filteredFreelancers: FreelancerData[] = [];
-  searchTerm = '';
-  statusFilter: 'All' | 'Active' | 'Suspended' | 'Pending Approval' | 'Blocked' | 'Deactivated' = 'All';
+
+  freelancers = signal<FreelancerData[]>([]);
+  searchTerm = signal<string>('');
+  statusFilter = signal<'All' | 'Active' | 'Suspended' | 'Pending Approval' | 'Blocked' | 'Deactivated'>('All');
+
+  filteredFreelancers = computed(() => {
+    return this.freelancers().filter(f => {
+      const term = this.searchTerm().toLowerCase();
+      const matchesSearch = f.name.toLowerCase().includes(term) ||
+        f.email.toLowerCase().includes(term) ||
+        f.skills.some(skill => skill.toLowerCase().includes(term));
+
+      const status = this.statusFilter();
+      const matchesStatus = status === 'All' || f.status === status;
+
+      return matchesSearch && matchesStatus;
+    });
+  });
 
   // Modal overlay variable
-  selectedFreelancer: FreelancerData | null = null;
+  selectedFreelancer = signal<FreelancerData | null>(null);
 
   ngOnInit(): void {
+    this.columns = [
+      { name: 'Freelancer', prop: 'name', width: 280, cellTemplate: this.freelancerTemplate },
+      { name: 'Email', prop: 'email', width: 280 },
+      { name: 'Phone', prop: 'phoneNumber', width: 180 },
+      { name: 'Title', prop: 'title', width: 220 },
+      { name: 'Hourly Rate', prop: 'hourlyRate', width: 150 },
+      { name: 'Status', prop: 'status', width: 140, cellTemplate: this.statusTemplate },
+      { name: 'Actions', prop: 'actions', sortable: false, cellTemplate: this.actionTemplate }
+    ];
     this.loadFreelancers();
   }
 
   loadFreelancers(): void {
     this.adminService.getFreelancers().subscribe({
       next: (data) => {
-        this.freelancers = data;
-        this.applyFilters();
+        this.freelancers.set(data);
       }
     });
   }
 
-  onSearch(event: any): void {
-    this.searchTerm = event.target.value;
-    this.applyFilters();
-  }
-
   onFilterStatus(status: 'All' | 'Active' | 'Suspended' | 'Pending Approval' | 'Blocked' | 'Deactivated'): void {
-    this.statusFilter = status;
-    this.applyFilters();
-  }
-
-  applyFilters(): void {
-    this.filteredFreelancers = this.freelancers.filter(f => {
-      const matchesSearch = f.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        f.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        f.skills.some(skill => skill.toLowerCase().includes(this.searchTerm.toLowerCase()));
-
-      const matchesStatus = this.statusFilter === 'All' || f.status === this.statusFilter;
-
-      return matchesSearch && matchesStatus;
-    });
+    this.statusFilter.set(status);
   }
 
   changeFreelancerStatus(id: string, status: 'Active' | 'Suspended' | 'Pending Approval' | 'Blocked' | 'Deactivated'): void {
     this.adminService.updateFreelancerStatus(id, status).subscribe({
       next: () => {
         this.loadFreelancers();
-        if (this.selectedFreelancer && this.selectedFreelancer.id === id) {
-          this.selectedFreelancer.status = status;
+        const selected = this.selectedFreelancer();
+        if (selected && selected.id === id) {
+          this.selectedFreelancer.update(f => f ? { ...f, status } : null);
         }
       }
     });
@@ -76,22 +81,21 @@ export class FreelancerListComponent implements OnInit {
     this.adminService.approveFreelancer(id).subscribe({
       next: () => {
         this.loadFreelancers();
-        if (this.selectedFreelancer && this.selectedFreelancer.id === id) {
-          this.selectedFreelancer.status = 'Active';
+        const selected = this.selectedFreelancer();
+        if (selected && selected.id === id) {
+          this.selectedFreelancer.update(f => f ? { ...f, status: 'Active' } : null);
         }
       }
     });
   }
 
   viewProfile(freelancer: FreelancerData): void {
-    this.selectedFreelancer = freelancer;
+    this.selectedFreelancer.set(freelancer);
   }
 
   closeProfileModal(): void {
-    this.selectedFreelancer = null;
+    this.selectedFreelancer.set(null);
   }
-
-
 
   @ViewChild('freelancerTemplate', { static: true })
   freelancerTemplate!: TemplateRef<any>;
@@ -105,74 +109,26 @@ export class FreelancerListComponent implements OnInit {
   columns: any[] = [];
 
   ngAfterViewInit(): void {
-
-    this.columns = [
-      {
-        name: 'Freelancer',
-        prop: 'name',
-        width: 280,
-        cellTemplate: this.freelancerTemplate
-      },
-      {
-        name: 'Email',
-        prop: 'email',
-        width: 280
-      },
-      {
-        name: 'Phone',
-        prop: 'phoneNumber',
-        width: 180
-      },
-      {
-        name: 'Title',
-        prop: 'title',
-        width: 220
-      },
-      {
-        name: 'Hourly Rate',
-        prop: 'hourlyRate',
-        width: 150
-      },
-      {
-        name: 'Status',
-        prop: 'status',
-        width: 140,
-        cellTemplate: this.statusTemplate
-      }
-      ,
-      {
-        name: 'Actions',
-        prop: 'actions',
-        sortable: false,
-        cellTemplate: this.actionTemplate
-      }];
-
   }
-
 
   statusOptions = [
     { label: 'All', value: 'All' },
     { label: 'Active', value: 'Active' },
     { label: 'Suspended', value: 'Suspended' },
+    { label: 'Pending Approval', value: 'Pending Approval' },
     { label: 'Blocked', value: 'Blocked' },
     { label: 'Deactivated', value: 'Deactivated' }
   ];
 
-  openMenuId: number | string | null = null;
+  openMenuId = signal<number | string | null>(null);
 
   toggleMenu(id: number | string, event: Event): void {
     event.stopPropagation();
-
-    this.openMenuId =
-      this.openMenuId === id
-        ? null
-        : id;
+    this.openMenuId.update(current => current === id ? null : id);
   }
 
   @HostListener('document:click')
-  closeMenu(): void {
-    this.openMenuId = null;
+  onDocumentClick(): void {
+    this.openMenuId.set(null);
   }
-
-
 }

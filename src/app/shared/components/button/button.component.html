@@ -1,8 +1,8 @@
-<button [type]="type" [class]="buttonClasses" [disabled]="disabled || loading" [style.fontSize]="fontSize">
-  @if (loading) {
+<button [type]="type()" [class]="buttonClasses()" [disabled]="disabled() || loading()" [style.fontSize]="fontSize()">
+  @if (loading()) {
     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   }
-  @if (!loading) {
+  @if (!loading()) {
     <ng-content></ng-content>
   }
 </button>

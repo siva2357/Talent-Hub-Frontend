@@ -40,7 +40,6 @@ import { FinanceOverviewComponent } from './features/user/freelancer/pages/finan
 // Error/Utility Components
 import { AccessDeniedComponent } from './shared/pages/access-denied/access-denied.component';
 import { FindContractsComponent } from './features/user/freelancer/pages/find-contracts/find-contracts.component';
-import { SavedContractsComponent } from './features/user/freelancer/pages/saved-contracts/saved-contracts.component';
 import { ContractDetailsComponent } from './features/user/freelancer/pages/contract-details/contract-details.component';
 import { LegalContractComponent } from './features/user/freelancer/pages/legal-contract/legal-contract.component';
 
@@ -135,9 +134,7 @@ export const routes: Routes = [
       { path: 'my-dashboard', component: FreelancerDashboardComponent },
       { path: 'find-contracts', component: FindContractsComponent },
       { path: 'contract-details', component: ContractDetailsComponent },
-      { path: 'saved-contracts', component: SavedContractsComponent },
       { path: 'proposals', component: ProposalsComponent },
-      { path: 'offers', component: ProposalsComponent, data: { defaultTab: 'offers' } },
       { path: 'contracts', component: ActiveContractsComponent },
       { path: 'contract-diary', component: ContractDiaryComponent },
       { path: 'finance-overview', component: FinanceOverviewComponent },

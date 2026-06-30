@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
@@ -8,9 +8,11 @@ import { FileUploadComponent } from '../../../../../shared/components/file-uploa
 import { FilePreviewComponent } from '../../../../../shared/components/file-preview/file-preview.component';
 import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
 import { Attachment, Diary, Phase, Revision } from '../../../../../core/model/contract-diary.model';
-import { finalize } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { RichTextEditorComponent } from '../../../../../shared/components/rich-text-editor/rich-text-editor.component';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Subject, of } from 'rxjs';
+import { catchError, map, startWith, switchMap, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -26,278 +28,171 @@ export class ContractDiaryComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private fb = inject(FormBuilder);
 
-  isLoading = true;
-diary: Diary | null = null;
-contractId = '';
-  // Submission state per phase
+  isLoading = signal(true);
+  
+  contractId = this.route.snapshot.queryParamMap.get('contractId') || '';
+  private refresh$ = new Subject<void>();
+
+  diary = toSignal(
+    this.refresh$.pipe(
+      startWith(null),
+      tap(() => this.isLoading.set(true)),
+      switchMap(() => {
+        if (!this.contractId) {
+          this.isLoading.set(false);
+          return of(null);
+        }
+        return this.diaryService.getFreelancerDiaries(this.contractId).pipe(
+          map((res: any) => res.diary || null),
+          tap(() => this.isLoading.set(false)),
+          catchError((err) => {
+            console.error(err);
+            this.isLoading.set(false);
+            return of(null);
+          })
+        );
+      })
+    ),
+    { initialValue: null }
+  );
+
   submitPhaseForm!: FormGroup;
-  submitting: Record<string, boolean> = {};
-  showSubmitModal = false;
-
-selectedDiaryId: string | null = null;
-
-selectedPhase: Phase | null = null;
-
+  submitting = signal<Record<string, boolean>>({});
+  showSubmitModal = signal(false);
+  selectedDiaryId = signal<string | null>(null);
+  selectedPhase = signal<Phase | null>(null);
 
   BucketKey = BucketKey;
   UploadSection = UploadSection;
-  tempUploadUrls: Record<string, string | null> = {};
-  uploadedFiles: Record<string, Attachment[]> = {};
+  tempUploadUrls = signal<Record<string, string | null>>({});
+  uploadedFiles = signal<Record<string, Attachment[]>>({});
 
-getRevisionNumber(
-  phase: Phase,
-  revision: Revision
-): number {
-
-  return phase.revisions.findIndex(
-    r => r._id === revision._id
-  ) + 1;
-
-}
-
-  openSubmitModal(
-  diaryId: string,
-  phase: Phase
-): void {
-
-  this.selectedDiaryId = diaryId;
-
-  this.selectedPhase = phase;
-
-  this.submitPhaseForm.reset({ freelancerNote: '' });
-
-  this.uploadedFiles[phase._id] ??= [];
-
-  this.showSubmitModal = true;
-
-  document.body.classList.add(
-    'modal-open'
-  );
-
-  this.cdr.detectChanges();
-
-}
-
-
-closeSubmitModal(): void {
-
-  this.showSubmitModal = false;
-
-  this.selectedDiaryId = null;
-
-  this.selectedPhase = null;
-
-  document.body.classList.remove(
-    'modal-open'
-  );
-
-  this.cdr.detectChanges();
-
-}
-
-onFileUploaded(
-  phaseId: string,
-  fileInfo: {
-    url: string;
-    fileName: string;
-    fileType: string;
-    fileSize: string;
-  }
-): void {
-    if (!this.uploadedFiles[phaseId]) {
-      this.uploadedFiles[phaseId] = [];
-    }
-    this.uploadedFiles[phaseId].push({
-      fileName: fileInfo.fileName,
-      fileUrl: fileInfo.url,
-      fileType: fileInfo.fileType,
-      fileSize: fileInfo.fileSize
+  ngOnInit(): void {
+    this.submitPhaseForm = this.fb.group({
+      freelancerNote: ['', Validators.required]
     });
-    this.tempUploadUrls[phaseId] = null;
+  }
+
+  getRevisionNumber(phase: Phase, revision: Revision): number {
+    return phase.revisions.findIndex(r => r._id === revision._id) + 1;
+  }
+
+  openSubmitModal(diaryId: string, phase: Phase): void {
+    this.selectedDiaryId.set(diaryId);
+    this.selectedPhase.set(phase);
+    this.submitPhaseForm.reset({ freelancerNote: '' });
+    
+    this.uploadedFiles.update(files => ({
+      ...files,
+      [phase._id]: files[phase._id] ?? []
+    }));
+
+    this.showSubmitModal.set(true);
+    document.body.classList.add('modal-open');
+  }
+
+  closeSubmitModal(): void {
+    this.showSubmitModal.set(false);
+    this.selectedDiaryId.set(null);
+    this.selectedPhase.set(null);
+    document.body.classList.remove('modal-open');
+  }
+
+  onFileUploaded(
+    phaseId: string,
+    fileInfo: { url: string; fileName: string; fileType: string; fileSize: string; }
+  ): void {
+    this.uploadedFiles.update(files => {
+      const current = files[phaseId] || [];
+      return {
+        ...files,
+        [phaseId]: [...current, {
+          fileName: fileInfo.fileName,
+          fileUrl: fileInfo.url,
+          fileType: fileInfo.fileType,
+          fileSize: fileInfo.fileSize
+        }]
+      };
+    });
+    this.tempUploadUrls.update(urls => ({ ...urls, [phaseId]: null }));
   }
 
   removeAttachment(phaseId: string, index: number): void {
-    if (this.uploadedFiles[phaseId]) {
-      this.uploadedFiles[phaseId].splice(index, 1);
-    }
-  }
-
-ngOnInit(): void {
-
-  this.contractId =
-    this.route.snapshot.queryParamMap.get(
-      'contractId'
-    ) || '';
-
-  if (this.contractId) {
-    this.fetchDiaries();
-  }
-
-  this.submitPhaseForm = this.fb.group({
-    freelancerNote: ['', Validators.required]
-  });
-
-}
-
-
-
-
-fetchDiaries(callback?: () => void): void {
-
-  if (!this.contractId) {
-    this.diary = null;
-    return;
-  }
-
-  this.isLoading = true;
-
-  this.diaryService
-    .getFreelancerDiaries(this.contractId)
-    .subscribe({
-
-      next: (res: any) => {
-
-        this.diary = res.diary || null;
-
-        this.isLoading = false;
-        this.cdr.detectChanges();
-        if (callback) callback();
-
-      },
-
-      error: (err) => {
-
-        console.error(err);
-
-        this.diary = null;
-
-        this.isLoading = false;
-        if (callback) callback();
-
+    this.uploadedFiles.update(files => {
+      const current = files[phaseId];
+      if (current) {
+        const newArr = [...current];
+        newArr.splice(index, 1);
+        return { ...files, [phaseId]: newArr };
       }
-
+      return files;
     });
-
-}
-
-  getLatestRevision(
-  phase: Phase
-): Revision | null {
-
-  if (!phase.revisions?.length) {
-    return null;
   }
 
-  return phase.revisions[
-    phase.revisions.length - 1
-  ];
+  getLatestRevision(phase: Phase): Revision | null {
+    if (!phase.revisions?.length) return null;
+    return phase.revisions[phase.revisions.length - 1];
+  }
 
-}
+  getLatestNote(phase: Phase): string {
+    return this.getLatestRevision(phase)?.freelancerNote || '';
+  }
 
-getLatestNote(
-  phase: Phase
-): string {
+  getLatestFeedback(phase: Phase): string {
+    return this.getLatestRevision(phase)?.clientFeedback || '';
+  }
 
-  return this.getLatestRevision(
-    phase
-  )?.freelancerNote || '';
+  getLatestAttachments(phase: Phase): Attachment[] {
+    return this.getLatestRevision(phase)?.attachments || [];
+  }
 
-}
-
-getLatestFeedback(
-  phase: Phase
-): string {
-
-  return this.getLatestRevision(
-    phase
-  )?.clientFeedback || '';
-
-}
-
-
-getLatestAttachments(
-  phase: Phase
-): Attachment[] {
-
-  return this.getLatestRevision(
-    phase
-  )?.attachments || [];
-
-}
-
-hasRevision(
-  phase: Phase
-): boolean {
-
-  return !!phase.revisions?.length;
-
-}
-
-
+  hasRevision(phase: Phase): boolean {
+    return !!phase.revisions?.length;
+  }
 
   startPhase(diaryId: string, phaseId: string): void {
-    this.submitting[phaseId] = true;
+    this.submitting.update(s => ({ ...s, [phaseId]: true }));
     this.diaryService.startPhase(diaryId, phaseId).subscribe({
       next: () => { 
-        this.fetchDiaries(() => {
-          this.submitting[phaseId] = false;
-        }); 
+        this.refresh$.next();
+        this.submitting.update(s => ({ ...s, [phaseId]: false }));
       },
-      error: () => { this.submitting[phaseId] = false; }
+      error: () => { 
+        this.submitting.update(s => ({ ...s, [phaseId]: false })); 
+      }
     });
   }
 
+  submitUpdate(diaryId: string, phaseId: string): void {
+    const note = this.submitPhaseForm.value.freelancerNote?.trim() || '';
+    const files = this.uploadedFiles()[phaseId] || [];
 
+    if (this.submitPhaseForm.invalid && files.length === 0) {
+      this.submitPhaseForm.markAllAsTouched();
+      return;
+    }
 
-submitUpdate(
-  diaryId: string,
-  phaseId: string
-): void {
+    this.submitting.update(s => ({ ...s, [phaseId]: true }));
 
-  const note = this.submitPhaseForm.value.freelancerNote?.trim() || '';
-
-  const files =
-    this.uploadedFiles[phaseId] || [];
-
-  if (this.submitPhaseForm.invalid && files.length === 0) {
-    this.submitPhaseForm.markAllAsTouched();
-    return;
-  }
-
-  this.submitting[phaseId] = true;
-
-  this.diaryService.submitPhaseUpdate(
-    diaryId,
-    phaseId,
-    {
+    this.diaryService.submitPhaseUpdate(diaryId, phaseId, {
       freelancerNote: note,
       attachments: files
-    }
-  )
-  .subscribe({
+    }).subscribe({
+      next: () => {
+        this.submitPhaseForm.reset({ freelancerNote: '' });
+        this.uploadedFiles.update(f => ({ ...f, [phaseId]: [] }));
+        this.tempUploadUrls.update(u => ({ ...u, [phaseId]: null }));
+        this.closeSubmitModal();
+        this.refresh$.next();
+        this.submitting.update(s => ({ ...s, [phaseId]: false }));
+      },
+      error: (err) => {
+        console.error(err);
+        this.submitting.update(s => ({ ...s, [phaseId]: false }));
+      }
+    });
+  }
 
-    next: () => {
-
-      this.submitPhaseForm.reset({ freelancerNote: '' });
-      this.uploadedFiles[phaseId] = [];
-      this.tempUploadUrls[phaseId] = null;
-
-      this.closeSubmitModal();
-
-      this.fetchDiaries(() => {
-        this.submitting[phaseId] = false;
-      });
-
-    },
-
-    error: (err) => {
-      console.error(err);
-      this.submitting[phaseId] = false;
-    }
-
-  });
-
-}
   getFileIcon(fileType: string): string {
     if (!fileType) return 'bi-file-earmark-fill';
     if (fileType.includes('pdf'))   return 'bi-file-earmark-pdf-fill text-danger';
@@ -318,13 +213,9 @@ submitUpdate(
     }
   }
 
-canStart(
-  phase: Phase
-): boolean {
-
-  return phase.status === 'pending';
-
-}
+  canStart(phase: Phase): boolean {
+    return phase.status === 'pending';
+  }
 
   canSubmit(phase: Phase): boolean {
     return phase.status === 'in-progress' || phase.status === 'changes-requested';
@@ -339,19 +230,13 @@ canStart(
     return diary.contractId.estimatedBudget || 0;
   }
 
-  trackByPhase(
-  index: number,
-  phase: Phase
-): string {
+  trackByPhase(index: number, phase: Phase): string {
+    return phase._id;
+  }
 
-  return phase._id;
-
-}
-
-
-  isContractActive(diary: Diary): boolean {
-    if (!diary.contractId?.contractStartDate) return true;
-    const start = new Date(diary.contractId.contractStartDate);
+  isContractActive(d: Diary): boolean {
+    if (!d.contractId?.contractStartDate) return true;
+    const start = new Date(d.contractId.contractStartDate);
     start.setHours(0, 0, 0, 0);
     const today = new Date();
     today.setHours(0, 0, 0, 0);

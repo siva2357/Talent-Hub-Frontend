@@ -8,9 +8,9 @@
         <p class="text-secondary mb-0">Generate custom spreadsheets, download active audits, and track user growth records.</p>
       </div>
       <div>
-        <button class="btn btn-brand d-flex align-items-center gap-2 py-2 px-4 rounded-3 shadow" (click)="downloadExcelReport()">
+        <app-button variant="brand" customClass="py-2 px-4 rounded-3 shadow" (click)="downloadExcelReport()">
           <i class="bi bi-file-earmark-excel"></i> Export Ledger to Excel
-        </button>
+        </app-button>
       </div>
     </div>
 
@@ -21,7 +21,7 @@
         <div class="glass rounded-4 p-4 d-flex align-items-center justify-content-between position-relative overflow-hidden h-100">
           <div class="position-relative z-1">
             <span class="text-secondary small fw-medium text-uppercase tracking-wider d-block mb-1">Total Clients</span>
-            <h3 class="text-white fw-bold mb-0">{{totalClients}}</h3>
+            <h3 class="text-white fw-bold mb-0">{{totalClients()}}</h3>
           </div>
           <div class="report-icon-box bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; flex-shrink: 0;">
             <i class="bi bi-people-fill fs-4"></i>
@@ -34,7 +34,7 @@
         <div class="glass rounded-4 p-4 d-flex align-items-center justify-content-between position-relative overflow-hidden h-100">
           <div class="position-relative z-1">
             <span class="text-secondary small fw-medium text-uppercase tracking-wider d-block mb-1">Total Freelancers</span>
-            <h3 class="text-white fw-bold mb-0">{{totalFreelancers}}</h3>
+            <h3 class="text-white fw-bold mb-0">{{totalFreelancers()}}</h3>
           </div>
           <div class="report-icon-box bg-success bg-opacity-10 text-success rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; flex-shrink: 0;">
             <i class="bi bi-person-badge-fill fs-4"></i>
@@ -47,7 +47,7 @@
         <div class="glass rounded-4 p-4 d-flex align-items-center justify-content-between position-relative overflow-hidden h-100">
           <div class="position-relative z-1">
             <span class="text-secondary small fw-medium text-uppercase tracking-wider d-block mb-1">Total Volume</span>
-            <h3 class="text-white fw-bold mb-0">₹{{financialStats.totalVolume | number:'1.0-0'}}</h3>
+            <h3 class="text-white fw-bold mb-0">₹{{financialStats().totalVolume | number:'1.0-0'}}</h3>
           </div>
           <div class="report-icon-box bg-info bg-opacity-10 text-info rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; flex-shrink: 0;">
             <i class="bi bi-cash-coin fs-4"></i>
@@ -60,7 +60,7 @@
         <div class="glass rounded-4 p-4 d-flex align-items-center justify-content-between position-relative overflow-hidden h-100">
           <div class="position-relative z-1">
             <span class="text-secondary small fw-medium text-uppercase tracking-wider d-block mb-1">Commissions</span>
-            <h3 class="text-white fw-bold mb-0">₹{{financialStats.platformCommissions | number:'1.0-0'}}</h3>
+            <h3 class="text-white fw-bold mb-0">₹{{financialStats().platformCommissions | number:'1.0-0'}}</h3>
           </div>
           <div class="report-icon-box bg-warning bg-opacity-10 text-warning rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; flex-shrink: 0;">
             <i class="bi bi-bank2 fs-4"></i>
@@ -73,7 +73,7 @@
         <div class="glass rounded-4 p-4 d-flex align-items-center justify-content-between position-relative overflow-hidden h-100">
           <div class="position-relative z-1">
             <span class="text-secondary small fw-medium text-uppercase tracking-wider d-block mb-1">Escrow Held</span>
-            <h3 class="text-white fw-bold mb-0">₹{{financialStats.escrowHeld | number:'1.0-0'}}</h3>
+            <h3 class="text-white fw-bold mb-0">₹{{financialStats().escrowHeld | number:'1.0-0'}}</h3>
           </div>
           <div class="report-icon-box bg-danger bg-opacity-10 text-danger rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; flex-shrink: 0;">
             <i class="bi bi-shield-lock-fill fs-4"></i>
@@ -90,46 +90,31 @@
           
           <form (submit)="onGenerateReport($event)" class="d-flex flex-column gap-3">
             <div>
-              <label class="text-secondary small fw-medium mb-2">Report Title</label>
-              <input type="text" 
-                     class="form-control bg-glass text-white border-0" 
-                     [value]="newReportTitle"
-                     (input)="onTitleInput($event)"
-                     placeholder="e.g. Q2 Talent Retention Study" 
-                     required>
+              <app-input type="text" label="Report Title" name="title" placeholder="e.g. Q2 Talent Retention Study" [required]="true"
+                         [ngModel]="newReportTitle()" (ngModelChange)="newReportTitle.set($event)">
+              </app-input>
             </div>
 
             <div>
-              <label class="text-secondary small fw-medium mb-2">Category</label>
-              <select class="form-select bg-glass text-white border-0" 
-                      (change)="onCategorySelect($event)" 
-                      [value]="newReportCategory">
-                <option value="Financial">Financial</option>
-                <option value="User Activity">User Activity</option>
-                <option value="Platform Health">Platform Health</option>
-              </select>
+              <app-input type="select" label="Category" name="category" [options]="categoryOptions"
+                         [ngModel]="newReportCategory()" (ngModelChange)="newReportCategory.set($event)">
+              </app-input>
             </div>
 
             <div>
-              <label class="text-secondary small fw-medium mb-2">Scope / Description</label>
-              <textarea class="form-control bg-glass text-white border-0" 
-                        rows="4" 
-                        [value]="newReportDesc"
-                        (input)="onDescInput($event)"
-                        placeholder="Define audit scope and target parameters..." 
-                        required></textarea>
+              <app-input type="textarea" label="Scope / Description" name="desc" placeholder="Define audit scope and target parameters..." [required]="true"
+                         [ngModel]="newReportDesc()" (ngModelChange)="newReportDesc.set($event)">
+              </app-input>
             </div>
 
-            <button type="submit" 
-                    class="btn btn-brand w-100 d-flex align-items-center justify-content-center gap-2 mt-2" 
-                    [disabled]="isGenerating || !newReportTitle.trim() || !newReportDesc.trim()">
-              @if (isGenerating) {
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <app-button variant="brand" type="submit" customClass="w-100 mt-2"
+                        [disabled]="isGenerating() || !newReportTitle().trim() || !newReportDesc().trim()" [loading]="isGenerating()">
+              @if (isGenerating()) {
                 Compiling Ledger...
               } @else {
                 <i class="bi bi-gear-wide-connected"></i> Build Spreadsheet
               }
-            </button>
+            </app-button>
           </form>
         </div>
       </div>
@@ -140,33 +125,21 @@
         <div class="glass rounded-4 p-4 mb-4">
           <div class="row g-3 align-items-center justify-content-between">
             <div class="col-12 col-md-5">
-              <div class="search-box position-relative">
-                <i class="bi bi-search search-icon text-secondary"></i>
-                <input type="text" 
-                       class="form-control bg-glass text-white border-0 ps-5" 
-                       placeholder="Search audits by title or scope..." 
-                       (input)="onSearch($event)">
-              </div>
+              <app-input type="text" placeholder="Search audits by title or scope..." icon="bi-search"
+                         [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)">
+              </app-input>
             </div>
 
             <div class="col-12 col-md-auto">
               <div class="d-flex flex-wrap gap-2">
-                <button class="btn btn-sm filter-btn rounded-3" 
-                        [class.btn-primary]="categoryFilter === 'All'" 
-                        [class.btn-dark]="categoryFilter !== 'All'"
-                        (click)="onFilterCategory('All')">All</button>
-                <button class="btn btn-sm filter-btn rounded-3" 
-                        [class.btn-primary]="categoryFilter === 'Financial'" 
-                        [class.btn-dark]="categoryFilter !== 'Financial'"
-                        (click)="onFilterCategory('Financial')">Finance</button>
-                <button class="btn btn-sm filter-btn rounded-3" 
-                        [class.btn-primary]="categoryFilter === 'User Activity'" 
-                        [class.btn-dark]="categoryFilter !== 'User Activity'"
-                        (click)="onFilterCategory('User Activity')">Users</button>
-                <button class="btn btn-sm filter-btn rounded-3" 
-                        [class.btn-primary]="categoryFilter === 'Platform Health'" 
-                        [class.btn-dark]="categoryFilter !== 'Platform Health'"
-                        (click)="onFilterCategory('Platform Health')">Health</button>
+                <app-button [variant]="categoryFilter() === 'All' ? 'primary' : 'dark'" size="sm" customClass="rounded-3"
+                            (click)="onFilterCategory('All')">All</app-button>
+                <app-button [variant]="categoryFilter() === 'Financial' ? 'primary' : 'dark'" size="sm" customClass="rounded-3"
+                            (click)="onFilterCategory('Financial')">Finance</app-button>
+                <app-button [variant]="categoryFilter() === 'User Activity' ? 'primary' : 'dark'" size="sm" customClass="rounded-3"
+                            (click)="onFilterCategory('User Activity')">Users</app-button>
+                <app-button [variant]="categoryFilter() === 'Platform Health' ? 'primary' : 'dark'" size="sm" customClass="rounded-3"
+                            (click)="onFilterCategory('Platform Health')">Health</app-button>
               </div>
             </div>
           </div>
@@ -174,13 +147,13 @@
 
         <!-- Reports List -->
         <div class="d-flex flex-column gap-3">
-          @if (filteredReports.length === 0) {
+          @if (filteredReports().length === 0) {
             <div class="glass rounded-4 p-5 text-center text-secondary">
               <i class="bi bi-folder2-open fs-1 d-block mb-3 opacity-30"></i>
               No reports found matching criteria.
             </div>
           } @else {
-            @for (report of filteredReports; track report.id) {
+            @for (report of filteredReports(); track report.id) {
               <div class="glass rounded-4 p-4 report-card d-flex align-items-center justify-content-between gap-4">
                 <div class="d-flex align-items-center gap-3">
                   <!-- File category icon container -->
@@ -214,9 +187,10 @@
                   </div>
                 </div>
                 <div>
-                  <button type="button" (click)="downloadReport(report)" class="btn btn-outline-light d-flex align-items-center justify-content-center p-2 rounded-3 bg-glass border-0" title="Download Spreadsheet">
+                  <app-button variant="outline" customClass="text-white border-light bg-glass p-2 rounded-3" title="Download Spreadsheet"
+                              (click)="downloadReport(report)">
                     <i class="bi bi-download fs-5"></i>
-                  </button>
+                  </app-button>
                 </div>
               </div>
             }
