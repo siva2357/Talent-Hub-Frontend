@@ -66,3 +66,15 @@ export interface UploadedFileEvent {
   fileType: string;
 }
 
+export interface Subcategory {
+  label: string;
+  value: string;
+}
+
+export interface SupportCategory {
+  id: string;
+  label: string;
+  icon: string;
+  description: string;
+  subcategories: Subcategory[];
+}

@@ -1,26 +1,26 @@
 <div class="legal-contract-page pb-5">
     <div class="container py-5">
-        @if (isLoading) {
+        @if (isLoading()) {
             <div class="text-center py-5">
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
-        } @else if (error) {
+        } @else if (error()) {
             <div class="alert glass border-danger border-opacity-25 text-danger rounded-4 p-4 text-center max-w-2xl mx-auto">
-                <i class="bi bi-exclamation-triangle me-2"></i>{{error}}
+                <i class="bi bi-exclamation-triangle me-2"></i>{{error()}}
                 <div class="mt-3">
                     <app-button variant="outline" routerLink="/user/offers">Back to Offers</app-button>
                 </div>
             </div>
-        } @else if (offerData) {
+        } @else if (offerData(); as offerData) {
             <div class="row justify-content-center">
                 <div class="col-lg-10 col-xl-8">
                     <!-- Header -->
                     <div class="d-flex justify-content-between align-items-center mb-5">
                         <div>
                             <h2 class="text-white fw-bold mb-1">Service <span class="text-primary">Agreement</span></h2>
-                            <p class="text-secondary mb-0">Contract ID: #{{offerId}}</p>
+                            <p class="text-secondary mb-0">Contract ID: #{{offerId()}}</p>
                         </div>
                         <div class="d-flex gap-2 align-items-center">
                             <app-button variant="outline" size="sm" customClass="px-3" (click)="downloadContractPdf()">
@@ -93,8 +93,8 @@
                                         <input type="file" #signatureInput class="d-none" (change)="onSignatureFileSelected($event)" accept="image/*">
                                         <div class="signature-line position-relative cursor-pointer py-2 border-bottom border-white border-opacity-20" 
                                              (click)="triggerSignatureUpload(signatureInput)" style="min-height: 80px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.02); border-radius: 8px;">
-                                            @if (signatureImage) {
-                                                <img [src]="signatureImage" alt="Signature" class="signature-img" style="max-height: 60px; max-width: 100%; object-fit: contain;">
+                                            @if (signatureImage()) {
+                                                <img [src]="signatureImage()" alt="Signature" class="signature-img" style="max-height: 60px; max-width: 100%; object-fit: contain;">
                                             } @else {
                                                 <div class="signature-placeholder d-flex align-items-center gap-2 text-secondary opacity-50 small">
                                                     <i class="bi bi-cloud-upload"></i>
@@ -117,7 +117,7 @@
                     <div class="glass p-4 rounded-5 border border-white border-opacity-10 shadow-lg">
                         <div class="d-flex align-items-center gap-4 mb-4">
                             <div class="form-check custom-checkbox">
-                                <input class="form-check-input" type="checkbox" id="termsCheck" [(ngModel)]="hasAgreed">
+                                <input class="form-check-input" type="checkbox" id="termsCheck" [ngModel]="hasAgreed()" (ngModelChange)="hasAgreed.set($event)">
                                 <label class="form-check-label text-white small" for="termsCheck">
                                     I have read and agree to the <a href="#" class="text-primary text-decoration-none">Standard Service Terms</a> and <a href="#" class="text-primary text-decoration-none">Payment Policy</a>.
                                 </label>
@@ -125,9 +125,11 @@
                         </div>
 
                         <div class="d-flex gap-3">
-                            <app-button variant="brand" (click)="signContract()" [disabled]="!hasAgreed || isSigning || !signatureImage">
-                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" *ngIf="isSigning"></span>
-                                {{ isSigning ? 'Executing Contract...' : 'Accept & Sign Contract' }}
+                            <app-button variant="brand" (click)="signContract()" [disabled]="!hasAgreed() || isSigning() || !signatureImage()">
+                                @if (isSigning()) {
+                                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                }
+                                {{ isSigning() ? 'Executing Contract...' : 'Accept & Sign Contract' }}
                             </app-button>
                             <app-button variant="outline" routerLink="/user/offers">
                                 Back to Offers

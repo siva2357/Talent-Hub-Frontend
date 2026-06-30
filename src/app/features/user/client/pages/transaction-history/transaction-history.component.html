@@ -9,7 +9,7 @@
         </div>
 
         <!-- Filter & Search Controls -->
-        <div class="glass-dark p-3 p-md-4 rounded-4 border border-white border-opacity-5 mb-4 mb-xl-5 position-relative" style="z-index: 10;">
+        <div class="glass-dark p-3 p-md-4 rounded-4 border-0 mb-4 mb-xl-5 position-relative" style="z-index: 10;">
             <div class="row g-3 align-items-center">
                 <!-- Search -->
                 <div class="col-12 col-md-5 col-lg-4">
@@ -33,18 +33,18 @@
             </div>
 
             <!-- Active Filter Chips -->
-            @if (searchQuery || typeFilter !== 'All') {
+            @if (searchQuery() || typeFilter() !== 'All') {
             <div class="d-flex align-items-center flex-wrap gap-2 mt-3 pt-3 border-top border-white border-opacity-5">
                 <span class="text-secondary small fw-bold text-uppercase me-2"
                     style="font-size: 11px; letter-spacing: 0.5px;">Active Filters:</span>
 
-                @if (searchQuery) {
+                @if (searchQuery()) {
                 <app-chip [label]="'Search: ' + searchQuery" variant="primary" [removable]="true"
                     (remove)="removeSearchChip()">
                 </app-chip>
                 }
 
-                @if (typeFilter !== 'All') {
+                @if (typeFilter() !== 'All') {
                 <app-chip [label]="'Type: ' + typeFilter" variant="primary" [removable]="true"
                     (remove)="removeTypeChip()">
                 </app-chip>
@@ -54,10 +54,11 @@
         </div>
 
         <!-- Premium Custom Contract Accordion System -->
+        @defer (on viewport) {
         <div class="d-flex flex-column gap-3 gap-md-4">
-            @for (c of filteredContracts; track c.contractId) {
+            @for (c of filteredContracts(); track c.contractId) {
             <div class="accordion-item-wrapper glass-dark rounded-4 border overflow-hidden transition-all"
-                [class.active-accordion]="expandedContractId === c.contractId">
+                [class.active-accordion]="expandedContractId() === c.contractId">
 
                 <!-- Accordion Header Card -->
                 <div class="accordion-header-card p-3 p-md-4 cursor-pointer d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between transition-all gap-4"
@@ -101,13 +102,13 @@
                         <!-- Toggle Chevron (Desktop) -->
                         <div class="d-none d-lg-flex ps-4 align-items-center justify-content-end ms-2">
                             <i class="bi bi-chevron-down text-secondary fs-4 transition-all chevron-icon"
-                                [class.rotate-180]="expandedContractId === c.contractId"></i>
+                                [class.rotate-180]="expandedContractId() === c.contractId"></i>
                         </div>
                     </div>
                 </div>
 
                 <!-- Accordion Panel Body (Flat Milestones List Items) -->
-                @if (expandedContractId === c.contractId) {
+                @if (expandedContractId() === c.contractId) {
                 <div
                     class="accordion-body-panel p-3 p-md-4 p-xl-5 border-top border-white border-opacity-5 bg-black bg-opacity-20 transition-all">
 
@@ -171,8 +172,8 @@
                                 </span>
 
                                 <!-- Amount to be paid -->
-                                <div class="d-flex flex-column align-items-start align-items-md-end pe-0 pe-md-3 text-start text-md-end"
-                                    style="min-width: auto; md-min-width: 120px;">
+                                <div class="d-flex flex-column align-items-start align-items-md-end pe-0 pe-md-3 text-start text-md-end amount-col-width"
+                                    style="min-width: auto;">
                                     <span class="text-secondary-light small fw-bold text-uppercase"
                                         style="font-size: 10px; letter-spacing: 0.5px; opacity: 0.6; margin-bottom: 2px;">Amount</span>
                                     <span class="fw-bold text-white" style="font-size: 15px;">₹{{ m.amount |
@@ -181,8 +182,8 @@
 
                                 <!-- Action Buttons -->
                                 @if (m.status !== 'approved') {
-                                <div class="milestone-row-actions d-flex align-items-center justify-content-end gap-2"
-                                    style="min-width: auto; md-min-width: 140px;">
+                                <div class="milestone-row-actions d-flex align-items-center justify-content-end gap-2 action-col-width"
+                                    style="min-width: auto;">
                                     @if (m.status === 'in-progress' || m.status === 'submitted' || m.status ===
                                     'changes-requested' || m.status === 'overdue') {
                                     <button
@@ -220,6 +221,7 @@
             </div>
             }
         </div>
+        } @placeholder { <div class="text-center p-5"><div class="spinner-border text-primary"></div></div> }
 
     </div>
 </div>

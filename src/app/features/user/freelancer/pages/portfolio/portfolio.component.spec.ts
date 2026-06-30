@@ -21,10 +21,10 @@ describe('PortfolioComponent', () => {
     };
 
     mockPortfolioService = {
-      getPortfolioItems: jasmine.createSpy('getPortfolioItems').and.returnValue(of([])),
-      addPortfolioItem: jasmine.createSpy('addPortfolioItem'),
-      deletePortfolioItem: jasmine.createSpy('deletePortfolioItem'),
-      updatePortfolioItem: jasmine.createSpy('updatePortfolioItem')
+      getMyPortfolio: jasmine.createSpy('getMyPortfolio').and.returnValue(of([])),
+      createPortfolio: jasmine.createSpy('createPortfolio').and.returnValue(of({})),
+      updatePortfolio: jasmine.createSpy('updatePortfolio').and.returnValue(of({})),
+      deletePortfolio: jasmine.createSpy('deletePortfolio').and.returnValue(of({}))
     };
 
     await TestBed.configureTestingModule({

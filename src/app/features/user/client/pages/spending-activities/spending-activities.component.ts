@@ -3,17 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ContractDiaryService } from '../../../../../core/services/contract-diary.service';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 
-export interface CompletedContract {
-  contractId: string;
-  title: string;
-  type: string;
-  freelancer: string;
-  startDate: string;
-  endDate: string;
-  budget: number;
-  totalPaid: number;
-  status: string;
-}
+import { CompletedContract } from '../../../../../core/model/client.model';
 
 @Component({
   selector: 'app-spending-activities',

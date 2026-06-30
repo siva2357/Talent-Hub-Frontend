@@ -53,20 +53,20 @@
           <div class="glass p-4 p-md-5 rounded-4 border-white border-opacity-10">
             <h5 class="text-white fw-bold mb-4 h5">Legal Terms & Conditions</h5>
             
-            <form #offerForm="ngForm">
+            <form [formGroup]="legalForm">
               <div class="mb-4">
                 <p class="text-secondary text-uppercase mb-2" style="font-size: 10px; letter-spacing: 0.5px;">Scope of Work Statement</p>
-                <app-input type="textarea" placeholder="Define the exact deliverables..." [(ngModel)]="scopeOfWork" name="scopeOfWork" [required]="true"></app-input>
+                <app-input type="textarea" placeholder="Define the exact deliverables..." formControlName="scopeOfWork" [required]="true"></app-input>
               </div>
 
               <div class="mb-4">
                 <p class="text-secondary text-uppercase mb-2" style="font-size: 10px; letter-spacing: 0.5px;">Additional Terms (Optional)</p>
-                <app-input type="textarea" placeholder="Any NDAs, specific timelines, or IP ownership clauses..." [(ngModel)]="additionalTerms" name="additionalTerms"></app-input>
+                <app-input type="textarea" placeholder="Any NDAs, specific timelines, or IP ownership clauses..." formControlName="additionalTerms"></app-input>
               </div>
 
               <div class="bg-dark bg-opacity-25 border border-white border-opacity-10 p-3 rounded-3 mb-4 d-flex gap-3 align-items-start">
                 <div class="form-check mt-1">
-                  <input class="form-check-input border-secondary animate-pulse" type="checkbox" id="legalConfirm" [(ngModel)]="confirmTerms" name="confirmTerms">
+                  <input class="form-check-input border-secondary animate-pulse" type="checkbox" id="legalConfirm" formControlName="confirmTerms">
                 </div>
                 <div>
                   <label class="form-check-label text-white fw-medium" for="legalConfirm" style="font-size: 14px;">
@@ -80,7 +80,7 @@
 
               <div class="d-flex justify-content-end gap-3 mt-5 border-top border-white border-opacity-10 pt-4">
                 <app-button variant="dark" customClass="text-white border-white border-opacity-10 px-4 rounded-3 fw-bold" routerLink="/user/hired-talent">Cancel</app-button>
-                <app-button variant="primary" customClass="px-4 rounded-3 fw-bold" (click)="sendOffer()" [disabled]="!confirmTerms" [loading]="isSubmitting">
+                <app-button variant="primary" customClass="px-4 rounded-3 fw-bold" (click)="sendOffer()" [disabled]="legalForm.invalid" [loading]="isSubmitting">
                   <i class="bi bi-send me-2"></i> Generate & Send Offer
                 </app-button>
               </div>

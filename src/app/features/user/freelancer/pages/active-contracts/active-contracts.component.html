@@ -8,22 +8,22 @@
 
         <!-- Custom Tabs -->
         <div class="d-flex mb-4 custom-tabs gap-3 border-bottom border-white border-opacity-10 pb-2">
-            <button 
-                class="tab-btn fw-semibold" 
-                [class.active]="currentTab === 'active'"
-                (click)="currentTab = 'active'">
+            <app-button 
+                [variant]="currentTab() === 'active' ? 'brand' : 'outline'"
+                customClass="fw-semibold px-4 rounded-pill" 
+                (click)="currentTab.set('active')">
                 Active Contracts
-            </button>
-            <button 
-                class="tab-btn fw-semibold" 
-                [class.active]="currentTab === 'completed'"
-                (click)="currentTab = 'completed'">
+            </app-button>
+            <app-button 
+                [variant]="currentTab() === 'completed' ? 'brand' : 'outline'"
+                customClass="fw-semibold px-4 rounded-pill" 
+                (click)="currentTab.set('completed')">
                 Completed
-            </button>
+            </app-button>
         </div>
 
         <!-- Loading State -->
-        @if (isLoading) {
+        @if (isLoading()) {
             <div class="text-center py-5">
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Loading...</span>
@@ -31,9 +31,9 @@
             </div>
         } @else {
 
-            @if (filteredContracts.length > 0) {
+            @if (filteredContracts().length > 0) {
                 <div class="row g-4">
-                    @for (contract of filteredContracts; track contract.id) {
+                    @for (contract of filteredContracts(); track contract.id) {
                     <div class="col-12">
                         <div class="contract-card glass p-4 rounded-4" [class.frozen]="contract.status === 'upcoming'">
 
@@ -128,9 +128,9 @@
             } @else {
                 <div class="text-center py-5 glass rounded-4 border border-white border-opacity-10">
                     <i class="bi bi-briefcase text-secondary display-1 mb-3"></i>
-                    <h4 class="text-white fw-bold">No {{ currentTab === 'active' ? 'active' : 'completed' }} contracts yet</h4>
+                    <h4 class="text-white fw-bold">No {{ currentTab() === 'active' ? 'active' : 'completed' }} contracts yet</h4>
                     <p class="text-secondary mb-0">
-                        {{ currentTab === 'active' ? 'When you accept an offer, your active contracts will appear here.' : 'When you complete a contract, it will appear here.' }}
+                        {{ currentTab() === 'active' ? 'When you accept an offer, your active contracts will appear here.' : 'When you complete a contract, it will appear here.' }}
                     </p>
                 </div>
             }

@@ -5,7 +5,7 @@
     <section class="profiles-section mb-5">
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-4">
   <div>
-    <h3 class="text-white fw-bold mb-3 h4">Get to know your Talents</h3>
+    <h3 class="text-white fw-bold mb-3 ">Get to know your Talents</h3>
     <p class="text-secondary text-lg mb-0">
       Discover skilled professionals and find the perfect match for your projects.
     </p>
@@ -161,14 +161,16 @@
 
 }
 
+
+    @defer (on viewport) {
       <div class="row g-4">
-        @if (talents.length === 0) {
+        @if (talents().length === 0) {
         <div class="col-12 text-center py-5">
           <h4 class="text-white fw-bold mb-2">No talents found</h4>
           <p class="text-secondary">Try adjusting your filters or search terms.</p>
         </div>
         } @else {
-        @for (talent of talents; track talent.id) {
+        @for (talent of talents(); track talent.id) {
         <div class="col-lg-4 col-md-6">
           <app-talent-card
             [name]="talent.name"
@@ -197,6 +199,14 @@
         }
         }
       </div>
+    } @placeholder {
+      <div class="text-center p-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    }
+
 
     </section>
   </div>

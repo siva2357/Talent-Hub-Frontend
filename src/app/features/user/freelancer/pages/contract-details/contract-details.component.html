@@ -15,7 +15,7 @@
       </ol>
     </nav>
 
-    @if (isLoading) {
+    @if (isLoading()) {
 
     <div class="text-center py-5">
       <div class="spinner-border text-primary"></div>
@@ -23,7 +23,7 @@
 
     }
 
-    @if (!isLoading && contract) {
+    @if (!isLoading() && contract(); as contract) {
 
     <div class="row g-4">
 
@@ -207,7 +207,7 @@
             @if (!contract.hasApplied) {
 
             <app-button variant="primary" size="lg" customClass="w-100 py-3 rounded-4 fw-bold mb-3 shadow-glow"
-              [loading]="isApplying" [disabled]="isApplying" (click)="applyToContract()">
+              [loading]="isApplying()" [disabled]="isApplying()" (click)="applyToContract()">
 
               Apply Now
 
@@ -220,7 +220,7 @@
             <!-- Withdraw Button -->
 
             <app-button variant="danger" size="lg" customClass="w-100 py-3 rounded-4 fw-bold mb-3"
-              [loading]="isWithdrawing" [disabled]="isWithdrawing" (click)="withdrawApplication()">
+              [loading]="isWithdrawing()" [disabled]="isWithdrawing()" (click)="withdrawApplication()">
 
               Withdraw Application
 

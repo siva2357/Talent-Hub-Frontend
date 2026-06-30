@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -31,23 +31,24 @@ export class SupportRequestsComponent implements OnInit {
   private supportService = inject(SupportService);
   private toastr = inject(ToastrService);
 
-  requests: SupportRequest[] = [];
-  filteredRequests: SupportRequest[] = [];
+  requests = signal<SupportRequest[]>([]);
+  
+  searchTerm = signal('');
 
-  searchTerm = '';
-
-  statusFilter:
+  statusFilter = signal<
     | 'All'
     | 'Open'
     | 'WaitingForAdmin'
     | 'WaitingForUser'
     | 'Resolved'
-    | 'Closed' = 'All';
+    | 'Closed'
+  >('All');
 
-  userTypeFilter:
+  userTypeFilter = signal<
     | 'All'
     | 'Client'
-    | 'Freelancer' = 'All';
+    | 'Freelancer'
+  >('All');
 
   statusOptions = [
     { label: 'All Status', value: 'All' },
@@ -64,12 +65,37 @@ export class SupportRequestsComponent implements OnInit {
     { label: 'Freelancer', value: 'Freelancer' }
   ];
 
-  isLoading = true;
+  isLoading = signal(true);
+  selectedRequest = signal<SupportRequest | null>(null);
+  replyText = signal('');
 
+  filteredRequests = computed(() => {
+    const search = this.searchTerm().toLowerCase();
+    
+    return this.requests().filter(ticket => {
+      const matchesSearch =
+        ticket.id.toLowerCase().includes(search) ||
+        ticket.userName.toLowerCase().includes(search) ||
+        ticket.userEmail.toLowerCase().includes(search) ||
+        ticket.message.toLowerCase().includes(search);
 
-  selectedRequest: SupportRequest | null = null;
+      const status = this.statusFilter();
+      const matchesStatus =
+        status === 'All' ||
+        ticket.status === status;
 
-  replyText = '';
+      const userType = this.userTypeFilter();
+      const matchesUserType =
+        userType === 'All' ||
+        ticket.userType === userType;
+
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesUserType
+      );
+    });
+  });
 
   ngOnInit(): void {
     this.loadRequests();
@@ -77,23 +103,21 @@ export class SupportRequestsComponent implements OnInit {
 
   loadRequests(): void {
 
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     this.supportService.getAllTickets().subscribe({
       next: (tickets) => {
 
-        this.requests = tickets;
-
-        this.applyFilters();
-
-        this.isLoading = false;
+        this.requests.set(tickets);
+        this.isLoading.set(false);
+        this.autoSelectTicket();
       },
 
       error: (error) => {
 
         console.error(error);
 
-        this.isLoading = false;
+        this.isLoading.set(false);
 
         this.toastr.error(
           'Failed to load support tickets',
@@ -103,105 +127,32 @@ export class SupportRequestsComponent implements OnInit {
     });
   }
 
-  onSearch(event: Event): void {
-
-    const input =
-      event.target as HTMLInputElement;
-
-    this.searchTerm = input.value;
-
-    this.applyFilters();
+  onFilterStatus(status: 'All' | 'Open' | 'WaitingForAdmin' | 'WaitingForUser' | 'Resolved' | 'Closed'): void {
+    this.statusFilter.set(status);
+    this.autoSelectTicket();
   }
 
-  onFilterStatus(
-    status:
-      | 'All'
-      | 'Open'
-      | 'WaitingForAdmin'
-      | 'WaitingForUser'
-      | 'Resolved'
-      | 'Closed'
-  ): void {
-
-    this.statusFilter = status;
-
-    this.applyFilters();
+  onFilterUserType(userType: 'All' | 'Client' | 'Freelancer'): void {
+    this.userTypeFilter.set(userType);
+    this.autoSelectTicket();
   }
 
-  onFilterUserType(
-    userType:
-      | 'All'
-      | 'Client'
-      | 'Freelancer'
-  ): void {
-
-    this.userTypeFilter = userType;
-
-    this.applyFilters();
-  }
-
-  applyFilters(): void {
-
-    const search =
-      this.searchTerm.toLowerCase();
-
-    this.filteredRequests =
-      this.requests.filter(ticket => {
-
-        const matchesSearch =
-          ticket.id.toLowerCase().includes(search) ||
-          ticket.userName.toLowerCase().includes(search) ||
-          ticket.userEmail.toLowerCase().includes(search) ||
-          ticket.message.toLowerCase().includes(search);
-
-        const matchesStatus =
-          this.statusFilter === 'All' ||
-          ticket.status === this.statusFilter;
-
-        const matchesUserType =
-          this.userTypeFilter === 'All' ||
-          ticket.userType === this.userTypeFilter;
-
-        return (
-          matchesSearch &&
-          matchesStatus &&
-          matchesUserType
-        );
-      });
-
-    if (!this.filteredRequests.length) {
-
-      this.selectedRequest = null;
-
+  autoSelectTicket(): void {
+    const filtered = this.filteredRequests();
+    if (!filtered.length) {
+      this.selectedRequest.set(null);
       return;
     }
 
-    if (
-      !this.selectedRequest ||
-      !this.filteredRequests.some(
-        ticket =>
-          ticket.id ===
-          this.selectedRequest?.id
-      )
-    ) {
-
-      this.selectedRequest =
-        this.filteredRequests[0];
-
+    const selected = this.selectedRequest();
+    if (!selected || !filtered.some(ticket => ticket.id === selected.id)) {
+      this.selectedRequest.set(filtered[0]);
       return;
     }
 
-    const updatedTicket =
-      this.filteredRequests.find(
-        ticket =>
-          ticket.id ===
-          this.selectedRequest?.id
-      );
-
+    const updatedTicket = filtered.find(ticket => ticket.id === selected.id);
     if (updatedTicket) {
-
-      this.selectedRequest =
-        updatedTicket;
+      this.selectedRequest.set(updatedTicket);
     }
   }
 
@@ -209,30 +160,29 @@ export class SupportRequestsComponent implements OnInit {
     request: SupportRequest
   ): void {
 
-    this.selectedRequest = request;
-
-    this.replyText = '';
+    this.selectedRequest.set(request);
+    this.replyText.set('');
   }
 
   submitReply(): void {
 
     if (
-      !this.selectedRequest ||
-      !this.replyText.trim()
+      !this.selectedRequest() ||
+      !this.replyText().trim()
     ) {
       return;
     }
 
     this.supportService.adminReplyToTicket(
-      this.selectedRequest.id,
+      this.selectedRequest()!.id,
       {
-        message: this.replyText.trim()
+        message: this.replyText().trim()
       }
     ).subscribe({
 
       next: (response) => {
 
-        this.replyText = '';
+        this.replyText.set('');
 
         this.toastr.success(
           response.message,
@@ -263,12 +213,12 @@ export class SupportRequestsComponent implements OnInit {
       | 'Closed'
   ): void {
 
-    if (!this.selectedRequest) {
+    if (!this.selectedRequest()) {
       return;
     }
 
     this.supportService.updateTicketStatus(
-      this.selectedRequest.id,
+      this.selectedRequest()!.id,
       {
         status
       }
@@ -298,12 +248,12 @@ export class SupportRequestsComponent implements OnInit {
 
   closeTicket(): void {
 
-    if (!this.selectedRequest) {
+    if (!this.selectedRequest()) {
       return;
     }
 
     this.supportService.closeTicket(
-      this.selectedRequest.id
+      this.selectedRequest()!.id
     ).subscribe({
 
       next: (response) => {

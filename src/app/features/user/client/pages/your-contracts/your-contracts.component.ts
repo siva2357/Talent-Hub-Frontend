@@ -1,7 +1,6 @@
-
-
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, HostListener, signal, computed, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
@@ -15,76 +14,68 @@ import { ContractService } from '../../../../../core/services/contract.service';
 import { Contract } from '../../../../../core/model/contract.model';
 import { Table } from "../../../../../shared/components/table/table.component";
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
+import { ContractStatusEnum, BudgetTypeEnum } from '../../../../../core/enums/contract.enum';
+import { Category } from '../../../../../core/enums/category.enum';
 
 @Component({
   selector: 'app-your-contracts',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    InputComponent,
-    ButtonComponent,
-    FormsModule,
-    ChipComponent,
-    Table,
-    BadgeComponent
-  ],
+  imports: [CommonModule, RouterLink, InputComponent, ButtonComponent, FormsModule, ChipComponent, Table, BadgeComponent],
   templateUrl: './your-contracts.component.html',
   styleUrl: './your-contracts.component.css'
 })
 export class YourContractsComponent implements OnInit {
   DateTimeHelper = DateTimeHelper;
+  ContractStatusEnum = ContractStatusEnum;
+  BudgetTypeEnum = BudgetTypeEnum;
+  Category = Category;
+  destroyRef = inject(DestroyRef);
+
+  // Pagination for cards (Frontend Infinite Scroll)
+  displayCount = signal<number>(10);
 
 
   // ========================================
   // FILTER STATES
   // ========================================
 
-  searchQuery: string = '';
-  statusFilter: string = '';
-  budgetTypeFilter: string = '';
-  contractTypeFilter: string = '';
+  searchQuery = signal<string>('');
+  statusFilter = signal<string>('');
+  budgetTypeFilter = signal<string>('');
+  contractTypeFilter = signal<string>('');
 
   pendingSearchQuery: string = '';
   pendingStatusFilter: string = '';
   pendingBudgetTypeFilter: string = '';
   pendingContractTypeFilter: string = '';
 
-  loading: boolean = false;
-
-  // ========================================
-  // CONTRACTS
-  // ========================================
-
-  contracts: Contract[] = [];
-
-  // ========================================
-  // STATUS OPTIONS
-  // ========================================
+  loading = signal<boolean>(false);
+  contracts = signal<Contract[]>([]);
 
   statusOptions = [
     {
       label: 'Pending',
-      value: 'pending'
+      value: ContractStatusEnum.PENDING
     },
     {
       label: 'In Progress',
-      value: 'in progress'
+      value: ContractStatusEnum.IN_PROGRESS
     },
     {
       label: 'Completed',
-      value: 'completed'
+      value: ContractStatusEnum.COMPLETED
     }
   ];
 
 
   contractTypeOptions = [
     { label: 'All Contract Types', value: '' },
-    { label: 'Frontend', value: 'Frontend' },
-    { label: 'Backend', value: 'Backend' },
-    { label: 'Full Stack', value: 'Full Stack' },
-    { label: 'Mobile', value: 'Mobile' },
-    { label: 'UI/UX', value: 'UI/UX' }
+    { label: Category.WebDevelopment, value: Category.WebDevelopment },
+    { label: Category.MobileDevelopment, value: Category.MobileDevelopment },
+    { label: Category.UIUXDesign, value: Category.UIUXDesign },
+    { label: Category.DataScience, value: Category.DataScience },
+    { label: Category.Marketing, value: Category.Marketing },
+    { label: Category.ContentWriting, value: Category.ContentWriting }
   ];
 
   budgetTypeOptions = [
@@ -94,11 +85,11 @@ export class YourContractsComponent implements OnInit {
     },
     {
       label: 'Fixed Price',
-      value: 'Fixed Price'
+      value: BudgetTypeEnum.FIXED_PRICE
     },
     {
       label: 'Hourly',
-      value: 'Hourly'
+      value: BudgetTypeEnum.HOURLY_RATE
     }
   ];
 
@@ -116,15 +107,23 @@ export class YourContractsComponent implements OnInit {
     this.getMyContracts();
   }
 
-  ngOnDestroy(): void {
-  }
-  
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
     if (this.activeActionRow) {
       const target = event.target as HTMLElement;
       if (!target.closest('.action-dropdown') && !target.closest('.action-menu')) {
         this.closeActionMenu();
+      }
+    }
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event?: Event): void {
+    // Check if user has scrolled near the bottom of the page
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
+      // If we haven't displayed all filtered contracts yet, load 10 more
+      if (this.displayCount() < this.filteredContracts().length) {
+        this.displayCount.update(count => count + 10);
       }
     }
   }
@@ -141,14 +140,14 @@ export class YourContractsComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.contractColumns = [
-        { name: 'Contract Title', prop: 'contractTitle', cellTemplate: this.titleTemplate, width: 250 },
-        { name: 'Subject', prop: 'contractSubject' },
-        { name: 'Contract Type', prop: 'contractType' },
-        { name: 'Budget Type', prop: 'budgetType' },
-        { name: 'Estimated Budget', prop: 'estimatedBudget', cellTemplate: this.budgetTemplate },
-        { name: 'Start Date', prop: 'contractStartDate', cellTemplate: this.dateTemplate },
-        { name: 'End Date', prop: 'contractEndDate', cellTemplate: this.dateTemplate },
-        { name: 'Status', prop: 'status', cellTemplate: this.statusTemplate },
+        { name: 'Contract Title', prop: 'contractTitle', cellTemplate: this.titleTemplate, width: 220 },
+        { name: 'Subject', prop: 'contractSubject', width: 150 },
+        { name: 'Contract Type', prop: 'contractType', width: 150 },
+        { name: 'Budget Type', prop: 'budgetType', width: 150 },
+        { name: 'Estimated Budget', prop: 'estimatedBudget', cellTemplate: this.budgetTemplate, width: 150 },
+        { name: 'Start Date', prop: 'contractStartDate', cellTemplate: this.dateTemplate, width: 150 },
+        { name: 'End Date', prop: 'contractEndDate', cellTemplate: this.dateTemplate, width: 150 },
+        { name: 'Status', prop: 'status', cellTemplate: this.statusTemplate, width: 150 },
         { name: 'Actions', prop: 'actions', cellTemplate: this.actionTemplate, sortable: false, width: 120 }
       ];
     });
@@ -173,21 +172,18 @@ export class YourContractsComponent implements OnInit {
 
   toggleActionMenu(event: MouseEvent, row: Contract): void {
     event.stopPropagation();
-    
+
     if (this.activeActionRow && this.activeActionRow._id === row._id) {
       this.closeActionMenu();
     } else {
       this.activeActionRow = row;
-      
-      // Calculate position relative to the clicked button
-      const target = (event.currentTarget as HTMLElement).closest('app-button') || event.currentTarget as HTMLElement;
+      const target = (event.currentTarget as HTMLElement).closest('.action-trigger') || event.currentTarget as HTMLElement;
       const rect = target.getBoundingClientRect();
       
-      // Always open downwards, absolute to the document body
+      // Since the menu is absolute and the page can scroll freely,
+      // we can always open it downwards.
       this.menuTop = rect.bottom + window.scrollY + 8;
-      
-      // Right-aligned (right edge of menu aligns with right edge of button)
-      this.menuLeft = rect.right + window.scrollX - 220; 
+      this.menuLeft = rect.right + window.scrollX - 220;
     }
   }
 
@@ -200,55 +196,44 @@ export class YourContractsComponent implements OnInit {
   // ========================================
 
   getMyContracts(): void {
-
-    this.loading = true;
-
-    this.contractService
-      .getMyContracts()
+    console.log('1. [API Flow] Starting fetch for contracts...');
+    this.loading.set(true);
+    this.contractService.getMyContracts().pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-
         next: (response) => {
-
-          this.contracts = response.contracts;
-
-          this.loading = false;
-
+          console.log('2. [API Flow] Data arrived! Setting contracts signal.', response.contracts);
+          this.contracts.set(response.contracts);
+          this.loading.set(false);
         },
-
         error: (error) => {
-
           console.error(error);
-
-          this.loading = false;
-
+          this.loading.set(false);
         }
-
       });
-
   }
 
   // ========================================
   // FILTERED CONTRACTS
   // ========================================
-  get filteredContracts(): Contract[] {
-
-    return this.contracts.filter(contract => {
+  filteredContracts = computed(() => {
+    console.log('3. [Signals Flow] Running filter logic! Data or Filters changed.');
+    return this.contracts().filter(contract => {
 
       const searchMatch =
-        !this.searchQuery ||
-        contract.contractTitle?.toLowerCase().includes(this.searchQuery.toLowerCase());
+        !this.searchQuery() ||
+        contract.contractTitle?.toLowerCase().includes(this.searchQuery().toLowerCase());
 
       const statusMatch =
-        !this.statusFilter ||
-        contract.status === this.statusFilter;
+        !this.statusFilter() ||
+        contract.status === this.statusFilter();
 
       const budgetMatch =
-        !this.budgetTypeFilter ||
-        contract.budgetType === this.budgetTypeFilter;
+        !this.budgetTypeFilter() ||
+        contract.budgetType === this.budgetTypeFilter();
 
       const typeMatch =
-        !this.contractTypeFilter ||
-        contract.contractType === this.contractTypeFilter;
+        !this.contractTypeFilter() ||
+        contract.contractType === this.contractTypeFilter();
 
       return (
         searchMatch &&
@@ -259,20 +244,20 @@ export class YourContractsComponent implements OnInit {
 
     });
 
-  }
+  });
 
   applyFiltersBtn(): void {
-    this.searchQuery = this.pendingSearchQuery;
-    this.statusFilter = this.pendingStatusFilter;
-    this.budgetTypeFilter = this.pendingBudgetTypeFilter;
-    this.contractTypeFilter = this.pendingContractTypeFilter;
+    this.searchQuery.set(this.pendingSearchQuery);
+    this.statusFilter.set(this.pendingStatusFilter);
+    this.budgetTypeFilter.set(this.pendingBudgetTypeFilter);
+    this.contractTypeFilter.set(this.pendingContractTypeFilter);
   }
 
   resetFilters(): void {
-    this.searchQuery = '';
-    this.statusFilter = '';
-    this.budgetTypeFilter = '';
-    this.contractTypeFilter = '';
+    this.searchQuery.set('');
+    this.statusFilter.set('');
+    this.budgetTypeFilter.set('');
+    this.contractTypeFilter.set('');
 
     this.pendingSearchQuery = '';
     this.pendingStatusFilter = '';
@@ -281,22 +266,22 @@ export class YourContractsComponent implements OnInit {
   }
 
   removeSearchChip(): void {
-    this.searchQuery = '';
+    this.searchQuery.set('');
     this.pendingSearchQuery = '';
   }
 
   removeStatusChip(): void {
-    this.statusFilter = '';
+    this.statusFilter.set('');
     this.pendingStatusFilter = '';
   }
 
   removeBudgetTypeChip(): void {
-    this.budgetTypeFilter = '';
+    this.budgetTypeFilter.set('');
     this.pendingBudgetTypeFilter = '';
   }
 
   removeContractTypeChip(): void {
-    this.contractTypeFilter = '';
+    this.contractTypeFilter.set('');
     this.pendingContractTypeFilter = '';
   }
 
@@ -305,93 +290,39 @@ export class YourContractsComponent implements OnInit {
   // ========================================
 
   deleteContract(id: string): void {
-
     const confirmed = confirm(
       'Are you sure you want to delete this contract?'
     );
-
     if (!confirmed) return;
-
     this.contractService
       .deleteContract(id)
       .subscribe({
-
         next: () => {
-
-          this.contracts =
-            this.contracts.filter(
-              contract => contract._id !== id
-            );
-
+          this.contracts.update(contracts =>
+            contracts.filter(contract => contract._id !== id)
+          );
         },
-
         error: (error) => {
-
           console.error(error);
-
         }
-
       });
 
   }
 
-  // ========================================
-  // EDIT CONTRACT
-  // ========================================
   editContract(id: string): void {
-
-    this.router.navigate(
-      ['/user/contract-form'],
-      {
-        queryParams: {
-          id: id
-        }
-      }
-    );
-
+    this.router.navigate(['/user/contract-form'], { queryParams: { id: id } });
   }
-
 
   viewContract(id: string): void {
-
-    this.router.navigate(
-      ['/user/contract-view-details'],
-      {
-        queryParams: {
-          id: id
-        }
-      }
-    );
-
+    this.router.navigate(['/user/contract-view-details'], { queryParams: { id: id } });
   }
-
-
 
   viewHiredTalents(id: string): void {
-
-    this.router.navigate(
-      ['/user/hired-talent'],
-      {
-        queryParams: {
-          contractId: id
-        }
-      }
-    );
-
+    this.router.navigate(['/user/hired-talent'], { queryParams: { contractId: id } });
   }
 
-
   viewContractDiary(contractId: string): void {
-
-    this.router.navigate(
-      ['/user/contract-progress'],
-      {
-        queryParams: {
-          contractId: contractId
-        }
-      }
-    );
-
+    this.router.navigate(['/user/contract-progress'], { queryParams: { contractId: contractId } });
   }
 
 }

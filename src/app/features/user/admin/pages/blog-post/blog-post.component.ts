@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -36,16 +36,16 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
 
   bucketKey = BucketKey.AdminCollection;
   uploadSection = UploadSection.BlogMedia;
-  posts: Blog[] = [];
-  rows: any[] = [];
+  posts = signal<Blog[]>([]);
+  rows = signal<any[]>([]);
   columns: any[] = [];
-  isFormOpen = false;
-  isEditing = false;
-  editId = '';
-  saving = false;
-  openMenuId: string | null = null;
+  isFormOpen = signal(false);
+  isEditing = signal(false);
+  editId = signal('');
+  saving = signal(false);
+  openMenuId = signal<string | null>(null);
   form!: FormGroup;
-  loadingPosts = false;
+  loadingPosts = signal(false);
   categoryOptions = [
     { label: 'Technology', value: 'Technology' },
     { label: 'Career', value: 'Career' },
@@ -74,10 +74,6 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.initializeForm();
-    this.loadPosts();
-  }
-
-  ngAfterViewInit(): void {
     this.columns = [
       {
         name: 'S.No',
@@ -105,6 +101,10 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
         width: 220
       },
     ];
+    this.loadPosts();
+  }
+
+  ngAfterViewInit(): void {
   }
 
   initializeForm(): void {
@@ -118,12 +118,12 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
   }
 
   loadPosts(): void {
-    this.loadingPosts = true;
+    this.loadingPosts.set(true);
     this.blogService.getAllBlogsAdmin().subscribe({
 
       next: ({ blogs }) => {
-        this.posts = blogs;
-        this.rows = blogs.map((post, index) => ({
+        this.posts.set(blogs);
+        this.rows.set(blogs.map((post, index) => ({
           id: post._id,
           index: index + 1,
           title: post.title,
@@ -131,13 +131,13 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
           status: post.status,
           createdAt: post.createdAt,
           post
-        }));
-        this.loadingPosts = false;
+        })));
+        this.loadingPosts.set(false);
       },
 
       error: (error) => {
         console.error(error);
-        this.loadingPosts = false;
+        this.loadingPosts.set(false);
         this.toastr.error(
           'Failed to load blogs',
           'Blog Management'
@@ -147,9 +147,9 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
   }
 
   openCreateForm(): void {
-    this.isEditing = false;
+    this.isEditing.set(false);
     this.resetForm();
-    this.isFormOpen = true;
+    this.isFormOpen.set(true);
   }
 
   onSubmit(): void {
@@ -161,12 +161,12 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
       );
       return;
     }
-    this.saving = true;
-    if (this.isEditing) {
+    this.saving.set(true);
+    if (this.isEditing()) {
       const dto: UpdateBlogDto = this.form.getRawValue();
-      this.blogService.updateBlog(this.editId, dto).subscribe({
+      this.blogService.updateBlog(this.editId(), dto).subscribe({
         next: () => {
-          this.saving = false;
+          this.saving.set(false);
           this.toastr.success(
             'Blog updated successfully',
             'Blog Management'
@@ -176,7 +176,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
         },
 
         error: (error) => {
-          this.saving = false;
+          this.saving.set(false);
           console.error(error);
           this.toastr.error(
             'Failed to update blog',
@@ -191,7 +191,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
     const dto: CreateBlogDto = this.form.getRawValue();
     this.blogService.createBlog(dto).subscribe({
       next: () => {
-        this.saving = false;
+        this.saving.set(false);
         this.toastr.success(
           'Blog created successfully',
           'Blog Management'
@@ -201,7 +201,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
       },
 
       error: (error) => {
-        this.saving = false;
+        this.saving.set(false);
         console.error(error);
         this.toastr.error(
           'Failed to create blog',
@@ -212,8 +212,8 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
   }
 
   editPost(blog: Blog): void {
-    this.isEditing = true;
-    this.editId = blog._id;
+    this.isEditing.set(true);
+    this.editId.set(blog._id);
     this.form.patchValue({
       title: blog.title,
       category: blog.category,
@@ -222,7 +222,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
       status: blog.status
     });
 
-    this.isFormOpen = true;
+    this.isFormOpen.set(true);
   }
 
   deletePost(id: string): void {
@@ -252,11 +252,11 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
 
   toggleMenu(id: string, event: Event): void {
     event.stopPropagation();
-    this.openMenuId = this.openMenuId === id ? null : id;
+    this.openMenuId.set(this.openMenuId() === id ? null : id);
   }
 
   resetForm(): void {
-    this.editId = '';
+    this.editId.set('');
     this.form.reset({
       title: '',
       category: '',
@@ -268,8 +268,8 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
 
   closeFormModal(): void {
     this.resetForm();
-    this.isEditing = false;
-    this.isFormOpen = false;
+    this.isEditing.set(false);
+    this.isFormOpen.set(false);
   }
 
 }

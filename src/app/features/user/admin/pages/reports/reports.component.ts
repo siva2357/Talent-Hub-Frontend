@@ -1,13 +1,16 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { AdminService, SystemReport, TransactionData, ClientData, FreelancerData } from '../../../../../core/services/admin.service';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
+import { ButtonComponent } from '../../../../../shared/components/button/button.component';
+import { InputComponent } from '../../../../../shared/components/input/input.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-reports',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonComponent, InputComponent, FormsModule],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.css'
 })
@@ -17,30 +20,48 @@ export class AdminReportsComponent implements OnInit {
   private adminService = inject(AdminService);
   private toastr = inject(ToastrService);
 
-  reports: SystemReport[] = [];
-  filteredReports: SystemReport[] = [];
-  transactions: TransactionData[] = [];
-  clients: ClientData[] = [];
-  freelancers: FreelancerData[] = [];
+  reports = signal<SystemReport[]>([]);
+  transactions = signal<TransactionData[]>([]);
+  clients = signal<ClientData[]>([]);
+  freelancers = signal<FreelancerData[]>([]);
   
   // Generating state
-  newReportTitle = '';
-  newReportCategory: 'Financial' | 'User Activity' | 'Platform Health' = 'Financial';
-  newReportDesc = '';
-  isGenerating = false;
+  newReportTitle = signal('');
+  newReportCategory = signal<'Financial' | 'User Activity' | 'Platform Health'>('Financial');
+  newReportDesc = signal('');
+  isGenerating = signal(false);
 
-  searchTerm = '';
-  categoryFilter: 'All' | 'Financial' | 'User Activity' | 'Platform Health' = 'All';
+  categoryOptions = [
+    { label: 'Financial', value: 'Financial' },
+    { label: 'User Activity', value: 'User Activity' },
+    { label: 'Platform Health', value: 'Platform Health' }
+  ];
+
+  searchTerm = signal('');
+  categoryFilter = signal<'All' | 'Financial' | 'User Activity' | 'Platform Health'>('All');
+
+  filteredReports = computed(() => {
+    return this.reports().filter(r => {
+      const term = this.searchTerm().toLowerCase();
+      const matchesSearch = r.title.toLowerCase().includes(term) ||
+                            r.description.toLowerCase().includes(term);
+
+      const cat = this.categoryFilter();
+      const matchesCategory = cat === 'All' || r.category === cat;
+
+      return matchesSearch && matchesCategory;
+    });
+  });
 
   // Summary Metrics
-  totalClients = 0;
-  totalFreelancers = 0;
-  financialStats = {
+  totalClients = signal(0);
+  totalFreelancers = signal(0);
+  financialStats = signal({
     totalVolume: 0,
     platformCommissions: 0,
     escrowHeld: 0,
     growthPercent: 0
-  };
+  });
 
   ngOnInit(): void {
     this.loadReports();
@@ -50,8 +71,7 @@ export class AdminReportsComponent implements OnInit {
   loadReports(): void {
     this.adminService.getReports().subscribe({
       next: (data) => {
-        this.reports = data;
-        this.applyFilters();
+        this.reports.set(data);
       },
       error: (err) => {
         console.error('Failed to load reports:', err);
@@ -62,84 +82,67 @@ export class AdminReportsComponent implements OnInit {
   loadStats(): void {
     this.adminService.getDashboardStats().subscribe({
       next: (stats) => {
-        this.totalClients = stats.totalClients || 0;
-        this.totalFreelancers = stats.totalFreelancers || 0;
+        this.totalClients.set(stats.totalClients || 0);
+        this.totalFreelancers.set(stats.totalFreelancers || 0);
       },
       error: (err) => console.error('Error fetching dashboard stats for reports:', err)
     });
 
     this.adminService.getFinancialStats().subscribe({
       next: (finances) => {
-        this.financialStats = finances;
+        this.financialStats.set(finances);
       },
       error: (err) => console.error('Error fetching financial stats for reports:', err)
     });
 
     this.adminService.getTransactions().subscribe({
       next: (txs) => {
-        this.transactions = txs;
+        this.transactions.set(txs);
       },
       error: (err) => console.error('Error fetching transactions for reports:', err)
     });
 
     this.adminService.getClients().subscribe({
       next: (cls) => {
-        this.clients = cls;
+        this.clients.set(cls);
       },
       error: (err) => console.error('Error fetching clients for reports:', err)
     });
 
     this.adminService.getFreelancers().subscribe({
       next: (frs) => {
-        this.freelancers = frs;
+        this.freelancers.set(frs);
       },
       error: (err) => console.error('Error fetching freelancers for reports:', err)
     });
   }
 
-  onSearch(event: any): void {
-    this.searchTerm = event.target.value;
-    this.applyFilters();
-  }
-
   onFilterCategory(category: 'All' | 'Financial' | 'User Activity' | 'Platform Health'): void {
-    this.categoryFilter = category;
-    this.applyFilters();
-  }
-
-  applyFilters(): void {
-    this.filteredReports = this.reports.filter(r => {
-      const matchesSearch = r.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                            r.description.toLowerCase().includes(this.searchTerm.toLowerCase());
-
-      const matchesCategory = this.categoryFilter === 'All' || r.category === this.categoryFilter;
-
-      return matchesSearch && matchesCategory;
-    });
+    this.categoryFilter.set(category);
   }
 
   onGenerateReport(event: Event): void {
     event.preventDefault();
-    if (!this.newReportTitle.trim() || !this.newReportDesc.trim()) {
+    if (!this.newReportTitle().trim() || !this.newReportDesc().trim()) {
       return;
     }
 
-    this.isGenerating = true;
+    this.isGenerating.set(true);
     
     this.adminService.generateReport(
-      this.newReportTitle,
-      this.newReportCategory,
-      this.newReportDesc
+      this.newReportTitle(),
+      this.newReportCategory(),
+      this.newReportDesc()
     ).subscribe({
       next: () => {
-        this.newReportTitle = '';
-        this.newReportDesc = '';
-        this.isGenerating = false;
+        this.newReportTitle.set('');
+        this.newReportDesc.set('');
+        this.isGenerating.set(false);
         this.toastr.success('Spreadsheet generated statefully.', 'Reports Desk');
         this.loadReports();
       },
       error: (err) => {
-        this.isGenerating = false;
+        this.isGenerating.set(false);
         this.toastr.error('Failed to generate report.', 'Reports Desk');
         console.error(err);
       }
@@ -153,16 +156,16 @@ export class AdminReportsComponent implements OnInit {
 
     // Summary Metrics Section
     csvContent += 'SUMMARY METRICS\n';
-    csvContent += `Total Clients,${this.totalClients}\n`;
-    csvContent += `Total Freelancers,${this.totalFreelancers}\n`;
-    csvContent += `Total Financial Volume,₹${this.financialStats.totalVolume.toFixed(2)}\n`;
-    csvContent += `Platform Commissions Earned,₹${this.financialStats.platformCommissions.toFixed(2)}\n`;
-    csvContent += `Escrow Held Balance,₹${this.financialStats.escrowHeld.toFixed(2)}\n\n`;
+    csvContent += `Total Clients,${this.totalClients()}\n`;
+    csvContent += `Total Freelancers,${this.totalFreelancers()}\n`;
+    csvContent += `Total Financial Volume,₹${this.financialStats().totalVolume.toFixed(2)}\n`;
+    csvContent += `Platform Commissions Earned,₹${this.financialStats().platformCommissions.toFixed(2)}\n`;
+    csvContent += `Escrow Held Balance,₹${this.financialStats().escrowHeld.toFixed(2)}\n\n`;
 
     // Transactions Section
     csvContent += 'TRANSACTION LEDGER\n';
     csvContent += 'Transaction ID,Client Name,Freelancer Name,Amount,Platform Fee,Status,Date,Type\n';
-    this.transactions.forEach(t => {
+    this.transactions().forEach(t => {
       csvContent += `"${t.id}","${t.clientName}","${t.freelancerName}",${t.amount},${t.platformFee},"${t.status}","${t.date}","${t.type}"\n`;
     });
 
@@ -186,39 +189,39 @@ export class AdminReportsComponent implements OnInit {
 
     if (report.category === 'Financial') {
       csvContent += 'SUMMARY METRICS\n';
-      csvContent += `Total Financial Volume,₹${this.financialStats.totalVolume.toFixed(2)}\n`;
-      csvContent += `Platform Commissions Earned,₹${this.financialStats.platformCommissions.toFixed(2)}\n`;
-      csvContent += `Escrow Held Balance,₹${this.financialStats.escrowHeld.toFixed(2)}\n\n`;
+      csvContent += `Total Financial Volume,₹${this.financialStats().totalVolume.toFixed(2)}\n`;
+      csvContent += `Platform Commissions Earned,₹${this.financialStats().platformCommissions.toFixed(2)}\n`;
+      csvContent += `Escrow Held Balance,₹${this.financialStats().escrowHeld.toFixed(2)}\n\n`;
 
       csvContent += 'TRANSACTION LEDGER\n';
       csvContent += 'Transaction ID,Client Name,Freelancer Name,Amount,Platform Fee,Status,Date,Type\n';
-      this.transactions.forEach(t => {
+      this.transactions().forEach(t => {
         csvContent += `"${t.id}","${t.clientName}","${t.freelancerName}",${t.amount},${t.platformFee},"${t.status}","${t.date}","${t.type}"\n`;
       });
     } else if (report.category === 'User Activity') {
       csvContent += 'USER METRICS\n';
-      csvContent += `Total Clients Registered,${this.totalClients || this.clients.length}\n`;
-      csvContent += `Total Freelancers Registered,${this.totalFreelancers || this.freelancers.length}\n\n`;
+      csvContent += `Total Clients Registered,${this.totalClients() || this.clients().length}\n`;
+      csvContent += `Total Freelancers Registered,${this.totalFreelancers() || this.freelancers().length}\n\n`;
 
       csvContent += 'CLIENT REGISTRY\n';
       csvContent += 'Client ID,Company Name,Contact Name,Email,Phone Number,Spent,Projects Count,Status,Joined Date,Industry\n';
-      this.clients.forEach(c => {
+      this.clients().forEach(c => {
         csvContent += `"${c.id}","${c.name}","${c.clientName}","${c.email}","${c.phoneNumber}",${c.spent},${c.projectsCount},"${c.status}","${c.joinedDate}","${c.industry}"\n`;
       });
       csvContent += '\n';
 
       csvContent += 'FREELANCER REGISTRY\n';
       csvContent += 'Freelancer ID,Name,Title,Email,Phone Number,Hourly Rate,Completed Projects,Earnings,Status,Joined Date,Rating\n';
-      this.freelancers.forEach(f => {
+      this.freelancers().forEach(f => {
         csvContent += `"${f.id}","${f.name}","${f.title}","${f.email}","${f.phoneNumber}",${f.hourlyRate},${f.completedProjects},${f.earnings},"${f.status}","${f.joinedDate}",${f.rating}\n`;
       });
     } else {
       csvContent += 'PLATFORM HEALTH METRICS\n';
-      csvContent += `Total Clients,${this.totalClients}\n`;
-      csvContent += `Total Freelancers,${this.totalFreelancers}\n`;
-      csvContent += `Total Transactions,${this.transactions.length}\n`;
+      csvContent += `Total Clients,${this.totalClients()}\n`;
+      csvContent += `Total Freelancers,${this.totalFreelancers()}\n`;
+      csvContent += `Total Transactions,${this.transactions().length}\n`;
       
-      const activeContracts = this.transactions.filter(t => t.status === 'Pending').length;
+      const activeContracts = this.transactions().filter(t => t.status === 'Pending').length;
       csvContent += `Estimated Active Workflows,${activeContracts}\n\n`;
 
       csvContent += 'SAMPLE LEDGER HEALTH AUDIT\n';
@@ -241,15 +244,4 @@ export class AdminReportsComponent implements OnInit {
     this.toastr.success(`Report "${report.title}" downloaded successfully!`, 'Reports Desk');
   }
 
-  onTitleInput(event: any): void {
-    this.newReportTitle = event.target.value;
-  }
-
-  onDescInput(event: any): void {
-    this.newReportDesc = event.target.value;
-  }
-
-  onCategorySelect(event: any): void {
-    this.newReportCategory = event.target.value;
-  }
 }

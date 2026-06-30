@@ -1,6 +1,14 @@
 <div class="progress-page p-3 p-md-4 p-xl-5">
   <div class="container-fluid max-w-7xl mx-auto">
-@if (contract) {
+
+    <!-- Back Button -->
+    <button class="btn btn-link text-secondary text-decoration-none p-0 mb-3" routerLink="/user/your-contracts">
+      <i class="bi bi-arrow-left me-2"></i>
+      Back to Contracts
+    </button>
+
+    @defer (on viewport) {
+@if (contract()) {
 
 <div
   class="glass rounded-4 p-4 mb-4
@@ -10,11 +18,11 @@
 
   <div class="flex-grow-1">
 
-    <h4 class="text-white fw-bold mb-3">
-      {{ contract.contractTitle }}
+    <h4 class="fs-5 fs-md-4 text-white fw-bold mb-3">
+      {{ contract()!.contractTitle }}
     </h4>
 
-    <div class="row g-3">
+    <div class="row g-3" [formGroup]="phaseForm">
 
       <div class="col-auto">
 
@@ -27,7 +35,7 @@
           </span>
 
           <span class="text-white fw-semibold">
-            {{ contract.budgetType }}
+            {{ contract()!.budgetType }}
           </span>
 
         </div>
@@ -45,7 +53,7 @@
           </span>
 
           <span class="text-white">
-            {{ formatDate(contract.contractStartDate) }}
+            {{ formatDate(contract()!.contractStartDate) }}
           </span>
 
         </div>
@@ -63,7 +71,7 @@
           </span>
 
           <span class="text-white">
-            {{ formatDate(contract.contractEndDate) }}
+            {{ formatDate(contract()!.contractEndDate) }}
           </span>
 
         </div>
@@ -81,7 +89,7 @@
           </span>
 
           <span class="text-success fw-bold">
-            ₹{{ contract.estimatedBudget | number }}
+            ₹{{ contract()!.estimatedBudget | number }}
           </span>
 
         </div>
@@ -94,22 +102,13 @@
 
   <div class="flex-shrink-0">
 
-    <span
-      class="badge px-3 py-2 rounded-pill"
-      [ngClass]="{
-        'badge-success-soft': diary?.overallStatus === 'completed',
-        'badge-primary-soft': diary?.overallStatus !== 'completed'
-      }">
-
-      {{ diary?.overallStatus | titlecase }}
-
-    </span>
+    <app-badge [variant]="getOverallStatusBadgeVariant(diary()?.overallStatus || '')" customClass="px-3 py-2 rounded-pill">{{ diary()?.overallStatus | titlecase }}</app-badge>
 
   </div>
 
 </div>
 }
-@if (diary) {
+@if (diary()) {
 
 <div class="row g-3 mb-4">
 
@@ -119,8 +118,8 @@
         Completed Phases
       </small>
 
-      <h4 class="text-success mb-0">
-        {{ getCompletedCount(diary) }}
+      <h4 class="fs-5 fs-md-4 text-success mb-0">
+        {{ getCompletedCount(diary()!) }}
       </h4>
     </div>
   </div>
@@ -131,8 +130,8 @@
         Total Budget
       </small>
 
-      <h4 class="text-white mb-0">
-        ₹{{ getTotalBudget(diary) | number }}
+      <h4 class="fs-5 fs-md-4 text-white mb-0">
+        ₹{{ getTotalBudget(diary()!) | number }}
       </h4>
     </div>
   </div>
@@ -143,8 +142,8 @@
         Released
       </small>
 
-      <h4 class="text-primary mb-0">
-        ₹{{ getSpent(diary) | number }}
+      <h4 class="fs-5 fs-md-4 text-primary mb-0">
+        ₹{{ getSpent(diary()!) | number }}
       </h4>
     </div>
   </div>
@@ -155,8 +154,8 @@
         Available
       </small>
 
-      <h4 class="text-success mb-0">
-        ₹{{ getRemainingBudget(diary) | number }}
+      <h4 class="fs-5 fs-md-4 text-success mb-0">
+        ₹{{ getRemainingBudget(diary()!) | number }}
       </h4>
     </div>
   </div>
@@ -166,7 +165,7 @@
 }
 
 
-@if (diary) {
+@if (diary()) {
 
 <div class="glass rounded-4 p-4 p-lg-5 mb-4">
 
@@ -191,30 +190,19 @@
           Assigned Freelancer
         </small>
 
-        <h4 class="text-white fw-bold mb-1">
-          {{ diary.freelancerId.registrationDetails.fullName }}
+        <h4 class="fs-5 fs-md-4 text-white fw-bold mb-1">
+          {{ diary()!.freelancerId.registrationDetails.fullName }}
         </h4>
 
         <p class="text-secondary mb-0">
-          {{ diary.freelancerId.registrationDetails.email }}
+          {{ diary()!.freelancerId.registrationDetails.email }}
         </p>
 
       </div>
 
     </div>
 
-    <span
-      class="badge px-3 py-2 rounded-pill"
-      [ngClass]="{
-        'badge-success-soft':
-          diary.overallStatus === 'completed',
-        'badge-primary-soft':
-          diary.overallStatus !== 'completed'
-      }">
-
-      {{ diary.overallStatus | titlecase }}
-
-    </span>
+    <app-badge [variant]="getOverallStatusBadgeVariant(diary()!.overallStatus)" customClass="px-3 py-2 rounded-pill">{{ diary()!.overallStatus | titlecase }}</app-badge>
 
   </div>
 
@@ -222,13 +210,13 @@
 
 }
 
-@if (diary && diary.phases.length === 0) {
+@if (diary() && diary()!.phases.length === 0) {
 
 <div class="glass rounded-4 p-5 text-center">
 
   <i class="bi bi-flag fs-1 text-primary mb-3 d-block"></i>
 
-  <h5 class="text-white fw-bold">
+  <h5 class="fs-6 fs-md-5 text-white fw-bold">
     No Milestones Created Yet
   </h5>
 
@@ -238,11 +226,11 @@
 
   <div class="d-flex justify-content-center">
 
-    @if (contract && !contract.funded) {
+    @if (contract() && !contract()!.funded) {
 
       <div class="alert glass border-warning border-opacity-25 text-warning rounded-4 p-4 text-start mb-0 max-w-lg mx-auto">
         <h6 class="fw-bold mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>Escrow Funding Required</h6>
-        <p class="small mb-4 text-white-50">You must fund this contract before you can issue phases to your freelancer. Please visit your financial summary to deposit funds into escrow securely.</p>
+        <p class="small mb-4 text-white-50">You must fund this contract() before you can issue phases to your freelancer. Please visit your financial summary to deposit funds into escrow securely.</p>
         <a routerLink="/user/financial-summary" class="text-decoration-none d-block text-center">
           <app-button variant="brand" size="sm" customClass="w-100">
             <i class="bi bi-credit-card-2-front me-2"></i>Fund Contract
@@ -255,7 +243,7 @@
       <app-button
         variant="primary"
         size="sm"
-        (click)="openAddPhaseModal(diary._id)">
+        (click)="openAddPhaseModal(diary()!._id)">
 
         <i class="bi bi-plus-circle"></i>
         Create First Phase
@@ -271,15 +259,15 @@
 }
 
 
-@if (diary && diary.phases.length > 0) {
+@if (diary() && diary()!.phases.length > 0) {
 
 <div class="glass rounded-4 p-4 p-lg-5">
 
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
 
     <div>
 
-      <h5 class="text-white fw-bold mb-1">
+      <h5 class="fs-6 fs-md-5 text-white fw-bold mb-1">
         Project Phases
       </h5>
 
@@ -292,7 +280,7 @@
     <app-button
       variant="primary"
       size="sm"
-      (click)="openAddPhaseModal(diary._id)">
+      (click)="openAddPhaseModal(diary()!._id)">
 
       <i class="bi bi-plus-circle"></i>
       Add Phase
@@ -303,11 +291,11 @@
 
   <div class="timeline">
 
-    @for (phase of diary.phases; track phase._id) {
+    @for (phase of diary()!.phases; track phase._id) {
 
     <div class="glass rounded-4 p-4 mb-3">
 
-      <div class="d-flex justify-content-between align-items-start mb-3">
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3 mb-3">
 
         <div>
 
@@ -321,15 +309,13 @@
 
         </div>
 
-        <div class="text-end">
+        <div class="text-start text-sm-end mt-2 mt-sm-0">
 
           <div class="text-success fw-bold">
             ₹{{ phase.amount | number }}
           </div>
 
-          <span class="badge badge-secondary-soft">
-            {{ phase.status | titlecase }}
-          </span>
+          <app-badge [variant]="getPhaseStatusBadgeVariant(phase.status)">{{ phase.status | titlecase }}</app-badge>
 
         </div>
 
@@ -382,7 +368,7 @@
 
   <div class="glass rounded-4 p-3 mb-3">
 
-    <div class="d-flex justify-content-between">
+    <div class="d-flex flex-column flex-sm-row justify-content-between gap-2">
 
       <span class="text-primary fw-semibold">
         Revision {{ i + 1 }}
@@ -483,13 +469,13 @@
 
 </div>
 
-<div class="d-flex gap-2 mt-3">
+<div class="d-flex flex-column flex-sm-row gap-2 mt-3">
 
 <app-button
   variant="success"
   [loading]="reviewing[phase._id]"
   [disabled]="reviewing[phase._id]"
-  (click)="approvePhase(diary._id, phase._id)">
+  (click)="approvePhase(diary()!._id, phase._id)">
 
   Approve Phase
 
@@ -499,7 +485,7 @@
   variant="danger"
   [loading]="reviewing[phase._id]"
   [disabled]="reviewing[phase._id]"
-  (click)="requestChanges(diary._id, phase._id)">
+  (click)="requestChanges(diary()!._id, phase._id)">
 
   Request Changes
 
@@ -571,11 +557,18 @@
 
 }
 
+    } @placeholder {
+      <div class="text-center p-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    }
 
   </div>
 
 
-  @if (showAddPhaseModal) {
+  @if (showAddPhaseModal()) {
 
   <div class="modal fade show" tabindex="-1" style="display:block; background:rgba(0,0,0,.65);">
 
@@ -585,7 +578,7 @@
 
         <div class="modal-header border-secondary">
 
-          <h5 class="modal-title text-white">
+          <h5 class="fs-6 fs-md-5 modal-title text-white">
             Create New Phase
           </h5>
 
@@ -596,14 +589,14 @@
 
        <div class="modal-body">
 
-  <div class="row g-3">
+  <div class="row g-3" [formGroup]="phaseForm">
 
     <div class="col-md-6">
 
       <app-input
         label="Phase Name"
         placeholder="Enter phase name"
-        [(ngModel)]="newPhase.name">
+        formControlName="name">
       </app-input>
 
     </div>
@@ -613,7 +606,7 @@
       <app-input
         type="date"
         label="Deadline"
-        [(ngModel)]="newPhase.deadline">
+        formControlName="deadline">
       </app-input>
 
     </div>
@@ -624,7 +617,7 @@
         type="number"
         label="Amount"
         placeholder="0"
-        [(ngModel)]="newPhase.amount">
+        formControlName="amount">
       </app-input>
 
     </div>
@@ -634,7 +627,7 @@
       <app-rich-text-editor
         label="Phase Description"
         placeholder="Describe deliverables, requirements, expectations, acceptance criteria and notes..."
-        [(ngModel)]="newPhase.description">
+        formControlName="description">
       </app-rich-text-editor>
 
     </div>
@@ -653,21 +646,21 @@
         [bucketKey]="bucketKey"
         [replaceExisting]="false"
         [uploadSection]="uploadSection"
-        [(ngModel)]="tempUploadUrl"
+        [ngModel]="tempUploadUrl()" (ngModelChange)="tempUploadUrl.set($event)"
         name="phaseUpload"
         (uploadSuccessDetailed)="onFileUploaded($event)">
       </app-file-upload>
 
     </div>
 
-    @if (newPhase.clientAttachments.length > 0) {
+    @if ((phaseForm.value.clientAttachments?.length || 0) > 0) {
 
     <div class="col-12">
 
       <div class="row g-2">
 
         @for (
-          file of newPhase.clientAttachments;
+          file of (phaseForm.value.clientAttachments || []);
           track $index
         ) {
 
@@ -705,9 +698,9 @@
 
   <app-button
     variant="primary"
-    [loading]="addingPhase[selectedDiaryId!]"
-    [disabled]="!newPhase.name"
-    (click)="addPhase(selectedDiaryId!)">
+    [loading]="addingPhase[selectedDiaryId()!]"
+    [disabled]="phaseForm.invalid"
+    (click)="addPhase(selectedDiaryId()!)">
 
     Create Phase
 

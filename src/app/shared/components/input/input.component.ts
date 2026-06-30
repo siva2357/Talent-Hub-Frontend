@@ -1,12 +1,7 @@
-import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { Component, input, output, forwardRef, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule, FormsModule,NgControl } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
-
-import {
-  Optional,
-  Self
-} from '@angular/core';
 @Component({
   selector: 'app-input',
   standalone: true,
@@ -22,24 +17,30 @@ import {
   ]
 })
 export class InputComponent implements ControlValueAccessor {
-  @Input() value: any = '';
-  @Input() type: 'text' | 'email' | 'number' | 'password' | 'date' | 'datetime-local' | 'select' | 'multiselect' | 'textarea' = 'text';
-  @Input() label: string = '';
-  @Input() placeholder: string = '';
-  @Input() options: { label: string, value: any }[] = []; // For select/multiselect
-  @Input() error: string | null = null;
-  @Input() mode: 'form' | 'filter' = 'form';
-  @Input() icon: string = ''; // Bootstrap icon class
-  @Input() customClass: string = '';
-  @Input() required: boolean = false;
-  @Input() disabled: boolean = false;
-  @Input() showPasswordToggle: boolean = false;
+  // Use model/signal for internal value to support ControlValueAccessor reactivity if needed, 
+  // but a standard property works best for CVA interoperability without complex wrappers.
+  value: any = ''; 
+  
+  type = input<'text' | 'email' | 'number' | 'password' | 'date' | 'datetime-local' | 'select' | 'multiselect' | 'textarea'>('text');
+  label = input<string>('');
+  placeholder = input<string>('');
+  options = input<{ label: string, value: any }[]>([]);
+  error = input<string | null>(null);
+  mode = input<'form' | 'filter'>('form');
+  icon = input<string>('');
+  customClass = input<string>('');
+  required = input<boolean>(false);
+  
+  // Note: disabled is managed by ControlValueAccessor setDisabledState as well
+  disabled = input<boolean>(false);
+  _internalDisabled = false;
 
+  showPasswordToggle = input<boolean>(false);
 
-  @Output() dropdownStateChange = new EventEmitter<boolean>();
+  dropdownStateChange = output<boolean>();
 
-  showPassword: boolean = false;
-  dropdownOpen: boolean = false;
+  showPassword = false;
+  dropdownOpen = false;
   onChange: any = () => { };
   onTouched: any = () => { };
 
@@ -56,7 +57,11 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this._internalDisabled = isDisabled;
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled() || this._internalDisabled;
   }
 
   handleInput(event: any): void {
@@ -65,63 +70,67 @@ export class InputComponent implements ControlValueAccessor {
     this.onChange(val);
   }
 
-toggleDropdown(): void {
-  if (!this.disabled) {
-    this.dropdownOpen = !this.dropdownOpen;
-    this.dropdownStateChange.emit(this.dropdownOpen);
+  toggleDropdown(): void {
+    if (!this.isDisabled) {
+      this.dropdownOpen = !this.dropdownOpen;
+      this.dropdownStateChange.emit(this.dropdownOpen);
 
-    if (!this.dropdownOpen) {
-      this.onTouched();
+      if (!this.dropdownOpen) {
+        this.onTouched();
+      }
     }
   }
-}
 
-toggleOption(optionValue: any): void {
-  if (this.type !== 'multiselect') return;
+  toggleOption(optionValue: any): void {
+    if (this.type() !== 'multiselect') return;
 
-  if (!Array.isArray(this.value)) {
-    this.value = [];
+    if (!Array.isArray(this.value)) {
+      this.value = [];
+    }
+
+    const index = this.value.indexOf(optionValue);
+
+    if (index > -1) {
+      this.value.splice(index, 1);
+    } else {
+      this.value.push(optionValue);
+    }
+
+    this.onChange([...this.value]);
+    this.onTouched();
   }
 
-  const index = this.value.indexOf(optionValue);
+  selectOption(optionValue: any): void {
+    if (this.type() !== 'select') return;
 
-  if (index > -1) {
-    this.value.splice(index, 1);
-  } else {
-    this.value.push(optionValue);
+    this.value = optionValue;
+
+    this.onChange(this.value);
+    this.onTouched();
+
+    this.dropdownOpen = false;
+    this.dropdownStateChange.emit(false);
   }
-
-  this.onChange([...this.value]);
-  this.onTouched();
-}
-
-selectOption(optionValue: any): void {
-  if (this.type !== 'select') return;
-
-  this.value = optionValue;
-
-  this.onChange(this.value);
-  this.onTouched();
-
-  this.dropdownOpen = false;
-  this.dropdownStateChange.emit(false);
-}
 
   getSelectedLabel(): string {
-    if (this.type === 'multiselect') {
-      if (!Array.isArray(this.value) || this.value.length === 0) return this.placeholder || 'Select Categories';
+    const currentType = this.type();
+    const currentOptions = this.options();
+    const currentPlaceholder = this.placeholder();
+
+    if (currentType === 'multiselect') {
+      if (!Array.isArray(this.value) || this.value.length === 0) return currentPlaceholder || 'Select Categories';
       if (this.value.length === 1) {
-        return this.options.find(opt => opt.value === this.value[0])?.label || this.value[0];
+        return currentOptions.find(opt => opt.value === this.value[0])?.label || this.value[0];
       }
       return `${this.value.length} Selected`;
     } else {
-      if (!this.value) return this.placeholder || 'Select Option';
-      return this.options.find(opt => opt.value === this.value)?.label || this.value;
+      if (!this.value) return currentPlaceholder || 'Select Option';
+      return currentOptions.find(opt => opt.value === this.value)?.label || this.value;
     }
   }
 
   isSelected(optionValue: any): boolean {
-    if (this.type === 'multiselect' && Array.isArray(this.value)) {
+    if (this.type() === 'multiselect' && Array.isArray(this.value)) {
       return this.value.includes(optionValue);
     }
     return this.value === optionValue;
@@ -132,9 +141,9 @@ selectOption(optionValue: any): void {
   }
 
   get inputType(): string {
-    if (this.type === 'password' && this.showPassword) {
+    if (this.type() === 'password' && this.showPassword) {
       return 'text';
     }
-    return this.type;
+    return this.type();
   }
 }

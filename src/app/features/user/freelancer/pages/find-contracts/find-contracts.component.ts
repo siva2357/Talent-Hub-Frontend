@@ -1,9 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
 import { ButtonComponent } from "../../../../../shared/components/button/button.component";
+import { InputComponent } from "../../../../../shared/components/input/input.component";
+import { ChipComponent } from "../../../../../shared/components/chip/chip.component";
 
 import { ContractService } from '../../../../../core/services/contract.service';
 
@@ -17,7 +19,9 @@ import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
     CommonModule,
     FormsModule,
     RouterModule,
-    ButtonComponent
+    ButtonComponent,
+    InputComponent,
+    ChipComponent
   ],
   templateUrl: './find-contracts.component.html',
   styleUrl: './find-contracts.component.css'
@@ -26,15 +30,20 @@ import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 export class FindContractsComponent implements OnInit {
   DateTimeHelper = DateTimeHelper;
 
-
   private contractService = inject(ContractService);
   private router = inject(Router)
 
-  searchQuery: string = '';
-  selectedCategory: string = 'All Categories';
-  selectedLevel: string = 'All Levels';
+  searchQuery = signal<string>('');
+  selectedCategory = signal<string>('All Categories');
 
-  isLoading: boolean = false;
+  draftSearchQuery = signal<string>('');
+  draftCategory = signal<string>('All Categories');
+
+  activeTab = signal<'discover' | 'saved'>('discover');
+
+  isLoading = signal<boolean>(false);
+  contracts = signal<Contract[]>([]);
+  savedContracts = signal<Contract[]>([]);
 
   categories = [
     'All Categories',
@@ -45,141 +54,101 @@ export class FindContractsComponent implements OnInit {
     'Data Science'
   ];
 
-  experienceLevels = [
-    'All Levels',
-    'Entry',
-    'Intermediate',
-    'Expert'
-  ];
-
-  contracts: Contract[] = [];
-
-
-
-  // ========================================
-  // Init
-  // ========================================
+  categoryOptions = this.categories.map(c => ({ label: c, value: c }));
 
   ngOnInit(): void {
-
     this.getContracts();
-
+    this.loadSavedContracts();
   }
 
-
-
-  // ========================================
-  // Get All Contracts
-  // ========================================
+  loadSavedContracts(): void {
+    this.contractService.getSavedContracts().subscribe({
+      next: (res) => {
+        this.savedContracts.set(res.contracts || []);
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
 
   getContracts(): void {
-
-    this.isLoading = true;
-
+    this.isLoading.set(true);
     this.contractService.getAllContracts().subscribe({
-
       next: (res) => {
-
-        this.contracts = res.contracts || [];
-
-        this.isLoading = false;
-
-      },
-
-      error: (err) => {
-
-        console.error(err);
-
-        this.isLoading = false;
-
-      }
-
-    });
-
-  }
-
-// ========================================
-// Save Contract
-// ========================================
-
-saveContract(id: string): void {
-  const contract = this.contracts.find((c) => c._id === id);
-  if (!contract) return;
-
-  if (contract.hasSaved) {
-    this.contractService.unsaveContract(id).subscribe({
-      next: () => {
-        this.contracts = this.contracts.map((c) => {
-          if (c._id === id) {
-            return {
-              ...c,
-              hasSaved: false
-            };
-          }
-          return c;
-        });
+        this.contracts.set(res.contracts || []);
+        this.isLoading.set(false);
       },
       error: (err) => {
         console.error(err);
-      }
-    });
-  } else {
-    this.contractService.saveContract(id).subscribe({
-      next: () => {
-        this.contracts = this.contracts.map((c) => {
-          if (c._id === id) {
-            return {
-              ...c,
-              hasSaved: true
-            };
-          }
-          return c;
-        });
-      },
-      error: (err) => {
-        console.error(err);
+        this.isLoading.set(false);
       }
     });
   }
-}
 
-  // ========================================
-  // Filter Contracts
-  // ========================================
+  saveContract(id: string): void {
+    const contractInAll = this.contracts().find(c => c._id === id);
+    const contractInSaved = this.savedContracts().find(c => c._id === id);
+    const hasSaved = contractInAll ? contractInAll.hasSaved : (contractInSaved ? true : false);
 
-  get filteredContracts(): Contract[] {
-
-    return this.contracts.filter((c: Contract) => {
-
-      const matchesSearch =
-        c.contractTitle?.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-
-        c.contractDescription?.toLowerCase().includes(this.searchQuery.toLowerCase());
-
-      // const matchesLevel =
-      //   this.selectedLevel === 'All Levels' ||
-
-      //   c.experienceLevel === this.selectedLevel;
-
-      return matchesSearch ;
-
-    });
-
-  }
-
-
-
-viewContract(id: string): void {
-
-  this.router.navigate(
-    ['/user/contract-details'],
-    {
-      queryParams: {
-        id
-      }
+    if (hasSaved) {
+      this.contractService.unsaveContract(id).subscribe({
+        next: () => {
+          this.contracts.update(arr => arr.map(c =>
+            c._id === id ? { ...c, hasSaved: false } : c
+          ));
+          this.savedContracts.update(arr => arr.filter(c => c._id !== id));
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    } else {
+      this.contractService.saveContract(id).subscribe({
+        next: () => {
+          this.contracts.update(arr => arr.map(c =>
+            c._id === id ? { ...c, hasSaved: true } : c
+          ));
+          this.loadSavedContracts();
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
     }
-  );
+  }
 
-}
+  applyFilters(): void {
+    this.searchQuery.set(this.draftSearchQuery());
+    this.selectedCategory.set(this.draftCategory());
+  }
 
+  resetFilters(): void {
+    this.draftSearchQuery.set('');
+    this.draftCategory.set('All Categories');
+    this.applyFilters();
+  }
+
+  removeCategoryFilter(): void {
+    this.draftCategory.set('All Categories');
+    this.selectedCategory.set('All Categories');
+  }
+
+  filteredContracts = computed(() => {
+    return this.contracts().filter((c: Contract) => {
+      const q = this.searchQuery().toLowerCase();
+      const matchesSearch =
+        c.contractTitle?.toLowerCase().includes(q) ||
+        c.contractDescription?.toLowerCase().includes(q);
+
+      const cat = this.selectedCategory();
+      const matchesCategory = cat === 'All Categories' || c.contractType === cat;
+
+      return matchesSearch && matchesCategory;
+    });
+  });
+
+  viewContract(id: string): void {
+    this.router.navigate(['/user/contract-details'], { queryParams: { id } });
+  }
 }

@@ -21,6 +21,7 @@ import { RegistrationComponent } from './features/account/registration/registrat
 
 // User Layout & Features
 import { UserLayoutComponent } from './core/layouts/user-layout/user-layout.component';
+import { AdminLayoutComponent } from './core/layouts/admin-layout/admin-layout.component';
 
 import { UserProfileComponent } from './shared/pages/user-profile/user-profile.component';
 import { AccountSettingsComponent } from './shared/pages/account-settings/account-settings.component';
@@ -39,7 +40,6 @@ import { FinanceOverviewComponent } from './features/user/freelancer/pages/finan
 // Error/Utility Components
 import { AccessDeniedComponent } from './shared/pages/access-denied/access-denied.component';
 import { FindContractsComponent } from './features/user/freelancer/pages/find-contracts/find-contracts.component';
-import { SavedContractsComponent } from './features/user/freelancer/pages/saved-contracts/saved-contracts.component';
 import { ContractDetailsComponent } from './features/user/freelancer/pages/contract-details/contract-details.component';
 import { LegalContractComponent } from './features/user/freelancer/pages/legal-contract/legal-contract.component';
 
@@ -134,24 +134,27 @@ export const routes: Routes = [
       { path: 'my-dashboard', component: FreelancerDashboardComponent },
       { path: 'find-contracts', component: FindContractsComponent },
       { path: 'contract-details', component: ContractDetailsComponent },
-      { path: 'saved-contracts', component: SavedContractsComponent },
       { path: 'proposals', component: ProposalsComponent },
-      { path: 'offers', component: ProposalsComponent, data: { defaultTab: 'offers' } },
       { path: 'contracts', component: ActiveContractsComponent },
       { path: 'contract-diary', component: ContractDiaryComponent },
       { path: 'finance-overview', component: FinanceOverviewComponent },
 
-      { path: 'portfolio', component: PortfolioComponent },
+      { path: 'portfolio', component: PortfolioComponent }
+    ]
+  },
 
-      // Admin Routes
-      { path: 'admin', redirectTo: 'admin/dashboard', pathMatch: 'full' },
-      { path: 'admin/dashboard', component: AdminDashboardComponent },
-      { path: 'admin/clients', component: ClientListComponent },
-      { path: 'admin/freelancers', component: FreelancerListComponent },
-      { path: 'admin/finances', component: AdminFinancialSummaryComponent },
-      { path: 'admin/reports', component: AdminReportsComponent },
-      { path: 'admin/support', component: SupportRequestsComponent },
-      { path: 'admin/blog', component: BlogPostComponent }
+  // Admin Layout Routes (With Admin Sidebar)
+  {
+    path: 'user/admin', component: AdminLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: AdminDashboardComponent },
+      { path: 'clients', component: ClientListComponent },
+      { path: 'freelancers', component: FreelancerListComponent },
+      { path: 'finances', component: AdminFinancialSummaryComponent },
+      { path: 'reports', component: AdminReportsComponent },
+      { path: 'support', component: SupportRequestsComponent },
+      { path: 'blog', component: BlogPostComponent }
     ]
   },
 

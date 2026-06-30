@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContractService } from '../../../../../core/services/contract.service';
 import { ApplicationService } from '../../../../../core/services/application.service';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
@@ -11,7 +11,7 @@ import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 @Component({
   selector: 'app-legal-form',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, ButtonComponent, InputComponent],
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, ButtonComponent, InputComponent],
   templateUrl: './legal-form.component.html',
   styleUrl: './legal-form.component.css'
 })
@@ -23,18 +23,19 @@ export class LegalFormComponent implements OnInit {
   private contractService = inject(ContractService);
   private applicationService = inject(ApplicationService);
 
+  private fb = inject(FormBuilder);
+
   contractId: string | null = null;
   contractData: any = null;
   selectedApplicant: any = null;
   isLoading = true;
   error: string | null = null;
 
-  scopeOfWork = '';
-  additionalTerms = '';
-  confirmTerms = false;
+  legalForm!: FormGroup;
   isSubmitting = false;
 
   ngOnInit(): void {
+    this.initForm();
     this.route.paramMap.subscribe(params => {
       this.contractId = params.get('contractId');
       if (this.contractId) {
@@ -43,6 +44,14 @@ export class LegalFormComponent implements OnInit {
         this.error = "No contract ID provided.";
         this.isLoading = false;
       }
+    });
+  }
+
+  initForm(): void {
+    this.legalForm = this.fb.group({
+      scopeOfWork: ['', Validators.required],
+      additionalTerms: [''],
+      confirmTerms: [false, Validators.requiredTrue]
     });
   }
 
@@ -95,15 +104,22 @@ export class LegalFormComponent implements OnInit {
       return;
     }
 
-    if (!this.confirmTerms) {
-      alert("Please confirm the legal terms by checking the box.");
+    if (this.legalForm.invalid) {
+      this.legalForm.markAllAsTouched();
+      if (!this.legalForm.get('confirmTerms')?.value) {
+        alert("Please confirm the legal terms by checking the box.");
+      } else {
+        alert("Please fill in the required fields.");
+      }
       return;
     }
 
     this.isSubmitting = true;
+    const formValues = this.legalForm.value;
+    
     this.applicationService.sendOffer(appId, {
-      scopeOfWork: this.scopeOfWork,
-      additionalTerms: this.additionalTerms
+      scopeOfWork: formValues.scopeOfWork,
+      additionalTerms: formValues.additionalTerms
     }).subscribe({
       next: (res) => {
         alert("Offer generated and sent successfully!");

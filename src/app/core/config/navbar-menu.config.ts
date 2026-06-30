@@ -6,7 +6,8 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
     label: 'Dashboard',
     roles: [UserRole.ADMIN],
     activePaths: ['admin/dashboard'],
-    route: '/user/admin/dashboard'
+    route: '/user/admin/dashboard',
+    icon: 'bi bi-grid-1x2'
   },
   {
     label: 'Users',
@@ -15,6 +16,7 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
       'admin/clients',
       'admin/freelancers'
     ],
+    icon: 'bi bi-people-fill',
     subItems: [
       {
         label: 'Client List',
@@ -38,6 +40,7 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
       'admin/finances',
       'admin/reports'
     ],
+    icon: 'bi bi-briefcase-fill',
     subItems: [
       {
         label: 'Financial Summary',
@@ -61,6 +64,7 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
       'admin/support',
       'admin/blog'
     ],
+    icon: 'bi bi-sliders',
     subItems: [
       {
         label: 'Support Requests',
@@ -82,19 +86,8 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
     roles: [UserRole.CLIENT],
     activePaths: [
       'your-contracts',
-      'contract-proposals',
-      'contract-progress',
-      'contract-proposals',
-      'hired-talent'
     ],
-    subItems: [
-      {
-        label: 'Your Contracts',
-        description: 'View and manage all your active client contracts.',
-        icon: 'bi bi-briefcase',
-        route: '/user/your-contracts',
-      }
-    ],
+    route: '/user/your-contracts',
   },
 
   {
@@ -147,33 +140,15 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
   {
     label: 'Find Contracts',
     roles: [UserRole.FREELANCER],
-    activePaths: [
-      'find-contracts',
-      'saved-contracts',
-      'proposals',
-    ],
-    subItems: [
-      {
-        label: 'Find Contracts',
-        description: 'Browse available jobs and opportunities.',
-        icon: 'bi bi-search',
-        route: '/user/find-contracts',
-      },
-      {
-        label: 'Saved Contracts',
-        description: 'Manage bookmarked opportunities.',
-        icon: 'bi bi-bookmark-heart',
-        route: '/user/saved-contracts',
-      },
-      {
-        label: 'Proposals & Offers',
-        description: 'Track submitted proposals and offers.',
-        icon: 'bi bi-file-earmark-text',
-        route: '/user/proposals',
-      },
-    ],
+    activePaths: ['find-contracts'],
+    route: '/user/find-contracts',
   },
-
+  {
+    label: 'My Proposals & Offers',
+    roles: [UserRole.FREELANCER],
+    activePaths: ['proposals'],
+    route: '/user/proposals',
+  },
   {
     label: 'Contract Management',
     roles: [UserRole.FREELANCER],

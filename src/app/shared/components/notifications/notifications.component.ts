@@ -40,6 +40,10 @@ export class NotificationsComponent implements OnInit {
     return this.showAllNotifications ? this.notifications : this.notifications.slice(0, 4);
   }
 
+  get unreadCount(): number {
+    return this.notifications.filter(n => !n.read).length;
+  }
+
   toggleShowAll(event: Event): void {
     event.stopPropagation();
     this.showAllNotifications = !this.showAllNotifications;

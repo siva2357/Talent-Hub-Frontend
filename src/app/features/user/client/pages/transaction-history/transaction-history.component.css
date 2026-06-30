@@ -195,3 +195,41 @@
 .contract-title {
     letter-spacing: 0.25px;
 }
+
+/* Custom explicit font sizes requested */
+h1, h2, h3, h4, h5, h6, .modal-title {
+  font-size: 16px !important;
+}
+
+label, .form-label, small, .small, .text-secondary, .text-xs, .text-sm, .text-lg, span, div {
+  /* Only apply to text containers if needed, but safer to target specific elements */
+}
+@media (min-width: 768px) {
+  .min-w-md-120 {
+      min-width: 120px !important;
+  }
+  .min-w-md-140 {
+      min-width: 140px !important;
+  }
+}
+
+label, .form-label, small, .small, .text-secondary, .text-xs, .text-sm, .text-lg {
+  font-size: 14px !important;
+}
+
+/* Responsive columns widths */
+.amount-col-width {
+    min-width: auto;
+}
+.action-col-width {
+    min-width: auto;
+}
+
+@media (min-width: 768px) {
+    .amount-col-width {
+        min-width: 120px;
+    }
+    .action-col-width {
+        min-width: 140px;
+    }
+}
