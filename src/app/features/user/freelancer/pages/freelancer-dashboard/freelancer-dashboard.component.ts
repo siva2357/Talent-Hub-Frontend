@@ -43,8 +43,41 @@ export class FreelancerDashboardComponent implements OnInit {
           this.freelancerName.set(res.fullName || 'Freelancer');
           this.profilePhoto.set(res.profilePhoto || '');
           this.activeContractsCount.set(res.activeContractsCount || 0);
-          this.stats.set(res.stats || []);
-          this.activities.set(res.activities || []);
+          
+          // Map icons and colors for stats on the frontend
+          const mappedStats = (res.stats || []).map((stat: any) => {
+            if (stat.label === 'Total Earnings') {
+              stat.icon = 'bi-currency-rupee';
+              stat.color = 'blue';
+            } else if (stat.label === 'Active Contracts') {
+              stat.icon = 'bi-check2-circle';
+              stat.color = 'green';
+            } else if (stat.label === 'Completed Contracts') {
+              stat.icon = 'bi-check-all';
+              stat.color = 'gold';
+            } else if (stat.label === 'Submitted Proposals') {
+              stat.icon = 'bi-cash-stack';
+              stat.color = 'purple';
+            } else {
+              stat.icon = 'bi-info-circle';
+              stat.color = 'blue';
+            }
+            return stat as DashboardStat;
+          });
+          this.stats.set(mappedStats);
+
+          // Map icons for activities on the frontend
+          const mappedActivities = (res.activities || []).map((act: any) => {
+            if (act.title === 'Contract Started') {
+              act.icon = 'bi-briefcase-fill';
+            } else if (act.title === 'Application Submitted') {
+              act.icon = 'bi-file-earmark-text-fill';
+            } else {
+              act.icon = 'bi-info-circle-fill';
+            }
+            return act as RecentActivity;
+          });
+          this.activities.set(mappedActivities);
         }
         this.isLoading.set(false);
       },

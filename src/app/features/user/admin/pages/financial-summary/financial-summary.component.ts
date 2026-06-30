@@ -121,14 +121,14 @@ export class AdminFinancialSummaryComponent implements OnInit {
       {
         name: 'S.No',
         prop: 'index',
-        width: 60,
+        width: 50,
         sortable: false,
         cellTemplate: this.indexTemplate
       },
       {
         name: 'Contract',
         prop: 'contractTitle',
-        width: 250
+        width: 200
       },
       {
         name: 'Client',

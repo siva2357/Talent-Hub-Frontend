@@ -106,6 +106,10 @@
     </div>
 
     <!-- Templates for Table -->
+    <ng-template #indexTemplate let-rowIndex="rowIndex">
+      <span class="text-secondary fw-semibold">{{ rowIndex + 1 }}</span>
+    </ng-template>
+
     <ng-template #mediaTemplate let-row="row" let-value="value">
       @if (value && value.length > 0) {
       @if (value[0].mediaType === 'image') {
