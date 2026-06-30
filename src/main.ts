@@ -5,7 +5,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { AppComponent } from './app/app.component';
 import { appConfig } from './app/app.config';
 
-console.log('App deployed successfully!');
+(window as any).DEPLOY_TIMESTAMP = '2026-06-30-update';
 
 bootstrapApplication(AppComponent, {
   ...appConfig,
