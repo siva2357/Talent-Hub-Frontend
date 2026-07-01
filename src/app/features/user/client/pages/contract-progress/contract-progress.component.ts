@@ -9,7 +9,7 @@ import { ContractDiaryService } from '../../../../../core/services/contract-diar
 import { FileUploadComponent } from '../../../../../shared/components/file-upload/file-upload.component';
 import { FilePreviewComponent } from '../../../../../shared/components/file-preview/file-preview.component';
 import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
-import { AddPhaseFormDto } from '../../../../../core/DTOs/contract-diary.dto';
+import { AddPhaseFormDto, SubmitFeedbackDto } from '../../../../../core/DTOs/contract-diary.dto';
 import { Attachment, Diary } from '../../../../../core/model/contract-diary.model';
 import { AuthService } from '../../../../../core/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
@@ -21,7 +21,7 @@ import { BadgeComponent } from '../../../../../shared/components/badge/badge.com
 @Component({
   selector: 'app-contract-progress',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent,InputComponent,RichTextEditorComponent, FileUploadComponent, FilePreviewComponent, BadgeComponent, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent, InputComponent, RichTextEditorComponent, FileUploadComponent, FilePreviewComponent, BadgeComponent, ReactiveFormsModule],
   templateUrl: './contract-progress.component.html',
   styleUrl: './contract-progress.component.css'
 })
@@ -34,7 +34,7 @@ export class ContractProgressComponent implements OnInit {
   contractId = signal<string>('');
 
 
-phaseForm = new FormGroup({
+  phaseForm = new FormGroup({
     name: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
     deadline: new FormControl('', Validators.required),
@@ -42,350 +42,351 @@ phaseForm = new FormGroup({
     clientAttachments: new FormControl<Attachment[]>([])
   });
   isLoading = signal(true);
-   userRole: 'freelancer' | 'client' = 'freelancer';
+  userRole: 'freelancer' | 'client' = 'freelancer';
   feedbackText: Record<string, string> = {};
   reviewing: Record<string, boolean> = {};
   addingPhase: Record<string, boolean> = {};
   showAddPhaseModal = signal(false);
-selectedDiaryId = signal<string | null>(null);
+  selectedDiaryId = signal<string | null>(null);
   bucketKey: BucketKey = BucketKey.ClientData;
   readonly uploadSection = UploadSection.ContractFiles;
   tempUploadUrl = signal<string | null>(null);
 
   diary = signal<Diary | null>(null);
-
-contract = signal<any>(null);
-
-
-getLatestRevision(phase: any) {
-  return phase.revisions?.length
-    ? phase.revisions[phase.revisions.length - 1]
-    : null;
-}
-
-getLatestNote(phase: any) {
-  return this.getLatestRevision(phase)?.freelancerNote || '';
-}
-
-getLatestAttachments(phase: any) {
-  return this.getLatestRevision(phase)?.attachments || [];
-}
-
-getLatestSubmissionDate(phase: any) {
-  return this.getLatestRevision(phase)?.submittedAt;
-}
+  contract = signal<any>(null);
 
 
-
-ngOnInit(): void {
-
-  const role = this.authService
-    .currentUser()
-    ?.role
-    ?.toLowerCase();
-
-  if (role !== 'client') {
-    throw new Error(
-      'Only clients can access contract progress'
-    );
+  getLatestRevision(phase: any) {
+    return phase.revisions?.length
+      ? phase.revisions[phase.revisions.length - 1]
+      : null;
   }
 
-  this.phaseForm.reset({ clientAttachments: [] });
+  getLatestNote(phase: any) {
+    return this.getLatestRevision(phase)?.freelancerNote || '';
+  }
 
-  this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+  getLatestAttachments(phase: any) {
+    return this.getLatestRevision(phase)?.attachments || [];
+  }
 
-    this.contractId.set(params.get('contractId') || '');
+  getLatestSubmissionDate(phase: any) {
+    return this.getLatestRevision(phase)?.submittedAt;
+  }
 
-    if (!this.contractId()) {
 
-      this.isLoading.set(false);
 
-      this.contract.set(null);
+  ngOnInit(): void {
 
-      this.diary.set(null);
+    const role = this.authService
+      .currentUser()
+      ?.role
+      ?.toLowerCase();
 
-      return;
-
+    if (role !== 'client') {
+      throw new Error(
+        'Only clients can access contract progress'
+      );
     }
 
-    this.fetchContractDiary();
+    this.phaseForm.reset({ clientAttachments: [] });
 
-  });
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
 
-}
+      this.contractId.set(params.get('contractId') || '');
 
-
-fetchContractDiary(
-  phaseId?: string
-): void {
-
-  if (!this.contractId()) {
-    return;
-  }
-
-  this.isLoading = signal(true);
-
-  this.diaryService
-    .getDiaryByContractId(
-      this.contractId()
-    )
-    .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe({
-
-      next: (res: any) => {
-
-        console.log(
-          'Statuses:',
-          res.diary?.phases?.map(
-            (p: any) => ({
-              id: p._id,
-              status: p.status
-            })
-          )
-        );
-
-        this.contract.set(res.contract || null);
-
-        this.diary.set(res.diary || null);
+      if (!this.contractId()) {
 
         this.isLoading.set(false);
-
-        if (phaseId) {
-          this.reviewing[phaseId] = false;
-        }
-
-        
-      },
-
-      error: (err) => {
-
-        console.error(
-          'Failed to load contract diary',
-          err
-        );
 
         this.contract.set(null);
 
         this.diary.set(null);
 
-        this.isLoading.set(false);
-
-        if (phaseId) {
-          this.reviewing[phaseId] = false;
-        }
+        return;
 
       }
 
+      this.fetchContractDiary();
+
     });
 
-}
-
-
-onFileUploaded(
-  fileInfo: {
-    url: string;
-    fileName: string;
-    fileSize: string;
-    fileType: string;
   }
-): void {
 
-  const attachment: Attachment = {
 
-    fileName: fileInfo.fileName,
+  fetchContractDiary(
+    phaseId?: string
+  ): void {
 
-    fileUrl: fileInfo.url,
+    if (!this.contractId()) {
+      return;
+    }
 
-    fileType: fileInfo.fileType,
+    this.isLoading = signal(true);
 
-    fileSize: fileInfo.fileSize
+    this.diaryService
+      .getDiaryByContractId(
+        this.contractId()
+      )
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
 
-  };
+        next: (res: any) => {
 
-  const attachments = this.phaseForm.value.clientAttachments || [];
-  this.phaseForm.patchValue({ clientAttachments: [...attachments, attachment] });
+          console.log(
+            'Statuses:',
+            res.diary?.phases?.map(
+              (p: any) => ({
+                id: p._id,
+                status: p.status
+              })
+            )
+          );
 
-  this.tempUploadUrl.set(null);
+          this.contract.set(res.contract || null);
 
-}
+          this.diary.set(res.diary || null);
 
-removeAttachment(
-  index: number
-): void {
+          this.isLoading.set(false);
 
-  const attachments = [...(this.phaseForm.value.clientAttachments || [])];
-  attachments.splice(index, 1);
-  this.phaseForm.patchValue({ clientAttachments: attachments });
+          if (phaseId) {
+            this.reviewing[phaseId] = false;
+          }
 
-}
+
+        },
+
+        error: (err) => {
+
+          console.error(
+            'Failed to load contract diary',
+            err
+          );
+
+          this.contract.set(null);
+
+          this.diary.set(null);
+
+          this.isLoading.set(false);
+
+          if (phaseId) {
+            this.reviewing[phaseId] = false;
+          }
+
+        }
+
+      });
+
+  }
+
+
+  onFileUploaded(
+    fileInfo: {
+      url: string;
+      fileName: string;
+      fileSize: string;
+      fileType: string;
+    }
+  ): void {
+
+    const attachment: Attachment = {
+
+      fileName: fileInfo.fileName,
+
+      fileUrl: fileInfo.url,
+
+      fileType: fileInfo.fileType,
+
+      fileSize: fileInfo.fileSize
+
+    };
+
+    const attachments = this.phaseForm.value.clientAttachments || [];
+    this.phaseForm.patchValue({ clientAttachments: [...attachments, attachment] });
+
+    this.tempUploadUrl.set(null);
+
+  }
+
+  removeAttachment(
+    index: number
+  ): void {
+
+    const attachments = [...(this.phaseForm.value.clientAttachments || [])];
+    attachments.splice(index, 1);
+    this.phaseForm.patchValue({ clientAttachments: attachments });
+
+  }
 
 
 
 
   openAddPhaseModal(
-  diaryId: string
-): void {
+    diaryId: string
+  ): void {
 
-  this.selectedDiaryId.set(diaryId);
+    this.selectedDiaryId.set(diaryId);
 
-  this.showAddPhaseModal.set(true);
+    this.showAddPhaseModal.set(true);
 
-  document.body.classList.add(
-    'modal-open'
-  );
-  
-  
-
-}
-
-closeAddPhaseModal(): void {
-
-  this.showAddPhaseModal = signal(false);
-
-  this.selectedDiaryId.set(null);
-
-  this.tempUploadUrl.set(null);
-
-  this.phaseForm.reset({ clientAttachments: [] });
-
-  document.body.classList.remove(
-    'modal-open'
-  );
-
-  
-
-}
+    document.body.classList.add(
+      'modal-open'
+    );
 
 
-approvePhase(
-  diaryId: string,
-  phaseId: string
-): void {
 
-  this.reviewing[phaseId] = true;
-
-  this.diaryService
-    .reviewPhase(
-      diaryId,
-      phaseId,
-      'approve'
-    )
-    .subscribe({
-
-      next: () => {
-
-        this.fetchContractDiary(
-          phaseId
-        );
-
-      },
-
-      error: () => {
-
-        this.reviewing[phaseId] = false;
-
-      }
-
-    });
-
-}
-
-requestChanges(
-  diaryId: string,
-  phaseId: string
-): void {
-
-  const feedback =
-    this.feedbackText[phaseId] || '';
-
-  this.reviewing[phaseId] = true;
-
-  this.diaryService
-    .reviewPhase(
-      diaryId,
-      phaseId,
-      'request-changes',
-      feedback
-    )
-    .subscribe({
-
-      next: () => {
-
-        this.feedbackText[phaseId] = '';
-
-        this.fetchContractDiary(
-          phaseId
-        );
-
-      },
-
-      error: () => {
-
-        this.reviewing[phaseId] = false;
-
-      }
-
-    });
-
-}
-
-addPhase(
-  diaryId: string
-): void {
-
-  if (this.phaseForm.invalid) {
-    return;
   }
-  const formValue = this.phaseForm.value;
 
-  this.addingPhase[diaryId] = true;
-
-  this.diaryService
-    .addPhase(
-      diaryId,
-      {
-        name: formValue.name || '',
-        description: formValue.description || '',
-        deadline: formValue.deadline || '',
-        amount: formValue.amount || 0,
-        clientAttachments: formValue.clientAttachments || []
-      }
-    )
-    .subscribe({
-
-      next: (res: any) => {
-
-        alert(
-          res.message ||
-          'Phase added successfully.'
-        );
-
-        this.phaseForm.reset({ clientAttachments: [] });
-
-        this.tempUploadUrl.set(null);
-
-        this.closeAddPhaseModal();
-
-        this.fetchContractDiary();
-        this.addingPhase[diaryId] = false;
-        
-
-      },
-
-      error: (err) => {
-
-        alert(
-          err.error?.message ||
-          'Failed to add phase.'
-        );
-
-        this.addingPhase[diaryId] = false;
-
-      }
-
+  closeAddPhaseModal(): void {
+    this.showAddPhaseModal.set(false);
+    this.selectedDiaryId.set(null);
+    this.tempUploadUrl.set(null);
+    this.phaseForm.reset({
+      name: '',
+      description: '',
+      deadline: '',
+      amount: null,
+      clientAttachments: []
     });
 
-}
+    document.body.classList.remove(
+      'modal-open'
+    );
+
+
+
+  }
+
+
+  approvePhase(
+    diaryId: string,
+    phaseId: string
+  ): void {
+
+    this.reviewing[phaseId] = true;
+
+    this.diaryService
+      .reviewPhase(
+        diaryId,
+        phaseId,
+        'approve'
+      )
+      .subscribe({
+
+        next: () => {
+
+          this.fetchContractDiary(
+            phaseId
+          );
+
+        },
+
+        error: () => {
+
+          this.reviewing[phaseId] = false;
+
+        }
+
+      });
+
+  }
+
+  requestChanges(
+    diaryId: string,
+    phaseId: string
+  ): void {
+
+    const feedback =
+      this.feedbackText[phaseId] || '';
+
+    this.reviewing[phaseId] = true;
+
+    const payload: SubmitFeedbackDto = {
+      clientFeedback: feedback
+    };
+
+    this.diaryService
+      .reviewPhase(
+        diaryId,
+        phaseId,
+        'request-changes',
+        payload.clientFeedback
+      )
+      .subscribe({
+
+        next: () => {
+
+          this.feedbackText[phaseId] = '';
+
+          this.fetchContractDiary(
+            phaseId
+          );
+
+        },
+
+        error: () => {
+
+          this.reviewing[phaseId] = false;
+
+        }
+
+      });
+
+  }
+
+  addPhase(diaryId: string): void {
+    if (this.phaseForm.invalid) {
+      return;
+    }
+    
+    const formValue = this.phaseForm.value;
+    const payload: AddPhaseFormDto = {
+      name: formValue.name || '',
+      description: formValue.description || '',
+      deadline: formValue.deadline || '',
+      amount: formValue.amount ?? null,
+      clientAttachments: formValue.clientAttachments || []
+    };
+
+    this.addingPhase[diaryId] = true;
+
+    this.diaryService
+      .addPhase(diaryId, payload)
+      .subscribe({
+
+        next: (res: any) => {
+
+          alert(
+            res.message ||
+            'Phase added successfully.'
+          );
+
+          this.phaseForm.reset({ clientAttachments: [] });
+
+          this.tempUploadUrl.set(null);
+
+          this.closeAddPhaseModal();
+
+          this.fetchContractDiary();
+          this.addingPhase[diaryId] = false;
+
+
+        },
+
+        error: (err) => {
+
+          alert(
+            err.error?.message ||
+            'Failed to add phase.'
+          );
+
+          this.addingPhase[diaryId] = false;
+
+        }
+
+      });
+
+  }
 
   formatDate(date: string | undefined | null): string {
     if (!date) return 'TBD';
@@ -411,21 +412,21 @@ addPhase(
 
   getFileIcon(fileType: string): string {
     if (!fileType) return 'bi-file-earmark-fill text-secondary';
-    if (fileType.includes('pdf'))   return 'bi-file-earmark-pdf-fill text-danger';
+    if (fileType.includes('pdf')) return 'bi-file-earmark-pdf-fill text-danger';
     if (fileType.includes('image')) return 'bi-file-earmark-image-fill text-info';
     if (fileType.includes('video')) return 'bi-play-btn-fill text-primary';
-    if (fileType.includes('zip'))   return 'bi-file-earmark-zip-fill text-success';
+    if (fileType.includes('zip')) return 'bi-file-earmark-zip-fill text-success';
     return 'bi-file-earmark-fill text-secondary';
   }
 
   getStatusDotClass(status: string): string {
     switch (status) {
-      case 'approved':          return 'bg-success';
-      case 'in-progress':       return 'bg-primary';
-      case 'submitted':         return 'bg-warning';
+      case 'approved': return 'bg-success';
+      case 'in-progress': return 'bg-primary';
+      case 'submitted': return 'bg-warning';
       case 'changes-requested': return 'bg-danger';
-      case 'overdue':           return 'bg-danger';
-      default:                  return 'bg-secondary';
+      case 'overdue': return 'bg-danger';
+      default: return 'bg-secondary';
     }
   }
 
@@ -435,12 +436,12 @@ addPhase(
 
   getPhaseStatusBadgeVariant(status: string): string {
     switch (status) {
-      case 'approved':          return 'success';
-      case 'in-progress':       return 'primary';
-      case 'submitted':         return 'warning';
+      case 'approved': return 'success';
+      case 'in-progress': return 'primary';
+      case 'submitted': return 'warning';
       case 'changes-requested': return 'danger';
-      case 'overdue':           return 'danger';
-      default:                  return 'secondary';
+      case 'overdue': return 'danger';
+      default: return 'secondary';
     }
   }
 

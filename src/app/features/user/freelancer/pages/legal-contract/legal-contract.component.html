@@ -106,29 +106,41 @@
                                     <p class="text-secondary smaller mb-1">Contracted Party Signature</p>
 
                                     <!-- Signature Upload Area -->
-                                    <input type="file" #signatureInput class="d-none"
-                                        (change)="onSignatureFileSelected($event)" accept="image/*">
-                                    <div class="signature-line position-relative cursor-pointer py-2 border-bottom border-white border-opacity-20"
-                                        (click)="triggerSignatureUpload(signatureInput)"
-                                        style="min-height: 80px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.02); border-radius: 8px;">
-                                        @if (signatureImage()) {
-                                        <img [src]="signatureImage()" alt="Signature" class="signature-img"
-                                            style="max-height: 60px; max-width: 100%; object-fit: contain;">
+                                    <div class="mt-2 mb-3">
+                                        @if(signatureImage()) {
+                                            <div class="mb-3">
+                                                <app-file-preview [url]="signatureImage()!" [fileName]="'Freelancer_Signature.png'"></app-file-preview>
+                                                <div class="mt-3">
+                                                    <app-file-upload [bucketKey]="BucketKey.FreelancerData" [uploadSection]="UploadSection.DigitalSignature"
+                                                        (uploadSuccess)="onSignatureUploaded($event)">
+                                                    </app-file-upload>
+                                                </div>
+                                            </div>
                                         } @else {
-                                        <div
-                                            class="signature-placeholder d-flex align-items-center gap-2 text-secondary opacity-50 small">
-                                            <i class="bi bi-cloud-upload"></i>
-                                            <span>Click to upload signature</span>
-                                        </div>
+                                            <app-file-upload [bucketKey]="BucketKey.FreelancerData" [uploadSection]="UploadSection.DigitalSignature"
+                                                (uploadSuccess)="onSignatureUploaded($event)">
+                                            </app-file-upload>
                                         }
                                     </div>
                                     <p class="text-secondary smaller mt-2">Freelancer:
                                         {{offerData.freelancerId?.registrationDetails?.fullName}}</p>
                                 </div>
                                 <div class="col-6 text-end">
-                                    <p class="text-secondary smaller mb-1">Authorized Seal</p>
-                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=verified-contract"
-                                        alt="QR Seal" class="opacity-50 rounded-2" style="width: 60px; height: 60px;">
+                                    <p class="text-secondary smaller mb-1">Client Signature</p>
+                                    @if(offerData.clientSignature) {
+                                        <div class="mt-2 mb-3 d-flex justify-content-end">
+                                            <div class="p-2 border border-white border-opacity-10 rounded bg-dark bg-opacity-25" style="display: inline-block;">
+                                                <img [src]="offerData.clientSignature" alt="Client Signature" class="signature-img"
+                                                    style="max-height: 60px; max-width: 100%; object-fit: contain;">
+                                            </div>
+                                        </div>
+                                    } @else {
+                                        <div class="mt-2 mb-3 text-secondary opacity-50 smaller">
+                                            Offer Sent Digitally
+                                        </div>
+                                    }
+                                    <p class="text-secondary smaller mt-2">Client:
+                                        {{offerData.clientId?.companyDetails?.companyName || 'Client'}}</p>
                                 </div>
                             </div>
                         </div>

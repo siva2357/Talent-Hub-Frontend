@@ -23,7 +23,7 @@ describe('ContractDetailsComponent', () => {
           status: 'Open',
           hasApplied: false,
           hasSaved: false,
-          totalApplicants: 5,
+
           contractDescription: '<p>Description</p>'
         }
       })),
@@ -66,14 +66,13 @@ describe('ContractDetailsComponent', () => {
     tick();
     expect(mockContractService.applyToContract).toHaveBeenCalledWith('1');
     expect(component.contract()?.hasApplied).toBeTrue();
-    expect(component.contract()?.totalApplicants).toBe(6);
+
   }));
 
   it('should withdraw from contract and update signal', fakeAsync(() => {
     component.contract.update(c => {
       if (c) {
         c.hasApplied = true;
-        c.totalApplicants = 6;
       }
       return c;
     });
@@ -81,7 +80,7 @@ describe('ContractDetailsComponent', () => {
     tick();
     expect(mockContractService.withdrawContractApplication).toHaveBeenCalledWith('1');
     expect(component.contract()?.hasApplied).toBeFalse();
-    expect(component.contract()?.totalApplicants).toBe(5);
+
   }));
 
   it('should save contract', fakeAsync(() => {

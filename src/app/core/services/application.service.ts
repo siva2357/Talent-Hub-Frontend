@@ -169,16 +169,7 @@ export class ApplicationService {
     );
   }
 
-  // ========================================
-  // Get Freelancer Offers (Freelancer)
-  // ========================================
 
-  getFreelancerOffers(): Observable<any> {
-    return this.http.get(
-      `${this.baseUrl}${API_ENDPOINTS.APPLICATIONS.MY_OFFERS}`,
-      this.getHeaders()
-    );
-  }
 
   // ========================================
   // Get Application By ID

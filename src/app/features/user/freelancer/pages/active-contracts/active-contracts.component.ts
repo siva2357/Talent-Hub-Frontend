@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
-import { ApplicationService } from '../../../../../core/services/application.service';
+import { OfferService } from '../../../../../core/services/offer.service';
 
 import { ActiveContract } from '../../../../../core/model/freelancer.model';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -17,7 +17,7 @@ import { of, Subject } from 'rxjs';
   styleUrl: './active-contracts.component.css'
 })
 export class ActiveContractsComponent {
-  private applicationService = inject(ApplicationService);
+  private offerService = inject(OfferService);
 
   currentTab = signal<'active' | 'completed'>('active');
   isLoading = signal<boolean>(true);
@@ -27,7 +27,7 @@ export class ActiveContractsComponent {
     this.refresh$.pipe(
       startWith(null),
       tap(() => this.isLoading.set(true)),
-      switchMap(() => this.applicationService.getFreelancerOffers().pipe(
+      switchMap(() => this.offerService.getFreelancerOffers().pipe(
         map((res: any) => {
           if (res.success && res.offers) {
             // Only show accepted offers as active contracts that are not completed
@@ -86,6 +86,6 @@ export class ActiveContractsComponent {
   });
 
   downloadContract(contractId: string): void {
-    window.open(this.applicationService.getContractPdfUrl(contractId), '_blank');
+    window.open(this.offerService.getContractPdfUrl(contractId), '_blank');
   }
 }

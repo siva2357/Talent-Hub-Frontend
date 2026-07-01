@@ -22,9 +22,7 @@ describe('ContractProposalsComponent', () => {
         _id: 'user-1',
         fullName: 'John Doe',
         professionalHeadline: 'Frontend Dev',
-        hourlyRate: 50,
         availability: ['full-time'],
-        budgetType: 'Fixed Price',
         gender: 'male',
         languages: ['English'],
         skills: ['Angular', 'React']
@@ -38,9 +36,7 @@ describe('ContractProposalsComponent', () => {
         _id: 'user-2',
         fullName: 'Jane Smith',
         professionalHeadline: 'Backend Dev',
-        hourlyRate: 80,
         availability: ['part-time'],
-        budgetType: 'Hourly',
         gender: 'female',
         languages: ['English', 'Spanish'],
         skills: ['NodeJS', 'Python']

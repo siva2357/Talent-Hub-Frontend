@@ -11,5 +11,6 @@ export enum UploadSection {
   BlogMedia = 'BLOG_MEDIA',
   AadhaarCard = 'AADHAAR_CARD',
   PanCard = 'PAN_CARD',
-  SupportRequest='SUPPORT_REQUEST'
+  SupportRequest='SUPPORT_REQUEST',
+  DigitalSignature = 'DIGITAL_SIGNATURE'
 }

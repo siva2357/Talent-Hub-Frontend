@@ -7,6 +7,7 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
 import { ChipComponent } from '../../../../../shared/components/chip/chip.component';
 import { ContractService } from '../../../../../core/services/contract.service';
 import { ApplicationService } from '../../../../../core/services/application.service';
+import { OfferService } from '../../../../../core/services/offer.service';
 import { AppliedApplication, AppliedContractsResponse, Proposal } from '../../../../../core/model/proposal.modal';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 import { ActiveFilter } from '../../../../../core/model/freelancer.model';
@@ -23,6 +24,7 @@ export class ProposalsComponent implements OnInit {
 
   private contractService = inject(ContractService);
   private applicationService = inject(ApplicationService);
+  private offerService = inject(OfferService);
   private route = inject(ActivatedRoute);
 
   assessmentSubmitting = signal(false);
@@ -35,7 +37,6 @@ export class ProposalsComponent implements OnInit {
   // Filter Selection State
   searchQuery = signal<string>('');
   dateFilter = signal<string>('All Time');
-  budgetFilter = signal<string>('All Budgets');
   statusFilter = signal<string>('All Status');
 
   // Options
@@ -43,12 +44,6 @@ export class ProposalsComponent implements OnInit {
     { label: 'All Time', value: 'All Time' },
     { label: 'Last 7 Days', value: 'Last 7 Days' },
     { label: 'Last 30 Days', value: 'Last 30 Days' }
-  ];
-
-  budgetOptions = [
-    { label: 'All Budgets', value: 'All Budgets' },
-    { label: 'Fixed Price', value: 'Fixed Price' },
-    { label: 'Hourly', value: 'Hourly' }
   ];
 
   statusOptions = computed(() => {
@@ -79,7 +74,6 @@ export class ProposalsComponent implements OnInit {
     const filters: ActiveFilter[] = [];
     if (this.searchQuery()) filters.push({ id: 'search', label: `Search: ${this.searchQuery()}`, type: 'search' });
     if (this.dateFilter() !== 'All Time') filters.push({ id: 'date', label: this.dateFilter(), type: 'date' });
-    if (this.budgetFilter() !== 'All Budgets') filters.push({ id: 'budget', label: this.budgetFilter(), type: 'budget' });
     if (this.statusFilter() !== 'All Status') filters.push({ id: 'status', label: this.statusFilter(), type: 'status' });
     return filters;
   });
@@ -87,20 +81,18 @@ export class ProposalsComponent implements OnInit {
   appliedProposals = computed(() => {
     return this.allProposals().filter(p => {
       const q = this.searchQuery().toLowerCase();
-      const matchesSearch = p.contractTitle.toLowerCase().includes(q) || p.client.toLowerCase().includes(q);
+      const matchesSearch = p.contractTitle.toLowerCase().includes(q) || p.client?.toLowerCase().includes(q);
       const matchesStatus = this.statusFilter() === 'All Status' || p.type === this.statusFilter();
-      const matchesBudget = this.budgetFilter() === 'All Budgets' || p.contractType === this.budgetFilter();
-      return matchesSearch && matchesStatus && matchesBudget;
+      return matchesSearch && matchesStatus;
     });
   });
 
   filteredOffers = computed(() => {
     return this.offers().filter(o => {
       const q = this.searchQuery().toLowerCase();
-      const matchesSearch = o.contractTitle.toLowerCase().includes(q) || o.client.toLowerCase().includes(q);
+      const matchesSearch = o.contractTitle.toLowerCase().includes(q) || o.client?.toLowerCase().includes(q);
       const matchesStatus = this.statusFilter() === 'All Status' || o.status === this.statusFilter();
-      const matchesBudget = this.budgetFilter() === 'All Budgets' || o.contractType === this.budgetFilter();
-      return matchesSearch && matchesStatus && matchesBudget;
+      return matchesSearch && matchesStatus;
     });
   });
 
@@ -118,11 +110,9 @@ export class ProposalsComponent implements OnInit {
       }
     });
 
-    if (this.activeTab() === 'proposals') {
-      this.fetchAppliedContracts();
-    } else {
-      this.fetchOffers();
-    }
+    // Fetch both datasets immediately so badge counts are accurate and tab switching is instant
+    this.fetchAppliedContracts();
+    this.fetchOffers();
   }
 
   switchTab(tab: 'proposals' | 'offers'): void {
@@ -132,19 +122,12 @@ export class ProposalsComponent implements OnInit {
     
     // Reset filters when switching tabs
     this.resetAll();
-
-    if (tab === 'proposals' && !this.allProposals().length) {
-      this.fetchAppliedContracts();
-    }
-
-    if (tab === 'offers' && !this.offers().length) {
-      this.fetchOffers();
-    }
   }
 
   fetchOffers(): void {
     this.isOffersLoading.set(true);
-    this.applicationService.getFreelancerOffers().subscribe({
+    this.offers.set([]);
+    this.offerService.getFreelancerOffers().subscribe({
       next: (res: any) => {
         this.offers.set(res?.success ? (res.offers || []) : []);
         this.isOffersLoading.set(false);
@@ -161,7 +144,7 @@ export class ProposalsComponent implements OnInit {
     if (!confirm('Are you sure you want to decline this contract offer?')) return;
 
     this.offerDeclining.set(true);
-    this.applicationService.declineOffer(id).subscribe({
+    this.offerService.declineOffer(id).subscribe({
       next: () => {
         this.fetchOffers();
         this.offerDeclining.set(false);
@@ -174,7 +157,7 @@ export class ProposalsComponent implements OnInit {
   }
 
   downloadSignedContract(offerId: string): void {
-    window.open(this.applicationService.getContractPdfUrl(offerId), '_blank');
+    window.open(this.offerService.getContractPdfUrl(offerId), '_blank');
   }
 
   markAssessmentCompleted(proposalId: string): void {
@@ -203,9 +186,15 @@ export class ProposalsComponent implements OnInit {
 
   fetchAppliedContracts(): void {
     this.isProposalsLoading.set(true);
+    this.allProposals.set([]);
     this.contractService.getAppliedContracts().subscribe({
       next: (res) => {
-        this.allProposals.set(res.success ? res.applications.map(app => this.mapApplicationToProposal(app)) : []);
+        if (res.success) {
+          const filteredApps = res.applications.filter((app: AppliedApplication) => !app.offerStatus || app.offerStatus === 'none');
+          this.allProposals.set(filteredApps.map((app: AppliedApplication) => this.mapApplicationToProposal(app)));
+        } else {
+          this.allProposals.set([]);
+        }
         this.isProposalsLoading.set(false);
       },
       error: (err) => {
@@ -226,7 +215,8 @@ export class ProposalsComponent implements OnInit {
       budget: `${app.contract?.estimatedBudget?.toLocaleString() || 0}`,
       budgetLabel: app.contract?.budgetType === 'Hourly Rate' ? 'Hourly Rate' : 'Proposal Amount',
       duration: this.calculateDuration(app.contract?.contractStartDate, app.contract?.contractEndDate),
-      contractType: app.contract?.budgetType === 'Hourly Rate' ? 'Hourly' : 'Fixed Price',
+      contractType: app.contract?.contractType || 'Fixed Price',
+      contractSubject: app.contract?.contractSubject || '',
       level: 'Intermediate',
       description: app.contract?.contractDescription || '',
       status: app.applicationStatus ? app.applicationStatus.replace(/\b\w/g, l => l.toUpperCase()) : 'Pending',
@@ -259,14 +249,12 @@ export class ProposalsComponent implements OnInit {
   removeActiveFilter(filter: ActiveFilter) {
     if (filter.id === 'search') this.searchQuery.set('');
     if (filter.id === 'date') this.dateFilter.set('All Time');
-    if (filter.id === 'budget') this.budgetFilter.set('All Budgets');
     if (filter.id === 'status') this.statusFilter.set('All Status');
   }
 
   resetAll() {
     this.searchQuery.set('');
     this.dateFilter.set('All Time');
-    this.budgetFilter.set('All Budgets');
     this.statusFilter.set('All Status');
   }
 }

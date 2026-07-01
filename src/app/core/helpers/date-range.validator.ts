@@ -13,9 +13,17 @@ export const dateRangeValidator: ValidatorFn = (control: AbstractControl): Valid
   }
 
   const minEndDate = new Date(startDate);
-  minEndDate.setMonth(minEndDate.getMonth() + 2);
+  minEndDate.setMonth(minEndDate.getMonth() + 3);
+  
+  const maxEndDate = new Date(startDate);
+  maxEndDate.setMonth(maxEndDate.getMonth() + 6);
+
   if (endDate < minEndDate) {
-    return { dateRangeInvalid: 'Contract duration must be at least 2 months' };
+    return { dateRangeInvalid: 'Contract duration must be at least 3 months' };
+  }
+
+  if (endDate > maxEndDate) {
+    return { dateRangeInvalid: 'Contract duration cannot exceed 6 months' };
   }
 
   return null;

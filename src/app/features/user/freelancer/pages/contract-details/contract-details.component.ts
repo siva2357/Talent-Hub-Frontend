@@ -72,7 +72,7 @@ export class ContractDetailsComponent implements OnInit {
         this.contract.update(c => {
           if (c) {
             c.hasApplied = true;
-            c.totalApplicants = (c.totalApplicants || 0) + 1;
+
           }
           return c;
         });
@@ -96,7 +96,7 @@ export class ContractDetailsComponent implements OnInit {
         this.contract.update(c => {
           if (c) {
             c.hasApplied = false;
-            c.totalApplicants = Math.max((c.totalApplicants || 1) - 1, 0);
+
           }
           return c;
         });

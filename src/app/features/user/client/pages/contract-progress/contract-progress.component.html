@@ -647,6 +647,7 @@
         [replaceExisting]="false"
         [uploadSection]="uploadSection"
         [ngModel]="tempUploadUrl()" (ngModelChange)="tempUploadUrl.set($event)"
+        [ngModelOptions]="{standalone: true}"
         name="phaseUpload"
         (uploadSuccessDetailed)="onFileUploaded($event)">
       </app-file-upload>
