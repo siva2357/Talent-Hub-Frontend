@@ -3,13 +3,16 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
-import { ApplicationService } from '../../../../../core/services/application.service';
+import { OfferService } from '../../../../../core/services/offer.service';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
+import { FileUploadComponent } from '../../../../../shared/components/file-upload/file-upload.component';
+import { FilePreviewComponent } from '../../../../../shared/components/file-preview/file-preview.component';
+import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
 
 @Component({
   selector: 'app-legal-contract',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, ButtonComponent],
+  imports: [CommonModule, RouterModule, FormsModule, ButtonComponent, FileUploadComponent, FilePreviewComponent],
   templateUrl: './legal-contract.component.html',
   styleUrl: './legal-contract.component.css'
 })
@@ -18,12 +21,15 @@ export class LegalContractComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private applicationService = inject(ApplicationService);
+  private offerService = inject(OfferService);
 
   offerId = signal<string | null>(null);
   offerData = signal<any>(null);
   isLoading = signal<boolean>(true);
   error = signal<string | null>(null);
+
+  BucketKey = BucketKey;
+  UploadSection = UploadSection;
 
   hasAgreed = signal<boolean>(false);
   isSigning = signal<boolean>(false);
@@ -83,10 +89,10 @@ export class LegalContractComponent implements OnInit {
       return;
     }
 
-    this.applicationService.getApplicationById(id).subscribe({
+    this.offerService.getOfferById(id).subscribe({
       next: (res: any) => {
-        if (res.success && res.application) {
-          this.offerData.set(res.application);
+        if (res.success && res.offer) {
+          this.offerData.set(res.offer);
         } else {
           this.error.set("Failed to load offer details.");
         }
@@ -100,24 +106,13 @@ export class LegalContractComponent implements OnInit {
     });
   }
 
-  triggerSignatureUpload(input: HTMLInputElement) {
-    input.click();
-  }
-
-  onSignatureFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.signatureImage.set(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
+  onSignatureUploaded(url: string | null): void {
+    this.signatureImage.set(url);
   }
 
   getContractPdfUrl(): string {
     if (!this.offerId()) return '#';
-    return this.applicationService.getContractPdfUrl(this.offerId()!);
+    return this.offerService.getContractPdfUrl(this.offerId()!);
   }
 
   downloadContractPdf(): void {
@@ -146,7 +141,7 @@ export class LegalContractComponent implements OnInit {
       return;
     }
 
-    this.applicationService.signOffer(currentId, { signatureImage: currentSignature }).subscribe({
+    this.offerService.signOffer(currentId, { freelancerSignature: currentSignature }).subscribe({
       next: (res) => {
         alert("Contract accepted, signed, and activated successfully!");
         this.isSigning.set(false);

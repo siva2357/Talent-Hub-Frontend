@@ -112,11 +112,15 @@ export class ContractProposalsComponent implements OnInit, AfterViewInit {
     });
   });
 
-  // Table Configuration
-  @ViewChild('freelancerTemplate', { static: true }) freelancerTemplate!: TemplateRef<any>;
-  @ViewChild('rateTemplate', { static: true }) rateTemplate!: TemplateRef<any>;
-  @ViewChild('completedJobsTemplate', { static: true }) completedJobsTemplate!: TemplateRef<any>;
+  @ViewChild('snoTemplate', { static: true }) snoTemplate!: TemplateRef<any>;
+  @ViewChild('profileImageTemplate', { static: true }) profileImageTemplate!: TemplateRef<any>;
+  @ViewChild('fullNameTemplate', { static: true }) fullNameTemplate!: TemplateRef<any>;
+  @ViewChild('emailTemplate', { static: true }) emailTemplate!: TemplateRef<any>;
+  @ViewChild('genderTemplate', { static: true }) genderTemplate!: TemplateRef<any>;
+  @ViewChild('locationTemplate', { static: true }) locationTemplate!: TemplateRef<any>;
+  @ViewChild('availabilityTemplate', { static: true }) availabilityTemplate!: TemplateRef<any>;
   @ViewChild('statusTemplate', { static: true }) statusTemplate!: TemplateRef<any>;
+  @ViewChild('offerStatusTemplate', { static: true }) offerStatusTemplate!: TemplateRef<any>;
   @ViewChild('actionTemplate', { static: true }) actionTemplate!: TemplateRef<any>;
 
   proposalColumns: any[] = [];
@@ -144,11 +148,16 @@ export class ContractProposalsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.proposalColumns = [
-        { name: 'Freelancer', prop: 'freelancer', cellTemplate: this.freelancerTemplate, width: 250 },
-        { name: 'Rate', prop: 'hourlyRate', cellTemplate: this.rateTemplate, width: 120 },
-        { name: 'Completed Jobs', prop: 'completed', cellTemplate: this.completedJobsTemplate, width: 150 },
-        { name: 'Application Status', prop: 'applicationStatus', cellTemplate: this.statusTemplate, width: 200 },
-        { name: 'Actions', prop: 'actions', cellTemplate: this.actionTemplate, sortable: false, width: 250 }
+        { name: 'S.No', prop: 'sno', cellTemplate: this.snoTemplate, width: 70 },
+        { name: 'Profile Image', prop: 'profileImage', cellTemplate: this.profileImageTemplate, width: 130 },
+        { name: 'Full Name', prop: 'fullName', cellTemplate: this.fullNameTemplate, width: 180 },
+        { name: 'Email', prop: 'email', cellTemplate: this.emailTemplate, width: 220 },
+        { name: 'Gender', prop: 'gender', cellTemplate: this.genderTemplate, width: 100 },
+        { name: 'Location', prop: 'location', cellTemplate: this.locationTemplate, width: 150 },
+        { name: 'Availability', prop: 'availability', cellTemplate: this.availabilityTemplate, width: 130 },
+        { name: 'Application Status', prop: 'applicationStatus', cellTemplate: this.statusTemplate, width: 180 },
+        { name: 'Offer Status', prop: 'offerStatus', cellTemplate: this.offerStatusTemplate, width: 150 },
+        { name: 'Actions', prop: 'actions', cellTemplate: this.actionTemplate, sortable: false, width: 150 }
       ];
     });
   }
@@ -261,7 +270,8 @@ export class ContractProposalsComponent implements OnInit, AfterViewInit {
       case 'assessment completed': return 'Assessment Completed';
       case 'interview scheduled': return 'Interview Pending';
       case 'interview completed': return 'Interview Completed';
-      case 'shortlisted': return 'Hired';
+      case 'shortlisted': return 'Final Shortlist';
+      case 'hired': return 'Hired';
       case 'rejected': return 'Rejected';
       default: return status;
     }
@@ -275,8 +285,29 @@ export class ContractProposalsComponent implements OnInit, AfterViewInit {
       case 'assessment completed': return 'info';
       case 'interview scheduled': return 'warning';
       case 'interview completed': return 'info';
-      case 'shortlisted': return 'success';
+      case 'shortlisted': return 'primary';
+      case 'hired': return 'success';
       case 'rejected': return 'danger';
+      default: return 'secondary';
+    }
+  }
+
+  getOfferStatusLabel(status: string): string {
+    switch (status) {
+      case 'sent': return 'Offer Sent';
+      case 'accepted': return 'Accepted';
+      case 'declined': return 'Declined';
+      case 'revoked': return 'Revoked';
+      default: return 'N/A';
+    }
+  }
+
+  getOfferStatusBadgeVariant(status: string): string {
+    switch (status) {
+      case 'sent': return 'warning';
+      case 'accepted': return 'success';
+      case 'declined': return 'danger';
+      case 'revoked': return 'secondary';
       default: return 'secondary';
     }
   }

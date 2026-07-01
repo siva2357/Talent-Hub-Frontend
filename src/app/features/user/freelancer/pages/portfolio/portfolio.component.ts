@@ -65,6 +65,7 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
   showUploader = signal(false);
 
   // Table & Actions
+  @ViewChild('indexTemplate', { static: true }) indexTemplate!: TemplateRef<any>;
   @ViewChild('mediaTemplate', { static: true }) mediaTemplate!: TemplateRef<any>;
   @ViewChild('tagsTemplate', { static: true }) tagsTemplate!: TemplateRef<any>;
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
@@ -91,11 +92,12 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.columns = [
+        { name: 'S.No', prop: 'index', cellTemplate: this.indexTemplate, width: 60, sortable: false },
         { name: 'Media', prop: 'media', cellTemplate: this.mediaTemplate, width: 100, sortable: false },
         { name: 'Title', prop: 'title', width: 200 },
         { name: 'Project Type', prop: 'projectType', width: 150 },
         { name: 'Role', prop: 'role', width: 150 },
-        { name: 'Tech Stack', prop: 'tags', cellTemplate: this.tagsTemplate, width: 250 },
+        { name: 'Tags', prop: 'tags', cellTemplate: this.tagsTemplate, width: 250 },
         { name: 'Actions', prop: 'actions', cellTemplate: this.actionsTemplate, sortable: false, width: 100 }
       ];
     });
@@ -268,7 +270,7 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
       this.activeActionRow = row;
       const target = (event.currentTarget as HTMLElement).closest('.action-trigger') || event.currentTarget as HTMLElement;
       const rect = target.getBoundingClientRect();
-      
+
       this.menuTop = rect.bottom + window.scrollY + 8;
       this.menuLeft = rect.right + window.scrollX - 220;
     }

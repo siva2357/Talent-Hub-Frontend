@@ -14,6 +14,8 @@ export interface AppliedApplication {
 
   applicationStatus: string;
 
+  offerStatus?: string;
+
   appliedAt: string;
 
   assessment: Assessment;
@@ -61,6 +63,10 @@ export interface AppliedContract {
   budgetType: 'Fixed Price' | 'Hourly Rate';
 
   estimatedBudget: number;
+
+  contractType: string;
+
+  contractSubject: string;
 
   contractDescription: string;
 
@@ -112,9 +118,9 @@ export interface Proposal {
     | 'Shortlisted'
     | 'Rejected';
 
-  contractType:
-    | 'Fixed Price'
-    | 'Hourly';
+  contractType: string;
+
+  contractSubject: string;
 
   level:
     | 'Entry'

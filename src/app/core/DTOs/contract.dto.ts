@@ -4,7 +4,6 @@
 
 export interface CreateContractDTO {
   contractTitle: string;
-  budgetType: 'Fixed Price' | 'Hourly Rate';
   estimatedBudget: number;
   contractStartDate: string;
   contractEndDate: string;
@@ -15,7 +14,6 @@ export interface CreateContractDTO {
 
 export interface UpdateContractDTO {
   contractTitle?: string;
-  budgetType?: 'Fixed Price' | 'Hourly Rate';
   estimatedBudget?: number;
   contractStartDate?: string;
   contractEndDate?: string;

@@ -30,7 +30,6 @@ export class ContractFormComponent implements OnInit {
   toastr = inject(ToastrService);
 
   statusOptions = CONTRACT_STATUS_OPTIONS;
-  budgetTypeOptions = BUDGET_TYPE_OPTIONS;
   contractTypeOptions = CONTRACT_TYPE_OPTIONS;
   contractSubjectOptions = CONTRACT_SUBJECT_OPTIONS;
 
@@ -53,8 +52,7 @@ export class ContractFormComponent implements OnInit {
   initializeForm(): void {
     this.contractForm = this.fb.group({
       contractTitle: ['', [Validators.required, Validators.minLength(5)]],
-      budgetType: [BudgetTypeEnum.FIXED_PRICE, Validators.required],
-      estimatedBudget: [null, [Validators.required, Validators.min(25000), Validators.max(75000)]],
+      estimatedBudget: [null, [Validators.required, Validators.min(30000), Validators.max(75000)]],
       contractStartDate: ['', Validators.required],
       contractEndDate: ['', Validators.required],
       contractDescription: ['', Validators.required],
@@ -70,7 +68,6 @@ export class ContractFormComponent implements OnInit {
       next: (response) => {
         this.contractForm.patchValue({
           contractTitle: response.contract.contractTitle,
-          budgetType: response.contract.budgetType,
           estimatedBudget: response.contract.estimatedBudget,
           contractStartDate: this.formatDate(response.contract.contractStartDate),
           contractEndDate: this.formatDate(response.contract.contractEndDate),
@@ -101,7 +98,6 @@ export class ContractFormComponent implements OnInit {
     this.loading.set(true);
     const payload: CreateContractDTO | UpdateContractDTO = {
       contractTitle: this.contractForm.value.contractTitle,
-      budgetType: this.contractForm.value.budgetType,
       estimatedBudget: this.contractForm.value.estimatedBudget,
       contractStartDate: this.contractForm.value.contractStartDate,
       contractEndDate: this.contractForm.value.contractEndDate,
@@ -119,7 +115,6 @@ export class ContractFormComponent implements OnInit {
           this.toastr.success('Contract created successfully!', 'Success');
           this.contractForm.reset();
           this.contractForm.patchValue({
-            budgetType: 'Fixed Price',
             status: 'pending',
             contractType: '',
             contractSubject: '',

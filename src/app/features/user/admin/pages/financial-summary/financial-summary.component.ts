@@ -4,7 +4,8 @@ import { AdminService, TransactionData } from '../../../../../core/services/admi
 import { TableColumn } from '../../../../../core/model/table.interface';
 import { Table } from "../../../../../shared/components/table/table.component";
 import { InputComponent } from "../../../../../shared/components/input/input.component";
-import {FormsModule} from '@angular/forms';
+import { BadgeComponent } from "../../../../../shared/components/badge/badge.component";
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -12,7 +13,7 @@ import {FormsModule} from '@angular/forms';
 @Component({
   selector: 'app-admin-financial-summary',
   standalone: true,
-  imports: [CommonModule, Table, InputComponent, FormsModule],
+  imports: [CommonModule, Table, InputComponent, BadgeComponent, FormsModule],
   templateUrl: './financial-summary.component.html',
   styleUrl: './financial-summary.component.css'
 })
@@ -36,8 +37,8 @@ export class AdminFinancialSummaryComponent implements OnInit {
     return this.transactions().filter(t => {
       const term = this.searchTerm().toLowerCase();
       const matchesSearch = t.clientName.toLowerCase().includes(term) ||
-                            t.freelancerName.toLowerCase().includes(term) ||
-                            (t.contractTitle || '').toLowerCase().includes(term);
+        t.freelancerName.toLowerCase().includes(term) ||
+        (t.contractTitle || '').toLowerCase().includes(term);
 
       const status = this.statusFilter();
       const matchesStatus = status === 'All' || t.status === status;
@@ -48,22 +49,25 @@ export class AdminFinancialSummaryComponent implements OnInit {
 
 
   @ViewChild('paymentTemplate', { static: true })
-paymentTemplate!: TemplateRef<any>;
+  paymentTemplate!: TemplateRef<any>;
 
-@ViewChild('freelancerPaymentTemplate', { static: true })
-freelancerPaymentTemplate!: TemplateRef<any>;
+  @ViewChild('indexTemplate', { static: true })
+  indexTemplate!: TemplateRef<any>;
 
-@ViewChild('commissionTemplate', { static: true })
-commissionTemplate!: TemplateRef<any>;
+  @ViewChild('freelancerPaymentTemplate', { static: true })
+  freelancerPaymentTemplate!: TemplateRef<any>;
 
-@ViewChild('statusTemplate', { static: true })
-statusTemplate!: TemplateRef<any>;
+  @ViewChild('commissionTemplate', { static: true })
+  commissionTemplate!: TemplateRef<any>;
+
+  @ViewChild('statusTemplate', { static: true })
+  statusTemplate!: TemplateRef<any>;
 
 
-ngOnInit(): void {
-  this.initializeColumns();
-  this.loadFinancials();
-}
+  ngOnInit(): void {
+    this.initializeColumns();
+    this.loadFinancials();
+  }
   loadFinancials(): void {
     // Load ledger stats
     this.adminService.getFinancialStats().subscribe({
@@ -92,73 +96,74 @@ ngOnInit(): void {
 
 
   statusOptions = [
-  {
-    label: 'All Contracts',
-    value: 'All'
-  },
-  {
-    label: 'In Progress',
-    value: 'In Progress'
-  },
-  {
-    label: 'Completed',
-    value: 'Completed'
-  },
-  {
-    label: 'Pending',
-    value: 'Pending'
-  }
-];
-
-
-
-initializeColumns(): void {
-  this.columns = [
     {
-      name: 'S.No',
-      prop: 'index',
-      width: 60,
-      sortable: false
+      label: 'All Contracts',
+      value: 'All'
     },
     {
-      name: 'Contract',
-      prop: 'contractTitle',
-      width: 280
+      label: 'In Progress',
+      value: 'In Progress'
     },
     {
-      name: 'Client',
-      prop: 'clientName',
-      width: 180
+      label: 'Completed',
+      value: 'Completed'
     },
     {
-      name: 'Freelancer',
-      prop: 'freelancerName',
-      width: 180
-    },
-    {
-      name: 'Client Payment',
-      prop: 'budget',
-      width: 180,
-      cellTemplate: this.paymentTemplate
-    },
-    {
-      name: 'Freelancer Payment',
-      prop: 'freelancerPayment',
-      width: 180,
-      cellTemplate: this.freelancerPaymentTemplate
-    },
-    {
-      name: 'Commission',
-      prop: 'commission',
-      width: 180,
-      cellTemplate: this.commissionTemplate
-    },
-    {
-      name: 'Status',
-      prop: 'status',
-      width: 140,
-      cellTemplate: this.statusTemplate
+      label: 'Pending',
+      value: 'Pending'
     }
   ];
-}
+
+
+
+  initializeColumns(): void {
+    this.columns = [
+      {
+        name: 'S.No',
+        prop: 'index',
+        width: 50,
+        sortable: false,
+        cellTemplate: this.indexTemplate
+      },
+      {
+        name: 'Contract',
+        prop: 'contractTitle',
+        width: 200
+      },
+      {
+        name: 'Client',
+        prop: 'clientName',
+        width: 180
+      },
+      {
+        name: 'Freelancer',
+        prop: 'freelancerName',
+        width: 180
+      },
+      {
+        name: 'Client Payment',
+        prop: 'budget',
+        width: 180,
+        cellTemplate: this.paymentTemplate
+      },
+      {
+        name: 'Freelancer Payment',
+        prop: 'freelancerPayment',
+        width: 180,
+        cellTemplate: this.freelancerPaymentTemplate
+      },
+      {
+        name: 'Commission',
+        prop: 'commission',
+        width: 180,
+        cellTemplate: this.commissionTemplate
+      },
+      {
+        name: 'Status',
+        prop: 'status',
+        width: 140,
+        cellTemplate: this.statusTemplate
+      }
+    ];
+  }
 }

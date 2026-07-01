@@ -15,11 +15,21 @@ import { Component, inject, OnInit, DestroyRef, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, Validators, FormGroup, AbstractControl, ValidationErrors } from '@angular/forms';
 import { InputComponent } from '../../components/input/input.component';
 import { ButtonComponent } from '../../components/button/button.component';
 import { ChipComponent } from '../../components/chip/chip.component';
 import { validateSocialLink, RegexPatterns } from '../../../core/regex/patterns';
+
+export function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+  const newPassword = control.get('newPassword');
+  const confirmPassword = control.get('confirmPassword');
+
+  if (newPassword && confirmPassword && newPassword.value !== confirmPassword.value) {
+    return { passwordMismatch: true };
+  }
+  return null;
+}
 
 @Component({
   selector: 'app-account-settings',
@@ -67,7 +77,7 @@ export class AccountSettingsComponent implements OnInit {
     clientType: ['Individual'],
     hiringType: ['long-term'],
     professionalHeadline: [''],
-    hourlyRate: [50],
+
     websiteUrl: [''],
     industry: [''],
     country: [''],
@@ -77,10 +87,9 @@ export class AccountSettingsComponent implements OnInit {
 
   securityForm: FormGroup = this.fb.group({
     currentPassword: ['', Validators.required],
-    newPassword: ['', Validators.required],
-    confirmPassword: ['', Validators.required],
-    twoFactorEnabled: [true]
-  });
+    newPassword: ['', [Validators.required, Validators.minLength(8)]],
+    confirmPassword: ['', Validators.required]
+  }, { validators: passwordMatchValidator });
 
   bankForm: FormGroup = this.fb.group({
     bankName: ['', Validators.required],
@@ -94,6 +103,7 @@ export class AccountSettingsComponent implements OnInit {
   otpSent = signal(false);
   phoneVerified = signal(false);
   emailVerified = signal(false);
+  isChangingPassword = signal(false);
   isEditLangModalOpen = signal(false);
   bankAccountLinked = signal(false);
   bankAccountVerified = signal(false);
@@ -253,7 +263,7 @@ export class AccountSettingsComponent implements OnInit {
             city: p.location?.city || '',
             timezone: p.location?.timezone || 'IST',
             professionalHeadline: basic.professionalHeadline || '',
-            hourlyRate: p.hourlyRate || 50,
+
             availabilityType: p.availability?.[0] || 'full-time',
             clientType: p.professionalDetails?.clientType ? p.professionalDetails.clientType.charAt(0).toUpperCase() + p.professionalDetails.clientType.slice(1) : 'Individual',
             websiteUrl: p.professionalDetails?.website || '',
@@ -566,33 +576,30 @@ export class AccountSettingsComponent implements OnInit {
   // GLOBAL SAVE SUBMISSIONS
   saveSettings(): void {
     if (this.activeTab() === 'security') {
+      if (this.securityForm.invalid) {
+        alert('Please fill out all password fields correctly. Passwords must match and be at least 8 characters long.');
+        return;
+      }
+
       const sForm = this.securityForm.getRawValue();
-      if (!sForm.currentPassword || !sForm.newPassword || !sForm.confirmPassword) {
-        alert('Please fill out all password fields.');
-        return;
-      }
-      if (sForm.newPassword !== sForm.confirmPassword) {
-        alert('New passwords do not match.');
-        return;
-      }
 
       const payload = {
         oldPassword: sForm.currentPassword,
         newPassword: sForm.newPassword
       };
 
+      this.isChangingPassword.set(true);
+
       this.authService.changePassword(payload).subscribe({
         next: (res: any) => {
+          this.isChangingPassword.set(false);
           alert('Password updated successfully! Redirecting to login...');
-          this.securityForm.patchValue({
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: ''
-          });
+          this.securityForm.reset();
           this.authService.logout();
           this.router.navigate(['/account/signin']);
         },
         error: (err: any) => {
+          this.isChangingPassword.set(false);
           alert(err.error?.message || 'Failed to update password');
         }
       });
@@ -689,7 +696,6 @@ export class AccountSettingsComponent implements OnInit {
         socialLinks: cleanedSocialLinks,
         languages: cleanedLanguages,
         availability: this.userMode === 'freelancer' ? availability : undefined,
-        hourlyRate: this.userMode === 'freelancer' ? Number(pForm.hourlyRate) : undefined
       };
 
       this.profileService.updateProfile(payload).subscribe({

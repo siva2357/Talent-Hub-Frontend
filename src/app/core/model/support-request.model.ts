@@ -69,6 +69,7 @@ export interface UploadedFileEvent {
 export interface Subcategory {
   label: string;
   value: string;
+  applicableRoles?: ('client' | 'freelancer')[];
 }
 
 export interface SupportCategory {
@@ -77,4 +78,5 @@ export interface SupportCategory {
   icon: string;
   description: string;
   subcategories: Subcategory[];
+  applicableRoles?: ('client' | 'freelancer')[];
 }

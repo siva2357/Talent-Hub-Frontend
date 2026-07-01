@@ -1,7 +1,6 @@
 export interface Contract {
   _id: string;
   contractTitle: string;
-  budgetType: 'Fixed Price' | 'Hourly Rate';
   estimatedBudget: number;
   contractStartDate: string;
   contractEndDate: string;
@@ -19,7 +18,7 @@ export interface Contract {
   updatedAt: string;
   hasSaved:boolean;
   hasApplied:boolean;
-  totalApplicants:number
+  totalApplicants?: number;
 }
 
 

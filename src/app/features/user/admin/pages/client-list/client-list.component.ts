@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit, TemplateRef, ViewChild, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AdminService, ClientData } from '../../../../../core/services/admin.service';
 import { Table } from "../../../../../shared/components/table/table.component";
 import { InputComponent } from "../../../../../shared/components/input/input.component";
@@ -19,6 +20,7 @@ export class ClientListComponent implements OnInit {
   DateTimeHelper = DateTimeHelper;
 
   private adminService = inject(AdminService);
+  private router = inject(Router);
 
   clients = signal<ClientData[]>([]);
   searchTerm = signal<string>('');
@@ -42,13 +44,13 @@ export class ClientListComponent implements OnInit {
 
   ngOnInit(): void {
     this.columns = [
-      { name: 'Client', prop: 'clientName', width: 280, cellTemplate: this.clientTemplate },
+      { name: 'Profile Image', prop: 'profileImage', width: 120, cellTemplate: this.profileImageTemplate, sortable: false },
+      { name: 'Full Name', prop: 'clientName', width: 180 },
       { name: 'Email', prop: 'email', width: 280 },
       { name: 'Phone', prop: 'phoneNumber', width: 180 },
       { name: 'Industry', prop: 'industry', width: 180 },
-      { name: 'Spent', prop: 'spent', width: 120 },
       { name: 'Status', prop: 'status', width: 140, cellTemplate: this.statusTemplate },
-      { name: 'Actions', prop: 'actions', sortable: false, cellTemplate: this.actionTemplate }
+      { name: 'Actions', prop: 'actions', width: 100, sortable: false, cellTemplate: this.actionTemplate }
     ];
     this.loadClients();
   }
@@ -79,15 +81,15 @@ export class ClientListComponent implements OnInit {
   }
 
   viewProfile(client: ClientData): void {
-    this.selectedClient.set(client);
+    this.router.navigate(['/user/profile', client.id]);
   }
 
   closeProfileModal(): void {
     this.selectedClient.set(null);
   }
 
-  @ViewChild('clientTemplate', { static: true })
-  clientTemplate!: TemplateRef<any>;
+  @ViewChild('profileImageTemplate', { static: true })
+  profileImageTemplate!: TemplateRef<any>;
 
   @ViewChild('statusTemplate', { static: true })
   statusTemplate!: TemplateRef<any>;
@@ -108,15 +110,34 @@ export class ClientListComponent implements OnInit {
     { label: 'Deactivated', value: 'Deactivated' }
   ];
 
-  openMenuId = signal<number | string | null>(null);
+  activeActionRow: ClientData | null = null;
+  menuTop: number = 0;
+  menuLeft: number = 0;
 
-  toggleMenu(id: number | string, event: Event): void {
+  toggleActionMenu(event: MouseEvent, row: ClientData): void {
     event.stopPropagation();
-    this.openMenuId.update(current => current === id ? null : id);
+    if (this.activeActionRow && this.activeActionRow.id === row.id) {
+      this.closeActionMenu();
+    } else {
+      this.activeActionRow = row;
+      const target = (event.currentTarget as HTMLElement).closest('.action-trigger') || event.currentTarget as HTMLElement;
+      const rect = target.getBoundingClientRect();
+      this.menuTop = rect.bottom + window.scrollY + 8;
+      this.menuLeft = rect.right + window.scrollX - 220;
+    }
   }
 
-  @HostListener('document:click')
-  onDocumentClick(): void {
-    this.openMenuId.set(null);
+  closeActionMenu(): void {
+    this.activeActionRow = null;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event): void {
+    if (this.activeActionRow) {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.action-menu') && !target.closest('.action-trigger')) {
+        this.closeActionMenu();
+      }
+    }
   }
 }

@@ -28,15 +28,12 @@
             [error]="f['contractTitle'].touched && f['contractTitle'].errors?.['required'] ? 'Contract title is required'  : '' "></app-input>
         </div>
 
-        <div class="col-12 col-md-6">
-          <app-input type="select" label="Budget Type" placeholder="Select Budget Type" icon="bi-cash-stack"
-            formControlName="budgetType" [options]="budgetTypeOptions" [required]="true"> </app-input>
-        </div>
+
 
         <div class="col-12 col-md-6">
           <app-input type="text" label="Estimated Budget (₹)" placeholder="Enter Estimated Budget"
             icon="bi-currency-rupee" formControlName="estimatedBudget" [required]="true"
-            [error]=" f['estimatedBudget'].touched && f['estimatedBudget'].errors?.['required'] ? 'Estimated budget is required' : f['estimatedBudget'].touched && (f['estimatedBudget'].errors?.['min'] || f['estimatedBudget'].errors?.['max']) ? 'Budget must be between ₹25,000 and ₹75,000' : ''"></app-input>
+            [error]=" f['estimatedBudget'].touched && f['estimatedBudget'].errors?.['required'] ? 'Estimated budget is required' : f['estimatedBudget'].touched && (f['estimatedBudget'].errors?.['min'] || f['estimatedBudget'].errors?.['max']) ? 'Budget must be between ₹30,000 and ₹75,000' : ''"></app-input>
         </div>
 
         <div class="col-12 col-md-6">
@@ -62,7 +59,7 @@
             [error]=" f['contractEndDate'].touched && f['contractEndDate'].hasError('required') ? 'End date is required' : f['contractEndDate'].touched && contractForm.hasError('dateRangeInvalid') ? contractForm.getError('dateRangeInvalid') : ''"></app-input>
         </div>
 
-        <div class="col-12">
+        <div class="col-12 col-md-6">
           <app-input type="select" label="Contract Status" placeholder="Select Contract Status"
             icon="bi-check-circle-fill" formControlName="status" [options]="statusOptions" [required]="true">
           </app-input>

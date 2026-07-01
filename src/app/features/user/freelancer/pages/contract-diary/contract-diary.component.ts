@@ -11,6 +11,7 @@ import { Attachment, Diary, Phase, Revision } from '../../../../../core/model/co
 import { ActivatedRoute } from '@angular/router';
 import { RichTextEditorComponent } from '../../../../../shared/components/rich-text-editor/rich-text-editor.component';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { SubmitPhaseWorkDto } from '../../../../../core/DTOs/contract-diary.dto';
 import { Subject, of } from 'rxjs';
 import { catchError, map, startWith, switchMap, tap } from 'rxjs/operators';
 
@@ -174,10 +175,12 @@ export class ContractDiaryComponent implements OnInit {
 
     this.submitting.update(s => ({ ...s, [phaseId]: true }));
 
-    this.diaryService.submitPhaseUpdate(diaryId, phaseId, {
+    const payload: SubmitPhaseWorkDto = {
       freelancerNote: note,
       attachments: files
-    }).subscribe({
+    };
+
+    this.diaryService.submitPhaseUpdate(diaryId, phaseId, payload).subscribe({
       next: () => {
         this.submitPhaseForm.reset({ freelancerNote: '' });
         this.uploadedFiles.update(f => ({ ...f, [phaseId]: [] }));

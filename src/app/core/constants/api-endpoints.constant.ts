@@ -112,7 +112,6 @@ CONTRACT_DIARY: {
     SEND_OFFER: (id: string) => `/applications/${id}/send-offer`,
     SIGN_OFFER: (id: string) => `/applications/${id}/sign-offer`,
     DECLINE_OFFER: (id: string) => `/applications/${id}/decline-offer`,
-    MY_OFFERS: '/applications/my-offers',
     ITEM: (id: string) => `/applications/${id}`,
     CONTRACT_PDF: (id: string, token: string) => `/applications/${id}/contract-pdf?token=${token}`,
   },

@@ -1,6 +1,6 @@
 .dashboard-container {
-    padding: 2rem;
-    min-width: 1200px;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
 /* Glassmorphism Base */
@@ -62,13 +62,27 @@
 }
 
 /* Glowing Accents */
-.border-accent-blue { border: 1px solid rgba(42, 128, 255, 0.15); }
-.border-accent-green { border: 1px solid rgba(16, 185, 129, 0.15); }
-.border-accent-purple { border: 1px solid rgba(168, 85, 247, 0.15); }
-.border-accent-gold { border: 1px solid rgba(245, 158, 11, 0.15); }
+.border-accent-blue {
+    border: 1px solid rgba(42, 128, 255, 0.15);
+}
+
+.border-accent-green {
+    border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+.border-accent-purple {
+    border: 1px solid rgba(168, 85, 247, 0.15);
+}
+
+.border-accent-gold {
+    border: 1px solid rgba(245, 158, 11, 0.15);
+}
 
 /* Glow Effects */
-.card-glow-blue, .card-glow-green, .card-glow-purple, .card-glow-gold {
+.card-glow-blue,
+.card-glow-green,
+.card-glow-purple,
+.card-glow-gold {
     position: absolute;
     top: -50px;
     right: -50px;
@@ -81,17 +95,28 @@
     transition: opacity 0.4s ease;
 }
 
-.stat-card:hover .card-glow-blue, 
-.stat-card:hover .card-glow-green, 
-.stat-card:hover .card-glow-purple, 
+.stat-card:hover .card-glow-blue,
+.stat-card:hover .card-glow-green,
+.stat-card:hover .card-glow-purple,
 .stat-card:hover .card-glow-gold {
     opacity: 0.25;
 }
 
-.card-glow-blue { background: #2a80ff; }
-.card-glow-green { background: #10b981; }
-.card-glow-purple { background: #a855f7; }
-.card-glow-gold { background: #f59e0b; }
+.card-glow-blue {
+    background: #2a80ff;
+}
+
+.card-glow-green {
+    background: #10b981;
+}
+
+.card-glow-purple {
+    background: #a855f7;
+}
+
+.card-glow-gold {
+    background: #f59e0b;
+}
 
 .stat-icon {
     width: 48px;
@@ -102,10 +127,10 @@
 }
 
 /* User Requested Unified Blue Theme */
-.icon-box-blue { 
-    background-color: rgba(42, 128, 255, 0.1) !important; 
+.icon-box-blue {
+    background-color: rgba(42, 128, 255, 0.1) !important;
     border: 1px solid rgba(42, 128, 255, 0.3) !important;
-    color: #2A80FF !important; 
+    color: #2A80FF !important;
 }
 
 /* User Requested Unified Info Badge */
@@ -119,14 +144,32 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.stat-card:nth-child(1) { animation-delay: 0.1s; }
-.stat-card:nth-child(2) { animation-delay: 0.2s; }
-.stat-card:nth-child(3) { animation-delay: 0.3s; }
-.stat-card:nth-child(4) { animation-delay: 0.4s; }
+.stat-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.stat-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.stat-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.stat-card:nth-child(4) {
+    animation-delay: 0.4s;
+}
 
 
 /* Timeline */
@@ -174,10 +217,21 @@
 }
 
 /* Typography & Helpers */
-.fw-black { font-weight: 900; }
-.ls-2 { letter-spacing: 2px; }
-.ls-n2 { letter-spacing: -2px; }
-.ls-n1 { letter-spacing: -1px; }
+.fw-black {
+    font-weight: 900;
+}
+
+.ls-2 {
+    letter-spacing: 2px;
+}
+
+.ls-n2 {
+    letter-spacing: -2px;
+}
+
+.ls-n1 {
+    letter-spacing: -1px;
+}
 
 .shadow-primary {
     box-shadow: 0 10px 25px rgba(42, 128, 255, 0.4) !important;

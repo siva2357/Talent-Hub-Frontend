@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit, TemplateRef, ViewChild, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -31,8 +31,6 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
   private blogService = inject(BlogService);
   private toastr = inject(ToastrService);
 
-  @ViewChild('actionTemplate', { static: true })
-  actionTemplate!: TemplateRef<any>;
 
   bucketKey = BucketKey.AdminCollection;
   uploadSection = UploadSection.BlogMedia;
@@ -57,6 +55,10 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
     { label: 'Draft', value: 'Draft' }
   ];
 
+  menuTop = 0;
+  menuLeft = 0;
+  activeActionRow: any = null;
+
   getError(controlName: string): string | null {
     const control = this.form.get(controlName);
     if (!control || !control.touched || !control.errors) {
@@ -72,13 +74,37 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
   }
 
 
+  @ViewChild('indexTemplate', { static: true })
+  indexTemplate!: TemplateRef<any>;
+
+  @ViewChild('statusTemplate', { static: true })
+  statusTemplate!: TemplateRef<any>;
+
+  @ViewChild('dateTemplate', { static: true })
+  dateTemplate!: TemplateRef<any>;
+
+  @ViewChild('mediaTemplate', { static: true })
+  mediaTemplate!: TemplateRef<any>;
+
+  @ViewChild('actionTemplate', { static: true })
+  actionTemplate!: TemplateRef<any>;
+
   ngOnInit(): void {
     this.initializeForm();
     this.columns = [
       {
         name: 'S.No',
         prop: 'index',
-        width: 80
+        width: 80,
+        sortable: false,
+        cellTemplate: this.indexTemplate
+      },
+      {
+        name: 'Media',
+        prop: 'media',
+        width: 100,
+        sortable: false,
+        cellTemplate: this.mediaTemplate
       },
       {
         name: 'Title',
@@ -93,13 +119,22 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
       {
         name: 'Status',
         prop: 'status',
-        width: 150
+        width: 150,
+        cellTemplate: this.statusTemplate
       },
       {
         name: 'Created',
         prop: 'createdAt',
-        width: 220
+        width: 220,
+        cellTemplate: this.dateTemplate
       },
+      {
+        name: 'Actions',
+        prop: 'actions',
+        width: 100,
+        sortable: false,
+        cellTemplate: this.actionTemplate
+      }
     ];
     this.loadPosts();
   }
@@ -129,7 +164,9 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
           title: post.title,
           category: post.category,
           status: post.status,
+          description: post.description,
           createdAt: post.createdAt,
+          updatedAt: post.updatedAt,
           post
         })));
         this.loadingPosts.set(false);
@@ -250,9 +287,32 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
     });
   }
 
-  toggleMenu(id: string, event: Event): void {
+  toggleActionMenu(event: MouseEvent, row: any) {
     event.stopPropagation();
-    this.openMenuId.set(this.openMenuId() === id ? null : id);
+    if (this.openMenuId() === row.id) {
+      this.closeActionMenu();
+      return;
+    }
+
+    this.activeActionRow = row;
+    this.openMenuId.set(row.id);
+
+    const button = (event.target as HTMLElement).closest('button');
+    if (button) {
+      const rect = button.getBoundingClientRect();
+      this.menuTop = rect.bottom + window.scrollY + 8;
+      this.menuLeft = rect.right + window.scrollX - 200;
+    }
+  }
+
+  closeActionMenu() {
+    this.openMenuId.set(null);
+    this.activeActionRow = null;
+  }
+
+  @HostListener('document:click')
+  onDocumentClick() {
+    this.closeActionMenu();
   }
 
   resetForm(): void {

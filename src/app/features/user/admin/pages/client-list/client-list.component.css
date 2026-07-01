@@ -117,78 +117,80 @@ app-table {
 }
 
 
-.action-menu {
+.action-dropdown {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  width: fit-content;
+  /* Centered in the column automatically since datatable-body-cell is flex centered */
 }
 
-.action-btn {
+.action-trigger {
   width: 38px;
   height: 38px;
-
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.03);
+  color: white;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-
-  background: rgba(255, 255, 255, 0.05);
-
-  color: #fff;
-  font-size: 18px;
-
-  cursor: pointer;
-  transition: all 0.2s ease;
+  transition: .25s ease;
 }
 
-.action-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+.action-trigger:hover {
+  background: rgba(255,255,255,.06);
 }
 
-.action-dropdown {
+.action-menu {
   position: absolute;
-
-  top: 0;
-left: calc(100% + 12px);
-
-  min-width: 150px;
-
+  /* Top and left are calculated dynamically via TS, so we just set defaults */
+  width: 220px;
+  z-index: 9999;
+  border-radius: 14px;
   background: #0f172a;
   border: 1px solid rgba(255,255,255,.08);
-  border-radius: 12px;
-
-  padding: 8px;
-
-  z-index: 99999;
-
-  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  box-shadow:
+    0 10px 25px rgba(0,0,0,.35),
+    0 0 0 1px rgba(255,255,255,.03);
+  padding: 8px 0;
 }
 
-.action-dropdown button {
-  width: 100%;
-
+.action-item {
+  min-height: 46px;
   display: flex;
   align-items: center;
-  gap: 10px;
-
-  padding: 10px 14px;
-
-  border: none;
-  border-radius: 8px;
-
-  background: transparent;
-  color: #fff;
-
+  gap: 12px;
+  padding: 0 16px;
   cursor: pointer;
-  transition: all .2s ease;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  transition: .2s ease;
 }
 
-.action-dropdown button:hover {
-  background: rgba(255,255,255,.08);
+.action-item span {
+  font-size: 14px;
+  line-height: 1;
 }
+
+.action-item:hover {
+  background: rgba(255,255,255,.05);
+}
+
+.action-item i {
+  color: var(--brand-400);
+}
+
+.action-item.text-success i { color: #198754 !important; }
+.action-item.text-danger i { color: #dc3545 !important; }
+.action-item.text-warning i { color: #ffc107 !important; }
+
+.action-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 4px 0;
+}
+
+
 
 
 
@@ -270,4 +272,31 @@ left: calc(100% + 12px);
   color: #fff;
   font-size: .9rem;
   font-weight: 600;
+}
+
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table-responsive-wrapper::-webkit-scrollbar {
+    height: 6px;
+}
+
+.table-responsive-wrapper::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 4px;
+}
+
+.table-responsive-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+.table-responsive-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.table-min-width {
+    min-width: 1180px;
 }

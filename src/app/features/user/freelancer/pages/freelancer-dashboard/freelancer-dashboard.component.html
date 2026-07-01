@@ -8,7 +8,8 @@
                 <span class="text-primary text-uppercase fw-bold ls-2 mb-3 d-block" style="font-size: 12px;">Freelancer
                     Workspace</span>
                 <h1 class="text-white fw-black display-5 mb-2 ls-n2">{{ greeting() }}, {{ freelancerName() }}!</h1>
-                <p class="text-secondary lead mb-4 opacity-75">You have {{ activeContractsCount() }} active contracts. Ready to take on more?</p>
+                <p class="text-secondary lead mb-4 opacity-75">You have {{ activeContractsCount() }} active contracts.
+                    Ready to take on more?</p>
                 <div class="d-flex flex-wrap gap-3">
                     <app-button variant="brand" customClass="px-4 py-2.5 rounded-pill shadow-primary"
                         routerLink="/user/find-contracts">
@@ -47,7 +48,8 @@
                     </div>
                 </div>
                 <div class="stat-content">
-                    <h6 class="text-secondary text-uppercase fw-bold mb-2 ls-1" style="font-size: 11px;">{{ stat.label }}</h6>
+                    <h6 class="text-secondary text-uppercase fw-bold mb-2 ls-1" style="font-size: 11px;">{{ stat.label
+                        }}</h6>
                     <h3 class="text-white fw-bold mb-0" style="font-size: 1.75rem;">{{ stat.value }}</h3>
                 </div>
                 <div [class]="'card-glow-' + stat.color"></div>
@@ -136,20 +138,7 @@
                 </div>
             </div>
 
-            <!-- Promotion / Tip Card -->
-            <div
-                class="tip-card p-5 rounded-5 bg-gradient-primary border border-primary border-opacity-30 position-relative overflow-hidden">
-                <div class="position-relative z-1">
-                    <h4 class="text-white fw-bold mb-3">Professional Tip</h4>
-                    <p class="text-white opacity-75 mb-4">Keeping your 'Hourly Work Diary' updated daily increases
-                        client trust and ensures faster payment processing.</p>
-                    <app-button variant="white" customClass="rounded-pill fw-bold"
-                        routerLink="/user/hourly-work-diary">Update Diary</app-button>
-                </div>
-                <div class="tip-decoration">
-                    <i class="bi bi-lightbulb"></i>
-                </div>
-            </div>
+
         </div>
     </div>
 </div>

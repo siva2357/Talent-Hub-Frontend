@@ -12,25 +12,12 @@
     <div class="glass-dark p-2  mb-4 position-relative" style="z-index: 10;">
       <div class="row g-3 align-items-center">
         <!-- Search -->
-        <div class="col-12 col-md-3">
+        <div class="col-12 col-md-5">
           <app-input type="text" mode="filter" icon="bi bi-search" placeholder="Search contracts..."
             [(ngModel)]="pendingSearchQuery">
           </app-input>
         </div>
 
-        <!-- Status Dropdown -->
-        <div class="col-12 col-md-2">
-          <app-input type="select" mode="filter" [options]="statusOptions" placeholder="Status"
-            [(ngModel)]="pendingStatusFilter">
-          </app-input>
-        </div>
-
-        <!-- Budget Type Dropdown -->
-        <div class="col-12 col-md-2">
-          <app-input type="select" mode="filter" [options]="budgetTypeOptions" placeholder="Budget Type"
-            [(ngModel)]="pendingBudgetTypeFilter">
-          </app-input>
-        </div>
 
         <!-- Contract Type Dropdown -->
         <div class="col-12 col-md-2">
@@ -39,6 +26,16 @@
           </app-input>
         </div>
 
+
+        <!-- Status Dropdown -->
+        <div class="col-12 col-md-2">
+          <app-input type="select" mode="filter" [options]="statusOptions" placeholder="Status"
+            [(ngModel)]="pendingStatusFilter">
+          </app-input>
+        </div>
+
+
+
         <div class="col-12 col-md-3  d-flex align-items-center gap-2   justify-content-start justify-content-lg-end">
           <app-button variant="primary" size="md" customClass="w-100" (click)="applyFiltersBtn()">Apply</app-button>
           <app-button variant="outline" size="md" customClass="w-100" (click)="resetFilters()">Reset</app-button>
@@ -46,7 +43,7 @@
       </div>
 
       <!-- Active Filter Chips -->
-      @if (searchQuery() || statusFilter() || budgetTypeFilter() || contractTypeFilter()) {
+      @if (searchQuery() || statusFilter() || contractTypeFilter()) {
       <div class="d-flex align-items-center flex-wrap gap-2 mt-3 pt-3 border-top border-white border-opacity-5">
         <span class="text-secondary small fw-bold text-uppercase me-2"
           style="font-size: 11px; letter-spacing: 0.5px;">Active Filters:</span>
@@ -63,11 +60,7 @@
         </app-chip>
         }
 
-        @if (budgetTypeFilter()) {
-        <app-chip [label]="'Budget: ' + budgetTypeFilter()" variant="primary" [removable]="true"
-          (remove)="removeBudgetTypeChip()">
-        </app-chip>
-        }
+
 
         @if (contractTypeFilter()) {
         <app-chip [label]="'Type: ' + contractTypeFilter()" variant="primary" [removable]="true"
@@ -89,7 +82,7 @@
     <div class="col-12">
 
       @if (loading() && contracts().length === 0) {
-      <div class="glass-dark rounded-0 p-0 p-md-3 border border-primary border-opacity-5 d-none d-lg-block">
+      <div class="glass-dark  p-0 p-md-3  d-none d-lg-block">
         <div class="table-responsive-wrapper">
           <div class="table-min-width">
             <app-table [rows]="[]" [columns]="contractColumns" [loading]="true"></app-table>
@@ -157,14 +150,14 @@
       <!-- Card View (Small and Medium Screens) -->
       <div class="d-block d-lg-none mt-3">
         <div class="row g-3">
-          @for(contract of filteredContracts().slice(0, displayCount()); track contract._id) {
+          @for(contract of filteredContracts().slice(0, displayCount()); track contract._id; let idx = $index) {
           <div class="col-12 col-md-6">
             @defer (on viewport) {
             <div
               class="glass-dark border border-white border-opacity-5 rounded-4 p-3 p-md-4 h-100 position-relative d-flex flex-column">
               <div class="d-flex justify-content-between align-items-start mb-4">
                 <div class="text-truncate" title="{{ contract.contractTitle }}">
-                  <span class="text-white fw-bold" style="font-size: 14px;">Contract Title : </span><span
+                  <span class="text-white fw-bold" style="font-size: 14px;">{{ idx + 1 }}. Contract Title : </span><span
                     class="text-secondary fw-normal ms-1" style="font-size: 13px;">{{ contract.contractTitle }}</span>
                 </div>
                 <button class="action-trigger" (click)="toggleActionMenu($event, contract)">
@@ -190,14 +183,7 @@
                         contract.contractSubject }}</span>
                     </div>
                   </div>
-                  <div class="col-6">
-                    <div class="d-flex flex-column">
-                      <span class="text-white fw-bold mb-1" style="font-size: 14px;"><i
-                          class="bi bi-cash-stack me-1"></i> Budget Type</span>
-                      <span class="text-secondary text-capitalize fw-normal" style="font-size: 13px;">{{
-                        contract.budgetType }}</span>
-                    </div>
-                  </div>
+
                   <div class="col-6">
                     <div class="d-flex flex-column">
                       <span class="text-white fw-bold mb-1" style="font-size: 14px;"><i
@@ -245,6 +231,10 @@
 </div>
 
 
+
+<ng-template #snoTemplate let-rowIndex="rowIndex">
+  <span class="fw-medium text-white">{{ rowIndex + 1 }}</span>
+</ng-template>
 
 <ng-template #titleTemplate let-row>
   <div class="fw-semibold text-white text-truncate" style="max-width: 250px;" title="{{ row.contractTitle }}">

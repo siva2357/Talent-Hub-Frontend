@@ -20,7 +20,7 @@
         <div class="glass-dark p-2 mb-4 position-relative" style="z-index: 10;">
             <div class="row g-3 align-items-center">
                 <!-- Search -->
-                <div class="col-12 col-lg-2">
+                <div class="col-12 col-lg-4">
                     <app-input mode="filter" type="text" placeholder="Search applicants..."
                         [(ngModel)]="pendingSearchQuery">
                     </app-input>
@@ -33,12 +33,7 @@
                     </app-input>
                 </div>
 
-                <!-- Budget -->
-                <div class="col-12 col-md-3 col-lg-2">
-                    <app-input mode="filter" type="select" placeholder="Budget Type"
-                        [(ngModel)]="pendingSelectedBudgetType" [options]="budgetTypeOptions">
-                    </app-input>
-                </div>
+
 
                 <!-- Gender -->
                 <div class="col-12 col-md-3 col-lg-2">
@@ -110,25 +105,39 @@
             <div class="row g-4 d-flex d-lg-none mt-2">
                 @if (filteredProposals().length > 0) {
                 @for (proposal of filteredProposals(); track proposal.applicationId) {
-                <div class="col-12">
-                    <div class="glass-dark rounded-4 p-3 p-md-4">
-                        <ng-container *ngTemplateOutlet="freelancerTemplate; context: { row: proposal }"></ng-container>
+                <div class="col-12 col-md-6">
+                    <div
+                        class="glass rounded-4 d-flex flex-column h-100 overflow-hidden border border-secondary border-opacity-25">
+                        <div class="p-3 p-md-4 flex-grow-1">
+                            <ng-container
+                                *ngTemplateOutlet="freelancerTemplate; context: { row: proposal }"></ng-container>
 
-                        <p class="text-secondary small my-3">{{ proposal.freelancer.shortBio | slice:0:150 }}...</p>
+                            <p class="text-secondary small my-3">{{ proposal.freelancer.professionalHeadline |
+                                slice:0:150 }}...</p>
 
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            <ng-container *ngTemplateOutlet="rateTemplate; context: { row: proposal }"></ng-container>
-                            <span class="badge bg-dark border border-secondary px-3 py-2 text-capitalize">
-                                <i class="bi bi-clock-history me-1 text-warning"></i> {{
-                                proposal.freelancer.availability?.[0] }}
-                            </span>
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                <span class="text-capitalize text-secondary small">
+                                    <i class="bi bi-clock-history me-1 text-warning"></i> {{
+                                    proposal.freelancer.availability?.[0] }}
+                                </span>
+                                <span class="text-capitalize text-secondary small">
+                                    <i class="bi bi-geo-alt me-1 text-info"></i> {{ proposal.freelancer.city }}, {{
+                                    proposal.freelancer.country }}
+                                </span>
+                                <span class="text-capitalize text-secondary small">
+                                    <i class="bi bi-gender-ambiguous me-1 text-success"></i> {{
+                                    proposal.freelancer.gender }}
+                                </span>
+                            </div>
                         </div>
 
-                        <div class="mb-3">
+                        <!-- Card Footer -->
+                        <div
+                            class="p-3 px-md-4 py-md-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center bg-black bg-opacity-25">
                             <ng-container *ngTemplateOutlet="statusTemplate; context: { row: proposal }"></ng-container>
+                            <ng-container
+                                *ngTemplateOutlet="mobileActionTemplate; context: { row: proposal }"></ng-container>
                         </div>
-
-                        <ng-container *ngTemplateOutlet="actionTemplate; context: { row: proposal }"></ng-container>
                     </div>
                 </div>
                 }
@@ -174,19 +183,26 @@
         </div>
     </ng-template>
 
-    <ng-template #rateTemplate let-row="row">
-        <span class="fw-bold text-nowrap">₹{{ row.freelancer.hourlyRate }}/hr</span>
-    </ng-template>
-
-    <ng-template #completedJobsTemplate let-row="row">
-        <span class="fw-bold">{{ row.freelancer.completedContractsCount || 0 }}</span>
-    </ng-template>
 
     <ng-template #statusTemplate let-row="row">
         <app-badge [variant]="getStatusBadgeVariant(row.applicationStatus)"
             customClass="w-auto d-inline-flex align-items-center">
             <i class="bi me-1" [ngClass]="getStatusIcon(row.applicationStatus)"></i> {{
             getStatusLabel(row.applicationStatus) }}
+        </app-badge>
+    </ng-template>
+
+    <ng-template #tableStatusTemplate let-row="row">
+        <app-badge [variant]="getStatusBadgeVariant(row.applicationStatus)"
+            customClass="w-auto d-inline-flex align-items-center">
+            {{ getStatusLabel(row.applicationStatus) }}
+        </app-badge>
+    </ng-template>
+
+    <ng-template #offerStatusTemplate let-row="row">
+        <app-badge [variant]="getOfferStatusBadgeVariant(row.offerStatus)"
+            customClass="w-auto d-inline-flex align-items-center">
+            {{ getOfferStatusLabel(row.offerStatus) }}
         </app-badge>
     </ng-template>
 
@@ -215,26 +231,16 @@
         </div>
         }
 
-        @if(activeActionRow().applicationStatus === 'shortlisted') {
+        @if(activeActionRow().applicationStatus === 'shortlisted' || activeActionRow().applicationStatus === 'hired' || activeActionRow().applicationStatus === 'rejected') {
         @if(activeActionRow().offerStatus === 'none') {
-        <div class="action-item text-success" (click)="sendOffer(activeActionRow()); closeActionMenu()">
+        <div class="action-item text-success" [routerLink]="['/user/legal-form', contractId()]" [queryParams]="{appId: activeActionRow().applicationId}" (click)="closeActionMenu()">
             <i class="bi bi-send-fill"></i>
             <span>Send Offer</span>
         </div>
-        } @else if(activeActionRow().offerStatus === 'sent') {
+        } @else if(activeActionRow().offerStatus !== 'none') {
         <div class="action-item text-warning" style="pointer-events: none; opacity: 0.7;">
             <i class="bi bi-clock-history"></i>
             <span>Offer Sent</span>
-        </div>
-        } @else if(activeActionRow().offerStatus === 'accepted') {
-        <div class="action-item text-success" style="pointer-events: none; opacity: 0.7;">
-            <i class="bi bi-check-circle-fill"></i>
-            <span>Offer Accepted</span>
-        </div>
-        } @else if(activeActionRow().offerStatus === 'declined') {
-        <div class="action-item text-danger" style="pointer-events: none; opacity: 0.7;">
-            <i class="bi bi-x-circle-fill"></i>
-            <span>Offer Declined</span>
         </div>
         }
         }
@@ -259,7 +265,7 @@
     <div class="modal fade" id="recruitmentModal" tabindex="-1" [class.show]="showRecruitmentModal()"
         [style.display]="showRecruitmentModal() ? 'block' : 'none'" [attr.aria-hidden]="!showRecruitmentModal()"
         style="z-index: 10500;" (mousedown)="closeModalIfTarget($event)">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content glass border border-white border-opacity-10 rounded-4 overflow-hidden"
                 style="background: #0f172a; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
                 <!-- Header -->
@@ -343,5 +349,78 @@
         </div>
     </div>
 
+    <ng-template #snoTemplate let-rowIndex="rowIndex">
+        <span class="text-secondary fw-medium">{{ rowIndex + 1 }}</span>
+    </ng-template>
+
+    <ng-template #emailTemplate let-row="row">
+        <a [href]="'mailto:' + row.freelancer.email" class="text-secondary text-decoration-none"
+            style="font-size: 14px; white-space: nowrap;">
+            {{ row.freelancer.email || 'N/A' }}
+        </a>
+    </ng-template>
+
+    <ng-template #genderTemplate let-row="row">
+        <span class="text-capitalize text-white" style="font-size: 14px; white-space: nowrap;">
+            {{ row.freelancer.gender || 'N/A' }}
+        </span>
+    </ng-template>
+
+    <ng-template #availabilityTemplate let-row="row">
+        <span class="text-capitalize text-secondary" style="font-size: 14px; white-space: nowrap;">
+            {{ row.freelancer.availability?.[0] || 'N/A' }}
+        </span>
+    </ng-template>
+
+    <ng-template #profileImageTemplate let-row="row">
+        <img [src]="row.freelancer.profilePhoto || 'assets/default-avatar.png'" class="rounded-circle" width="40"
+            height="40" style="object-fit:cover; border: 1px solid rgba(255,255,255,0.1);" />
+    </ng-template>
+
+    <ng-template #fullNameTemplate let-row="row">
+        <h6 class="text-white mb-0 text-truncate fw-semibold">{{ row.freelancer.fullName }}</h6>
+    </ng-template>
+
+    <ng-template #headlineTemplate let-row="row">
+        <span class="text-secondary small">{{ row.freelancer.professionalHeadline | slice:0:50 }}{{
+            row.freelancer.professionalHeadline.length > 50 ? '...' : '' }}</span>
+    </ng-template>
+
+    <ng-template #locationTemplate let-row="row">
+        <span class="text-white" style="font-size: 14px; white-space: nowrap;">
+            {{ row.freelancer.city }}, {{ row.freelancer.country }}
+            <span class="text-secondary ms-1">({{ row.freelancer.timezone }})</span>
+        </span>
+    </ng-template>
+
+    <!-- Mobile Action Buttons -->
+    <ng-template #mobileActionTemplate let-row="row">
+        <div class="d-flex gap-2 align-items-center justify-content-end flex-wrap">
+            <app-button variant="outline" size="sm" (click)="viewProfile(row.freelancer._id)">
+                Profile
+            </app-button>
+
+            @if(row.applicationStatus !== 'shortlisted' && row.applicationStatus !== 'rejected') {
+            <app-button variant="primary" size="sm" (click)="openRecruitmentModal(row)">
+                Recruit
+            </app-button>
+            }
+
+            @if(row.applicationStatus === 'shortlisted' || row.applicationStatus === 'hired' || row.applicationStatus === 'rejected') {
+            @if(row.offerStatus === 'none') {
+            <app-button variant="success" size="sm" [routerLink]="['/user/legal-form', contractId()]" [queryParams]="{appId: row.applicationId}">
+                Send Offer
+            </app-button>
+            } @else if(row.offerStatus !== 'none') {
+            <app-badge variant="warning"><i class="bi bi-clock-history me-1 text-dark"></i><span
+                    class="text-dark">Offer Sent</span></app-badge>
+            }
+            }
+
+            @if(row.applicationStatus === 'rejected') {
+            <app-badge variant="danger"><i class="bi bi-person-x-fill me-1"></i>Rejected</app-badge>
+            }
+        </div>
+    </ng-template>
 
 </div>

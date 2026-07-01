@@ -7,15 +7,8 @@
 .contract-card {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   background: rgba(255, 255, 255, 0.02) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid var(--brand-500) !important;
   backdrop-filter: blur(10px);
-}
-
-.contract-card:hover {
-  transform: translateY(-8px);
-  background: rgba(255, 255, 255, 0.04) !important;
-  border-color: var(--brand-500) !important;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
 }
 
 .badge-type {
@@ -194,5 +187,83 @@ label {
 
 .shadow-glow-success {
   box-shadow: 0 8px 20px rgba(25, 135, 84, 0.3);
+}
+
+/* Horizontal Stepper Timeline */
+.stepper-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stepper-wrapper .step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+.stepper-wrapper .step.active,
+.stepper-wrapper .step.completed {
+  opacity: 1;
+}
+
+.stepper-wrapper .step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 2px solid #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.stepper-wrapper .step.active .step-circle {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+.stepper-wrapper .step.completed .step-circle {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+.stepper-wrapper .step-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.stepper-wrapper .step.active .step-label,
+.stepper-wrapper .step.completed .step-label {
+  color: #f1f5f9;
+}
+
+.stepper-wrapper .step-line {
+  flex-grow: 1;
+  height: 2px;
+  background: #334155;
+  margin: 0 -5px;
+  margin-bottom: 22px; /* align with circle */
+  transition: all 0.3s ease;
+}
+
+.stepper-wrapper .step-line.active {
+  background: #3b82f6;
+  box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
 }
 

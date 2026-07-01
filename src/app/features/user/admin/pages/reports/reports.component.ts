@@ -204,16 +204,16 @@ export class AdminReportsComponent implements OnInit {
       csvContent += `Total Freelancers Registered,${this.totalFreelancers() || this.freelancers().length}\n\n`;
 
       csvContent += 'CLIENT REGISTRY\n';
-      csvContent += 'Client ID,Company Name,Contact Name,Email,Phone Number,Spent,Projects Count,Status,Joined Date,Industry\n';
+      csvContent += 'Client ID,Company Name,Contact Name,Email,Phone Number,Projects Count,Status,Joined Date,Industry\n';
       this.clients().forEach(c => {
-        csvContent += `"${c.id}","${c.name}","${c.clientName}","${c.email}","${c.phoneNumber}",${c.spent},${c.projectsCount},"${c.status}","${c.joinedDate}","${c.industry}"\n`;
+        csvContent += `"${c.id}","${c.name}","${c.clientName}","${c.email}","${c.phoneNumber}",${c.projectsCount},"${c.status}","${c.joinedDate}","${c.industry}"\n`;
       });
       csvContent += '\n';
 
       csvContent += 'FREELANCER REGISTRY\n';
-      csvContent += 'Freelancer ID,Name,Title,Email,Phone Number,Hourly Rate,Completed Projects,Earnings,Status,Joined Date,Rating\n';
+      csvContent += 'Freelancer ID,Name,Title,Email,Phone Number,Completed Projects,Status,Joined Date\n';
       this.freelancers().forEach(f => {
-        csvContent += `"${f.id}","${f.name}","${f.title}","${f.email}","${f.phoneNumber}",${f.hourlyRate},${f.completedProjects},${f.earnings},"${f.status}","${f.joinedDate}",${f.rating}\n`;
+        csvContent += `"${f.id}","${f.name}","${f.title}","${f.email}","${f.phoneNumber}",${f.completedProjects},"${f.status}","${f.joinedDate}"\n`;
       });
     } else {
       csvContent += 'PLATFORM HEALTH METRICS\n';

@@ -102,7 +102,7 @@
 
               <!-- GRID OF CATEGORY CARDS -->
               <div class="row g-4">
-                @for (cat of categories; track cat.id) {
+                @for (cat of filteredCategories(); track cat.id) {
                 <div class="col-12 col-sm-6 col-md-4">
                   <div class="category-card border-glass text-start cursor-pointer h-100"
                        [class.active]="supportForm.get('categoryId')?.value === cat.id"
@@ -124,8 +124,8 @@
             </section>
 
             <!-- STEP 2: DYNAMIC SUBCATEGORY SELECTOR (CONDITIONAL) -->
-            @if (supportForm.get('categoryId')?.value) {
-            <section class="wizard-step animate-fade-in pt-3 border-top-glass">
+            @if (activeCategoryId()) {
+            <section class="wizard-step animate-fade-in pt-3 border-top-glass position-relative" style="z-index: 10;">
               <div class="section-title-box d-flex align-items-center gap-2 mb-3.5">
                 <div class="section-icon-bullet d-flex align-items-center justify-content-center text-xs">2</div>
                 <h2 class="text-lg fw-bold text-white mb-0">Specify the Nature of Your Dispute</h2>
@@ -185,20 +185,14 @@
 </app-file-upload>
 
   @if (uploadedAttachments().length > 0) {
-    <div class="mt-4">
-      <div
-        class="border-glass rounded-3 p-3 mb-2"
-        *ngFor="let file of uploadedAttachments()">
-
-        <div class="d-flex justify-content-between align-items-center">
-          <span class="text-white text-sm">
-            {{ file.name }}
-          </span>
-
-          <i class="bi bi-check-circle-fill text-success"></i>
-        </div>
-
-      </div>
+    <div class="mt-4 attachments-grid d-flex flex-wrap gap-2">
+      @for (file of uploadedAttachments(); track file.url) {
+        <app-file-preview
+          [url]="file.url"
+          [fileName]="file.name"
+          [disabled]="true">
+        </app-file-preview>
+      }
     </div>
   }
 </section>

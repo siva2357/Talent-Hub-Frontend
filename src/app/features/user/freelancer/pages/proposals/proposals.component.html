@@ -1,6 +1,6 @@
 <div class="proposals-page pb-5">
   <div class="container py-4">
-    
+
     <!-- Header Section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
@@ -11,55 +11,45 @@
 
     <!-- Tabs -->
     <div class="d-flex gap-4 border-bottom border-secondary border-opacity-25 mb-5">
-      <div 
-        class="pb-3 px-2 transition-all fw-bold d-flex align-items-center gap-2" 
-        style="cursor: pointer;"
-        [class.text-primary]="activeTab() === 'proposals'"
-        [class.border-bottom]="activeTab() === 'proposals'"
-        [class.border-primary]="activeTab() === 'proposals'"
-        [class.border-3]="activeTab() === 'proposals'"
-        [class.text-secondary]="activeTab() !== 'proposals'"
-        (click)="switchTab('proposals')">
+      <div class="pb-3 px-2 transition-all fw-bold d-flex align-items-center gap-2" style="cursor: pointer;"
+        [class.text-primary]="activeTab() === 'proposals'" [class.border-bottom]="activeTab() === 'proposals'"
+        [class.border-primary]="activeTab() === 'proposals'" [class.border-3]="activeTab() === 'proposals'"
+        [class.text-secondary]="activeTab() !== 'proposals'" (click)="switchTab('proposals')">
         <i class="bi bi-file-earmark-text"></i> Proposals
-        <span class="badge rounded-pill" [ngClass]="activeTab() === 'proposals' ? 'bg-primary' : 'bg-secondary'">{{allProposals().length}}</span>
+        <span class="badge rounded-pill"
+          [ngClass]="activeTab() === 'proposals' ? 'bg-primary' : 'bg-secondary'">{{allProposals().length}}</span>
       </div>
-      <div 
-        class="pb-3 px-2 transition-all fw-bold d-flex align-items-center gap-2" 
-        style="cursor: pointer;"
-        [class.text-primary]="activeTab() === 'offers'"
-        [class.border-bottom]="activeTab() === 'offers'"
-        [class.border-primary]="activeTab() === 'offers'"
-        [class.border-3]="activeTab() === 'offers'"
-        [class.text-secondary]="activeTab() !== 'offers'"
-        (click)="switchTab('offers')">
+      <div class="pb-3 px-2 transition-all fw-bold d-flex align-items-center gap-2" style="cursor: pointer;"
+        [class.text-primary]="activeTab() === 'offers'" [class.border-bottom]="activeTab() === 'offers'"
+        [class.border-primary]="activeTab() === 'offers'" [class.border-3]="activeTab() === 'offers'"
+        [class.text-secondary]="activeTab() !== 'offers'" (click)="switchTab('offers')">
         <i class="bi bi-envelope-open"></i> Offers
-        <span class="badge rounded-pill" [ngClass]="activeTab() === 'offers' ? 'bg-primary' : 'bg-secondary'">{{offers().length}}</span>
+        <span class="badge rounded-pill"
+          [ngClass]="activeTab() === 'offers' ? 'bg-primary' : 'bg-secondary'">{{offers().length}}</span>
       </div>
     </div>
 
     <!-- Enhanced Filter Section -->
-    <div class="glass p-4 rounded-5 mb-5 shadow-lg border border-white border-opacity-10 position-relative" style="z-index: 10;">
+    <div class="glass p-4 rounded-5 mb-5 shadow-lg border border-white border-opacity-10 position-relative"
+      style="z-index: 10;">
       <div class="row g-4 align-items-end">
         <!-- Search & Dropdowns -->
-        <div class="col-lg-4">
+        <div class="col-lg-6">
           <label class="text-secondary smaller mb-2 ps-2">Search</label>
-          <app-input mode="filter" icon="bi-search" placeholder="Search contracts..."
-            [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)"></app-input>
+          <app-input mode="filter" icon="bi-search" placeholder="Search contracts..." [ngModel]="searchQuery()"
+            (ngModelChange)="searchQuery.set($event)"></app-input>
         </div>
 
         <div class="col-lg-2">
           <label class="text-secondary smaller mb-2 ps-2">Date Range</label>
-          <app-input type="select" mode="filter" [options]="dateOptions" [ngModel]="dateFilter()" (ngModelChange)="dateFilter.set($event)"></app-input>
-        </div>
-
-        <div class="col-lg-2">
-          <label class="text-secondary smaller mb-2 ps-2">Budget Type</label>
-          <app-input type="select" mode="filter" [options]="budgetOptions" [ngModel]="budgetFilter()" (ngModelChange)="budgetFilter.set($event)"></app-input>
+          <app-input type="select" mode="filter" [options]="dateOptions" [ngModel]="dateFilter()"
+            (ngModelChange)="dateFilter.set($event)"></app-input>
         </div>
 
         <div class="col-lg-2">
           <label class="text-secondary smaller mb-2 ps-2">Status</label>
-          <app-input type="select" mode="filter" [options]="statusOptions()" [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)"></app-input>
+          <app-input type="select" mode="filter" [options]="statusOptions()" [ngModel]="statusFilter()"
+            (ngModelChange)="statusFilter.set($event)"></app-input>
         </div>
 
         <!-- Action Buttons -->
@@ -71,359 +61,403 @@
 
         <!-- Active Filter Chips (Shown after Apply) -->
         @if (activeFilters().length > 0) {
-          <div class="col-12 mt-4 pt-3 border-top border-white border-opacity-5">
-            <div class="d-flex align-items-center gap-3">
-              <span class="text-secondary smaller fw-bold text-uppercase opacity-50">Active Filters:</span>
-              <div class="d-flex flex-wrap gap-2">
-                @for (filter of activeFilters(); track filter.id) {
-                  <app-chip [label]="filter.label" variant="primary" [removable]="true"
-                    (remove)="removeActiveFilter(filter)"></app-chip>
-                }
-              </div>
+        <div class="col-12 mt-4 pt-3 border-top border-white border-opacity-5">
+          <div class="d-flex align-items-center gap-3">
+            <span class="text-secondary smaller fw-bold text-uppercase opacity-50">Active Filters:</span>
+            <div class="d-flex flex-wrap gap-2">
+              @for (filter of activeFilters(); track filter.id) {
+              <app-chip [label]="filter.label" variant="primary" [removable]="true"
+                (remove)="removeActiveFilter(filter)"></app-chip>
+              }
             </div>
           </div>
+        </div>
         }
       </div>
     </div>
 
     <!-- TAB 1: PROPOSALS -->
     @if (activeTab() === 'proposals') {
-      <div class="animate-fade-in">
+    <div class="animate-fade-in">
 
-        <!-- Proposals Grid -->
-        <div class="proposals-grid">
-          @if (isProposalsLoading()) {
-            <div class="text-center py-5">
-              <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+      <!-- Proposals Grid -->
+      <div class="proposals-grid">
+        @if (isProposalsLoading()) {
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        } @else {
+        <div class="row g-4">
+          @for (proposal of appliedProposals(); track proposal.id) {
+          <div class="col-12">
+            <div class="contract-card glass p-4 rounded-4 d-flex flex-column border border-white border-opacity-10">
+              <div class="row g-4">
+                <!-- Left Content: Job Details -->
+                <div class="col-lg-7 d-flex flex-column border-end border-white border-opacity-10 pe-lg-4">
+                  <h4 class="fw-bold mb-3 text-white mt-1">{{proposal.contractTitle}}</h4>
+
+                  <div class="d-flex flex-wrap gap-2 mb-4">
+                    @if (proposal.contractType) {
+                    <span class="badge-type"
+                      [ngClass]="proposal.contractType === 'Fixed Price' ? 'fixed' : 'hourly'">{{proposal.contractType}}</span>
+                    }
+                    @if (proposal.contractSubject) {
+                    <span class="badge-level">{{proposal.contractSubject}}</span>
+                    }
+                  </div>
+
+                  <div class="text-sm text-secondary mb-4 description-content flex-grow-1"
+                    [innerHTML]="proposal.description"></div>
+
+                  <div
+                    class="d-flex justify-content-between align-items-center pt-3 border-top border-white border-opacity-10 mt-auto">
+                    <div class="contract-stat">
+                      <div class="text-white fw-bold fs-6">{{proposal.budget}}</div>
+                      <div class="text-xxs text-secondary">{{proposal.budgetLabel}}</div>
+                    </div>
+                    <div class="contract-stat text-center">
+                      <div class="text-white fw-bold fs-6"><i class="bi bi-calendar-event me-1"></i> {{proposal.date}}
+                      </div>
+                      <div class="text-xxs text-secondary">Applied Date</div>
+                    </div>
+                    <div class="contract-stat text-end">
+                      <div class="text-white fw-bold fs-6"><i class="bi bi-clock me-1"></i> {{proposal.duration}}</div>
+                      <div class="text-xxs text-secondary">Duration</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right Content: Timeline & Actions -->
+                <div class="col-lg-5 ps-lg-4 d-flex flex-column">
+                  <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h6 class="text-white fw-bold mb-0">Application Progress</h6>
+                    <span class="status-badge" [class]="proposal.type.toLowerCase()">{{proposal.status}}</span>
+                  </div>
+
+                  <!-- Timeline Stepper -->
+                  <div class="stepper-wrapper w-100 mb-4">
+                    <!-- Step 1: Applied -->
+                    <div class="step" [class.completed]="true">
+                      <div class="step-circle"><i class="bi bi-check-lg"></i></div>
+                      <div class="step-label">Applied</div>
+                    </div>
+                    <div class="step-line" [class.active]="proposal.type !== 'Applied'"></div>
+
+                    <!-- Step 2: Assessment -->
+                    <div class="step"
+                      [class.active]="proposal.type === 'Assignment' && proposal.status !== 'assessment completed'"
+                      [class.completed]="proposal.type === 'Interview' || proposal.type === 'Shortlisted' || proposal.type === 'Rejected' || proposal.status === 'assessment completed'">
+                      <div class="step-circle">
+                        @if (proposal.type === 'Interview' || proposal.type === 'Shortlisted' || proposal.type ===
+                        'Rejected' || proposal.status === 'assessment completed') { <i class="bi bi-check-lg"></i> }
+                        @else { <i class="bi bi-journal-text"></i> }
+                      </div>
+                      <div class="step-label">Assessment</div>
+                    </div>
+                    <div class="step-line"
+                      [class.active]="proposal.type === 'Interview' || proposal.type === 'Shortlisted' || proposal.type === 'Rejected'">
+                    </div>
+
+                    <!-- Step 3: Interview -->
+                    <div class="step"
+                      [class.active]="proposal.type === 'Interview' && proposal.status !== 'interview completed'"
+                      [class.completed]="proposal.type === 'Shortlisted' || proposal.type === 'Rejected' || proposal.status === 'interview completed'">
+                      <div class="step-circle">
+                        @if (proposal.type === 'Shortlisted' || proposal.type === 'Rejected' || proposal.status ===
+                        'interview completed') { <i class="bi bi-check-lg"></i> }
+                        @else { <i class="bi bi-camera-video"></i> }
+                      </div>
+                      <div class="step-label">Interview</div>
+                    </div>
+                    <div class="step-line"
+                      [class.active]="proposal.type === 'Shortlisted' || proposal.type === 'Rejected'"></div>
+
+                    <!-- Step 4: Decision -->
+                    <div class="step" [class.active]="proposal.type === 'Shortlisted' || proposal.type === 'Rejected'"
+                      [class.completed]="proposal.type === 'Shortlisted' || proposal.type === 'Rejected'">
+                      <div class="step-circle"
+                        [ngClass]="{'bg-danger border-danger text-white': proposal.type === 'Rejected', 'bg-success border-success text-white': proposal.type === 'Shortlisted'}">
+                        @if (proposal.type === 'Rejected') { <i class="bi bi-x-lg"></i> }
+                        @else if (proposal.type === 'Shortlisted') { <i class="bi bi-patch-check-fill"></i> }
+                        @else { <i class="bi bi-award"></i> }
+                      </div>
+                      <div class="step-label">{{ proposal.type === 'Rejected' ? 'Rejected' : (proposal.type ===
+                        'Shortlisted' ? 'Offer' : 'Decision') }}</div>
+                    </div>
+                  </div>
+
+                  <!-- Contextual Boxes -->
+                  <div class="mt-auto mb-3">
+                    @if (proposal.type === 'Applied') {
+                    <div class="silver-box p-3 rounded-4">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="icon-circle bg-secondary bg-opacity-10 text-secondary"><i
+                            class="bi bi-clock-history"></i></div>
+                        <div>
+                          <p class="text-white small mb-0 fw-bold">{{proposal.status}}</p>
+                          <p class="text-secondary smaller mb-0">
+                            {{ proposal.status === 'Application Shortlisted' ? 'You have been shortlisted for the next steps.' : 'The client is reviewing your proposal.' }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    }
+                    @if (proposal.type === 'Shortlisted') {
+                    <div class="success-box p-3 rounded-4">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="icon-circle bg-success bg-opacity-10 text-success"><i
+                            class="bi bi-patch-check-fill"></i></div>
+                        <div>
+                          <p class="text-white small mb-0 fw-bold">You are Hired!</p>
+                          <p class="text-secondary smaller mb-0">The client is preparing your offer. It will appear in the Offers tab once sent.</p>
+                        </div>
+                      </div>
+                    </div>
+                    }
+                    @if (proposal.type === 'Rejected') {
+                    <div class="danger-box p-3 rounded-4">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="icon-circle bg-danger bg-opacity-10 text-danger"><i class="bi bi-x-circle-fill"></i>
+                        </div>
+                        <div>
+                          <p class="text-white small mb-0 fw-bold">Proposal Declined</p>
+                          <p class="text-secondary smaller mb-0">The client decided to go with another candidate.</p>
+                        </div>
+                      </div>
+                    </div>
+                    }
+                    @if (proposal.type === 'Assignment') {
+                    <div class="context-box p-3 rounded-4">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="icon-circle bg-primary bg-opacity-10 text-primary"><i
+                            class="bi bi-journal-text"></i></div>
+                        <div>
+                          <p class="text-white small mb-0 fw-bold">
+                            {{ proposal.status.toLowerCase() === 'assessment completed' ? 'Assessment Submitted' :
+                            'Assessment Required' }}:
+                            <span class="text-primary">{{proposal.assessment.title}}</span>
+                          </p>
+                          @if (proposal.assessment.description) {
+                          <p class="text-secondary smaller mb-1 mt-1">{{proposal.assessment.description}}</p>
+                          }
+                          <p class="text-secondary smaller mb-0">Deadline: <span class="text-danger">{{
+                              DateTimeHelper.toLocalString(proposal.assessment.date || '', false, 'M/D/YY, h:mm A')
+                              }}</span></p>
+                          @if (proposal.status.toLowerCase() === 'assessment completed') {
+                          <span class="badge bg-success bg-opacity-10 text-success mt-2">Completed</span>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    }
+                    @if (proposal.type === 'Interview') {
+                    <div class="context-box p-3 rounded-4">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="icon-circle bg-info bg-opacity-10 text-info"><i class="bi bi-camera-video"></i>
+                        </div>
+                        <div>
+                          <p class="text-white small mb-0 fw-bold">
+                            {{ proposal.status.toLowerCase() === 'interview completed' ? 'Interview Completed' :
+                            'Interview Meeting' }}:
+                            <span class="text-info">{{proposal.interview.title}}</span>
+                          </p>
+                          @if (proposal.interview.description) {
+                          <p class="text-secondary smaller mb-1 mt-1">{{proposal.interview.description}}</p>
+                          }
+                          <p class="text-info smaller mb-0"><i class="bi bi-clock me-1"></i> {{
+                            DateTimeHelper.toLocalString(proposal.interview.date || '', false, 'M/D/YY, h:mm A') }}</p>
+                          @if (proposal.status.toLowerCase() === 'interview completed') {
+                          <span class="badge bg-success bg-opacity-10 text-success mt-2">Completed</span>
+                          @if (proposal.interview.feedback) {
+                          <div
+                            class="mt-2 p-2 rounded bg-white bg-opacity-5 border border-white border-opacity-10 text-start">
+                            <p class="text-secondary smaller mb-1 fw-bold"><i
+                                class="bi bi-chat-right-text me-1 text-info"></i>Interview Feedback:</p>
+                            <p class="text-white small mb-0">{{ proposal.interview.feedback }}</p>
+                          </div>
+                          }
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    }
+                  </div>
+
+                  <!-- Actions -->
+                  <div class="d-flex gap-2 w-100">
+                    @if (proposal.type === 'Assignment') {
+                    <a [href]="proposal.link || '#'" target="_blank" class="w-50 text-decoration-none">
+                      <app-button variant="outline">Go to Assessment</app-button>
+                    </a>
+                    <div class="w-50">
+                      @if (proposal.status.toLowerCase() !== 'assessment completed') {
+                      <app-button variant="primary" (click)="markAssessmentCompleted(proposal.id)"
+                        [disabled]="assessmentSubmitting()">
+                        @if (assessmentSubmitting()) { <span class="spinner-border spinner-border-sm me-2"></span>
+                        Submitting... }
+                        @else { Mark Completed }
+                      </app-button>
+                      } @else {
+                      <app-button variant="primary" [disabled]="true">
+                        <i class="bi bi-check2-circle me-1"></i> Submitted
+                      </app-button>
+                      }
+                    </div>
+                    }
+                    @if (proposal.type === 'Interview') {
+                    <a [routerLink]="['/user/interview-setup']" [queryParams]="{ id: proposal.id }"
+                      class="w-100 text-decoration-none">
+                      <app-button variant="primary">Join
+                        Meeting</app-button>
+                    </a>
+                    }
+                  </div>
+                </div>
+
               </div>
             </div>
-          } @else {
-            <div class="row g-4">
-              @for (proposal of appliedProposals(); track proposal.id) {
-                <div class="col-lg-6">
-                  <div class="contract-card glass p-4 rounded-4 h-100 d-flex flex-column">
-                    <!-- Top Info -->
-                    <div class="d-flex justify-content-between align-items-start mb-4">
-                      <div class="w-100">
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                          <span class="text-secondary small fw-medium" style="font-size: 11px;">{{proposal.client}} · {{proposal.date}}</span>
-                        </div>
-                        <h5 class="fw-bold mb-2 h6 text-white">{{proposal.contractTitle}}</h5>
-                        <div class="d-flex gap-2">
-                          <span class="badge-type"
-                            [ngClass]="proposal.contractType === 'Fixed Price' ? 'fixed' : 'hourly'">{{proposal.contractType}}</span>
-                          <span class="badge-level">{{proposal.level}}</span>
-                          <span class="status-badge ms-2" [class]="proposal.type.toLowerCase()">{{proposal.status}}</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <!-- Main Content Area -->
-                    <div class="flex-grow-1">
-                      <!-- Description -->
-                      <div class="text-sm text-secondary mb-3 description-content" [innerHTML]="proposal.description">
-                      </div>
-                    </div>
-
-                    <!-- Contextual Information -->
-                    @if (proposal.type === 'Applied') {
-                      <div class="silver-box p-3 rounded-4 mb-3">
-                        <div class="d-flex align-items-center gap-3">
-                          <div class="icon-circle bg-secondary bg-opacity-10 text-secondary">
-                            <i class="bi bi-clock-history"></i>
-                          </div>
-                          <div>
-                            <p class="text-white small mb-0 fw-bold">{{proposal.status}}</p>
-                            @if (proposal.status.toLowerCase() === 'application shortlisted') {
-                              <p class="text-secondary smaller mb-0">The client has shortlisted your profile and is reviewing it for the next steps.</p>
-                            } @else {
-                              <p class="text-secondary smaller mb-0">The client is currently reviewing your proposal. You'll be notified of any updates.</p>
-                            }
-                          </div>
-                        </div>
-                      </div>
-                    }
-                    
-                    @if (proposal.type === 'Shortlisted') {
-                      <div class="success-box p-3 rounded-4 mb-3">
-                        <div class="d-flex align-items-center gap-3">
-                          <div class="icon-circle bg-success bg-opacity-10 text-success">
-                            <i class="bi bi-patch-check-fill"></i>
-                          </div>
-                          <div>
-                            <p class="text-white small mb-0 fw-bold">You are Shortlisted (Hired)!</p>
-                            <p class="text-secondary smaller mb-0">Congratulations! The client has sent you a contract offer. View the offer details below.</p>
-                          </div>
-                        </div>
-                      </div>
-                    }
-                    
-                    @if (proposal.type === 'Rejected') {
-                      <div class="danger-box p-3 rounded-4 mb-3">
-                        <div class="d-flex align-items-center gap-3">
-                          <div class="icon-circle bg-danger bg-opacity-10 text-danger">
-                            <i class="bi bi-x-circle-fill"></i>
-                          </div>
-                          <div>
-                            <p class="text-white small mb-0 fw-bold">Proposal Declined</p>
-                            <p class="text-secondary smaller mb-0">The client has decided to go with another candidate. Keep applying to find your perfect match!</p>
-                          </div>
-                        </div>
-                      </div>
-                    }
-
-                    @if (proposal.type === 'Assignment') {
-                      <div class="context-box p-3 rounded-4 mb-3">
-                        <div class="d-flex align-items-center gap-3">
-                          <div class="icon-circle bg-primary bg-opacity-10 text-primary">
-                            <i class="bi bi-journal-text"></i>
-                          </div>
-                          <div>
-                            <p class="text-white small mb-0 fw-bold">
-                              {{ proposal.status.toLowerCase() === 'assessment completed' ? 'Assessment Submitted' : 'Assessment Required' }}: 
-                              <span class="text-primary">{{proposal.assessment.title}}</span>
-                            </p>
-                            @if (proposal.assessment.description) {
-                              <p class="text-secondary smaller mb-1 mt-1">{{proposal.assessment.description}}</p>
-                            }
-                            <p class="text-secondary smaller mb-0">Deadline: <span class="text-danger">{{ DateTimeHelper.toLocalString(proposal.assessment.date || '', false, 'M/D/YY, h:mm A') }}</span></p>
-                            
-                            @if (proposal.status.toLowerCase() === 'assessment completed') {
-                              <span class="badge bg-success bg-opacity-10 text-success mt-2">Completed</span>
-                            }
-                          </div>
-                        </div>
-                      </div>
-                    }
-                    
-                    @if (proposal.type === 'Interview') {
-                      <div class="context-box p-3 rounded-4 mb-3">
-                        <div class="d-flex align-items-center gap-3">
-                          <div class="icon-circle bg-info bg-opacity-10 text-info">
-                            <i class="bi bi-camera-video"></i>
-                          </div>
-                          <div>
-                            <p class="text-white small mb-0 fw-bold">
-                              {{ proposal.status.toLowerCase() === 'interview completed' ? 'Interview Completed' : 'Interview Meeting' }}: 
-                              <span class="text-info">{{proposal.interview.title}}</span>
-                            </p>
-                            @if (proposal.interview.description) {
-                              <p class="text-secondary smaller mb-1 mt-1">{{proposal.interview.description}}</p>
-                            }
-                            <p class="text-info smaller mb-0"><i class="bi bi-clock me-1"></i> {{ DateTimeHelper.toLocalString(proposal.interview.date || '', false, 'M/D/YY, h:mm A') }}</p>
-                            
-                            @if (proposal.status.toLowerCase() === 'interview completed') {
-                              <span class="badge bg-success bg-opacity-10 text-success mt-2">Completed</span>
-                              @if (proposal.interview.feedback) {
-                                <div class="mt-2 p-2 rounded bg-white bg-opacity-5 border border-white border-opacity-10 text-start">
-                                  <p class="text-secondary smaller mb-1 fw-bold"><i class="bi bi-chat-right-text me-1 text-info"></i>Interview Feedback:</p>
-                                  <p class="text-white small mb-0">{{ proposal.interview.feedback }}</p>
-                                </div>
-                              }
-                            }
-                          </div>
-                        </div>
-                      </div>
-                    }
-
-                    <!-- Stats & Action -->
-                    <div class="pt-3 border-top border-white border-opacity-10 mt-auto">
-                      <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="contract-stat">
-                          <div class="text-white fw-bold">{{proposal.budget}}</div>
-                          <div class="text-xxs text-secondary">{{proposal.budgetLabel}}</div>
-                        </div>
-                        <div class="contract-stat text-end">
-                          <div class="text-white fw-bold"><i class="bi bi-clock me-1"></i> {{proposal.duration}}</div>
-                          <div class="text-xxs text-secondary">Duration</div>
-                        </div>
-                      </div>
-
-                      <div class="d-flex gap-2">
-                        @if (proposal.type === 'Assignment') {
-                          <div class="d-flex w-100 gap-2">
-                            <a [href]="proposal.link || '#'" target="_blank" class="w-50 text-decoration-none d-block">
-                              <app-button variant="outline" customClass="w-100">
-                                Go to Assessment
-                              </app-button>
-                            </a>
-                            
-                            <div class="w-50">
-                              @if (proposal.status.toLowerCase() !== 'assessment completed') {
-                                <app-button variant="brand" customClass="w-100" (click)="markAssessmentCompleted(proposal.id)" [disabled]="assessmentSubmitting()">
-                                  @if (assessmentSubmitting()) {
-                                    <span class="spinner-border spinner-border-sm me-2"></span> Submitting...
-                                  } @else {
-                                    Mark Completed
-                                  }
-                                </app-button>
-                              } @else {
-                                <app-button variant="brand" customClass="w-100" [disabled]="true">
-                                  <i class="bi bi-check2-circle me-1"></i> Submitted
-                                </app-button>
-                              }
-                            </div>
-                          </div>
-                        }
-
-                        @if (proposal.type === 'Interview') {
-                          <a [routerLink]="['/user/interview-setup']" [queryParams]="{ id: proposal.id }" class="w-100 text-decoration-none">
-                            <app-button variant="brand" customClass="w-100">
-                              Join Meeting
-                            </app-button>
-                          </a>
-                        }
-
-                        @if (proposal.type === 'Shortlisted') {
-                          <app-button variant="brand" customClass="w-100" (click)="switchTab('offers')">
-                            View Offer Details
-                          </app-button>
-                        }
-
-                        @if (proposal.type === 'Applied') {
-                          <a [routerLink]="['/user/contract-details']" [queryParams]="{ id: proposal.contractId }" class="w-100 text-decoration-none">
-                            <app-button variant="brand" customClass="w-100">
-                              View Original Post
-                            </app-button>
-                          </a>
-                        }
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              } @empty {
-                <div class="col-12 text-center py-5">
-                  <div class="empty-state glass p-5 rounded-5 border-dashed">
-                    <div class="empty-icon mb-4">
-                      <i class="bi bi-file-earmark-text fs-1 opacity-25 text-secondary"></i>
-                    </div>
-                    <h4 class="text-white fw-bold">No proposals found</h4>
-                    <p class="text-secondary mb-4">Adjust your filters or search query to find what you're looking for.</p>
-                    <app-button variant="brand" (click)="resetAll()">
-                      Reset All Filters
-                    </app-button>
-                  </div>
-                </div>
-              }
+          </div>
+          } @empty {
+          <div class="col-12 text-center py-5">
+            <div class="empty-state glass p-5 rounded-5 border-dashed">
+              <div class="empty-icon mb-4">
+                <i class="bi bi-file-earmark-text fs-1 opacity-25 text-secondary"></i>
+              </div>
+              <h4 class="text-white fw-bold">No proposals found</h4>
+              <p class="text-secondary mb-4">Adjust your filters or search query to find what you're looking for.</p>
+              <app-button variant="primary" customClass="shadow-glow-primary" (click)="resetAll()">
+                Reset All Filters
+              </app-button>
             </div>
+          </div>
           }
         </div>
+        }
       </div>
+    </div>
     }
 
     <!-- TAB 2: OFFERS -->
     @if (activeTab() === 'offers') {
-      <div class="animate-fade-in">
-        <!-- Offers List -->
-        @if (isOffersLoading()) {
-          <div class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
+    <div class="animate-fade-in">
+      <!-- Offers List -->
+      @if (isOffersLoading()) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      } @else {
+      <div class="row g-4">
+        @for (offer of filteredOffers(); track offer.id) {
+        <div class="col-lg-6">
+          <div class="contract-card glass p-4 rounded-4 h-100 d-flex flex-column border-white border-opacity-5">
+            <!-- Top Info -->
+            <div class="d-flex justify-content-between align-items-start mb-4">
+              <div>
+                <h5 class="fw-bold mb-2 h6 text-white">{{offer.contractTitle}}</h5>
+                <div class="d-flex gap-2 align-items-center">
+                  <span class="badge-type"
+                    [ngClass]="offer.contractType === 'Fixed Price' ? 'fixed' : 'hourly'">{{offer.contractType}}</span>
+                  <span class="badge-level">{{offer.level}}</span>
+                  @if (offer.status === 'Pending') {
+                  <span class="badge-expires ms-2"><i class="bi bi-hourglass-split me-1"></i> Expires in
+                    {{offer.expiresIn}}</span>
+                  }
+                </div>
+              </div>
+              <div class="text-end">
+                <div class="text-white fw-bold">{{offer.budget}}</div>
+                <div class="text-xxs text-secondary">Offer Amount</div>
+              </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="flex-grow-1">
+              <div class="text-sm text-secondary mb-3 description-content" [innerHTML]="offer.description">
+              </div>
+
+              <div class="d-flex flex-wrap gap-2 mb-3">
+                @for (tech of offer.techStack; track tech) {
+                <span class="tech-tag">{{tech}}</span>
+                }
+              </div>
+            </div>
+
+            <!-- Offer Details Box -->
+            <div class="offer-details-box p-3 rounded-4 mb-3 glass border border-white border-opacity-5">
+              <div class="row g-3">
+                <div class="col-6">
+                  <p class="text-secondary smaller mb-1">Start Date</p>
+                  <p class="text-white small mb-0 fw-bold">{{offer.startDate}}</p>
+                </div>
+                <div class="col-6 text-end">
+                  <p class="text-secondary smaller mb-1">Client</p>
+                  <p class="text-white small mb-0 fw-bold">{{offer.client}}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stats & Actions -->
+            <div class="pt-3 border-top border-white border-opacity-10 mt-auto">
+              @if (offer.status === 'Pending') {
+              <div class="d-flex gap-2">
+                <app-button variant="primary" customClass="rounded-3 px-4 py-2 fw-bold text-xs shadow-glow-primary"
+                  [routerLink]="['/user/legal-contract', offer.id]">
+                  Accept Offer
+                </app-button>
+                <app-button variant="outline" (click)="declineOffer(offer.id)" [disabled]="offerDeclining()">
+                  @if (offerDeclining()) {
+                  <span class="spinner-border spinner-border-sm me-2"></span> Declining...
+                  } @else {
+                  Decline
+                  }
+                </app-button>
+              </div>
+              } @else {
+              <div class="d-flex flex-column gap-2 w-100">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi text-sm"
+                    [ngClass]="offer.status === 'Accepted' ? 'bi-patch-check-fill text-success' : 'bi-x-circle-fill text-danger'"></i>
+                  <span class="text-sm fw-bold"
+                    [ngClass]="offer.status === 'Accepted' ? 'text-success' : 'text-danger'">
+                    Offer {{ offer.status }}
+                  </span>
+                </div>
+                @if (offer.status === 'Accepted') {
+                <div class="d-flex gap-2 flex-wrap">
+                  <app-button variant="success" customClass="text-xs py-2 px-3 rounded-3 fw-bold text-white"
+                    (click)="downloadSignedContract(offer.id)">
+                    <i class="bi bi-file-earmark-pdf me-1"></i>Download Contract
+                  </app-button>
+                  <app-button variant="outline"
+                    customClass="text-xs py-2 px-3 rounded-3 fw-bold text-white border-white border-opacity-25"
+                    [routerLink]="['/user/contracts']">
+                    <i class="bi bi-briefcase me-1"></i>Go to Your Contract
+                  </app-button>
+                </div>
+                } @else {
+                <span class="text-xxs text-secondary uppercase tracking-widest">Completed</span>
+                }
+              </div>
+              }
             </div>
           </div>
-        } @else {
-          <div class="row g-4">
-            @for (offer of filteredOffers(); track offer.id) {
-              <div class="col-lg-6">
-                <div class="contract-card glass p-4 rounded-4 h-100 d-flex flex-column border-white border-opacity-5">
-                  <!-- Top Info -->
-                  <div class="d-flex justify-content-between align-items-start mb-4">
-                    <div>
-                      <h5 class="fw-bold mb-2 h6 text-white">{{offer.contractTitle}}</h5>
-                      <div class="d-flex gap-2 align-items-center">
-                        <span class="badge-type"
-                          [ngClass]="offer.contractType === 'Fixed Price' ? 'fixed' : 'hourly'">{{offer.contractType}}</span>
-                        <span class="badge-level">{{offer.level}}</span>
-                        @if (offer.status === 'Pending') {
-                          <span class="badge-expires ms-2"><i class="bi bi-hourglass-split me-1"></i> Expires in {{offer.expiresIn}}</span>
-                        }
-                      </div>
-                    </div>
-                    <div class="text-end">
-                      <div class="text-white fw-bold">{{offer.budget}}</div>
-                      <div class="text-xxs text-secondary">Offer Amount</div>
-                    </div>
-                  </div>
-
-                  <!-- Main Content Area -->
-                  <div class="flex-grow-1">
-                    <div class="text-sm text-secondary mb-3 description-content" [innerHTML]="offer.description">
-                    </div>
-
-                    <div class="d-flex flex-wrap gap-2 mb-3">
-                      @for (tech of offer.techStack; track tech) {
-                        <span class="tech-tag">{{tech}}</span>
-                      }
-                    </div>
-                  </div>
-
-                  <!-- Offer Details Box -->
-                  <div class="offer-details-box p-3 rounded-4 mb-3 glass border border-white border-opacity-5">
-                    <div class="row g-3">
-                      <div class="col-6">
-                        <p class="text-secondary smaller mb-1">Start Date</p>
-                        <p class="text-white small mb-0 fw-bold">{{offer.startDate}}</p>
-                      </div>
-                      <div class="col-6 text-end">
-                        <p class="text-secondary smaller mb-1">Client</p>
-                        <p class="text-white small mb-0 fw-bold">{{offer.client}}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Stats & Actions -->
-                  <div class="pt-3 border-top border-white border-opacity-10 mt-auto">
-                    @if (offer.status === 'Pending') {
-                      <div class="d-flex gap-2">
-                        <app-button variant="primary" customClass="rounded-3 px-4 py-2 fw-bold text-xs shadow-glow-primary" [routerLink]="['/user/legal-contract', offer.id]">
-                          Accept Offer
-                        </app-button>
-                        <app-button variant="outline" (click)="declineOffer(offer.id)" [disabled]="offerDeclining()">
-                          @if (offerDeclining()) {
-                            <span class="spinner-border spinner-border-sm me-2"></span> Declining...
-                          } @else {
-                            Decline
-                          }
-                        </app-button>
-                      </div>
-                    } @else {
-                      <div class="d-flex flex-column gap-2 w-100">
-                        <div class="d-flex align-items-center gap-2">
-                          <i class="bi text-sm" [ngClass]="offer.status === 'Accepted' ? 'bi-patch-check-fill text-success' : 'bi-x-circle-fill text-danger'"></i>
-                          <span class="text-sm fw-bold" [ngClass]="offer.status === 'Accepted' ? 'text-success' : 'text-danger'">
-                            Offer {{ offer.status }}
-                          </span>
-                        </div>
-                        @if (offer.status === 'Accepted') {
-                          <div class="d-flex gap-2 flex-wrap">
-                            <app-button variant="success" customClass="text-xs py-2 px-3 rounded-3 fw-bold text-white" (click)="downloadSignedContract(offer.id)">
-                              <i class="bi bi-file-earmark-pdf me-1"></i>Download Contract
-                            </app-button>
-                            <app-button variant="outline" customClass="text-xs py-2 px-3 rounded-3 fw-bold text-white border-white border-opacity-25" [routerLink]="['/user/contracts']">
-                              <i class="bi bi-briefcase me-1"></i>Go to Your Contract
-                            </app-button>
-                          </div>
-                        } @else {
-                          <span class="text-xxs text-secondary uppercase tracking-widest">Completed</span>
-                        }
-                      </div>
-                    }
-                  </div>
-                </div>
-              </div>
-            } @empty {
-              <div class="col-12 text-center py-5 animate-fade-in">
-                <div class="empty-state glass p-5 rounded-5 border-dashed">
-                  <i class="bi bi-briefcase fs-1 opacity-25 text-secondary mb-4 d-block"></i>
-                  <h4 class="text-white fw-bold">No active offers</h4>
-                  <p class="text-secondary mb-0">Check back later or browse more contracts to get started.</p>
-                </div>
-              </div>
-            }
+        </div>
+        } @empty {
+        <div class="col-12 text-center py-5 animate-fade-in">
+          <div class="empty-state glass p-5 rounded-5 border-dashed">
+            <i class="bi bi-briefcase fs-1 opacity-25 text-secondary mb-4 d-block"></i>
+            <h4 class="text-white fw-bold">No active offers</h4>
+            <p class="text-secondary mb-0">Check back later or browse more contracts to get started.</p>
           </div>
+        </div>
         }
       </div>
+      }
+    </div>
     }
   </div>
 </div>

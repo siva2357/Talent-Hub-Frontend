@@ -41,7 +41,7 @@ export class YourContractsComponent implements OnInit {
 
   searchQuery = signal<string>('');
   statusFilter = signal<string>('');
-  budgetTypeFilter = signal<string>('');
+
   contractTypeFilter = signal<string>('');
 
   pendingSearchQuery: string = '';
@@ -129,6 +129,7 @@ export class YourContractsComponent implements OnInit {
   }
 
 
+  @ViewChild('snoTemplate', { static: true }) snoTemplate!: TemplateRef<any>;
   @ViewChild('titleTemplate', { static: true }) titleTemplate!: TemplateRef<any>;
   @ViewChild('dateTemplate', { static: true }) dateTemplate!: TemplateRef<any>;
   @ViewChild('budgetTemplate', { static: true }) budgetTemplate!: TemplateRef<any>;
@@ -140,11 +141,12 @@ export class YourContractsComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.contractColumns = [
+        { name: 'S.No', prop: 'sno', cellTemplate: this.snoTemplate, width: 70 },
         { name: 'Contract Title', prop: 'contractTitle', cellTemplate: this.titleTemplate, width: 220 },
         { name: 'Subject', prop: 'contractSubject', width: 150 },
         { name: 'Contract Type', prop: 'contractType', width: 150 },
-        { name: 'Budget Type', prop: 'budgetType', width: 150 },
-        { name: 'Estimated Budget', prop: 'estimatedBudget', cellTemplate: this.budgetTemplate, width: 150 },
+
+        { name: 'Budget', prop: 'estimatedBudget', cellTemplate: this.budgetTemplate, width: 150 },
         { name: 'Start Date', prop: 'contractStartDate', cellTemplate: this.dateTemplate, width: 150 },
         { name: 'End Date', prop: 'contractEndDate', cellTemplate: this.dateTemplate, width: 150 },
         { name: 'Status', prop: 'status', cellTemplate: this.statusTemplate, width: 150 },
@@ -179,7 +181,7 @@ export class YourContractsComponent implements OnInit {
       this.activeActionRow = row;
       const target = (event.currentTarget as HTMLElement).closest('.action-trigger') || event.currentTarget as HTMLElement;
       const rect = target.getBoundingClientRect();
-      
+
       // Since the menu is absolute and the page can scroll freely,
       // we can always open it downwards.
       this.menuTop = rect.bottom + window.scrollY + 8;
@@ -227,10 +229,6 @@ export class YourContractsComponent implements OnInit {
         !this.statusFilter() ||
         contract.status === this.statusFilter();
 
-      const budgetMatch =
-        !this.budgetTypeFilter() ||
-        contract.budgetType === this.budgetTypeFilter();
-
       const typeMatch =
         !this.contractTypeFilter() ||
         contract.contractType === this.contractTypeFilter();
@@ -238,7 +236,6 @@ export class YourContractsComponent implements OnInit {
       return (
         searchMatch &&
         statusMatch &&
-        budgetMatch &&
         typeMatch
       );
 
@@ -249,14 +246,14 @@ export class YourContractsComponent implements OnInit {
   applyFiltersBtn(): void {
     this.searchQuery.set(this.pendingSearchQuery);
     this.statusFilter.set(this.pendingStatusFilter);
-    this.budgetTypeFilter.set(this.pendingBudgetTypeFilter);
+
     this.contractTypeFilter.set(this.pendingContractTypeFilter);
   }
 
   resetFilters(): void {
     this.searchQuery.set('');
     this.statusFilter.set('');
-    this.budgetTypeFilter.set('');
+
     this.contractTypeFilter.set('');
 
     this.pendingSearchQuery = '';
@@ -276,7 +273,7 @@ export class YourContractsComponent implements OnInit {
   }
 
   removeBudgetTypeChip(): void {
-    this.budgetTypeFilter.set('');
+
     this.pendingBudgetTypeFilter = '';
   }
 

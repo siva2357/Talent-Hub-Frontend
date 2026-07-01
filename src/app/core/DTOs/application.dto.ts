@@ -1,6 +1,7 @@
 export interface SendOfferDto {
   scopeOfWork: string;
   additionalTerms: string;
+  clientSignature?: string | null;
 }
 
 export interface ScheduleAssessmentDto {

@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { ProfileService } from '../../../core/services/profile.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { DateTimeHelper } from '../../../core/helpers/date-time.helper';
@@ -17,8 +17,8 @@ export class UserProfileComponent implements OnInit {
   DateTimeHelper = DateTimeHelper;
 
   private profileService = inject(ProfileService);
-    private authService = inject(AuthService);
-
+  private authService = inject(AuthService);
+  private route = inject(ActivatedRoute);
 
   currentUser = this.authService.currentUser;
 
@@ -30,12 +30,23 @@ export class UserProfileComponent implements OnInit {
   selectedPortfolioItem = signal<any>(null);
 
   isFreelancer = computed(() =>
-    this.currentUser()?.role === 'Freelancer'
+    this.user()?.role === 'Freelancer'
   );
 
   isClient = computed(() =>
-    this.currentUser()?.role === 'Client'
+    this.user()?.role === 'Client'
   );
+
+  backRoute = computed(() => {
+    const role = this.currentUser()?.role;
+    if (role === 'Admin') {
+      if (this.user()?.role === 'Client') return '/user/admin/clients';
+      return '/user/admin/freelancers';
+    }
+    if (role === 'Client') return '/user/client-dashboard';
+    if (role === 'Freelancer') return '/user/my-dashboard';
+    return '/user';
+  });
 
   clientJobsPosted = computed(() => this.contracts().length);
 
@@ -65,7 +76,12 @@ export class UserProfileComponent implements OnInit {
 
 
   getProfile(): void {
-    this.profileService.getMyProfile().subscribe({
+    const userId = this.route.snapshot.paramMap.get('id');
+    const profileObservable = userId 
+      ? this.profileService.getProfileById(userId) 
+      : this.profileService.getMyProfile();
+      
+    profileObservable.subscribe({
       next: (res) => {
         this.user.set(res.user);
         this.profile.set(res.profile);
