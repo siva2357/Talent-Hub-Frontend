@@ -74,8 +74,10 @@ ngOnInit(): void {
 
   if (role === 'client') {
     this.bucketKey = BucketKey.ClientData;
+    this.currentUserRole.set('client');
   } else if (role === 'freelancer') {
     this.bucketKey = BucketKey.FreelancerData;
+    this.currentUserRole.set('freelancer');
   } else {
     throw new Error('Unsupported role for support ticket uploads');
   }
@@ -160,23 +162,12 @@ getStatusClass(status: string): string {
       label: 'Interview Phase',
       icon: 'bi-people-fill',
       description: 'Issues with schedule sync, expired meeting rooms, or chat linkages.',
+      applicableRoles: ['client', 'freelancer'],
       subcategories: [
-        {
-          label: 'Virtual interview room connection issue',
-          value: 'room-connection',
-        },
-        {
-          label: 'Schedule synchronization mismatch',
-          value: 'schedule-mismatch',
-        },
-        {
-          label: 'Client/Freelancer failed to attend',
-          value: 'no-show',
-        },
-        {
-          label: 'Interview chat link expired',
-          value: 'chat-expired',
-        },
+        { label: 'Virtual interview room connection issue', value: 'room-connection', applicableRoles: ['client', 'freelancer'] },
+        { label: 'Schedule synchronization mismatch', value: 'schedule-mismatch', applicableRoles: ['client', 'freelancer'] },
+        { label: 'Client/Freelancer failed to attend', value: 'no-show', applicableRoles: ['client', 'freelancer'] },
+        { label: 'Interview chat link expired', value: 'chat-expired', applicableRoles: ['client', 'freelancer'] },
       ],
     },
     {
@@ -184,23 +175,13 @@ getStatusClass(status: string): string {
       label: 'Application Phase',
       icon: 'bi-file-earmark-post',
       description: 'Trouble posting proposals, bid credit issues, or offer letter visibility.',
+      applicableRoles: ['client', 'freelancer'],
       subcategories: [
-        {
-          label: 'Proposal editing error',
-          value: 'proposal-error',
-        },
-        {
-          label: 'Bid token consumption error',
-          value: 'token-error',
-        },
-        {
-          label: 'Offer letter not visible',
-          value: 'offer-hidden',
-        },
-        {
-          label: 'Portfolio asset attachment issue',
-          value: 'portfolio-attachment',
-        },
+        { label: 'Proposal editing error', value: 'proposal-error', applicableRoles: ['freelancer'] },
+        { label: 'Bid token consumption error', value: 'token-error', applicableRoles: ['freelancer'] },
+        { label: 'Offer letter not visible', value: 'offer-hidden', applicableRoles: ['client', 'freelancer'] },
+        { label: 'Portfolio asset attachment issue', value: 'portfolio-attachment', applicableRoles: ['freelancer'] },
+        { label: 'Project posting error', value: 'project-posting-error', applicableRoles: ['client'] },
       ],
     },
     {
@@ -208,23 +189,12 @@ getStatusClass(status: string): string {
       label: 'Contract Management',
       icon: 'bi-file-earmark-lock2-fill',
       description: 'Errors during digital signature uploads or scope edits.',
+      applicableRoles: ['client', 'freelancer'],
       subcategories: [
-        {
-          label: 'Digital signature upload failure',
-          value: 'signature-upload',
-        },
-        {
-          label: 'Scope modification approval stuck',
-          value: 'scope-stuck',
-        },
-        {
-          label: 'Contract closure request dispute',
-          value: 'closure-dispute',
-        },
-        {
-          label: 'Contract diary tracking mismatch',
-          value: 'diary-mismatch',
-        },
+        { label: 'Digital signature upload failure', value: 'signature-upload', applicableRoles: ['client', 'freelancer'] },
+        { label: 'Scope modification approval stuck', value: 'scope-stuck', applicableRoles: ['client', 'freelancer'] },
+        { label: 'Contract closure request dispute', value: 'closure-dispute', applicableRoles: ['client', 'freelancer'] },
+        { label: 'Contract diary tracking mismatch', value: 'diary-mismatch', applicableRoles: ['client', 'freelancer'] },
       ],
     },
     {
@@ -232,23 +202,13 @@ getStatusClass(status: string): string {
       label: 'Payment & Escrow',
       icon: 'bi-credit-card-2-front-fill',
       description: 'Invoicing transaction failures, escrow holding delay, or refunds.',
+      applicableRoles: ['client', 'freelancer'],
       subcategories: [
-        {
-          label: 'Invoice processing failure',
-          value: 'invoice-failure',
-        },
-        {
-          label: 'Escrow release dispute',
-          value: 'escrow-dispute',
-        },
-        {
-          label: 'Refund transaction delay',
-          value: 'refund-delay',
-        },
-        {
-          label: 'Milestone funding error',
-          value: 'milestone-error',
-        },
+        { label: 'Invoice processing failure', value: 'invoice-failure', applicableRoles: ['client', 'freelancer'] },
+        { label: 'Escrow release dispute', value: 'escrow-dispute', applicableRoles: ['client', 'freelancer'] },
+        { label: 'Refund transaction delay', value: 'refund-delay', applicableRoles: ['client'] },
+        { label: 'Milestone funding error', value: 'milestone-error', applicableRoles: ['client'] },
+        { label: 'Withdrawal processing delay', value: 'withdrawal-delay', applicableRoles: ['freelancer'] },
       ],
     },
     {
@@ -256,33 +216,38 @@ getStatusClass(status: string): string {
       label: 'General & Account',
       icon: 'bi-gear-wide-connected',
       description: 'Login difficulties, 2FA authorization lockout, or settings delay.',
+      applicableRoles: ['client', 'freelancer'],
       subcategories: [
-        {
-          label: 'Account settings update issue',
-          value: 'settings-issue',
-        },
-        {
-          label: 'Notification preference delay',
-          value: 'notification-delay',
-        },
-        {
-          label: 'Two-factor authentication issue',
-          value: '2fa-issue',
-        },
-        {
-          label: 'General visual layout glitch',
-          value: 'layout-glitch',
-        },
+        { label: 'Account settings update issue', value: 'settings-issue', applicableRoles: ['client', 'freelancer'] },
+        { label: 'Notification preference delay', value: 'notification-delay', applicableRoles: ['client', 'freelancer'] },
+        { label: 'Two-factor authentication issue', value: '2fa-issue', applicableRoles: ['client', 'freelancer'] },
+        { label: 'General visual layout glitch', value: 'layout-glitch', applicableRoles: ['client', 'freelancer'] },
       ],
     },
   ];
 
+  currentUserRole = signal<'client' | 'freelancer'>('client');
+
+  filteredCategories = computed(() => {
+    const role = this.currentUserRole();
+    return this.categories
+      .filter(c => !c.applicableRoles || c.applicableRoles.includes(role))
+      .map(c => ({
+        ...c,
+        subcategories: c.subcategories.filter(sc => !sc.applicableRoles || sc.applicableRoles.includes(role))
+      }))
+      .filter(c => c.subcategories.length > 0);
+  });
+
+  activeCategoryId = signal<string>('');
+
   activeCategory = computed(() => {
-    const catId = this.supportForm.get('categoryId')?.value;
-    return this.categories.find((category) => category.id === catId);
+    const catId = this.activeCategoryId();
+    return this.filteredCategories().find((category) => category.id === catId);
   });
 
   selectCategory(categoryId: string): void {
+    this.activeCategoryId.set(categoryId);
     this.supportForm.patchValue({
       categoryId: categoryId,
       subcategoryValue: ''
@@ -340,6 +305,7 @@ getStatusClass(status: string): string {
 
   private resetForm(): void {
     this.supportForm.reset();
+    this.activeCategoryId.set('');
     this.uploadedAttachments.set([]);
     this.generatedTicketId.set('');
     this.uploadResetTrigger.update(val => val + 1);
