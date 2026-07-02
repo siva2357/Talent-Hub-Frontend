@@ -60,17 +60,7 @@ export class SavedTalentComponent implements OnInit {
     const projectsCount = freelancer.contractCount || 0;
     const totalHours = hasContracts ? (100 + (idHash % 10) * 150) : 0;
     
-    const completedCount = freelancer.completedContractsCount || 0;
-    const performance = Math.min(100, completedCount * 10);
-    
-    let performanceTier = 'Low';
-    if (performance >= 80) {
-      performanceTier = 'High';
-    } else if (performance >= 40) {
-      performanceTier = 'Medium';
-    } else {
-      performanceTier = 'Low';
-    }
+
 
     return {
       id: freelancer._id,
@@ -78,8 +68,6 @@ export class SavedTalentComponent implements OnInit {
       role: freelancer.basicInformation?.professionalHeadline || 'Freelancer Professional',
       location: freelancer.location ? `${freelancer.location.city || ''}, ${freelancer.location.country || ''}`.replace(/^,\s*/, '').trim() || 'Remote' : 'Remote',
       avatar: freelancer.basicInformation?.profilePhoto || '/assets/images/profiles/avatar-1.jpg',
-      performance,
-      performanceTier,
       skills: freelancer.professionalDetails?.skills || [],
       hourlyRate: freelancer.hourlyRate || 50,
       projectsCount,

@@ -6,6 +6,8 @@ import { Table } from '../../../../../shared/components/table/table.component';
 import { TableColumn } from '../../../../../core/model/table.interface';
 import { FinanceService } from '../../../../../core/services/finance.service';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
+import { AccordionComponent } from '../../../../../shared/components/accordion/accordion.component';
+import { AlertModalService } from '../../../../../core/services/alert-modal.service';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, catchError, map, of, switchMap, tap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -13,7 +15,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-finance-overview',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, Table, FormsModule],
+  imports: [CommonModule, ButtonComponent, Table, FormsModule, AccordionComponent],
   templateUrl: './finance-overview.component.html',
   styleUrl: './finance-overview.component.css'
 })
@@ -22,6 +24,7 @@ export class FinanceOverviewComponent implements OnInit {
 
   private router = inject(Router);
   private financeService = inject(FinanceService);
+  private alertModal = inject(AlertModalService);
 
   // UI State
   isLoading = signal(true);
@@ -66,6 +69,7 @@ export class FinanceOverviewComponent implements OnInit {
           return res.report.map((item: any) => {
             const contractObj = {
               ...item,
+              id: item.contractId || item._id, // Add ID for Accordion
               totalEarned: item.earned,
               lastPaymentDate: item.lastPaymentDate || '-'
             };
@@ -115,6 +119,10 @@ export class FinanceOverviewComponent implements OnInit {
     // The unified page shows all transactions now.
   }
 
+  getStatementUrl(contractId: string): string {
+    return this.financeService.getPaymentStatementPdfUrl(contractId);
+  }
+
   withdrawContractBalance(contract: any) {
     if (contract.balance > 0) {
       this.selectedWithdrawItem.set({
@@ -147,16 +155,31 @@ export class FinanceOverviewComponent implements OnInit {
       this.financeService.withdraw(amount, contractId).subscribe({
         next: (res: any) => {
           if (res.success) {
-            alert(`Withdrawal request for ₹${amount.toFixed(2)} processed successfully!`);
+            this.alertModal.show({
+                title: 'Withdrawal Successful',
+                message: `Withdrawal request for ₹${amount.toFixed(2)} processed successfully!`,
+                type: 'success',
+                confirmText: 'Great'
+            });
             this.refresh$.next(); // Reload data
             this.closeModal();
           } else {
-            alert(res.message || 'Failed to process withdrawal.');
+            this.alertModal.show({
+                title: 'Withdrawal Failed',
+                message: res.message || 'Failed to process withdrawal.',
+                type: 'danger',
+                confirmText: 'Close'
+            });
           }
         },
         error: (err) => {
           console.error('Withdrawal error:', err);
-          alert('An error occurred during withdrawal processing.');
+          this.alertModal.show({
+                title: 'Error',
+                message: 'An error occurred during withdrawal processing.',
+                type: 'danger',
+                confirmText: 'Close'
+            });
         }
       });
     }

@@ -8,6 +8,7 @@ export interface Milestone {
 }
 
 export interface ContractTransactions {
+  id: string;
   diaryId: string;
   contractId: string;
   title: string;

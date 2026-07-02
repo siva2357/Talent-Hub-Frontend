@@ -1,0 +1,23 @@
+<div class="action-dropdown">
+  <button #trigger type="button" [class]="buttonClass" (click)="toggleMenu($event)">
+    <i class="bi bi-three-dots-vertical"></i>
+  </button>
+</div>
+
+<div #menu class="action-menu" 
+     [style.display]="isOpen ? 'block' : 'none'"
+     [style.position]="'absolute'" 
+     [style.top.px]="menuTop" 
+     [style.left.px]="menuLeft">
+  @for (action of actions; track action.value) {
+    <div class="action-item" 
+         [class.disabled]="action.disabled"
+         [class.danger]="action.value === 'delete' || action.value === 'reject' || action.value === 'decline' || action.value === 'rejected_state'"
+         (click)="onSelect(action, $event)">
+      @if (action.icon) {
+        <i class="bi {{action.icon}}"></i>
+      }
+      <span>{{ action.label }}</span>
+    </div>
+  }
+</div>

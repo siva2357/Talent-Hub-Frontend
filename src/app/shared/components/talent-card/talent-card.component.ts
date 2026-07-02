@@ -19,8 +19,6 @@ export class TalentCardComponent {
   @Input() avatar: string = '';
   @Input() location: string = '';
   @Input() role: string = '';
-  @Input() performance: number = 0;
-  @Input() performanceTier: string = '';
   @Input() skills: string[] = [];
   @Input() stats: TalentCardStat[] = [];
   @Input() statusClass: string = '';

@@ -161,6 +161,7 @@ section {
 .gradient-text {
   background: linear-gradient(90deg, var(--brand-400), #A3C8FF);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -420,13 +421,14 @@ section {
 
 /* ================= TABLE RESPONSIVE DROPDOWN CLIPPING FIX ================= */
 @media (min-width: 992px) {
+
   .table-responsive,
   .table-responsive-md,
   .table-responsive-lg,
   .table-responsive-xl {
     overflow: visible !important;
   }
-  
+
   /* Ensure parent containers of table-responsive don't clip on desktop */
   .glass-dark.overflow-hidden,
   .glass.overflow-hidden,
@@ -439,10 +441,35 @@ section {
 
 /* ================= HIDE SCROLLBARS GLOBALLY ================= */
 * {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
 }
 
 *::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
+  /* Chrome, Safari, Opera */
+}
+
+/* ================= GLOBAL MODAL CSS ================= */
+.modal-content {
+  background-color: var(--bg-tertiary) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+}
+
+.modal-header {
+  border-bottom: 0 !important;
+  padding: 1.5rem 1.5rem 0.5rem 1.5rem !important;
+}
+
+.modal-body {
+  padding: 1rem 1.5rem !important;
+}
+
+.modal-footer {
+  border-top: 0 !important;
+  padding: 1rem 1.5rem 1.5rem 1.5rem !important;
 }

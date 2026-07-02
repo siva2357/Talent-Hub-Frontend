@@ -11,27 +11,6 @@
     </p>
   </div>
 
-  <div class="d-flex flex-wrap gap-4 profile-legend">
-    <div class="d-flex align-items-center gap-2">
-      <span class="dot bg-secondary"></span>
-      <span class="text-xs text-secondary">New (0)</span>
-    </div>
-
-    <div class="d-flex align-items-center gap-2">
-      <span class="dot bg-danger"></span>
-      <span class="text-xs text-secondary">Low (10-40)</span>
-    </div>
-
-    <div class="d-flex align-items-center gap-2">
-      <span class="dot bg-warning"></span>
-      <span class="text-xs text-secondary">Medium (50-70)</span>
-    </div>
-
-    <div class="d-flex align-items-center gap-2">
-      <span class="dot bg-success"></span>
-      <span class="text-xs text-secondary">High (80-100)</span>
-    </div>
-  </div>
 </div>
 
 <!-- Horizontal Filters Bar -->
@@ -57,14 +36,7 @@
       </app-input>
     </div>
 
-    <div class="col-12 col-lg-2">
-      <app-input
-        type="select"
-        [(ngModel)]="selectedPerformance"
-        [options]="performanceOptions"
-        icon="bi-bar-chart">
-      </app-input>
-    </div>
+
 
     <div class="col-12 col-lg-3">
       <div class="row g-2">
@@ -110,7 +82,6 @@
 @if (
   appliedSearchQuery ||
   appliedCategory !== 'All Categories' ||
-  appliedPerformance !== 'All' ||
   appliedMinRate !== null ||
   appliedMaxRate !== null
 ) {
@@ -133,13 +104,7 @@
     </app-chip>
   }
 
-  @if (appliedPerformance !== 'All') {
-    <app-chip
-      [label]="'Performance: ' + appliedPerformance"
-      variant="secondary"
-      (remove)="removePerformance()">
-    </app-chip>
-  }
+
 
   @if (appliedMinRate !== null) {
     <app-chip
@@ -177,8 +142,6 @@
             [avatar]="talent.avatar"
             [location]="talent.location"
             [role]="talent.role"
-            [performance]="talent.performance"
-            [performanceTier]="talent.performanceTier"
             [skills]="talent.skills"
             [stats]="talent.stats"
             [statusClass]="talent.status === 'active' ? 'bg-success' : 'bg-danger'"

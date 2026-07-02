@@ -82,7 +82,7 @@
     <div class="col-12">
 
       @if (loading() && contracts().length === 0) {
-      <div class="glass-dark  p-0 p-md-3  d-none d-lg-block">
+      <div class="glass-dark border border-secondary  p-0 p-md-3  d-none d-lg-block">
         <div class="table-responsive-wrapper">
           <div class="table-min-width">
             <app-table [rows]="[]" [columns]="contractColumns" [loading]="true"></app-table>
@@ -131,7 +131,7 @@
       @else {
 
       <!-- Table View (Large Screens) -->
-      <div class="glass-dark  mt-5  p-2   d-none d-lg-block">
+      <div class="glass-dark border border-secondary  mt-5  p-2   d-none d-lg-block">
         <div class="table-responsive-wrapper">
           <div class="table-min-width">
             @defer (on viewport) {
@@ -160,9 +160,8 @@
                   <span class="text-white fw-bold" style="font-size: 14px;">{{ idx + 1 }}. Contract Title : </span><span
                     class="text-secondary fw-normal ms-1" style="font-size: 13px;">{{ contract.contractTitle }}</span>
                 </div>
-                <button class="action-trigger" (click)="toggleActionMenu($event, contract)">
-                  <i class="bi bi-three-dots-vertical"></i>
-                </button>
+                <app-dropdown [actions]="getActions(contract)"
+                  (actionSelect)="handleAction($event, contract)"></app-dropdown>
               </div>
 
               <div class="mb-auto">
@@ -263,49 +262,5 @@
 </ng-template>
 
 <ng-template #actionTemplate let-row>
-  <div class="action-dropdown">
-    <button class="action-trigger" (click)="toggleActionMenu($event, row)">
-      <i class="bi bi-three-dots-vertical"></i>
-    </button>
-  </div>
+  <app-dropdown [actions]="getActions(row)" (actionSelect)="handleAction($event, row)"></app-dropdown>
 </ng-template>
-
-<!-- Action Menu (Rendered outside table) -->
-@if(activeActionRow){
-<div class="action-menu glass" [style.position]="'absolute'" [style.top.px]="menuTop" [style.left.px]="menuLeft"
-  style="z-index: 9999; width: 220px;">
-
-  <div class="action-item" (click)="viewContract(activeActionRow._id); closeActionMenu()">
-    <i class="bi bi-eye"></i>
-    <span>View Contract</span>
-  </div>
-
-  <div class="action-item" (click)="viewApplicants(activeActionRow._id); closeActionMenu()">
-    <i class="bi bi-people"></i>
-    <span>Applicants</span>
-  </div>
-
-  <div class="action-item" (click)="viewHiredTalents(activeActionRow._id); closeActionMenu()">
-    <i class="bi bi-people"></i>
-    <span>View Hired Talents</span>
-  </div>
-
-  <div class="action-item" (click)="viewContractDiary(activeActionRow._id); closeActionMenu()">
-    <i class="bi bi-people"></i>
-    <span>View Contract Progress</span>
-  </div>
-
-  <div class="action-item" (click)="editContract(activeActionRow._id); closeActionMenu()">
-    <i class="bi bi-pencil"></i>
-    <span>Edit</span>
-  </div>
-
-  <div class="action-divider"></div>
-
-  <div class="action-item danger" (click)="deleteContract(activeActionRow._id); closeActionMenu()">
-    <i class="bi bi-trash"></i>
-    <span>Delete</span>
-  </div>
-
-</div>
-}

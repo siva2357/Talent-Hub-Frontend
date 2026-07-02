@@ -139,11 +139,7 @@
     </ng-template>
 
     <ng-template #actionsTemplate let-row="row">
-      <div class="action-dropdown">
-        <button class="action-trigger" (click)="toggleActionMenu($event, row)">
-          <i class="bi bi-three-dots-vertical"></i>
-        </button>
-      </div>
+      <app-dropdown [actions]="portfolioActions" (actionSelect)="handleAction($event, row)"></app-dropdown>
     </ng-template>
 
     @if (isSaving()) {
@@ -294,22 +290,4 @@
 
   </div>
 </div>
-
-<!-- Action Menu (Rendered outside table container) -->
-@if (activeActionRow) {
-<div class="action-menu glass" [style.position]="'absolute'" [style.top.px]="menuTop" [style.left.px]="menuLeft"
-  style="z-index: 9999; width: 220px;">
-
-  <div class="action-item" (click)="editItem(activeActionRow); closeActionMenu()">
-    <i class="bi bi-pencil"></i>
-    <span>Edit Project</span>
-  </div>
-
-  <div class="action-divider"></div>
-  <div class="action-item" (click)="deleteItem(activeActionRow._id || ''); closeActionMenu()">
-    <i class="bi bi-trash text-danger"></i>
-    <span class="text-danger">Delete Project</span>
-  </div>
-
-</div>
-}
+

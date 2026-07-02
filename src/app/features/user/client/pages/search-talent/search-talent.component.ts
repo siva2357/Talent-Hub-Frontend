@@ -26,7 +26,6 @@ export class SearchTalentComponent implements OnInit {
   selectedCategory = 'All Categories';
   minRate: number | null = null;
   maxRate: number | null = null;
-  selectedPerformance = 'All';
 
 categoryOptions = [
   { label: 'All Categories', value: 'All Categories' },
@@ -36,13 +35,7 @@ categoryOptions = [
   }))
 ];
 
-performanceOptions = [
-  { label: 'All Performance', value: 'All' },
-  { label: 'New', value: 'New' },
-  { label: 'High', value: 'High' },
-  { label: 'Medium', value: 'Medium' },
-  { label: 'Low', value: 'Low' }
-];
+
 
   talents = signal<any[]>([]);
   isLoading = signal(true);
@@ -60,13 +53,7 @@ loadTalents(): void {
         this.mapTalentFields(f)
       );
 
-      if (this.selectedPerformance !== 'All') {
-        talents = talents.filter(
-          talent => talent.performanceTier === this.selectedPerformance
-        );
-      }
-
-      this.talents.set(talents);
+        this.talents.set(talents);
       this.isLoading.set(false);
     },
     error: (err) => {
@@ -92,7 +79,6 @@ loadTalents(): void {
 applyFilters(): void {
   this.appliedSearchQuery = this.searchQuery;
   this.appliedCategory = this.selectedCategory;
-  this.appliedPerformance = this.selectedPerformance;
   this.appliedMinRate = this.minRate;
   this.appliedMaxRate = this.maxRate;
 
@@ -121,11 +107,7 @@ applyFilters(): void {
           this.mapTalentFields(f)
         );
 
-        if (this.selectedPerformance !== 'All') {
-          talents = talents.filter(
-            talent => talent.performanceTier === this.selectedPerformance
-          );
-        }
+
 
         this.talents.set(talents);
       this.isLoading.set(false);
@@ -140,13 +122,11 @@ applyFilters(): void {
   resetFilters(): void {
   this.searchQuery = '';
   this.selectedCategory = 'All Categories';
-  this.selectedPerformance = 'All';
   this.minRate = null;
   this.maxRate = null;
 
   this.appliedSearchQuery = '';
   this.appliedCategory = 'All Categories';
-  this.appliedPerformance = 'All';
   this.appliedMinRate = null;
   this.appliedMaxRate = null;
 
@@ -184,18 +164,8 @@ applyFilters(): void {
   }
 
   mapTalentFields(freelancer: any): any {
-    const activeContracts = freelancer.activeContracts || 0;
+const activeContracts = freelancer.activeContracts || 0;
 const completedContracts = freelancer.completedContracts || 0;
-let performance = Math.min(100, completedContracts * 10);
-let performanceTier = 'New';
-
-if (performance > 0 && performance <= 40) {
-  performanceTier = 'Low';
-} else if (performance > 40 && performance <= 70) {
-  performanceTier = 'Medium';
-} else if (performance > 70) {
-  performanceTier = 'High';
-}
 
 return {
   id: freelancer._id,
@@ -205,9 +175,6 @@ return {
     .replace(/^,\s*/, '')
     .trim() || 'Remote',
   avatar: freelancer.profilePhoto || '/assets/images/profiles/avatar-1.jpg',
-
-  performance,
-  performanceTier,
 
   skills: freelancer.skills || [],
   hourlyRate: freelancer.hourlyRate || 50,
@@ -238,10 +205,7 @@ removeCategory(): void {
   this.applyFilters();
 }
 
-removePerformance(): void {
-  this.selectedPerformance = 'All';
-  this.applyFilters();
-}
+
 
 removeMinRate(): void {
   this.minRate = null;
@@ -256,7 +220,6 @@ removeMaxRate(): void {
 
 appliedSearchQuery = '';
 appliedCategory = 'All Categories';
-appliedPerformance = 'All';
 appliedMinRate: number | null = null;
 appliedMaxRate: number | null = null;
 

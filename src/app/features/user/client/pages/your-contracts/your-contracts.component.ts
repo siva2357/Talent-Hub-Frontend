@@ -8,6 +8,7 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { ChipComponent } from '../../../../../shared/components/chip/chip.component';
 import { BadgeComponent } from '../../../../../shared/components/badge/badge.component';
+import { DropdownComponent, DropdownAction } from '../../../../../shared/components/dropdown/dropdown.component';
 
 import { ContractService } from '../../../../../core/services/contract.service';
 
@@ -16,11 +17,12 @@ import { Table } from "../../../../../shared/components/table/table.component";
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 import { ContractStatusEnum, BudgetTypeEnum } from '../../../../../core/enums/contract.enum';
 import { Category } from '../../../../../core/enums/category.enum';
+import { AlertModalService } from '../../../../../core/services/alert-modal.service';
 
 @Component({
   selector: 'app-your-contracts',
   standalone: true,
-  imports: [CommonModule, RouterLink, InputComponent, ButtonComponent, FormsModule, ChipComponent, Table, BadgeComponent],
+  imports: [CommonModule, RouterLink, InputComponent, ButtonComponent, FormsModule, ChipComponent, Table, BadgeComponent, DropdownComponent],
   templateUrl: './your-contracts.component.html',
   styleUrl: './your-contracts.component.css'
 })
@@ -96,7 +98,8 @@ export class YourContractsComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private alertModalService: AlertModalService
   ) { }
 
   // ========================================
@@ -107,15 +110,7 @@ export class YourContractsComponent implements OnInit {
     this.getMyContracts();
   }
 
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: Event) {
-    if (this.activeActionRow) {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.action-dropdown') && !target.closest('.action-menu')) {
-        this.closeActionMenu();
-      }
-    }
-  }
+
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event?: Event): void {
@@ -168,29 +163,24 @@ export class YourContractsComponent implements OnInit {
 
   }
 
-  activeActionRow: Contract | null = null;
-  menuTop: number = 0;
-  menuLeft: number = 0;
-
-  toggleActionMenu(event: MouseEvent, row: Contract): void {
-    event.stopPropagation();
-
-    if (this.activeActionRow && this.activeActionRow._id === row._id) {
-      this.closeActionMenu();
-    } else {
-      this.activeActionRow = row;
-      const target = (event.currentTarget as HTMLElement).closest('.action-trigger') || event.currentTarget as HTMLElement;
-      const rect = target.getBoundingClientRect();
-
-      // Since the menu is absolute and the page can scroll freely,
-      // we can always open it downwards.
-      this.menuTop = rect.bottom + window.scrollY + 8;
-      this.menuLeft = rect.right + window.scrollX - 220;
-    }
+  getActions(contract: Contract): DropdownAction[] {
+    return [
+      { label: 'View Contract', value: 'view', icon: 'bi-eye' },
+      { label: 'Applicants', value: 'applicants', icon: 'bi-people' },
+      { label: 'View Hired Talents', value: 'hired', icon: 'bi-people' },
+      { label: 'View Contract Progress', value: 'diary', icon: 'bi-people' },
+      { label: 'Edit', value: 'edit', icon: 'bi-pencil' },
+      { label: 'Delete', value: 'delete', icon: 'bi-trash text-danger' }
+    ];
   }
 
-  closeActionMenu(): void {
-    this.activeActionRow = null;
+  handleAction(actionValue: string, contract: Contract) {
+    if (actionValue === 'view') this.viewContract(contract._id);
+    else if (actionValue === 'applicants') this.viewApplicants(contract._id);
+    else if (actionValue === 'hired') this.viewHiredTalents(contract._id);
+    else if (actionValue === 'diary') this.viewContractDiary(contract._id);
+    else if (actionValue === 'edit') this.editContract(contract._id);
+    else if (actionValue === 'delete') this.deleteContract(contract._id);
   }
 
   // ========================================
@@ -287,23 +277,26 @@ export class YourContractsComponent implements OnInit {
   // ========================================
 
   deleteContract(id: string): void {
-    const confirmed = confirm(
-      'Are you sure you want to delete this contract?'
-    );
-    if (!confirmed) return;
-    this.contractService
-      .deleteContract(id)
-      .subscribe({
-        next: () => {
-          this.contracts.update(contracts =>
-            contracts.filter(contract => contract._id !== id)
-          );
-        },
-        error: (error) => {
-          console.error(error);
-        }
-      });
-
+    this.alertModalService.show({
+      title: 'Delete Contract',
+      message: 'Are you sure you want to delete this contract?',
+      type: 'danger',
+      confirmText: 'Delete',
+      onConfirm: () => {
+        this.contractService
+          .deleteContract(id)
+          .subscribe({
+            next: () => {
+              this.contracts.update(contracts =>
+                contracts.filter(contract => contract._id !== id)
+              );
+            },
+            error: (error) => {
+              console.error(error);
+            }
+          });
+      }
+    });
   }
 
   editContract(id: string): void {

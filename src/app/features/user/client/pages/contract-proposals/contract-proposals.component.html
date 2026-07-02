@@ -207,52 +207,8 @@
     </ng-template>
 
     <ng-template #actionTemplate let-row="row">
-        <div class="action-dropdown">
-            <button class="action-trigger" (click)="toggleActionMenu($event, row)">
-                <i class="bi bi-three-dots-vertical"></i>
-            </button>
-        </div>
+        <app-dropdown [actions]="getActions(row)" (actionSelect)="handleAction($event, row)"></app-dropdown>
     </ng-template>
-
-    <!-- Action Menu (Rendered outside table) -->
-    @if(activeActionRow()) {
-    <div class="action-menu glass" [style.position]="'fixed'" [style.top.px]="menuTop()" [style.left.px]="menuLeft()"
-        style="z-index: 9999; width: 220px;">
-        <div class="action-item" (click)="viewProfile(activeActionRow().freelancer._id); closeActionMenu()">
-            <i class="bi bi-person-circle"></i>
-            <span>View Profile</span>
-        </div>
-
-        @if(activeActionRow().applicationStatus !== 'shortlisted' && activeActionRow().applicationStatus !== 'rejected')
-        {
-        <div class="action-item" (click)="openRecruitmentModal(activeActionRow()); closeActionMenu()">
-            <i class="bi bi-briefcase-fill"></i>
-            <span>Recruitment</span>
-        </div>
-        }
-
-        @if(activeActionRow().applicationStatus === 'shortlisted' || activeActionRow().applicationStatus === 'hired' || activeActionRow().applicationStatus === 'rejected') {
-        @if(activeActionRow().offerStatus === 'none') {
-        <div class="action-item text-success" [routerLink]="['/user/legal-form', contractId()]" [queryParams]="{appId: activeActionRow().applicationId}" (click)="closeActionMenu()">
-            <i class="bi bi-send-fill"></i>
-            <span>Send Offer</span>
-        </div>
-        } @else if(activeActionRow().offerStatus !== 'none') {
-        <div class="action-item text-warning" style="pointer-events: none; opacity: 0.7;">
-            <i class="bi bi-clock-history"></i>
-            <span>Offer Sent</span>
-        </div>
-        }
-        }
-
-        @if(activeActionRow().applicationStatus === 'rejected') {
-        <div class="action-item text-danger" style="pointer-events: none; opacity: 0.7;">
-            <i class="bi bi-person-x-fill"></i>
-            <span>Rejected</span>
-        </div>
-        }
-    </div>
-    }
 
     <!-- ======================================== -->
     <!-- Recruitment Modal -->

@@ -14,6 +14,7 @@ import { Table } from '../../../../../shared/components/table/table.component';
 import { FilePreviewComponent } from "../../../../../shared/components/file-preview/file-preview.component";
 import { BadgeComponent } from '../../../../../shared/components/badge/badge.component';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
+import { AlertModalService } from '../../../../../core/services/alert-modal.service';
 
 @Component({
   selector: 'app-blog-post',
@@ -30,6 +31,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
   private fb = inject(FormBuilder);
   private blogService = inject(BlogService);
   private toastr = inject(ToastrService);
+  private alertModalService = inject(AlertModalService);
 
 
   bucketKey = BucketKey.AdminCollection;
@@ -263,26 +265,28 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
   }
 
   deletePost(id: string): void {
-
-    if (!confirm('Are you sure you want to delete this blog?')) {
-      return;
-    }
-
-    this.blogService.deleteBlog(id).subscribe({
-      next: () => {
-        this.toastr.success(
-          'Blog deleted successfully',
-          'Blog Management'
-        );
-        this.loadPosts();
-      },
-
-      error: (error) => {
-        console.error(error);
-        this.toastr.error(
-          'Failed to delete blog',
-          'Blog Management'
-        );
+    this.alertModalService.show({
+      title: 'Delete Blog',
+      message: 'Are you sure you want to delete this blog?',
+      type: 'danger',
+      confirmText: 'Delete',
+      onConfirm: () => {
+        this.blogService.deleteBlog(id).subscribe({
+          next: () => {
+            this.toastr.success(
+              'Blog deleted successfully',
+              'Blog Management'
+            );
+            this.loadPosts();
+          },
+          error: (error) => {
+            console.error(error);
+            this.toastr.error(
+              'Failed to delete blog',
+              'Blog Management'
+            );
+          }
+        });
       }
     });
   }

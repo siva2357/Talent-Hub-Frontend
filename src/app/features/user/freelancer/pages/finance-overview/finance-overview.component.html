@@ -93,77 +93,64 @@
             <h5 class="text-white fw-bold mb-0">Contract Earning History</h5>
         </div>
 
-        <div class="list-container">
-            @for (contract of contracts(); track contract.title) {
-            <div class="list-item-wrapper" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                <div class="list-item p-4 transition-all cursor-pointer hover-bg-darker"
-                    [class.active-item]="selectedContract() === contract" (click)="toggleContractDetails(contract)">
-                    <div class="row align-items-center g-3 g-md-0">
-                        <div class="col-12 col-md-3 col-lg-3 mb-2 mb-md-0">
-                            <div class="d-flex align-items-center gap-3 h-100">
-                                <i class="bi"
-                                    [ngClass]="selectedContract() === contract ? 'bi-chevron-down text-secondary' : 'bi-chevron-right text-secondary'"
-                                    style="font-size: 0.8rem;"></i>
-                                <div>
-                                    <div class="text-secondary text-uppercase mb-1"
-                                        style="font-size: 10px; letter-spacing: 0.5px;">Contract Title</div>
-                                    <h6 class="text-white fw-bold mb-0" style="font-size: 15px;">{{ contract.title }}
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-2 col-lg-2">
-                            <div class="text-secondary text-uppercase mb-1"
-                                style="font-size: 10px; letter-spacing: 0.5px;">Budget Type</div>
+        <div class="list-container p-3 p-md-4">
+            @if (contracts().length > 0) {
+            <app-accordion [items]="contracts()" accordionId="financeAccordion">
+                <ng-template #bodyTemplate let-contract>
+                    <!-- Metadata moved to body -->
+                    <div class="row g-3 px-1 px-md-3 mb-4">
+                        <div class="col-6 col-md-3">
+                            <div class="text-secondary text-uppercase mb-1" style="font-size: 10px; letter-spacing: 0.5px;">Budget Type</div>
                             <div class="fw-bold text-primary" style="font-size: 15px;">{{ contract.type }}</div>
                         </div>
-                        <div class="col-6 col-md-2 col-lg-2">
-                            <div class="text-secondary text-uppercase mb-1"
-                                style="font-size: 10px; letter-spacing: 0.5px;">Status</div>
-                            <div class="fw-bold" style="font-size: 15px;"
-                                [ngClass]="contract.status === 'Completed' ? 'text-success' : 'text-primary'">{{
-                                contract.status }}</div>
+                        <div class="col-6 col-md-3">
+                            <div class="text-secondary text-uppercase mb-1" style="font-size: 10px; letter-spacing: 0.5px;">Status</div>
+                            <div class="fw-bold" style="font-size: 15px;" [ngClass]="contract.status === 'Completed' ? 'text-success' : 'text-primary'">{{ contract.status }}</div>
                         </div>
-                        <div class="col-6 col-md-3 col-lg-3">
-                            <div class="text-secondary text-uppercase mb-1"
-                                style="font-size: 10px; letter-spacing: 0.5px;">Total Earned</div>
-                            <div class="text-white fw-bold" style="font-size: 15px;">₹{{ contract.totalEarned |
-                                number:'1.2-2' }}</div>
+                        <div class="col-6 col-md-3">
+                            <div class="text-secondary text-uppercase mb-1" style="font-size: 10px; letter-spacing: 0.5px;">Total Earned</div>
+                            <div class="text-white fw-bold" style="font-size: 15px;">₹{{ contract.totalEarned | number:'1.2-2' }}</div>
                         </div>
-                        <div class="col-6 col-md-2 col-lg-2">
-                            <div class="text-secondary text-uppercase mb-1"
-                                style="font-size: 10px; letter-spacing: 0.5px;">Balance</div>
-                            <div class="text-white fw-bold mb-2" style="font-size: 15px;"
-                                [ngClass]="{'text-success': contract.balance > 0}">₹{{ contract.balance | number:'1.2-2'
-                                }}</div>
-                            @if (contract.balance > 0) {
-                            <app-button variant="brand" size="sm"
-                                customClass="rounded-pill px-2 py-1 border border-white border-opacity-10 text-white"
-                                fontSize="10px"
-                                [disabled]="contract.status?.toLowerCase() !== 'completed' && contract.status?.toLowerCase() !== 'cancelled'"
-                                (click)="$event.stopPropagation(); withdrawContractBalance(contract)">
-                                <i class="bi bi-wallet2 me-1"></i> Withdraw
-                            </app-button>
-                            }
+                        <div class="col-6 col-md-3">
+                            <div class="text-secondary text-uppercase mb-1" style="font-size: 10px; letter-spacing: 0.5px;">Balance</div>
+                            <div class="text-white fw-bold mb-2" style="font-size: 15px;" [ngClass]="{'text-success': contract.balance > 0}">₹{{ contract.balance | number:'1.2-2' }}</div>
+                            <div class="d-flex flex-wrap gap-2">
+                                @if (contract.balance > 0) {
+                                <app-button variant="brand" size="sm"
+                                    customClass="rounded-pill px-2 py-1 border border-white border-opacity-10 text-white"
+                                    fontSize="10px"
+                                    [disabled]="contract.status?.toLowerCase() !== 'completed' && contract.status?.toLowerCase() !== 'cancelled'"
+                                    (click)="$event.stopPropagation(); withdrawContractBalance(contract)">
+                                    <i class="bi bi-wallet2 me-1"></i> Withdraw
+                                </app-button>
+                                }
+                                @if (contract.status?.toLowerCase() === 'completed') {
+                                <a [href]="getStatementUrl(contract.id)" target="_blank" class="text-decoration-none" (click)="$event.stopPropagation()">
+                                    <app-button variant="outline" size="sm" customClass="rounded-pill px-2 py-1 text-white border-secondary" fontSize="10px">
+                                        <i class="bi bi-download me-1"></i> Statement
+                                    </app-button>
+                                </a>
+                                }
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Phase Breakdown (Conditional) -->
-                @if (selectedContract() === contract) {
-                <div class="phase-breakdown px-4 px-md-5 py-4 animate-in"
-                    style="background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.02);">
-                    <div class="mb-4 d-flex align-items-center gap-2">
-                        <div class="h-px bg-primary opacity-50" style="width: 20px;"></div>
-                        <span class="text-primary text-uppercase fw-bold text-xxs ls-1">Payment Phase Breakdown</span>
+                    
+                    <!-- Phase Breakdown -->
+                    <div class="phase-breakdown px-1 px-md-3 py-4 animate-in" style="background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.02);">
+                        <div class="mb-4 d-flex align-items-center gap-2">
+                            <div class="h-px bg-primary opacity-50" style="width: 20px;"></div>
+                            <span class="text-primary text-uppercase fw-bold text-xxs ls-1">Payment Phase Breakdown</span>
+                        </div>
+                        <div class="phase-list">
+                            <app-table [rows]="contract.phases" [columns]="phaseColumns" [loading]="isLoading()"></app-table>
+                        </div>
                     </div>
-
-                    <div class="phase-list px-1 px-md-3">
-                        <app-table [rows]="contract.phases" [columns]="phaseColumns"
-                            [loading]="isLoading()"></app-table>
-                    </div>
-                </div>
-                }
+                </ng-template>
+            </app-accordion>
+            } @else {
+            <div class="text-center py-5 glass-dark rounded-4 border border-white border-opacity-5">
+                <i class="bi bi-folder2-open text-secondary fs-1 mb-3"></i>
+                <p class="text-secondary mb-0">No contract earning history found.</p>
             </div>
             }
         </div>

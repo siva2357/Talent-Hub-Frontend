@@ -8,11 +8,12 @@ import { InputComponent } from "../../../../../shared/components/input/input.com
 import { FormsModule } from '@angular/forms';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 import { BadgeComponent } from '../../../../../shared/components/badge/badge.component';
+import { DropdownComponent, DropdownAction } from '../../../../../shared/components/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-freelancer-list',
   standalone: true,
-  imports: [CommonModule, Table, ButtonComponent, InputComponent, FormsModule, BadgeComponent],
+  imports: [CommonModule, Table, ButtonComponent, InputComponent, FormsModule, BadgeComponent, DropdownComponent],
   templateUrl: './freelancer-list.component.html',
   styleUrl: './freelancer-list.component.css'
 })
@@ -121,34 +122,37 @@ export class FreelancerListComponent implements OnInit {
     { label: 'Deactivated', value: 'Deactivated' }
   ];
 
-  activeActionRow: FreelancerData | null = null;
-  menuTop: number = 0;
-  menuLeft: number = 0;
+  getActions(freelancer: FreelancerData): DropdownAction[] {
+    const actions: DropdownAction[] = [
+      { label: 'View Profile', value: 'view', icon: 'bi bi-eye text-primary' }
+    ];
 
-  toggleActionMenu(event: MouseEvent, row: FreelancerData): void {
-    event.stopPropagation();
-    if (this.activeActionRow && this.activeActionRow.id === row.id) {
-      this.closeActionMenu();
+    if (freelancer.status === 'Pending Approval') {
+      actions.push({ label: 'Approve Profile', value: 'Approve', icon: 'bi bi-check-lg text-success' });
+      actions.push({ label: 'Block / Reject', value: 'Blocked', icon: 'bi bi-slash-circle text-danger' });
     } else {
-      this.activeActionRow = row;
-      const target = (event.currentTarget as HTMLElement).closest('.action-trigger') || event.currentTarget as HTMLElement;
-      const rect = target.getBoundingClientRect();
-      this.menuTop = rect.bottom + window.scrollY + 8;
-      this.menuLeft = rect.right + window.scrollX - 220;
-    }
-  }
-
-  closeActionMenu(): void {
-    this.activeActionRow = null;
-  }
-
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: Event): void {
-    if (this.activeActionRow) {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.action-menu') && !target.closest('.action-trigger')) {
-        this.closeActionMenu();
+      if (freelancer.status === 'Blocked') {
+        actions.push({ label: 'Unblock Account', value: 'Active', icon: 'bi bi-shield-check text-success' });
+      } else {
+        actions.push({ label: 'Block Account', value: 'Blocked', icon: 'bi bi-shield-slash text-warning' });
       }
+
+      if (freelancer.status === 'Active') {
+        actions.push({ label: 'Deactivate', value: 'Deactivated', icon: 'bi bi-pause-circle text-danger' });
+      } else if (freelancer.status === 'Deactivated' || freelancer.status === 'Suspended') {
+        actions.push({ label: 'Activate', value: 'Active', icon: 'bi bi-play-circle text-success' });
+      }
+    }
+    return actions;
+  }
+
+  handleAction(actionValue: string, freelancer: FreelancerData) {
+    if (actionValue === 'view') {
+      this.viewProfile(freelancer);
+    } else if (actionValue === 'Approve') {
+      this.approveFreelancer(freelancer.id);
+    } else {
+      this.changeFreelancerStatus(freelancer.id, actionValue as any);
     }
   }
 }

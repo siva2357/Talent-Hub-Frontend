@@ -11,9 +11,11 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
 import { FilePreviewComponent } from '../../../../../shared/components/file-preview/file-preview.component';
 import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { AlertModalService } from '../../../../../core/services/alert-modal.service';
 import { BehaviorSubject, catchError, of, switchMap } from 'rxjs';
 import { Table } from '../../../../../shared/components/table/table.component';
 import { TableColumn } from '@swimlane/ngx-datatable';
+import { DropdownComponent, DropdownAction } from '../../../../../shared/components/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-portfolio',
@@ -27,7 +29,8 @@ import { TableColumn } from '@swimlane/ngx-datatable';
     InputComponent,
     FilePreviewComponent,
     ReactiveFormsModule,
-    Table
+    Table,
+    DropdownComponent
   ],
   templateUrl: './portfolio.component.html',
   styleUrl: './portfolio.component.css',
@@ -35,6 +38,7 @@ import { TableColumn } from '@swimlane/ngx-datatable';
 export class PortfolioComponent implements OnInit, AfterViewInit {
   private portfolioService = inject(PortfolioService);
   private toastr = inject(ToastrService);
+  private alertModalService = inject(AlertModalService);
 
   private fb = inject(FormBuilder);
 
@@ -71,19 +75,10 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
 
   columns: TableColumn[] = [];
-  activeActionRow: Portfolio | null = null;
-  menuTop: number = 0;
-  menuLeft: number = 0;
-
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: Event) {
-    if (this.activeActionRow) {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.action-dropdown') && !target.closest('.action-menu')) {
-        this.closeActionMenu();
-      }
-    }
-  }
+  portfolioActions: DropdownAction[] = [
+    { label: 'Edit Project', value: 'edit', icon: 'bi bi-pencil' },
+    { label: 'Delete Project', value: 'delete', icon: 'bi bi-trash text-danger' }
+  ];
 
   ngOnInit(): void {
     this.initForm();
@@ -201,22 +196,28 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
   }
 
   deleteItem(id: string): void {
-    if (confirm('Are you sure you want to delete this portfolio project?')) {
-      this.portfolioService.deletePortfolio(id).subscribe({
-        next: () => {
-          this.isSaving.set(true);
-          this.toastr.success('Project deleted from portfolio.', 'My Portfolio');
-          setTimeout(() => {
-            this.loadPortfolio();
-            this.isSaving.set(false);
-          }, 2000);
-        },
-        error: (err: any) => {
-          this.toastr.error('Failed to delete portfolio project.', 'My Portfolio');
-          console.error(err);
-        },
-      });
-    }
+    this.alertModalService.show({
+      title: 'Delete Portfolio Project',
+      message: 'Are you sure you want to delete this portfolio project?',
+      type: 'danger',
+      confirmText: 'Delete',
+      onConfirm: () => {
+        this.portfolioService.deletePortfolio(id).subscribe({
+          next: () => {
+            this.isSaving.set(true);
+            this.toastr.success('Project deleted from portfolio.', 'My Portfolio');
+            setTimeout(() => {
+              this.loadPortfolio();
+              this.isSaving.set(false);
+            }, 2000);
+          },
+          error: (err: any) => {
+            this.toastr.error('Failed to delete portfolio project.', 'My Portfolio');
+            console.error(err);
+          },
+        });
+      }
+    });
   }
 
   onUploadSuccess(url: string): void {
@@ -262,21 +263,11 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
     this.isFormOpen.set(false);
   }
 
-  toggleActionMenu(event: MouseEvent, row: Portfolio): void {
-    event.stopPropagation();
-    if (this.activeActionRow && this.activeActionRow._id === row._id) {
-      this.closeActionMenu();
-    } else {
-      this.activeActionRow = row;
-      const target = (event.currentTarget as HTMLElement).closest('.action-trigger') || event.currentTarget as HTMLElement;
-      const rect = target.getBoundingClientRect();
-
-      this.menuTop = rect.bottom + window.scrollY + 8;
-      this.menuLeft = rect.right + window.scrollX - 220;
+  handleAction(actionValue: string, item: Portfolio): void {
+    if (actionValue === 'edit') {
+      this.editItem(item);
+    } else if (actionValue === 'delete') {
+      this.deleteItem(item._id || '');
     }
-  }
-
-  closeActionMenu(): void {
-    this.activeActionRow = null;
   }
 }

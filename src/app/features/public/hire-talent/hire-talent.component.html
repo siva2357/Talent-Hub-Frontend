@@ -8,9 +8,9 @@
       <div class="testimonial-card glass p-0 rounded-5 overflow-hidden position-relative mb-5">
         <img src="assets/images/Talent Matching.jpg" alt="Team Collaboration" class="img-fluid">
         <div class="testimonial-content text-start w-100 px-4 px-md-5">
-          <h3 class="fw-medium lh-base">“Talent Hub helps businesses discover the right talent through AI-powered
+          <h3 class="fw-medium lh-base">“Talent Hub helps businesses discover the right talent through skill-based
             matching, verified profiles, transparent contract history, and real-time collaboration tools — making hiring
-            faster, smarter, and more reliable.”</h3>
+            easier, and more reliable.”</h3>
         </div>
       </div>
       <div class="row g-4 pt-4 border-top border-secondary border-opacity-10">
@@ -26,7 +26,7 @@
         </div>
         <div class="col-lg-4">
           <h4 class="fw-bold mb-3">Meet & Collaborate with Talent</h4>
-          <p class="text-sm text-secondary">Connect through chat, meetings, and real-time discussions to align project
+          <p class="text-sm text-secondary">Connect through our support resolving system and real-time discussions to align project
             goals, timelines, budgets, and expectations while building productive working relationships.</p>
         </div>
       </div>
@@ -45,19 +45,19 @@
         </div>
         <div class="col-lg-5 offset-lg-1 mt-5 mt-lg-0">
           <h6 class="text-brand text-sm fw-bold mb-3">Talent Hub starts here</h6>
-          <h3 class="fw-bold mb-4 h4">AI-powered intelligence for smarter talent matching.</h3>
+          <h3 class="fw-bold mb-4 h4">Skill-based capabilities for better talent matching.</h3>
           <p class="text-lg text-secondary mb-4">
-            Our intelligent matching system analyzes project requirements, technical skills, experience levels, budgets,
+            Our matching system analyzes project requirements, technical skills, experience levels, budgets,
             and workflow preferences to recommend the most suitable talent profiles in real time.
           </p>
           <p class="text-lg text-secondary mb-4">
-            Improve hiring accuracy with AI-driven profile insights, skill verification, performance analysis, and
+            Improve hiring accuracy with advanced profile insights, skill verification, performance analysis, and
             risk-status evaluation designed to help teams make confident hiring decisions faster.
           </p>
           <ul class="list-unstyled d-grid gap-3 mb-5">
             <li class="d-flex gap-3 align-items-center text-secondary">
               <i class="bi bi-check2 text-brand fs-4"></i>
-              <span>AI-based talent matching using project requirements</span>
+              <span>Skill-based talent matching using project requirements</span>
             </li>
             <li class="d-flex gap-3 align-items-center text-secondary">
               <i class="bi bi-check2 text-brand fs-4"></i>
@@ -65,7 +65,7 @@
             </li>
             <li class="d-flex gap-3 align-items-center text-secondary">
               <i class="bi bi-check2 text-brand fs-4"></i>
-              <span>Faster shortlisting with intelligent recommendations</span>
+              <span>Faster shortlisting with skill-based recommendations</span>
             </li>
           </ul>
           <app-button variant="dark">Start Hiring Talents</app-button>
@@ -79,7 +79,7 @@
   <section class="feature-grid-section section-padding bg-dark-soft mt-4">
     <div class="container">
       <div class="mb-5 text-start">
-        <h3 class="fw-bold mb-3 h4">A smarter way to <span class="text-brand">hire talent.</span></h3>
+        <h3 class="fw-bold mb-3 h4">A seamless way to <span class="text-brand">hire talent.</span></h3>
         <p class="text-lg text-secondary" style="max-width: 800px;">
           Everything you need to find the right talent, collaborate seamlessly, and deliver exceptional results.
         </p>
@@ -137,11 +137,9 @@
             [avatar]="talent.avatar"
             [location]="talent.location"
             [role]="talent.role"
-            [performance]="talent.performance"
-            [performanceTier]="talent.performanceTier"
             [skills]="talent.skills"
             [stats]="getTalentStats(talent)"
-            [statusClass]="talent.performanceTier === 'High' ? 'bg-success' : (talent.performanceTier === 'Medium' ? 'bg-warning' : 'bg-danger')"
+            [statusClass]="talent.isAvailable ? 'bg-success' : 'bg-danger'"
             [statusLabel]="talent.isAvailable ? 'Available' : 'Busy'">
             <div actions class="d-flex gap-2">
               <button class="btn btn-outline-secondary btn-sm rounded-3 px-2 border-opacity-25">
@@ -165,10 +163,10 @@
         <div class="col-lg-4">
           <div class="step-item">
             <div class="step-number mb-4">1</div>
-            <h4 class="fw-bold mb-3">Discover AI-Matched Talent</h4>
-            <p class="text-secondary text-sm">Browse verified freelancers recommended using AI-powered skill matching
+            <h4 class="fw-bold mb-3">Discover Top Talent</h4>
+            <p class="text-secondary text-sm">Browse verified freelancers recommended using skill-based matching
               based on your project requirements, technologies, experience level, and business goals.</p>
-            <p class="text-secondary text-sm mt-3">Find the right professionals faster with smart talent
+            <p class="text-secondary text-sm mt-3">Find the right professionals faster with skill-based talent
               recommendations, performance insights, portfolios, and availability status.</p>
           </div>
         </div>
@@ -176,7 +174,7 @@
           <div class="step-item">
             <div class="step-number mb-4">2</div>
             <h4 class="fw-bold mb-3">Connect & Discuss Project Details</h4>
-            <p class="text-secondary text-sm">Chat directly with shortlisted talent to discuss project scope, budget,
+            <p class="text-secondary text-sm">Communicate securely through the platform to discuss project scope, budget,
               timeline, technical requirements, milestones, and collaboration expectations.</p>
             <p class="text-secondary text-sm mt-3">Review profiles, compare expertise, negotiate pricing, and finalize
               the best fit for your project.</p>
@@ -185,11 +183,11 @@
         <div class="col-lg-4">
           <div class="step-item">
             <div class="step-number mb-4">3</div>
-            <h4 class="fw-bold mb-3">Interview, Hire & Start Working</h4>
-            <p class="text-secondary text-sm">Conduct interviews, evaluate communication and technical skills, complete
+            <h4 class="fw-bold mb-3">Evaluate, Hire & Start Working</h4>
+            <p class="text-secondary text-sm">Evaluate communication and technical skills, complete
               secure onboarding, and hire with confidence.</p>
             <p class="text-secondary text-sm mt-3">Start collaborating immediately using integrated workspace tools,
-              project tracking, messaging, meetings, and workflow management features.</p>
+              project tracking, messaging, and workflow management features.</p>
           </div>
         </div>
       </div>

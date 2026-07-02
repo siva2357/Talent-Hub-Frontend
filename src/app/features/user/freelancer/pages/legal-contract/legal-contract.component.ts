@@ -8,6 +8,7 @@ import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 import { FileUploadComponent } from '../../../../../shared/components/file-upload/file-upload.component';
 import { FilePreviewComponent } from '../../../../../shared/components/file-preview/file-preview.component';
 import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-legal-contract',
@@ -22,6 +23,7 @@ export class LegalContractComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private offerService = inject(OfferService);
+  private toastr = inject(ToastrService);
 
   offerId = signal<string | null>(null);
   offerData = signal<any>(null);
@@ -118,7 +120,7 @@ export class LegalContractComponent implements OnInit {
   downloadContractPdf(): void {
     const currentId = this.offerId();
     if (!currentId || currentId.startsWith('mock_')) {
-      alert("PDF download is only available for real server-created offers.");
+      this.toastr.warning("PDF download is only available for real server-created offers.", "Contract Signature");
       return;
     }
     window.open(this.getContractPdfUrl(), '_blank');
@@ -135,7 +137,7 @@ export class LegalContractComponent implements OnInit {
     if (currentId.startsWith('mock_')) {
       setTimeout(() => {
         this.isSigning.set(false);
-        alert("Mock offer signed successfully!");
+        this.toastr.success("Mock offer signed successfully!", "Contract Signature");
         this.router.navigate(['/user/offers']);
       }, 1500);
       return;
@@ -143,13 +145,13 @@ export class LegalContractComponent implements OnInit {
 
     this.offerService.signOffer(currentId, { freelancerSignature: currentSignature }).subscribe({
       next: (res) => {
-        alert("Contract accepted, signed, and activated successfully!");
+        this.toastr.success("Contract accepted, signed, and activated successfully!", "Contract Signature");
         this.isSigning.set(false);
         this.router.navigate(['/user/contracts']);
       },
       error: (err) => {
         console.error(err);
-        alert("Failed to sign the contract. Please try again.");
+        this.toastr.error("Failed to sign the contract. Please try again.", "Contract Signature");
         this.isSigning.set(false);
       }
     });

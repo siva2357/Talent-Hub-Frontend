@@ -17,9 +17,9 @@ export class HireTalentComponent {
     {
       id: 1,
       icon: 'bi-person-bounding-box',
-      subtitle: 'AI Talent Matching',
-      title: 'Find the perfect match with AI.',
-      description: 'Our AI analyzes skills, experience, and project needs to recommend the best talent for you.'
+      subtitle: 'Skill-Based Talent Matching',
+      title: 'Find the perfect match easily.',
+      description: 'Our platform analyzes skills, experience, and project needs to recommend the best talent for you.'
     },
     {
       id: 2,
@@ -30,10 +30,10 @@ export class HireTalentComponent {
     },
     {
       id: 3,
-      icon: 'bi-chat-left-dots',
-      subtitle: 'Chat & Discuss',
-      title: 'Connect and discuss project details.',
-      description: 'Chat in real-time, share files, discuss requirements, and align on goals and expectations.'
+      icon: 'bi-headset',
+      subtitle: 'Contact Support',
+      title: 'Connect and resolve project details.',
+      description: 'Reach out to our support resolving system to discuss requirements, and align on goals and expectations.'
     },
     {
       id: 4,
@@ -54,7 +54,7 @@ export class HireTalentComponent {
       icon: 'bi-graph-up-arrow',
       subtitle: 'Project Tracking',
       title: 'Track progress in real-time.',
-      description: 'Monitor tasks, deadlines, and progress with intelligent tracking and reporting dashboards.'
+      description: 'Monitor tasks, deadlines, and progress with advanced tracking and reporting dashboards.'
     },
     {
       id: 7,
@@ -68,7 +68,7 @@ export class HireTalentComponent {
       icon: 'bi-folder2-open',
       subtitle: 'Organized Workspace',
       title: 'Work organized. Deliver with full production.',
-      description: 'Centralized workspace with files, messages, meetings, and tools to deliver high-quality results.'
+      description: 'Centralized workspace with files, messages, and tools to deliver high-quality results.'
     }
   ];
 

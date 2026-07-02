@@ -78,201 +78,93 @@
           }
           @else {
           <div class="step-tracker">
-
-            <div class="row g-4">
-
-              @for (phase of diary.phases; track phase._id) {
-
-              <div class="col-12">
-
-                <div class="glass rounded-4 p-4">
-
-                  <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3 mb-4">
-                    <!-- Left Side -->
-                    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-3 gap-md-4">
-                      <h4 class="text-white fw-bold mb-0">
-                        {{ phase.name }}
-                      </h4>
-                      <div class="d-flex flex-wrap gap-3">
-                        <div class="text-secondary small">
-                          <i class="bi bi-calendar-event me-1"></i>
-                          Due {{ formatDate(phase.deadline) }}
-                        </div>
-                        <div class="text-secondary small">
-                          <i class="bi bi-currency-rupee me-1"></i>
-                          ₹{{ phase.amount | number }}
-                        </div>
+            <app-accordion [items]="accordionItems" accordionId="contractDiaryAccordion">
+              <ng-template #bodyTemplate let-phase>
+                
+                <div class="glass rounded-4 p-4 border-0">
+                  <div class="d-flex flex-wrap gap-3 mb-4 justify-content-between align-items-start">
+                    <div class="d-flex flex-wrap gap-3">
+                      <div class="text-secondary small">
+                        <i class="bi bi-calendar-event me-1"></i>
+                        Due {{ formatDate(phase.deadline) }}
+                      </div>
+                      <div class="text-secondary small">
+                        <i class="bi bi-currency-rupee me-1"></i>
+                        ₹{{ phase.amount | number }}
                       </div>
                     </div>
-                    <!-- Right Side -->
-                    <span class="status-badge ms-md-auto" [ngClass]="phase.status">
+                    <span class="status-badge" [ngClass]="phase.status">
                       {{ phase.status | titlecase }}
                     </span>
                   </div>
 
                   <!-- Description -->
                   @if (phase.description) {
-
                   <div class="mb-4">
-
-                    <div class="text-uppercase text-secondary small fw-semibold mb-2">
-                      Description
-                    </div>
-
-                    <div class="text-secondary" [innerHTML]="phase.description">
-                    </div>
-
+                    <div class="text-uppercase text-secondary small fw-semibold mb-2">Description</div>
+                    <div class="text-secondary" [innerHTML]="phase.description"></div>
                   </div>
-
                   }
 
                   <!-- Requirement Files -->
                   @if (phase.clientAttachments.length) {
-
                   <div class="mb-4">
-
-                    <div class="text-uppercase text-secondary small fw-semibold mb-2">
-                      Requirement Files
-                    </div>
-
+                    <div class="text-uppercase text-secondary small fw-semibold mb-2">Requirement Files</div>
                     <div class="d-flex flex-wrap gap-2">
-
-                      @for (
-                      file of phase.clientAttachments;
-                      track file._id
-                      ) {
-
-                      <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true">
-                      </app-file-preview>
-
+                      @for (file of phase.clientAttachments; track file._id) {
+                        <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true"></app-file-preview>
                       }
-
                     </div>
-
                   </div>
-
                   }
 
-
                   @if (phase.revisions.length) {
-
                   <div class="mt-4">
-
-                    <h6 class="text-warning fw-bold mb-3">
-                      Revision History
-                    </h6>
-
-                    @for (
-                    revision of phase.revisions;
-                    track revision._id
-                    ) {
-
-                    <div class="glass rounded-4 p-3 mb-3">
-
-                      <div class="d-flex justify-content-between mb-3">
-
-                        <span class="fw-bold text-white">
-                          Revision #{{ getRevisionNumber(phase, revision) }}
-                        </span>
-
-                        <span class="small text-secondary">
-                          {{ formatDate(revision.submittedAt) }}
-                        </span>
-
+                    <h6 class="text-warning fw-bold mb-3">Revision History</h6>
+                    @for (revision of phase.revisions; track revision._id) {
+                      <div class="glass rounded-4 p-3 mb-3">
+                        <div class="d-flex justify-content-between mb-3">
+                          <span class="fw-bold text-white">Revision #{{ getRevisionNumber(phase, revision) }}</span>
+                          <span class="small text-secondary">{{ formatDate(revision.submittedAt) }}</span>
+                        </div>
+                        <div class="mb-3">
+                          <div class="text-uppercase text-secondary small mb-2">Freelancer Update</div>
+                          <div class="text-white" [innerHTML]="revision.freelancerNote"></div>
+                        </div>
+                        @if (revision.attachments.length) {
+                          <div class="mb-3">
+                            <div class="text-uppercase text-secondary small mb-2">Files</div>
+                            <div class="d-flex flex-wrap gap-2">
+                              @for (file of revision.attachments; track file._id) {
+                                <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true"></app-file-preview>
+                              }
+                            </div>
+                          </div>
+                        }
+                        @if (revision.clientFeedback) {
+                          <div class="glass rounded-3 p-3 mt-3">
+                            <div class="text-warning fw-semibold mb-2">Client Feedback</div>
+                            <div class="text-white" [innerHTML]="revision.clientFeedback"></div>
+                          </div>
+                        }
                       </div>
-
-                      <div class="mb-3">
-
-                        <div class="text-uppercase text-secondary small mb-2">
-                          Freelancer Update
-                        </div>
-
-                        <div class="text-white" [innerHTML]="revision.freelancerNote">
-                        </div>
-
-                      </div>
-
-                      @if (revision.attachments.length) {
-
-                      <div class="mb-3">
-
-                        <div class="text-uppercase text-secondary small mb-2">
-                          Files
-                        </div>
-
-                        <div class="d-flex flex-wrap gap-2">
-
-                          @for (
-                          file of revision.attachments;
-                          track file._id
-                          ) {
-
-                          <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true">
-                          </app-file-preview>
-
-                          }
-
-                        </div>
-
-                      </div>
-
-                      }
-
-                      @if (revision.clientFeedback) {
-
-                      <div class="glass rounded-3 p-3">
-
-                        <div class="text-warning fw-semibold mb-2">
-                          Client Feedback
-                        </div>
-
-                        <div class="text-white" [innerHTML]="revision.clientFeedback">
-                        </div>
-
-                      </div>
-
-                      }
-
-                    </div>
-
                     }
-
                   </div>
-
                   }
 
                   <!-- Actions -->
                   <div class="d-flex gap-2 flex-wrap">
-
                     @if (canStart(phase)) {
-
-                    <app-button variant="brand" size="sm" (click)="startPhase(diary._id, phase._id)">
-
-                      Start Phase
-
-                    </app-button>
-
+                      <app-button variant="brand" size="sm" (click)="startPhase(diary._id, phase._id)">Start Phase</app-button>
                     }
-
                     @if (canSubmit(phase)) {
-
-                    <app-button variant="brand" size="sm" (click)="openSubmitModal(diary._id, phase)">
-
-                      Submit Update
-
-                    </app-button>
-
+                      <app-button variant="brand" size="sm" (click)="openSubmitModal(diary._id, phase)">Submit Update</app-button>
                     }
-
                   </div>
-
                 </div>
 
-              </div>
-
-              }
-
-            </div>
+              </ng-template>
+            </app-accordion>
           </div>
           }
         </div>

@@ -20,14 +20,14 @@ export class AboutUsComponent {
       description: 'Freelancers face payment delays, milestone disputes, and unclear payment processes.'
     },
     {
-      icon: 'bi-chat-dots',
+      icon: 'bi-headset',
       title: 'Poor communication and collaboration',
-      description: 'Managing chats, meetings, files, and updates across multiple tools leads to confusion and low productivity.'
+      description: 'Managing support tickets, files, and updates across multiple tools leads to confusion and low productivity.'
     },
     {
       icon: 'bi-eye-slash',
       title: 'Lack of transparency in project progress',
-      description: 'Clients struggle to monitor activity, attendance, timelines, and real-time work progress.'
+      description: 'Clients struggle to monitor activity, timelines, and real-time work progress.'
     },
     {
       icon: 'bi-people',
@@ -36,8 +36,8 @@ export class AboutUsComponent {
     },
     {
       icon: 'bi-clock-history',
-      title: 'Manual attendance and inaccurate tracking',
-      description: 'Lack of automated time-tracking and attendance leads to disputes, payment errors, and reduced accountability.'
+      title: 'Manual activity and inaccurate tracking',
+      description: 'Lack of automated progress tracking leads to disputes, payment errors, and reduced accountability.'
     }
   ];
 
@@ -46,8 +46,8 @@ export class AboutUsComponent {
       image: '/assets/images/solutions/ai_talent_matching.png',
       icon: 'bi-stars',
       glow: 'bg-blue-glow',
-      title: 'AI-Powered Talent Matching',
-      description: 'Our AI engine matches the right talent based on skills, experience, and project requirements.'
+      title: 'Skill-Based Talent Matching',
+      description: 'Our platform matches the right talent based on skills, experience, and project requirements.'
     },
     {
       image: '/assets/images/solutions/secure_payments.png',
@@ -60,15 +60,15 @@ export class AboutUsComponent {
       image: '/assets/images/solutions/productivity.png',
       icon: 'bi-lightning-charge',
       glow: 'bg-purple-glow',
-      title: 'Smart Productivity & Attendance',
-      description: 'Live face-detection attendance, activity monitoring, and productivity insights ensure transparency.'
+      title: 'Efficient Productivity & Tracking',
+      description: 'Activity monitoring and productivity insights ensure transparency and efficient workflow.'
     },
     {
       image: '/assets/images/solutions/collaboration.png',
-      icon: 'bi-chat-square-text',
+      icon: 'bi-headset',
       glow: 'bg-orange-glow',
-      title: 'Centralized Collaboration',
-      description: 'Video meetings, chat, file sharing, and task management — all in one unified workspace.'
+      title: 'Centralized Support',
+      description: 'Contact support resolving system, file sharing, and task management — all in one unified workspace.'
     },
     {
       image: '/assets/images/solutions/tracking_insights.png',
@@ -100,7 +100,7 @@ export class AboutUsComponent {
     {
       icon: 'bi-lightbulb',
       title: 'Innovation',
-      description: 'We continuously innovate to build smarter solutions for the future.'
+      description: 'We continuously innovate to build better solutions for the future.'
     },
     {
       icon: 'bi-people',
