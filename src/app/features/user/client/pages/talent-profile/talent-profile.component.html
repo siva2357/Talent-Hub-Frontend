@@ -158,91 +158,112 @@
           </div>
 
           <!-- Contract History (Replaced Experience) -->
-   <div class="glass p-4 rounded-4 border-white border-opacity-10">
-
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="text-white fw-bold mb-0">
-      Contract History
-    </h5>
+<div class="glass-dark p-4 p-md-5 rounded-4 border-glass shadow-sm">
+  <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+    <div class="d-flex align-items-center gap-3">
+      <div class="section-indicator rounded-pill"></div>
+      <h4 class="text-white fw-bold mb-0 text-lg font-headline">Contract History</h4>
+    </div>
   </div>
 
   @if (talent.contractHistory?.length > 0) {
-
-    <div class="experience-timeline">
-
-      @for (contract of talent.contractHistory; track contract.role) {
-
+    <div class="d-flex flex-column gap-3.5">
+      @for (contract of talent.contractHistory; track contract._id) {
         <div
-          class="timeline-item d-flex gap-3 pb-4 mb-4 border-bottom border-white border-opacity-5">
+          class="contract-ledger-row p-4 rounded-4 border-glass position-relative overflow-hidden bg-card-dark text-start d-flex flex-column gap-3 mb-4">
+          <div class="contract-status-bar position-absolute h-100" [ngClass]="{
+              'bg-success': contract.status === 'completed',
+              'bg-warning': contract.status === 'in-progress' || contract.status === 'in progress' || contract.status === 'active' || contract.status === 'pending',
+              'bg-danger': contract.status === 'closed'
+          }"></div>
 
           <div
-            class="timeline-icon-box {{contract.color}} rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
-
-            <i class="bi {{contract.icon}} text-white fs-5"></i>
-
-          </div>
-
-          <div class="flex-grow-1">
-
-            <div class="d-flex justify-content-between align-items-start">
-
-              <div>
-                <h6 class="text-white fw-bold mb-1">
-                  {{contract.role}}
-                </h6>
-
-                <p class="text-secondary smaller mb-1">
-                  {{contract.company}}
-                  •
-                  <span class="text-white">
-                    {{contract.amount}}
-                  </span>
-                </p>
-
-                <p class="text-secondary smaller mb-2">
-                  {{contract.duration}}
-                </p>
+            class="d-flex align-items-start align-items-md-center justify-content-between flex-wrap gap-3 position-relative z-2">
+            <div class="d-flex align-items-center gap-3">
+              <div
+                class="avatar-circle rounded-circle bg-primary-glow text-primary-light d-flex align-items-center justify-content-center text-uppercase">
+                {{ (contract.clientName || 'C').charAt(0) }}
               </div>
-
-              <div class="d-flex align-items-center gap-1">
-                <i class="bi bi-star-fill text-warning smaller"></i>
-                <span class="text-white smaller fw-bold">
-                  {{contract.rating}}
+              <div class="d-flex flex-column">
+                <h5
+                  class="text-white fw-bold font-sm mb-1 d-flex align-items-center gap-2 flex-wrap">
+                  <span>{{ contract.contractTitle }}</span>
+                  <span
+                    class="badge badge-contract-id font-monospace font-xs px-2 py-0.5 rounded">
+                    {{ contract._id }}
+                  </span>
+                </h5>
+                <span class="text-secondary-light font-xs">
+                  Client: <strong class="text-white-50">{{ contract.clientName || 'Client' }}</strong>
                 </span>
               </div>
-
             </div>
 
+            <div class="d-flex align-items-center flex-wrap gap-3 ms-md-auto text-md-end mt-3 mt-md-0">
+              <div class="d-flex flex-column text-start text-md-end">
+                <span class="text-secondary-light font-xs text-uppercase ls-1">Status</span>
+                <span class="text-capitalize font-sm mt-0.5 fw-semibold" [ngClass]="{
+                    'text-warning': contract.status === 'in-progress' || contract.status === 'in progress' || contract.status === 'active' || contract.status === 'pending',
+                    'text-success': contract.status === 'completed',
+                    'text-danger': contract.status === 'closed'
+                }">
+                  {{ contract.status }}
+                </span>
+              </div>
+              <div class="d-flex flex-column">
+                <span class="text-secondary-light font-xs text-uppercase ls-1">Budget</span>
+                <span class="text-success-light fw-extrabold font-monospace font-sm mt-0.5">
+                  ₹{{ contract.estimatedBudget | number }}
+                </span>
+              </div>
+              <div class="d-flex flex-column">
+                <span class="text-secondary-light font-xs text-uppercase ls-1">End Date</span>
+                <span class="text-white fw-semibold font-monospace font-xs mt-1">
+                  {{ DateTimeHelper.toLocalString(contract.contractEndDate, true) }}
+                </span>
+              </div>
+            </div>
           </div>
 
+          <!-- Deliverables Completed items / Description -->
+          <div class="p-3 rounded-3 border-glass text-start position-relative z-2 mt-1"
+            style="background: rgba(0,0,0,0.15);">
+            <div
+              class="d-flex align-items-center gap-2 mb-1.5 text-secondary-light font-xs fw-semibold">
+              <i class="bi bi-file-earmark-text text-primary-light"></i>
+              <span>Contract Description</span>
+            </div>
+            <p class="text-secondary font-sm mb-0 lh-relaxed" [innerHTML]="contract.contractDescription"></p>
+          </div>
+
+          <!-- Client Feedback Review Card -->
+          @if (contract.review) {
+            <div class="p-4 ps-4.5 rounded-3 border-glass text-start position-relative z-2 mt-4 bg-warning-glow"
+              style="border-left: 4px solid var(--bs-warning) !important; padding-left: 1.5rem !important;">
+              <div class="d-flex align-items-center gap-2 mb-2 text-warning font-xs fw-semibold">
+                <i class="bi bi-chat-left-quote-fill"></i>
+                <span>Client Feedback</span>
+              </div>
+              <p class="text-white-75 fst-italic mb-0 font-sm">"{{ contract.review }}"</p>
+            </div>
+          }
         </div>
-
       }
-
     </div>
-
   } @else {
-
     <!-- Empty State -->
-
     <div class="text-center py-5">
-
       <div class="mb-3">
         <i class="bi bi-briefcase fs-1 text-secondary opacity-50"></i>
       </div>
-
       <h6 class="text-white fw-bold mb-2">
         No Contract History Yet
       </h6>
-
       <p class="text-secondary small mb-0">
         This talent hasn't completed any contracts yet.
       </p>
-
     </div>
-
   }
-
 </div>
         </div>
 

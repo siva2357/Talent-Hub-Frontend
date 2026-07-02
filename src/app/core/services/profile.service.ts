@@ -154,7 +154,7 @@ getFreelancerProfileById(
   /**
    * Fetches all saved talents for the logged-in client.
    */
-  getSavedTalents(): Observable<{ success: boolean; savedTalents: any[] }> {
-    return this.http.get<{ success: boolean; savedTalents: any[] }>(`${this.baseUrl}${API_ENDPOINTS.PROFILE.SAVED_TALENTS}`);
+  getSavedTalents(): Observable<{ success: boolean; total_count: number; items: any[] }> {
+    return this.http.get<{ success: boolean; total_count: number; items: any[] }>(`${this.baseUrl}${API_ENDPOINTS.PROFILE.SAVED_TALENTS}`);
   }
 }

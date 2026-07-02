@@ -32,39 +32,37 @@
 
     </div>
 
-@if (!isLoading && hiredTalents.length === 0) {
+    @if (!isLoading && hiredTalents.length === 0) {
 
-  <div class="glass rounded-4 p-5 text-center">
+    <div class="glass  rounded-4 p-5 text-center">
 
-    <h5 class="text-white mb-2">
-      No Hired Talent Yet
-    </h5>
+      <h5 class="text-white mb-2">
+        No Hired Talent Yet
+      </h5>
 
-    <p class="text-secondary mb-0">
-      Accepted contract offers will appear here.
-    </p>
+      <p class="text-secondary mb-0">
+        Accepted contract offers will appear here.
+      </p>
 
-  </div>
+    </div>
 
-}
+    }
 
-@if (isLoading || hiredTalents.length) {
 
-  <app-table
-    [rows]="hiredTalents"
-    [columns]="columns"
-    [loading]="isLoading">
-  </app-table>
 
-}
+
+    @if (isLoading || hiredTalents.length) {
+    <div class="glass border border-secondary rounded-0 p-0 p-md-3 text-center">
+      <app-table [rows]="hiredTalents" [columns]="columns" [loading]="isLoading">
+      </app-table>
+    </div>
+    }
 
   </div>
 
 </div>
 
-<ng-template
-  #actionTemplate
-  let-row="row">
+<ng-template #actionTemplate let-row="row">
 
   <app-button variant="outline" size="sm" (click)="downloadSignedContract(row); $event.stopPropagation()">
     Download Contract
@@ -74,34 +72,24 @@
 
 
 
-<ng-template
-  #profileTemplate
-  let-row="row">
+<ng-template #profileTemplate let-row="row">
 
   @if (row.profilePhoto) {
 
-    <img
-      [src]="row.profilePhoto"
-      alt="Profile"
-      class="rounded-circle"
-      width="40"
-      height="40"
-      style="object-fit: cover;">
+  <img [src]="row.profilePhoto" alt="Profile" class="rounded-circle" width="40" height="40" style="object-fit: cover;">
 
   } @else {
 
-    <div
-      class="rounded-circle d-flex align-items-center justify-content-center"
-      style="
+  <div class="rounded-circle d-flex align-items-center justify-content-center" style="
         width:40px;
         height:40px;
         background:#334155;
         color:white;
         font-weight:600;">
 
-      {{ row.fullName?.charAt(0) || 'F' }}
+    {{ row.fullName?.charAt(0) || 'F' }}
 
-    </div>
+  </div>
 
   }
 

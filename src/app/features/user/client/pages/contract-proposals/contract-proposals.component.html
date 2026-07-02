@@ -77,7 +77,7 @@
         <div class="col-12">
             @if(isLoading() && applicants().length === 0) {
             <!-- Loading State -->
-            <div class="glass-dark rounded-0 p-0 p-md-3 border border-primary border-opacity-5 d-none d-lg-block">
+            <div class="glass-dark rounded-0 p-0 p-md-3 border border-secondary  d-none d-lg-block">
                 <div class="table-responsive-wrapper">
                     <div class="table-min-width">
                         <app-table [rows]="[]" [columns]="proposalColumns" [loading]="true"></app-table>
@@ -93,7 +93,7 @@
 
             @defer (on viewport) {
             <!-- Desktop Table View (Will show empty state if rows are empty) -->
-            <div class="glass-dark mt-4 p-2 d-none d-lg-block">
+            <div class="glass-dark mt-4 p-2  border border-secondary d-none d-lg-block">
                 <div class="table-responsive-wrapper">
                     <div class="table-min-width">
                         <app-table [rows]="filteredProposals()" [columns]="proposalColumns"></app-table>
@@ -362,14 +362,16 @@
             </app-button>
             }
 
-            @if(row.applicationStatus === 'shortlisted' || row.applicationStatus === 'hired' || row.applicationStatus === 'rejected') {
+            @if(row.applicationStatus === 'shortlisted' || row.applicationStatus === 'hired' || row.applicationStatus
+            === 'rejected') {
             @if(row.offerStatus === 'none') {
-            <app-button variant="success" size="sm" [routerLink]="['/user/legal-form', contractId()]" [queryParams]="{appId: row.applicationId}">
+            <app-button variant="success" size="sm" [routerLink]="['/user/legal-form', contractId()]"
+                [queryParams]="{appId: row.applicationId}">
                 Send Offer
             </app-button>
             } @else if(row.offerStatus !== 'none') {
-            <app-badge variant="warning"><i class="bi bi-clock-history me-1 text-dark"></i><span
-                    class="text-dark">Offer Sent</span></app-badge>
+            <app-badge variant="warning"><i class="bi bi-clock-history me-1 text-dark"></i><span class="text-dark">Offer
+                    Sent</span></app-badge>
             }
             }
 

@@ -56,6 +56,7 @@ export interface TalentProfilePayload {
   success: boolean;
   profile: TalentProfile;
   portfolio: Portfolio[];
+  diaries?: any[];
 }
 
 export type TalentProfileResponse =
