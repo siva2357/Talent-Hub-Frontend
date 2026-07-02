@@ -8,6 +8,8 @@ import { InputComponent } from '../../../../../shared/components/input/input.com
 import { ButtonComponent } from '../../../../../shared/components/button/button.component';
 import { ChipComponent } from '../../../../../shared/components/chip/chip.component';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
+import { AccordionComponent } from '../../../../../shared/components/accordion/accordion.component';
+import { AlertModalService } from '../../../../../core/services/alert-modal.service';
 
 import { Milestone, ContractTransactions } from '../../../../../core/model/client.model';
 
@@ -19,7 +21,8 @@ import { Milestone, ContractTransactions } from '../../../../../core/model/clien
     FormsModule,
     InputComponent,
     ButtonComponent,
-    ChipComponent
+    ChipComponent,
+    AccordionComponent
   ],
   templateUrl: './transaction-history.component.html',
   styleUrl: './transaction-history.component.css'
@@ -30,6 +33,7 @@ export class TransactionHistoryComponent implements OnInit {
   private diaryService = inject(ContractDiaryService);
   private financeService = inject(FinanceService);
   private destroyRef = inject(DestroyRef);
+  private alertModal = inject(AlertModalService);
 
   searchQuery = signal('');
   typeFilter = signal('All');
@@ -85,6 +89,7 @@ export class TransactionHistoryComponent implements OnInit {
               .reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
 
             return {
+              id: diary.contractId?._id || diary._id,
               diaryId: diary._id,
               contractId: diary.contractId?._id || diary._id,
               title: diary.contractId?.contractTitle || 'Contract',
@@ -155,29 +160,55 @@ export class TransactionHistoryComponent implements OnInit {
 
   releaseMilestonePayment(c: ContractTransactions, m: Milestone) {
     if (m.status === 'approved') {
-      alert('This milestone payment has already been released!');
+      this.alertModal.show({
+          title: 'Already Paid',
+          message: 'This milestone payment has already been released!',
+          type: 'info',
+          confirmText: 'OK'
+      });
       return;
     }
 
-    const confirmRelease = confirm(`Are you sure you want to release the escrow payment of ₹${m.amount.toLocaleString('en-IN', {minimumFractionDigits: 2})} for milestone: "${m.title}"?`);
-    if (!confirmRelease) return;
-
-    this.diaryService.reviewPhase(c.diaryId, m.id, 'approve').subscribe({
-      next: (res: any) => {
-        if (res.success) {
-          alert(`Successfully approved milestone and released escrow payment of ₹${m.amount.toFixed(2)} to the freelancer!`);
-          this.loadDiaries();
+    this.alertModal.show({
+        title: 'Confirm Payment',
+        message: `Are you sure you want to release the escrow payment of ₹${m.amount.toLocaleString('en-IN', {minimumFractionDigits: 2})} for milestone: "${m.title}"?`,
+        type: 'warning',
+        confirmText: 'Release Payment',
+        cancelText: 'Cancel',
+        onConfirm: () => {
+            this.diaryService.reviewPhase(c.diaryId, m.id, 'approve').subscribe({
+              next: (res: any) => {
+                if (res.success) {
+                  this.alertModal.show({
+                      title: 'Payment Released',
+                      message: `Successfully approved milestone and released escrow payment of ₹${m.amount.toFixed(2)} to the freelancer!`,
+                      type: 'success',
+                      confirmText: 'Great'
+                  });
+                  this.loadDiaries();
+                }
+              },
+              error: (err) => {
+                this.alertModal.show({
+                      title: 'Payment Failed',
+                      message: 'Failed to release payment: ' + (err.error?.message || 'Error occurred'),
+                      type: 'danger',
+                      confirmText: 'Close'
+                  });
+              }
+            });
         }
-      },
-      error: (err) => {
-        alert('Failed to release payment: ' + (err.error?.message || 'Error occurred'));
-      }
     });
   }
 
   downloadMilestoneReceipt(c: ContractTransactions, m: Milestone) {
     if (!m.invoiceId) {
-      alert('Invoice not available for incomplete milestones.');
+      this.alertModal.show({
+          title: 'Invoice Unavailable',
+          message: 'Invoice not available for incomplete milestones.',
+          type: 'warning',
+          confirmText: 'OK'
+      });
       return;
     }
 

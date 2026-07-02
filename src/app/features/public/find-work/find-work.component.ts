@@ -15,8 +15,8 @@ export class FindWorkComponent {
       id: 1,
       icon: 'bi-cpu',
       subtitle: '01',
-      title: 'AI Matches You with Relevant Work',
-      description: 'Our AI analyzes your skills, experience, and preferences to recommend the best projects that match you.'
+      title: 'Platform Matches You with Relevant Work',
+      description: 'Our system analyzes your skills, experience, and preferences to recommend the best projects that match you.'
     },
     {
       id: 2,
@@ -36,8 +36,8 @@ export class FindWorkComponent {
       id: 4,
       icon: 'bi-calendar-event',
       subtitle: '04',
-      title: 'Schedule Interview with Client',
-      description: 'Discuss project goals, expectations, and delivery approach in a meeting scheduled at your convenience.'
+      title: 'Connect with Client',
+      description: 'Discuss project goals, expectations, and delivery approach through our integrated contact support resolving system.'
     },
     {
       id: 5,
@@ -57,8 +57,8 @@ export class FindWorkComponent {
       id: 7,
       icon: 'bi-clock-history',
       subtitle: '07',
-      title: 'Track Progress & Daily Attendance',
-      description: 'Update tasks, track milestones, and maintain daily attendance to keep everything on track.'
+      title: 'Track Progress & Milestones',
+      description: 'Update tasks, track milestones, and manage project progress to keep everything on track.'
     },
     {
       id: 8,
@@ -88,7 +88,7 @@ export class FindWorkComponent {
       logo: 'assets/logo/mongodb.png',
       type: 'Hourly',
       level: 'Mid to Senior',
-      description: 'Develop and maintain a full-stack web platform with secure APIs, real-time chat, authentication, and admin dashboard modules.',
+      description: 'Develop and maintain a full-stack web platform with secure APIs, real-time notifications, authentication, and admin dashboard modules.',
       techStack: ['MongoDB', 'Express', 'React', 'Node.js', 'Socket.IO'],
       budget: '$35/hr',
       budgetLabel: 'Est. Hours: 120 Hours',
@@ -120,12 +120,12 @@ export class FindWorkComponent {
     },
     {
       id: 5,
-      title: 'AI Integration Specialist',
+      title: 'Data Integration Specialist',
       logo: 'assets/logo/ai-brain.png',
       type: 'Fixed Price',
       level: 'Expert',
-      description: 'Integrate AI-powered recommendation systems, intelligent talent matching, and automated workflow analysis features.',
-      techStack: ['Python', 'AI APIs', 'TensorFlow', 'NLP', 'Data Analysis'],
+      description: 'Integrate advanced recommendation systems, skill-based talent matching, and automated workflow analysis features.',
+      techStack: ['Python', 'APIs', 'Data Science', 'Data Analysis', 'Backend'],
       budget: '$6,800',
       budgetLabel: 'Total Budget',
       duration: '4 Months'

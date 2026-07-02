@@ -1,0 +1,52 @@
+@if (config) {
+  <div class="modal fade show d-block" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border border-secondary border-opacity-25 shadow-lg rounded-4"
+        style="background: var(--bg-tertiary) !important;">
+        <div class="modal-header border-0 px-4 pt-4 pb-2">
+          <h5 class="modal-title text-white fw-bold d-flex align-items-center gap-3">
+            <div class="p-2 rounded-3 d-flex align-items-center justify-content-center shadow-lg"
+                 style="width: 48px; height: 48px;"
+                 [ngStyle]="{
+                   'background': config.type === 'success' ? 'rgba(25, 135, 84, 0.2)' : 
+                                 config.type === 'danger' ? 'rgba(220, 53, 69, 0.2)' : 
+                                 config.type === 'warning' ? 'rgba(255, 193, 7, 0.2)' : 
+                                 'rgba(13, 202, 240, 0.2)'
+                 }"
+                 [ngClass]="{
+                   'border border-success text-success': config.type === 'success',
+                   'border border-danger text-danger': config.type === 'danger',
+                   'border border-warning text-warning': config.type === 'warning',
+                   'border border-info text-info': config.type === 'info' || !config.type
+                 }">
+              <i class="bi fs-3" 
+                 [ngClass]="{
+                   'bi-check-circle': config.type === 'success',
+                   'bi-exclamation-triangle': config.type === 'danger' || config.type === 'warning',
+                   'bi-info-circle': config.type === 'info' || !config.type
+                 }"></i>
+            </div>
+            <span>{{ config.title }}</span>
+          </h5>
+          <button type="button" class="btn-close btn-close-white shadow-none opacity-50 hover-opacity-100"
+            (click)="onCancel()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-4 py-2">
+          <p class="text-white-50 mb-0">{{ config.message }}</p>
+        </div>
+        <div class="modal-footer border-0 px-4 pb-4 pt-3">
+          <app-button variant="dark" customClass="fw-bold border border-white border-opacity-10"
+            (click)="onCancel()">{{ config.cancelText || 'Cancel' }}</app-button>
+          
+          <app-button 
+            [variant]="config.type === 'danger' ? 'danger' : (config.type === 'success' ? 'success' : 'primary')" 
+            customClass="fw-bold" 
+            (click)="onConfirm()">
+            {{ config.confirmText || 'Confirm' }}
+          </app-button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+}

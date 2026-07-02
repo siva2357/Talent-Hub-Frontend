@@ -1,0 +1,26 @@
+<div class="accordion custom-accordion" [id]="accordionId">
+  @for (item of items; track item.id; let i = $index) {
+    <div class="accordion-item glass-dark border border-white border-opacity-10 rounded-4 mb-3 overflow-hidden">
+      <h2 class="accordion-header" [id]="'heading' + item.id">
+        <button 
+          class="accordion-button collapsed bg-transparent text-white fw-bold d-flex align-items-center gap-3 p-3 p-md-4 shadow-none" 
+          type="button" 
+          data-bs-toggle="collapse" 
+          [attr.data-bs-target]="'#collapse' + item.id" 
+          aria-expanded="false" 
+          [attr.aria-controls]="'collapse' + item.id">
+          {{ item.title }}
+        </button>
+      </h2>
+      <div 
+        [id]="'collapse' + item.id" 
+        class="accordion-collapse collapse" 
+        [attr.aria-labelledby]="'heading' + item.id" 
+        [attr.data-bs-parent]="'#' + accordionId">
+        <div class="accordion-body p-0 border-top border-white border-opacity-10 bg-black bg-opacity-20">
+          <ng-container *ngTemplateOutlet="bodyTemplate; context: { $implicit: item, index: i }"></ng-container>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -171,28 +171,7 @@
 
 
         <ng-template #actionTemplate let-row>
-            <div class="action-dropdown" style="position: relative;">
-                <button class="action-trigger" (click)="toggleActionMenu($event, row)">
-                    <i class="bi bi-three-dots-vertical"></i>
-                </button>
-
-                <!-- Action Menu (Rendered inline to stay attached to button) -->
-                @if(activeActionRow && activeActionRow.id === row.id){
-                <div class="action-menu glass" style="position: absolute; top: calc(100% + 4px); right: 0; z-index: 9999; width: 180px;">
-                    @if (row.remainingAmount > 0) {
-                    <div class="action-item" (click)="fundContract(row); closeActionMenu()">
-                        <i class="bi bi-credit-card-2-front"></i>
-                        <span>Pay / Fund</span>
-                    </div>
-                    } @else {
-                    <div class="action-item" (click)="downloadInvoice(row); closeActionMenu()">
-                        <i class="bi bi-file-earmark-arrow-down"></i>
-                        <span>Invoice</span>
-                    </div>
-                    }
-                </div>
-                }
-            </div>
+            <app-dropdown [actions]="getActions(row)" (actionSelect)="handleAction($event, row)"></app-dropdown>
         </ng-template>
 
 

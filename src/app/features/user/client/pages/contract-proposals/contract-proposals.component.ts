@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, computed, inject, DestroyRef, ViewChild, TemplateRef, AfterViewInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ContractService } from '../../../../../core/services/contract.service';
@@ -12,6 +12,7 @@ import { ButtonComponent } from '../../../../../shared/components/button/button.
 import { ChipComponent } from '../../../../../shared/components/chip/chip.component';
 import { Table } from '../../../../../shared/components/table/table.component';
 import { BadgeComponent } from '../../../../../shared/components/badge/badge.component';
+import { DropdownComponent, DropdownAction } from '../../../../../shared/components/dropdown/dropdown.component';
 
 import { Availability } from '../../../../../core/enums/availability.enum';
 import { BudgetTypeEnum } from '../../../../../core/enums/contract.enum';
@@ -21,7 +22,7 @@ import { Language } from '../../../../../core/enums/language.enum';
 @Component({
   selector: 'app-contract-proposals',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, InputComponent, ButtonComponent, ChipComponent, Table, BadgeComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, InputComponent, ButtonComponent, ChipComponent, Table, BadgeComponent, DropdownComponent],
   templateUrl: './contract-proposals.component.html',
   styleUrl: './contract-proposals.component.css'
 })
@@ -30,6 +31,7 @@ export class ContractProposalsComponent implements OnInit, AfterViewInit {
   private contractService = inject(ContractService);
   private applicationService = inject(ApplicationService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
 
@@ -182,35 +184,39 @@ export class ContractProposalsComponent implements OnInit, AfterViewInit {
   // ACTION MENU (3 DOTS)
   // ========================================
 
-  activeActionRow = signal<any | null>(null);
-  menuTop = signal<number>(0);
-  menuLeft = signal<number>(0);
+  getActions(proposal: any): DropdownAction[] {
+    const actions: DropdownAction[] = [
+      { label: 'View Profile', value: 'view', icon: 'bi-person-circle' }
+    ];
 
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: Event) {
-    if (this.activeActionRow()) {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.action-dropdown') && !target.closest('.action-menu')) {
-        this.closeActionMenu();
+    const status = proposal.applicationStatus;
+    if (status !== 'shortlisted' && status !== 'rejected') {
+      actions.push({ label: 'Recruitment', value: 'recruit', icon: 'bi-briefcase-fill' });
+    }
+
+    if (status === 'shortlisted' || status === 'hired' || status === 'rejected') {
+      if (proposal.offerStatus === 'none') {
+        actions.push({ label: 'Send Offer', value: 'offer', icon: 'bi-send-fill text-success' });
+      } else if (proposal.offerStatus !== 'none') {
+        actions.push({ label: 'Offer Sent', value: 'offer_sent', icon: 'bi-clock-history text-warning', disabled: true });
       }
     }
-  }
 
-  toggleActionMenu(event: MouseEvent, row: any): void {
-    event.stopPropagation();
-    if (this.activeActionRow() && this.activeActionRow()?.applicationId === row.applicationId) {
-      this.closeActionMenu();
-    } else {
-      this.activeActionRow.set(row);
-      const target = (event.currentTarget as HTMLElement).closest('app-button') || event.currentTarget as HTMLElement;
-      const rect = target.getBoundingClientRect();
-      this.menuTop.set(rect.bottom + 8);
-      this.menuLeft.set(rect.right - 220);
+    if (status === 'rejected') {
+      actions.push({ label: 'Rejected', value: 'rejected_state', icon: 'bi-person-x-fill text-danger', disabled: true });
     }
+
+    return actions;
   }
 
-  closeActionMenu(): void {
-    this.activeActionRow.set(null);
+  handleAction(actionValue: string, proposal: any) {
+    if (actionValue === 'view') {
+      this.viewProfile(proposal.freelancer._id);
+    } else if (actionValue === 'recruit') {
+      this.openRecruitmentModal(proposal);
+    } else if (actionValue === 'offer') {
+      this.router.navigate(['/user/legal-form', this.contractId()], { queryParams: { appId: proposal.applicationId } });
+    }
   }
 
   // ========================================

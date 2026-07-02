@@ -290,267 +290,105 @@
   </div>
 
   <div class="timeline">
-
-    @for (phase of diary()!.phases; track phase._id) {
-
-    <div class="glass rounded-4 p-4 mb-3">
-
-      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3 mb-3">
-
-        <div>
-
-          <h6 class="text-white fw-bold mb-1">
-            {{ phase.name }}
-          </h6>
-
-          <small class="text-secondary">
-            Due {{ formatDate(phase.deadline) }}
-          </small>
-
-        </div>
-
-        <div class="text-start text-sm-end mt-2 mt-sm-0">
-
-          <div class="text-success fw-bold">
-            ₹{{ phase.amount | number }}
+    <app-accordion [items]="accordionItems" accordionId="contractProgressAccordion">
+      <ng-template #bodyTemplate let-phase>
+        
+        <div class="glass rounded-4 p-4 border-0">
+          <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3 mb-3">
+            <div>
+              <small class="text-secondary">Due {{ formatDate(phase.deadline) }}</small>
+            </div>
+            <div class="text-start text-sm-end mt-2 mt-sm-0">
+              <div class="text-success fw-bold">₹{{ phase.amount | number }}</div>
+              <app-badge [variant]="getPhaseStatusBadgeVariant(phase.status)">{{ phase.status | titlecase }}</app-badge>
+            </div>
           </div>
 
-          <app-badge [variant]="getPhaseStatusBadgeVariant(phase.status)">{{ phase.status | titlecase }}</app-badge>
+          <div class="text-secondary small" [innerHTML]="phase.description"></div>
 
-        </div>
+          @if (phase.clientAttachments.length) {
+            <div class="mt-3">
+              <h6 class="text-secondary small mb-2">Attachments</h6>
+              <div class="d-flex flex-wrap gap-2">
+                @for (file of phase.clientAttachments; track file._id) {
+                  <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true"></app-file-preview>
+                }
+              </div>
+            </div>
+          }
 
-      </div>
+          @if (phase.revisions.length) {
+            <div class="mt-4">
+              <h6 class="text-warning mb-3">Revision History</h6>
+              @for (revision of phase.revisions; track revision._id; let i = $index) {
+                <div class="glass rounded-4 p-3 mb-3">
+                  <div class="d-flex flex-column flex-sm-row justify-content-between gap-2">
+                    <span class="text-primary fw-semibold">Revision {{ i + 1 }}</span>
+                    <small class="text-secondary">{{ formatDate(revision.submittedAt) }}</small>
+                  </div>
+                  <div class="mt-2 text-white" [innerHTML]="revision.freelancerNote"></div>
+                  
+                  @if (revision.attachments.length) {
+                    <div class="mt-3">
+                      <small class="text-secondary">Files</small>
+                      <div class="d-flex flex-wrap gap-2 mt-2">
+                        @for (file of revision.attachments; track file._id) {
+                          <app-file-preview [url]="file.fileUrl" [fileName]="file.fileName" [disabled]="true"></app-file-preview>
+                        }
+                      </div>
+                    </div>
+                  }
 
-      <div
-        class="text-secondary small"
-        [innerHTML]="phase.description">
-      </div>
+                  @if (revision.clientFeedback) {
+                    <div class="glass rounded-3 p-3 mt-3">
+                      <div class="fw-semibold mb-2">
+                        @if (revision.status === 'changes-requested') {
+                          <span class="text-warning">Client Requested Changes</span>
+                        } @else if (revision.status === 'approved') {
+                          <span class="text-success">Client Approved</span>
+                        }
+                      </div>
+                      <div [innerHTML]="revision.clientFeedback"></div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
 
-      @if (phase.clientAttachments.length) {
+          @if (phase.status === 'submitted') {
+            <div class="mt-4">
+              <app-rich-text-editor label="Review Comment" placeholder="Provide feedback for the freelancer. Explain what was completed well or what changes are required before approval..." [(ngModel)]="feedbackText[phase._id]"></app-rich-text-editor>
+            </div>
+            <div class="d-flex flex-column flex-sm-row gap-2 mt-3">
+              <app-button variant="success" [loading]="reviewing[phase._id]" [disabled]="reviewing[phase._id]" (click)="approvePhase(diary()!._id, phase._id)">Approve Phase</app-button>
+              <app-button variant="danger" [loading]="reviewing[phase._id]" [disabled]="reviewing[phase._id]" (click)="requestChanges(diary()!._id, phase._id)">Request Changes</app-button>
+            </div>
+          }
 
-      <div class="mt-3">
+          @if (phase.status === 'approved' && getLatestRevision(phase)?.clientFeedback) {
+            <div class="glass rounded-4 p-3 mt-4">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-check-circle-fill text-success"></i>
+                <span class="text-success fw-semibold">Client Approval Feedback</span>
+              </div>
+              <div class="text-secondary" [innerHTML]="getLatestRevision(phase)?.clientFeedback"></div>
+            </div>
+          }
 
-        <h6 class="text-secondary small mb-2">
-          Attachments
-        </h6>
-
-        <div class="d-flex flex-wrap gap-2">
-
-          @for (file of phase.clientAttachments; track file._id) {
-
-          <app-file-preview
-            [url]="file.fileUrl"
-            [fileName]="file.fileName"
-            [disabled]="true">
-          </app-file-preview>
-
+          @if (phase.status === 'changes-requested' && getLatestRevision(phase)?.clientFeedback) {
+            <div class="glass rounded-4 p-3 mt-4">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-pencil-square text-warning"></i>
+                <span class="text-warning fw-semibold">Revision Request</span>
+              </div>
+              <div class="text-secondary" [innerHTML]="getLatestRevision(phase)?.clientFeedback"></div>
+            </div>
           }
 
         </div>
-
-      </div>
-
-      }
-
-@if (phase.revisions.length) {
-
-<div class="mt-4">
-
-  <h6 class="text-warning mb-3">
-    Revision History
-  </h6>
-
-  @for (
-    revision of phase.revisions;
-    track revision._id;
-    let i = $index
-  ) {
-
-  <div class="glass rounded-4 p-3 mb-3">
-
-    <div class="d-flex flex-column flex-sm-row justify-content-between gap-2">
-
-      <span class="text-primary fw-semibold">
-        Revision {{ i + 1 }}
-      </span>
-
-      <small class="text-secondary">
-        {{ formatDate(revision.submittedAt) }}
-      </small>
-
-    </div>
-
-    <div
-      class="mt-2 text-white"
-      [innerHTML]="revision.freelancerNote">
-    </div>
-
-    @if (revision.attachments.length) {
-
-    <div class="mt-3">
-
-      <small class="text-secondary">
-        Files
-      </small>
-
-      <div class="d-flex flex-wrap gap-2 mt-2">
-
-        @for (
-          file of revision.attachments;
-          track file._id
-        ) {
-
-        <app-file-preview
-          [url]="file.fileUrl"
-          [fileName]="file.fileName"
-          [disabled]="true">
-        </app-file-preview>
-
-        }
-
-      </div>
-
-    </div>
-
-    }
-
-    @if (revision.clientFeedback) {
-
-    <div
-      class="glass rounded-3 p-3 mt-3">
-
-      <div class="fw-semibold mb-2">
-
-        @if (
-          revision.status === 'changes-requested'
-        ) {
-
-          <span class="text-warning">
-            Client Requested Changes
-          </span>
-
-        } @else if (
-          revision.status === 'approved'
-        ) {
-
-          <span class="text-success">
-            Client Approved
-          </span>
-
-        }
-
-      </div>
-
-      <div
-        [innerHTML]="revision.clientFeedback">
-      </div>
-
-    </div>
-
-    }
-
-  </div>
-
-  }
-
-</div>
-
-}
-
-@if (phase.status === 'submitted') {
-
-<div class="mt-4">
-
-<app-rich-text-editor
-  label="Review Comment"
-  placeholder="Provide feedback for the freelancer. Explain what was completed well or what changes are required before approval..."
-  [(ngModel)]="feedbackText[phase._id]">
-</app-rich-text-editor>
-
-</div>
-
-<div class="d-flex flex-column flex-sm-row gap-2 mt-3">
-
-<app-button
-  variant="success"
-  [loading]="reviewing[phase._id]"
-  [disabled]="reviewing[phase._id]"
-  (click)="approvePhase(diary()!._id, phase._id)">
-
-  Approve Phase
-
-</app-button>
-
-<app-button
-  variant="danger"
-  [loading]="reviewing[phase._id]"
-  [disabled]="reviewing[phase._id]"
-  (click)="requestChanges(diary()!._id, phase._id)">
-
-  Request Changes
-
-</app-button>
-
-</div>
-
-}
-
-@if (
-  phase.status === 'approved' &&
-  getLatestRevision(phase)?.clientFeedback
-) {
-
-<div class="glass rounded-4 p-3 mt-4">
-
-  <div class="d-flex align-items-center gap-2 mb-2">
-
-    <i class="bi bi-check-circle-fill text-success"></i>
-
-    <span class="text-success fw-semibold">
-      Client Approval Feedback
-    </span>
-
-  </div>
-
-  <div
-    class="text-secondary"
-    [innerHTML]="getLatestRevision(phase)?.clientFeedback">
-  </div>
-
-</div>
-
-}
-
-@if (
-  phase.status === 'changes-requested' &&
-  getLatestRevision(phase)?.clientFeedback
-) {
-
-<div class="glass rounded-4 p-3 mt-4">
-
-  <div class="d-flex align-items-center gap-2 mb-2">
-
-    <i class="bi bi-pencil-square text-warning"></i>
-
-    <span class="text-warning fw-semibold">
-      Revision Request
-    </span>
-
-  </div>
-
-  <div
-    class="text-secondary"
-    [innerHTML]="getLatestRevision(phase)?.clientFeedback">
-  </div>
-
-</div>
-
-}
-
-    </div>
-
-    }
-
+      </ng-template>
+    </app-accordion>
   </div>
 
 </div>

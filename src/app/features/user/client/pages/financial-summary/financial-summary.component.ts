@@ -13,6 +13,8 @@ import { ChipComponent } from "../../../../../shared/components/chip/chip.compon
 import { BadgeComponent } from '../../../../../shared/components/badge/badge.component';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 import { Invoice } from '../../../../../core/model/client.model';
+import { ToastrService } from 'ngx-toastr';
+import { DropdownComponent, DropdownAction } from '../../../../../shared/components/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-financial-summary',
@@ -24,7 +26,8 @@ import { Invoice } from '../../../../../core/model/client.model';
     ButtonComponent,
     InputComponent,
     ChipComponent,
-    BadgeComponent
+    BadgeComponent,
+    DropdownComponent
   ],
   templateUrl: './financial-summary.component.html',
   styleUrl: './financial-summary.component.css'
@@ -35,6 +38,7 @@ export class FinancialSummaryComponent implements OnInit {
   private financeService = inject(FinanceService);
   private contractService = inject(ContractService);
   private router = inject(Router);
+  private toastr = inject(ToastrService);
   private destroyRef = inject(DestroyRef);
 
   // Summary Stats
@@ -216,15 +220,15 @@ export class FinancialSummaryComponent implements OnInit {
           if (matchingTxn) {
             window.open(this.financeService.getInvoicePdfUrl(matchingTxn._id), '_blank');
           } else {
-            alert('No completed payment transaction found for this contract yet.');
+            this.toastr.warning('No completed payment transaction found for this contract yet.', 'Invoice Details');
           }
         } else {
-          alert('Failed to retrieve transaction invoices from server.');
+          this.toastr.error('Failed to retrieve transaction invoices from server.', 'Invoice Details');
         }
       },
       error: (err) => {
         console.error('Failed to load transaction invoices:', err);
-        alert('Failed to contact invoice service.');
+        this.toastr.error('Failed to contact invoice service.', 'Invoice Details');
       }
     });
   }
@@ -236,49 +240,18 @@ export class FinancialSummaryComponent implements OnInit {
     }
   }
 
-  activeActionRow: Invoice | null = null;
-  menuTop: number = 0;
-  menuLeft: number = 0;
-
-  toggleActionMenu(event: MouseEvent, row: Invoice): void {
-    event.stopPropagation();
-    if (this.activeActionRow && this.activeActionRow.id === row.id) {
-      this.closeActionMenu();
-    } else {
-      this.activeActionRow = row;
-      const target = (event.currentTarget as HTMLElement).closest('.action-trigger') || event.currentTarget as HTMLElement;
-      const rect = target.getBoundingClientRect();
-      this.menuTop = rect.bottom + 8;
-      this.menuLeft = rect.right - 220;
+  getActions(inv: Invoice): DropdownAction[] {
+    const actions: DropdownAction[] = [];
+    if (inv.remainingAmount > 0) {
+      actions.push({ label: 'Pay / Fund', value: 'fund', icon: 'bi-credit-card-2-front' });
     }
+    actions.push({ label: 'Invoice', value: 'receipts', icon: 'bi-file-earmark-arrow-down' });
+    return actions;
   }
 
-  closeActionMenu(): void {
-    this.activeActionRow = null;
-  }
-
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    if (this.activeActionRow) {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.action-menu') && !target.closest('.action-dropdown')) {
-        this.closeActionMenu();
-      }
-    }
-  }
-
-  @HostListener('window:scroll', ['$event'])
-  onWindowScroll(event: Event): void {
-    if (this.activeActionRow) {
-      this.closeActionMenu();
-    }
-  }
-
-  @HostListener('document:scroll', ['$event'])
-  onScroll(event: Event): void {
-    if (this.activeActionRow) {
-      this.closeActionMenu();
-    }
+  handleAction(actionValue: string, inv: Invoice) {
+    if (actionValue === 'fund') this.fundContract(inv);
+    else if (actionValue === 'receipts') this.downloadInvoice(inv);
   }
 
   // Redirect to Payment Gateway to fund a specific contract

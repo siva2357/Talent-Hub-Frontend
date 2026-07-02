@@ -8,11 +8,12 @@ import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from "../../../../../shared/components/button/button.component";
 import { BadgeComponent } from '../../../../../shared/components/badge/badge.component';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
+import { DropdownComponent, DropdownAction } from '../../../../../shared/components/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-client-list',
   standalone: true,
-  imports: [CommonModule, Table, InputComponent, FormsModule, ButtonComponent, BadgeComponent],
+  imports: [CommonModule, Table, InputComponent, FormsModule, ButtonComponent, BadgeComponent, DropdownComponent],
   templateUrl: './client-list.component.html',
   styleUrl: './client-list.component.css'
 })
@@ -110,34 +111,30 @@ export class ClientListComponent implements OnInit {
     { label: 'Deactivated', value: 'Deactivated' }
   ];
 
-  activeActionRow: ClientData | null = null;
-  menuTop: number = 0;
-  menuLeft: number = 0;
+  getActions(client: ClientData): DropdownAction[] {
+    const actions: DropdownAction[] = [
+      { label: 'View Profile', value: 'view', icon: 'bi bi-eye text-primary' }
+    ];
 
-  toggleActionMenu(event: MouseEvent, row: ClientData): void {
-    event.stopPropagation();
-    if (this.activeActionRow && this.activeActionRow.id === row.id) {
-      this.closeActionMenu();
+    if (client.status === 'Blocked') {
+      actions.push({ label: 'Unblock Account', value: 'Active', icon: 'bi bi-shield-check text-success' });
     } else {
-      this.activeActionRow = row;
-      const target = (event.currentTarget as HTMLElement).closest('.action-trigger') || event.currentTarget as HTMLElement;
-      const rect = target.getBoundingClientRect();
-      this.menuTop = rect.bottom + window.scrollY + 8;
-      this.menuLeft = rect.right + window.scrollX - 220;
+      actions.push({ label: 'Block Account', value: 'Blocked', icon: 'bi bi-shield-slash text-warning' });
     }
+
+    if (client.status === 'Active') {
+      actions.push({ label: 'Deactivate', value: 'Deactivated', icon: 'bi bi-pause-circle text-danger' });
+    } else if (client.status === 'Deactivated' || client.status === 'Suspended') {
+      actions.push({ label: 'Activate', value: 'Active', icon: 'bi bi-play-circle text-success' });
+    }
+    return actions;
   }
 
-  closeActionMenu(): void {
-    this.activeActionRow = null;
-  }
-
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: Event): void {
-    if (this.activeActionRow) {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.action-menu') && !target.closest('.action-trigger')) {
-        this.closeActionMenu();
-      }
+  handleAction(actionValue: string, client: ClientData) {
+    if (actionValue === 'view') {
+      this.viewProfile(client);
+    } else {
+      this.changeClientStatus(client.id, actionValue as any);
     }
   }
 }

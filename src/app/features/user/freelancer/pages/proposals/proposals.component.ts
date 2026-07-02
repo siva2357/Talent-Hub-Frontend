@@ -11,6 +11,7 @@ import { OfferService } from '../../../../../core/services/offer.service';
 import { AppliedApplication, AppliedContractsResponse, Proposal } from '../../../../../core/model/proposal.modal';
 import { DateTimeHelper } from '../../../../../core/helpers/date-time.helper';
 import { ActiveFilter } from '../../../../../core/model/freelancer.model';
+import { AlertModalService } from '../../../../../core/services/alert-modal.service';
 
 @Component({
   selector: 'app-proposals',
@@ -26,6 +27,7 @@ export class ProposalsComponent implements OnInit {
   private applicationService = inject(ApplicationService);
   private offerService = inject(OfferService);
   private route = inject(ActivatedRoute);
+  private alertModalService = inject(AlertModalService);
 
   assessmentSubmitting = signal(false);
   offerDeclining = signal(false);
@@ -141,17 +143,23 @@ export class ProposalsComponent implements OnInit {
   }
 
   declineOffer(id: string): void {
-    if (!confirm('Are you sure you want to decline this contract offer?')) return;
-
-    this.offerDeclining.set(true);
-    this.offerService.declineOffer(id).subscribe({
-      next: () => {
-        this.fetchOffers();
-        this.offerDeclining.set(false);
-      },
-      error: (err) => {
-        console.error('Failed to decline offer:', err);
-        this.offerDeclining.set(false);
+    this.alertModalService.show({
+      title: 'Decline Offer',
+      message: 'Are you sure you want to decline this contract offer?',
+      type: 'danger',
+      confirmText: 'Decline',
+      onConfirm: () => {
+        this.offerDeclining.set(true);
+        this.offerService.declineOffer(id).subscribe({
+          next: () => {
+            this.fetchOffers();
+            this.offerDeclining.set(false);
+          },
+          error: (err) => {
+            console.error('Failed to decline offer:', err);
+            this.offerDeclining.set(false);
+          }
+        });
       }
     });
   }

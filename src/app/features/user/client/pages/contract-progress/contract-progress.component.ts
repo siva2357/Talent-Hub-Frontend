@@ -16,12 +16,15 @@ import { ActivatedRoute } from '@angular/router';
 import { InputComponent } from '../../../../../shared/components/input/input.component';
 import { RichTextEditorComponent } from '../../../../../shared/components/rich-text-editor/rich-text-editor.component';
 import { BadgeComponent } from '../../../../../shared/components/badge/badge.component';
+import { ToastrService } from 'ngx-toastr';
 
+
+import { AccordionComponent } from '../../../../../shared/components/accordion/accordion.component';
 
 @Component({
   selector: 'app-contract-progress',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent, InputComponent, RichTextEditorComponent, FileUploadComponent, FilePreviewComponent, BadgeComponent, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, RouterModule, ButtonComponent, InputComponent, RichTextEditorComponent, FileUploadComponent, FilePreviewComponent, BadgeComponent, ReactiveFormsModule, AccordionComponent],
   templateUrl: './contract-progress.component.html',
   styleUrl: './contract-progress.component.css'
 })
@@ -30,6 +33,7 @@ export class ContractProgressComponent implements OnInit {
   private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
+  private toastr = inject(ToastrService);
 
   contractId = signal<string>('');
 
@@ -54,6 +58,16 @@ export class ContractProgressComponent implements OnInit {
 
   diary = signal<Diary | null>(null);
   contract = signal<any>(null);
+
+  get accordionItems(): any[] {
+    const d = this.diary();
+    if (!d || !d.phases) return [];
+    return d.phases.map((phase: any) => ({
+      ...phase,
+      id: phase._id,
+      title: phase.name
+    }));
+  }
 
 
   getLatestRevision(phase: any) {
@@ -356,9 +370,10 @@ export class ContractProgressComponent implements OnInit {
 
         next: (res: any) => {
 
-          alert(
+          this.toastr.success(
             res.message ||
-            'Phase added successfully.'
+            'Phase added successfully.',
+            'Contract Progress'
           );
 
           this.phaseForm.reset({ clientAttachments: [] });
@@ -375,9 +390,10 @@ export class ContractProgressComponent implements OnInit {
 
         error: (err) => {
 
-          alert(
+          this.toastr.error(
             err.error?.message ||
-            'Failed to add phase.'
+            'Failed to add phase.',
+            'Contract Progress'
           );
 
           this.addingPhase[diaryId] = false;

@@ -29,7 +29,7 @@ export class BlogComponent implements OnInit {
   categories = [
     'All Posts',
     'Technology',
-    'Artificial Intelligence',
+    'Remote Work',
     'Education',
     'Career',
     'Business',

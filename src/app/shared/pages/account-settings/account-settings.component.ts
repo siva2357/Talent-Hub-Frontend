@@ -20,6 +20,7 @@ import { InputComponent } from '../../components/input/input.component';
 import { ButtonComponent } from '../../components/button/button.component';
 import { ChipComponent } from '../../components/chip/chip.component';
 import { validateSocialLink, RegexPatterns } from '../../../core/regex/patterns';
+import { ToastrService } from 'ngx-toastr';
 
 export function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
   const newPassword = control.get('newPassword');
@@ -52,6 +53,7 @@ export class AccountSettingsComponent implements OnInit {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private fb = inject(FormBuilder);
+  private toastr = inject(ToastrService);
 
   // SETTINGS TABS LAYOUT STATE
   activeTab = signal<'profile' | 'security' | 'notifications' | 'manage' | 'payment'>('profile');
@@ -560,14 +562,14 @@ export class AccountSettingsComponent implements OnInit {
     if (this.confirmDelete && this.deleteConfirmPassword) {
       this.profileService.deleteProfile().subscribe({
         next: (res: any) => {
-          alert('Account and all associated data deleted successfully! Redirecting...');
+          this.toastr.success('Account and all associated data deleted successfully! Redirecting...', 'Account Settings');
           this.confirmDelete = false;
           this.deleteConfirmPassword = '';
           this.authService.logout();
           this.router.navigate(['/']);
         },
         error: (err: any) => {
-          alert(err.error?.message || 'Failed to delete profile');
+          this.toastr.error(err.error?.message || 'Failed to delete profile', 'Account Settings');
         }
       });
     }
@@ -786,15 +788,15 @@ export class AccountSettingsComponent implements OnInit {
   withdrawFunds(): void {
     const amt = Number(this.withdrawAmount);
     if (isNaN(amt) || amt <= 0) {
-      alert('Please enter a valid withdrawal amount.');
+      this.toastr.warning('Please enter a valid withdrawal amount.', 'Withdrawal');
       return;
     }
     if (amt > this.availableBalance) {
-      alert('Insufficient available balance for withdrawal.');
+      this.toastr.warning('Insufficient available balance for withdrawal.', 'Withdrawal');
       return;
     }
     this.availableBalance -= amt;
-    alert(`Successfully withdrew ₹ ${amt} to linked bank account!`);
+    this.toastr.success(`Successfully withdrew ₹ ${amt} to linked bank account!`, 'Withdrawal');
     this.withdrawAmount = 0;
   }
 

@@ -11,6 +11,7 @@ import { FileUploadComponent } from '../../../../../shared/components/file-uploa
 import { FilePreviewComponent } from '../../../../../shared/components/file-preview/file-preview.component';
 import { ApplicationService } from '../../../../../core/services/application.service';
 import { BucketKey, UploadSection } from '../../../../../core/enums/upload.enum';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-legal-form',
   standalone: true,
@@ -26,6 +27,7 @@ export class LegalFormComponent implements OnInit {
   private contractService = inject(ContractService);
   private applicationService = inject(ApplicationService);
   private offerService = inject(OfferService);
+  private toastr = inject(ToastrService);
 
   private fb = inject(FormBuilder);
 
@@ -110,7 +112,7 @@ export class LegalFormComponent implements OnInit {
 
   sendOffer(): void {
     if (!this.selectedApplicant) {
-      alert("No applicant selected for this contract.");
+      this.toastr.warning("No applicant selected for this contract.", "Contract Offer");
       return;
     }
 
@@ -119,18 +121,18 @@ export class LegalFormComponent implements OnInit {
       : this.selectedApplicant.applicationId;
 
     if (!appId) {
-      alert("Application ID is missing.");
+      this.toastr.warning("Application ID is missing.", "Contract Offer");
       return;
     }
 
     if (this.legalForm.invalid || !this.clientSignatureUrl) {
       this.legalForm.markAllAsTouched();
       if (!this.clientSignatureUrl) {
-        alert("Please draw or upload your signature before sending the offer.");
+        this.toastr.warning("Please draw or upload your signature before sending the offer.", "Contract Offer");
       } else if (!this.legalForm.get('confirmTerms')?.value) {
-        alert("Please confirm the legal terms by checking the box.");
+        this.toastr.warning("Please confirm the legal terms by checking the box.", "Contract Offer");
       } else {
-        alert("Please fill in the required fields.");
+        this.toastr.warning("Please fill in the required fields.", "Contract Offer");
       }
       return;
     }
@@ -144,14 +146,13 @@ export class LegalFormComponent implements OnInit {
       clientSignature: this.clientSignatureUrl
     }).subscribe({
       next: (res) => {
-        alert("Offer generated and sent successfully!");
+        this.toastr.success("Offer generated and sent successfully!", "Contract Offer");
         this.isSubmitting = false;
-        // Redirect back to contract proposals
         this.router.navigate(['/user/contract-proposals'], { queryParams: { contractId: this.contractId } });
       },
       error: (err) => {
         console.error("Error sending offer:", err);
-        alert(err.error?.message || "Failed to send contract offer. Please try again.");
+        this.toastr.error(err.error?.message || "Failed to send contract offer. Please try again.", "Contract Offer");
         this.isSubmitting = false;
       }
     });

@@ -19,22 +19,7 @@
       </div>
     </div>
     
-    @if (performanceTier) {
-      <div class="performance-ring text-start">
-   <div class="ring-wrapper ms-0 mb-1" [ngClass]="performanceTier.toLowerCase()">
-  <span class="percent text-white">
-    {{ performanceTier === 'New' ? 'NEW' : performance + '%' }}
-  </span>
-</div>
-        <div class="fw-bold text-xs" [ngClass]="{
-                'text-success': performanceTier === 'High',
-                'text-warning': performanceTier === 'Medium',
-                'text-danger': performanceTier === 'Low',
-                'text-secondary': performanceTier === 'New' || performanceTier === 'N/A'
-              }">{{ performanceTier }}</div>
-        <div class="text-secondary text-xxs">Performance</div>
-      </div>
-    }
+
   </div>
 
   <!-- Custom Badges Slot -->

@@ -168,11 +168,7 @@
 </ng-template>
 
 <ng-template #actionTemplate let-row="row">
-  <div class="action-dropdown">
-    <button class="action-trigger" (click)="toggleActionMenu($event, row)">
-      <i class="bi bi-three-dots-vertical"></i>
-    </button>
-  </div>
+  <app-dropdown [actions]="getActions(row)" (actionSelect)="handleAction($event, row)"></app-dropdown>
 </ng-template>
 
 
@@ -237,60 +233,4 @@
   </div>
 </div>
 }
-
-<!-- Action Menu (Rendered outside table) -->
-@if(activeActionRow){
-<div class="action-menu glass" [style.position]="'absolute'" [style.top.px]="menuTop" [style.left.px]="menuLeft"
-  style="z-index: 9999; width: 220px;">
-
-  <div class="action-item" (click)="viewProfile(activeActionRow); closeActionMenu()">
-    <i class="bi bi-eye text-primary"></i>
-    <span>View Profile</span>
-  </div>
-
-  <div class="action-divider"></div>
-
-  @if (activeActionRow.status === 'Pending Approval') {
-  <div class="action-item text-success" (click)="approveFreelancer(activeActionRow.id); closeActionMenu()">
-    <i class="bi bi-check-lg"></i>
-    <span>Approve Profile</span>
-  </div>
-  <div class="action-item text-danger"
-    (click)="changeFreelancerStatus(activeActionRow.id, 'Blocked'); closeActionMenu()">
-    <i class="bi bi-slash-circle"></i>
-    <span>Block / Reject</span>
-  </div>
-  } @else {
-  <!-- Block / Unblock -->
-  @if (activeActionRow.status === 'Blocked') {
-  <div class="action-item text-success"
-    (click)="changeFreelancerStatus(activeActionRow.id, 'Active'); closeActionMenu()">
-    <i class="bi bi-shield-check"></i>
-    <span>Unblock Account</span>
-  </div>
-  } @else {
-  <div class="action-item text-warning"
-    (click)="changeFreelancerStatus(activeActionRow.id, 'Blocked'); closeActionMenu()">
-    <i class="bi bi-shield-slash"></i>
-    <span>Block Account</span>
-  </div>
-  }
-
-  <!-- Activate / Deactivate -->
-  @if (activeActionRow.status === 'Active') {
-  <div class="action-item text-danger"
-    (click)="changeFreelancerStatus(activeActionRow.id, 'Deactivated'); closeActionMenu()">
-    <i class="bi bi-pause-circle"></i>
-    <span>Deactivate</span>
-  </div>
-  } @else if (activeActionRow.status === 'Deactivated' || activeActionRow.status === 'Suspended') {
-  <div class="action-item text-success"
-    (click)="changeFreelancerStatus(activeActionRow.id, 'Active'); closeActionMenu()">
-    <i class="bi bi-play-circle"></i>
-    <span>Activate</span>
-  </div>
-  }
-  }
-
-</div>
-}
+

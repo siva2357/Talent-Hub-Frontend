@@ -16,10 +16,12 @@ import { Subject, of } from 'rxjs';
 import { catchError, map, startWith, switchMap, tap } from 'rxjs/operators';
 
 
+import { AccordionComponent } from '../../../../../shared/components/accordion/accordion.component';
+
 @Component({
   selector: 'app-contract-diary',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule,RichTextEditorComponent, ButtonComponent, FileUploadComponent, FilePreviewComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule,RichTextEditorComponent, ButtonComponent, FileUploadComponent, FilePreviewComponent, AccordionComponent],
   templateUrl: './contract-diary.component.html',
   styleUrl: './contract-diary.component.css'
 })
@@ -56,6 +58,16 @@ export class ContractDiaryComponent implements OnInit {
     ),
     { initialValue: null }
   );
+
+  get accordionItems(): any[] {
+    const d = this.diary();
+    if (!d || !d.phases) return [];
+    return d.phases.map((phase: Phase) => ({
+      ...phase,
+      id: phase._id,
+      title: phase.name
+    }));
+  }
 
   submitPhaseForm!: FormGroup;
   submitting = signal<Record<string, boolean>>({});

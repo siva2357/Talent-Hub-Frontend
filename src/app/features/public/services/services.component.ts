@@ -11,17 +11,17 @@ export class ServicesComponent {
   services = [
     {
       image: '/assets/images/solutions/collaboration.png',
-      icon: 'bi-camera-video',
+      icon: 'bi-headset',
       glow: 'bg-blue-glow',
-      title: 'Video Meetings & Team Collaboration',
-      description: 'Conduct one-to-one meetings, team discussions, and project collaboration sessions through integrated real-time video communication tools.'
+      title: 'Support Resolving System',
+      description: 'Resolve issues and collaborate seamlessly through our dedicated contact support resolving system.'
     },
     {
       image: '/assets/images/solutions/productivity.png',
-      icon: 'bi-person-check',
+      icon: 'bi-graph-up',
       glow: 'bg-green-glow',
-      title: 'Smart Attendance System',
-      description: 'Track freelancer attendance and active work sessions using live face-detection verification and intelligent attendance monitoring systems.'
+      title: 'Activity Tracking System',
+      description: 'Track active work sessions using advanced activity monitoring systems.'
     },
     {
       image: '/assets/images/solutions/tracking_insights.png',
