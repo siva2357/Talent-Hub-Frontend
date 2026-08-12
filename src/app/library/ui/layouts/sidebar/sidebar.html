@@ -17,15 +17,20 @@
       <div class="nav-section">
         <span class="nav-section-title">{{ section.title }}</span>
         @for (link of section.links; track link.path) {
-          <a [routerLink]="link.path" routerLinkActive="active" class="nav-item">
+          <a [routerLink]="link.path" routerLinkActive="active" class="nav-item" (mouseenter)="showTooltip($event, link.label)" (mouseleave)="hideTooltip()">
             <i class="nav-icon" [ngClass]="link.icon"></i>
             <span class="nav-text">{{ link.label }}</span>
-            <span class="custom-tooltip">{{ link.label }}</span>
           </a>
         }
       </div>
     }
   </div>
+
+  @if (tooltipText) {
+    <div class="custom-tooltip" [style.top.px]="tooltipTop">
+      {{ tooltipText }}
+    </div>
+  }
 </aside>
 
 @if (isOpen) {

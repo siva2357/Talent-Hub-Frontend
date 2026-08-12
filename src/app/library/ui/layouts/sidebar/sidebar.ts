@@ -23,6 +23,22 @@ interface NavSection {
 export class Sidebar implements OnInit {
   isOpen = false;
   
+  // Tooltip state
+  tooltipText = '';
+  tooltipTop = 0;
+
+  showTooltip(event: MouseEvent, label: string) {
+    if (this.isOpen) return;
+    const target = event.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    this.tooltipTop = rect.top + (rect.height / 2);
+    this.tooltipText = label;
+  }
+
+  hideTooltip() {
+    this.tooltipText = '';
+  }
+
   ngOnInit() {
     const savedState = localStorage.getItem('sidebarOpen');
     if (savedState) {

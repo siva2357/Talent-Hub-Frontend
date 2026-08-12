@@ -67,6 +67,8 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
   margin-top: 16px;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -222,10 +224,9 @@
 
 /* Custom Tooltip */
 .custom-tooltip {
-  position: absolute;
-  left: calc(100% + 14px);
-  top: 50%;
-  transform: translateY(-50%) translateX(-10px);
+  position: fixed;
+  left: 94px;
+  transform: translateY(-50%);
   background-color: #198cef;
   color: white;
   padding: 8px 14px;
@@ -233,12 +234,15 @@
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
   pointer-events: none;
-  z-index: 1000;
+  z-index: 10000;
   box-shadow: 0 4px 12px rgba(25, 140, 239, 0.3);
+  animation: tooltipFadeIn 0.2s ease forwards;
+}
+
+@keyframes tooltipFadeIn {
+  from { opacity: 0; transform: translateY(-50%) translateX(-10px); }
+  to { opacity: 1; transform: translateY(-50%) translateX(0); }
 }
 
 .custom-tooltip::before {
@@ -250,14 +254,4 @@
   border-width: 6px;
   border-style: solid;
   border-color: transparent #198cef transparent transparent;
-}
-
-.modern-sidebar:not(.open) .nav-item:hover .custom-tooltip {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(-50%) translateX(0);
-}
-
-.modern-sidebar.open .custom-tooltip {
-  display: none !important;
 }
