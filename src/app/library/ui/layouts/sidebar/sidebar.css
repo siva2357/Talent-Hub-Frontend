@@ -1,0 +1,221 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.modern-sidebar {
+  width: 250px;
+  height: 100%;
+  background: #ffffff;
+  border-right: 1px solid #edf2f7;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #1a202c;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.02);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sidebar-header {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 250px; /* keep header from squishing */
+}
+
+.hamburger-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.hamburger-btn:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  transition: opacity 0.2s;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 16px;
+  /* Hide scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+.sidebar-nav::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+.nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  padding: 8px 16px 4px;
+  transition: opacity 0.2s;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  text-decoration: none;
+  color: #64748b;
+  border-radius: 12px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  min-width: 218px; /* ensures text doesn't wrap before hiding */
+}
+
+.nav-item:hover {
+  background-color: rgba(25, 140, 239, 0.08);
+  color: #198cef;
+  transform: translateX(4px);
+}
+
+.nav-item.active {
+  background-color: rgba(25, 140, 239, 0.12);
+  color: #198cef;
+  font-weight: 600;
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px;
+  width: 4px;
+  background-color: #198cef;
+  border-radius: 0 4px 4px 0;
+}
+
+.nav-icon {
+  margin-right: 14px;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.nav-item:hover .nav-icon {
+  transform: scale(1.1);
+}
+
+.nav-text {
+  font-size: 14px;
+  flex: 1;
+  transition: opacity 0.2s;
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid #edf2f7;
+}
+
+/* Collapsed State */
+.modern-sidebar:not(.open) {
+  width: 80px;
+}
+
+.modern-sidebar:not(.open) .nav-text,
+.modern-sidebar:not(.open) .nav-section-title,
+.modern-sidebar:not(.open) .logo-img {
+  display: none;
+}
+
+.modern-sidebar:not(.open) .nav-icon {
+  margin-right: 0;
+}
+
+.modern-sidebar:not(.open) .nav-section {
+  gap: 12px;
+}
+
+.modern-sidebar:not(.open) .nav-item {
+  min-width: unset;
+  justify-content: center;
+  padding: 0;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+}
+
+.modern-sidebar:not(.open) .sidebar-header {
+  min-width: unset;
+  justify-content: center;
+  padding: 24px 0;
+  gap: 0;
+}
+
+.modern-sidebar:not(.open) .hamburger-btn {
+  margin: 0 auto;
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+}
+
+/* Responsive Styles for Mobile */
+@media (max-width: 768px) {
+  :host {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+
+  .modern-sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .modern-sidebar.open ~ .sidebar-overlay {
+    display: block;
+  }
+}
