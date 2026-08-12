@@ -4,12 +4,17 @@ import { AccountPages } from './views/account-pages/account-pages';
 import { Admin } from './views/admin/admin';
 import { Client } from './views/client/client';
 import { Freelancer } from './views/freelancer/freelancer';
+import { UiComponents } from './ui-components/ui-components';
 
 export const routes: Routes = [
   {
     path: '',
     component: PublicLayout,
     loadChildren: () => import('./library/ui/layouts/public-layout/public.routes').then(m => m.PUBLIC_ROUTES)
+  },
+  {
+    path: 'ui-components',
+    component: UiComponents
   },
   {
     path: '',

@@ -12,7 +12,7 @@ export const ADMIN_ROUTES: Routes = [
   { path: 'dashboard', component: Dashboard },
   { path: 'client-management', component: ClientManagement },
   { path: 'freelancer-management', component: FreelancerManagement },
-  { path: 'financial-summary', component: FinancialSummary },
+  { path: 'financial-management', component: FinancialSummary },
   { path: 'reports', component: Reports },
   { path: 'support-request', component: SupportRequest },
   { path: 'blog-manager', component: BlogManager }

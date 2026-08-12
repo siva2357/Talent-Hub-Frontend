@@ -1,6 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+
+interface NavLink {
+  label: string;
+  path: string;
+  icon: string;
+}
+
+interface NavSection {
+  title: string;
+  links: NavLink[];
+}
 
 @Component({
   selector: 'app-sidebar',
@@ -9,55 +20,64 @@ import { RouterModule } from '@angular/router';
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css'
 })
-export class Sidebar {
+export class Sidebar implements OnInit {
   isOpen = false;
+  
+  ngOnInit() {
+    const savedState = localStorage.getItem('sidebarOpen');
+    if (savedState) {
+      this.isOpen = savedState === 'true';
+    }
+  }
 
-  navSections = [
+  navSections: NavSection[] = [
+    {
+      title: 'Shared',
+      links: [
+        { label: 'Dashboard', path: '/dashboard', icon: 'bi bi-grid-1x2' },
+        { label: 'Profile', path: '/profile', icon: 'bi bi-person' },
+        { label: 'Account Settings', path: '/account-settings', icon: 'bi bi-gear' },
+        { label: 'Contact Support', path: '/contact-support', icon: 'bi bi-headset' },
+        { label: 'UI Components', path: '/ui-components', icon: 'bi bi-palette' },
+      ]
+    },
     {
       title: 'Admin',
       links: [
-        { label: 'Dashboard', path: '/dashboard', icon: 'dashboard-icon' },
-        { label: 'Client Management', path: '/client-management', icon: 'users-icon' },
-        { label: 'Freelancer Management', path: '/freelancer-management', icon: 'users-icon' },
-        { label: 'Financial Summary', path: '/financial-summary', icon: 'finance-icon' },
-        { label: 'Reports', path: '/reports', icon: 'document-icon' },
-        { label: 'Support Request', path: '/support-request', icon: 'support-icon' },
-        { label: 'Blog Manager', path: '/blog-manager', icon: 'document-icon' },
+        { label: 'Client Management', path: '/client-management', icon: 'bi bi-people' },
+        { label: 'Freelancer Management', path: '/freelancer-management', icon: 'bi bi-person-lines-fill' },
+        { label: 'Financial Management', path: '/financial-management', icon: 'bi bi-currency-dollar' },
+        { label: 'Reports', path: '/reports', icon: 'bi bi-file-earmark-text' },
+        { label: 'Support Request', path: '/support-request', icon: 'bi bi-question-circle' },
+        { label: 'Blog Manager', path: '/blog-manager', icon: 'bi bi-layout-text-sidebar-reverse' },
       ]
     },
     {
       title: 'Client',
       links: [
-        { label: 'Dashboard', path: '/dashboard', icon: 'dashboard-icon' },
-        { label: 'Manage Contract', path: '/manage-contract', icon: 'document-icon' },
-        { label: 'Applicants', path: '/applicants', icon: 'users-icon' },
-        { label: 'Contract Progress', path: '/contract-progress', icon: 'chart-icon' },
-        { label: 'Search Talent', path: '/search-talent', icon: 'search-icon' },
-        { label: 'Financial Summary', path: '/financial-summary', icon: 'finance-icon' },
-        { label: 'Profile', path: '/profile', icon: 'user-icon' },
-        { label: 'Account Settings', path: '/account-settings', icon: 'settings-icon' },
-        { label: 'Contact Support', path: '/contact-support', icon: 'support-icon' },
+        { label: 'Manage Contract', path: '/manage-contract', icon: 'bi bi-file-earmark-medical' },
+        { label: 'Applicants', path: '/applicants', icon: 'bi bi-person-check' },
+        { label: 'Contract Progress', path: '/contract-progress', icon: 'bi bi-bar-chart' },
+        { label: 'Search Talent', path: '/search-talent', icon: 'bi bi-search' },
+        { label: 'Financial Summary', path: '/financial-summary', icon: 'bi bi-currency-dollar' },
       ]
     },
     {
       title: 'Freelancer',
       links: [
-        { label: 'Dashboard', path: '/dashboard', icon: 'dashboard-icon' },
-        { label: 'Find Contracts', path: '/find-contracts', icon: 'search-icon' },
-        { label: 'Contract Details', path: '/contract-details', icon: 'document-icon' },
-        { label: 'Proposal Offers', path: '/proposal-offers', icon: 'document-icon' },
-        { label: 'My Contracts', path: '/my-contracts', icon: 'document-icon' },
-        { label: 'Contract Diary', path: '/contract-diary', icon: 'document-icon' },
-        { label: 'Finance Overview', path: '/finance-overview', icon: 'finance-icon' },
-        { label: 'Portfolio', path: '/portfolio', icon: 'document-icon' },
-        { label: 'Profile', path: '/profile', icon: 'user-icon' },
-        { label: 'Account Settings', path: '/account-settings', icon: 'settings-icon' },
-        { label: 'Contact Support', path: '/contact-support', icon: 'support-icon' },
+        { label: 'Find Contracts', path: '/find-contracts', icon: 'bi bi-search' },
+        { label: 'Contract Details', path: '/contract-details', icon: 'bi bi-file-earmark-medical' },
+        { label: 'Proposal Offers', path: '/proposal-offers', icon: 'bi bi-file-earmark-check' },
+        { label: 'My Contracts', path: '/my-contracts', icon: 'bi bi-briefcase' },
+        { label: 'Contract Diary', path: '/contract-diary', icon: 'bi bi-journal-bookmark' },
+        { label: 'Finance Overview', path: '/finance-overview', icon: 'bi bi-currency-dollar' },
+        { label: 'Portfolio', path: '/portfolio', icon: 'bi bi-person-workspace' },
       ]
     }
   ];
 
   toggleSidebar() {
     this.isOpen = !this.isOpen;
+    localStorage.setItem('sidebarOpen', String(this.isOpen));
   }
 }
