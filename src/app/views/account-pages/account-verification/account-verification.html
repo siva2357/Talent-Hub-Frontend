@@ -1,1 +1,21 @@
-<p>account-verification works!</p>
+<div class="viewport-wrapper">
+  <!-- Success State Viewport -->
+  <div class="verification-container">
+    <img src="/logo 2.png" alt="Talent Hub" class="logo" />
+    <div class="icon-circle"></div>
+    <h1 class="title">Account Confirmed!</h1>
+    <p class="subtitle">Your email has been successfully verified.<br>You're one step closer to getting started.</p>
+    <button type="button" class="btn-primary" (click)="continueToLogin()">Continue to Login</button>
+  </div>
+
+  <!-- Failure State Viewport -->
+  <div class="verification-container">
+    <img src="/logo 2.png" alt="Talent Hub" class="logo" />
+    <div class="icon-circle"></div>
+    <h1 class="title">Account Not Verified</h1>
+    <p class="subtitle">We couldn't verify your email address<br>The verification code might have been expired or is invalid</p>
+    <button type="button" class="btn-primary">Resend verification code</button>
+    <br>
+    <a class="back-link" routerLink="/register">Back to Register</a>
+  </div>
+</div>

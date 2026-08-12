@@ -1,0 +1,171 @@
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    padding: 1rem;
+    padding-top: 8vh;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    font-family: 'Inter', 'Outfit', sans-serif;
+    color: #1a1a1a;
+    overflow: hidden;
+}
+
+.logo-wrapper {
+    margin-bottom: 2rem;
+}
+
+.logo {
+    height: 80px;
+    object-fit: contain;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: #111111;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #555555;
+}
+
+.roles-container {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.role-card {
+    position: relative;
+    width: 240px;
+    padding: 1.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background-color: #fff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.role-card:hover {
+    border-color: #198cef;
+    box-shadow: 0 10px 25px -5px rgba(25, 140, 239, 0.15);
+    transform: translateY(-2px);
+}
+
+.role-card.selected {
+    border-color: #198cef;
+    background-color: #ffffff;
+}
+
+.radio-circle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #cbd5e1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.role-card:hover .radio-circle {
+    border-color: #198cef;
+}
+
+.role-card.selected .radio-circle {
+    border-color: #198cef;
+    background-color: #198cef;
+}
+
+.role-card.selected .radio-circle::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.icon-placeholder {
+    width: 70px;
+    height: 70px;
+    border: 2px solid #cbd5e1;
+    border-radius: 50%;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.role-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.role-description {
+    font-size: 0.8rem;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+/* Add a create account button */
+.action-container {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #198cef;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 100%;
+    min-width: 250px;
+}
+
+.btn-primary:hover {
+    background-color: #198cef;
+}
+
+.btn-primary:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.login-link {
+    margin-top: 3rem;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.login-link a {
+    color: #198cef;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}

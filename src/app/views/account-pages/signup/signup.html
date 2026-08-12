@@ -1,1 +1,38 @@
-<p>signup works!</p>
+<div class="signup-container">
+  <div class="logo-wrapper">
+    <img src="/logo 2.png" alt="Talent Hub" class="logo" />
+  </div>
+
+  <div class="header">
+    <h1 class="title">Choose your role</h1>
+    <p class="subtitle">Select the option that best describes you to get started with Talent Hub</p>
+  </div>
+
+  <div class="roles-container">
+    <!-- Client Card -->
+    <div class="role-card" [class.selected]="selectedRole === 'client'" (click)="selectRole('client')">
+      <div class="radio-circle"></div>
+      <div class="icon-placeholder"></div>
+      <h2 class="role-title">Client</h2>
+      <p class="role-description">Hire talented professionals and get work done</p>
+    </div>
+
+    <!-- Freelancer Card -->
+    <div class="role-card" [class.selected]="selectedRole === 'freelancer'" (click)="selectRole('freelancer')">
+      <div class="radio-circle"></div>
+      <div class="icon-placeholder"></div>
+      <h2 class="role-title">Freelancer</h2>
+      <p class="role-description">Find exciting projects and grow your career</p>
+    </div>
+  </div>
+
+  @if (selectedRole) {
+    <div class="action-container">
+      <button class="btn-primary" (click)="continue()">Create Account</button>
+    </div>
+  }
+
+  <div class="login-link">
+    Already have an account? <a routerLink="/login">Log in</a>
+  </div>
+</div>
