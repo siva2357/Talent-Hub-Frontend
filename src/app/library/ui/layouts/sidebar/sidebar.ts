@@ -42,6 +42,19 @@ export class Sidebar implements OnInit {
       ]
     },
     {
+      title: 'Auth Pages',
+      links: [
+        { label: 'Login', path: '/login', icon: 'bi bi-box-arrow-in-right' },
+        { label: 'Signup', path: '/signup', icon: 'bi bi-person-plus' },
+        { label: 'Register', path: '/register', icon: 'bi bi-card-checklist' },
+        { label: 'OTP Verification', path: '/otp-verification', icon: 'bi bi-shield-lock' },
+        { label: 'Account Verification', path: '/account-verification', icon: 'bi bi-check-circle' },
+        { label: 'Forgot Password', path: '/forgot-password', icon: 'bi bi-key' },
+        { label: 'Reset Password', path: '/reset-password', icon: 'bi bi-arrow-clockwise' },
+        { label: 'Profile Form', path: '/profile-form', icon: 'bi bi-person-lines-fill' },
+      ]
+    },
+    {
       title: 'Admin',
       links: [
         { label: 'Client Management', path: '/client-management', icon: 'bi bi-people' },
