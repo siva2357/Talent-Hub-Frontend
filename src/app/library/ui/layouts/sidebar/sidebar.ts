@@ -55,6 +55,8 @@ export class Sidebar implements OnInit {
         { label: 'Account Settings', path: '/account-settings', icon: 'bi bi-gear' },
         { label: 'Contact Support', path: '/contact-support', icon: 'bi bi-headset' },
         { label: 'UI Components', path: '/ui-components', icon: 'bi bi-palette' },
+        { label: 'Meet Page', path: '/meet-page', icon: 'bi bi-camera-video' },
+        { label: 'Chat Page', path: '/chat-page', icon: 'bi bi-chat-dots' },
       ]
     },
     {
@@ -79,6 +81,8 @@ export class Sidebar implements OnInit {
         { label: 'Reports', path: '/reports', icon: 'bi bi-file-earmark-text' },
         { label: 'Support Request', path: '/support-request', icon: 'bi bi-question-circle' },
         { label: 'Blog Manager', path: '/blog-manager', icon: 'bi bi-layout-text-sidebar-reverse' },
+        { label: 'Create Blog', path: '/create-blog', icon: 'bi bi-pencil-square' },
+        { label: 'View Report', path: '/view-report', icon: 'bi bi-graph-up' },
       ]
     },
     {
@@ -89,6 +93,12 @@ export class Sidebar implements OnInit {
         { label: 'Contract Progress', path: '/contract-progress', icon: 'bi bi-bar-chart' },
         { label: 'Search Talent', path: '/search-talent', icon: 'bi bi-search' },
         { label: 'Financial Summary', path: '/financial-summary', icon: 'bi bi-currency-dollar' },
+        { label: 'Create Contract', path: '/create-contract', icon: 'bi bi-plus-circle' },
+        { label: 'Legal Contract Page', path: '/legal-contract-page', icon: 'bi bi-file-earmark-ruled' },
+        { label: 'Recruitment Workflow', path: '/recruitment-workflow', icon: 'bi bi-diagram-3' },
+        { label: 'Create Phase', path: '/create-phase', icon: 'bi bi-layers' },
+        { label: 'Phase Details', path: '/phase-details', icon: 'bi bi-list-columns' },
+        { label: 'Transaction History', path: '/transaction-history', icon: 'bi bi-clock-history' },
       ]
     },
     {
@@ -101,6 +111,10 @@ export class Sidebar implements OnInit {
         { label: 'Contract Diary', path: '/contract-diary', icon: 'bi bi-journal-bookmark' },
         { label: 'Finance Overview', path: '/finance-overview', icon: 'bi bi-currency-dollar' },
         { label: 'Portfolio', path: '/portfolio', icon: 'bi bi-person-workspace' },
+        { label: 'Create Portfolio', path: '/create-portfolio', icon: 'bi bi-brush' },
+        { label: 'Feedback Reports', path: '/feedback-reports', icon: 'bi bi-chat-square-text' },
+        { label: 'View Contract Offer', path: '/view-contract-offer', icon: 'bi bi-eye' },
+        { label: 'Legal Contract Acceptance', path: '/legal-contract-acceptance', icon: 'bi bi-check2-square' },
       ]
     }
   ];
