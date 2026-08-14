@@ -6,6 +6,7 @@ import { ContractDetails } from './contract-details/contract-details';
 import { ProposalOffers } from './proposal-offers/proposal-offers';
 import { MyContracts } from './my-contracts/my-contracts';
 import { ContractDiary } from './contract-diary/contract-diary';
+import { ContractPhaseDetails } from './contract-phase-details/contract-phase-details';
 import { FinanceOverview } from './finance-overview/finance-overview';
 import { Portfolio } from './portfolio/portfolio';
 
@@ -19,6 +20,7 @@ import { CreatePortfolio } from './create-portfolio/create-portfolio';
 import { FeedbackReports } from './feedback-reports/feedback-reports';
 import { ViewContractOffer } from './view-contract-offer/view-contract-offer';
 import { LegalContractAcceptance } from './legal-contract-acceptance/legal-contract-acceptance';
+import { CreateTicket } from '../shared/create-ticket/create-ticket';
 
 export const FREELANCER_ROUTES: Routes = [
   { path: 'dashboard', component: Dashboard },
@@ -27,11 +29,13 @@ export const FREELANCER_ROUTES: Routes = [
   { path: 'proposal-offers', component: ProposalOffers },
   { path: 'my-contracts', component: MyContracts },
   { path: 'contract-diary', component: ContractDiary },
+  { path: 'contract-phase-details', component: ContractPhaseDetails },
   { path: 'finance-overview', component: FinanceOverview },
   { path: 'portfolio', component: Portfolio },
   { path: 'profile', component: Profile },
   { path: 'account-settings', component: AccountSettings },
   { path: 'contact-support', component: ContactSupport },
+  { path: 'create-ticket', component: CreateTicket },
   { path: 'create-portfolio', component: CreatePortfolio },
   { path: 'feedback-reports', component: FeedbackReports },
   { path: 'view-contract-offer', component: ViewContractOffer },

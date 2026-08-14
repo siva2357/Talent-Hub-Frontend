@@ -1,1 +1,624 @@
-<p>dashboard works!</p>
+@if (role === 'admin') {
+<div class="dashboard-container p-4">
+  <!-- Header Section -->
+  <header class="mb-4">
+    <h1 class="fw-bold fs-4 mb-1">My dashboard</h1>
+    <p class="text-muted small mb-0">System-wide monitoring, user management, and transactional reports.</p>
+  </header>
+
+  <!-- Top Stats Row -->
+  <section class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon client-icon flex-shrink-0"></div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Total Clients</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon freelancer-icon flex-shrink-0"></div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Total Freelancers</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">500</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon contract-icon flex-shrink-0"></div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Total Contracts</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon payout-icon flex-shrink-0"></div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Total Payouts</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">₹100,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon revenue-icon flex-shrink-0"></div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Platform Revenue</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">₹100,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Line Charts Section -->
+  <section class="row g-4 mb-4">
+    <div class="col-12 col-lg-6">
+      <div class="card chart-card shadow-sm border-0 rounded-3 h-100 p-3">
+        <div class="card-body">
+          <h3 class="fs-6 fw-bold mb-1">Clients Overview</h3>
+          <p class="text-muted small mb-4">Check the data analytics of realtime users of how many registered.</p>
+          <div class="chart-placeholder line-chart-placeholder">
+            <svg viewBox="0 0 100 50" class="mock-chart-svg w-100 h-100">
+              <polyline fill="none" stroke="#FF4D6D" stroke-width="1.5" points="0,40 15,20 30,45 50,10 70,45 85,48 100,30" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <div class="card chart-card shadow-sm border-0 rounded-3 h-100 p-3">
+        <div class="card-body">
+          <h3 class="fs-6 fw-bold mb-1">Freelancers Overview</h3>
+          <p class="text-muted small mb-4">Check the data analytics of realtime users of how many registered.</p>
+          <div class="chart-placeholder line-chart-placeholder">
+            <svg viewBox="0 0 100 50" class="mock-chart-svg w-100 h-100">
+              <polyline fill="none" stroke="#FF4D6D" stroke-width="1.5" points="0,40 15,20 30,45 50,10 70,45 85,48 100,30" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Donut Charts Section -->
+  <section class="row g-4 mb-4">
+    <div class="col-12 col-lg-6">
+      <div class="card chart-card shadow-sm border-0 rounded-3 h-100 p-3">
+        <div class="card-body">
+          <h3 class="fs-6 fw-bold mb-1">Revenue Overview</h3>
+          <p class="text-muted small mb-4">Check the data analytics of realtime users of how many registered.</p>
+          <div class="chart-placeholder donut-chart-placeholder d-flex justify-content-center align-items-center">
+            <div class="mock-donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <div class="card chart-card shadow-sm border-0 rounded-3 h-100 p-3">
+        <div class="card-body">
+          <h3 class="fs-6 fw-bold mb-1">Contracts Overview</h3>
+          <p class="text-muted small mb-4">Check the data analytics of realtime users of how many registered.</p>
+          <div class="chart-placeholder donut-chart-placeholder d-flex justify-content-center align-items-center">
+            <div class="mock-donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Section (Feed & Controls) -->
+  <section class="row g-4">
+    <!-- System Log & Feed -->
+    <div class="col-12 col-lg-8">
+      <div class="card feed-card shadow-sm border-0 rounded-3 h-100 p-3">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <h2 class="fs-5 fw-bold mb-0">System Log & Feed</h2>
+            <a href="#" class="view-all text-decoration-none fw-semibold">View All</a>
+          </div>
+          <p class="text-muted small mb-4">View recent log history about the registration, finance and desk support issues</p>
+          
+          <div class="feed-list d-flex flex-column">
+            <!-- Feed items -->
+            <div class="feed-item d-flex align-items-center py-3 border-bottom">
+              <div class="feed-avatar flex-shrink-0"></div>
+              <div class="feed-details flex-grow-1 ms-3">
+                <p class="mb-0 small text-dark"><strong class="fw-bold">Siva Prasad Kurra</strong> registered as a hiring client.</p>
+                <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+              </div>
+              <span class="badge badge-recent ms-3">Recently</span>
+            </div>
+            <div class="feed-item d-flex align-items-center py-3 border-bottom">
+              <div class="feed-avatar flex-shrink-0"></div>
+              <div class="feed-details flex-grow-1 ms-3">
+                <p class="mb-0 small text-dark"><strong class="fw-bold">Siva Prasad Kurra</strong> registered as a hiring client.</p>
+                <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+              </div>
+              <span class="badge badge-recent ms-3">Recently</span>
+            </div>
+            <div class="feed-item d-flex align-items-center py-3 border-bottom">
+              <div class="feed-avatar flex-shrink-0"></div>
+              <div class="feed-details flex-grow-1 ms-3">
+                <p class="mb-0 small text-dark"><strong class="fw-bold">Siva Prasad Kurra</strong> registered as a hiring client.</p>
+                <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+              </div>
+              <span class="badge badge-recent ms-3">Recently</span>
+            </div>
+            <div class="feed-item d-flex align-items-center py-3 border-bottom">
+              <div class="feed-avatar flex-shrink-0"></div>
+              <div class="feed-details flex-grow-1 ms-3">
+                <p class="mb-0 small text-dark"><strong class="fw-bold">Siva Prasad Kurra</strong> registered as a hiring client.</p>
+                <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+              </div>
+              <span class="badge badge-recent ms-3">Recently</span>
+            </div>
+            <div class="feed-item d-flex align-items-center py-3">
+              <div class="feed-avatar flex-shrink-0"></div>
+              <div class="feed-details flex-grow-1 ms-3">
+                <p class="mb-0 small text-dark"><strong class="fw-bold">Siva Prasad Kurra</strong> registered as a hiring client.</p>
+                <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+              </div>
+              <span class="badge badge-recent ms-3">Recently</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Control Panels -->
+    <div class="col-12 col-lg-4">
+      <div class="card control-panel-card shadow-sm border-0 rounded-3 h-100 p-3">
+        <div class="card-body">
+          <h2 class="fs-5 fw-bold mb-4">Control Panels</h2>
+          <div class="control-list d-flex flex-column gap-2">
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center">
+              <div class="control-icon client-control-icon flex-shrink-0"></div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold text-primary">Client Management</span>
+                <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and profile management</span>
+              </div>
+            </div>
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center">
+              <div class="control-icon freelancer-control-icon flex-shrink-0"></div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold text-primary">Freelancer Management</span>
+                <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and profile management</span>
+              </div>
+            </div>
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center">
+              <div class="control-icon financial-control-icon flex-shrink-0"></div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold text-primary">Financial Summary</span>
+                <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and profile management</span>
+              </div>
+            </div>
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center">
+              <div class="control-icon reports-control-icon flex-shrink-0"></div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold text-primary">Reports</span>
+                <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and profile management</span>
+              </div>
+            </div>
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center">
+              <div class="control-icon support-control-icon flex-shrink-0"></div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold text-primary">Support Management</span>
+                <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and profile management</span>
+              </div>
+            </div>
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center">
+              <div class="control-icon blog-control-icon flex-shrink-0"></div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold text-primary">Blog Management</span>
+                <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and profile management</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+} @else if (role === 'client') {
+<div class="dashboard-container p-4">
+  <!-- Header Section -->
+  <header class="mb-4 d-flex justify-content-between align-items-start">
+    <div>
+      <h1 class="fw-bold fs-4 mb-1">Welcome back, Siva Prasad Kurra</h1>
+      <p class="text-muted small mb-0">System-wide monitoring, contract management, hiring analytics and transactional reports.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary px-4 shadow-sm">Find Talent</button>
+      <button class="btn btn-outline-primary bg-white px-4 shadow-sm">Post a Job</button>
+    </div>
+  </header>
+
+  <!-- Top Stats Row -->
+  <section class="row g-3 mb-5">
+    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon border border-primary border-opacity-25 rounded-3 flex-shrink-0" style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Active Contracts</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon border border-primary border-opacity-25 rounded-3 flex-shrink-0" style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Total Spent</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">₹100,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon border border-primary border-opacity-25 rounded-3 flex-shrink-0" style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Pay Vaulta Balance</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon border border-primary border-opacity-25 rounded-3 flex-shrink-0" style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Pending Proposals</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">₹100,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Section (Feed & Controls) -->
+  <section class="row g-4">
+    <!-- System Log & Feed -->
+    <div class="col-12 col-lg-8">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <h2 class="fs-5 fw-bold mb-0">System Log & Feed</h2>
+        <a href="#" class="text-primary text-decoration-none fw-semibold small">View All</a>
+      </div>
+      <p class="text-muted small mb-4">View recent log history about the registration , finance and desk support issues</p>
+      
+      <div class="feed-list d-flex flex-column">
+        <!-- Feed items -->
+        <div class="d-flex align-items-center py-3 border-bottom border-secondary border-opacity-25">
+          <div class="rounded-circle border border-dark bg-dark position-relative flex-shrink-0" style="width: 40px; height: 40px;">
+             <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+          </div>
+          <div class="ms-3 flex-grow-1">
+            <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none" style="color: #007bff;">Siva Prasad Kurra</a> has applied for contract ID -123456</p>
+            <span class="text-muted" style="font-size: 0.75rem;">Job Applicant</span>
+          </div>
+          <span class="badge text-primary rounded-pill px-3 py-1 ms-3 fw-semibold" style="background-color: #e0f0ff;">Recently</span>
+        </div>
+        
+        <div class="d-flex align-items-center py-3 border-bottom border-secondary border-opacity-25">
+          <div class="rounded-circle border border-dark bg-dark position-relative flex-shrink-0" style="width: 40px; height: 40px;">
+             <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+          </div>
+          <div class="ms-3 flex-grow-1">
+            <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none" style="color: #007bff;">Siva Prasad Kurra</a> has been hired for the Contract ID -123456.</p>
+            <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+          </div>
+          <span class="badge text-success rounded-pill px-4 py-1 ms-3 fw-semibold" style="background-color: #d1fae5;">Hired</span>
+        </div>
+
+        <div class="d-flex align-items-center py-3 border-bottom border-secondary border-opacity-25">
+          <div class="rounded-circle border border-dark bg-dark position-relative flex-shrink-0" style="width: 40px; height: 40px;">
+             <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+          </div>
+          <div class="ms-3 flex-grow-1">
+            <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none" style="color: #007bff;">Siva Prasad Kurra</a> has submitted the assessment for contract ID -123456.</p>
+            <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+          </div>
+          <span class="badge text-primary rounded-pill px-3 py-1 ms-3 fw-semibold" style="background-color: #e0f0ff;">Recently</span>
+        </div>
+
+        <div class="d-flex align-items-center py-3 border-bottom border-secondary border-opacity-25">
+          <div class="rounded-circle border border-dark bg-dark position-relative flex-shrink-0" style="width: 40px; height: 40px;">
+             <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+          </div>
+          <div class="ms-3 flex-grow-1">
+            <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none" style="color: #007bff;">Siva Prasad Kurra</a> registered as a hiring client.</p>
+            <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+          </div>
+          <span class="badge text-primary rounded-pill px-3 py-1 ms-3 fw-semibold" style="background-color: #e0f0ff;">Recently</span>
+        </div>
+        
+        <div class="d-flex align-items-center py-3 border-bottom border-secondary border-opacity-25">
+          <div class="rounded-circle border border-dark bg-dark position-relative flex-shrink-0" style="width: 40px; height: 40px;">
+             <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+          </div>
+          <div class="ms-3 flex-grow-1">
+            <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none" style="color: #007bff;">Siva Prasad Kurra</a> registered as a hiring client.</p>
+            <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+          </div>
+          <span class="badge text-primary rounded-pill px-3 py-1 ms-3 fw-semibold" style="background-color: #e0f0ff;">Recently</span>
+        </div>
+
+        <div class="d-flex align-items-center py-3 border-bottom border-secondary border-opacity-25">
+          <div class="rounded-circle border border-dark bg-dark position-relative flex-shrink-0" style="width: 40px; height: 40px;">
+             <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+          </div>
+          <div class="ms-3 flex-grow-1">
+            <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none" style="color: #007bff;">Siva Prasad Kurra</a> registered as a hiring client.</p>
+            <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+          </div>
+          <span class="badge text-primary rounded-pill px-3 py-1 ms-3 fw-semibold" style="background-color: #e0f0ff;">Recently</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Control Panels -->
+    <div class="col-12 col-lg-4">
+      <div class="card shadow-sm border-0 rounded-3 h-100 p-3 bg-white">
+        <div class="card-body">
+          <h2 class="fs-5 fw-bold mb-4">Control Panels</h2>
+          <div class="control-list d-flex flex-column gap-3">
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center shadow-sm" style="cursor: pointer; background-color: #fff;">
+              <div class="border border-primary border-opacity-25 rounded flex-shrink-0" style="width: 32px; height: 32px; background-color: #e0f0ff;"></div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold" style="color: #007bff;">Post new contracts</span>
+                <span class="d-block text-muted" style="font-size: 0.70rem;">Audit the clients and profile management</span>
+              </div>
+            </div>
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center shadow-sm" style="cursor: pointer; background-color: #fff;">
+              <div class="border border-primary border-opacity-25 rounded flex-shrink-0" style="width: 32px; height: 32px; background-color: #e0f0ff;"></div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold" style="color: #007bff;">Manage Contracts</span>
+                <span class="d-block text-muted" style="font-size: 0.70rem;">Audit the clients and profile management</span>
+              </div>
+            </div>
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center shadow-sm" style="cursor: pointer; background-color: #fff;">
+              <div class="border border-primary border-opacity-25 rounded flex-shrink-0" style="width: 32px; height: 32px; background-color: #e0f0ff;"></div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold" style="color: #007bff;">Search Talents</span>
+                <span class="d-block text-muted" style="font-size: 0.70rem;">Audit the clients and profile management</span>
+              </div>
+            </div>
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center shadow-sm" style="cursor: pointer; background-color: #fff;">
+              <div class="border border-primary border-opacity-25 rounded flex-shrink-0" style="width: 32px; height: 32px; background-color: #e0f0ff;"></div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold" style="color: #007bff;">Financial Summary</span>
+                <span class="d-block text-muted" style="font-size: 0.70rem;">Audit the clients and profile management</span>
+              </div>
+            </div>
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center shadow-sm" style="cursor: pointer; background-color: #fff;">
+              <div class="border border-primary border-opacity-25 rounded flex-shrink-0" style="width: 32px; height: 32px; background-color: #e0f0ff;"></div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold" style="color: #007bff;">Transaction history</span>
+                <span class="d-block text-muted" style="font-size: 0.70rem;">Audit the clients and profile management</span>
+              </div>
+            </div>
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center shadow-sm" style="cursor: pointer; background-color: #fff;">
+              <div class="border border-primary border-opacity-25 rounded flex-shrink-0" style="width: 32px; height: 32px; background-color: #e0f0ff;"></div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold" style="color: #007bff;">Contact Support</span>
+                <span class="d-block text-muted" style="font-size: 0.70rem;">Audit the clients and profile management</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+} @else if (role === 'freelancer') {
+<div class="dashboard-container p-4">
+  <!-- Header Section -->
+  <header class="mb-4 d-flex justify-content-between align-items-start">
+    <div>
+      <h1 class="fw-bold fs-4 mb-1">Welcome back, Freelancer</h1>
+      <p class="text-muted small mb-0">Manage your contracts, track your earnings, and discover new opportunities.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary px-4 shadow-sm">Find Contracts</button>
+      <button class="btn btn-outline-primary bg-white px-4 shadow-sm">Update Portfolio</button>
+    </div>
+  </header>
+
+  <!-- Top Stats Row -->
+  <section class="row g-3 mb-5">
+    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100 hover-card">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon border border-primary border-opacity-25 rounded-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background-color: #e0f0ff;">
+            <i class="bi bi-briefcase text-primary fs-5"></i>
+          </div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Active Contracts</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100 hover-card">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon border border-success border-opacity-25 rounded-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background-color: #d1fae5;">
+            <i class="bi bi-cash-stack text-success fs-5"></i>
+          </div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Total Earnings</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">₹2,50,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100 hover-card">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon border border-warning border-opacity-25 rounded-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background-color: #fef3c7;">
+            <i class="bi bi-wallet2 text-warning fs-5"></i>
+          </div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Available Balance</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">₹45,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100 hover-card">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon border border-info border-opacity-25 rounded-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background-color: #e0f2fe;">
+            <i class="bi bi-file-earmark-check text-info fs-5"></i>
+          </div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Pending Proposals</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">12</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Section (Feed & Controls) -->
+  <section class="row g-4">
+    <!-- System Log & Feed -->
+    <div class="col-12 col-lg-8">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <h2 class="fs-5 fw-bold mb-0">Recent Activity</h2>
+        <a href="#" class="text-primary text-decoration-none fw-semibold small">View All</a>
+      </div>
+      <p class="text-muted small mb-4">Keep track of your proposals, contract updates, and payments.</p>
+      
+      <div class="feed-list d-flex flex-column bg-white rounded-3 shadow-sm p-3">
+        <!-- Feed items -->
+        <div class="d-flex align-items-center py-3 border-bottom border-secondary border-opacity-10">
+          <div class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
+             <i class="bi bi-currency-rupee fs-5"></i>
+          </div>
+          <div class="ms-3 flex-grow-1">
+            <p class="mb-0 small text-dark">Payment of <span class="fw-bold">₹25,000</span> released by <a href="#" class="fw-bold text-decoration-none text-primary">ABC Tech</a>.</p>
+            <span class="text-muted" style="font-size: 0.75rem;">Just now</span>
+          </div>
+          <span class="badge text-success rounded-pill px-3 py-1 ms-3 fw-semibold bg-success bg-opacity-10">Paid</span>
+        </div>
+        
+        <div class="d-flex align-items-center py-3 border-bottom border-secondary border-opacity-10">
+          <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
+             <i class="bi bi-file-earmark-text fs-5"></i>
+          </div>
+          <div class="ms-3 flex-grow-1">
+            <p class="mb-0 small text-dark">You submitted a proposal for <a href="#" class="fw-bold text-decoration-none text-primary">E-commerce Redesign</a>.</p>
+            <span class="text-muted" style="font-size: 0.75rem;">2 hours ago</span>
+          </div>
+          <span class="badge text-primary rounded-pill px-3 py-1 ms-3 fw-semibold bg-primary bg-opacity-10">Proposal</span>
+        </div>
+
+        <div class="d-flex align-items-center py-3 border-bottom border-secondary border-opacity-10">
+          <div class="rounded-circle bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
+             <i class="bi bi-check2-circle fs-5"></i>
+          </div>
+          <div class="ms-3 flex-grow-1">
+            <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none text-primary">XYZ Corp</a> approved Phase 2 milestone.</p>
+            <span class="text-muted" style="font-size: 0.75rem;">1 day ago</span>
+          </div>
+          <span class="badge text-warning rounded-pill px-3 py-1 ms-3 fw-semibold bg-warning bg-opacity-10 text-dark">Approved</span>
+        </div>
+
+        <div class="d-flex align-items-center py-3 border-bottom border-secondary border-opacity-10">
+          <div class="rounded-circle bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
+             <i class="bi bi-chat-dots fs-5"></i>
+          </div>
+          <div class="ms-3 flex-grow-1">
+            <p class="mb-0 small text-dark">New message received from <a href="#" class="fw-bold text-decoration-none text-primary">Tech Solutions</a>.</p>
+            <span class="text-muted" style="font-size: 0.75rem;">2 days ago</span>
+          </div>
+          <span class="badge text-info rounded-pill px-3 py-1 ms-3 fw-semibold bg-info bg-opacity-10">Message</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Control Panels -->
+    <div class="col-12 col-lg-4">
+      <div class="card shadow-sm border-0 rounded-3 h-100 p-3 bg-white">
+        <div class="card-body">
+          <h2 class="fs-5 fw-bold mb-4">Quick Links</h2>
+          <div class="control-list d-flex flex-column gap-3">
+            
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center shadow-sm" style="cursor: pointer; background-color: #fff; transition: all 0.2s;">
+              <div class="border border-primary border-opacity-25 rounded flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: #e0f0ff;">
+                <i class="bi bi-search text-primary"></i>
+              </div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold" style="color: #007bff;">Find Contracts</span>
+                <span class="d-block text-muted" style="font-size: 0.70rem;">Browse and apply for new jobs</span>
+              </div>
+            </div>
+            
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center shadow-sm" style="cursor: pointer; background-color: #fff; transition: all 0.2s;">
+              <div class="border border-primary border-opacity-25 rounded flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: #e0f0ff;">
+                <i class="bi bi-briefcase text-primary"></i>
+              </div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold" style="color: #007bff;">My Contracts</span>
+                <span class="d-block text-muted" style="font-size: 0.70rem;">Manage your active projects</span>
+              </div>
+            </div>
+            
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center shadow-sm" style="cursor: pointer; background-color: #fff; transition: all 0.2s;">
+              <div class="border border-primary border-opacity-25 rounded flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: #e0f0ff;">
+                <i class="bi bi-file-earmark-check text-primary"></i>
+              </div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold" style="color: #007bff;">Proposal Offers</span>
+                <span class="d-block text-muted" style="font-size: 0.70rem;">Track your sent proposals</span>
+              </div>
+            </div>
+            
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center shadow-sm" style="cursor: pointer; background-color: #fff; transition: all 0.2s;">
+              <div class="border border-primary border-opacity-25 rounded flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: #e0f0ff;">
+                <i class="bi bi-currency-dollar text-primary"></i>
+              </div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold" style="color: #007bff;">Finance Overview</span>
+                <span class="d-block text-muted" style="font-size: 0.70rem;">View earnings and withdrawals</span>
+              </div>
+            </div>
+            
+            <div class="control-item border rounded-3 p-3 d-flex align-items-center shadow-sm" style="cursor: pointer; background-color: #fff; transition: all 0.2s;">
+              <div class="border border-primary border-opacity-25 rounded flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: #e0f0ff;">
+                <i class="bi bi-person-workspace text-primary"></i>
+              </div>
+              <div class="ms-3">
+                <span class="d-block small fw-bold" style="color: #007bff;">Portfolio</span>
+                <span class="d-block text-muted" style="font-size: 0.70rem;">Update your professional profile</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+}

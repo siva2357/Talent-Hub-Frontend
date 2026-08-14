@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './meet-page.css'
 })
 export class MeetPage {
-
+  mode: 'meeting' | 'interview' = 'meeting'; // 'meeting' or 'interview'
 }

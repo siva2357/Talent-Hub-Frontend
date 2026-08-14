@@ -1,1 +1,536 @@
-<p>search-talent works!</p>
+<div class="management-container p-4">
+  <!-- Header -->
+  <header class="mb-4">
+    <h1 class="fw-bold fs-3 mb-1 text-dark">Get to know your Talents</h1>
+    <p class="text-muted small mb-0">Discover skilled professionals and find the perfect match for your projects.</p>
+  </header>
+
+  <!-- Filter Card -->
+  <div class="card shadow-sm border-0 rounded-3 mb-4 p-4 bg-white">
+    <div class="row g-3 mb-3">
+      <!-- Row 1 -->
+      <div class="col-md-3">
+        <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Skills</label>
+        <select class="form-select text-dark" style="font-size: 0.8rem;">
+          <option>All Skills</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Experience Level</label>
+        <select class="form-select text-dark" style="font-size: 0.8rem;">
+          <option>All Levels</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Availability</label>
+        <select class="form-select text-dark" style="font-size: 0.8rem;">
+          <option>All Availability</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Hourly Rate</label>
+        <select class="form-select text-dark" style="font-size: 0.8rem;">
+          <option>All Rates</option>
+        </select>
+      </div>
+      
+      <!-- Row 2 -->
+      <div class="col-md-3">
+        <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Location</label>
+        <select class="form-select text-dark" style="font-size: 0.8rem;">
+          <option>All Locations</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Languages</label>
+        <select class="form-select text-dark" style="font-size: 0.8rem;">
+          <option>All Languages</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Job Success</label>
+        <select class="form-select text-dark" style="font-size: 0.8rem;">
+          <option>All Ratings</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Sort By</label>
+        <select class="form-select text-dark" style="font-size: 0.8rem;">
+          <option>Best Match</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary btn-sm px-4 fw-semibold">Apply Filters</button>
+      <button class="btn btn-outline-secondary bg-white btn-sm px-4 fw-semibold">Clear All</button>
+    </div>
+  </div>
+
+  <!-- Talent Grid -->
+  <div class="row g-4">
+    
+    <!-- Talent Card 1 (High Match) -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-3 h-100 p-4 bg-white d-flex flex-column hover-card">
+        <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+          <div class="d-flex gap-3">
+            <div class="rounded-circle bg-dark position-relative flex-shrink-0" style="width: 50px; height: 50px;">
+              <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-0">Full Name</h3>
+              <span class="text-muted d-block" style="font-size: 0.65rem;"><i class="bi bi-geo-alt"></i> Location</span>
+              <span class="text-muted d-block mt-1" style="font-size: 0.7rem;">Professional Headline</span>
+            </div>
+          </div>
+          <!-- Match Score -->
+          <div class="text-center">
+            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; border-radius: 50%; background: conic-gradient(#198754 0% 85%, #e9ecef 85% 100%);">
+              <div class="bg-white rounded-circle position-absolute d-flex flex-column align-items-center justify-content-center fw-bold text-dark" style="width: 35px; height: 35px; font-size: 0.7rem;">
+                85%
+              </div>
+            </div>
+            <span class="d-block fw-bold text-dark mt-1" style="font-size: 0.6rem;">High</span>
+          </div>
+        </div>
+        
+        <!-- Skills -->
+        <div class="mb-3">
+          <span class="text-primary fw-bold d-block mb-2" style="font-size: 0.75rem;">Skills</span>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 1</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 2</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 3</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 4</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 5</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 6</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 7</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 8</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 9</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 10</span>
+          </div>
+        </div>
+        
+        <!-- Stats Row -->
+        <div class="d-flex justify-content-between align-items-center border-top border-bottom py-3 mb-3 text-center">
+          <div>
+            <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500/hr</span>
+            <span class="text-muted" style="font-size: 0.65rem;">Rate</span>
+          </div>
+          <div class="border-start ps-3">
+            <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span>
+            <span class="text-muted" style="font-size: 0.65rem;">Projects</span>
+          </div>
+          <div class="border-start ps-3">
+            <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500K+</span>
+            <span class="text-muted" style="font-size: 0.65rem;">Earned</span>
+          </div>
+          <div class="border-start ps-3">
+            <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span>
+            <span class="text-muted" style="font-size: 0.65rem;">Reviews</span>
+          </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="d-flex justify-content-between align-items-center mt-auto">
+          <span class="text-dark fw-semibold d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i class="bi bi-circle-fill text-success" style="font-size: 0.4rem;"></i> Available</span>
+          <button class="btn btn-primary btn-sm px-4 fw-bold shadow-sm" style="font-size: 0.75rem;">View Profile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Talent Card 2 (High Match) -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-3 h-100 p-4 bg-white d-flex flex-column hover-card">
+        <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+          <div class="d-flex gap-3">
+            <div class="rounded-circle bg-dark position-relative flex-shrink-0" style="width: 50px; height: 50px;">
+              <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-0">Full Name</h3>
+              <span class="text-muted d-block" style="font-size: 0.65rem;"><i class="bi bi-geo-alt"></i> Location</span>
+              <span class="text-muted d-block mt-1" style="font-size: 0.7rem;">Professional Headline</span>
+            </div>
+          </div>
+          <div class="text-center">
+            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; border-radius: 50%; background: conic-gradient(#198754 0% 85%, #e9ecef 85% 100%);">
+              <div class="bg-white rounded-circle position-absolute d-flex flex-column align-items-center justify-content-center fw-bold text-dark" style="width: 35px; height: 35px; font-size: 0.7rem;">85%</div>
+            </div>
+            <span class="d-block fw-bold text-dark mt-1" style="font-size: 0.6rem;">High</span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <span class="text-primary fw-bold d-block mb-2" style="font-size: 0.75rem;">Skills</span>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 1</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 2</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 3</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 4</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 5</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 6</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 7</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 8</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 9</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 10</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center border-top border-bottom py-3 mb-3 text-center">
+          <div><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500/hr</span><span class="text-muted" style="font-size: 0.65rem;">Rate</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Projects</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500K+</span><span class="text-muted" style="font-size: 0.65rem;">Earned</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Reviews</span></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-auto">
+          <span class="text-dark fw-semibold d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i class="bi bi-circle-fill text-success" style="font-size: 0.4rem;"></i> Available</span>
+          <button class="btn btn-primary btn-sm px-4 fw-bold shadow-sm" style="font-size: 0.75rem;">View Profile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Talent Card 3 (High Match) -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-3 h-100 p-4 bg-white d-flex flex-column hover-card">
+        <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+          <div class="d-flex gap-3">
+            <div class="rounded-circle bg-dark position-relative flex-shrink-0" style="width: 50px; height: 50px;">
+              <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-0">Full Name</h3>
+              <span class="text-muted d-block" style="font-size: 0.65rem;"><i class="bi bi-geo-alt"></i> Location</span>
+              <span class="text-muted d-block mt-1" style="font-size: 0.7rem;">Professional Headline</span>
+            </div>
+          </div>
+          <div class="text-center">
+            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; border-radius: 50%; background: conic-gradient(#198754 0% 85%, #e9ecef 85% 100%);">
+              <div class="bg-white rounded-circle position-absolute d-flex flex-column align-items-center justify-content-center fw-bold text-dark" style="width: 35px; height: 35px; font-size: 0.7rem;">85%</div>
+            </div>
+            <span class="d-block fw-bold text-dark mt-1" style="font-size: 0.6rem;">High</span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <span class="text-primary fw-bold d-block mb-2" style="font-size: 0.75rem;">Skills</span>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 1</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 2</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 3</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 4</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 5</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 6</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 7</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 8</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 9</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 10</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center border-top border-bottom py-3 mb-3 text-center">
+          <div><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500/hr</span><span class="text-muted" style="font-size: 0.65rem;">Rate</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Projects</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500K+</span><span class="text-muted" style="font-size: 0.65rem;">Earned</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Reviews</span></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-auto">
+          <span class="text-dark fw-semibold d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i class="bi bi-circle-fill text-success" style="font-size: 0.4rem;"></i> Available</span>
+          <button class="btn btn-primary btn-sm px-4 fw-bold shadow-sm" style="font-size: 0.75rem;">View Profile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Talent Card 4 (Medium Match) -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-3 h-100 p-4 bg-white d-flex flex-column hover-card">
+        <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+          <div class="d-flex gap-3">
+            <div class="rounded-circle bg-dark position-relative flex-shrink-0" style="width: 50px; height: 50px;">
+              <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-0">Full Name</h3>
+              <span class="text-muted d-block" style="font-size: 0.65rem;"><i class="bi bi-geo-alt"></i> Location</span>
+              <span class="text-muted d-block mt-1" style="font-size: 0.7rem;">Professional Headline</span>
+            </div>
+          </div>
+          <div class="text-center">
+            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; border-radius: 50%; background: conic-gradient(#ffc107 0% 65%, #e9ecef 65% 100%);">
+              <div class="bg-white rounded-circle position-absolute d-flex flex-column align-items-center justify-content-center fw-bold text-dark" style="width: 35px; height: 35px; font-size: 0.7rem;">65%</div>
+            </div>
+            <span class="d-block fw-bold text-dark mt-1" style="font-size: 0.6rem;">Medium</span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <span class="text-primary fw-bold d-block mb-2" style="font-size: 0.75rem;">Skills</span>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 1</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 2</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 3</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 4</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 5</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 6</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 7</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 8</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 9</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 10</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center border-top border-bottom py-3 mb-3 text-center">
+          <div><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500/hr</span><span class="text-muted" style="font-size: 0.65rem;">Rate</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Projects</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500K+</span><span class="text-muted" style="font-size: 0.65rem;">Earned</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Reviews</span></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-auto">
+          <span class="text-dark fw-semibold d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i class="bi bi-circle-fill text-success" style="font-size: 0.4rem;"></i> Available</span>
+          <button class="btn btn-primary btn-sm px-4 fw-bold shadow-sm" style="font-size: 0.75rem;">View Profile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Talent Card 5 (Medium Match) -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-3 h-100 p-4 bg-white d-flex flex-column hover-card">
+        <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+          <div class="d-flex gap-3">
+            <div class="rounded-circle bg-dark position-relative flex-shrink-0" style="width: 50px; height: 50px;">
+              <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-0">Full Name</h3>
+              <span class="text-muted d-block" style="font-size: 0.65rem;"><i class="bi bi-geo-alt"></i> Location</span>
+              <span class="text-muted d-block mt-1" style="font-size: 0.7rem;">Professional Headline</span>
+            </div>
+          </div>
+          <div class="text-center">
+            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; border-radius: 50%; background: conic-gradient(#ffc107 0% 65%, #e9ecef 65% 100%);">
+              <div class="bg-white rounded-circle position-absolute d-flex flex-column align-items-center justify-content-center fw-bold text-dark" style="width: 35px; height: 35px; font-size: 0.7rem;">65%</div>
+            </div>
+            <span class="d-block fw-bold text-dark mt-1" style="font-size: 0.6rem;">Medium</span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <span class="text-primary fw-bold d-block mb-2" style="font-size: 0.75rem;">Skills</span>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 1</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 2</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 3</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 4</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 5</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 6</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 7</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 8</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 9</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 10</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center border-top border-bottom py-3 mb-3 text-center">
+          <div><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500/hr</span><span class="text-muted" style="font-size: 0.65rem;">Rate</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Projects</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500K+</span><span class="text-muted" style="font-size: 0.65rem;">Earned</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Reviews</span></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-auto">
+          <span class="text-dark fw-semibold d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i class="bi bi-circle-fill text-success" style="font-size: 0.4rem;"></i> Available</span>
+          <button class="btn btn-primary btn-sm px-4 fw-bold shadow-sm" style="font-size: 0.75rem;">View Profile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Talent Card 6 (Medium Match) -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-3 h-100 p-4 bg-white d-flex flex-column hover-card">
+        <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+          <div class="d-flex gap-3">
+            <div class="rounded-circle bg-dark position-relative flex-shrink-0" style="width: 50px; height: 50px;">
+              <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-0">Full Name</h3>
+              <span class="text-muted d-block" style="font-size: 0.65rem;"><i class="bi bi-geo-alt"></i> Location</span>
+              <span class="text-muted d-block mt-1" style="font-size: 0.7rem;">Professional Headline</span>
+            </div>
+          </div>
+          <div class="text-center">
+            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; border-radius: 50%; background: conic-gradient(#ffc107 0% 65%, #e9ecef 65% 100%);">
+              <div class="bg-white rounded-circle position-absolute d-flex flex-column align-items-center justify-content-center fw-bold text-dark" style="width: 35px; height: 35px; font-size: 0.7rem;">65%</div>
+            </div>
+            <span class="d-block fw-bold text-dark mt-1" style="font-size: 0.6rem;">Medium</span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <span class="text-primary fw-bold d-block mb-2" style="font-size: 0.75rem;">Skills</span>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 1</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 2</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 3</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 4</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 5</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 6</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 7</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 8</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 9</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 10</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center border-top border-bottom py-3 mb-3 text-center">
+          <div><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500/hr</span><span class="text-muted" style="font-size: 0.65rem;">Rate</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Projects</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500K+</span><span class="text-muted" style="font-size: 0.65rem;">Earned</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Reviews</span></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-auto">
+          <span class="text-dark fw-semibold d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i class="bi bi-circle-fill text-success" style="font-size: 0.4rem;"></i> Available</span>
+          <button class="btn btn-primary btn-sm px-4 fw-bold shadow-sm" style="font-size: 0.75rem;">View Profile</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Talent Card 7 (Low Match) -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-3 h-100 p-4 bg-white d-flex flex-column hover-card">
+        <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+          <div class="d-flex gap-3">
+            <div class="rounded-circle bg-dark position-relative flex-shrink-0" style="width: 50px; height: 50px;">
+              <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-0">Full Name</h3>
+              <span class="text-muted d-block" style="font-size: 0.65rem;"><i class="bi bi-geo-alt"></i> Location</span>
+              <span class="text-muted d-block mt-1" style="font-size: 0.7rem;">Professional Headline</span>
+            </div>
+          </div>
+          <div class="text-center">
+            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; border-radius: 50%; background: conic-gradient(#dc3545 0% 45%, #e9ecef 45% 100%);">
+              <div class="bg-white rounded-circle position-absolute d-flex flex-column align-items-center justify-content-center fw-bold text-dark" style="width: 35px; height: 35px; font-size: 0.7rem;">45%</div>
+            </div>
+            <span class="d-block fw-bold text-dark mt-1" style="font-size: 0.6rem;">Low</span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <span class="text-primary fw-bold d-block mb-2" style="font-size: 0.75rem;">Skills</span>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 1</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 2</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 3</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 4</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 5</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 6</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 7</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 8</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 9</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 10</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center border-top border-bottom py-3 mb-3 text-center">
+          <div><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500/hr</span><span class="text-muted" style="font-size: 0.65rem;">Rate</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Projects</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500K+</span><span class="text-muted" style="font-size: 0.65rem;">Earned</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Reviews</span></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-auto">
+          <span class="text-dark fw-semibold d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i class="bi bi-circle-fill text-success" style="font-size: 0.4rem;"></i> Available</span>
+          <button class="btn btn-primary btn-sm px-4 fw-bold shadow-sm" style="font-size: 0.75rem;">View Profile</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Talent Card 8 (Low Match) -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-3 h-100 p-4 bg-white d-flex flex-column hover-card">
+        <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+          <div class="d-flex gap-3">
+            <div class="rounded-circle bg-dark position-relative flex-shrink-0" style="width: 50px; height: 50px;">
+              <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-0">Full Name</h3>
+              <span class="text-muted d-block" style="font-size: 0.65rem;"><i class="bi bi-geo-alt"></i> Location</span>
+              <span class="text-muted d-block mt-1" style="font-size: 0.7rem;">Professional Headline</span>
+            </div>
+          </div>
+          <div class="text-center">
+            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; border-radius: 50%; background: conic-gradient(#dc3545 0% 45%, #e9ecef 45% 100%);">
+              <div class="bg-white rounded-circle position-absolute d-flex flex-column align-items-center justify-content-center fw-bold text-dark" style="width: 35px; height: 35px; font-size: 0.7rem;">45%</div>
+            </div>
+            <span class="d-block fw-bold text-dark mt-1" style="font-size: 0.6rem;">Low</span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <span class="text-primary fw-bold d-block mb-2" style="font-size: 0.75rem;">Skills</span>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 1</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 2</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 3</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 4</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 5</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 6</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 7</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 8</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 9</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 10</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center border-top border-bottom py-3 mb-3 text-center">
+          <div><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500/hr</span><span class="text-muted" style="font-size: 0.65rem;">Rate</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Projects</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500K+</span><span class="text-muted" style="font-size: 0.65rem;">Earned</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Reviews</span></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-auto">
+          <span class="text-dark fw-semibold d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i class="bi bi-circle-fill text-success" style="font-size: 0.4rem;"></i> Available</span>
+          <button class="btn btn-primary btn-sm px-4 fw-bold shadow-sm" style="font-size: 0.75rem;">View Profile</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Talent Card 9 (Low Match) -->
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-3 h-100 p-4 bg-white d-flex flex-column hover-card">
+        <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+          <div class="d-flex gap-3">
+            <div class="rounded-circle bg-dark position-relative flex-shrink-0" style="width: 50px; height: 50px;">
+              <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 16px; height: 16px; background-color: #5a5ce8;"></div>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-0">Full Name</h3>
+              <span class="text-muted d-block" style="font-size: 0.65rem;"><i class="bi bi-geo-alt"></i> Location</span>
+              <span class="text-muted d-block mt-1" style="font-size: 0.7rem;">Professional Headline</span>
+            </div>
+          </div>
+          <div class="text-center">
+            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; border-radius: 50%; background: conic-gradient(#dc3545 0% 45%, #e9ecef 45% 100%);">
+              <div class="bg-white rounded-circle position-absolute d-flex flex-column align-items-center justify-content-center fw-bold text-dark" style="width: 35px; height: 35px; font-size: 0.7rem;">45%</div>
+            </div>
+            <span class="d-block fw-bold text-dark mt-1" style="font-size: 0.6rem;">Low</span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <span class="text-primary fw-bold d-block mb-2" style="font-size: 0.75rem;">Skills</span>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 1</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 2</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 3</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 4</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 5</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 6</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 7</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 8</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 9</span>
+            <span class="badge border border-secondary border-opacity-25 text-muted bg-white fw-normal rounded px-2" style="font-size: 0.65rem;">Skill 10</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center border-top border-bottom py-3 mb-3 text-center">
+          <div><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500/hr</span><span class="text-muted" style="font-size: 0.65rem;">Rate</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Projects</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">₹500K+</span><span class="text-muted" style="font-size: 0.65rem;">Earned</span></div>
+          <div class="border-start ps-3"><span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">10</span><span class="text-muted" style="font-size: 0.65rem;">Reviews</span></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-auto">
+          <span class="text-dark fw-semibold d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i class="bi bi-circle-fill text-success" style="font-size: 0.4rem;"></i> Available</span>
+          <button class="btn btn-primary btn-sm px-4 fw-bold shadow-sm" style="font-size: 0.75rem;">View Profile</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,1 +1,401 @@
-<p>chat-page works!</p>
+<div class="management-container d-flex flex-column" style="height: calc(100vh - 60px);">
+  
+  <!-- Top Header for Messages Page -->
+  <div class="px-4 py-3 bg-white border-bottom d-flex justify-content-between align-items-center flex-shrink-0">
+    <div>
+      <h1 class="fw-bold fs-4 mb-0 text-dark">Messages</h1>
+      <p class="text-muted small mb-0">Communicate with your clients</p>
+    </div>
+  </div>
+
+  <!-- Main Chat Layout (3 Columns) -->
+  <div class="d-flex flex-grow-1 overflow-hidden bg-white">
+    
+    <!-- Left Column: Conversation List -->
+    <div class="d-flex flex-column border-end flex-shrink-0" style="width: 340px;">
+      
+      <!-- Search & Filter -->
+      <div class="p-3 border-bottom d-flex gap-2">
+        <div class="input-group input-group-sm bg-light border rounded-3 flex-grow-1">
+          <span class="input-group-text bg-transparent border-0 text-muted"><i class="bi bi-search"></i></span>
+          <input type="text" class="form-control border-0 bg-transparent text-dark shadow-none" placeholder="Search conversations...">
+        </div>
+        <button class="btn btn-light border rounded-3 text-muted d-flex align-items-center justify-content-center px-2"><i class="bi bi-funnel"></i></button>
+      </div>
+
+      <!-- Tabs -->
+      <ul class="nav nav-tabs border-bottom-0 px-3 pt-2" style="font-size: 0.85rem;">
+        <li class="nav-item flex-grow-1 text-center">
+          <a class="nav-link active fw-bold text-primary border-0 border-bottom border-2 border-primary bg-transparent py-2" href="#">All</a>
+        </li>
+        <li class="nav-item flex-grow-1 text-center">
+          <a class="nav-link text-muted border-0 bg-transparent py-2 hover-text-primary" href="#">Unread <span class="badge bg-purple-soft text-purple rounded-pill ms-1">3</span></a>
+        </li>
+        <li class="nav-item flex-grow-1 text-center">
+          <a class="nav-link text-muted border-0 bg-transparent py-2 hover-text-primary" href="#">Archived</a>
+        </li>
+      </ul>
+
+      <!-- List of Conversations -->
+      <div class="overflow-y-auto flex-grow-1 chat-list-scroll">
+        
+        <!-- Active Chat Item -->
+        <div class="p-3 border-bottom position-relative cursor-pointer" style="background-color: rgba(111, 66, 193, 0.05);">
+          <!-- Left Purple Border indicator -->
+          <div class="position-absolute start-0 top-0 bottom-0 bg-purple" style="width: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px;"></div>
+          
+          <div class="d-flex gap-3 align-items-start ps-2">
+            <div class="position-relative flex-shrink-0">
+              <img src="https://i.pravatar.cc/150?u=a042581f4e29026704a" class="rounded-circle object-fit-cover" width="40" height="40" alt="Avatar">
+              <span class="position-absolute bottom-0 end-0 bg-success border border-2 border-white rounded-circle" style="width: 10px; height: 10px;"></span>
+            </div>
+            <div class="flex-grow-1 min-w-0">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold text-dark text-truncate" style="font-size: 0.9rem;">Rohit Sharma</span>
+                <span class="text-purple fw-semibold" style="font-size: 0.7rem;">10:30 AM</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-start">
+                <p class="text-dark mb-0 text-truncate pe-2 fw-semibold" style="font-size: 0.75rem; line-height: 1.4;">Looks good! Please update the product card design as discussed.</p>
+                <span class="badge bg-purple rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 20px; height: 20px; font-size: 0.65rem;">2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Item 2 -->
+        <div class="p-3 border-bottom cursor-pointer hover-bg-light">
+          <div class="d-flex gap-3 align-items-start ps-2">
+            <img src="https://i.pravatar.cc/150?u=a042581f4e29026704b" class="rounded-circle object-fit-cover flex-shrink-0" width="40" height="40" alt="Avatar">
+            <div class="flex-grow-1 min-w-0">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold text-dark text-truncate" style="font-size: 0.9rem;">Anita Verma</span>
+                <span class="text-muted" style="font-size: 0.7rem;">Yesterday</span>
+              </div>
+              <p class="text-muted mb-0 text-truncate pe-2" style="font-size: 0.75rem;">Thanks for the quick update!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Item 3 -->
+        <div class="p-3 border-bottom cursor-pointer hover-bg-light">
+          <div class="d-flex gap-3 align-items-start ps-2">
+            <img src="https://i.pravatar.cc/150?u=a042581f4e29026704c" class="rounded-circle object-fit-cover flex-shrink-0" width="40" height="40" alt="Avatar">
+            <div class="flex-grow-1 min-w-0">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold text-dark text-truncate" style="font-size: 0.9rem;">Meera Client</span>
+                <span class="text-muted" style="font-size: 0.7rem;">Yesterday</span>
+              </div>
+              <p class="text-muted mb-0 text-truncate pe-2" style="font-size: 0.75rem;">Payment of ₹15,000 released.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Item 4 -->
+        <div class="p-3 border-bottom cursor-pointer hover-bg-light">
+          <div class="d-flex gap-3 align-items-start ps-2">
+            <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" class="rounded-circle object-fit-cover flex-shrink-0" width="40" height="40" alt="Avatar">
+            <div class="flex-grow-1 min-w-0">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold text-dark text-truncate" style="font-size: 0.9rem;">Vikram Singh</span>
+                <span class="text-muted" style="font-size: 0.7rem;">2 days ago</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-start">
+                <p class="text-dark fw-semibold mb-0 text-truncate pe-2" style="font-size: 0.75rem;">Please share the API documentation.</p>
+                <span class="badge bg-purple rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 20px; height: 20px; font-size: 0.65rem;">1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Item 5 -->
+        <div class="p-3 border-bottom cursor-pointer hover-bg-light">
+          <div class="d-flex gap-3 align-items-start ps-2">
+            <img src="https://i.pravatar.cc/150?u=a042581f4e29026704e" class="rounded-circle object-fit-cover flex-shrink-0" width="40" height="40" alt="Avatar">
+            <div class="flex-grow-1 min-w-0">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold text-dark text-truncate" style="font-size: 0.9rem;">Priya Patel</span>
+                <span class="text-muted" style="font-size: 0.7rem;">3 days ago</span>
+              </div>
+              <p class="text-muted mb-0 text-truncate pe-2" style="font-size: 0.75rem;">Can we schedule a call tomorrow?</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Item 6 (Support) -->
+        <div class="p-3 border-bottom cursor-pointer hover-bg-light">
+          <div class="d-flex gap-3 align-items-start ps-2">
+            <div class="bg-purple text-white rounded-circle d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
+              <i class="bi bi-headset fs-5"></i>
+            </div>
+            <div class="flex-grow-1 min-w-0">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold text-dark text-truncate" style="font-size: 0.9rem;">Support Team</span>
+                <span class="text-muted" style="font-size: 0.7rem;">5 days ago</span>
+              </div>
+              <p class="text-muted mb-0 text-truncate pe-2" style="font-size: 0.75rem;">Your ticket has been resolved.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Item 7 -->
+        <div class="p-3 cursor-pointer hover-bg-light">
+          <div class="d-flex gap-3 align-items-start ps-2">
+            <img src="https://i.pravatar.cc/150?u=a042581f4e29026704f" class="rounded-circle object-fit-cover flex-shrink-0" width="40" height="40" alt="Avatar">
+            <div class="flex-grow-1 min-w-0">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold text-dark text-truncate" style="font-size: 0.9rem;">Karan Malhotra</span>
+                <span class="text-muted" style="font-size: 0.7rem;">1 week ago</span>
+              </div>
+              <p class="text-muted mb-0 text-truncate pe-2" style="font-size: 0.75rem;">Great work on the dashboard!</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Middle Column: Main Chat Window -->
+    <div class="d-flex flex-column flex-grow-1 position-relative" style="background-color: #fafbfc;">
+      
+      <!-- Chat Header -->
+      <div class="px-4 py-3 bg-white border-bottom d-flex justify-content-between align-items-center flex-shrink-0 z-1 shadow-sm">
+        <div class="d-flex gap-3 align-items-center">
+          <div class="position-relative">
+            <img src="https://i.pravatar.cc/150?u=a042581f4e29026704a" class="rounded-circle object-fit-cover" width="45" height="45" alt="Avatar">
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <h2 class="fw-bold fs-5 mb-0 text-dark">Rohit Sharma</h2>
+              <span class="d-flex align-items-center gap-1 text-success" style="font-size: 0.7rem;"><i class="bi bi-circle-fill" style="font-size: 0.4rem;"></i> Online</span>
+            </div>
+            <p class="text-muted mb-0" style="font-size: 0.75rem;">Client · E-commerce Website Development</p>
+          </div>
+        </div>
+        <div class="d-flex gap-3 text-muted">
+          <button class="btn btn-light rounded-circle border d-flex justify-content-center align-items-center" style="width: 38px; height: 38px;"><i class="bi bi-camera-video fs-5"></i></button>
+          <button class="btn btn-light rounded-circle border d-flex justify-content-center align-items-center" style="width: 38px; height: 38px;"><i class="bi bi-telephone fs-5"></i></button>
+          <button class="btn btn-light rounded-circle border d-flex justify-content-center align-items-center" style="width: 38px; height: 38px;"><i class="bi bi-info-circle fs-5"></i></button>
+        </div>
+      </div>
+
+      <!-- Chat Messages Area -->
+      <div class="flex-grow-1 overflow-y-auto p-4 d-flex flex-column gap-3 chat-messages-scroll" style="background-color: #fafbfc;">
+        
+        <!-- Date Divider -->
+        <div class="d-flex justify-content-center my-2">
+          <span class="badge bg-white text-muted border px-3 py-1 fw-normal shadow-sm" style="font-size: 0.7rem;">Jul 18, 2026</span>
+        </div>
+
+        <!-- Message Received -->
+        <div class="d-flex gap-3 align-items-end me-5">
+          <img src="https://i.pravatar.cc/150?u=a042581f4e29026704a" class="rounded-circle object-fit-cover mb-4" width="30" height="30" alt="Avatar">
+          <div class="d-flex flex-column gap-1">
+            <div class="bg-white border text-dark p-3 rounded-4 rounded-bottom-0 rounded-end-4 shadow-sm" style="font-size: 0.85rem; max-width: 450px; line-height: 1.5;">
+              Hi Siva, I reviewed the product listing page.<br>Overall it looks great! 🎉
+            </div>
+            <span class="text-muted ms-1" style="font-size: 0.65rem;">10:15 AM</span>
+          </div>
+        </div>
+
+        <!-- Message Sent -->
+        <div class="d-flex gap-3 align-items-end ms-5 ms-auto">
+          <div class="d-flex flex-column gap-1 align-items-end">
+            <div class="bg-purple text-white p-3 rounded-4 rounded-bottom-0 rounded-start-4 shadow-sm" style="font-size: 0.85rem; max-width: 450px; line-height: 1.5;">
+              Hi Rohit, thank you! 😊<br>I'll start working on the filter and sorting functionality and will share an update soon.
+            </div>
+            <span class="text-muted me-1 d-flex align-items-center gap-1" style="font-size: 0.65rem;">10:17 AM <i class="bi bi-check-all text-primary fs-6"></i></span>
+          </div>
+        </div>
+
+        <!-- Message Received -->
+        <div class="d-flex gap-3 align-items-end me-5">
+          <img src="https://i.pravatar.cc/150?u=a042581f4e29026704a" class="rounded-circle object-fit-cover mb-4" width="30" height="30" alt="Avatar">
+          <div class="d-flex flex-column gap-1">
+            <div class="bg-white border text-dark p-3 rounded-4 rounded-bottom-0 rounded-end-4 shadow-sm" style="font-size: 0.85rem; max-width: 450px; line-height: 1.5;">
+              Perfect! Also, please make sure it is fully responsive for mobile devices.
+            </div>
+            <span class="text-muted ms-1" style="font-size: 0.65rem;">10:18 AM</span>
+          </div>
+        </div>
+
+        <!-- Message Sent -->
+        <div class="d-flex gap-3 align-items-end ms-5 ms-auto">
+          <div class="d-flex flex-column gap-1 align-items-end">
+            <div class="bg-purple text-white p-3 rounded-4 rounded-bottom-0 rounded-start-4 shadow-sm" style="font-size: 0.85rem; max-width: 450px; line-height: 1.5;">
+              Sure, I'll make it fully responsive.
+            </div>
+            <span class="text-muted me-1 d-flex align-items-center gap-1" style="font-size: 0.65rem;">10:19 AM <i class="bi bi-check-all text-primary fs-6"></i></span>
+          </div>
+        </div>
+
+        <!-- Date Divider -->
+        <div class="d-flex justify-content-center my-2 mt-4">
+          <span class="badge bg-white text-muted border px-3 py-1 fw-normal shadow-sm" style="font-size: 0.7rem;">Jul 20, 2026</span>
+        </div>
+
+        <!-- Message Received -->
+        <div class="d-flex gap-3 align-items-end me-5">
+          <img src="https://i.pravatar.cc/150?u=a042581f4e29026704a" class="rounded-circle object-fit-cover mb-4" width="30" height="30" alt="Avatar">
+          <div class="d-flex flex-column gap-1">
+            <div class="bg-white border text-dark p-3 rounded-4 rounded-bottom-0 rounded-end-4 shadow-sm" style="font-size: 0.85rem; max-width: 450px; line-height: 1.5;">
+              Hey Siva, I have a small change request.
+            </div>
+            <span class="text-muted ms-1" style="font-size: 0.65rem;">10:28 AM</span>
+          </div>
+        </div>
+        
+        <!-- Message Received (Continued) -->
+        <div class="d-flex gap-3 align-items-end me-5">
+          <img src="https://i.pravatar.cc/150?u=a042581f4e29026704a" class="rounded-circle object-fit-cover mb-4" width="30" height="30" alt="Avatar">
+          <div class="d-flex flex-column gap-1">
+            <div class="bg-white border text-dark p-3 rounded-4 rounded-top-0 rounded-end-4 shadow-sm" style="font-size: 0.85rem; max-width: 450px; line-height: 1.5;">
+              Can we show the rating below the product name instead of beside it?
+            </div>
+            <span class="text-muted ms-1" style="font-size: 0.65rem;">10:29 AM</span>
+          </div>
+        </div>
+
+        <!-- Message Sent -->
+        <div class="d-flex gap-3 align-items-end ms-5 ms-auto">
+          <div class="d-flex flex-column gap-1 align-items-end">
+            <div class="bg-purple text-white p-3 rounded-4 rounded-bottom-0 rounded-start-4 shadow-sm" style="font-size: 0.85rem; max-width: 450px; line-height: 1.5;">
+              Yes, no problem, I'll update it and share the new UI by today evening.
+            </div>
+            <span class="text-muted me-1 d-flex align-items-center gap-1" style="font-size: 0.65rem;">10:30 AM <i class="bi bi-check-all text-primary fs-6"></i></span>
+          </div>
+        </div>
+        
+        <!-- Message Received -->
+        <div class="d-flex gap-3 align-items-end me-5">
+          <img src="https://i.pravatar.cc/150?u=a042581f4e29026704a" class="rounded-circle object-fit-cover mb-4" width="30" height="30" alt="Avatar">
+          <div class="d-flex flex-column gap-1">
+            <div class="bg-white border text-dark p-3 rounded-4 rounded-bottom-0 rounded-end-4 shadow-sm" style="font-size: 0.85rem; max-width: 450px; line-height: 1.5;">
+              Looks good! Please update the product card design as discussed.
+            </div>
+            <span class="text-muted ms-1" style="font-size: 0.65rem;">10:30 AM</span>
+          </div>
+        </div>
+
+        <!-- Auto scroll anchor -->
+        <div id="chat-end"></div>
+
+      </div>
+
+      <!-- Chat Input Area -->
+      <div class="p-3 bg-white border-top flex-shrink-0 z-1">
+        <div class="d-flex align-items-center gap-2 bg-light border rounded-pill p-1 shadow-sm">
+          <button class="btn btn-light rounded-circle text-muted border-0 bg-transparent d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;"><i class="bi bi-paperclip fs-5"></i></button>
+          <input type="text" class="form-control border-0 bg-transparent shadow-none" placeholder="Type your message..." style="font-size: 0.85rem;">
+          <button class="btn btn-light rounded-circle text-muted border-0 bg-transparent d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;"><i class="bi bi-emoji-smile fs-5"></i></button>
+          <button class="btn btn-primary rounded-circle d-flex justify-content-center align-items-center me-1" style="width: 40px; height: 40px; background-color: #6f42c1; border-color: #6f42c1;"><i class="bi bi-send-fill"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Conversation Details -->
+    <div class="d-flex flex-column border-start bg-white flex-shrink-0 overflow-y-auto chat-details-scroll" style="width: 320px;">
+      
+      <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+        <h3 class="fs-6 fw-bold text-dark mb-0">Conversation Details</h3>
+        <button class="btn btn-light text-muted border-0 bg-transparent p-1"><i class="bi bi-three-dots-vertical"></i></button>
+      </div>
+
+      <div class="p-4 border-bottom text-center">
+        <img src="https://i.pravatar.cc/150?u=a042581f4e29026704a" class="rounded-circle object-fit-cover mb-3 shadow-sm border" width="80" height="80" alt="Avatar">
+        <h4 class="fw-bold fs-5 text-dark mb-1">Rohit Sharma</h4>
+        <div class="d-flex align-items-center justify-content-center gap-1 text-success mb-2" style="font-size: 0.75rem;">
+          <i class="bi bi-circle-fill" style="font-size: 0.4rem;"></i> Online
+        </div>
+        <span class="d-block text-muted mb-2" style="font-size: 0.8rem;">Client</span>
+        <a href="mailto:rohit.sharma@email.com" class="text-primary text-decoration-none" style="font-size: 0.8rem;">rohit.sharma@email.com</a>
+      </div>
+
+      <div class="p-4 border-bottom">
+        <h5 class="fw-bold text-dark mb-3" style="font-size: 0.8rem;">Related Contract</h5>
+        <div class="d-flex align-items-start gap-3 mb-3">
+          <div class="bg-light border rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
+            <i class="bi bi-clipboard-check text-muted fs-5"></i>
+          </div>
+          <div>
+            <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.8rem;">E-commerce Website Development</span>
+            <span class="text-muted" style="font-size: 0.75rem;">CT-2506-001</span>
+          </div>
+        </div>
+        <button class="btn btn-outline-primary btn-sm w-100 fw-semibold bg-white rounded-3 py-2" style="font-size: 0.75rem;">View Contract</button>
+      </div>
+
+      <div class="p-4 border-bottom">
+        <h5 class="fw-bold text-dark mb-3" style="font-size: 0.8rem;">Phase</h5>
+        <div class="d-flex align-items-start gap-3 mb-3">
+          <div class="bg-light border rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
+            <i class="bi bi-clock-history text-muted fs-5"></i>
+          </div>
+          <div>
+            <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.8rem;">1. Frontend - Product Listing Page</span>
+            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1" style="font-size: 0.65rem;">In Progress</span>
+          </div>
+        </div>
+        <button class="btn btn-outline-primary btn-sm w-100 fw-semibold bg-white rounded-3 py-2" style="font-size: 0.75rem;">View Phase</button>
+      </div>
+
+      <div class="p-4 border-bottom">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold text-dark mb-0" style="font-size: 0.8rem;">Shared Files</h5>
+          <a href="#" class="text-primary text-decoration-none fw-semibold" style="font-size: 0.75rem;">View all</a>
+        </div>
+        
+        <div class="d-flex flex-column gap-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="bg-danger bg-opacity-10 text-danger rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
+              <i class="bi bi-filetype-pdf fs-5"></i>
+            </div>
+            <div class="flex-grow-1 min-w-0">
+              <span class="d-block fw-bold text-dark text-truncate mb-1" style="font-size: 0.8rem;">Product_Requirements.pdf</span>
+              <span class="text-muted" style="font-size: 0.7rem;">1.2 MB · Jul 18, 2026</span>
+            </div>
+            <button class="btn btn-light btn-sm text-muted rounded-circle border-0 bg-transparent"><i class="bi bi-download"></i></button>
+          </div>
+
+          <div class="d-flex align-items-center gap-3">
+            <div class="bg-purple-soft text-purple rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
+              <i class="bi bi-image fs-5"></i>
+            </div>
+            <div class="flex-grow-1 min-w-0">
+              <span class="d-block fw-bold text-dark text-truncate mb-1" style="font-size: 0.8rem;">Design_Reference.png</span>
+              <span class="text-muted" style="font-size: 0.7rem;">2.4 MB · Jul 18, 2026</span>
+            </div>
+            <button class="btn btn-light btn-sm text-muted rounded-circle border-0 bg-transparent"><i class="bi bi-download"></i></button>
+          </div>
+
+          <div class="d-flex align-items-center gap-3">
+            <div class="bg-danger bg-opacity-10 text-danger rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
+              <i class="bi bi-filetype-pdf fs-5"></i>
+            </div>
+            <div class="flex-grow-1 min-w-0">
+              <span class="d-block fw-bold text-dark text-truncate mb-1" style="font-size: 0.8rem;">API_Specs.pdf</span>
+              <span class="text-muted" style="font-size: 0.7rem;">1.8 MB · Jul 19, 2026</span>
+            </div>
+            <button class="btn btn-light btn-sm text-muted rounded-circle border-0 bg-transparent"><i class="bi bi-download"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4">
+        <h5 class="fw-bold text-dark mb-3" style="font-size: 0.8rem;">Options</h5>
+        <div class="d-flex flex-column gap-3">
+          <div class="d-flex justify-content-between align-items-center text-muted cursor-pointer hover-text-primary">
+            <span class="d-flex align-items-center gap-2" style="font-size: 0.8rem;"><i class="bi bi-bell-slash"></i> Mute Conversation</span>
+            <div class="form-check form-switch m-0 fs-5">
+              <input class="form-check-input" type="checkbox" role="switch">
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2 text-muted cursor-pointer hover-text-primary" style="font-size: 0.8rem;">
+            <i class="bi bi-archive"></i> Archive Conversation
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

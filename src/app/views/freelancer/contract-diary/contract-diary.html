@@ -1,1 +1,427 @@
-<p>contract-diary works!</p>
+<div class="management-container p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold fs-3 mb-0 text-dark">Contract Diary</h1>
+  </div>
+
+  <!-- Contract Overview Header -->
+  <div class="card border-0 shadow-sm rounded-4 bg-white p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <span class="text-muted d-block fw-semibold mb-1" style="font-size: 0.75rem;">Contract</span>
+        <div class="d-flex align-items-center gap-3">
+          <h2 class="fs-5 fw-bold text-dark mb-0">E-commerce Website Development</h2>
+          <span class="badge bg-success bg-opacity-10 text-success rounded-pill fw-semibold px-3">Active</span>
+        </div>
+      </div>
+      <button class="btn btn-outline-primary fw-semibold bg-white border-primary border-opacity-50">View Contract Details</button>
+    </div>
+    
+    <div class="row g-4 border-top pt-4">
+      <div class="col-md-2 border-end border-light">
+        <div class="d-flex gap-2">
+          <div class="rounded-circle bg-purple-soft text-purple d-flex justify-content-center align-items-center mt-1 flex-shrink-0" style="width: 24px; height: 24px;"><i class="bi bi-person"></i></div>
+          <div>
+            <span class="d-block text-muted" style="font-size: 0.7rem;">Client</span>
+            <span class="fw-bold text-dark fs-6">Rohit Sharma</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2 border-end border-light">
+        <div class="d-flex gap-2">
+          <div class="text-muted mt-1 flex-shrink-0"><i class="bi bi-calendar-event"></i></div>
+          <div>
+            <span class="d-block text-muted" style="font-size: 0.7rem;">Start Date</span>
+            <span class="fw-bold text-dark fs-6">20 Jul, 2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2 border-end border-light">
+        <div class="d-flex gap-2">
+          <div class="text-muted mt-1 flex-shrink-0"><i class="bi bi-calendar-x"></i></div>
+          <div>
+            <span class="d-block text-muted" style="font-size: 0.7rem;">End Date</span>
+            <span class="fw-bold text-dark fs-6">20 Oct, 2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 border-end border-light">
+        <div class="d-flex flex-column">
+          <span class="d-block text-muted mb-1" style="font-size: 0.7rem;">Contract Amount</span>
+          <span class="fw-bold text-dark fs-5">₹ 1,25,000</span>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="d-flex flex-column">
+          <span class="d-block text-muted mb-1" style="font-size: 0.7rem;">Earned So Far</span>
+          <span class="fw-bold text-success fs-5">₹ 45,000 <span class="fw-semibold ms-1" style="font-size: 0.8rem;">(36%)</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase Summary Cards -->
+  <div class="row g-3 mb-4">
+    <!-- Total Phases -->
+    <div class="col">
+      <div class="card border border-light shadow-sm rounded-4 bg-white p-3 h-100">
+        <div class="d-flex gap-3 align-items-start mb-3">
+          <div class="rounded-3 bg-purple-soft text-purple d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;"><i class="bi bi-journal-text fs-5"></i></div>
+          <div>
+            <span class="d-block text-muted fw-semibold" style="font-size: 0.7rem;">Total Phases</span>
+            <span class="fw-bold text-dark fs-4">5</span>
+          </div>
+        </div>
+        <a href="#" class="text-primary text-decoration-none fw-semibold d-block mt-auto" style="font-size: 0.75rem;">View all phases <i class="bi bi-arrow-right"></i></a>
+      </div>
+    </div>
+    <!-- Completed -->
+    <div class="col">
+      <div class="card shadow-sm rounded-4 bg-white p-3 h-100 border-0 border-bottom border-4 border-success position-relative overflow-hidden">
+        <div class="d-flex gap-3 align-items-start">
+          <div class="rounded-3 bg-success bg-opacity-10 text-success d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;"><i class="bi bi-check-circle fs-5"></i></div>
+          <div>
+            <span class="d-block text-muted fw-semibold" style="font-size: 0.7rem;">Completed</span>
+            <span class="fw-bold text-dark fs-4">1</span>
+          </div>
+        </div>
+        <div class="position-absolute bottom-0 end-0 mb-3 me-3">
+          <span class="text-muted fw-bold" style="font-size: 0.75rem;">20%</span>
+        </div>
+      </div>
+    </div>
+    <!-- In Progress -->
+    <div class="col">
+      <div class="card shadow-sm rounded-4 bg-white p-3 h-100 border-0 border-bottom border-4 border-primary position-relative overflow-hidden">
+        <div class="d-flex gap-3 align-items-start">
+          <div class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;"><i class="bi bi-arrow-repeat fs-5"></i></div>
+          <div>
+            <span class="d-block text-muted fw-semibold" style="font-size: 0.7rem;">In Progress</span>
+            <span class="fw-bold text-dark fs-4">2</span>
+          </div>
+        </div>
+        <div class="position-absolute bottom-0 end-0 mb-3 me-3">
+          <span class="text-muted fw-bold" style="font-size: 0.75rem;">40%</span>
+        </div>
+      </div>
+    </div>
+    <!-- Not Started -->
+    <div class="col">
+      <div class="card shadow-sm rounded-4 bg-white p-3 h-100 border-0 border-bottom border-4 border-secondary position-relative overflow-hidden">
+        <div class="d-flex gap-3 align-items-start">
+          <div class="rounded-3 bg-secondary bg-opacity-10 text-secondary d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;"><i class="bi bi-clock fs-5"></i></div>
+          <div>
+            <span class="d-block text-muted fw-semibold" style="font-size: 0.7rem;">Not Started</span>
+            <span class="fw-bold text-dark fs-4">2</span>
+          </div>
+        </div>
+        <div class="position-absolute bottom-0 end-0 mb-3 me-3">
+          <span class="text-muted fw-bold" style="font-size: 0.75rem;">40%</span>
+        </div>
+      </div>
+    </div>
+    <!-- Pending Submissions -->
+    <div class="col">
+      <div class="card shadow-sm rounded-4 bg-white p-3 h-100 border-0 border-bottom border-4 border-warning position-relative overflow-hidden bg-warning bg-opacity-10">
+        <div class="d-flex gap-3 align-items-start">
+          <div class="rounded-3 bg-warning text-white d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;"><i class="bi bi-upload fs-5"></i></div>
+          <div>
+            <span class="d-block text-warning-dark fw-semibold" style="font-size: 0.7rem;">Pending Submissions</span>
+            <span class="fw-bold text-dark fs-4">1</span>
+          </div>
+        </div>
+        <div class="position-absolute bottom-0 end-0 mb-2 me-3">
+          <span class="text-warning-dark fw-semibold" style="font-size: 0.7rem;">Action required</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phases List Area -->
+  <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+    
+    <!-- Tab & Sort Header -->
+    <div class="d-flex justify-content-between align-items-center px-4 pt-3 border-bottom border-light">
+      <ul class="nav nav-tabs border-bottom-0" style="font-size: 0.85rem;">
+        <li class="nav-item">
+          <a class="nav-link active fw-bold text-primary border-0 border-bottom border-2 border-primary bg-transparent px-3 py-3" href="#">All Phases</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-muted border-0 bg-transparent px-3 py-3 hover-text-primary" href="#">In Progress</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-muted border-0 bg-transparent px-3 py-3 hover-text-primary" href="#">Pending Submission</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-muted border-0 bg-transparent px-3 py-3 hover-text-primary" href="#">Completed</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-muted border-0 bg-transparent px-3 py-3 hover-text-primary" href="#">Not Started</a>
+        </li>
+      </ul>
+      <div class="pb-2">
+        <select class="form-select form-select-sm text-muted border-light shadow-sm" style="font-size: 0.75rem;">
+          <option>Sort by: Deadline (Soonest)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+      <table class="table align-middle mb-0" style="font-size: 0.8rem;">
+        <thead class="text-muted" style="font-size: 0.75rem; background-color: #fafbfc;">
+          <tr>
+            <th class="fw-semibold py-3 ps-4 border-bottom-0 w-25">Phase Details</th>
+            <th class="fw-semibold py-3 border-bottom-0">Deadline</th>
+            <th class="fw-semibold py-3 border-bottom-0">Budget</th>
+            <th class="fw-semibold py-3 border-bottom-0">Status</th>
+            <th class="fw-semibold py-3 border-bottom-0">Progress</th>
+            <th class="fw-semibold py-3 border-bottom-0">Next Milestone</th>
+            <th class="fw-semibold py-3 border-bottom-0 pe-4">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Row 1 -->
+          <tr class="border-top border-light">
+            <td class="py-4 ps-4">
+              <div class="d-flex gap-3 align-items-start">
+                <div class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;"><i class="bi bi-display fs-5"></i></div>
+                <div>
+                  <h3 class="fs-6 fw-bold text-dark mb-1">1. Frontend - Product Listing Page</h3>
+                  <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.4;">Create responsive product listing page with filter, search and sorting.</p>
+                </div>
+              </div>
+            </td>
+            <td class="py-4">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <i class="bi bi-calendar-event text-muted"></i>
+                <span class="fw-bold text-dark">25 Jul, 2026</span>
+              </div>
+              <span class="text-danger fw-semibold" style="font-size: 0.7rem;">10 days left</span>
+            </td>
+            <td class="py-4 fw-bold text-dark fs-6">₹25,000</td>
+            <td class="py-4"><span class="badge bg-primary bg-opacity-10 text-primary rounded px-2 py-1">In Progress</span></td>
+            <td class="py-4">
+              <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold text-dark" style="font-size: 0.7rem;">60%</span>
+                <div class="progress flex-grow-1" style="height: 6px;">
+                  <div class="progress-bar bg-primary" role="progressbar" style="width: 60%"></div>
+                </div>
+              </div>
+            </td>
+            <td class="py-4">
+              <span class="d-block text-muted" style="font-size: 0.7rem;">Complete API integration</span>
+              <span class="text-muted" style="font-size: 0.7rem;">by <span class="fw-semibold">20 Jul, 2026</span></span>
+            </td>
+            <td class="py-4 pe-4">
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm fw-semibold bg-white px-3" style="font-size: 0.75rem;">View Details</button>
+                <button class="btn btn-light btn-sm text-muted rounded border"><i class="bi bi-three-dots-vertical"></i></button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 2 -->
+          <tr class="border-top border-light">
+            <td class="py-4 ps-4">
+              <div class="d-flex gap-3 align-items-start">
+                <div class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;"><i class="bi bi-shield-lock fs-5"></i></div>
+                <div>
+                  <h3 class="fs-6 fw-bold text-dark mb-1">2. User Authentication Module</h3>
+                  <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.4;">Implement login, register, forgot password and email verification.</p>
+                </div>
+              </div>
+            </td>
+            <td class="py-4">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <i class="bi bi-calendar-event text-muted"></i>
+                <span class="fw-bold text-dark">05 Aug, 2026</span>
+              </div>
+              <span class="text-muted" style="font-size: 0.7rem;">21 days left</span>
+            </td>
+            <td class="py-4 fw-bold text-dark fs-6">₹20,000</td>
+            <td class="py-4"><span class="badge bg-primary bg-opacity-10 text-primary rounded px-2 py-1">In Progress</span></td>
+            <td class="py-4">
+              <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold text-dark" style="font-size: 0.7rem;">30%</span>
+                <div class="progress flex-grow-1" style="height: 6px;">
+                  <div class="progress-bar bg-primary" role="progressbar" style="width: 30%"></div>
+                </div>
+              </div>
+            </td>
+            <td class="py-4">
+              <span class="d-block text-muted" style="font-size: 0.7rem;">API integration</span>
+              <span class="text-muted" style="font-size: 0.7rem;">by <span class="fw-semibold">01 Aug, 2026</span></span>
+            </td>
+            <td class="py-4 pe-4">
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm fw-semibold bg-white px-3" style="font-size: 0.75rem;">View Details</button>
+                <button class="btn btn-light btn-sm text-muted rounded border"><i class="bi bi-three-dots-vertical"></i></button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 3 -->
+          <tr class="border-top border-light opacity-75">
+            <td class="py-4 ps-4">
+              <div class="d-flex gap-3 align-items-start">
+                <div class="rounded-3 bg-secondary bg-opacity-10 text-secondary d-flex align-items-center justify-content-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;"><i class="bi bi-grid-1x2 fs-5"></i></div>
+                <div>
+                  <h3 class="fs-6 fw-bold text-dark mb-1">3. Admin Dashboard</h3>
+                  <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.4;">Create admin dashboard with analytics and management features.</p>
+                </div>
+              </div>
+            </td>
+            <td class="py-4">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <i class="bi bi-calendar-event text-muted"></i>
+                <span class="fw-bold text-dark">15 Aug, 2026</span>
+              </div>
+              <span class="text-muted" style="font-size: 0.7rem;">31 days left</span>
+            </td>
+            <td class="py-4 fw-bold text-dark fs-6">₹22,000</td>
+            <td class="py-4"><span class="badge bg-secondary bg-opacity-10 text-secondary rounded px-2 py-1">Not Started</span></td>
+            <td class="py-4">
+              <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold text-dark" style="font-size: 0.7rem;">0%</span>
+                <div class="progress flex-grow-1" style="height: 6px;">
+                  <div class="progress-bar bg-light" role="progressbar" style="width: 100%"></div>
+                </div>
+              </div>
+            </td>
+            <td class="py-4 text-muted" style="font-size: 0.7rem;">Not Started</td>
+            <td class="py-4 pe-4">
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm fw-semibold bg-white px-3" style="font-size: 0.75rem;">View Details</button>
+                <button class="btn btn-light btn-sm text-muted rounded border"><i class="bi bi-three-dots-vertical"></i></button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 4 -->
+          <tr class="border-top border-light opacity-75">
+            <td class="py-4 ps-4">
+              <div class="d-flex gap-3 align-items-start">
+                <div class="rounded-3 bg-warning bg-opacity-10 text-warning-dark d-flex align-items-center justify-content-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;"><i class="bi bi-credit-card fs-5"></i></div>
+                <div>
+                  <h3 class="fs-6 fw-bold text-dark mb-1">4. Payment Integration</h3>
+                  <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.4;">Integrate Razorpay and implement secure payment flow.</p>
+                </div>
+              </div>
+            </td>
+            <td class="py-4">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <i class="bi bi-calendar-event text-muted"></i>
+                <span class="fw-bold text-dark">28 Aug, 2026</span>
+              </div>
+              <span class="text-muted" style="font-size: 0.7rem;">44 days left</span>
+            </td>
+            <td class="py-4 fw-bold text-dark fs-6">₹18,000</td>
+            <td class="py-4"><span class="badge bg-secondary bg-opacity-10 text-secondary rounded px-2 py-1">Not Started</span></td>
+            <td class="py-4">
+              <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold text-dark" style="font-size: 0.7rem;">0%</span>
+                <div class="progress flex-grow-1" style="height: 6px;">
+                  <div class="progress-bar bg-light" role="progressbar" style="width: 100%"></div>
+                </div>
+              </div>
+            </td>
+            <td class="py-4 text-muted" style="font-size: 0.7rem;">Not Started</td>
+            <td class="py-4 pe-4">
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm fw-semibold bg-white px-3" style="font-size: 0.75rem;">View Details</button>
+                <button class="btn btn-light btn-sm text-muted rounded border"><i class="bi bi-three-dots-vertical"></i></button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 5 -->
+          <tr class="border-top border-light opacity-75">
+            <td class="py-4 ps-4">
+              <div class="d-flex gap-3 align-items-start">
+                <div class="rounded-3 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;"><i class="bi bi-bug fs-5"></i></div>
+                <div>
+                  <h3 class="fs-6 fw-bold text-dark mb-1">5. Testing & Bug Fixing</h3>
+                  <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.4;">Test all modules and fix bugs for smooth deployment.</p>
+                </div>
+              </div>
+            </td>
+            <td class="py-4">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <i class="bi bi-calendar-event text-muted"></i>
+                <span class="fw-bold text-dark">10 Sep, 2026</span>
+              </div>
+              <span class="text-muted" style="font-size: 0.7rem;">57 days left</span>
+            </td>
+            <td class="py-4 fw-bold text-dark fs-6">₹15,000</td>
+            <td class="py-4"><span class="badge bg-secondary bg-opacity-10 text-secondary rounded px-2 py-1">Not Started</span></td>
+            <td class="py-4">
+              <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold text-dark" style="font-size: 0.7rem;">0%</span>
+                <div class="progress flex-grow-1" style="height: 6px;">
+                  <div class="progress-bar bg-light" role="progressbar" style="width: 100%"></div>
+                </div>
+              </div>
+            </td>
+            <td class="py-4 text-muted" style="font-size: 0.7rem;">Not Started</td>
+            <td class="py-4 pe-4">
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm fw-semibold bg-white px-3" style="font-size: 0.75rem;">View Details</button>
+                <button class="btn btn-light btn-sm text-muted rounded border"><i class="bi bi-three-dots-vertical"></i></button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="fs-6 fw-bold text-dark mb-0">Recent Activity</h3>
+      <a href="#" class="text-primary fw-semibold text-decoration-none" style="font-size: 0.75rem;">View All Activity <i class="bi bi-arrow-right"></i></a>
+    </div>
+
+    <div class="row g-4 border-top pt-3">
+      <div class="col-md-3 border-end border-light">
+        <div class="d-flex gap-3 align-items-center">
+          <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;"><i class="bi bi-upload"></i></div>
+          <div style="font-size: 0.75rem;">
+            <span class="text-muted d-block">You submitted work for</span>
+            <span class="fw-bold text-dark d-block">Frontend - Product Listing Page</span>
+            <span class="text-muted" style="font-size: 0.65rem;">2 hours ago</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 border-end border-light">
+        <div class="d-flex gap-3 align-items-center">
+          <div class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;"><i class="bi bi-chat-square-text"></i></div>
+          <div style="font-size: 0.75rem;">
+            <span class="text-muted d-block">Client commented on your<br>submission</span>
+            <span class="text-muted" style="font-size: 0.65rem;">5 hours ago</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 border-end border-light">
+        <div class="d-flex gap-3 align-items-center">
+          <div class="rounded-circle bg-warning bg-opacity-10 text-warning-dark d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;"><i class="bi bi-journal-plus"></i></div>
+          <div style="font-size: 0.75rem;">
+            <span class="text-muted d-block">Phase "User Authentication Module"<br>was created</span>
+            <span class="text-muted" style="font-size: 0.65rem;">1 day ago</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="d-flex gap-3 align-items-center">
+          <div class="rounded-circle bg-purple-soft text-purple d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;"><i class="bi bi-currency-rupee"></i></div>
+          <div style="font-size: 0.75rem;">
+            <span class="text-muted d-block">Received payment of</span>
+            <span class="fw-bold text-dark d-block fs-6">₹ 25,000</span>
+            <span class="text-muted" style="font-size: 0.65rem;">3 days ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

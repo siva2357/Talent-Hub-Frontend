@@ -19,6 +19,7 @@ import { RecruitmentWorkflow } from './recruitment-workflow/recruitment-workflow
 import { CreatePhase } from './create-phase/create-phase';
 import { PhaseDetails } from './phase-details/phase-details';
 import { TransactionHistory } from './transaction-history/transaction-history';
+import { CreateTicket } from '../shared/create-ticket/create-ticket';
 
 export const CLIENT_ROUTES: Routes = [
   { path: 'dashboard', component: Dashboard },
@@ -30,6 +31,7 @@ export const CLIENT_ROUTES: Routes = [
   { path: 'profile', component: Profile },
   { path: 'account-settings', component: AccountSettings },
   { path: 'contact-support', component: ContactSupport },
+  { path: 'create-ticket', component: CreateTicket },
   { path: 'create-contract', component: CreateContract },
   { path: 'legal-contract-page', component: LegalContractPage },
   { path: 'recruitment-workflow', component: RecruitmentWorkflow },

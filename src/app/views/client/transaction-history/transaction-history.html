@@ -1,1 +1,562 @@
-<p>transaction-history works!</p>
+<div class="management-container p-4">
+  
+  <!-- Top Tabs -->
+  <ul class="nav nav-pills mb-4 d-inline-flex bg-white rounded-pill p-1 shadow-sm" style="font-size: 0.8rem; font-weight: 600;">
+    <li class="nav-item">
+      <a class="nav-link active rounded-pill px-4" href="#">All Transactions</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-dark rounded-pill px-4 bg-transparent" href="#">Contracts</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-dark rounded-pill px-4 bg-transparent" href="#">Milestones</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-dark rounded-pill px-4 bg-transparent" href="#">Escrow & Releases</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-dark rounded-pill px-4 bg-transparent" href="#">Refunds</a>
+    </li>
+  </ul>
+
+  <!-- Filters Row -->
+  <div class="d-flex justify-content-between align-items-center mb-4 gap-3">
+    <div class="input-group flex-grow-1 bg-white rounded-3 shadow-sm overflow-hidden" style="max-width: 400px;">
+      <span class="input-group-text bg-white border-0 text-muted ps-3"><i class="bi bi-search"></i></span>
+      <input type="text" class="form-control border-0 ps-2 bg-transparent" style="font-size: 0.8rem;" placeholder="Search by contract name, freelancer name or ID...">
+    </div>
+    
+    <div class="d-flex gap-3">
+      <select class="form-select bg-white border-0 shadow-sm text-dark rounded-3" style="font-size: 0.8rem; min-width: 150px;">
+        <option>All Contract Types</option>
+      </select>
+      <div class="bg-white border-0 shadow-sm rounded-3 px-3 py-2 d-flex justify-content-between align-items-center cursor-pointer" style="font-size: 0.8rem; min-width: 200px;">
+         <span class="text-dark fw-semibold d-flex align-items-center gap-2"><i class="bi bi-calendar3"></i> Jun 01, 2026 - Jul 21, 2026</span>
+      </div>
+      <button class="btn btn-white bg-white shadow-sm border-0 rounded-3 px-3 d-flex align-items-center gap-2" style="font-size: 0.8rem;">
+        <i class="bi bi-funnel"></i> Filter
+      </button>
+    </div>
+  </div>
+
+  <!-- Top Stat Cards -->
+  <div class="row g-3 mb-4">
+    <!-- Total Spent -->
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 rounded-3 p-3 bg-white h-100 d-flex flex-row align-items-center gap-3">
+        <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;">
+          <i class="bi bi-arrow-up-circle text-success fs-5"></i>
+        </div>
+        <div>
+          <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Total Spent</span>
+          <span class="fw-bold text-dark d-block fs-5">₹66,000.00</span>
+          <span class="text-muted d-block" style="font-size: 0.65rem;">Across 4 Contracts</span>
+        </div>
+      </div>
+    </div>
+    <!-- Total Released -->
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 rounded-3 p-3 bg-white h-100 d-flex flex-row align-items-center gap-3">
+        <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;">
+          <i class="bi bi-briefcase text-primary fs-5"></i>
+        </div>
+        <div>
+          <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Total Released</span>
+          <span class="fw-bold text-dark d-block fs-5">₹66,000.00</span>
+          <span class="text-muted d-block" style="font-size: 0.65rem;">Across 9 Milestones</span>
+        </div>
+      </div>
+    </div>
+    <!-- Escrow Balance -->
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 rounded-3 p-3 bg-white h-100 d-flex flex-row align-items-center gap-3">
+        <div class="rounded-circle bg-warning bg-opacity-10 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;">
+          <i class="bi bi-shield-check text-warning fs-5"></i>
+        </div>
+        <div>
+          <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Escrow Balance</span>
+          <span class="fw-bold text-dark d-block fs-5">₹0.00</span>
+          <span class="text-muted d-block" style="font-size: 0.65rem;">Currently in Escrow</span>
+        </div>
+      </div>
+    </div>
+    <!-- Total Refunds -->
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 rounded-3 p-3 bg-white h-100 d-flex flex-row align-items-center gap-3">
+        <div class="rounded-circle" style="background-color: #f3e8ff; color: #a855f7; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <i class="bi bi-arrow-repeat fs-5"></i>
+        </div>
+        <div>
+          <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Total Refunds</span>
+          <span class="fw-bold text-dark d-block fs-5">₹0.00</span>
+          <span class="text-muted d-block" style="font-size: 0.65rem;">Across 0 Refunds</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="row g-4">
+    <!-- Left Column: Contract List -->
+    <div class="col-lg-9">
+      
+      <!-- Expanded Contract Item (Website Development) -->
+      <div class="card shadow-sm border-0 rounded-3 mb-3 bg-white overflow-hidden">
+        <!-- Contract Header row -->
+        <div class="p-3 d-flex justify-content-between align-items-center bg-white border-bottom position-relative">
+          <div class="position-absolute top-0 bottom-0 start-0 bg-primary" style="width: 4px;"></div>
+          <div class="d-flex align-items-center gap-3 ps-3">
+            <div class="rounded bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
+              <i class="bi bi-globe fs-5"></i>
+            </div>
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <h3 class="fs-6 fw-bold text-dark mb-0">Website Development</h3>
+                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2" style="font-size: 0.65rem;">Completed</span>
+              </div>
+              <div class="text-muted d-flex align-items-center gap-2" style="font-size: 0.7rem;">
+                <span>CT-2026-00001</span>
+                <span>&bull;</span>
+                <span>Fixed Price</span>
+                <span>&bull;</span>
+                <span class="text-dark fw-semibold">Siva Prasad Kurra</span>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-4">
+            <div class="text-end">
+              <span class="text-muted d-block" style="font-size: 0.65rem;">Total Budget</span>
+              <span class="fw-bold text-dark fs-6">₹60,000.00</span>
+            </div>
+            <div class="text-end">
+              <span class="text-muted d-block" style="font-size: 0.65rem;">Released</span>
+              <span class="fw-bold text-success fs-6">₹60,000.00</span>
+            </div>
+            <div class="text-end me-3">
+              <span class="text-muted d-block" style="font-size: 0.65rem;">Balance</span>
+              <span class="fw-bold text-primary fs-6">₹0.00</span>
+            </div>
+            <i class="bi bi-three-dots-vertical text-muted cursor-pointer fs-5"></i>
+          </div>
+        </div>
+
+        <!-- Expanded Content -->
+        <div class="d-flex">
+          <!-- Left Sidebar Menu -->
+          <div class="border-end bg-white" style="width: 200px; min-height: 400px;">
+            <ul class="nav flex-column fw-semibold" style="font-size: 0.75rem;">
+              <li class="nav-item">
+                <a class="nav-link text-primary bg-primary bg-opacity-10 d-flex justify-content-between align-items-center py-3 px-4 border-start border-primary border-3" href="#">
+                  <span><i class="bi bi-grid text-primary me-2"></i> Overview</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-muted d-flex justify-content-between align-items-center py-3 px-4 border-start border-transparent border-3" href="#">
+                  <span><i class="bi bi-star me-2"></i> Milestones</span>
+                  <span class="text-dark">3/3</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-muted d-flex justify-content-between align-items-center py-3 px-4 border-start border-transparent border-3" href="#">
+                  <span><i class="bi bi-arrow-left-right me-2"></i> Transactions</span>
+                  <span class="text-dark">7</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-muted d-flex justify-content-between align-items-center py-3 px-4 border-start border-transparent border-3" href="#">
+                  <span><i class="bi bi-file-earmark-text me-2"></i> Invoices</span>
+                  <span class="text-dark">3</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-muted d-flex justify-content-between align-items-center py-3 px-4 border-start border-transparent border-3" href="#">
+                  <span><i class="bi bi-folder me-2"></i> Files</span>
+                  <span class="text-dark">12</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-muted d-flex justify-content-between align-items-center py-3 px-4 border-start border-transparent border-3" href="#">
+                  <span><i class="bi bi-camera-video me-2"></i> Meetings</span>
+                  <span class="text-dark">5</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Inner Content Area -->
+          <div class="p-4 flex-grow-1 bg-white">
+            <div class="row g-4 h-100">
+              <!-- Left inside: Milestone Details & Timeline -->
+              <div class="col-md-8 d-flex flex-column">
+                <h4 class="fs-6 fw-bold text-dark mb-3">Milestone & Payment Details</h4>
+                <div class="table-responsive mb-4 flex-grow-1">
+                  <table class="table table-borderless align-middle" style="font-size: 0.75rem;">
+                    <thead class="text-muted border-bottom" style="font-size: 0.7rem;">
+                      <tr>
+                        <th class="fw-normal pb-2">#</th>
+                        <th class="fw-normal pb-2">Milestone</th>
+                        <th class="fw-normal pb-2">Due Date</th>
+                        <th class="fw-normal pb-2">Status</th>
+                        <th class="fw-normal pb-2">Amount</th>
+                        <th class="fw-normal pb-2">Paid On</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="border-bottom">
+                        <td><div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 20px; height: 20px; font-size: 0.65rem;">1</div></td>
+                        <td>
+                          <span class="fw-bold text-dark d-block">UI/UX Design</span>
+                          <span class="text-muted" style="font-size: 0.65rem;">Wireframes, mockups and design system</span>
+                        </td>
+                        <td class="text-dark">Jun 23, 2026</td>
+                        <td><span class="text-success fw-bold">Approved</span></td>
+                        <td class="text-dark fw-bold">₹20,000.00</td>
+                        <td class="text-dark">Jun 22, 2026</td>
+                        <td><i class="bi bi-chevron-right text-muted cursor-pointer"></i></td>
+                      </tr>
+                      <tr class="border-bottom">
+                        <td><div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 20px; height: 20px; font-size: 0.65rem;">2</div></td>
+                        <td>
+                          <span class="fw-bold text-dark d-block">Frontend Development</span>
+                          <span class="text-muted" style="font-size: 0.65rem;">Implement responsive UI</span>
+                        </td>
+                        <td class="text-dark">Jul 05, 2026</td>
+                        <td><span class="text-success fw-bold">Approved</span></td>
+                        <td class="text-dark fw-bold">₹20,000.00</td>
+                        <td class="text-dark">Jul 01, 2026</td>
+                        <td><i class="bi bi-chevron-right text-muted cursor-pointer"></i></td>
+                      </tr>
+                      <tr class="border-bottom">
+                        <td><div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 20px; height: 20px; font-size: 0.65rem;">3</div></td>
+                        <td>
+                          <span class="fw-bold text-dark d-block">Testing & Deployment</span>
+                          <span class="text-muted" style="font-size: 0.65rem;">Testing, bug fixing and deployment</span>
+                        </td>
+                        <td class="text-dark">Jul 15, 2026</td>
+                        <td><span class="text-success fw-bold">Approved</span></td>
+                        <td class="text-dark fw-bold">₹20,000.00</td>
+                        <td class="text-dark">Jul 14, 2026</td>
+                        <td><i class="bi bi-chevron-right text-muted cursor-pointer"></i></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Transaction Timeline Visual -->
+                <div class="mt-auto">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="fs-6 fw-bold text-dark mb-0" style="font-size: 0.8rem;">Transaction Timeline</h4>
+                    <a href="#" class="text-primary text-decoration-none fw-bold" style="font-size: 0.75rem;">View All Transactions</a>
+                  </div>
+                  
+                  <div class="position-relative py-3 mt-2 px-3">
+                    <div class="position-absolute top-50 start-0 translate-middle-y w-100" style="height: 2px; background-color: #0d6efd; z-index: 1;"></div>
+                    <div class="d-flex justify-content-between position-relative z-2">
+                      <div class="text-center">
+                        <div class="rounded-circle bg-success mx-auto mb-2 border border-white border-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;"><i class="bi bi-check text-white" style="font-size: 0.8rem;"></i></div>
+                        <span class="d-block fw-bold text-dark" style="font-size: 0.65rem;">Contract Created</span>
+                        <span class="d-block text-muted" style="font-size: 0.6rem;">Jun 18, 2026</span>
+                      </div>
+                      <div class="text-center">
+                        <div class="rounded-circle bg-primary mx-auto mb-2 border border-white border-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;"><i class="bi bi-file-text text-white" style="font-size: 0.7rem;"></i></div>
+                        <span class="d-block fw-bold text-dark" style="font-size: 0.65rem;">Fund Deposited</span>
+                        <span class="d-block text-muted" style="font-size: 0.6rem;">Jun 18, 2026</span>
+                      </div>
+                      <div class="text-center">
+                        <div class="rounded-circle bg-success mx-auto mb-2 border border-white border-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;"><i class="bi bi-check text-white" style="font-size: 0.8rem;"></i></div>
+                        <span class="d-block fw-bold text-dark" style="font-size: 0.65rem;">Milestone 1 Paid</span>
+                        <span class="d-block text-muted" style="font-size: 0.6rem;">Jun 22, 2026</span>
+                      </div>
+                      <div class="text-center">
+                        <div class="rounded-circle bg-success mx-auto mb-2 border border-white border-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;"><i class="bi bi-check text-white" style="font-size: 0.8rem;"></i></div>
+                        <span class="d-block fw-bold text-dark" style="font-size: 0.65rem;">Milestone 2 Paid</span>
+                        <span class="d-block text-muted" style="font-size: 0.6rem;">Jul 01, 2026</span>
+                      </div>
+                      <div class="text-center">
+                        <div class="rounded-circle bg-success mx-auto mb-2 border border-white border-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;"><i class="bi bi-check text-white" style="font-size: 0.8rem;"></i></div>
+                        <span class="d-block fw-bold text-dark" style="font-size: 0.65rem;">Milestone 3 Paid</span>
+                        <span class="d-block text-muted" style="font-size: 0.6rem;">Jul 14, 2026</span>
+                      </div>
+                      <div class="text-center">
+                        <div class="rounded-circle bg-success bg-opacity-10 text-success mx-auto mb-2 border border-success border-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;"></div>
+                        <span class="d-block fw-bold text-dark" style="font-size: 0.65rem;">Contract Completed</span>
+                        <span class="d-block text-muted" style="font-size: 0.6rem;">Jul 18, 2026</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Right inside: Contract Summary -->
+              <div class="col-md-4 border-start ps-4">
+                <h4 class="fs-6 fw-bold text-dark mb-4">Contract Summary</h4>
+                <div class="d-flex flex-column gap-3 mb-4" style="font-size: 0.75rem;">
+                  <div class="d-flex justify-content-between">
+                    <span class="text-muted">Start Date</span>
+                    <span class="fw-bold text-dark">Jun 18, 2026</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span class="text-muted">End Date</span>
+                    <span class="fw-bold text-dark">Jul 18, 2026</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span class="text-muted">Duration</span>
+                    <span class="fw-bold text-dark">31 Days</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span class="text-muted">Payment Model</span>
+                    <span class="fw-bold text-dark">Fixed Price</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span class="text-muted">Category</span>
+                    <span class="fw-bold text-dark">Web Development</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mt-2">
+                    <span class="text-muted">Created By</span>
+                    <span class="fw-bold text-dark">Rahul Sharma</span>
+                  </div>
+                </div>
+                <button class="btn btn-outline-secondary bg-white text-dark w-100 fw-bold shadow-sm" style="font-size: 0.75rem;">View Contract Details ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collapsed Contract Item (E-commerce) -->
+      <div class="card shadow-sm border-0 rounded-3 mb-3 bg-white">
+        <div class="p-3 d-flex justify-content-between align-items-center position-relative">
+          <div class="position-absolute top-0 bottom-0 start-0" style="width: 4px; background-color: transparent;"></div>
+          <div class="d-flex align-items-center gap-3 ps-3">
+            <div class="rounded bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
+              <i class="bi bi-cart3 fs-5"></i>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-1">E-commerce Platform</h3>
+              <div class="text-muted d-flex align-items-center gap-2" style="font-size: 0.7rem;">
+                <span>CT-2026-00002</span>
+                <span>&bull;</span>
+                <span>Fixed Price</span>
+                <span>&bull;</span>
+                <span class="text-dark fw-semibold">Ankit Verma</span>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-4">
+            <div class="text-end">
+              <span class="text-muted d-block" style="font-size: 0.65rem;">Total Budget</span>
+              <span class="fw-bold text-dark fs-6">₹80,000.00</span>
+            </div>
+            <div class="text-end">
+              <span class="text-muted d-block" style="font-size: 0.65rem;">Released</span>
+              <span class="fw-bold text-success fs-6">₹40,000.00</span>
+            </div>
+            <div class="text-end me-3">
+              <span class="text-muted d-block" style="font-size: 0.65rem;">Balance</span>
+              <span class="fw-bold text-primary fs-6">₹40,000.00</span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+               <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1">In Progress</span>
+               <i class="bi bi-chevron-down text-muted cursor-pointer fs-6"></i>
+               <i class="bi bi-three-dots-vertical text-muted cursor-pointer fs-5"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collapsed Contract Item (Mobile App) -->
+      <div class="card shadow-sm border-0 rounded-3 mb-3 bg-white">
+        <div class="p-3 d-flex justify-content-between align-items-center position-relative">
+          <div class="position-absolute top-0 bottom-0 start-0" style="width: 4px; background-color: transparent;"></div>
+          <div class="d-flex align-items-center gap-3 ps-3">
+            <div class="rounded" style="background-color: #ffe4e6; color: #e11d48; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <i class="bi bi-phone fs-5"></i>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-1">Mobile App Development</h3>
+              <div class="text-muted d-flex align-items-center gap-2" style="font-size: 0.7rem;">
+                <span>CT-2026-00003</span>
+                <span>&bull;</span>
+                <span>Fixed Price</span>
+                <span>&bull;</span>
+                <span class="text-dark fw-semibold">Neha Singh</span>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-4">
+            <div class="text-end">
+              <span class="text-muted d-block" style="font-size: 0.65rem;">Total Budget</span>
+              <span class="fw-bold text-dark fs-6">₹50,000.00</span>
+            </div>
+            <div class="text-end">
+              <span class="text-muted d-block" style="font-size: 0.65rem;">Released</span>
+              <span class="fw-bold text-success fs-6">₹10,000.00</span>
+            </div>
+            <div class="text-end me-3">
+              <span class="text-muted d-block" style="font-size: 0.65rem;">Balance</span>
+              <span class="fw-bold text-primary fs-6">₹40,000.00</span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+               <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1">In Progress</span>
+               <i class="bi bi-chevron-down text-muted cursor-pointer fs-6"></i>
+               <i class="bi bi-three-dots-vertical text-muted cursor-pointer fs-5"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collapsed Contract Item (Logo & Branding) -->
+      <div class="card shadow-sm border-0 rounded-3 mb-3 bg-white">
+        <div class="p-3 d-flex justify-content-between align-items-center position-relative">
+          <div class="position-absolute top-0 bottom-0 start-0" style="width: 4px; background-color: transparent;"></div>
+          <div class="d-flex align-items-center gap-3 ps-3">
+            <div class="rounded bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
+              <i class="bi bi-box fs-5"></i>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-1">Logo & Branding Design</h3>
+              <div class="text-muted d-flex align-items-center gap-2" style="font-size: 0.7rem;">
+                <span>CT-2026-00004</span>
+                <span>&bull;</span>
+                <span>Fixed Price</span>
+                <span>&bull;</span>
+                <span class="text-dark fw-semibold">Rahul Das</span>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-4">
+            <div class="text-end">
+              <span class="text-muted d-block" style="font-size: 0.65rem;">Total Budget</span>
+              <span class="fw-bold text-dark fs-6">₹15,000.00</span>
+            </div>
+            <div class="text-end">
+              <span class="text-muted d-block" style="font-size: 0.65rem;">Released</span>
+              <span class="fw-bold text-success fs-6">₹15,000.00</span>
+            </div>
+            <div class="text-end me-3">
+              <span class="text-muted d-block" style="font-size: 0.65rem;">Balance</span>
+              <span class="fw-bold text-dark fs-6">₹0.00</span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+               <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-1">Completed</span>
+               <i class="bi bi-chevron-down text-muted cursor-pointer fs-6"></i>
+               <i class="bi bi-three-dots-vertical text-muted cursor-pointer fs-5"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Sidebar (Insights & Activity) -->
+    <div class="col-lg-3">
+      <div class="d-flex flex-column gap-4 h-100">
+        
+        <!-- Spending Insights -->
+        <div class="card shadow-sm border-0 rounded-3 p-4 bg-white">
+          <h3 class="fs-6 fw-bold text-dark mb-4">Spending Insights</h3>
+          <div class="d-flex justify-content-center mb-4">
+            <div class="position-relative d-flex align-items-center justify-content-center" style="width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(#198754 0% 38%, #0d6efd 38% 83%, #ffc107 83% 100%);">
+              <div class="bg-white rounded-circle position-absolute d-flex flex-column align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                <span class="text-muted" style="font-size: 0.7rem;">Total</span>
+                <span class="fw-bold text-dark" style="font-size: 0.9rem;">₹66,000</span>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-column gap-2" style="font-size: 0.75rem;">
+             <div class="d-flex justify-content-between align-items-center">
+               <span class="text-muted"><i class="bi bi-circle-fill text-success me-2" style="font-size: 0.5rem;"></i>Completed</span>
+               <span class="text-dark fw-bold">₹25,000 (38%)</span>
+             </div>
+             <div class="d-flex justify-content-between align-items-center">
+               <span class="text-muted"><i class="bi bi-circle-fill text-primary me-2" style="font-size: 0.5rem;"></i>In Progress</span>
+               <span class="text-dark fw-bold">₹38,000 (45%)</span>
+             </div>
+             <div class="d-flex justify-content-between align-items-center">
+               <span class="text-muted"><i class="bi bi-circle-fill text-warning me-2" style="font-size: 0.5rem;"></i>Pending</span>
+               <span class="text-dark fw-bold">₹3,000 (5%)</span>
+             </div>
+          </div>
+        </div>
+
+        <!-- Recent Activities -->
+        <div class="card shadow-sm border-0 rounded-3 p-4 bg-white flex-grow-1">
+          <h3 class="fs-6 fw-bold text-dark mb-4">Recent Activities</h3>
+          
+          <div class="d-flex flex-column gap-4 position-relative ps-2 mb-4 flex-grow-1">
+            <div class="position-absolute top-0 bottom-0 ms-1" style="left: 0; width: 1px; background-color: #e9ecef; z-index: 1;"></div>
+            
+            <div class="position-relative z-2 w-100">
+              <div class="d-flex gap-3">
+                <div class="rounded-circle bg-success mt-1" style="width: 10px; height: 10px; margin-left: -4px;"></div>
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">Milestone 3 payment released</span>
+                  </div>
+                  <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Website Development</span>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted" style="font-size: 0.65rem;">Jul 18, 2026</span>
+                    <span class="text-success fw-bold" style="font-size: 0.7rem;">+₹20,000.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="position-relative z-2 w-100">
+              <div class="d-flex gap-3">
+                <div class="rounded-circle" style="background-color: #a855f7; margin-top: 4px; width: 10px; height: 10px; margin-left: -4px;"></div>
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">Milestone 2 payment released</span>
+                  </div>
+                  <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Website Development</span>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted" style="font-size: 0.65rem;">Jul 01, 2026</span>
+                    <span class="text-success fw-bold" style="font-size: 0.7rem;">+₹20,000.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="position-relative z-2 w-100">
+              <div class="d-flex gap-3">
+                <div class="rounded-circle bg-success mt-1" style="width: 10px; height: 10px; margin-left: -4px;"></div>
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">Milestone 1 payment released</span>
+                  </div>
+                  <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Website Development</span>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted" style="font-size: 0.65rem;">Jun 22, 2026</span>
+                    <span class="text-success fw-bold" style="font-size: 0.7rem;">+₹20,000.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="position-relative z-2 w-100">
+              <div class="d-flex gap-3">
+                <div class="rounded-circle bg-primary mt-1" style="width: 10px; height: 10px; margin-left: -4px;"></div>
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">Funds deposited to escrow</span>
+                  </div>
+                  <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Website Development</span>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted" style="font-size: 0.65rem;">Jun 18, 2026</span>
+                    <span class="text-success fw-bold" style="font-size: 0.7rem;">+₹60,000.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <button class="btn btn-outline-primary bg-white text-primary fw-bold w-100 border-opacity-50" style="font-size: 0.75rem;">View Full Activity</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

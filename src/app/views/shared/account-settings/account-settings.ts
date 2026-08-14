@@ -7,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './account-settings.css'
 })
 export class AccountSettings {
+  activeTab: string = 'profile';
 
+  setTab(tab: string) {
+    this.activeTab = tab;
+  }
 }

@@ -1,1 +1,156 @@
-<p>financial-summary works!</p>
+<div class="management-container p-4">
+  <!-- Header -->
+  <header class="mb-4">
+    <h1 class="fw-bold fs-4 mb-1">Financial summary & Ledger</h1>
+    <p class="text-muted small mb-0">Track platform commission revenues, escrow volumes, deposits, and payout allocations.</p>
+  </header>
+
+  <!-- Stats Row -->
+  <section class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon volume-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3" style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Total Volume</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">₹60,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon commission-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3" style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Commissions Collected</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">₹60,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon escrow-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3" style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Escrow held balance</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">₹60,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="stat-icon growth-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3" style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
+          <div>
+            <span class="d-block text-muted small fw-semibold">Audited Growth</span>
+            <span class="d-block fs-5 fw-bold text-dark mt-1">₹60,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter Section -->
+  <section class="card shadow-sm border-0 rounded-3 mb-4">
+    <div class="card-body p-4">
+      <div class="row g-3 align-items-center mb-3">
+        <div class="col-md-6 col-lg-7">
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0 text-primary"><i class="bi bi-search"></i>&#128269;</span>
+            <input type="text" class="form-control border-start-0 ps-0" placeholder="Search by Freelancer ID, Email">
+          </div>
+        </div>
+        <div class="col-md-3 col-lg-3">
+          <select class="form-select text-muted">
+            <option selected>Select All</option>
+            <option value="1">Completed</option>
+            <option value="2">Pending</option>
+          </select>
+        </div>
+        <div class="col-md-3 col-lg-2 d-flex gap-2">
+          <button class="btn btn-primary flex-grow-1">Apply</button>
+          <button class="btn btn-outline-primary flex-grow-1 bg-white">Reset</button>
+        </div>
+      </div>
+      
+      <div class="d-flex align-items-center flex-wrap gap-2">
+        <span class="text-dark small fw-semibold me-2">Active Filters :</span>
+        <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
+          Tag <span class="badge-close">&times;</span>
+        </span>
+        <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
+          Tag <span class="badge-close">&times;</span>
+        </span>
+        <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
+          Tag <span class="badge-close">&times;</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Table Section -->
+  <section class="card shadow-sm border-0 rounded-3 mb-4">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light text-dark font-monospace small" style="font-family: serif !important;">
+            <tr>
+              <th scope="col" class="ps-4 fw-bold">S.NO</th>
+              <th scope="col" class="fw-bold">Contract Title</th>
+              <th scope="col" class="fw-bold">Client</th>
+              <th scope="col" class="fw-bold">Freelancer</th>
+              <th scope="col" class="fw-bold">Client Payment</th>
+              <th scope="col" class="fw-bold">Freelancer Payment</th>
+              <th scope="col" class="fw-bold">Commission</th>
+              <th scope="col" class="pe-4 fw-bold">Status</th>
+            </tr>
+          </thead>
+          <tbody style="font-family: serif;">
+            <tr>
+              <td class="ps-4">1</td>
+              <td>E-commerce Website</td>
+              <td>Siva Prasad Kurra</td>
+              <td>Siva Prasad Kurra</td>
+              <td>₹66,000</td>
+              <td>₹55,500</td>
+              <td>₹10,500</td>
+              <td class="pe-4">Completed</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Empty State / No Data Placeholder -->
+      <div class="py-5 text-center text-muted" style="font-family: serif;">
+        <p class="mb-0">No data available</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pagination -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+    <div class="d-flex align-items-center gap-2">
+      <span class="small text-dark">Show</span>
+      <select class="form-select form-select-sm" style="width: 70px;">
+        <option selected>10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+      <span class="small text-dark">Entries</span>
+    </div>
+    
+    <span class="small text-dark">Showing 1-50 of 500</span>
+    
+    <nav aria-label="Table pagination">
+      <ul class="pagination pagination-sm mb-0 gap-1">
+        <li class="page-item"><a class="page-link text-primary rounded" href="#">&lsaquo;</a></li>
+        <li class="page-item"><a class="page-link text-primary rounded" href="#">&laquo;</a></li>
+        <li class="page-item active"><a class="page-link rounded" href="#">1</a></li>
+        <li class="page-item"><a class="page-link text-primary rounded" href="#">&rsaquo;</a></li>
+        <li class="page-item"><a class="page-link text-primary rounded" href="#">&raquo;</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
