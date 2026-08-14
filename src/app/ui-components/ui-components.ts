@@ -21,12 +21,15 @@ import { NotificationDropdown } from '../library/shared/components/notification-
 import { FileUpload } from '../library/shared/components/file-upload/file-upload';
 import { FilePreview } from '../library/shared/components/file-preview/file-preview';
 
+import { UserNavbar } from '../library/ui/layouts/user-navbar/user-navbar';
+
 @Component({
   selector: 'app-ui-components',
   standalone: true,
   imports: [
     CommonModule,
     Sidebar,
+    UserNavbar,
     Accordion, Alert, Badge, Button, Chip, Dropdown, InputField, Loader, Modal, Pagination, Table, Toast,
     Timeline, ProfileAvatar, NotificationDropdown, FileUpload, FilePreview
   ],

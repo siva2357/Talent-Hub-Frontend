@@ -1,0 +1,70 @@
+/* Bootstrap Accordion Overrides to match premium design */
+
+.accordion {
+  --bs-accordion-border-color: #e5e7eb;
+  --bs-accordion-border-radius: 8px;
+  --bs-accordion-inner-border-radius: 8px;
+  --bs-accordion-btn-padding-x: 20px;
+  --bs-accordion-btn-padding-y: 16px;
+  --bs-accordion-btn-color: #374151;
+  --bs-accordion-btn-bg: #ffffff;
+  --bs-accordion-btn-icon-width: 16px;
+  --bs-accordion-btn-focus-border-color: rgba(37, 99, 235, 0.2);
+  --bs-accordion-btn-focus-box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.1);
+  --bs-accordion-active-color: #2563eb;
+  --bs-accordion-active-bg: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+.accordion-item {
+  border: 1px solid var(--bs-accordion-border-color);
+  margin-bottom: -1px; /* collapse borders */
+}
+.accordion-item:first-of-type {
+  border-top-left-radius: var(--bs-accordion-border-radius);
+  border-top-right-radius: var(--bs-accordion-border-radius);
+}
+.accordion-item:last-of-type {
+  border-bottom-left-radius: var(--bs-accordion-border-radius);
+  border-bottom-right-radius: var(--bs-accordion-border-radius);
+  margin-bottom: 0;
+}
+
+.accordion-button {
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: none !important; /* remove bootstrap default shadow */
+}
+
+/* Expanded state styling */
+.accordion-button:not(.collapsed) {
+  color: #2563eb;
+  background-color: #ffffff;
+  box-shadow: none;
+}
+
+.accordion-body {
+  padding: 0 20px 20px 20px; /* remove top padding to pull it closer to header */
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* Accordion with Icons specific styling */
+.accordion-icon-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #eff6ff;
+  color: #2563eb;
+  margin-right: 12px;
+  font-size: 16px;
+}
+
+.accordion-button:not(.collapsed) .accordion-icon-container {
+  background-color: #2563eb;
+  color: #ffffff;
+}

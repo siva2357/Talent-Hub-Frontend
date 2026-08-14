@@ -1,1 +1,186 @@
-<p>accordion works!</p>
+<div class="accordion-showcase border border-dark border-1 rounded-3"
+    style="padding: 40px; font-family: 'Inter', sans-serif; background: #fff; max-width: 1000px; margin: 0 auto; color: #000000;">
+    <h1 style="font-size: 18px; font-weight: 700; color: #2563eb; margin-bottom: 8px;">4. ACCORDION</h1>
+    <p style="color: #6b7280; font-size: 13px; margin-bottom: 40px;">Accordions organize content in collapsible
+        sections.</p>
+
+    <!-- Stacked vertically as requested (full row size) -->
+    <div style="display: flex; flex-direction: column; gap: 48px;">
+
+        <!-- 4.1. DEFAULT ACCORDION -->
+        <section>
+            <h2
+                style="font-size: 12px; font-weight: 700; color: #4b5563; text-transform: uppercase; margin-bottom: 16px;">
+                4.1. Default Accordion</h2>
+
+            <div class="accordion" id="accordionDefault">
+                <!-- Item 1 (Expanded) -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true">
+                            What is TalentHub?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionDefault">
+                        <div class="accordion-body">
+                            TalentHub is an AI-powered platform that connects clients with the best talent and helps
+                            manage projects efficiently.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false">
+                            How does it work?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionDefault">
+                        <div class="accordion-body">
+                            Clients post jobs, and our AI matches them with top-rated freelancers based on skills and
+                            experience.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree" aria-expanded="false">
+                            Is there a free trial?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionDefault">
+                        <div class="accordion-body">
+                            Yes, we offer a 14-day free trial for all new enterprise clients to explore our advanced
+                            features.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4.2. ACCORDION WITH ICONS -->
+        <section>
+            <h2
+                style="font-size: 12px; font-weight: 700; color: #4b5563; text-transform: uppercase; margin-bottom: 16px;">
+                4.2. Accordion With Icons</h2>
+
+            <div class="accordion" id="accordionIcons">
+                <!-- Item 1 (Expanded) -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseIconOne" aria-expanded="true">
+                            <span class="accordion-icon-container"><i class="bi bi-person"></i></span>
+                            Account Settings
+                        </button>
+                    </h2>
+                    <div id="collapseIconOne" class="accordion-collapse collapse show" data-bs-parent="#accordionIcons">
+                        <div class="accordion-body" style="padding-left: 64px;">
+                            Manage your profile, preferences and account security settings.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseIconTwo" aria-expanded="false">
+                            <span class="accordion-icon-container"><i class="bi bi-bell"></i></span>
+                            Notification Preferences
+                        </button>
+                    </h2>
+                    <div id="collapseIconTwo" class="accordion-collapse collapse" data-bs-parent="#accordionIcons">
+                        <div class="accordion-body" style="padding-left: 64px;">
+                            Choose what updates you want to receive via email or SMS.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseIconThree" aria-expanded="false">
+                            <span class="accordion-icon-container"><i class="bi bi-credit-card"></i></span>
+                            Billing & Payments
+                        </button>
+                    </h2>
+                    <div id="collapseIconThree" class="accordion-collapse collapse" data-bs-parent="#accordionIcons">
+                        <div class="accordion-body" style="padding-left: 64px;">
+                            View payment history, manage payment methods, and download invoices.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4.3. ACCORDION (MULTI-EXPAND) -->
+        <section>
+            <h2
+                style="font-size: 12px; font-weight: 700; color: #4b5563; text-transform: uppercase; margin-bottom: 16px;">
+                4.3. Accordion (Multi-Expand)</h2>
+
+            <!-- Removed data-bs-parent to allow multi-expand -->
+            <div class="accordion">
+                <!-- Item 1 (Expanded) -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseMultiOne" aria-expanded="true">
+                            <span class="accordion-icon-container" style="background: none; color: #2563eb;"><i
+                                    class="bi bi-exclamation-circle-fill"></i></span>
+                            General Information
+                        </button>
+                    </h2>
+                    <div id="collapseMultiOne" class="accordion-collapse collapse show">
+                        <div class="accordion-body" style="padding-left: 64px;">
+                            This section contains general information about your account.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 (Expanded) -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseMultiTwo" aria-expanded="true">
+                            <span class="accordion-icon-container" style="background: none; color: #2563eb;"><i
+                                    class="bi bi-shield-check"></i></span>
+                            Privacy Settings
+                        </button>
+                    </h2>
+                    <div id="collapseMultiTwo" class="accordion-collapse collapse show">
+                        <div class="accordion-body" style="padding-left: 64px;">
+                            Manage how your data is used and shared.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseMultiThree" aria-expanded="false">
+                            <span class="accordion-icon-container" style="background: none; color: #6b7280;"><i
+                                    class="bi bi-shield-lock"></i></span>
+                            Security
+                        </button>
+                    </h2>
+                    <div id="collapseMultiThree" class="accordion-collapse collapse">
+                        <div class="accordion-body" style="padding-left: 64px;">
+                            Set up two-factor authentication and review login activity.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
