@@ -1,38 +1,108 @@
-<div class="signup-container">
-  <div class="logo-wrapper">
-    <img src="/logo 2.png" alt="Talent Hub" class="logo" />
+<div class="signup-container d-flex flex-column align-items-center justify-content-center min-vh-100 position-relative">
+  <!-- Top Logo -->
+  <div class="text-center mb-4 z-1">
+    <img src="/logo 2.png" alt="Talent Hub Logo" class="logo mb-3" />
+    <h1 class="fw-bold fs-2 text-dark">Choose your role</h1>
+    <p class="text-muted">Select the option that best describes you to get started with Talent Hub.</p>
   </div>
 
-  <div class="header">
-    <h1 class="title">Choose your role</h1>
-    <p class="subtitle">Select the option that best describes you to get started with Talent Hub</p>
+  <!-- Cards Container -->
+  <div class="container z-1">
+    <div class="row justify-content-center g-4 max-w-4xl mx-auto">
+      
+      <!-- Client Card -->
+      <div class="col-md-6 col-lg-5">
+        <div class="card role-card h-100 p-4 border-0 shadow-sm" 
+             [class.selected]="selectedRole === 'client'" 
+             (click)="selectRole('client')">
+          @if (selectedRole === 'client') {
+            <div class="check-circle">
+              <i class="bi bi-check-circle-fill text-primary"></i>
+            </div>
+          }
+          <div class="card-body text-center d-flex flex-column align-items-center">
+            <div class="icon-wrapper mb-3 text-primary rounded-circle d-flex align-items-center justify-content-center">
+              <i class="bi bi-person-fill fs-1"></i>
+            </div>
+            <h3 class="fw-bold fs-4">Client</h3>
+            <p class="text-muted small mb-4">Hire talented professionals<br>and get work done</p>
+            
+            <ul class="list-unstyled text-start w-100 small text-muted">
+              <li class="mb-3 d-flex align-items-start"><i class="bi bi-people-fill text-primary me-3 mt-1"></i> <span>Post projects and find the right talent</span></li>
+              <li class="mb-3 d-flex align-items-start"><i class="bi bi-shield-check text-primary me-3 mt-1"></i> <span>Manage contracts and track progress</span></li>
+              <li class="d-flex align-items-start"><i class="bi bi-chat-dots text-primary me-3 mt-1"></i> <span>Collaborate and achieve goals</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Freelancer Card -->
+      <div class="col-md-6 col-lg-5">
+        <div class="card role-card h-100 p-4 border-0 shadow-sm" 
+             [class.selected]="selectedRole === 'freelancer'" 
+             (click)="selectRole('freelancer')">
+          @if (selectedRole === 'freelancer') {
+            <div class="check-circle">
+              <i class="bi bi-check-circle-fill text-primary"></i>
+            </div>
+          }
+          <div class="card-body text-center d-flex flex-column align-items-center">
+            <div class="icon-wrapper mb-3 text-primary rounded-circle d-flex align-items-center justify-content-center">
+              <i class="bi bi-briefcase-fill fs-1"></i>
+            </div>
+            <h3 class="fw-bold fs-4">Freelancer</h3>
+            <p class="text-muted small mb-4">Find exciting projects and<br>grow your career</p>
+            
+            <ul class="list-unstyled text-start w-100 small text-muted">
+              <li class="mb-3 d-flex align-items-start"><i class="bi bi-search text-primary me-3 mt-1"></i> <span>Find projects that match your skills</span></li>
+              <li class="mb-3 d-flex align-items-start"><i class="bi bi-globe text-primary me-3 mt-1"></i> <span>Work with great clients worldwide</span></li>
+              <li class="d-flex align-items-start"><i class="bi bi-graph-up-arrow text-primary me-3 mt-1"></i> <span>Build your profile and grow your career</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+    </div>
   </div>
 
-  <div class="roles-container">
-    <!-- Client Card -->
-    <div class="role-card" [class.selected]="selectedRole === 'client'" (click)="selectRole('client')">
-      <div class="radio-circle"></div>
-      <div class="icon-placeholder"></div>
-      <h2 class="role-title">Client</h2>
-      <p class="role-description">Hire talented professionals and get work done</p>
-    </div>
-
-    <!-- Freelancer Card -->
-    <div class="role-card" [class.selected]="selectedRole === 'freelancer'" (click)="selectRole('freelancer')">
-      <div class="radio-circle"></div>
-      <div class="icon-placeholder"></div>
-      <h2 class="role-title">Freelancer</h2>
-      <p class="role-description">Find exciting projects and grow your career</p>
-    </div>
+  <div class="text-center mt-4 mb-4 z-1">
+    <p class="text-muted small">You can change your role anytime from your account settings.</p>
   </div>
 
   @if (selectedRole) {
-    <div class="action-container">
-      <button class="btn-primary" (click)="continue()">Create Account</button>
+    <div class="text-center z-1 mb-4">
+      <button class="btn btn-primary px-5 py-2 rounded-pill fw-bold shadow" (click)="continue()">Create Account</button>
     </div>
   }
 
-  <div class="login-link">
-    Already have an account? <a routerLink="/login">Log in</a>
+  <!-- Footer Features -->
+  <div class="container mt-4 z-1">
+    <div class="row justify-content-center text-center max-w-4xl mx-auto border-top pt-4">
+      <div class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0">
+        <i class="bi bi-shield-check fs-3 text-primary me-3"></i>
+        <div class="text-start">
+          <h6 class="mb-0 fw-bold text-dark small">Secure & Trusted</h6>
+          <small class="text-muted" style="font-size: 0.75rem;">Your data is safe with us</small>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 border-md-start border-md-end">
+        <i class="bi bi-people-fill fs-3 text-primary me-3"></i>
+        <div class="text-start">
+          <h6 class="mb-0 fw-bold text-dark small">Join Thousands</h6>
+          <small class="text-muted" style="font-size: 0.75rem;">Happy clients and freelancers</small>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex align-items-center justify-content-center">
+        <i class="bi bi-headset fs-3 text-primary me-3"></i>
+        <div class="text-start">
+          <h6 class="mb-0 fw-bold text-dark small">24/7 Support</h6>
+          <small class="text-muted" style="font-size: 0.75rem;">We're here to help you</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-link text-center mt-4 z-1 mb-5">
+    <span class="text-muted small">Already have an account?</span> <a routerLink="/login" class="text-primary fw-bold text-decoration-none small">Log in</a>
   </div>
 </div>

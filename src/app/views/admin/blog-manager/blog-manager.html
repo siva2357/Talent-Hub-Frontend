@@ -1,116 +1,163 @@
-<div class="management-container p-4">
-  <!-- Header -->
-  <header class="mb-4 d-flex justify-content-between align-items-center">
-    <div>
-      <h1 class="fw-bold fs-4 mb-1">Public Blog Publisher</h1>
-      <p class="text-muted small mb-0">Write articles, manage publication releases, and view platform blogs.</p>
+<div class="dashboard-container position-relative p-4">
+  <!-- Decorative background wrapper -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
     </div>
-    <button class="btn btn-outline-secondary bg-white text-dark shadow-sm px-4">Add Blog</button>
-  </header>
+  </div>
 
-  <!-- Filter Section -->
-  <section class="card shadow-sm border-0 rounded-3 mb-4">
-    <div class="card-body p-4">
-      <div class="row g-3 align-items-center mb-3">
-        <div class="col-md-5 col-lg-5">
-          <div class="input-group">
-            <span class="input-group-text bg-white border-end-0 text-primary"><i class="bi bi-search"></i>&#128269;</span>
-            <input type="text" class="form-control border-start-0 ps-0" placeholder="Search by Ticket .....">
+  <!-- Main Content Wrapper (Glassmorphism) -->
+  <div class="position-relative z-1 glass-card p-4 mx-auto" style="max-width: 1400px;">
+    <!-- Header -->
+    <header class="mb-4 d-flex justify-content-between align-items-center">
+      <div>
+        <h1 class="fw-bold fs-4 mb-1">Public Blog Publisher</h1>
+        <p class="text-muted small mb-0">Write articles, manage publication releases, and view platform blogs.</p>
+      </div>
+      <button class="btn btn-primary rounded-pill shadow-sm px-4 fw-semibold"><i class="bi bi-plus-lg me-1"></i> Add
+        Blog</button>
+    </header>
+
+    <!-- Filter Section -->
+    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
+      <div class="card-body p-4">
+        <div class="row g-3 align-items-center mb-3">
+          <div class="col-md-5 col-lg-5">
+            <div
+              class="input-group shadow-sm rounded-pill overflow-hidden border border-primary border-opacity-25 bg-white">
+              <span class="input-group-text bg-transparent border-0 text-primary ps-4"><i
+                  class="bi bi-search"></i></span>
+              <input type="text" class="form-control border-0 shadow-none ps-2 py-2"
+                placeholder="Search blogs by title or content...">
+            </div>
+          </div>
+          <div class="col-md-2 col-lg-2">
+            <select class="form-select shadow-sm rounded-pill border-primary border-opacity-25 text-muted py-2">
+              <option selected>Category</option>
+              <option value="1">Career</option>
+              <option value="2">Technology</option>
+            </select>
+          </div>
+          <div class="col-md-2 col-lg-2">
+            <select class="form-select shadow-sm rounded-pill border-primary border-opacity-25 text-muted py-2">
+              <option selected>Status</option>
+              <option value="1">Published</option>
+              <option value="2">Draft</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-lg-3 d-flex gap-2">
+            <button class="btn btn-primary rounded-pill shadow-sm flex-grow-1"><i class="bi bi-funnel me-1"></i>
+              Apply</button>
+            <button
+              class="btn btn-light rounded-pill shadow-sm border border-light flex-grow-1 text-primary hover-bg-light"><i
+                class="bi bi-arrow-clockwise"></i></button>
           </div>
         </div>
-        <div class="col-md-2 col-lg-2">
-          <select class="form-select text-muted">
-            <option selected>Select All</option>
-          </select>
-        </div>
-        <div class="col-md-2 col-lg-2">
-          <select class="form-select text-muted">
-            <option selected>Select All</option>
-          </select>
-        </div>
-        <div class="col-md-3 col-lg-3 d-flex gap-2">
-          <button class="btn btn-primary flex-grow-1">Apply</button>
-          <button class="btn btn-outline-primary flex-grow-1 bg-white">Reset</button>
-        </div>
-      </div>
-      
-      <div class="d-flex align-items-center flex-wrap gap-2">
-        <span class="text-dark small fw-semibold me-2">Active Filters :</span>
-        <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-          Tag <span class="badge-close">&times;</span>
-        </span>
-        <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-          Tag <span class="badge-close">&times;</span>
-        </span>
-        <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-          Tag <span class="badge-close">&times;</span>
-        </span>
-      </div>
-    </div>
-  </section>
 
-  <!-- Data Table Section -->
-  <section class="card shadow-sm border-0 rounded-3 mb-4">
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-hover align-middle text-center mb-0">
-          <thead class="table-light text-dark font-monospace small" style="font-family: serif !important;">
-            <tr>
-              <th scope="col" class="ps-4 fw-bold">S.NO</th>
-              <th scope="col" class="fw-bold">Media</th>
-              <th scope="col" class="fw-bold">Blog Title</th>
-              <th scope="col" class="fw-bold">Category</th>
-              <th scope="col" class="fw-bold">Status</th>
-              <th scope="col" class="fw-bold">Created</th>
-              <th scope="col" class="pe-4 fw-bold">Actions</th>
-            </tr>
-          </thead>
-          <tbody style="font-family: serif;">
-            <tr>
-              <td class="ps-4">1</td>
-              <td>
-                <div class="mx-auto" style="width: 48px; height: 32px; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border: 1px solid #ced4da;">
-                  <span class="text-muted" style="font-size: 0.5rem; display: block; padding-top: 8px;">IMG</span>
-                </div>
-              </td>
-              <td>AI Talent Matching</td>
-              <td>Career</td>
-              <td>Published</td>
-              <td>August 1st, 2026</td>
-              <td class="pe-4"><input class="form-check-input border-secondary" type="checkbox" value="" style="width: 20px; height: 20px;"></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="d-flex align-items-center flex-wrap gap-2">
+          <span class="text-dark small fw-semibold me-2">Active Filters :</span>
+          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
+            Tag <span class="badge-close">&times;</span>
+          </span>
+          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
+            Tag <span class="badge-close">&times;</span>
+          </span>
+          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
+            Tag <span class="badge-close">&times;</span>
+          </span>
+        </div>
       </div>
-      <!-- Empty State / No Data Placeholder -->
-      <div class="py-5 text-center text-muted border-top" style="font-family: serif;">
-        <p class="mb-0">No data available</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Pagination -->
-  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-    <div class="d-flex align-items-center gap-2">
-      <span class="small text-dark">Show</span>
-      <select class="form-select form-select-sm" style="width: 70px;">
-        <option selected>10</option>
-        <option value="20">20</option>
-        <option value="50">50</option>
-      </select>
-      <span class="small text-dark">Entries</span>
+    <!-- Data Table Section -->
+    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle text-center mb-0 border-light">
+            <thead class="bg-light bg-opacity-50 text-dark small text-uppercase fw-bold" style="font-size: 0.75rem;">
+              <tr>
+                <th scope="col" class="ps-4 py-3 text-muted text-start">#</th>
+                <th scope="col" class="py-3 text-start"><i class="bi bi-card-image text-primary me-1"></i> Media</th>
+                <th scope="col" class="py-3 text-start"><i class="bi bi-journal-text text-primary me-1"></i> Blog Title
+                </th>
+                <th scope="col" class="py-3"><i class="bi bi-bookmark-star text-primary me-1"></i> Category</th>
+                <th scope="col" class="py-3"><i class="bi bi-activity text-primary me-1"></i> Status</th>
+                <th scope="col" class="py-3"><i class="bi bi-calendar3 text-primary me-1"></i> Created</th>
+                <th scope="col" class="pe-4 py-3"><i class="bi bi-gear text-primary me-1"></i> Actions</th>
+              </tr>
+            </thead>
+            <tbody class="border-top-0">
+              <tr>
+                <td class="ps-4 text-start fw-semibold text-muted">1</td>
+                <td class="text-start">
+                  <div
+                    class="rounded-3 shadow-sm overflow-hidden border border-light bg-white d-flex align-items-center justify-content-center"
+                    style="width: 56px; height: 40px; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);">
+                    <i class="bi bi-image text-muted" style="font-size: 1.2rem;"></i>
+                  </div>
+                </td>
+                <td class="text-start">
+                  <span class="d-block fw-bold text-dark text-truncate" style="max-width: 200px;">AI Talent
+                    Matching</span>
+                </td>
+                <td><span
+                    class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1">Career</span>
+                </td>
+                <td>
+                  <span
+                    class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"><i
+                      class="bi bi-check-circle-fill" style="font-size: 0.5rem;"></i> Published</span>
+                </td>
+                <td><span class="text-muted fw-semibold" style="font-size: 0.85rem;">August 1st, 2026</span></td>
+                <td class="pe-4">
+                  <div class="d-flex justify-content-center gap-2">
+                    <button
+                      class="btn btn-sm btn-light text-success rounded-circle shadow-sm border border-light d-flex justify-content-center align-items-center hover-bg-light"
+                      style="width: 32px; height: 32px;" title="Edit"><i class="bi bi-pencil-fill"></i></button>
+                    <button
+                      class="btn btn-sm btn-light text-danger rounded-circle shadow-sm border border-light d-flex justify-content-center align-items-center hover-bg-light"
+                      style="width: 32px; height: 32px;" title="Delete"><i class="bi bi-trash3-fill"></i></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Empty State / No Data Placeholder -->
+        <div class="py-5 text-center text-muted border-top" style="font-family: serif;">
+          <p class="mb-0">No data available</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pagination -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+      <div class="d-flex align-items-center gap-2">
+        <span class="small text-dark">Show</span>
+        <select class="form-select form-select-sm" style="width: 70px;">
+          <option selected>10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+        <span class="small text-dark">Entries</span>
+      </div>
+
+      <span class="small text-dark">Showing 1-50 of 500</span>
+
+      <nav aria-label="Table pagination">
+        <ul class="pagination pagination-sm mb-0 gap-1">
+          <li class="page-item"><a class="page-link text-primary rounded" href="#">&lsaquo;</a></li>
+          <li class="page-item"><a class="page-link text-primary rounded" href="#">&laquo;</a></li>
+          <li class="page-item active"><a class="page-link rounded" href="#">1</a></li>
+          <li class="page-item"><a class="page-link text-primary rounded" href="#">&rsaquo;</a></li>
+          <li class="page-item"><a class="page-link text-primary rounded" href="#">&raquo;</a></li>
+        </ul>
+      </nav>
     </div>
-    
-    <span class="small text-dark">Showing 1-50 of 500</span>
-    
-    <nav aria-label="Table pagination">
-      <ul class="pagination pagination-sm mb-0 gap-1">
-        <li class="page-item"><a class="page-link text-primary rounded" href="#">&lsaquo;</a></li>
-        <li class="page-item"><a class="page-link text-primary rounded" href="#">&laquo;</a></li>
-        <li class="page-item active"><a class="page-link rounded" href="#">1</a></li>
-        <li class="page-item"><a class="page-link text-primary rounded" href="#">&rsaquo;</a></li>
-        <li class="page-item"><a class="page-link text-primary rounded" href="#">&raquo;</a></li>
-      </ul>
-    </nav>
   </div>
 </div>

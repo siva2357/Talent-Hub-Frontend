@@ -1,4 +1,18 @@
-<div class="management-container p-4">
+<div class="dashboard-container position-relative p-4">
+  <!-- Decorative background wrapper -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper (Glassmorphism) -->
+  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
   <!-- Top Navigation & Stepper -->
   <div class="d-flex justify-content-between align-items-start mb-4">
     <div>
@@ -44,7 +58,7 @@
   </div>
 
   <!-- Contract Summary Card -->
-  <div class="card shadow-sm border-0 rounded-3 mb-4 p-4 bg-white">
+  <div class="glass-card rounded-3 mb-4 p-4 bg-white">
     <h3 class="fs-6 fw-bold text-dark mb-4 d-flex align-items-center gap-2">
       <i class="bi bi-file-earmark-text text-primary"></i> Contract Summary
     </h3>
@@ -311,7 +325,7 @@
       <div class="d-flex flex-column gap-4">
         
         <!-- Contract Overview -->
-        <div class="card shadow-sm border-0 rounded-3 p-4 bg-white">
+        <div class="glass-card rounded-3 p-4 bg-white">
           <h3 class="fs-6 fw-bold text-dark mb-4">Contract Overview</h3>
           <div class="d-flex flex-column gap-3" style="font-size: 0.75rem;">
             <div class="d-flex justify-content-between">
@@ -346,7 +360,7 @@
         </div>
 
         <!-- Progress Checklist -->
-        <div class="card shadow-sm border-0 rounded-3 p-4 bg-white">
+        <div class="glass-card rounded-3 p-4 bg-white">
           <h3 class="fs-6 fw-bold text-dark mb-4">Progress Checklist</h3>
           
           <div class="d-flex flex-column gap-3" style="font-size: 0.75rem;">
@@ -401,7 +415,7 @@
         </div>
 
         <!-- Contract Details -->
-        <div class="card shadow-sm border-0 rounded-3 p-4 bg-white">
+        <div class="glass-card rounded-3 p-4 bg-white">
           <h3 class="fs-6 fw-bold text-dark mb-4">Contract Details</h3>
           <div class="d-flex flex-column gap-3" style="font-size: 0.75rem;">
             <div class="d-flex justify-content-between">
@@ -456,8 +470,10 @@
   <div class="d-flex gap-3">
     <button class="btn btn-outline-secondary bg-white text-dark px-4 fw-semibold shadow-sm d-flex align-items-center gap-2"><i class="bi bi-eye"></i> Preview PDF</button>
     <button class="btn btn-outline-secondary bg-white text-dark px-4 fw-semibold shadow-sm d-flex align-items-center gap-2"><i class="bi bi-download"></i> Download Draft</button>
-    <button class="btn btn-primary px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
+    <button class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
       <i class="bi bi-send"></i> Generate & Send Legal Offer <i class="bi bi-arrow-right ms-1"></i>
     </button>
   </div>
+</div>
+
 </div>

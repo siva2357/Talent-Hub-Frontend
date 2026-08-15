@@ -8,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class Profile {
   role: string = 'client';
+
+  setRole(role: string): void {
+    this.role = role;
+  }
 }

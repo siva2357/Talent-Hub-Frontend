@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './profile-form.css'
 })
 export class ProfileForm {
-  role: string = 'freelancer'; // 'client' or 'freelancer'
+  role: string = 'client'; // 'client' or 'freelancer'
   currentStep: number = 1; // 1: Basic, 2: Professional, 3: Social, 4: Review
 
   nextStep() {

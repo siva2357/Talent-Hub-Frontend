@@ -1,15 +1,40 @@
-<div class="management-container p-4">
-  
-  <div class="mb-4">
-    <h1 class="fw-bold fs-3 text-dark mb-1">Account Settings</h1>
-    <p class="text-muted" style="font-size: 0.85rem;">Manage your profile, login details, and platform preferences.</p>
+<div class="management-container p-3 p-md-4 position-relative">
+  <!-- Decorative background wrapper to prevent overflow -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+      <div class="bg-shape top-left"></div>
+      <div class="bg-shape bottom-right"></div>
+      <div class="bg-shape right-shape"></div>
+      
+      <div class="concentric-circles">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+          <div class="circle circle-3"></div>
+      </div>
   </div>
 
-  <div class="card border border-light shadow-sm rounded-4 bg-white overflow-hidden">
+  <!-- Role Switcher (For Development) -->
+  <div class="position-absolute top-0 end-0 m-4 z-3 d-flex gap-2">
+    <button class="btn btn-sm rounded-pill px-3 fw-semibold shadow-sm border" 
+            [class.btn-primary]="role === 'client'" 
+            [class.btn-light]="role !== 'client'"
+            (click)="role = 'client'">Client View</button>
+    <button class="btn btn-sm rounded-pill px-3 fw-semibold shadow-sm border" 
+            [class.btn-primary]="role === 'freelancer'" 
+            [class.btn-light]="role !== 'freelancer'"
+            (click)="role = 'freelancer'">Freelancer View</button>
+  </div>
+
+  <div class="position-relative z-1 mx-auto" style="max-width: 900px; margin-top: 2rem;">
+    <div class="mb-4 text-center">
+      <h1 class="fw-bold fs-3 text-dark mb-1">Account Settings</h1>
+      <p class="text-muted" style="font-size: 0.85rem;">Manage your account settings and profile.</p>
+    </div>
+
+    <div class="glass-card shadow-lg p-0 overflow-hidden mb-5">
     
     <!-- Custom Tabs Navigation -->
     <div class="border-bottom px-4 pt-3 bg-light bg-opacity-50">
-      <ul class="nav nav-underline gap-4" style="font-size: 0.85rem;">
+      <ul class="nav nav-underline gap-4 justify-content-center" style="font-size: 0.85rem;">
         <li class="nav-item">
           <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" 
              [class.active]="activeTab === 'profile'" 
@@ -65,69 +90,171 @@
               <div class="col-md-9">
                 <div class="row g-4">
                   <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Full Name</label>
+                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Full Name *</label>
                     <input type="text" class="form-control" value="Rohit Sharma" style="font-size: 0.85rem;">
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Username</label>
-                    <input type="text" class="form-control" value="rohit_dev" style="font-size: 0.85rem;">
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Email Address</label>
+                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Email Address *</label>
                     <input type="email" class="form-control" value="rohit.sharma@example.com" style="font-size: 0.85rem;">
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Phone Number</label>
+                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Phone Number *</label>
                     <input type="tel" class="form-control" value="+91 98765 43210" style="font-size: 0.85rem;">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Gender *</label>
+                    <select class="form-select" style="font-size: 0.85rem;">
+                      <option disabled>Select gender</option>
+                      <option selected>Male</option>
+                      <option>Female</option>
+                      <option>Other</option>
+                    </select>
                   </div>
                 </div>
               </div>
             </div>
 
             <div class="mb-4">
-              <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Bio / Description</label>
-              <textarea class="form-control" rows="4" style="font-size: 0.85rem; resize: none;">Expert Frontend Developer specializing in React and Angular. Over 5 years of experience building scalable web applications for diverse clients.</textarea>
+              <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Short Bio *</label>
+              <textarea class="form-control" rows="4" style="font-size: 0.85rem; resize: none;">Passionate professional with extensive experience in the industry, looking to connect and collaborate on meaningful projects.</textarea>
             </div>
           </div>
 
-          <!-- Professional Details -->
+          <!-- Professional Details / Company Information -->
           <div class="mb-5 border-top pt-5">
-            <h2 class="fs-5 fw-bold text-dark mb-4">Professional Details</h2>
+            <h2 class="fs-5 fw-bold text-dark mb-4">
+              @if (role === 'client') { Company Information } @else { Professional Information }
+            </h2>
+            
             <div class="row g-4">
-              <div class="col-md-6">
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Professional Title</label>
-                <input type="text" class="form-control" value="Senior Frontend Developer" style="font-size: 0.85rem;">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Location</label>
-                <input type="text" class="form-control" value="Hyderabad, India" style="font-size: 0.85rem;">
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Hourly Rate ($)</label>
-                <input type="number" class="form-control" value="45" style="font-size: 0.85rem;">
-              </div>
-              <div class="col-md-8">
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Skills (Comma separated)</label>
-                <input type="text" class="form-control" value="Angular, React, UI/UX, Bootstrap" style="font-size: 0.85rem;">
-              </div>
+              @if (role === 'client') {
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Company Type *</label>
+                  <input type="text" class="form-control" value="LLC" style="font-size: 0.85rem;">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Website *</label>
+                  <input type="url" class="form-control" value="https://example.com" style="font-size: 0.85rem;">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Industry *</label>
+                  <input type="text" class="form-control" value="Technology" style="font-size: 0.85rem;">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">City *</label>
+                  <input type="text" class="form-control" value="Hyderabad" style="font-size: 0.85rem;">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">State *</label>
+                  <input type="text" class="form-control" value="Telangana" style="font-size: 0.85rem;">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Country *</label>
+                  <input type="text" class="form-control" value="India" style="font-size: 0.85rem;">
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Company Description *</label>
+                  <textarea class="form-control" rows="4" style="font-size: 0.85rem; resize: none;">A forward-thinking technology firm specializing in web solutions and e-commerce platforms.</textarea>
+                </div>
+              } @else {
+                <div class="col-12">
+                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Professional Headline *</label>
+                  <input type="text" class="form-control" value="Senior Frontend Developer" style="font-size: 0.85rem;">
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Skills *</label>
+                  <input type="text" class="form-control" value="Angular, React, TypeScript" style="font-size: 0.85rem;">
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Technologies *</label>
+                  <input type="text" class="form-control" value="HTML/CSS, Git, Bootstrap" style="font-size: 0.85rem;">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Availability *</label>
+                  <select class="form-select" style="font-size: 0.85rem;">
+                    <option disabled>Select availability</option>
+                    <option selected>Full Time (40hrs/wk)</option>
+                    <option>Part Time (20hrs/wk)</option>
+                    <option>As needed</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Preferred Job Type *</label>
+                  <select class="form-select" style="font-size: 0.85rem;">
+                    <option disabled>Select preferred type</option>
+                    <option selected>Long-term contract</option>
+                    <option>Short-term project</option>
+                    <option>Hourly work</option>
+                  </select>
+                </div>
+              }
             </div>
           </div>
 
-          <!-- Social Links -->
+          <!-- Social Media and Languages -->
           <div class="mb-5 border-top pt-5">
-            <h2 class="fs-5 fw-bold text-dark mb-4">Social Links</h2>
-            <div class="row g-4">
-              <div class="col-md-6">
-                <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2" style="font-size: 0.8rem;"><i class="bi bi-linkedin text-primary"></i> LinkedIn Profile</label>
-                <input type="url" class="form-control" placeholder="https://linkedin.com/in/username" style="font-size: 0.85rem;">
+            <h2 class="fs-5 fw-bold text-dark mb-4">Social media and languages</h2>
+            
+            <div class="mb-4">
+              <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Social Media profile</h4>
+              <div class="d-flex align-items-end gap-3 mb-3">
+                <div class="flex-grow-1">
+                  <label class="form-label text-muted" style="font-size: 0.7rem;">Select media *</label>
+                  <select class="form-select" style="font-size: 0.8rem;">
+                    <option>LinkedIn</option>
+                    <option>GitHub</option>
+                    <option>Twitter</option>
+                    <option>Portfolio Website</option>
+                  </select>
+                </div>
+                <div class="flex-grow-1" style="flex: 2;">
+                  <label class="form-label text-muted" style="font-size: 0.7rem;">Platform link *</label>
+                  <input type="url" class="form-control" placeholder="https://" style="font-size: 0.8rem;">
+                </div>
+                <button class="btn btn-primary px-4 fw-semibold shadow-sm" style="font-size: 0.8rem;">Add</button>
               </div>
-              <div class="col-md-6">
-                <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2" style="font-size: 0.8rem;"><i class="bi bi-github text-dark"></i> GitHub Profile</label>
-                <input type="url" class="form-control" placeholder="https://github.com/username" style="font-size: 0.85rem;">
+              
+              <!-- Added media items list -->
+              <div class="d-flex flex-column gap-2 mb-4">
+                <div class="d-flex align-items-center gap-3 p-2 border rounded-3 bg-light bg-opacity-50">
+                  <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;"><i class="bi bi-linkedin"></i></div>
+                  <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">https://linkedin.com/in/username</span>
+                  <button class="btn btn-link text-danger p-0 border-0 text-decoration-none"><i class="bi bi-x-circle"></i></button>
+                </div>
               </div>
-              <div class="col-md-6">
-                <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2" style="font-size: 0.8rem;"><i class="bi bi-globe text-primary"></i> Personal Portfolio / Website</label>
-                <input type="url" class="form-control" placeholder="https://yourwebsite.com" style="font-size: 0.85rem;">
+            </div>
+
+            <div class="mb-4">
+              <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Languages</h4>
+              <div class="d-flex align-items-end gap-3 mb-3">
+                <div class="flex-grow-1">
+                  <label class="form-label text-muted" style="font-size: 0.7rem;">Select language *</label>
+                  <select class="form-select" style="font-size: 0.8rem;">
+                    <option>English</option>
+                    <option>Spanish</option>
+                    <option>French</option>
+                    <option>German</option>
+                    <option>Hindi</option>
+                  </select>
+                </div>
+                <div class="flex-grow-1">
+                  <label class="form-label text-muted" style="font-size: 0.7rem;">Select proficiency *</label>
+                  <select class="form-select" style="font-size: 0.8rem;">
+                    <option>Basic</option>
+                    <option>Conversational</option>
+                    <option>Fluent</option>
+                    <option>Native or Bilingual</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary px-4 fw-semibold shadow-sm" style="font-size: 0.8rem;">Add</button>
+              </div>
+
+              <!-- Added language items list -->
+              <div class="d-flex flex-column gap-2">
+                <div class="d-flex align-items-center gap-3 p-2 border rounded-3 bg-light bg-opacity-50">
+                  <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">English - <span class="text-muted fw-normal">Fluent</span></span>
+                  <button class="btn btn-link text-danger p-0 border-0 text-decoration-none"><i class="bi bi-x-circle"></i></button>
+                </div>
               </div>
             </div>
           </div>
@@ -266,15 +393,6 @@
           <div class="col-md-10 col-lg-8">
             <h2 class="fs-5 fw-bold text-dark mb-4">Account Management</h2>
             
-            <div class="card border border-warning border-opacity-25 bg-warning bg-opacity-10 shadow-none mb-4">
-              <div class="card-body p-4">
-                <h3 class="fs-6 fw-bold text-dark mb-2 d-flex align-items-center gap-2">Deactivate Account</h3>
-                <p class="text-muted mb-4" style="font-size: 0.8rem; line-height: 1.5;">
-                  Deactivating your account will hide your profile and active proposals from the platform. You can reactivate your account at any time by simply logging back in.
-                </p>
-                <button class="btn btn-outline-warning text-dark fw-semibold px-4 bg-white shadow-sm" style="font-size: 0.85rem; border-color: #ffc107;">Deactivate Account</button>
-              </div>
-            </div>
 
             <div class="card border border-danger border-opacity-25 bg-danger bg-opacity-10 shadow-none">
               <div class="card-body p-4">
@@ -297,6 +415,7 @@
       }
 
     </div>
+  </div>
   </div>
 
 </div>

@@ -1,5 +1,17 @@
-<div class="meet-container">
-  
+<div class="dashboard-container position-relative d-flex flex-column p-3 p-md-4" style="height: 100vh;">
+  <!-- Decorative background wrapper -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </div>
+
   <!-- MODE SWITCHER (For Development / Preview Purposes) -->
   <div class="position-absolute top-0 start-50 translate-middle-x mt-2 z-3 bg-white p-2 rounded-pill shadow-sm d-flex gap-2 border">
     <button class="btn btn-sm rounded-pill px-3 fw-semibold" 
@@ -14,10 +26,10 @@
 
   @if (mode === 'meeting') {
     <!-- NORMAL MEETING LAYOUT -->
-    <div class="d-flex w-100 h-100 bg-white">
+    <div class="d-flex w-100 flex-grow-1 glass-card border-0 overflow-hidden position-relative z-1 mx-auto mt-4" style="max-width: 1400px; min-height: 0;">
       
       <!-- Main Meeting Area -->
-      <div class="flex-grow-1 d-flex flex-column position-relative h-100 overflow-hidden">
+      <div class="flex-grow-1 d-flex flex-column position-relative overflow-hidden" style="min-height: 0;">
         
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center p-3 border-bottom flex-shrink-0">
@@ -46,13 +58,13 @@
           </div>
         </div>
 
-        <!-- Video Grid & Bottom Info -->
-        <div class="flex-grow-1 d-flex flex-column p-3 gap-3 overflow-y-auto meeting-scroll bg-light bg-opacity-50">
+        <!-- Video Grid -->
+        <div class="flex-grow-1 d-flex flex-column p-4 overflow-y-auto meeting-scroll align-items-center justify-content-center" style="background-color: rgba(255, 255, 255, 0.4);">
           
           <!-- Video Feeds -->
-          <div class="row g-3 flex-grow-1" style="min-height: 400px;">
+          <div class="row g-4 w-100">
             <div class="col-6">
-              <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-sm border border-light">
+              <div class="position-relative w-100 rounded-4 overflow-hidden shadow-sm border border-light" style="height: 45vh; min-height: 320px;">
                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800&h=600" class="w-100 h-100 object-fit-cover" alt="Client Video">
                 <div class="position-absolute top-0 start-0 m-3 bg-dark bg-opacity-75 text-white px-3 py-1 rounded-pill fw-semibold" style="font-size: 0.75rem;">You (Siva Prasad)</div>
                 <div class="position-absolute bottom-0 start-0 m-3 d-flex align-items-center gap-2">
@@ -61,7 +73,7 @@
               </div>
             </div>
             <div class="col-6">
-              <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-sm border border-light">
+              <div class="position-relative w-100 rounded-4 overflow-hidden shadow-sm border border-light" style="height: 45vh; min-height: 320px;">
                 <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=800&h=600" class="w-100 h-100 object-fit-cover" alt="Freelancer Video">
                 <div class="position-absolute top-0 start-0 m-3 bg-dark bg-opacity-75 text-white px-3 py-1 rounded-pill fw-semibold" style="font-size: 0.75rem;">Rohit Sharma (Freelancer)</div>
                 <div class="position-absolute top-0 end-0 m-3">
@@ -74,49 +86,11 @@
             </div>
           </div>
 
-          <!-- Bottom Info Cards -->
-          <div class="row g-3 flex-shrink-0">
-            <div class="col-3">
-              <div class="bg-white border rounded-3 p-3 d-flex align-items-center gap-3 shadow-sm h-100">
-                <div class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0" style="width: 36px; height: 36px;"><i class="bi bi-briefcase"></i></div>
-                <div>
-                  <span class="d-block text-muted" style="font-size: 0.65rem;">Contract</span>
-                  <span class="d-block fw-bold text-dark text-truncate" style="font-size: 0.75rem;">E-commerce Website Development</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="bg-white border rounded-3 p-3 d-flex align-items-center gap-3 shadow-sm h-100">
-                <div class="bg-success bg-opacity-10 text-success rounded d-flex justify-content-center align-items-center flex-shrink-0" style="width: 36px; height: 36px;"><i class="bi bi-clock-history"></i></div>
-                <div>
-                  <span class="d-block text-muted" style="font-size: 0.65rem;">Phase</span>
-                  <span class="d-block fw-bold text-dark text-truncate" style="font-size: 0.75rem;">Frontend - Product Listing Page</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="bg-white border rounded-3 p-3 d-flex align-items-center gap-3 shadow-sm h-100">
-                <div class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0" style="width: 36px; height: 36px;"><i class="bi bi-flag"></i></div>
-                <div>
-                  <span class="d-block text-muted" style="font-size: 0.65rem;">Next Milestone</span>
-                  <span class="d-block fw-bold text-dark text-truncate" style="font-size: 0.75rem;">Complete API Integration by 25 Jul 2024</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="bg-white border rounded-3 p-3 d-flex align-items-center gap-3 shadow-sm h-100">
-                <div class="bg-warning bg-opacity-10 text-warning-dark rounded d-flex justify-content-center align-items-center flex-shrink-0" style="width: 36px; height: 36px;"><i class="bi bi-wallet2"></i></div>
-                <div>
-                  <span class="d-block text-muted" style="font-size: 0.65rem;">Budget</span>
-                  <span class="d-block fw-bold text-dark text-truncate" style="font-size: 0.75rem;">₹59,800</span>
-                </div>
-              </div>
-            </div>
-          </div>
+
         </div>
 
         <!-- Meeting Controls Footer -->
-        <div class="d-flex justify-content-center align-items-center p-3 bg-white border-top flex-shrink-0 gap-4">
+        <div class="d-flex justify-content-center align-items-center p-3 border-top flex-shrink-0 gap-4" style="background-color: rgba(255, 255, 255, 0.4);">
           <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 bg-transparent text-dark hover-bg-light rounded p-2">
             <i class="bi bi-mic fs-5"></i><span style="font-size: 0.65rem;" class="fw-semibold">Mic</span>
           </button>
@@ -149,7 +123,7 @@
       </div>
 
       <!-- Right Sidebar (AI Notes & Chat) -->
-      <div class="border-start flex-shrink-0 bg-white d-flex flex-column" style="width: 400px; height: 100%;">
+      <div class="border-start flex-shrink-0 d-flex flex-column" style="width: 400px; background-color: rgba(255, 255, 255, 0.4); min-height: 0;">
         
         <!-- Tabs -->
         <ul class="nav nav-underline border-bottom px-3 pt-2 flex-shrink-0" style="font-size: 0.8rem;">
@@ -277,40 +251,36 @@
 
   @if (mode === 'interview') {
     <!-- INTERVIEW MODE LAYOUT -->
-    <div class="d-flex flex-column w-100 h-100 bg-white">
+    <div class="d-flex w-100 flex-grow-1 glass-card border-0 overflow-hidden position-relative z-1 mx-auto mt-4" style="max-width: 1400px; min-height: 0;">
       
-      <!-- Top Nav/Header -->
-      <div class="d-flex justify-content-between align-items-center p-3 border-bottom flex-shrink-0 bg-white shadow-sm z-1">
-        <div>
-          <div class="d-flex align-items-center gap-3 mb-1">
-            <h1 class="fs-5 fw-bold text-dark mb-0">Frontend Developer Interview</h1>
-            <span class="d-flex align-items-center gap-1 text-primary fw-bold" style="font-size: 0.75rem;"><i class="bi bi-circle-fill text-primary" style="font-size: 0.4rem;"></i> Live</span>
-            <span class="text-muted fw-semibold" style="font-size: 0.85rem;">00:24:18</span>
+      <!-- Main Layout (Left Column) -->
+      <div class="flex-grow-1 d-flex flex-column position-relative overflow-hidden" style="min-height: 0;">
+        
+        <!-- Top Nav/Header -->
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom flex-shrink-0">
+          <div>
+            <div class="d-flex align-items-center gap-3 mb-1">
+              <h1 class="fs-5 fw-bold text-dark mb-0">Frontend Developer Interview</h1>
+              <span class="d-flex align-items-center gap-1 text-primary fw-bold" style="font-size: 0.75rem;"><i class="bi bi-circle-fill text-primary" style="font-size: 0.4rem;"></i> Live</span>
+              <span class="text-muted fw-semibold" style="font-size: 0.85rem;">00:24:18</span>
+            </div>
+            <div class="text-muted d-flex align-items-center gap-2" style="font-size: 0.75rem;">
+              <span>Interview ID: INT-2024-0718-001</span>
+              <button class="btn btn-link p-0 text-muted border-0 text-decoration-none"><i class="bi bi-copy"></i></button>
+            </div>
           </div>
-          <div class="text-muted d-flex align-items-center gap-2" style="font-size: 0.75rem;">
-            <span>Interview ID: INT-2024-0718-001</span>
-            <button class="btn btn-link p-0 text-muted border-0 text-decoration-none"><i class="bi bi-copy"></i></button>
+          
+          <div class="d-flex gap-3 align-items-center">
+            <button class="btn btn-light rounded-circle d-flex justify-content-center align-items-center border" style="width: 38px; height: 38px;"><i class="bi bi-person-plus text-dark"></i></button>
+            <button class="btn btn-light rounded-circle d-flex justify-content-center align-items-center border" style="width: 38px; height: 38px;"><i class="bi bi-gear text-dark"></i></button>
           </div>
         </div>
-        
-        <div class="d-flex gap-3 align-items-center">
-          <button class="btn btn-light rounded-circle d-flex justify-content-center align-items-center border" style="width: 38px; height: 38px;"><i class="bi bi-person-plus text-dark"></i></button>
-          <button class="btn btn-light rounded-circle d-flex justify-content-center align-items-center border" style="width: 38px; height: 38px;"><i class="bi bi-gear text-dark"></i></button>
-          <button class="btn btn-outline-danger px-4 rounded-pill fw-semibold">End Interview</button>
-        </div>
-      </div>
-
-      <!-- Main Layout -->
-      <div class="d-flex flex-grow-1 overflow-hidden" style="background-color: #fafbfc;">
-        
-        <!-- Left Column: Video & AI Notes -->
-        <div class="flex-grow-1 d-flex flex-column position-relative h-100 border-end">
           
           <!-- Video Feeds Section -->
-          <div class="p-4 border-bottom bg-white flex-shrink-0">
+          <div class="p-4 border-bottom flex-shrink-0" style="background-color: rgba(255, 255, 255, 0.4);">
             <div class="row g-4">
               <div class="col-6">
-                <div class="position-relative w-100 rounded-4 overflow-hidden shadow-sm border border-light" style="height: 320px;">
+                <div class="position-relative w-100 rounded-4 overflow-hidden shadow-sm border border-light" style="height: 45vh; min-height: 320px;">
                   <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800&h=600" class="w-100 h-100 object-fit-cover" alt="Interviewer Video">
                   <div class="position-absolute top-0 start-0 m-3 bg-primary bg-opacity-75 text-white px-3 py-1 rounded-pill fw-semibold" style="font-size: 0.75rem;">You (Interviewer)</div>
                   <div class="position-absolute bottom-0 start-0 m-3 d-flex align-items-center gap-2">
@@ -320,7 +290,7 @@
                 </div>
               </div>
               <div class="col-6">
-                <div class="position-relative w-100 rounded-4 overflow-hidden shadow-sm border border-light" style="height: 320px;">
+                <div class="position-relative w-100 rounded-4 overflow-hidden shadow-sm border border-light" style="height: 45vh; min-height: 320px;">
                   <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=800&h=600" class="w-100 h-100 object-fit-cover" alt="Candidate Video">
                   <div class="position-absolute top-0 start-0 m-3 bg-dark bg-opacity-75 text-white px-3 py-1 rounded-pill fw-semibold" style="font-size: 0.75rem;">Siva Prasad Kurra (You)</div>
                   <div class="position-absolute top-0 end-0 m-3">
@@ -334,37 +304,11 @@
               </div>
             </div>
 
-            <!-- Controls Toolbar -->
-            <div class="d-flex justify-content-center align-items-center gap-5 mt-4 pt-3 border-top">
-              <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 bg-transparent text-dark hover-bg-light rounded p-2">
-                <i class="bi bi-mic fs-4"></i><span style="font-size: 0.7rem;" class="fw-semibold">Mic</span>
-              </button>
-              <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 bg-transparent text-dark hover-bg-light rounded p-2">
-                <i class="bi bi-camera-video fs-4"></i><span style="font-size: 0.7rem;" class="fw-semibold">Camera</span>
-              </button>
-              <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 bg-transparent text-dark hover-bg-light rounded p-2">
-                <i class="bi bi-display fs-4"></i><span style="font-size: 0.7rem;" class="fw-semibold">Screen Share</span>
-              </button>
-              <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 bg-transparent text-dark hover-bg-light rounded p-2">
-                <i class="bi bi-chat-left-text fs-4"></i><span style="font-size: 0.7rem;" class="fw-semibold">Chat</span>
-              </button>
-              
-              <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 text-purple bg-transparent rounded p-2 position-relative">
-                <i class="bi bi-stars fs-4"></i><span style="font-size: 0.7rem;" class="fw-semibold">AI Notes</span>
-                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-primary border border-light rounded-circle mt-1"></span>
-              </button>
-              
-              <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 bg-transparent text-dark hover-bg-light rounded p-2">
-                <i class="bi bi-people fs-4"></i><span style="font-size: 0.7rem;" class="fw-semibold">Participants</span>
-              </button>
-              <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 bg-transparent text-dark hover-bg-light rounded p-2">
-                <i class="bi bi-three-dots fs-4"></i><span style="font-size: 0.7rem;" class="fw-semibold">More</span>
-              </button>
-            </div>
+
           </div>
 
           <!-- Bottom Half: AI capturing Key Points -->
-          <div class="flex-grow-1 bg-white p-4 overflow-y-auto meeting-scroll">
+          <div class="flex-grow-1 p-4 overflow-y-auto meeting-scroll">
             <div class="d-flex justify-content-between align-items-center mb-4">
               <h3 class="fw-bold text-dark fs-6 d-flex align-items-center gap-2 m-0"><i class="bi bi-stars text-purple"></i> AI is capturing key points...</h3>
               <span class="text-success fw-semibold d-flex align-items-center gap-1" style="font-size: 0.75rem;"><i class="bi bi-circle-fill" style="font-size: 0.4rem;"></i> Auto-saving...</span>
@@ -393,10 +337,41 @@
             </div>
           </div>
 
+        <!-- Meeting Controls Footer -->
+        <div class="d-flex justify-content-center align-items-center p-3 border-top flex-shrink-0 gap-4" style="background-color: rgba(255, 255, 255, 0.4);">
+          <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 bg-transparent text-dark hover-bg-light rounded p-2">
+            <i class="bi bi-mic fs-5"></i><span style="font-size: 0.65rem;" class="fw-semibold">Mic</span>
+          </button>
+          <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 bg-transparent text-dark hover-bg-light rounded p-2">
+            <i class="bi bi-camera-video fs-5"></i><span style="font-size: 0.65rem;" class="fw-semibold">Camera</span>
+          </button>
+          <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 bg-transparent text-dark hover-bg-light rounded p-2">
+            <i class="bi bi-display fs-5"></i><span style="font-size: 0.65rem;" class="fw-semibold">Screen Share</span>
+          </button>
+          
+          <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 text-purple bg-purple-soft rounded p-2 px-3 position-relative">
+            <i class="bi bi-stars fs-5"></i><span style="font-size: 0.65rem;" class="fw-semibold">AI Notes</span>
+            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-primary border border-light rounded-circle"></span>
+          </button>
+          
+          <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 bg-transparent text-dark hover-bg-light rounded p-2">
+            <i class="bi bi-chat-left-text fs-5"></i><span style="font-size: 0.65rem;" class="fw-semibold">Chat</span>
+          </button>
+          <button class="btn btn-light d-flex flex-column align-items-center gap-1 border-0 bg-transparent text-dark hover-bg-light rounded p-2">
+            <i class="bi bi-three-dots fs-5"></i><span style="font-size: 0.65rem;" class="fw-semibold">More</span>
+          </button>
+          
+          <div class="vr mx-2"></div>
+          
+          <button class="btn btn-danger rounded-pill px-4 fw-semibold d-flex align-items-center gap-2 shadow-sm">
+            <i class="bi bi-telephone-x"></i> End Meeting
+          </button>
+        </div>
+
         </div>
 
         <!-- Right Sidebar (Interview Details & Checklist) -->
-        <div class="bg-white flex-shrink-0 d-flex flex-column overflow-y-auto side-panel-scroll" style="width: 320px;">
+        <div class="border-start flex-shrink-0 d-flex flex-column overflow-y-auto side-panel-scroll" style="width: 320px; background-color: rgba(255, 255, 255, 0.4); min-height: 0;">
           
           <div class="p-4 border-bottom">
             <h3 class="fs-6 fw-bold text-dark mb-4 d-flex align-items-center gap-2"><i class="bi bi-info-circle text-primary"></i> Interview Details</h3>
@@ -469,8 +444,6 @@
           </div>
 
         </div>
-
-      </div>
 
     </div>
   }

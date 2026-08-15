@@ -1,10 +1,24 @@
-<div class="management-container p-4">
+<div class="dashboard-container position-relative p-4">
+  <!-- Decorative background wrapper -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper (Glassmorphism) -->
+  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="fw-bold fs-3 mb-0 text-dark">Contract Diary</h1>
   </div>
 
   <!-- Contract Overview Header -->
-  <div class="card border-0 shadow-sm rounded-4 bg-white p-4 mb-4">
+  <div class="glass-card rounded-4 bg-white p-4 mb-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <span class="text-muted d-block fw-semibold mb-1" style="font-size: 0.75rem;">Contract</span>
@@ -137,7 +151,7 @@
   </div>
 
   <!-- Phases List Area -->
-  <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+  <div class="glass-card rounded-4 bg-white mb-4">
     
     <!-- Tab & Sort Header -->
     <div class="d-flex justify-content-between align-items-center px-4 pt-3 border-bottom border-light">
@@ -376,7 +390,7 @@
   </div>
 
   <!-- Recent Activity -->
-  <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+  <div class="glass-card rounded-4 bg-white p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h3 class="fs-6 fw-bold text-dark mb-0">Recent Activity</h3>
       <a href="#" class="text-primary fw-semibold text-decoration-none" style="font-size: 0.75rem;">View All Activity <i class="bi bi-arrow-right"></i></a>
@@ -423,5 +437,7 @@
       </div>
     </div>
   </div>
+
+</div>
 
 </div>

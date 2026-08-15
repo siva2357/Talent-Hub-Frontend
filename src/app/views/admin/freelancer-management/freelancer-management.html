@@ -1,156 +1,195 @@
-<div class="management-container p-4">
-  <!-- Header -->
-  <header class="mb-4">
-    <h1 class="fw-bold fs-4 mb-1">Freelancer Management</h1>
-    <p class="text-muted small mb-0">Audit freelancer activities, spent volumes, and configure access settings.</p>
-  </header>
+<div class="dashboard-container position-relative p-4">
+  <!-- Decorative background wrapper -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </div>
 
-  <!-- Stats Row -->
-  <section class="row g-3 mb-4">
-    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
-        <div class="card-body d-flex align-items-center gap-3">
-          <div class="stat-icon client-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3" style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
-          <div>
-            <span class="d-block text-muted small fw-semibold">Total Clients</span>
-            <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
-        <div class="card-body d-flex align-items-center gap-3">
-          <div class="stat-icon freelancer-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3" style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
-          <div>
-            <span class="d-block text-muted small fw-semibold">Total Freelancers</span>
-            <span class="d-block fs-5 fw-bold text-dark mt-1">500</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
-        <div class="card-body d-flex align-items-center gap-3">
-          <div class="stat-icon contract-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3" style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
-          <div>
-            <span class="d-block text-muted small fw-semibold">Total Contracts</span>
-            <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-      <div class="card stat-card shadow-sm border-0 rounded-3 h-100">
-        <div class="card-body d-flex align-items-center gap-3">
-          <div class="stat-icon payout-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3" style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
-          <div>
-            <span class="d-block text-muted small fw-semibold">Total Payouts</span>
-            <span class="d-block fs-5 fw-bold text-dark mt-1">₹100,000</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- Main Content Wrapper (Glassmorphism) -->
+  <div class="position-relative z-1 glass-card p-4 mx-auto" style="max-width: 1400px;">
+    <!-- Header -->
+    <header class="mb-4">
+      <h1 class="fw-bold fs-4 mb-1">Freelancer Management</h1>
+      <p class="text-muted small mb-0">Audit freelancer activities, spent volumes, and configure access settings.</p>
+    </header>
 
-  <!-- Filter Section -->
-  <section class="card shadow-sm border-0 rounded-3 mb-4">
-    <div class="card-body p-4">
-      <div class="row g-3 align-items-center mb-3">
-        <div class="col-md-6 col-lg-7">
-          <div class="input-group">
-            <span class="input-group-text bg-white border-end-0 text-primary"><i class="bi bi-search"></i>&#128269;</span>
-            <input type="text" class="form-control border-start-0 ps-0" placeholder="Search by Freelancer ID, Email">
+    <!-- Stats Row -->
+    <section class="row g-3 mb-4">
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="stat-icon client-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center"
+              style="width: 48px; height: 48px; background-color: #e0f0ff;">
+              <i class="bi bi-people-fill text-primary fs-4"></i>
+            </div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Total Clients</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="stat-icon freelancer-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center"
+              style="width: 48px; height: 48px; background-color: #e0f0ff;">
+              <i class="bi bi-person-workspace text-primary fs-4"></i>
+            </div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Total Freelancers</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">500</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="stat-icon contract-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center"
+              style="width: 48px; height: 48px; background-color: #e0f0ff;">
+              <i class="bi bi-file-earmark-text-fill text-primary fs-4"></i>
+            </div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Total Contracts</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="stat-icon payout-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center"
+              style="width: 48px; height: 48px; background-color: #e0f0ff;">
+              <i class="bi bi-wallet2 text-primary fs-4"></i>
+            </div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Total Payouts</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">₹100,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
+      <div class="card-body p-4">
+        <div class="row g-3 align-items-center mb-3">
+          <div class="col-md-6 col-lg-7">
+          <div class="input-group shadow-sm rounded-pill overflow-hidden border border-primary border-opacity-25 bg-white">
+            <span class="input-group-text bg-transparent border-0 text-primary ps-4"><i class="bi bi-search"></i></span>
+            <input type="text" class="form-control border-0 shadow-none ps-2 py-2" placeholder="Search by Freelancer ID, Email...">
           </div>
         </div>
         <div class="col-md-3 col-lg-3">
-          <select class="form-select text-muted">
-            <option selected>Select All</option>
+          <select class="form-select shadow-sm rounded-pill border-primary border-opacity-25 text-muted py-2">
+            <option selected>All Statuses</option>
             <option value="1">Active</option>
             <option value="2">Inactive</option>
           </select>
         </div>
         <div class="col-md-3 col-lg-2 d-flex gap-2">
-          <button class="btn btn-primary flex-grow-1">Apply</button>
-          <button class="btn btn-outline-primary flex-grow-1 bg-white">Reset</button>
+          <button class="btn btn-primary rounded-pill shadow-sm flex-grow-1"><i class="bi bi-funnel me-1"></i> Apply</button>
+          <button class="btn btn-light rounded-pill shadow-sm border border-light flex-grow-1 text-primary hover-bg-light"><i class="bi bi-arrow-clockwise"></i></button>
         </div>
       </div>
-      
-      <div class="d-flex align-items-center flex-wrap gap-2">
-        <span class="text-dark small fw-semibold me-2">Active Filters :</span>
-        <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-          Tag <span class="badge-close">&times;</span>
-        </span>
-        <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-          Tag <span class="badge-close">&times;</span>
-        </span>
-        <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-          Tag <span class="badge-close">&times;</span>
-        </span>
-      </div>
-    </div>
-  </section>
 
-  <!-- Data Table Section -->
-  <section class="card shadow-sm border-0 rounded-3 mb-4">
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="table-light text-dark font-monospace small" style="font-family: serif !important;">
+        <div class="d-flex align-items-center flex-wrap gap-2">
+          <span class="text-dark small fw-semibold me-2">Active Filters :</span>
+          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
+            Tag <span class="badge-close">&times;</span>
+          </span>
+          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
+            Tag <span class="badge-close">&times;</span>
+          </span>
+          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
+            Tag <span class="badge-close">&times;</span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data Table Section -->
+    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 border-light">
+          <thead class="bg-light bg-opacity-50 text-dark small text-uppercase fw-bold" style="font-size: 0.75rem;">
             <tr>
-              <th scope="col" class="ps-4 fw-bold">S.No</th>
-              <th scope="col" class="fw-bold">Profile Image</th>
-              <th scope="col" class="fw-bold">Full Name</th>
-              <th scope="col" class="fw-bold">Email</th>
-              <th scope="col" class="fw-bold">Phone Number</th>
-              <th scope="col" class="fw-bold">Professional Headline</th>
-              <th scope="col" class="fw-bold">Status</th>
-              <th scope="col" class="pe-4 fw-bold">Actions</th>
+              <th scope="col" class="ps-4 py-3 text-muted">#</th>
+              <th scope="col" class="py-3"><i class="bi bi-image text-primary me-1"></i> Profile</th>
+              <th scope="col" class="py-3"><i class="bi bi-person-vcard text-primary me-1"></i> Full Name</th>
+              <th scope="col" class="py-3"><i class="bi bi-envelope text-primary me-1"></i> Email</th>
+              <th scope="col" class="py-3"><i class="bi bi-telephone text-primary me-1"></i> Phone</th>
+              <th scope="col" class="py-3"><i class="bi bi-briefcase text-primary me-1"></i> Headline</th>
+              <th scope="col" class="py-3"><i class="bi bi-activity text-primary me-1"></i> Status</th>
+              <th scope="col" class="pe-4 py-3 text-center"><i class="bi bi-gear text-primary me-1"></i> Actions</th>
             </tr>
           </thead>
-          <tbody style="font-family: serif;">
+          <tbody class="border-top-0">
             <tr>
-              <td class="ps-4">1</td>
-              <td><div class="avatar-circle"></div></td>
-              <td>Siva Prasad Kurra</td>
-              <td>naveenPaul123@gmail.com</td>
-              <td>+91 9876543210</td>
-              <td>Tech Services</td>
-              <td>Active</td>
-              <td class="pe-4"><input class="form-check-input border-secondary" type="checkbox" value="" style="width: 20px; height: 20px;"></td>
+              <td class="ps-4 fw-semibold text-muted">1</td>
+              <td>
+                <img src="https://i.pravatar.cc/150?u=a042581f4e29026704b" class="rounded-circle border border-2 border-white shadow-sm object-fit-cover" width="40" height="40" alt="Avatar">
+              </td>
+              <td>
+                <span class="d-block fw-bold text-dark">Siva Prasad Kurra</span>
+              </td>
+              <td><span class="text-muted" style="font-size: 0.85rem;">naveenPaul123@gmail.com</span></td>
+              <td><span class="text-muted" style="font-size: 0.85rem;">+91 9876543210</span></td>
+              <td><span class="badge bg-purple-soft text-purple border border-purple border-opacity-25 rounded-pill px-3 py-2 fw-semibold text-truncate" style="max-width: 130px;">Tech Services</span></td>
+              <td>
+                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"><i class="bi bi-circle-fill" style="font-size: 0.4rem;"></i> Active</span>
+              </td>
+              <td class="pe-4">
+                <div class="d-flex justify-content-center gap-2">
+                  <button class="btn btn-sm btn-light text-primary rounded-circle shadow-sm border border-light d-flex justify-content-center align-items-center hover-bg-light" style="width: 32px; height: 32px;" title="View"><i class="bi bi-eye-fill"></i></button>
+                  <button class="btn btn-sm btn-light text-success rounded-circle shadow-sm border border-light d-flex justify-content-center align-items-center hover-bg-light" style="width: 32px; height: 32px;" title="Edit"><i class="bi bi-pencil-fill"></i></button>
+                  <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm border border-light d-flex justify-content-center align-items-center hover-bg-light" style="width: 32px; height: 32px;" title="Delete"><i class="bi bi-trash3-fill"></i></button>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
+        </div>
+        <!-- Empty State / No Data Placeholder -->
+        <div class="py-5 text-center text-muted" style="font-family: serif;">
+          <p class="mb-0">No data available</p>
+        </div>
       </div>
-      <!-- Empty State / No Data Placeholder -->
-      <div class="py-5 text-center text-muted" style="font-family: serif;">
-        <p class="mb-0">No data available</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Pagination -->
-  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-    <div class="d-flex align-items-center gap-2">
-      <span class="small text-dark">Show</span>
-      <select class="form-select form-select-sm" style="width: 70px;">
-        <option selected>10</option>
-        <option value="20">20</option>
-        <option value="50">50</option>
-      </select>
-      <span class="small text-dark">Entries</span>
+    <!-- Pagination -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+      <div class="d-flex align-items-center gap-2">
+        <span class="small text-dark">Show</span>
+        <select class="form-select form-select-sm" style="width: 70px;">
+          <option selected>10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+        <span class="small text-dark">Entries</span>
+      </div>
+
+      <span class="small text-dark">Showing 1-50 of 500</span>
+
+      <nav aria-label="Table pagination">
+        <ul class="pagination pagination-sm mb-0 gap-1">
+          <li class="page-item"><a class="page-link text-primary rounded" href="#">&lsaquo;</a></li>
+          <li class="page-item"><a class="page-link text-primary rounded" href="#">&laquo;</a></li>
+          <li class="page-item active"><a class="page-link rounded" href="#">1</a></li>
+          <li class="page-item"><a class="page-link text-primary rounded" href="#">&rsaquo;</a></li>
+          <li class="page-item"><a class="page-link text-primary rounded" href="#">&raquo;</a></li>
+        </ul>
+      </nav>
     </div>
-    
-    <span class="small text-dark">Showing 1-50 of 500</span>
-    
-    <nav aria-label="Table pagination">
-      <ul class="pagination pagination-sm mb-0 gap-1">
-        <li class="page-item"><a class="page-link text-primary rounded" href="#">&lsaquo;</a></li>
-        <li class="page-item"><a class="page-link text-primary rounded" href="#">&laquo;</a></li>
-        <li class="page-item active"><a class="page-link rounded" href="#">1</a></li>
-        <li class="page-item"><a class="page-link text-primary rounded" href="#">&rsaquo;</a></li>
-        <li class="page-item"><a class="page-link text-primary rounded" href="#">&raquo;</a></li>
-      </ul>
-    </nav>
   </div>
 </div>

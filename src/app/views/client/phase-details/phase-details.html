@@ -1,4 +1,18 @@
-<div class="management-container p-4">
+<div class="dashboard-container position-relative p-4">
+  <!-- Decorative background wrapper -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper (Glassmorphism) -->
+  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
   <!-- Top Navigation & Actions -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <nav aria-label="breadcrumb">
@@ -14,7 +28,7 @@
   </div>
 
   <!-- Header Card -->
-  <div class="card shadow-sm border-0 rounded-3 mb-4 p-4 bg-white">
+  <div class="glass-card rounded-3 mb-4 p-4 bg-white">
     <div class="d-flex justify-content-between align-items-start mb-4">
       <div class="d-flex align-items-center gap-3">
         <div class="rounded-circle border d-flex align-items-center justify-content-center bg-light" style="width: 48px; height: 48px;">
@@ -126,7 +140,7 @@
       <div class="row g-4 mb-4">
         <!-- Phase Description -->
         <div class="col-md-6">
-          <div class="card shadow-sm border-0 rounded-3 h-100 p-4 bg-white">
+          <div class="glass-card rounded-3 h-100 p-4 bg-white">
             <h3 class="fs-6 fw-bold mb-3 text-dark">Phase Description</h3>
             <p class="text-muted small mb-4" style="line-height: 1.6;">
               Implement the frontend as per the approved UI/UX design. Ensure pixel-perfect implementation, responsive layout, and smooth integration with backend APIs.
@@ -144,7 +158,7 @@
         
         <!-- Phase Status Visual -->
         <div class="col-md-6">
-          <div class="card shadow-sm border-0 rounded-3 h-100 p-4 bg-white">
+          <div class="glass-card rounded-3 h-100 p-4 bg-white">
             <h3 class="fs-6 fw-bold mb-4 text-dark">Phase Status</h3>
             
             <!-- Custom Stepper -->
@@ -195,7 +209,7 @@
       </div>
 
       <!-- Latest Submission -->
-      <div class="card shadow-sm border-0 rounded-3 mb-4 p-4 bg-white">
+      <div class="glass-card rounded-3 mb-4 p-4 bg-white">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h3 class="fs-6 fw-bold text-dark mb-0 d-flex align-items-center gap-2">
             Latest Submission 
@@ -260,7 +274,7 @@
       <!-- Bottom Row (Revision History & Discussion) -->
       <div class="row g-4">
         <div class="col-md-5">
-          <div class="card shadow-sm border-0 rounded-3 h-100 p-4 bg-white">
+          <div class="glass-card rounded-3 h-100 p-4 bg-white">
             <h3 class="fs-6 fw-bold text-dark mb-4">Revision History</h3>
             
             <div class="d-flex position-relative mb-4">
@@ -306,7 +320,7 @@
         </div>
         
         <div class="col-md-7">
-          <div class="card shadow-sm border-0 rounded-3 h-100 p-4 bg-white d-flex flex-column">
+          <div class="glass-card rounded-3 h-100 p-4 bg-white d-flex flex-column">
             <h3 class="fs-6 fw-bold text-dark mb-4">Discussion</h3>
             
             <!-- Chat area -->
@@ -345,7 +359,7 @@
               <input type="text" class="form-control border bg-light fs-6" placeholder="Type your message...">
               <button class="btn btn-light border bg-light text-muted"><i class="bi bi-paperclip"></i></button>
               <button class="btn btn-light border bg-light text-muted"><i class="bi bi-emoji-smile"></i></button>
-              <button class="btn btn-primary"><i class="bi bi-send"></i></button>
+              <button class="btn btn-primary rounded-pill fw-semibold shadow-sm"><i class="bi bi-send"></i></button>
             </div>
           </div>
         </div>
@@ -357,7 +371,7 @@
     <div class="col-lg-4">
       
       <!-- Phase Timeline -->
-      <div class="card shadow-sm border-0 rounded-3 mb-4 p-4 bg-white">
+      <div class="glass-card rounded-3 mb-4 p-4 bg-white">
         <h3 class="fs-6 fw-bold text-dark mb-4">Phase Timeline</h3>
         
         <div class="d-flex position-relative mb-4">
@@ -431,7 +445,7 @@
       </div>
 
       <!-- Budget & Payment -->
-      <div class="card shadow-sm border-0 rounded-3 mb-4 p-4 bg-white">
+      <div class="glass-card rounded-3 mb-4 p-4 bg-white">
         <h3 class="fs-6 fw-bold text-dark mb-4">Budget & Payment</h3>
         <ul class="list-group list-group-flush small mb-3">
           <li class="list-group-item d-flex justify-content-between px-0 py-2 border-0">
@@ -457,7 +471,7 @@
       </div>
 
       <!-- Phase Participants -->
-      <div class="card shadow-sm border-0 rounded-3 p-4 bg-white">
+      <div class="glass-card rounded-3 p-4 bg-white">
         <h3 class="fs-6 fw-bold text-dark mb-4">Phase Participants</h3>
         <div class="d-flex flex-column gap-3 mb-4">
           <div class="d-flex align-items-center justify-content-between">
@@ -500,4 +514,6 @@
 
     </div>
   </div>
+</div>
+
 </div>

@@ -1,11 +1,25 @@
-<div class="management-container p-4">
+<div class="dashboard-container position-relative p-4">
+  <!-- Decorative background wrapper -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper (Glassmorphism) -->
+  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
   
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
       <h1 class="fw-bold fs-3 mb-1 text-dark d-flex align-items-center gap-2">My Professional Portfolio <i class="bi bi-star-fill text-primary" style="font-size: 1rem; padding: 4px; border-radius: 50%; background-color: rgba(13, 110, 253, 0.1);"></i></h1>
       <p class="text-muted small mb-0">Showcase your best work, projects, and achievements to potential clients & recruiters.</p>
     </div>
-    <button class="btn btn-primary fw-bold d-flex align-items-center gap-2 px-3 shadow-sm" style="font-size: 0.85rem;"><i class="bi bi-plus"></i> Add New Project</button>
+    <button class="btn btn-primary rounded-pill fw-semibold shadow-sm fw-bold d-flex align-items-center gap-2 px-3 shadow-sm" style="font-size: 0.85rem;"><i class="bi bi-plus"></i> Add New Project</button>
   </div>
 
   <!-- Top Metric Cards -->
@@ -95,7 +109,7 @@
   </div>
 
   <!-- Table -->
-  <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden mb-4">
+  <div class="glass-card rounded-4 bg-white overflow-hidden mb-4">
     <div class="table-responsive">
       <table class="table align-middle mb-0" style="font-size: 0.8rem;">
         <thead class="text-muted text-uppercase bg-light" style="font-size: 0.65rem; letter-spacing: 0.5px;">
@@ -292,5 +306,7 @@
       </div>
     </div>
   </div>
+
+</div>
 
 </div>

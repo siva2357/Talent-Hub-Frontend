@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './account-settings.css'
 })
 export class AccountSettings {
+  role: string = 'freelancer'; // 'client' or 'freelancer'
   activeTab: string = 'profile';
 
   setTab(tab: string) {

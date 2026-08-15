@@ -1,4 +1,18 @@
-<div class="management-container p-4">
+<div class="dashboard-container position-relative p-4">
+  <!-- Decorative background wrapper -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper (Glassmorphism) -->
+  <div class="position-relative z-1 glass-card p-4 mx-auto" style="max-width: 1400px;">
   <!-- Back Link & Header -->
   <div class="mb-4 d-flex justify-content-between align-items-start">
     <div>
@@ -11,11 +25,11 @@
       </div>
     </div>
     <div class="d-flex gap-2">
-      <button class="btn btn-outline-secondary bg-white text-dark shadow-sm px-3 d-flex align-items-center gap-2">
-        <span>&#128424;</span> Print
+      <button class="btn btn-outline-secondary rounded-pill bg-white text-dark shadow-sm px-4 fw-semibold d-flex align-items-center gap-2">
+        <i class="bi bi-printer"></i> Print
       </button>
-      <button class="btn btn-primary shadow-sm px-3 d-flex align-items-center gap-2">
-        <span>&#10515;</span> Download PDF
+      <button class="btn btn-primary rounded-pill shadow-sm px-4 fw-semibold d-flex align-items-center gap-2">
+        <i class="bi bi-download"></i> Download PDF
       </button>
     </div>
   </div>
@@ -28,20 +42,25 @@
   <div class="row g-4 mb-5">
     <div class="col-lg-6">
       <h2 class="fs-5 fw-bold mb-3 text-dark">1. Full Year Audit (2026)</h2>
-      <div class="card shadow-sm border-0 rounded-3 h-100 bg-white">
+      <div class="card shadow-sm border-light rounded-4 h-100 bg-white bg-opacity-75 transition-all hover-bg-light">
         <div class="card-body p-4 text-center">
+          <div class="d-flex justify-content-center mb-3">
+            <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+              <i class="bi bi-cash-stack text-primary fs-2"></i>
+            </div>
+          </div>
           <p class="text-muted small fw-bold text-uppercase mb-1">Total Annual Volume</p>
           <h3 class="fs-1 fw-bold text-dark mb-0 text-primary">₹5,420,000</h3>
-          <p class="text-success small mb-0 mt-2 fw-semibold">&#8593; 22% Year-over-Year Growth</p>
-          <hr class="my-3 border-secondary border-opacity-25">
+          <p class="text-success small mb-0 mt-2 fw-semibold"><i class="bi bi-arrow-up-right-circle-fill me-1"></i>22% Year-over-Year Growth</p>
+          <hr class="my-3 border-light">
           <div class="d-flex justify-content-around">
             <div>
-              <p class="text-muted small mb-0">Total Contracts</p>
-              <h5 class="fw-bold mb-0">1,245</h5>
+              <p class="text-muted small fw-semibold mb-0"><i class="bi bi-file-earmark-text text-muted me-1"></i>Total Contracts</p>
+              <h5 class="fw-bold mb-0 text-dark">1,245</h5>
             </div>
             <div>
-              <p class="text-muted small mb-0">Commissions</p>
-              <h5 class="fw-bold mb-0">₹813,000</h5>
+              <p class="text-muted small fw-semibold mb-0"><i class="bi bi-percent text-muted me-1"></i>Commissions</p>
+              <h5 class="fw-bold mb-0 text-dark">₹813,000</h5>
             </div>
           </div>
         </div>
@@ -50,26 +69,26 @@
 
     <div class="col-lg-6">
       <h2 class="fs-5 fw-bold mb-3 text-dark">2. Half-Yearly Comparison</h2>
-      <div class="card shadow-sm border-0 rounded-3 h-100 bg-white">
+      <div class="card shadow-sm border-light rounded-4 h-100 bg-white bg-opacity-75">
         <div class="card-body p-0">
-          <table class="table table-hover align-middle text-center mb-0 h-100" style="min-height: 200px;">
-            <thead class="table-light text-dark font-monospace small" style="font-family: serif !important;">
+          <table class="table table-hover align-middle text-center mb-0 h-100 border-light" style="min-height: 200px;">
+            <thead class="bg-light bg-opacity-50 text-dark small text-uppercase fw-bold" style="font-size: 0.75rem;">
               <tr>
-                <th scope="col" class="fw-bold border-bottom-0 pt-3">Period</th>
-                <th scope="col" class="fw-bold border-bottom-0 pt-3">Volume</th>
-                <th scope="col" class="fw-bold border-bottom-0 pt-3">Growth</th>
+                <th scope="col" class="py-3 border-bottom-0"><i class="bi bi-calendar-event text-primary me-1"></i> Period</th>
+                <th scope="col" class="py-3 border-bottom-0"><i class="bi bi-graph-up-arrow text-primary me-1"></i> Volume</th>
+                <th scope="col" class="py-3 border-bottom-0"><i class="bi bi-activity text-primary me-1"></i> Growth</th>
               </tr>
             </thead>
-            <tbody style="font-family: serif;">
+            <tbody class="border-top-0">
               <tr>
                 <td class="fw-bold text-dark py-4">H1 (Jan - Jun)</td>
                 <td class="fw-semibold">₹2,100,000</td>
-                <td class="text-success fw-bold">+8%</td>
+                <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-1 fw-semibold"><i class="bi bi-arrow-up-right"></i> +8%</span></td>
               </tr>
               <tr>
                 <td class="fw-bold text-dark py-4">H2 (Jul - Dec) *Proj</td>
                 <td class="fw-semibold">₹3,320,000</td>
-                <td class="text-success fw-bold">+14%</td>
+                <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-1 fw-semibold"><i class="bi bi-arrow-up-right"></i> +14%</span></td>
               </tr>
             </tbody>
           </table>
@@ -78,43 +97,42 @@
     </div>
   </div>
 
-  <!-- Section 3: Quarterly Breakdown -->
   <h2 class="fs-5 fw-bold mb-3 text-dark">3. Quarterly Breakdown</h2>
   <div class="row g-3 mb-5">
     <div class="col-md-3">
-      <div class="card shadow-sm border-0 rounded-3 h-100 bg-white text-center">
+      <div class="card shadow-sm border-light rounded-4 h-100 bg-white bg-opacity-75 text-center">
         <div class="card-body p-4">
           <h4 class="fw-bold text-dark mb-3">Q1</h4>
           <h5 class="fs-4 fw-bold text-primary mb-1">₹950,000</h5>
-          <p class="text-muted small mb-0">210 Contracts</p>
+          <p class="text-muted small fw-semibold mb-0"><i class="bi bi-file-earmark-text text-muted me-1"></i>210 Contracts</p>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card shadow-sm border-0 rounded-3 h-100 bg-white text-center">
+      <div class="card shadow-sm border-light rounded-4 h-100 bg-white bg-opacity-75 text-center">
         <div class="card-body p-4">
           <h4 class="fw-bold text-dark mb-3">Q2</h4>
           <h5 class="fs-4 fw-bold text-primary mb-1">₹1,150,000</h5>
-          <p class="text-muted small mb-0">285 Contracts</p>
+          <p class="text-muted small fw-semibold mb-0"><i class="bi bi-file-earmark-text text-muted me-1"></i>285 Contracts</p>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card shadow-sm border-0 rounded-3 h-100 bg-white text-center border border-primary" style="border-width: 2px !important;">
+      <div class="card shadow-sm border-primary border-opacity-50 rounded-4 h-100 bg-white bg-opacity-75 text-center" style="border-width: 2px !important;">
         <div class="card-body p-4 position-relative">
-          <div class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-primary">Current</div>
+          <div class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-primary px-3 shadow-sm"><i class="bi bi-star-fill text-warning me-1" style="font-size: 0.7rem;"></i>Current</div>
           <h4 class="fw-bold text-dark mb-3 mt-2">Q3</h4>
           <h5 class="fs-4 fw-bold text-primary mb-1">₹1,240,000</h5>
-          <p class="text-muted small mb-0">342 Contracts</p>
+          <p class="text-muted small fw-semibold mb-0"><i class="bi bi-file-earmark-text text-muted me-1"></i>342 Contracts</p>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card shadow-sm border-0 rounded-3 h-100 bg-light text-center opacity-75">
+      <div class="card shadow-sm border-light rounded-4 h-100 bg-light bg-opacity-50 text-center border-dashed">
         <div class="card-body p-4">
           <h4 class="fw-bold text-muted mb-3">Q4 (Projected)</h4>
           <h5 class="fs-4 fw-bold text-secondary mb-1">₹2,080,000</h5>
-          <p class="text-muted small mb-0">408 Contracts</p>
+          <p class="text-muted small fw-semibold mb-0"><i class="bi bi-file-earmark-text text-muted me-1"></i>408 Contracts</p>
         </div>
       </div>
     </div>
@@ -122,40 +140,40 @@
 
   <!-- Section 4: Month-wise Detail -->
   <h2 class="fs-5 fw-bold mb-3 text-dark">4. Month-wise Audit Data (Current Quarter)</h2>
-  <div class="card shadow-sm border-0 rounded-3 mb-4">
+  <div class="card shadow-sm border-light rounded-4 mb-4 bg-white bg-opacity-75">
     <div class="card-body p-0">
       <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0 text-center">
-          <thead class="table-light text-dark font-monospace small" style="font-family: serif !important;">
+        <table class="table table-hover align-middle mb-0 text-center border-light">
+          <thead class="bg-light bg-opacity-50 text-dark small text-uppercase fw-bold" style="font-size: 0.75rem;">
             <tr>
-              <th scope="col" class="ps-4 fw-bold">Month</th>
-              <th scope="col" class="fw-bold">New Contracts</th>
-              <th scope="col" class="fw-bold">Total Volume</th>
-              <th scope="col" class="fw-bold">Commissions</th>
-              <th scope="col" class="pe-4 fw-bold">Audit Status</th>
+              <th scope="col" class="ps-4 py-3 text-muted text-start">Month</th>
+              <th scope="col" class="py-3"><i class="bi bi-file-earmark-plus text-primary me-1"></i> New Contracts</th>
+              <th scope="col" class="py-3"><i class="bi bi-graph-up text-primary me-1"></i> Total Volume</th>
+              <th scope="col" class="py-3"><i class="bi bi-wallet2 text-primary me-1"></i> Commissions</th>
+              <th scope="col" class="pe-4 py-3"><i class="bi bi-shield-check text-primary me-1"></i> Audit Status</th>
             </tr>
           </thead>
-          <tbody style="font-family: serif;">
+          <tbody class="border-top-0">
             <tr>
-              <td class="ps-4 fw-bold text-dark">July 2026</td>
+              <td class="ps-4 fw-bold text-dark text-start">July 2026</td>
               <td>110</td>
               <td class="fw-semibold">₹400,000</td>
               <td class="text-success fw-semibold">+₹60,000</td>
-              <td class="pe-4"><span class="badge bg-success bg-opacity-25 text-success rounded-pill px-3 border border-success">Audited & Verified</span></td>
+              <td class="pe-4"><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-1"><i class="bi bi-check-circle-fill" style="font-size: 0.5rem;"></i> Audited & Verified</span></td>
             </tr>
             <tr>
-              <td class="ps-4 fw-bold text-dark">August 2026</td>
+              <td class="ps-4 fw-bold text-dark text-start">August 2026</td>
               <td>124</td>
               <td class="fw-semibold">₹450,000</td>
               <td class="text-success fw-semibold">+₹67,500</td>
-              <td class="pe-4"><span class="badge bg-warning bg-opacity-25 text-warning rounded-pill px-3 border border-warning">Reconciliation Pending</span></td>
+              <td class="pe-4"><span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-1"><i class="bi bi-exclamation-circle-fill" style="font-size: 0.5rem;"></i> Reconciliation Pending</span></td>
             </tr>
             <tr>
-              <td class="ps-4 fw-bold text-dark">September 2026</td>
+              <td class="ps-4 fw-bold text-dark text-start">September 2026</td>
               <td>108</td>
               <td class="fw-semibold">₹390,000</td>
               <td class="text-success fw-semibold">+₹58,500</td>
-              <td class="pe-4"><span class="badge bg-secondary bg-opacity-25 text-secondary rounded-pill px-3 border border-secondary">In Progress</span></td>
+              <td class="pe-4"><span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-1"><i class="bi bi-clock-fill" style="font-size: 0.5rem;"></i> In Progress</span></td>
             </tr>
           </tbody>
         </table>
@@ -163,4 +181,5 @@
     </div>
   </div>
   
+</div>
 </div>
