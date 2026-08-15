@@ -1,0 +1,284 @@
+<div class="management-container d-flex align-items-center justify-content-center p-4">
+  <!-- Modal/Card Wrapper to match the centered design -->
+  <div class="card shadow-lg border-0 rounded-4 bg-white" style="max-width: 1100px; width: 100%;">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start p-4 border-bottom">
+      <div>
+        <h1 class="fw-bold fs-4 mb-1 text-dark">Recruitment Workflow</h1>
+        <p class="text-muted small mb-0">Track and manage the recruitment progress of this candidate.</p>
+      </div>
+      <button class="btn btn-link text-muted p-0"><i class="bi bi-x-lg fs-5"></i></button>
+    </div>
+
+    <div class="row g-0">
+      <!-- Left Column: Vertical Timeline -->
+      <div class="col-md-4 border-end p-4 bg-light bg-opacity-25" style="max-height: 600px; overflow-y: auto;">
+
+        <div class="d-flex flex-column gap-0 position-relative ps-2">
+          <!-- Continuous Vertical Line -->
+          <div class="position-absolute top-0 bottom-0"
+            style="left: 20px; width: 2px; background-color: #dee2e6; z-index: 1;"></div>
+          <!-- Completed portion of line -->
+          <div class="position-absolute top-0"
+            style="left: 20px; width: 2px; background-color: #0d6efd; height: 40%; z-index: 1;"></div>
+
+          <!-- Step 1 -->
+          <div class="d-flex align-items-start position-relative z-2 mb-4">
+            <div
+              class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0 mt-1 shadow-sm"
+              style="width: 28px; height: 28px; font-size: 0.75rem;">1</div>
+            <div class="ms-3 flex-grow-1">
+              <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.85rem;">Application Submitted</span>
+              <span class="text-muted d-block" style="font-size: 0.7rem;">20 Jul 2026 &bull; 10:15 AM</span>
+            </div>
+            <div class="ms-auto mt-1"><i class="bi bi-check-circle text-primary fs-5"></i></div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="d-flex align-items-start position-relative z-2 mb-4">
+            <div
+              class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0 mt-1 shadow-sm"
+              style="width: 28px; height: 28px; font-size: 0.75rem;">2</div>
+            <div class="ms-3 flex-grow-1">
+              <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.85rem;">Profile Reviewed</span>
+              <span class="text-muted d-block" style="font-size: 0.7rem;">20 Jul 2026 &bull; 11:30 AM</span>
+            </div>
+            <div class="ms-auto mt-1"><i class="bi bi-check-circle text-primary fs-5"></i></div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="d-flex align-items-start position-relative z-2 mb-4">
+            <div
+              class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0 mt-1 shadow-sm"
+              style="width: 28px; height: 28px; font-size: 0.75rem;">3</div>
+            <div class="ms-3 flex-grow-1">
+              <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.85rem;">Shortlisted</span>
+              <span class="text-muted d-block" style="font-size: 0.7rem;">21 Jul 2026 &bull; 09:00 AM</span>
+            </div>
+            <div class="ms-auto mt-1"><i class="bi bi-check-circle text-primary fs-5"></i></div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="d-flex align-items-start position-relative z-2 mb-4">
+            <div
+              class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0 mt-1 shadow-sm"
+              style="width: 28px; height: 28px; font-size: 0.75rem;">4</div>
+            <div class="ms-3 flex-grow-1">
+              <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.85rem;">Assessment Assigned</span>
+              <span class="text-muted d-block" style="font-size: 0.7rem;">21 Jul 2026 &bull; 10:45 AM</span>
+            </div>
+            <div class="ms-auto mt-1"><i class="bi bi-check-circle text-primary fs-5"></i></div>
+          </div>
+
+          <!-- Connecting line transition -->
+          <div class="position-absolute"
+            style="top: 40%; left: 20px; width: 2px; background-color: #198754; height: 10%; z-index: 1;"></div>
+
+          <!-- Step 5 (Current) -->
+          <div
+            class="d-flex align-items-start position-relative z-2 mb-4 bg-white p-2 rounded-3 shadow-sm border border-success border-opacity-25 ms-n2 me-2">
+            <div
+              class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center flex-shrink-0 mt-1 shadow-sm"
+              style="width: 28px; height: 28px; font-size: 0.75rem;">5</div>
+            <div class="ms-3 flex-grow-1">
+              <span class="fw-bold text-success d-block mb-1" style="font-size: 0.85rem;">Assessment Completed</span>
+              <span class="text-muted d-block" style="font-size: 0.7rem;">24 Jul 2026 &bull; 02:30 PM</span>
+            </div>
+            <div class="ms-auto mt-1">
+              <span
+                class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded px-2 py-1"
+                style="font-size: 0.65rem;">Current</span>
+            </div>
+          </div>
+
+          <!-- Step 6 -->
+          <div class="d-flex align-items-start position-relative z-2 mb-4 ms-2">
+            <div
+              class="rounded-circle bg-light border border-secondary text-muted d-flex align-items-center justify-content-center flex-shrink-0 mt-1"
+              style="width: 28px; height: 28px; font-size: 0.75rem;">6</div>
+            <div class="ms-3 flex-grow-1 opacity-75">
+              <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.85rem;">Interview Scheduled</span>
+              <span class="text-muted d-block" style="font-size: 0.7rem;">Pending</span>
+            </div>
+          </div>
+
+          <!-- Step 7 -->
+          <div class="d-flex align-items-start position-relative z-2 mb-4 ms-2">
+            <div
+              class="rounded-circle bg-light border border-secondary text-muted d-flex align-items-center justify-content-center flex-shrink-0 mt-1"
+              style="width: 28px; height: 28px; font-size: 0.75rem;">7</div>
+            <div class="ms-3 flex-grow-1 opacity-75">
+              <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.85rem;">Interview Completed</span>
+              <span class="text-muted d-block" style="font-size: 0.7rem;">Pending</span>
+            </div>
+          </div>
+
+          <!-- Step 8 -->
+          <div class="d-flex align-items-start position-relative z-2 mb-4 ms-2">
+            <div
+              class="rounded-circle bg-light border border-secondary text-muted d-flex align-items-center justify-content-center flex-shrink-0 mt-1"
+              style="width: 28px; height: 28px; font-size: 0.75rem;">8</div>
+            <div class="ms-3 flex-grow-1 opacity-75">
+              <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.85rem;">Offer Sent</span>
+              <span class="text-muted d-block" style="font-size: 0.7rem;">Pending</span>
+            </div>
+          </div>
+
+          <!-- Step 9 -->
+          <div class="d-flex align-items-start position-relative z-2 mb-4 ms-2">
+            <div
+              class="rounded-circle bg-light border border-secondary text-muted d-flex align-items-center justify-content-center flex-shrink-0 mt-1"
+              style="width: 28px; height: 28px; font-size: 0.75rem;">9</div>
+            <div class="ms-3 flex-grow-1 opacity-75">
+              <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.85rem;">Offer Accepted</span>
+              <span class="text-muted d-block" style="font-size: 0.7rem;">Pending</span>
+            </div>
+          </div>
+
+          <!-- Step 10 -->
+          <div class="d-flex align-items-start position-relative z-2 ms-2">
+            <div
+              class="rounded-circle bg-light border border-secondary text-muted d-flex align-items-center justify-content-center flex-shrink-0 mt-1"
+              style="width: 28px; height: 28px; font-size: 0.75rem;">10</div>
+            <div class="ms-3 flex-grow-1 opacity-75">
+              <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.85rem;">Hired</span>
+              <span class="text-muted d-block" style="font-size: 0.7rem;">Pending</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Middle Column: Action/Detail Card -->
+      <div class="col-md-5 border-end p-4">
+
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <h2 class="fw-bold fs-5 mb-0 text-dark">Assessment Completed</h2>
+          <span
+            class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded px-2 py-1"
+            style="font-size: 0.65rem;">Current</span>
+        </div>
+
+        <p class="text-muted small mb-4" style="font-size: 0.85rem;">The candidate has completed the assessment.</p>
+
+        <!-- Assessment Result Box -->
+        <div class="rounded-3 p-4 mb-4" style="background-color: #f0fdf4; border: 1px solid #bbf7d0;">
+          <h3 class="fs-6 fw-bold text-dark mb-3">Assessment Result</h3>
+
+          <div class="d-flex justify-content-between mb-4">
+            <div>
+              <span class="text-muted d-block mb-1" style="font-size: 0.75rem;">Score</span>
+              <span class="fw-bold text-success fs-3 d-block lh-1">82%</span>
+            </div>
+            <div class="text-end">
+              <span class="text-muted d-block mb-2" style="font-size: 0.75rem;">Status</span>
+              <span
+                class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 rounded px-3 py-1">Passed</span>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <span class="text-muted d-block mb-1" style="font-size: 0.75rem;">Completed On</span>
+            <span class="fw-bold text-dark" style="font-size: 0.8rem;">24 Jul 2026 &bull; 02:30 PM</span>
+          </div>
+
+          <div>
+            <span class="text-muted d-block mb-1" style="font-size: 0.75rem;">Notes</span>
+            <p class="text-dark fw-semibold mb-0" style="font-size: 0.8rem; line-height: 1.5;">Strong performance in
+              technical and problem-solving sections.</p>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="fs-6 fw-bold text-dark mb-1">Next Step</h3>
+          <p class="text-muted small mb-0" style="font-size: 0.85rem;">Schedule an interview with the candidate.</p>
+        </div>
+
+        <div>
+          <h3 class="fs-6 fw-bold text-dark mb-3">Actions</h3>
+          <div class="d-flex gap-3">
+            <button
+              class="btn btn-outline-primary bg-white fw-bold d-flex align-items-center gap-2 px-4 border-opacity-50">
+              <i class="bi bi-calendar-plus"></i> Schedule Interview
+            </button>
+            <button
+              class="btn btn-outline-danger bg-white fw-bold d-flex align-items-center gap-2 px-4 border-opacity-50">
+              <i class="bi bi-x-circle"></i> Reject Candidate
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Candidate Profile summary -->
+      <div class="col-md-3 p-4 bg-white">
+
+        <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-4">
+          <div class="rounded-circle bg-primary flex-shrink-0" style="width: 60px; height: 60px; overflow: hidden;">
+            <div class="w-100 h-100 d-flex align-items-end justify-content-center pt-2">
+              <div class="bg-dark rounded-circle" style="width: 30px; height: 30px;"></div>
+            </div>
+          </div>
+          <div>
+            <h4 class="fw-bold text-dark mb-1 fs-6">Siva Prasad Kurra</h4>
+            <span class="text-muted d-block" style="font-size: 0.7rem;">Frontend Developer<br>Hyderabad, India</span>
+            <span class="text-muted d-flex align-items-center gap-1 mt-2" style="font-size: 0.65rem;">
+              <i class="bi bi-calendar3"></i> Applied on<br>20 Jul 2026
+            </span>
+          </div>
+        </div>
+
+        <div class="d-flex flex-column gap-3" style="font-size: 0.8rem;">
+          <div>
+            <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Application ID</span>
+            <span class="fw-bold text-dark">APP-1024</span>
+          </div>
+
+          <div>
+            <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Email</span>
+            <a href="#" class="text-primary text-decoration-none fw-semibold">sivaprasad23@gmail.com</a>
+          </div>
+
+          <div>
+            <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Experience</span>
+            <span class="fw-bold text-dark">2.8 Years</span>
+          </div>
+
+          <div>
+            <span class="text-muted d-block mb-2" style="font-size: 0.7rem;">Skills</span>
+            <div class="d-flex flex-wrap gap-2">
+              <span
+                class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1 fw-normal">Angular</span>
+              <span
+                class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1 fw-normal">TypeScript</span>
+              <span
+                class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1 fw-normal">HTML</span>
+              <span
+                class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1 fw-normal">+3</span>
+            </div>
+          </div>
+
+          <div>
+            <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Availability</span>
+            <span class="fw-bold text-dark">Full-Time</span>
+          </div>
+
+          <div>
+            <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Expected Salary</span>
+            <span class="fw-bold text-dark">₹8,00,000 - ₹10,00,000</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="p-3 border-top d-flex justify-content-end gap-3 bg-light rounded-bottom-4">
+      <button class="btn btn-outline-secondary bg-white text-dark px-4 fw-semibold shadow-sm">Cancel</button>
+      <button class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold shadow-sm">Save & Close</button>
+    </div>
+
+  </div>
+
+</div>

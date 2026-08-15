@@ -1,0 +1,719 @@
+<div class="dashboard-container position-relative p-3 p-md-4">
+  <!-- Decorative background wrapper to prevent overflow -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </div>
+
+  <!-- Role Switcher (For Development) -->
+  <div class="position-absolute top-0 end-0 m-4 z-3 d-flex gap-2">
+    <button class="btn btn-sm rounded-pill px-3 fw-semibold shadow-sm border" [class.btn-primary]="role === 'admin'"
+      [class.btn-light]="role !== 'admin'" (click)="setRole('admin')">Admin</button>
+    <button class="btn btn-sm rounded-pill px-3 fw-semibold shadow-sm border" [class.btn-primary]="role === 'client'"
+      [class.btn-light]="role !== 'client'" (click)="setRole('client')">Client</button>
+    <button class="btn btn-sm rounded-pill px-3 fw-semibold shadow-sm border"
+      [class.btn-primary]="role === 'freelancer'" [class.btn-light]="role !== 'freelancer'"
+      (click)="setRole('freelancer')">Freelancer</button>
+  </div>
+
+  <div class="position-relative z-1 mx-auto" style="max-width: 1400px; margin-top: 2rem;">
+
+    @if (role === 'admin') {
+    <!-- Header Section -->
+    <header class="mb-4">
+      <h1 class="fw-bold fs-4 mb-1">My dashboard</h1>
+      <p class="text-muted small mb-0">System-wide monitoring, user management, and transactional reports.</p>
+    </header>
+
+    <!-- Top Stats Row -->
+    <section class="row g-3 mb-4">
+      <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
+        <div class="glass-card stat-card border-0 h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="stat-icon flex-shrink-0"><i class="bi bi-people-fill"></i></div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Total Clients</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
+        <div class="glass-card stat-card border-0 h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="stat-icon flex-shrink-0"><i class="bi bi-person-workspace"></i></div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Total Freelancers</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">500</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
+        <div class="glass-card stat-card border-0 h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="stat-icon flex-shrink-0"><i class="bi bi-file-earmark-check-fill"></i></div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Total Contracts</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
+        <div class="glass-card stat-card border-0 h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="stat-icon flex-shrink-0"><i class="bi bi-wallet-fill"></i></div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Total Payouts</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">₹100,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
+        <div class="glass-card stat-card border-0 h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="stat-icon flex-shrink-0"><i class="bi bi-graph-up-arrow"></i></div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Platform Revenue</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">₹100,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Line Charts Section -->
+    <section class="row g-4 mb-4">
+      <div class="col-12 col-lg-6">
+        <div class="glass-card chart-card border-0 h-100 p-4">
+          <div class="card-body p-4">
+            <h3 class="fs-6 fw-bold mb-1">Clients Overview</h3>
+            <p class="text-muted small mb-4">Check the data analytics of realtime users of how many registered.</p>
+            <div class="chart-placeholder line-chart-placeholder">
+              <canvas #clientsChart></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6">
+        <div class="glass-card chart-card border-0 h-100 p-4">
+          <div class="card-body p-4">
+            <h3 class="fs-6 fw-bold mb-1">Freelancers Overview</h3>
+            <p class="text-muted small mb-4">Check the data analytics of realtime users of how many registered.</p>
+            <div class="chart-placeholder line-chart-placeholder">
+              <canvas #freelancersChart></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Donut Charts Section -->
+    <section class="row g-4 mb-4">
+      <div class="col-12 col-lg-6">
+        <div class="glass-card chart-card border-0 h-100 p-4">
+          <div class="card-body p-4">
+            <h3 class="fs-6 fw-bold mb-1">Revenue Overview</h3>
+            <p class="text-muted small mb-4">Check the data analytics of realtime users of how many registered.</p>
+            <div class="chart-placeholder donut-chart-placeholder d-flex justify-content-center align-items-center">
+              <canvas #revenueChart></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6">
+        <div class="glass-card chart-card border-0 h-100 p-4">
+          <div class="card-body p-4">
+            <h3 class="fs-6 fw-bold mb-1">Contracts Overview</h3>
+            <p class="text-muted small mb-4">Check the data analytics of realtime users of how many registered.</p>
+            <div class="chart-placeholder donut-chart-placeholder d-flex justify-content-center align-items-center">
+              <canvas #contractsChart></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Section (Feed & Controls) -->
+    <section class="row g-4">
+      <!-- System Log & Feed -->
+      <div class="col-12 col-lg-8">
+        <div class="glass-card feed-card border-0 h-100 p-4">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <h2 class="fs-5 fw-bold mb-0">System Log & Feed</h2>
+              <a href="#" class="view-all text-decoration-none fw-semibold">View All</a>
+            </div>
+            <p class="text-muted small mb-4">View recent log history about the registration, finance and desk support
+              issues</p>
+
+            <div class="feed-list d-flex flex-column">
+              <!-- Feed items -->
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-person"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark"><strong class="fw-bold">Siva Prasad Kurra</strong> registered as a
+                    hiring client.</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+                </div>
+                <span class="badge badge-recent ms-3">Recently</span>
+              </div>
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-person"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark"><strong class="fw-bold">Siva Prasad Kurra</strong> registered as a
+                    hiring client.</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+                </div>
+                <span class="badge badge-recent ms-3">Recently</span>
+              </div>
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-person"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark"><strong class="fw-bold">Siva Prasad Kurra</strong> registered as a
+                    hiring client.</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+                </div>
+                <span class="badge badge-recent ms-3">Recently</span>
+              </div>
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-person"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark"><strong class="fw-bold">Siva Prasad Kurra</strong> registered as a
+                    hiring client.</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+                </div>
+                <span class="badge badge-recent ms-3">Recently</span>
+              </div>
+              <div class="feed-item d-flex align-items-center py-3">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-person"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark"><strong class="fw-bold">Siva Prasad Kurra</strong> registered as a
+                    hiring client.</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+                </div>
+                <span class="badge badge-recent ms-3">Recently</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control Panels -->
+      <div class="col-12 col-lg-4">
+        <div class="glass-card control-panel-card border-0 h-100 p-4">
+          <div class="card-body p-4">
+            <h2 class="fs-5 fw-bold mb-4">Control Panels</h2>
+            <div class="control-list d-flex flex-column gap-2">
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Client Management</span>
+                  <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and profile
+                    management</span>
+                </div>
+              </div>
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-person-workspace"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Freelancer Management</span>
+                  <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and profile
+                    management</span>
+                </div>
+              </div>
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-graph-up"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Financial Summary</span>
+                  <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and profile
+                    management</span>
+                </div>
+              </div>
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-file-earmark-text"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Reports</span>
+                  <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and profile
+                    management</span>
+                </div>
+              </div>
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-headset"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Support Management</span>
+                  <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and profile
+                    management</span>
+                </div>
+              </div>
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-newspaper"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Blog Management</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    }
+    @else if (role === 'client') {
+    <!-- Header Section -->
+    <header class="mb-4 d-flex justify-content-between align-items-start">
+      <div>
+        <h1 class="fw-bold fs-4 mb-1">Welcome back, Siva Prasad Kurra</h1>
+        <p class="text-muted small mb-0">System-wide monitoring, contract management, hiring analytics and
+          transactional
+          reports.</p>
+      </div>
+
+    </header>
+
+    <!-- Top Stats Row -->
+    <section class="row g-3 mb-5">
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <div class="glass-card stat-card border-0 h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="stat-icon flex-shrink-0"><i class="bi bi-briefcase-fill"></i></div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Active Contracts</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <div class="glass-card stat-card border-0 h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="stat-icon flex-shrink-0"><i class="bi bi-currency-dollar"></i></div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Total Spent</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">₹100,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <div class="glass-card stat-card border-0 h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="stat-icon flex-shrink-0"><i class="bi bi-wallet2"></i></div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Pay Vaulta Balance</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <div class="glass-card stat-card border-0 h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="stat-icon flex-shrink-0"><i class="bi bi-file-earmark-text-fill"></i></div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Pending Proposals</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">₹100,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Section (Feed & Controls) -->
+    <section class="row g-4">
+      <!-- System Log & Feed -->
+      <div class="col-12 col-lg-8">
+        <div class="glass-card feed-card border-0 h-100 p-4">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <h2 class="fs-5 fw-bold mb-0">System Log & Feed</h2>
+              <a href="#" class="view-all text-decoration-none fw-semibold">View All</a>
+            </div>
+            <p class="text-muted small mb-4">View recent log history about the registration, finance and
+              desk support issues</p>
+
+            <div class="feed-list d-flex flex-column">
+              <!-- Feed items -->
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-person-lines-fill"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none text-primary">Siva
+                      Prasad Kurra</a> has applied
+                    for contract ID -123456</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">Job Applicant</span>
+                </div>
+                <span class="badge badge-recent ms-3">Recently</span>
+              </div>
+
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0 bg-success text-white"><i class="bi bi-check2-circle"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none text-primary">Siva
+                      Prasad Kurra</a> has been
+                    hired for the Contract ID -123456.</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+                </div>
+                <span class="badge text-success rounded-pill px-4 py-1 ms-3 fw-semibold">Hired</span>
+              </div>
+
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-file-earmark-check"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none text-primary">Siva
+                      Prasad Kurra</a> has
+                    submitted the assessment for contract ID -123456.</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+                </div>
+                <span class="badge badge-recent ms-3">Recently</span>
+              </div>
+
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-person"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none text-primary">Siva
+                      Prasad Kurra</a> registered
+                    as a hiring client.</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+                </div>
+                <span class="badge badge-recent ms-3">Recently</span>
+              </div>
+
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-person"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none text-primary">Siva
+                      Prasad Kurra</a> registered
+                    as a hiring client.</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+                </div>
+                <span class="badge badge-recent ms-3">Recently</span>
+              </div>
+
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-person"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none text-primary">Siva
+                      Prasad Kurra</a> registered
+                    as a hiring client.</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">Client Registration</span>
+                </div>
+                <span class="badge badge-recent ms-3">Recently</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control Panels -->
+      <div class="col-12 col-lg-4">
+        <div class="glass-card control-panel-card border-0 h-100 p-4">
+          <div class="card-body p-4">
+            <h2 class="fs-5 fw-bold mb-4">Control Panels</h2>
+            <div class="control-list d-flex flex-column gap-2">
+
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-file-earmark-plus-fill"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Post new contracts</span>
+                  <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and
+                    profile management</span>
+                </div>
+              </div>
+
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-briefcase-fill"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Manage Contracts</span>
+                  <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and
+                    profile management</span>
+                </div>
+              </div>
+
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-search"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Search Talents</span>
+                  <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and
+                    profile management</span>
+                </div>
+              </div>
+
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-graph-up"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Financial Summary</span>
+                  <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and
+                    profile management</span>
+                </div>
+              </div>
+
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-clock-history"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Transaction history</span>
+                  <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and
+                    profile management</span>
+                </div>
+              </div>
+
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-headset"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Contact Support</span>
+                  <span class="d-block text-muted" style="font-size: 0.75rem;">Audit the clients and
+                    profile management</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    }
+
+    @else if (role === 'freelancer') {
+
+    <!-- Header Section -->
+    <header class="mb-4 d-flex justify-content-between align-items-start">
+      <div>
+        <h1 class="fw-bold fs-4 mb-1">Welcome back, Freelancer</h1>
+        <p class="text-muted small mb-0">Manage your contracts, track your earnings, and discover new
+          opportunities.</p>
+      </div>
+
+    </header>
+
+    <!-- Top Stats Row -->
+    <section class="row g-3 mb-5">
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <div class="glass-card stat-card border-0 h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="stat-icon flex-shrink-0"><i class="bi bi-briefcase"></i></div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Active Contracts</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <div class="glass-card stat-card border-0 h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="stat-icon flex-shrink-0"><i class="bi bi-cash-stack"></i></div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Total Earnings</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">₹2,50,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <div class="glass-card stat-card border-0 h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="stat-icon flex-shrink-0"><i class="bi bi-wallet2"></i></div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Available Balance</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">₹45,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <div class="glass-card stat-card border-0 h-100">
+          <div class="card-body p-4 d-flex align-items-center gap-3">
+            <div class="stat-icon flex-shrink-0"><i class="bi bi-file-earmark-check"></i></div>
+            <div>
+              <span class="d-block text-muted small fw-semibold">Pending Proposals</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">12</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Section (Feed & Controls) -->
+    <section class="row g-4">
+      <!-- System Log & Feed -->
+      <div class="col-12 col-lg-8">
+        <div class="glass-card feed-card border-0 h-100 p-4">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <h2 class="fs-5 fw-bold mb-0">Recent Activity</h2>
+              <a href="#" class="view-all text-decoration-none fw-semibold">View All</a>
+            </div>
+            <p class="text-muted small mb-4">Keep track of your proposals, contract updates, and payments.</p>
+
+            <div class="feed-list d-flex flex-column">
+              <!-- Feed items -->
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-currency-rupee"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark">Payment of <span class="fw-bold">₹25,000</span> released by
+                    <a href="#" class="fw-bold text-decoration-none text-primary">ABC Tech</a>.
+                  </p>
+                  <span class="text-muted" style="font-size: 0.75rem;">Just now</span>
+                </div>
+                <span
+                  class="badge text-success rounded-pill px-3 py-1 ms-3 fw-semibold bg-success bg-opacity-10">Paid</span>
+              </div>
+
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-file-earmark-text"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark">You submitted a proposal for <a href="#"
+                      class="fw-bold text-decoration-none text-primary">E-commerce Redesign</a>.</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">2 hours ago</span>
+                </div>
+                <span
+                  class="badge text-primary rounded-pill px-3 py-1 ms-3 fw-semibold bg-primary bg-opacity-10">Proposal</span>
+              </div>
+
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-check2-circle"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark"><a href="#" class="fw-bold text-decoration-none text-primary">XYZ
+                      Corp</a>
+                    approved Phase 2 milestone.</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">1 day ago</span>
+                </div>
+                <span
+                  class="badge text-warning rounded-pill px-3 py-1 ms-3 fw-semibold bg-warning bg-opacity-10 text-dark">Approved</span>
+              </div>
+
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0"><i class="bi bi-chat-dots"></i></div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark">New message received from <a href="#"
+                      class="fw-bold text-decoration-none text-primary">Tech Solutions</a>.</p>
+                  <span class="text-muted" style="font-size: 0.75rem;">2 days ago</span>
+                </div>
+                <span
+                  class="badge text-info rounded-pill px-3 py-1 ms-3 fw-semibold bg-info bg-opacity-10">Message</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control Panels -->
+      <div class="col-12 col-lg-4">
+        <div class="glass-card control-panel-card border-0 h-100 p-4">
+          <div class="card-body p-4">
+            <h2 class="fs-5 fw-bold mb-4">Quick Links</h2>
+            <div class="control-list d-flex flex-column gap-3">
+
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-search"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Find Contracts</span>
+                  <span class="d-block text-muted" style="font-size: 0.70rem;">Browse and apply for new
+                    jobs</span>
+                </div>
+              </div>
+
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-briefcase"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">My Contracts</span>
+                  <span class="d-block text-muted" style="font-size: 0.70rem;">Manage your active
+                    projects</span>
+                </div>
+              </div>
+
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-file-earmark-check"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Proposal Offers</span>
+                  <span class="d-block text-muted" style="font-size: 0.70rem;">Track your sent
+                    proposals</span>
+                </div>
+              </div>
+
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-currency-dollar"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Finance Overview</span>
+                  <span class="d-block text-muted" style="font-size: 0.70rem;">View earnings and
+                    withdrawals</span>
+                </div>
+              </div>
+
+              <div class="control-item rounded-3 p-3 d-flex align-items-center">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-person-workspace"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Portfolio</span>
+                  <span class="d-block text-muted" style="font-size: 0.70rem;">Update your professional
+                    profile</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    }
+  </div>
+
+</div>

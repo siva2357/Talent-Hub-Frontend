@@ -1,0 +1,141 @@
+:host {
+  display: block;
+}
+
+.management-container {
+  font-family: 'Inter', 'Outfit', sans-serif;
+  background-color: #fcfbfe;
+  min-height: 100vh;
+  position: relative;
+}
+
+.bg-light-purple {
+  background-color: #f9faff;
+}
+
+/* Background decorations */
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.top-left {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%);
+  top: -150px;
+  left: -150px;
+}
+
+.bottom-right {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%);
+  bottom: -200px;
+  right: -200px;
+}
+
+.right-shape {
+  width: 400px;
+  height: 400px;
+  background: rgba(37, 99, 235, 0.05);
+  filter: blur(80px);
+  top: 30%;
+  right: -100px;
+  transform: translateY(-50%);
+}
+
+.concentric-circles {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  top: 15%;
+  left: 0;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(168, 85, 247, 0.15);
+}
+
+.circle-1 { width: 300px; height: 300px; }
+.circle-2 { width: 500px; height: 500px; }
+.circle-3 { width: 700px; height: 700px; }
+
+/* Premium Card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 24px !important;
+}
+
+.cursor-pointer { cursor: pointer; }
+
+/* Tab overrides */
+.nav-underline .nav-link {
+  color: #6c757d;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+.nav-underline .nav-link.active {
+  border-bottom-color: #4a3aff;
+}
+.nav-underline .nav-link:hover:not(.active) {
+  border-bottom-color: rgba(74, 58, 255, 0.2);
+}
+
+/* Form Elements */
+.form-control, .form-select {
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background-color: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #4a3aff;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(74, 58, 255, 0.15);
+}
+
+.form-check-input:checked {
+  background-color: #4a3aff;
+  border-color: #4a3aff;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4a3aff, #2563eb);
+  border: none;
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(74, 58, 255, 0.35);
+  background: linear-gradient(135deg, #3f31eb, #1d4ed8);
+}
+
+.btn-outline-primary {
+  color: #4a3aff;
+  border-color: #4a3aff;
+  border-radius: 10px;
+}
+
+.btn-outline-primary:hover {
+  background-color: #4a3aff;
+  color: white;
+}
+
+.text-primary {
+  color: #4a3aff !important;
+}

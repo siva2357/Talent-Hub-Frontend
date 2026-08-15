@@ -1,0 +1,469 @@
+<div class="management-container p-3 p-md-4 position-relative">
+  <!-- Decorative background wrapper to prevent overflow -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+      <div class="bg-shape top-left"></div>
+      <div class="bg-shape bottom-right"></div>
+      <div class="bg-shape right-shape"></div>
+      
+      <div class="concentric-circles">
+          <div class="circle circle-1"></div>
+          <div class="circle circle-2"></div>
+          <div class="circle circle-3"></div>
+      </div>
+  </div>
+
+  <div class="mx-auto position-relative z-1" style="max-width: 800px; margin-top: 2rem;">
+    
+    @if (currentStep < 5) {
+      <h2 class="fs-3 fw-bold text-dark mb-1">
+        @if (role === 'client') { Client Profile } @else { Freelancer Profile }
+      </h2>
+      <p class="text-muted mb-5" style="font-size: 0.85rem;">Complete your profile to access your account.</p>
+
+      <!-- Stepper Navigation -->
+      <div class="position-relative mb-5 px-3">
+        <div class="position-absolute top-50 start-0 end-0 translate-middle-y bg-light" style="height: 2px; z-index: 0; left: 40px !important; right: 40px !important;"></div>
+      
+      <div class="d-flex justify-content-between position-relative z-1">
+        <!-- Step 1 -->
+        <div class="d-flex flex-column align-items-center gap-2 cursor-pointer" (click)="currentStep = 1">
+          <div class="rounded-circle d-flex justify-content-center align-items-center bg-white border border-2" 
+               [class.border-primary]="currentStep >= 1" [class.border-light]="currentStep < 1"
+               style="width: 24px; height: 24px;">
+            <div class="rounded-circle" [class.bg-primary]="currentStep >= 1" style="width: 10px; height: 10px;"></div>
+          </div>
+          <span class="fw-semibold text-center" [class.text-dark]="currentStep >= 1" [class.text-muted]="currentStep < 1" style="font-size: 0.75rem;">Basic information</span>
+        </div>
+        
+        <!-- Step 2 -->
+        <div class="d-flex flex-column align-items-center gap-2 cursor-pointer" (click)="currentStep = 2">
+          <div class="rounded-circle d-flex justify-content-center align-items-center bg-white border border-2" 
+               [class.border-primary]="currentStep >= 2" [class.border-light]="currentStep < 2"
+               style="width: 24px; height: 24px;">
+            <div class="rounded-circle" [class.bg-primary]="currentStep >= 2" style="width: 10px; height: 10px;"></div>
+          </div>
+          <span class="fw-semibold text-center" [class.text-dark]="currentStep >= 2" [class.text-muted]="currentStep < 2" style="font-size: 0.75rem;">
+            @if (role === 'client') { Company Information } @else { Professional information }
+          </span>
+        </div>
+        
+        <!-- Step 3 -->
+        <div class="d-flex flex-column align-items-center gap-2 cursor-pointer" (click)="currentStep = 3">
+          <div class="rounded-circle d-flex justify-content-center align-items-center bg-white border border-2" 
+               [class.border-primary]="currentStep >= 3" [class.border-light]="currentStep < 3"
+               style="width: 24px; height: 24px;">
+            <div class="rounded-circle" [class.bg-primary]="currentStep >= 3" style="width: 10px; height: 10px;"></div>
+          </div>
+          <span class="fw-semibold text-center" [class.text-dark]="currentStep >= 3" [class.text-muted]="currentStep < 3" style="font-size: 0.75rem;">Social profile</span>
+        </div>
+        
+        <!-- Step 4 -->
+        <div class="d-flex flex-column align-items-center gap-2 cursor-pointer" (click)="currentStep = 4">
+          <div class="rounded-circle d-flex justify-content-center align-items-center bg-white border border-2" 
+               [class.border-primary]="currentStep >= 4" [class.border-light]="currentStep < 4"
+               style="width: 24px; height: 24px;">
+            <div class="rounded-circle" [class.bg-primary]="currentStep >= 4" style="width: 10px; height: 10px;"></div>
+          </div>
+          <span class="fw-semibold text-center" [class.text-dark]="currentStep >= 4" [class.text-muted]="currentStep < 4" style="font-size: 0.75rem;">Review</span>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Stepper Form Content -->
+    <div class="glass-card position-relative z-1 p-4 p-md-5 mb-5">
+      
+      <!-- STEP 1: Basic Information -->
+      @if (currentStep === 1) {
+        <h3 class="fs-6 fw-bold text-dark mb-1">Basic information</h3>
+        <p class="text-muted mb-4" style="font-size: 0.75rem;">Let's start with your basic details</p>
+        
+        <div class="row g-4">
+          <div class="col-md-3">
+            <div class="d-flex flex-column align-items-center gap-3 mt-2">
+              <div class="position-relative">
+                <div class="rounded-circle border border-2 border-light d-flex justify-content-center align-items-center bg-light text-muted" style="width: 120px; height: 120px;">
+                  <i class="bi bi-person fs-1"></i>
+                </div>
+                <button type="button" class="btn btn-white btn-sm rounded-circle position-absolute bottom-0 end-0 d-flex justify-content-center align-items-center shadow-sm border" style="width: 32px; height: 32px;"><i class="bi bi-camera" style="font-size: 0.85rem;"></i></button>
+              </div>
+              <div class="text-center">
+                <span class="d-block fw-semibold text-dark" style="font-size: 0.75rem;">Upload your image</span>
+                <span class="text-muted" style="font-size: 0.65rem;">(JPG, PNG max 2 MB)</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-9">
+            <div class="row g-4">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Full Name *</label>
+                <input type="text" class="form-control" placeholder="Enter your full name" style="font-size: 0.8rem;">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Email Address *</label>
+                <input type="email" class="form-control" placeholder="Enter your email" style="font-size: 0.8rem;">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Phone Number *</label>
+                <input type="tel" class="form-control" placeholder="Enter phone number" style="font-size: 0.8rem;">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Gender *</label>
+                <select class="form-select" style="font-size: 0.8rem;">
+                  <option selected disabled>Select gender</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Short Bio *</label>
+                <textarea class="form-control" rows="4" placeholder="Tell us a bit about yourself" style="font-size: 0.8rem; resize: none;"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="d-flex justify-content-end mt-4 pt-3 border-top">
+          <button type="button" class="btn btn-primary px-4 fw-semibold shadow-sm" style="font-size: 0.85rem;" (click)="nextStep()">Next</button>
+        </div>
+      }
+
+      <!-- STEP 2: Professional / Company Information -->
+      @if (currentStep === 2) {
+        
+        @if (role === 'client') {
+          <h3 class="fs-6 fw-bold text-dark mb-1">Company Information</h3>
+          <p class="text-muted mb-4" style="font-size: 0.75rem;">Tell us about your company details</p>
+          
+          <div class="row g-4">
+            <div class="col-md-4">
+              <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Company Type *</label>
+              <input type="text" class="form-control" placeholder="e.g. LLC, Corporation" style="font-size: 0.8rem;">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Website *</label>
+              <input type="url" class="form-control" placeholder="https://" style="font-size: 0.8rem;">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Industry *</label>
+              <input type="text" class="form-control" placeholder="e.g. Technology" style="font-size: 0.8rem;">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">City *</label>
+              <input type="text" class="form-control" placeholder="Enter city" style="font-size: 0.8rem;">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">State *</label>
+              <input type="text" class="form-control" placeholder="Enter state" style="font-size: 0.8rem;">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Country *</label>
+              <input type="text" class="form-control" placeholder="Enter country" style="font-size: 0.8rem;">
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Company Description *</label>
+              <textarea class="form-control" rows="4" placeholder="Describe your company" style="font-size: 0.8rem; resize: none;"></textarea>
+            </div>
+          </div>
+        } @else {
+          <h3 class="fs-6 fw-bold text-dark mb-1">Professional Information</h3>
+          <p class="text-muted mb-4" style="font-size: 0.75rem;">Tell us about your Professional details</p>
+          
+          <div class="row g-4">
+            <div class="col-12">
+              <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Professional Headline *</label>
+              <input type="text" class="form-control" placeholder="e.g. Senior Frontend Developer" style="font-size: 0.8rem;">
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Skills *</label>
+              <input type="text" class="form-control" placeholder="Comma separated skills" style="font-size: 0.8rem;">
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Technologies *</label>
+              <input type="text" class="form-control" placeholder="Comma separated technologies" style="font-size: 0.8rem;">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Availability *</label>
+              <select class="form-select" style="font-size: 0.8rem;">
+                <option selected disabled>Select availability</option>
+                <option>Full Time (40hrs/wk)</option>
+                <option>Part Time (20hrs/wk)</option>
+                <option>As needed</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark" style="font-size: 0.75rem;">Preferred Job Type *</label>
+              <select class="form-select" style="font-size: 0.8rem;">
+                <option selected disabled>Select preferred type</option>
+                <option>Long-term contract</option>
+                <option>Short-term project</option>
+                <option>Hourly work</option>
+              </select>
+            </div>
+          </div>
+        }
+
+        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+          <button type="button" class="btn btn-outline-primary px-4 fw-semibold shadow-sm" style="font-size: 0.85rem;" (click)="prevStep()">Back</button>
+          <button type="button" class="btn btn-primary px-4 fw-semibold shadow-sm" style="font-size: 0.85rem;" (click)="nextStep()">Next</button>
+        </div>
+      }
+
+      <!-- STEP 3: Social Media and Languages -->
+      @if (currentStep === 3) {
+        <h3 class="fs-6 fw-bold text-dark mb-1">Social media and languages</h3>
+        <p class="text-muted mb-4" style="font-size: 0.75rem;">Tell us about your social profile and languages</p>
+        
+        <div class="mb-4">
+          <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Social Media profile</h4>
+          <div class="d-flex align-items-end gap-3 mb-3">
+            <div class="flex-grow-1">
+              <label class="form-label text-muted" style="font-size: 0.7rem;">Select media *</label>
+              <select class="form-select" style="font-size: 0.8rem;">
+                <option>LinkedIn</option>
+                <option>GitHub</option>
+                <option>Twitter</option>
+                <option>Portfolio Website</option>
+              </select>
+            </div>
+            <div class="flex-grow-1" style="flex: 2;">
+              <label class="form-label text-muted" style="font-size: 0.7rem;">Platform link *</label>
+              <input type="url" class="form-control" placeholder="https://" style="font-size: 0.8rem;">
+            </div>
+            <button class="btn btn-primary px-4 fw-semibold shadow-sm" style="font-size: 0.8rem;">Add</button>
+          </div>
+          
+          <!-- Added media items list placeholder -->
+          <div class="d-flex flex-column gap-2 mb-4">
+            <div class="d-flex align-items-center gap-3 p-2 border rounded-3 bg-light bg-opacity-50">
+              <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;"><i class="bi bi-linkedin"></i></div>
+              <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">https://linkedin.com/in/username</span>
+              <button class="btn btn-link text-danger p-0 border-0 text-decoration-none"><i class="bi bi-x-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Languages</h4>
+          <div class="d-flex align-items-end gap-3 mb-3">
+            <div class="flex-grow-1">
+              <label class="form-label text-muted" style="font-size: 0.7rem;">Select language *</label>
+              <select class="form-select" style="font-size: 0.8rem;">
+                <option>English</option>
+                <option>Spanish</option>
+                <option>French</option>
+                <option>German</option>
+                <option>Hindi</option>
+              </select>
+            </div>
+            <div class="flex-grow-1">
+              <label class="form-label text-muted" style="font-size: 0.7rem;">Select proficiency *</label>
+              <select class="form-select" style="font-size: 0.8rem;">
+                <option>Basic</option>
+                <option>Conversational</option>
+                <option>Fluent</option>
+                <option>Native or Bilingual</option>
+              </select>
+            </div>
+            <button class="btn btn-primary px-4 fw-semibold shadow-sm" style="font-size: 0.8rem;">Add</button>
+          </div>
+
+          <!-- Added language items list placeholder -->
+          <div class="d-flex flex-column gap-2">
+            <div class="d-flex align-items-center gap-3 p-2 border rounded-3 bg-light bg-opacity-50">
+              <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">English - <span class="text-muted fw-normal">Fluent</span></span>
+              <button class="btn btn-link text-danger p-0 border-0 text-decoration-none"><i class="bi bi-x-circle"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+          <button type="button" class="btn btn-outline-primary px-4 fw-semibold shadow-sm" style="font-size: 0.85rem;" (click)="prevStep()">Back</button>
+          <button type="button" class="btn btn-primary px-4 fw-semibold shadow-sm" style="font-size: 0.85rem;" (click)="nextStep()">Next</button>
+        </div>
+      }
+
+      <!-- STEP 4: Review -->
+      @if (currentStep === 4) {
+        <h3 class="fs-6 fw-bold text-dark mb-1">Review your profile</h3>
+        <p class="text-muted mb-4" style="font-size: 0.75rem;">Please review all details before submitting.</p>
+        
+        <div class="d-flex flex-column gap-4 mb-4">
+          
+          <!-- Basic Info Review -->
+          <div class="border rounded-4 p-4 bg-light bg-opacity-50">
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+              <h4 class="fw-bold text-dark mb-0 fs-6">Basic Information</h4>
+              <button class="btn btn-link p-0 text-primary fw-semibold text-decoration-none" style="font-size: 0.75rem;" (click)="currentStep = 1">Edit</button>
+            </div>
+            
+            <div class="d-flex gap-4 align-items-start">
+              <img src="https://i.pravatar.cc/150?u=a042581f4e29026704a" class="rounded-circle object-fit-cover border border-4 border-white shadow-sm flex-shrink-0" width="80" height="80" alt="Avatar">
+              
+              <div class="row g-3 flex-grow-1">
+                <div class="col-md-6">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Full Name</span>
+                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">Rohit Sharma</span>
+                </div>
+                <div class="col-md-6">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Email Address</span>
+                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">rohit.sharma@example.com</span>
+                </div>
+                <div class="col-md-6">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Phone Number</span>
+                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">+91 98765 43210</span>
+                </div>
+                <div class="col-md-6">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Gender</span>
+                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">Male</span>
+                </div>
+                <div class="col-12">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Short Bio</span>
+                  <span class="fw-semibold text-dark" style="font-size: 0.8rem; line-height: 1.5;">Passionate professional with extensive experience in the industry, looking to connect and collaborate on meaningful projects.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Professional / Company Info Review -->
+          <div class="border rounded-4 p-4 bg-light bg-opacity-50">
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+              <h4 class="fw-bold text-dark mb-0 fs-6">
+                @if (role === 'client') { Company Information } @else { Professional Information }
+              </h4>
+              <button class="btn btn-link p-0 text-primary fw-semibold text-decoration-none" style="font-size: 0.75rem;" (click)="currentStep = 2">Edit</button>
+            </div>
+            
+            <div class="row g-3">
+              @if (role === 'client') {
+                <div class="col-md-4">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Company Type</span>
+                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">LLC</span>
+                </div>
+                <div class="col-md-4">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Website</span>
+                  <span class="fw-semibold text-primary" style="font-size: 0.8rem;">https://example.com</span>
+                </div>
+                <div class="col-md-4">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Industry</span>
+                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">Technology</span>
+                </div>
+                <div class="col-md-12">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Location</span>
+                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">Hyderabad, Telangana, India</span>
+                </div>
+                <div class="col-12">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Company Description</span>
+                  <span class="fw-semibold text-dark" style="font-size: 0.8rem; line-height: 1.5;">A forward-thinking technology firm specializing in web solutions and e-commerce platforms.</span>
+                </div>
+              } @else {
+                <div class="col-12">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Professional Headline</span>
+                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">Senior Frontend Developer</span>
+                </div>
+                <div class="col-12">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Skills</span>
+                  <div class="d-flex gap-2 flex-wrap mt-1">
+                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1 fw-semibold" style="font-size: 0.7rem;">Angular</span>
+                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1 fw-semibold" style="font-size: 0.7rem;">React</span>
+                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1 fw-semibold" style="font-size: 0.7rem;">TypeScript</span>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Technologies</span>
+                  <div class="d-flex gap-2 flex-wrap mt-1">
+                    <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded px-2 py-1 fw-semibold" style="font-size: 0.7rem;">HTML/CSS</span>
+                    <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded px-2 py-1 fw-semibold" style="font-size: 0.7rem;">Git</span>
+                    <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded px-2 py-1 fw-semibold" style="font-size: 0.7rem;">Bootstrap</span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Availability</span>
+                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">Full Time (40hrs/wk)</span>
+                </div>
+                <div class="col-md-6">
+                  <span class="d-block text-muted" style="font-size: 0.7rem;">Preferred Job Type</span>
+                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">Long-term contract</span>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Social Media and Languages Review -->
+          <div class="border rounded-4 p-4 bg-light bg-opacity-50">
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+              <h4 class="fw-bold text-dark mb-0 fs-6">Social Media & Languages</h4>
+              <button class="btn btn-link p-0 text-primary fw-semibold text-decoration-none" style="font-size: 0.75rem;" (click)="currentStep = 3">Edit</button>
+            </div>
+            
+            <div class="row g-4">
+              <div class="col-md-6">
+                <span class="d-block text-muted mb-2" style="font-size: 0.7rem;">Social Profiles</span>
+                <div class="d-flex flex-column gap-2">
+                  <a href="#" class="d-flex align-items-center gap-2 text-decoration-none group">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center" style="width: 24px; height: 24px;"><i class="bi bi-linkedin" style="font-size: 0.7rem;"></i></div>
+                    <span class="fw-semibold text-dark text-truncate" style="font-size: 0.75rem;">linkedin.com/in/rohit-sharma</span>
+                  </a>
+                  <a href="#" class="d-flex align-items-center gap-2 text-decoration-none group">
+                    <div class="bg-dark bg-opacity-10 text-dark rounded-circle d-flex justify-content-center align-items-center" style="width: 24px; height: 24px;"><i class="bi bi-github" style="font-size: 0.7rem;"></i></div>
+                    <span class="fw-semibold text-dark text-truncate" style="font-size: 0.75rem;">github.com/rohit-sharma</span>
+                  </a>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <span class="d-block text-muted mb-2" style="font-size: 0.7rem;">Languages</span>
+                <div class="d-flex flex-column gap-2">
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-globe text-primary"></i>
+                    <span class="fw-semibold text-dark" style="font-size: 0.75rem;">English - <span class="text-muted fw-normal">Fluent</span></span>
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-globe text-primary"></i>
+                    <span class="fw-semibold text-dark" style="font-size: 0.75rem;">Hindi - <span class="text-muted fw-normal">Native</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+          <button type="button" class="btn btn-outline-primary px-4 fw-semibold shadow-sm" style="font-size: 0.85rem;" (click)="prevStep()">Back</button>
+          <button type="button" class="btn btn-success px-4 fw-semibold shadow-sm text-white" style="font-size: 0.85rem;" (click)="submitProfile()">Submit Profile</button>
+        </div>
+      }
+
+      <!-- STEP 5: Success Screen -->
+      @if (currentStep === 5) {
+        <div class="d-flex flex-column align-items-center justify-content-center text-center py-5">
+          <!-- Logo -->
+          <img src="/logo 2.png" alt="Talent Hub" class="mb-5 mx-auto" style="height: 70px; object-fit: contain;" />
+          
+          <!-- Success Icon -->
+          <div class="mx-auto bg-white d-flex align-items-center justify-content-center position-relative shadow-sm mb-4" style="width: 100px; height: 100px; border-radius: 50%; border: 6px solid #f9faff;">
+              <i class="bi bi-check-circle-fill text-success" style="font-size: 3.5rem;"></i>
+              <div class="position-absolute bg-white text-success rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="bottom: 5px; right: 5px; width: 32px; height: 32px; font-size: 0.9rem; border: 3px solid #f9faff;">
+                  <i class="bi bi-shield-check-fill"></i>
+              </div>
+          </div>
+
+          <h3 class="fs-4 fw-bold text-dark mb-3">Profile Submitted Successfully!</h3>
+          
+          <p class="text-muted mb-5 mx-auto" style="font-size: 0.95rem; max-width: 450px; line-height: 1.6;">
+            Your profile is now live on Talent Hub.<br>
+            You can now explore opportunities and connect with amazing @if (role === 'client') { Freelancers } @else { Clients }.
+          </p>
+          
+          <button class="btn btn-primary px-5 py-3 fw-bold shadow-sm rounded-3 d-flex align-items-center justify-content-center mx-auto" style="font-size: 1rem;" routerLink="/dashboard">
+            Go to Dashboard <i class="bi bi-arrow-right ms-2"></i>
+          </button>
+        </div>
+      }
+
+    </div>
+    </div>
+
+</div>

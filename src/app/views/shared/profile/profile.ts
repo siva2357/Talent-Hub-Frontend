@@ -1,0 +1,15 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-profile',
+  imports: [],
+  templateUrl: './profile.html',
+  styleUrl: './profile.css'
+})
+export class Profile {
+  role: string = 'client';
+
+  setRole(role: string): void {
+    this.role = role;
+  }
+}
