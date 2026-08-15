@@ -1,0 +1,159 @@
+<div class="border border-dark border-1 rounded-3"
+    style="padding: 40px; font-family: 'Inter', sans-serif; background: #fff;">
+    <h1 style="font-size: 24px; font-weight: 700; color: #1e3a8a; margin-bottom: 8px;">File Preview Components</h1>
+    <p style="color: #6b7280; font-size: 14px; margin-bottom: 32px;">Different file type previews</p>
+
+    <div style="display: flex; gap: 40px;">
+        <!-- Left Side: Image Gallery & Profile Edit -->
+        <div style="flex: 1.5; display: flex; flex-direction: column; gap: 40px;">
+
+            <!-- Image Gallery -->
+            <div>
+                <h2 style="font-size: 16px; font-weight: 600; color: #111827; margin-bottom: 4px;">Image Preview Gallery
+                </h2>
+                <p style="color: #6b7280; font-size: 12px; margin-bottom: 16px;">Image file previews in grid / gallery
+                    style</p>
+
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+                    <div class="image-gallery-card">
+                        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b" alt="mountain">
+                        <button class="image-gallery-close"><i class="bi bi-x"></i></button>
+                        <div class="image-gallery-meta">
+                            <div class="image-gallery-name">mountain.jpg</div>
+                            <div class="image-gallery-size">1.2 MB</div>
+                        </div>
+                    </div>
+                    <div class="image-gallery-card">
+                        <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f" alt="interior">
+                        <button class="image-gallery-close"><i class="bi bi-x"></i></button>
+                        <div class="image-gallery-meta">
+                            <div class="image-gallery-name">interior.png</div>
+                            <div class="image-gallery-size">2.4 MB</div>
+                        </div>
+                    </div>
+                    <div class="image-gallery-card">
+                        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df" alt="cityscape">
+                        <button class="image-gallery-close"><i class="bi bi-x"></i></button>
+                        <div class="image-gallery-meta">
+                            <div class="image-gallery-name">cityscape.jpeg</div>
+                            <div class="image-gallery-size">1.6 MB</div>
+                        </div>
+                    </div>
+                    <div class="image-gallery-card">
+                        <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853" alt="abstract">
+                        <button class="image-gallery-close"><i class="bi bi-x"></i></button>
+                        <div class="image-gallery-meta">
+                            <div class="image-gallery-name">abstract.png</div>
+                            <div class="image-gallery-size">950 KB</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Image Preview (Edit) -->
+            <div>
+                <h2 style="font-size: 16px; font-weight: 600; color: #111827; margin-bottom: 4px;">Profile Image Preview
+                    (Edit)</h2>
+                <p style="color: #6b7280; font-size: 12px; margin-bottom: 16px;">Current profile picture preview with
+                    edit option</p>
+
+                <div class="profile-preview-card" style="display: inline-flex;">
+                    <div class="profile-preview-avatar">
+                        <img src="https://i.pravatar.cc/150?img=11" alt="Profile">
+                        <div class="profile-preview-camera"><i class="bi bi-pencil-fill"></i></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Side: File List Previews -->
+        <div style="flex: 1;">
+
+            <div class="file-list-item">
+                <div class="file-icon-box bg-pdf">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                </div>
+                <div class="file-info">
+                    <div class="file-name">Contract_Agreement.pdf</div>
+                    <div class="file-meta">PDF Document &bull; 245 KB <a href="#">View File</a></div>
+                </div>
+                <div class="file-actions">
+                    <button class="btn-icon-light"><i class="bi bi-download"></i></button>
+                    <button class="btn-icon-light"><i class="bi bi-x"></i></button>
+                </div>
+            </div>
+
+            <div class="file-list-item">
+                <div class="file-icon-box bg-word">
+                    <i class="bi bi-file-earmark-word"></i>
+                </div>
+                <div class="file-info">
+                    <div class="file-name">Project_Proposal.docx</div>
+                    <div class="file-meta">Word Document &bull; 1.2 MB <a href="#">View File</a></div>
+                </div>
+                <div class="file-actions">
+                    <button class="btn-icon-light"><i class="bi bi-download"></i></button>
+                    <button class="btn-icon-light"><i class="bi bi-x"></i></button>
+                </div>
+            </div>
+
+            <div class="file-list-item">
+                <div class="file-icon-box bg-excel">
+                    <i class="bi bi-file-earmark-excel"></i>
+                </div>
+                <div class="file-info">
+                    <div class="file-name">Budget_Plan.xlsx</div>
+                    <div class="file-meta">Excel Spreadsheet &bull; 820 KB <a href="#">View File</a></div>
+                </div>
+                <div class="file-actions">
+                    <button class="btn-icon-light"><i class="bi bi-download"></i></button>
+                    <button class="btn-icon-light"><i class="bi bi-x"></i></button>
+                </div>
+            </div>
+
+            <div class="file-list-item">
+                <div class="file-icon-box bg-ppt">
+                    <i class="bi bi-file-earmark-ppt"></i>
+                </div>
+                <div class="file-info">
+                    <div class="file-name">Presentation.pptx</div>
+                    <div class="file-meta">PowerPoint Presentation &bull; 3.4 MB <a href="#">View File</a></div>
+                </div>
+                <div class="file-actions">
+                    <button class="btn-icon-light"><i class="bi bi-download"></i></button>
+                    <button class="btn-icon-light"><i class="bi bi-x"></i></button>
+                </div>
+            </div>
+
+            <div class="file-list-item">
+                <div class="file-icon-box bg-zip">
+                    <i class="bi bi-file-earmark-zip"></i>
+                </div>
+                <div class="file-info">
+                    <div class="file-name">Resources.zip</div>
+                    <div class="file-meta">ZIP Archive &bull; 12.5 MB <a href="#">View File</a></div>
+                </div>
+                <div class="file-actions">
+                    <button class="btn-icon-light"><i class="bi bi-download"></i></button>
+                    <button class="btn-icon-light"><i class="bi bi-x"></i></button>
+                </div>
+            </div>
+
+            <div class="file-list-item">
+                <div class="file-icon-box bg-generic">
+                    <i class="bi bi-file-earmark"></i>
+                </div>
+                <div class="file-info">
+                    <div class="file-name">Document.pdf</div>
+                    <div class="file-meta">PDF Document &bull; 1.1 MB <a href="#">View File</a></div>
+                </div>
+                <div class="file-actions">
+                    <button class="btn-icon-light"><i class="bi bi-eye"></i></button>
+                    <button class="btn-icon-light"><i class="bi bi-x"></i></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,165 @@
+.timeline-section { margin-bottom: 48px; }
+.timeline-section-title { font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 32px; }
+.timeline-divider { border: none; border-top: 1px solid #f3f4f6; margin: 32px 0; }
+
+.timeline-container {
+    display: flex;
+    width: 100%;
+}
+
+.timeline-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.timeline-title-top {
+    font-size: 12px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 16px;
+}
+
+.timeline-node-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.timeline-line {
+    flex: 1;
+    height: 2px;
+    background-color: #9ca3af;
+}
+
+.timeline-line.completed-line {
+    background-color: #22c55e;
+}
+
+.timeline-step:first-child .left-line { visibility: hidden; }
+.timeline-step:last-child .right-line { visibility: hidden; }
+
+/* Default Node */
+.timeline-node {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #9ca3af;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.timeline-step.completed .timeline-node {
+    background-color: #22c55e;
+    border-color: #22c55e;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.timeline-step.active .timeline-node {
+    border-color: #2563eb;
+    border-width: 2px;
+}
+.timeline-inner-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #2563eb;
+    border-radius: 50%;
+}
+
+.final-node {
+    border-color: #9ca3af;
+}
+.timeline-inner-dot-gray {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid #9ca3af;
+}
+
+/* Error / Skipped / Disabled */
+.timeline-step.error .timeline-node { border-color: #ef4444; }
+.timeline-inner-dot-error { width: 10px; height: 10px; background-color: #ef4444; border-radius: 50%; }
+
+.timeline-step.disabled .timeline-node.solid { background-color: #d1d5db; border-color: #d1d5db; }
+
+.timeline-step.skipped .timeline-node { border-color: #f59e0b; color: #f59e0b; font-size: 16px; }
+
+/* Text Content */
+.timeline-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+.timeline-desc {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.timeline-step.completed .timeline-title { color: #111827; }
+.timeline-step.active .timeline-title { color: #2563eb; }
+.timeline-step.error .timeline-title { color: #ef4444; }
+.timeline-step.skipped .timeline-title { color: #f59e0b; }
+
+/* 2. With Icons */
+.timeline-step.with-icon .timeline-node {
+    width: 48px;
+    height: 48px;
+    border: none;
+    font-size: 28px;
+    color: #9ca3af;
+    background: transparent;
+    position: relative;
+}
+.timeline-step.with-icon .timeline-node i { z-index: 2; position: relative; }
+.timeline-step.with-icon .halo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 48px;
+    height: 48px;
+    transform: translate(-50%, -50%) scale(1.3);
+    border-radius: 50%;
+    z-index: 1;
+}
+.timeline-step.with-icon.completed .timeline-node { color: #22c55e; }
+.timeline-step.with-icon.completed .halo { background-color: #dcfce7; }
+.timeline-step.with-icon.active .timeline-node { color: #2563eb; }
+.timeline-step.with-icon.active .halo { background-color: #dbeafe; }
+
+/* 3. Minimal */
+.timeline-step.minimal .timeline-node {
+    width: 16px;
+    height: 16px;
+}
+.timeline-step.minimal.completed .timeline-node {
+    background-color: #22c55e;
+    color: #ffffff;
+    font-size: 12px;
+    border: none;
+}
+.timeline-step.minimal.active .timeline-node {
+    background-color: #2563eb;
+    border: none;
+}
+.timeline-step.minimal.active .timeline-inner-dot { display: none; }
+
+/* 4. Numbered */
+.timeline-step.numbered .timeline-node {
+    width: 32px;
+    height: 32px;
+    background-color: #9ca3af;
+    border: none;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+}
+.timeline-step.numbered.completed .timeline-node { background-color: #22c55e; }
+.timeline-step.numbered.active .timeline-node { background-color: #2563eb; }

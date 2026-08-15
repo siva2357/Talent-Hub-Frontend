@@ -1,0 +1,84 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.meet-container {
+  font-family: 'Inter', system-ui, sans-serif;
+  height: 100%;
+  width: 100%;
+  background-color: #f4f6f8;
+  position: relative;
+}
+
+.text-purple { color: #6f42c1 !important; }
+.bg-purple { background-color: #6f42c1 !important; }
+.border-purple { border-color: #6f42c1 !important; }
+.bg-purple-soft { background-color: rgba(111, 66, 193, 0.1) !important; }
+
+.btn-outline-purple {
+  color: #6f42c1;
+  border-color: #6f42c1;
+  background-color: transparent;
+}
+.btn-outline-purple:hover {
+  background-color: #6f42c1;
+  color: white;
+}
+
+.cursor-pointer { cursor: pointer; }
+.hover-bg-light:hover { background-color: rgba(0,0,0,0.05) !important; }
+.hover-text-primary:hover { color: #0d6efd !important; }
+
+.nav-underline .nav-link {
+  color: #6c757d;
+  border-bottom: 2px solid transparent;
+}
+.nav-underline .nav-link.active {
+  color: #6f42c1 !important;
+}
+
+/* Custom scrollbars */
+.meeting-scroll::-webkit-scrollbar,
+.side-panel-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.meeting-scroll::-webkit-scrollbar-track,
+.side-panel-scroll::-webkit-scrollbar-track {
+  background: transparent; 
+}
+.meeting-scroll::-webkit-scrollbar-thumb,
+.side-panel-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1); 
+  border-radius: 10px;
+}
+.meeting-scroll:hover::-webkit-scrollbar-thumb,
+.side-panel-scroll:hover::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2); 
+}
+
+.dashboard-container {
+  font-family: 'Inter', 'Outfit', sans-serif;
+  background-color: #fcfbfe;
+  position: relative;
+}
+
+/* Background decorations */
+.bg-shape { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
+.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
+.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
+.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.05); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
+.concentric-circles { position: absolute; pointer-events: none; z-index: 0; top: 15%; left: 0; }
+.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.15); }
+.circle-1 { width: 300px; height: 300px; }
+.circle-2 { width: 500px; height: 500px; }
+.circle-3 { width: 700px; height: 700px; }
+
+/* Premium Card (Glassmorphism) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 20px !important;
+}
