@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-contact-support',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './contact-support.html',
   styleUrl: './contact-support.css'
 })

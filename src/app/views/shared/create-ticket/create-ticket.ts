@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-create-ticket',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './create-ticket.html',
   styleUrl: './create-ticket.css'
 })

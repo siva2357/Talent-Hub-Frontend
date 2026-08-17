@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-feedback-reports',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './feedback-reports.html',
   styleUrl: './feedback-reports.css'
 })

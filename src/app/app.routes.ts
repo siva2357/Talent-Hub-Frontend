@@ -5,6 +5,9 @@ import { Admin } from './views/admin/admin';
 import { Client } from './views/client/client';
 import { Freelancer } from './views/freelancer/freelancer';
 import { UiComponents } from './ui-components/ui-components';
+import { Profile } from './views/shared/profile/profile';
+import { AccountSettings } from './views/shared/account-settings/account-settings';
+import { ContactSupport } from './views/shared/contact-support/contact-support';
 
 export const routes: Routes = [
   {
@@ -15,6 +18,18 @@ export const routes: Routes = [
   {
     path: 'ui-components',
     component: UiComponents
+  },
+  {
+    path: 'profile',
+    component: Profile
+  },
+  {
+    path: 'account-settings',
+    component: AccountSettings
+  },
+  {
+    path: 'contact-support',
+    component: ContactSupport
   },
   {
     path: '',
