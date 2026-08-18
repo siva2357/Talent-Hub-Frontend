@@ -9,6 +9,9 @@ import { Profile } from './views/shared/profile/profile';
 import { AccountSettings } from './views/shared/account-settings/account-settings';
 import { ContactSupport } from './views/shared/contact-support/contact-support';
 
+import { AuthGuard } from './core/guards/auth.guard';
+import { RoleGuard } from './core/guards/role.guard';
+
 export const routes: Routes = [
   {
     path: '',
@@ -21,15 +24,21 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
-    component: Profile
+    component: Profile,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { expectedRoles: ['client', 'freelancer'] }
   },
   {
     path: 'account-settings',
-    component: AccountSettings
+    component: AccountSettings,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { expectedRoles: ['client', 'freelancer'] }
   },
   {
     path: 'contact-support',
-    component: ContactSupport
+    component: ContactSupport,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { expectedRoles: ['client', 'freelancer'] }
   },
   {
     path: '',
@@ -39,16 +48,25 @@ export const routes: Routes = [
   {
     path: '',
     component: Admin,
+    canMatch: [RoleGuard],
+    canActivate: [AuthGuard],
+    data: { expectedRoles: ['admin'] },
     loadChildren: () => import('./views/admin/admin.routes').then(m => m.ADMIN_ROUTES)
   },
   {
     path: '',
     component: Client,
+    canMatch: [RoleGuard],
+    canActivate: [AuthGuard],
+    data: { expectedRoles: ['client'] },
     loadChildren: () => import('./views/client/client.routes').then(m => m.CLIENT_ROUTES)
   },
   {
     path: '',
     component: Freelancer,
+    canMatch: [RoleGuard],
+    canActivate: [AuthGuard],
+    data: { expectedRoles: ['freelancer'] },
     loadChildren: () => import('./views/freelancer/freelancer.routes').then(m => m.FREELANCER_ROUTES)
   },
   { path: '**', redirectTo: '' }

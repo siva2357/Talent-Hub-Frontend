@@ -20,7 +20,7 @@
                         <label class="form-label small fw-semibold text-dark mb-1">Email Address</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
-                            <input type="email" class="form-control border-start-0 ps-0 py-2" placeholder="Enter your email address" required>
+                            <input type="email" class="form-control border-start-0 ps-0 py-2" placeholder="Enter your email address" [(ngModel)]="loginData.email" name="email" required>
                         </div>
                     </div>
 
@@ -28,7 +28,7 @@
                         <label class="form-label small fw-semibold text-dark mb-1">Password</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-lock"></i></span>
-                            <input type="password" class="form-control border-start-0 border-end-0 ps-0 py-2" placeholder="Enter your password" required>
+                            <input type="password" class="form-control border-start-0 border-end-0 ps-0 py-2" placeholder="Enter your password" [(ngModel)]="loginData.password" name="password" required>
                             <span class="input-group-text bg-white border-start-0 text-muted cursor-pointer"><i class="bi bi-eye"></i></span>
                         </div>
                     </div>
@@ -37,8 +37,13 @@
                         <a routerLink="/forgot-password" class="text-primary text-decoration-none small fw-semibold">Forgot password?</a>
                     </div>
 
-                    <button type="button" class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow-sm" (click)="login()">
-                        <i class="bi bi-box-arrow-in-right me-2"></i> Log In
+                    <div *ngIf="errorMessage" class="alert alert-danger py-2 small mb-3">
+                        {{ errorMessage }}
+                    </div>
+
+                    <button type="button" class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow-sm" (click)="login()" [disabled]="isLoading">
+                        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        <i *ngIf="!isLoading" class="bi bi-box-arrow-in-right me-2"></i> {{ isLoading ? 'Logging in...' : 'Log In' }}
                     </button>
                     
                     <div class="text-center mt-5 pb-4">

@@ -1,16 +1,13 @@
 <aside class="modern-sidebar" [class.open]="isOpen">
   <div class="sidebar-nav">
-    @for (section of navSections; track section.title) {
-      <div class="nav-section">
-        <span class="nav-section-title">{{ section.title }}</span>
-        @for (link of section.links; track link.path) {
-          <a [routerLink]="link.path" routerLinkActive="active" class="nav-item" (mouseenter)="showTooltip($event, link.label)" (mouseleave)="hideTooltip()">
-            <i class="nav-icon" [ngClass]="link.icon"></i>
-            <span class="nav-text">{{ link.label }}</span>
-          </a>
-        }
-      </div>
-    }
+    <div class="nav-section">
+      @for (link of navLinks; track link.path) {
+        <a [routerLink]="link.path" routerLinkActive="active" class="nav-item" (mouseenter)="showTooltip($event, link.label)" (mouseleave)="hideTooltip()">
+          <i class="nav-icon" [ngClass]="link.icon"></i>
+          <span class="nav-text">{{ link.label }}</span>
+        </a>
+      }
+    </div>
   </div>
 
   @if (tooltipText) {

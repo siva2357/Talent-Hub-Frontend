@@ -1,88 +1,91 @@
 <div class="management-container p-3 p-md-4 position-relative">
   <!-- Decorative background wrapper to prevent overflow -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
-      <div class="bg-shape top-left"></div>
-      <div class="bg-shape bottom-right"></div>
-      <div class="bg-shape right-shape"></div>
-      
-      <div class="concentric-circles">
-          <div class="circle circle-1"></div>
-          <div class="circle circle-2"></div>
-          <div class="circle circle-3"></div>
-      </div>
-  </div>
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
 
-  <!-- Role Switcher (For Development) -->
-  <div class="position-absolute top-0 end-0 m-4 z-3 d-flex gap-2">
-    <button class="btn btn-sm rounded-pill px-3 fw-semibold shadow-sm border" 
-            [class.btn-primary]="role === 'client'" 
-            [class.btn-light]="role !== 'client'"
-            (click)="role = 'client'">Client View</button>
-    <button class="btn btn-sm rounded-pill px-3 fw-semibold shadow-sm border" 
-            [class.btn-primary]="role === 'freelancer'" 
-            [class.btn-light]="role !== 'freelancer'"
-            (click)="role = 'freelancer'">Freelancer View</button>
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
   </div>
 
   <div class="position-relative z-1 mx-auto" style="max-width: 900px; margin-top: 2rem;">
-    <div class="mb-4 text-center">
-      <h1 class="fw-bold fs-3 text-dark mb-1">Account Settings</h1>
-      <p class="text-muted" style="font-size: 0.85rem;">Manage your account settings and profile.</p>
+    <div class="d-flex align-items-center mb-4 position-relative">
+      <button
+        class="btn btn-white rounded-circle shadow-sm border d-flex justify-content-center align-items-center position-absolute start-0"
+        style="width: 40px; height: 40px; top: 0;" (click)="goBack()">
+        <i class="bi bi-arrow-left fs-5 text-dark"></i>
+      </button>
+      <div class="w-100 text-center">
+        <h1 class="fw-bold fs-3 text-dark mb-1">Account Settings</h1>
+        <p class="text-muted" style="font-size: 0.85rem;">Manage your account settings and profile.</p>
+      </div>
     </div>
+
+    @if (isLoading) {
+    <div class="d-flex justify-content-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    } @else if (error) {
+    <div class="alert alert-danger text-center">{{ error }}</div>
+    } @else {
 
     <div class="glass-card shadow-lg p-0 overflow-hidden mb-5">
-    
-    <!-- Custom Tabs Navigation -->
-    <div class="border-bottom px-4 pt-3 bg-light bg-opacity-50">
-      <ul class="nav nav-underline gap-4 justify-content-center" style="font-size: 0.85rem;">
-        <li class="nav-item">
-          <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" 
-             [class.active]="activeTab === 'profile'" 
-             [class.text-primary]="activeTab === 'profile'"
-             [class.text-muted]="activeTab !== 'profile'"
-             (click)="setTab('profile')">Profile Details</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" 
-             [class.active]="activeTab === 'security'"
-             [class.text-primary]="activeTab === 'security'"
-             [class.text-muted]="activeTab !== 'security'"
-             (click)="setTab('security')">Security and Password</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" 
-             [class.active]="activeTab === 'notifications'"
-             [class.text-primary]="activeTab === 'notifications'"
-             [class.text-muted]="activeTab !== 'notifications'"
-             (click)="setTab('notifications')">Notifications</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" 
-             [class.active]="activeTab === 'manage'"
-             [class.text-danger]="activeTab === 'manage'"
-             [class.text-muted]="activeTab !== 'manage'"
-             (click)="setTab('manage')"
-             [style.border-bottom-color]="activeTab === 'manage' ? '#dc3545' : 'transparent'">Manage Account</a>
-        </li>
-      </ul>
-    </div>
 
-    <!-- Tab Content Area -->
-    <div class="p-4 p-md-5">
-      
-      <!-- PROFILE DETAILS TAB -->
-      @if (activeTab === 'profile') {
+      <!-- Custom Tabs Navigation -->
+      <div class="border-bottom px-4 pt-3 bg-light bg-opacity-50">
+        <ul class="nav nav-underline gap-4 justify-content-center" style="font-size: 0.85rem;">
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" [class.active]="activeTab === 'profile'"
+              [class.text-primary]="activeTab === 'profile'" [class.text-muted]="activeTab !== 'profile'"
+              (click)="setTab('profile')">Profile Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" [class.active]="activeTab === 'security'"
+              [class.text-primary]="activeTab === 'security'" [class.text-muted]="activeTab !== 'security'"
+              (click)="setTab('security')">Security and Password</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" [class.active]="activeTab === 'notifications'"
+              [class.text-primary]="activeTab === 'notifications'" [class.text-muted]="activeTab !== 'notifications'"
+              (click)="setTab('notifications')">Notifications</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" [class.active]="activeTab === 'manage'"
+              [class.text-danger]="activeTab === 'manage'" [class.text-muted]="activeTab !== 'manage'"
+              (click)="setTab('manage')"
+              [style.border-bottom-color]="activeTab === 'manage' ? '#dc3545' : 'transparent'">Manage Account</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div class="p-4 p-md-5">
+
+        <!-- PROFILE DETAILS TAB -->
+        @if (activeTab === 'profile') {
         <form>
           <!-- Basic Details -->
           <div class="mb-5">
             <h2 class="fs-5 fw-bold text-dark mb-4">Basic Details</h2>
-            
+
             <div class="row g-4 mb-4">
               <div class="col-md-3">
                 <div class="d-flex flex-column align-items-center gap-3">
                   <div class="position-relative">
-                    <img src="https://i.pravatar.cc/150?u=a042581f4e29026704a" class="rounded-circle object-fit-cover border border-4 border-light shadow-sm" width="100" height="100" alt="Avatar">
-                    <button type="button" class="btn btn-primary btn-sm rounded-circle position-absolute bottom-0 end-0 d-flex justify-content-center align-items-center shadow" style="width: 32px; height: 32px;"><i class="bi bi-pencil-fill" style="font-size: 0.75rem;"></i></button>
+                    <img
+                      [src]="profileData?.basicInformation?.profilePhoto || 'https://i.pravatar.cc/150?u=a042581f4e29026704a'"
+                      class="rounded-circle object-fit-cover border border-4 border-light shadow-sm" width="100"
+                      height="100" alt="Avatar">
+                    <button type="button"
+                      class="btn btn-primary btn-sm rounded-circle position-absolute bottom-0 end-0 d-flex justify-content-center align-items-center shadow"
+                      style="width: 32px; height: 32px;"><i class="bi bi-pencil-fill"
+                        style="font-size: 0.75rem;"></i></button>
                   </div>
                   <span class="text-muted fw-semibold" style="font-size: 0.75rem;">Max 5MB (JPG, PNG)</span>
                 </div>
@@ -91,23 +94,27 @@
                 <div class="row g-4">
                   <div class="col-md-6">
                     <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Full Name *</label>
-                    <input type="text" class="form-control" value="Rohit Sharma" style="font-size: 0.85rem;">
+                    <input type="text" class="form-control" [(ngModel)]="profileData.basicInformation.fullName"
+                      name="fullName" style="font-size: 0.85rem;">
                   </div>
                   <div class="col-md-6">
                     <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Email Address *</label>
-                    <input type="email" class="form-control" value="rohit.sharma@example.com" style="font-size: 0.85rem;">
+                    <input type="email" class="form-control" [(ngModel)]="profileData.basicInformation.email"
+                      name="email" disabled style="font-size: 0.85rem;">
                   </div>
                   <div class="col-md-6">
                     <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Phone Number *</label>
-                    <input type="tel" class="form-control" value="+91 98765 43210" style="font-size: 0.85rem;">
+                    <input type="tel" class="form-control" [(ngModel)]="profileData.basicInformation.phoneNumber"
+                      name="phoneNumber" style="font-size: 0.85rem;">
                   </div>
                   <div class="col-md-6">
                     <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Gender *</label>
-                    <select class="form-select" style="font-size: 0.85rem;">
+                    <select class="form-select" [(ngModel)]="profileData.basicInformation.gender" name="gender"
+                      style="font-size: 0.85rem;">
                       <option disabled>Select gender</option>
-                      <option selected>Male</option>
-                      <option>Female</option>
-                      <option>Other</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
                     </select>
                   </div>
                 </div>
@@ -116,7 +123,8 @@
 
             <div class="mb-4">
               <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Short Bio *</label>
-              <textarea class="form-control" rows="4" style="font-size: 0.85rem; resize: none;">Passionate professional with extensive experience in the industry, looking to connect and collaborate on meaningful projects.</textarea>
+              <textarea class="form-control" [(ngModel)]="profileData.basicInformation.shortBio" name="shortBio"
+                rows="4" style="font-size: 0.85rem; resize: none;"></textarea>
             </div>
           </div>
 
@@ -125,76 +133,96 @@
             <h2 class="fs-5 fw-bold text-dark mb-4">
               @if (role === 'client') { Company Information } @else { Professional Information }
             </h2>
-            
+
             <div class="row g-4">
               @if (role === 'client') {
-                <div class="col-md-4">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Company Type *</label>
-                  <input type="text" class="form-control" value="LLC" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Website *</label>
-                  <input type="url" class="form-control" value="https://example.com" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Industry *</label>
-                  <input type="text" class="form-control" value="Technology" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">City *</label>
-                  <input type="text" class="form-control" value="Hyderabad" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">State *</label>
-                  <input type="text" class="form-control" value="Telangana" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Country *</label>
-                  <input type="text" class="form-control" value="India" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-12">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Company Description *</label>
-                  <textarea class="form-control" rows="4" style="font-size: 0.85rem; resize: none;">A forward-thinking technology firm specializing in web solutions and e-commerce platforms.</textarea>
-                </div>
+              <div class="col-md-4">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Company Type *</label>
+                <input type="text" class="form-control" [(ngModel)]="profileData.professionalDetails.companyType"
+                  name="companyType" style="font-size: 0.85rem;">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Website *</label>
+                <input type="url" class="form-control" [(ngModel)]="profileData.professionalDetails.website"
+                  name="website" style="font-size: 0.85rem;">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Industry *</label>
+                <input type="text" class="form-control" [(ngModel)]="profileData.professionalDetails.industry"
+                  name="industry" style="font-size: 0.85rem;">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Company Description *</label>
+                <textarea class="form-control" [(ngModel)]="profileData.professionalDetails.companyDescription"
+                  name="companyDescription" rows="4" style="font-size: 0.85rem; resize: none;"></textarea>
+              </div>
               } @else {
-                <div class="col-12">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Professional Headline *</label>
-                  <input type="text" class="form-control" value="Senior Frontend Developer" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-12">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Skills *</label>
-                  <input type="text" class="form-control" value="Angular, React, TypeScript" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-12">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Technologies *</label>
-                  <input type="text" class="form-control" value="HTML/CSS, Git, Bootstrap" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Availability *</label>
-                  <select class="form-select" style="font-size: 0.85rem;">
-                    <option disabled>Select availability</option>
-                    <option selected>Full Time (40hrs/wk)</option>
-                    <option>Part Time (20hrs/wk)</option>
-                    <option>As needed</option>
-                  </select>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Preferred Job Type *</label>
-                  <select class="form-select" style="font-size: 0.85rem;">
-                    <option disabled>Select preferred type</option>
-                    <option selected>Long-term contract</option>
-                    <option>Short-term project</option>
-                    <option>Hourly work</option>
-                  </select>
-                </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Professional Headline
+                  *</label>
+                <input type="text" class="form-control"
+                  [(ngModel)]="profileData.professionalDetails.professionalHeadline" name="professionalHeadline"
+                  style="font-size: 0.85rem;">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Skills *</label>
+                <input type="text" class="form-control" [(ngModel)]="profileData.professionalDetails.skills"
+                  name="skills" style="font-size: 0.85rem;">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Technologies *</label>
+                <input type="text" class="form-control" [(ngModel)]="profileData.professionalDetails.technologies"
+                  name="technologies" style="font-size: 0.85rem;">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Availability *</label>
+                <select class="form-select" [(ngModel)]="profileData.professionalDetails.availability"
+                  name="availability" style="font-size: 0.85rem;">
+                  <option disabled value="">Select availability</option>
+                  <option value="Full Time (40hrs/wk)">Full Time (40hrs/wk)</option>
+                  <option value="Part Time (20hrs/wk)">Part Time (20hrs/wk)</option>
+                  <option value="As needed">As needed</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Preferred Job Type *</label>
+                <select class="form-select" [(ngModel)]="profileData.professionalDetails.preferredJobType"
+                  name="preferredJobType" style="font-size: 0.85rem;">
+                  <option disabled value="">Select preferred type</option>
+                  <option value="Long-term contract">Long-term contract</option>
+                  <option value="Short-term project">Short-term project</option>
+                  <option value="Hourly work">Hourly work</option>
+                </select>
+              </div>
               }
+
+              <div class="col-12 mt-4">
+                <h4 class="fs-6 fw-bold text-dark mb-3">Location</h4>
+                <div class="row g-4">
+                  <div class="col-md-4">
+                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">City *</label>
+                    <input type="text" class="form-control" [(ngModel)]="profileData.location.city" name="city"
+                      style="font-size: 0.85rem;">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">State *</label>
+                    <input type="text" class="form-control" [(ngModel)]="profileData.location.state" name="state"
+                      style="font-size: 0.85rem;">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Country *</label>
+                    <input type="text" class="form-control" [(ngModel)]="profileData.location.country" name="country"
+                      style="font-size: 0.85rem;">
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- Social Media and Languages -->
           <div class="mb-5 border-top pt-5">
             <h2 class="fs-5 fw-bold text-dark mb-4">Social media and languages</h2>
-            
+
             <div class="mb-4">
               <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Social Media profile</h4>
               <div class="d-flex align-items-end gap-3 mb-3">
@@ -213,13 +241,17 @@
                 </div>
                 <button class="btn btn-primary px-4 fw-semibold shadow-sm" style="font-size: 0.8rem;">Add</button>
               </div>
-              
+
               <!-- Added media items list -->
               <div class="d-flex flex-column gap-2 mb-4">
                 <div class="d-flex align-items-center gap-3 p-2 border rounded-3 bg-light bg-opacity-50">
-                  <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;"><i class="bi bi-linkedin"></i></div>
-                  <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">https://linkedin.com/in/username</span>
-                  <button class="btn btn-link text-danger p-0 border-0 text-decoration-none"><i class="bi bi-x-circle"></i></button>
+                  <div
+                    class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center"
+                    style="width: 32px; height: 32px;"><i class="bi bi-linkedin"></i></div>
+                  <span class="fw-semibold text-dark flex-grow-1"
+                    style="font-size: 0.8rem;">https://linkedin.com/in/username</span>
+                  <button class="btn btn-link text-danger p-0 border-0 text-decoration-none"><i
+                      class="bi bi-x-circle"></i></button>
                 </div>
               </div>
             </div>
@@ -252,8 +284,10 @@
               <!-- Added language items list -->
               <div class="d-flex flex-column gap-2">
                 <div class="d-flex align-items-center gap-3 p-2 border rounded-3 bg-light bg-opacity-50">
-                  <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">English - <span class="text-muted fw-normal">Fluent</span></span>
-                  <button class="btn btn-link text-danger p-0 border-0 text-decoration-none"><i class="bi bi-x-circle"></i></button>
+                  <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">English - <span
+                      class="text-muted fw-normal">Fluent</span></span>
+                  <button class="btn btn-link text-danger p-0 border-0 text-decoration-none"><i
+                      class="bi bi-x-circle"></i></button>
                 </div>
               </div>
             </div>
@@ -262,68 +296,87 @@
           <!-- Actions -->
           <div class="d-flex justify-content-end gap-3 pt-4 border-top">
             <button type="button" class="btn btn-light fw-semibold px-4" style="font-size: 0.85rem;">Cancel</button>
-            <button type="button" class="btn btn-primary fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;">Save Changes</button>
+            <button type="button" class="btn btn-primary fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;"
+              (click)="saveProfileChanges()">Save
+              Changes</button>
           </div>
         </form>
-      }
+        }
 
-      <!-- SECURITY AND PASSWORD TAB -->
-      @if (activeTab === 'security') {
+        <!-- SECURITY AND PASSWORD TAB -->
+        @if (activeTab === 'security') {
         <div class="row justify-content-center">
           <div class="col-md-8 col-lg-6">
             <h2 class="fs-5 fw-bold text-dark mb-4 text-center">Change Password</h2>
-            <p class="text-center text-muted mb-5" style="font-size: 0.85rem;">Ensure your account is using a long, random password to stay secure.</p>
-            
+            <p class="text-center text-muted mb-5" style="font-size: 0.85rem;">Ensure your account is using a long,
+              random password to stay secure.</p>
+
             <form class="d-flex flex-column gap-4">
               <div>
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Current Password <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Current Password <span
+                    class="text-danger">*</span></label>
                 <div class="input-group">
-                  <input type="password" class="form-control bg-light border-end-0" placeholder="Enter current password" style="font-size: 0.85rem;">
-                  <span class="input-group-text bg-light bg-transparent cursor-pointer"><i class="bi bi-eye-slash text-muted"></i></span>
+                  <input type="password" class="form-control bg-light border-end-0" placeholder="Enter current password"
+                    style="font-size: 0.85rem;">
+                  <span class="input-group-text bg-light bg-transparent cursor-pointer"><i
+                      class="bi bi-eye-slash text-muted"></i></span>
                 </div>
               </div>
               <div>
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">New Password <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">New Password <span
+                    class="text-danger">*</span></label>
                 <div class="input-group">
-                  <input type="password" class="form-control bg-light border-end-0" placeholder="Enter new password" style="font-size: 0.85rem;">
-                  <span class="input-group-text bg-light bg-transparent cursor-pointer"><i class="bi bi-eye-slash text-muted"></i></span>
+                  <input type="password" class="form-control bg-light border-end-0" placeholder="Enter new password"
+                    style="font-size: 0.85rem;">
+                  <span class="input-group-text bg-light bg-transparent cursor-pointer"><i
+                      class="bi bi-eye-slash text-muted"></i></span>
                 </div>
-                <div class="form-text mt-2" style="font-size: 0.7rem;"><i class="bi bi-info-circle text-primary"></i> Password must be at least 8 characters long and include a number and a symbol.</div>
+                <div class="form-text mt-2" style="font-size: 0.7rem;"><i class="bi bi-info-circle text-primary"></i>
+                  Password must be at least 8 characters long and include a number and a symbol.</div>
               </div>
               <div>
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Confirm New Password <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Confirm New Password <span
+                    class="text-danger">*</span></label>
                 <div class="input-group">
-                  <input type="password" class="form-control bg-light border-end-0" placeholder="Confirm new password" style="font-size: 0.85rem;">
-                  <span class="input-group-text bg-light bg-transparent cursor-pointer"><i class="bi bi-eye-slash text-muted"></i></span>
+                  <input type="password" class="form-control bg-light border-end-0" placeholder="Confirm new password"
+                    style="font-size: 0.85rem;">
+                  <span class="input-group-text bg-light bg-transparent cursor-pointer"><i
+                      class="bi bi-eye-slash text-muted"></i></span>
                 </div>
               </div>
-              
+
               <div class="d-flex justify-content-between align-items-center mt-3 pt-4 border-top">
-                <a href="#" class="text-primary text-decoration-none fw-semibold" style="font-size: 0.8rem;">Forgot Password?</a>
-                <button type="button" class="btn btn-primary fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;">Update Password</button>
+                <a href="#" class="text-primary text-decoration-none fw-semibold" style="font-size: 0.8rem;">Forgot
+                  Password?</a>
+                <button type="button" class="btn btn-primary fw-semibold px-4 shadow-sm"
+                  style="font-size: 0.85rem;">Update Password</button>
               </div>
             </form>
           </div>
         </div>
-      }
+        }
 
-      <!-- NOTIFICATIONS TAB -->
-      @if (activeTab === 'notifications') {
+        <!-- NOTIFICATIONS TAB -->
+        @if (activeTab === 'notifications') {
         <div class="row justify-content-center">
           <div class="col-md-10 col-lg-8">
             <h2 class="fs-5 fw-bold text-dark mb-2">Notification Preferences</h2>
-            <p class="text-muted mb-4 pb-3 border-bottom" style="font-size: 0.85rem;">Choose how and when you want to be notified about activity on your account.</p>
-            
+            <p class="text-muted mb-4 pb-3 border-bottom" style="font-size: 0.85rem;">Choose how and when you want to be
+              notified about activity on your account.</p>
+
             <div class="d-flex flex-column gap-4">
               <!-- Item 1 -->
               <div class="d-flex justify-content-between align-items-start gap-4">
                 <div class="d-flex gap-3">
-                  <div class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;">
+                  <div
+                    class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1"
+                    style="width: 40px; height: 40px;">
                     <i class="bi bi-envelope fs-5"></i>
                   </div>
                   <div>
                     <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Email Notifications</span>
-                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Receive an email for important updates, contract offers, and messages.</p>
+                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Receive an email for important updates,
+                      contract offers, and messages.</p>
                   </div>
                 </div>
                 <div class="form-check form-switch fs-4 mt-1">
@@ -334,12 +387,15 @@
               <!-- Item 2 -->
               <div class="d-flex justify-content-between align-items-start gap-4">
                 <div class="d-flex gap-3">
-                  <div class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;">
+                  <div
+                    class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1"
+                    style="width: 40px; height: 40px;">
                     <i class="bi bi-phone fs-5"></i>
                   </div>
                   <div>
                     <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Push Notifications</span>
-                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Get real-time push notifications on your device for immediate alerts.</p>
+                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Get real-time push notifications on your
+                      device for immediate alerts.</p>
                   </div>
                 </div>
                 <div class="form-check form-switch fs-4 mt-1">
@@ -350,28 +406,35 @@
               <!-- Item 3 -->
               <div class="d-flex justify-content-between align-items-start gap-4">
                 <div class="d-flex gap-3">
-                  <div class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;">
+                  <div
+                    class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1"
+                    style="width: 40px; height: 40px;">
                     <i class="bi bi-chat-dots fs-5"></i>
                   </div>
                   <div>
                     <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Messages & Chat</span>
-                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Notify me when I receive a new direct message or chat reply.</p>
+                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Notify me when I receive a new direct message
+                      or chat reply.</p>
                   </div>
                 </div>
                 <div class="form-check form-switch fs-4 mt-1">
                   <input class="form-check-input" type="checkbox" role="switch" checked>
                 </div>
               </div>
-              
+
               <!-- Item 4 -->
               <div class="d-flex justify-content-between align-items-start gap-4">
                 <div class="d-flex gap-3">
-                  <div class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;">
+                  <div
+                    class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1"
+                    style="width: 40px; height: 40px;">
                     <i class="bi bi-megaphone fs-5"></i>
                   </div>
                   <div>
-                    <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Marketing & Promotions</span>
-                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Receive occasional emails about new features, tips, and special offers.</p>
+                    <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Marketing &
+                      Promotions</span>
+                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Receive occasional emails about new features,
+                      tips, and special offers.</p>
                   </div>
                 </div>
                 <div class="form-check form-switch fs-4 mt-1">
@@ -381,24 +444,27 @@
             </div>
 
             <div class="d-flex justify-content-end mt-5 pt-4 border-top">
-              <button type="button" class="btn btn-primary fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;">Save Preferences</button>
+              <button type="button" class="btn btn-primary fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;">Save
+                Preferences</button>
             </div>
           </div>
         </div>
-      }
+        }
 
-      <!-- MANAGE ACCOUNT TAB -->
-      @if (activeTab === 'manage') {
+        <!-- MANAGE ACCOUNT TAB -->
+        @if (activeTab === 'manage') {
         <div class="row justify-content-center">
           <div class="col-md-10 col-lg-8">
             <h2 class="fs-5 fw-bold text-dark mb-4">Account Management</h2>
-            
+
 
             <div class="card border border-danger border-opacity-25 bg-danger bg-opacity-10 shadow-none">
               <div class="card-body p-4">
-                <h3 class="fs-6 fw-bold text-danger mb-2 d-flex align-items-center gap-2"><i class="bi bi-exclamation-triangle-fill"></i> Delete Account</h3>
+                <h3 class="fs-6 fw-bold text-danger mb-2 d-flex align-items-center gap-2"><i
+                    class="bi bi-exclamation-triangle-fill"></i> Delete Account</h3>
                 <p class="text-muted mb-4" style="font-size: 0.8rem; line-height: 1.5;">
-                  Once you delete your account, there is no going back. All your data, including profile details, messages, and contract history will be permanently wiped out. Please be certain.
+                  Once you delete your account, there is no going back. All your data, including profile details,
+                  messages, and contract history will be permanently wiped out. Please be certain.
                 </p>
                 <div class="form-check mb-4">
                   <input class="form-check-input border-danger" type="checkbox" id="confirmDelete">
@@ -406,16 +472,16 @@
                     I confirm that I want to permanently delete my account.
                   </label>
                 </div>
-                <button class="btn btn-danger fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;" disabled>Permanently Delete Account</button>
+                <button class="btn btn-danger fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;"
+                  disabled>Permanently Delete Account</button>
               </div>
             </div>
 
           </div>
         </div>
-      }
-
+        }
+      </div>
     </div>
+    }
   </div>
-  </div>
-
 </div>
