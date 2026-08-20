@@ -36,6 +36,10 @@ export class ContractService {
   }
 
   // --- Freelancer Endpoints ---
+  getFreelancerMyContracts(): Observable<{ success: boolean; contracts: any[] }> {
+    return this.http.get<{ success: boolean; contracts: any[] }>(`${this.apiUrl}/freelancer/my-contracts`, { headers: this.getAuthHeaders() });
+  }
+
   getAllContracts(): Observable<{ success: boolean; contracts: Contract[] }> {
     return this.http.get<{ success: boolean; contracts: Contract[] }>(`${this.apiUrl}`, { headers: this.getAuthHeaders() });
   }
@@ -59,4 +63,11 @@ export class ContractService {
   getContractApplicants(contractId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/my-contracts/applicants?contractId=${contractId}`, { headers: this.getAuthHeaders() });
   }
+
+
+
+
+
+
+
 }

@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ContractService } from '../../../core/services/contract.service';
 import { ApplicationService } from '../../../core/services/application.service';
+import { OfferService } from '../../../core/services/offer.service';
 
 interface AppliedContract {
   applicationId: string;
@@ -31,17 +32,40 @@ interface AppliedContract {
   styleUrl: './proposal-offers.css'
 })
 export class ProposalOffers implements OnInit {
+  activeTab: 'proposals' | 'offers' = 'proposals';
   applications: AppliedContract[] = [];
   totalApplications = 0;
+  offers: any[] = [];
+  totalOffers = 0;
   isLoading = true;
+  isLoadingOffers = true;
 
   constructor(
     private contractService: ContractService,
-    private applicationService: ApplicationService
+    private applicationService: ApplicationService,
+    private offerService: OfferService
   ) {}
 
   ngOnInit(): void {
     this.fetchAppliedContracts();
+    this.fetchOffers();
+  }
+
+  fetchOffers(): void {
+    this.isLoadingOffers = true;
+    this.offerService.getFreelancerOffers().subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.offers = res.offers || [];
+          this.totalOffers = this.offers.length;
+        }
+        this.isLoadingOffers = false;
+      },
+      error: (err) => {
+        console.error('Error fetching offers:', err);
+        this.isLoadingOffers = false;
+      }
+    });
   }
 
   fetchAppliedContracts(): void {
@@ -62,30 +86,32 @@ export class ProposalOffers implements OnInit {
   }
 
   getProgressWidth(status: string): string {
-    if (status === 'hired' || status === 'rejected') return '100%';
-    if (['interview scheduled', 'interview completed', 'offer sent', 'offer accepted'].includes(status)) return '66%';
-    if (['shortlisted', 'assessment assigned', 'assessment completed'].includes(status)) return '33%';
+    if (status === 'hired' || status === 'rejected' || status === 'offer accepted') return '100%';
+    if (status === 'offer sent') return '85%';
+    if (['interview scheduled', 'interview completed'].includes(status)) return '66%';
+    if (['assessment assigned', 'assessment completed'].includes(status)) return '33%';
+    if (status === 'shortlisted') return '15%';
     return '0%';
   }
 
   isAssessmentActive(status: string): boolean {
-    return ['shortlisted', 'assessment assigned', 'assessment completed', 'interview scheduled', 'interview completed', 'offer sent', 'offer accepted', 'hired', 'rejected'].includes(status);
+    return ['assessment assigned'].includes(status);
   }
 
   isAssessmentDone(status: string): boolean {
-    return ['interview scheduled', 'interview completed', 'offer sent', 'offer accepted', 'hired', 'rejected'].includes(status);
+    return ['assessment completed', 'interview scheduled', 'interview completed', 'offer sent', 'offer accepted', 'hired'].includes(status);
   }
 
   isInterviewActive(status: string): boolean {
-    return ['interview scheduled', 'interview completed', 'offer sent', 'offer accepted', 'hired', 'rejected'].includes(status);
+    return ['interview scheduled'].includes(status);
   }
 
   isInterviewDone(status: string): boolean {
-    return ['hired', 'rejected'].includes(status);
+    return ['interview completed', 'offer sent', 'offer accepted', 'hired'].includes(status);
   }
 
   isDecisionActive(status: string): boolean {
-    return ['hired', 'rejected'].includes(status);
+    return ['offer sent', 'offer accepted', 'hired', 'rejected'].includes(status);
   }
 
   joinInterview(applicationId: string): void {
@@ -118,6 +144,20 @@ export class ProposalOffers implements OnInit {
         }
       },
       error: (err) => console.error('Error submitting assessment:', err)
+    });
+  }
+
+  rejectOffer(offerId: string): void {
+    this.offerService.declineOffer(offerId).subscribe({
+      next: (res) => {
+        if (res.success) {
+          const offer = this.offers.find(o => o.id === offerId);
+          if (offer) {
+            offer.status = 'Declined';
+          }
+        }
+      },
+      error: (err) => console.error('Error declining offer:', err)
     });
   }
 }

@@ -208,7 +208,7 @@
                           (click)="openRecruitmentWorkflow(applicant.applicationId)" data-bs-toggle="modal"
                           data-bs-target="#recruitmentWorkflowModal"><i class="bi bi-diagram-3 me-2 text-info"></i>
                           Recruitment Workflow</a></li>
-                      <li><a class="dropdown-item cursor-pointer" routerLink="/legal-contract-page"><i
+                      <li><a class="dropdown-item cursor-pointer" [routerLink]="['/legal-contract-page', applicant.applicationId]"><i
                             class="bi bi-check-circle me-2 text-success"></i> Send Offer</a></li>
                     </ul>
                   </div>

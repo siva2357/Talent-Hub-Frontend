@@ -38,8 +38,8 @@ export const FREELANCER_ROUTES: Routes = [
   { path: 'create-ticket', component: CreateTicket },
   { path: 'create-portfolio', component: CreatePortfolio },
   { path: 'feedback-reports', component: FeedbackReports },
-  { path: 'view-contract-offer', component: ViewContractOffer },
-  { path: 'legal-contract-acceptance', component: LegalContractAcceptance },
+  { path: 'view-contract-offer/:id', component: ViewContractOffer },
+  { path: 'legal-contract-acceptance/:id', component: LegalContractAcceptance },
   { path: 'meet-page', component: MeetPage },
   { path: 'chat-page', component: ChatPage }
 ];
