@@ -14,8 +14,7 @@ export const NAV_LINKS: NavLink[] = [
   { label: 'Blog Manager', path: '/blog-manager', icon: 'bi bi-layout-text-sidebar-reverse', roles: ['admin'] },
 
   // Client only
-  { label: 'Manage Contract', path: '/manage-contract', icon: 'bi bi-file-earmark-medical', roles: ['client'] },
-  { label: 'Contract Progress', path: '/contract-progress', icon: 'bi bi-file-earmark-medical', roles: ['client'] },
+  { label: 'Manage Contracts', path: '/manage-contract', icon: 'bi bi-file-earmark-medical', roles: ['client'] },
   { label: 'Search Talent', path: '/search-talent', icon: 'bi bi-search', roles: ['client'] },
   { label: 'Financial Summary', path: '/financial-summary', icon: 'bi bi-currency-dollar', roles: ['client'] },
 

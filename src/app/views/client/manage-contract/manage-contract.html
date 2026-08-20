@@ -84,6 +84,7 @@
                 <th scope="col" class="fw-bold">Budget</th>
                 <th scope="col" class="fw-bold">Start Date</th>
                 <th scope="col" class="fw-bold">End Date</th>
+                <th scope="col" class="fw-bold">Funds Status</th>
                 <th scope="col" class="fw-bold">Status</th>
                 <th scope="col" class="pe-4 fw-bold">Actions</th>
               </tr>
@@ -107,6 +108,13 @@
                   <td>{{ contract.contractStartDate | date:'mediumDate' }}</td>
                   <td>{{ contract.contractEndDate | date:'mediumDate' }}</td>
                   <td>
+                    @if (contract.funded && contract.funded > 0) {
+                      <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2">Fully Paid</span>
+                    } @else {
+                      <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-2">Pending</span>
+                    }
+                  </td>
+                  <td>
                     <span class="badge rounded-pill px-3 border border-opacity-25 bg-opacity-25"
                       [class.bg-success]="contract.status === 'completed' || contract.status === 'closed'"
                       [class.text-success]="contract.status === 'completed' || contract.status === 'closed'"
@@ -129,8 +137,15 @@
                       <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
                         <li><a class="dropdown-item cursor-pointer" (click)="viewApplicants(contract._id)"><i
                               class="bi bi-people me-2 text-primary"></i> Applicants</a></li>
+                        <li><a class="dropdown-item cursor-pointer" (click)="viewContractProgress(contract._id)"><i
+                              class="bi bi-graph-up me-2 text-secondary"></i> Contract Progress</a></li>
                         <li><a class="dropdown-item cursor-pointer" (click)="editContract(contract._id)"><i
                               class="bi bi-pencil me-2 text-warning"></i> Edit</a></li>
+                        
+                        @if (!isFullyFunded(contract)) {
+                          <li><a class="dropdown-item cursor-pointer fw-bold text-success" (click)="fundContract(contract)"><i
+                                class="bi bi-credit-card me-2 text-success"></i> Fund Contract</a></li>
+                        }
                         <li>
                           <hr class="dropdown-divider">
                         </li>

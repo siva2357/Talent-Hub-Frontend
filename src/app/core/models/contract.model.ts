@@ -12,6 +12,7 @@ export interface Contract {
   contractSubject: string;
   status: 'draft' | 'open' | 'in progress' | 'completed' | 'closed';
   spent?: number;
+  funded?: number;
   clientName?: string;
   clientEmail?: string;
   clientRole?: string;
