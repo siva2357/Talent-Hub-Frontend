@@ -24,7 +24,7 @@ import { CreateTicket } from '../shared/create-ticket/create-ticket';
 export const CLIENT_ROUTES: Routes = [
   { path: 'dashboard', component: Dashboard },
   { path: 'manage-contract', component: ManageContract },
-  { path: 'applicants', component: Applicants },
+  { path: 'applicants/:id', component: Applicants },
   { path: 'contract-progress', component: ContractProgress },
   { path: 'search-talent', component: SearchTalent },
   { path: 'financial-summary', component: FinancialSummary },
@@ -34,7 +34,6 @@ export const CLIENT_ROUTES: Routes = [
   { path: 'create-ticket', component: CreateTicket },
   { path: 'create-contract', component: CreateContract },
   { path: 'legal-contract-page', component: LegalContractPage },
-  { path: 'recruitment-workflow', component: RecruitmentWorkflow },
   { path: 'create-phase', component: CreatePhase },
   { path: 'phase-details', component: PhaseDetails },
   { path: 'transaction-history', component: TransactionHistory },

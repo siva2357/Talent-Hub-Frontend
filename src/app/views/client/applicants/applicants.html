@@ -32,7 +32,7 @@
               style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
             <div>
               <span class="d-block text-muted small fw-semibold">Total Applicants</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ totalApplicants }}</span>
             </div>
           </div>
         </div>
@@ -141,50 +141,56 @@
               </tr>
             </thead>
             <tbody style="font-family: serif;">
-              @for (applicant of applicants; track applicant.id) {
+              @for (applicant of applicants; track applicant.applicationId; let i = $index) {
               <tr>
-                <td class="ps-4">{{ applicant.id }}</td>
+                <td class="ps-4">{{ i + 1 }}</td>
                 <td>
-                  <div class="rounded-circle bg-dark mx-auto position-relative" style="width: 32px; height: 32px;">
-                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle"
-                      style="width: 12px; height: 12px;" [style.background-color]="applicant.avatarColor"></div>
+                  <div class="rounded-circle bg-dark mx-auto position-relative overflow-hidden"
+                    [style.background-color]="applicant.avatarColor"
+                    style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                    @if (applicant.freelancer.profilePhoto) {
+                    <img [src]="applicant.freelancer.profilePhoto" alt="Avatar" class="w-100 h-100 object-fit-cover">
+                    } @else {
+                    <span class="text-white fw-bold" style="font-size: 0.8rem;">{{
+                      applicant.freelancer.fullName.charAt(0) | uppercase }}</span>
+                    }
                   </div>
                 </td>
-                <td>{{ applicant.fullName }}</td>
-                <td>{{ applicant.email }}</td>
-                <td>{{ applicant.gender }}</td>
-                <td>{{ applicant.availability }}</td>
-                <td>
+                <td>{{ applicant.freelancer.fullName }}</td>
+                <td>{{ applicant.freelancer.email }}</td>
+                <td class="text-capitalize">{{ applicant.freelancer.gender }}</td>
+                <td class="text-capitalize">{{ getAvailabilityString(applicant.freelancer.availability) }}</td>
+                <td class="text-capitalize">
                   <span class="badge rounded-pill px-3 border border-opacity-25 bg-opacity-25"
-                    [class.bg-success]="applicant.applicationStatus === 'Hired'"
-                    [class.text-success]="applicant.applicationStatus === 'Hired'"
-                    [class.border-success]="applicant.applicationStatus === 'Hired'"
-                    [class.bg-primary]="applicant.applicationStatus === 'Interviewing'"
-                    [class.text-primary]="applicant.applicationStatus === 'Interviewing'"
-                    [class.border-primary]="applicant.applicationStatus === 'Interviewing'"
-                    [class.bg-warning]="applicant.applicationStatus === 'Pending'"
-                    [class.text-warning]="applicant.applicationStatus === 'Pending'"
-                    [class.border-warning]="applicant.applicationStatus === 'Pending'"
-                    [class.bg-danger]="applicant.applicationStatus === 'Rejected'"
-                    [class.text-danger]="applicant.applicationStatus === 'Rejected'"
-                    [class.border-danger]="applicant.applicationStatus === 'Rejected'">
+                    [class.bg-success]="applicant.applicationStatus === 'hired'"
+                    [class.text-success]="applicant.applicationStatus === 'hired'"
+                    [class.border-success]="applicant.applicationStatus === 'hired'"
+                    [class.bg-primary]="applicant.applicationStatus === 'interviewing'"
+                    [class.text-primary]="applicant.applicationStatus === 'interviewing'"
+                    [class.border-primary]="applicant.applicationStatus === 'interviewing'"
+                    [class.bg-warning]="applicant.applicationStatus === 'pending'"
+                    [class.text-warning]="applicant.applicationStatus === 'pending'"
+                    [class.border-warning]="applicant.applicationStatus === 'pending'"
+                    [class.bg-danger]="applicant.applicationStatus === 'rejected'"
+                    [class.text-danger]="applicant.applicationStatus === 'rejected'"
+                    [class.border-danger]="applicant.applicationStatus === 'rejected'">
                     {{ applicant.applicationStatus }}
                   </span>
                 </td>
-                <td>
+                <td class="text-capitalize">
                   <span class="badge rounded-pill px-3 border border-opacity-25 bg-opacity-25"
-                    [class.bg-success]="applicant.offerStatus === 'Accepted'"
-                    [class.text-success]="applicant.offerStatus === 'Accepted'"
-                    [class.border-success]="applicant.offerStatus === 'Accepted'"
-                    [class.bg-primary]="applicant.offerStatus === 'Sent'"
-                    [class.text-primary]="applicant.offerStatus === 'Sent'"
-                    [class.border-primary]="applicant.offerStatus === 'Sent'"
-                    [class.bg-secondary]="applicant.offerStatus === 'Not Sent'"
-                    [class.text-secondary]="applicant.offerStatus === 'Not Sent'"
-                    [class.border-secondary]="applicant.offerStatus === 'Not Sent'"
-                    [class.bg-danger]="applicant.offerStatus === 'Declined'"
-                    [class.text-danger]="applicant.offerStatus === 'Declined'"
-                    [class.border-danger]="applicant.offerStatus === 'Declined'">
+                    [class.bg-success]="applicant.offerStatus === 'accepted'"
+                    [class.text-success]="applicant.offerStatus === 'accepted'"
+                    [class.border-success]="applicant.offerStatus === 'accepted'"
+                    [class.bg-primary]="applicant.offerStatus === 'sent'"
+                    [class.text-primary]="applicant.offerStatus === 'sent'"
+                    [class.border-primary]="applicant.offerStatus === 'sent'"
+                    [class.bg-secondary]="applicant.offerStatus === 'none'"
+                    [class.text-secondary]="applicant.offerStatus === 'none'"
+                    [class.border-secondary]="applicant.offerStatus === 'none'"
+                    [class.bg-danger]="applicant.offerStatus === 'declined'"
+                    [class.text-danger]="applicant.offerStatus === 'declined'"
+                    [class.border-danger]="applicant.offerStatus === 'declined'">
                     {{ applicant.offerStatus }}
                   </span>
                 </td>
@@ -198,8 +204,10 @@
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
                       <li><a class="dropdown-item cursor-pointer" routerLink="/profile"><i
                             class="bi bi-eye me-2 text-primary"></i> View Profile</a></li>
-                      <li><a class="dropdown-item cursor-pointer" routerLink="/recruitment-workflow"><i
-                            class="bi bi-diagram-3 me-2 text-info"></i> Recruitment Workflow</a></li>
+                      <li><a class="dropdown-item cursor-pointer"
+                          (click)="openRecruitmentWorkflow(applicant.applicationId)" data-bs-toggle="modal"
+                          data-bs-target="#recruitmentWorkflowModal"><i class="bi bi-diagram-3 me-2 text-info"></i>
+                          Recruitment Workflow</a></li>
                       <li><a class="dropdown-item cursor-pointer" routerLink="/legal-contract-page"><i
                             class="bi bi-check-circle me-2 text-success"></i> Send Offer</a></li>
                     </ul>
@@ -231,7 +239,8 @@
         <span class="small text-dark">Entries</span>
       </div>
 
-      <span class="small text-dark">Showing 1-50 of 500</span>
+      <span class="small text-dark">Showing {{ applicants.length > 0 ? 1 : 0 }}-{{ applicants.length }} of {{
+        totalApplicants }}</span>
 
       <nav aria-label="Table pagination">
         <ul class="pagination pagination-sm mb-0 gap-1">
@@ -243,6 +252,24 @@
         </ul>
       </nav>
     </div>
-  </div>
 
+
+  </div>
+</div>
+
+<!-- Recruitment Workflow Modal -->
+<div class="modal fade" id="recruitmentWorkflowModal" tabindex="-1" aria-labelledby="recruitmentWorkflowModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header border-bottom-0 pb-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        @if (selectedApplicantId) {
+        <app-recruitment-workflow [applicationId]="selectedApplicantId"></app-recruitment-workflow>
+        }
+      </div>
+    </div>
+  </div>
 </div>

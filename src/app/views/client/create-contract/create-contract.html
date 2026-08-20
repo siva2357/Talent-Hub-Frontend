@@ -12,16 +12,17 @@
   </div>
 
   <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
+  <form [formGroup]="contractForm" (ngSubmit)="submitContract()" class="position-relative z-1 p-4 mx-auto"
+    style="max-width: 1400px;">
 
-    <!-- ==========================================
-       STEP 1: BASIC DETAILS
-  =========================================== -->
     <div class="step-container bg-white rounded-4 shadow-sm mb-5 border p-0 overflow-hidden">
-      <!-- Header & Stepper -->
+
+      <!-- ==========================================
+         CONSTANT HEADER & STEPPER
+      =========================================== -->
       <div class="p-4 border-bottom bg-light bg-opacity-50">
         <div class="d-flex align-items-start gap-3 mb-4">
-          <button routerLink="/manage-contract" class="btn btn-link text-dark p-0 mt-1"><i
+          <button type="button" routerLink="/manage-contract" class="btn btn-link text-dark p-0 mt-1"><i
               class="bi bi-arrow-left fs-5"></i></button>
           <div>
             <h1 class="fw-bold fs-4 mb-1 text-dark">Create New Contract</h1>
@@ -29,50 +30,64 @@
           </div>
         </div>
 
-        <!-- Stepper: Step 1 Active -->
+        <!-- Dynamic Stepper -->
         <div class="d-flex align-items-center w-75 mx-auto mt-2">
+
+          <!-- Step 1 Indicator -->
           <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
             <div
-              class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
-              style="width: 32px; height: 32px; font-size: 0.8rem;">1</div>
-            <span class="text-primary small mt-2 fw-bold" style="font-size: 0.7rem;">Basic Details</span>
+              class="rounded-circle d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
+              [ngClass]="currentStep > 1 ? 'bg-success text-white' : 'bg-primary text-white'"
+              style="width: 32px; height: 32px; font-size: 0.8rem;">
+              @if (currentStep > 1) { <i class="bi bi-check fs-5"></i> } @else { 1 }
+            </div>
+            <span class="small mt-2 fw-bold" [ngClass]="currentStep >= 1 ? 'text-primary' : 'text-muted'"
+              style="font-size: 0.7rem;">Basic Details</span>
             <div class="position-absolute top-0 start-50 w-100"
-              style="height: 3px; background-color: #e9ecef; margin-top: 15px; z-index: 1;"></div>
+              [ngClass]="currentStep > 1 ? 'bg-success' : 'bg-secondary bg-opacity-25'"
+              style="height: 3px; margin-top: 15px; z-index: 1;"></div>
           </div>
+
+          <!-- Step 2 Indicator -->
           <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
             <div
-              class="rounded-circle bg-white border border-2 border-secondary text-muted d-flex align-items-center justify-content-center z-2 fw-bold bg-opacity-50"
-              style="width: 32px; height: 32px; font-size: 0.8rem;">2</div>
-            <span class="text-muted small mt-2" style="font-size: 0.7rem;">Budget & Duration</span>
+              class="rounded-circle d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
+              [ngClass]="currentStep > 2 ? 'bg-success text-white' : (currentStep === 2 ? 'bg-primary text-white' : 'bg-white border-secondary text-muted bg-opacity-50')"
+              style="width: 32px; height: 32px; font-size: 0.8rem;">
+              @if (currentStep > 2) { <i class="bi bi-check fs-5"></i> } @else { 2 }
+            </div>
+            <span class="small mt-2 fw-bold" [ngClass]="currentStep >= 2 ? 'text-primary' : 'text-muted'"
+              style="font-size: 0.7rem;">Terms & Conditions</span>
             <div class="position-absolute top-0 start-50 w-100"
-              style="height: 3px; background-color: #e9ecef; margin-top: 15px; z-index: 1;"></div>
+              [ngClass]="currentStep > 2 ? 'bg-success' : 'bg-secondary bg-opacity-25'"
+              style="height: 3px; margin-top: 15px; z-index: 1;"></div>
           </div>
+
+          <!-- Step 3 Indicator -->
           <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
             <div
-              class="rounded-circle bg-white border border-2 border-secondary text-muted d-flex align-items-center justify-content-center z-2 fw-bold bg-opacity-50"
+              class="rounded-circle d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
+              [ngClass]="currentStep === 3 ? 'bg-primary text-white' : 'bg-white border-secondary text-muted bg-opacity-50'"
               style="width: 32px; height: 32px; font-size: 0.8rem;">3</div>
-            <span class="text-muted small mt-2" style="font-size: 0.7rem;">Terms & Conditions</span>
-            <div class="position-absolute top-0 start-50 w-100"
-              style="height: 3px; background-color: #e9ecef; margin-top: 15px; z-index: 1;"></div>
-          </div>
-          <div class="d-flex flex-column align-items-center position-relative" style="width: 80px;">
-            <div
-              class="rounded-circle bg-white border border-2 border-secondary text-muted d-flex align-items-center justify-content-center z-2 fw-bold bg-opacity-50"
-              style="width: 32px; height: 32px; font-size: 0.8rem;">4</div>
-            <span class="text-muted small mt-2 text-center" style="font-size: 0.7rem;">Review & Create</span>
+            <span class="small mt-2 text-center fw-bold" [ngClass]="currentStep === 3 ? 'text-primary' : 'text-muted'"
+              style="font-size: 0.7rem;">Review & Create</span>
           </div>
         </div>
       </div>
 
-      <!-- Main Content Step 1 -->
+      <!-- ==========================================
+         STEP 1: BASIC DETAILS & BUDGET
+      =========================================== -->
+      @if (currentStep === 1) {
       <div class="p-4">
         <div class="row g-5">
           <!-- Left Column -->
-          <div class="col-lg-8">
+          <div class="col-lg-8 mx-auto">
             <div class="d-flex align-items-center gap-2 mb-2">
               <div
                 class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
-                <i class="bi bi-file-earmark-text fs-5"></i></div>
+                <i class="bi bi-file-earmark-text fs-5"></i>
+              </div>
               <h2 class="fs-5 fw-bold mb-0 text-dark">Basic Details</h2>
             </div>
             <p class="text-muted small mb-4">Provide the fundamental information about this contract.</p>
@@ -81,27 +96,36 @@
               <div class="col-md-6">
                 <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Title <span
                     class="text-danger">*</span></label>
-                <input type="text" class="form-control" placeholder="Enter a clear contract title">
+                <input type="text" class="form-control" formControlName="contractTitle"
+                  placeholder="Enter a clear contract title">
               </div>
               <div class="col-md-6">
                 <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Type <span
                     class="text-danger">*</span></label>
-                <select class="form-select text-muted">
-                  <option>Select contract type</option>
+                <select class="form-select text-dark" formControlName="contractType">
+                  <option value="" disabled>Select contract type</option>
+                  <option value="Fixed Price">Fixed Price</option>
+                  <option value="Hourly">Hourly</option>
                 </select>
               </div>
               <div class="col-md-6">
                 <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Category <span
                     class="text-danger">*</span></label>
-                <select class="form-select text-muted">
-                  <option>Select category</option>
+                <select class="form-select text-dark" formControlName="contractCategory">
+                  <option value="" disabled>Select category</option>
+                  <option value="Web Development">Web Development</option>
+                  <option value="Mobile Development">Mobile Development</option>
+                  <option value="Design">Design</option>
                 </select>
               </div>
               <div class="col-md-6">
                 <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Subject <span
                     class="text-danger">*</span></label>
-                <select class="form-select text-muted">
-                  <option>Select subject</option>
+                <select class="form-select text-dark" formControlName="contractSubject">
+                  <option value="" disabled>Select subject</option>
+                  <option value="Frontend">Frontend</option>
+                  <option value="Backend">Backend</option>
+                  <option value="Full Stack">Full Stack</option>
                 </select>
               </div>
             </div>
@@ -110,26 +134,9 @@
               <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Description <span
                   class="text-danger">*</span></label>
               <div class="border rounded-3 p-2 bg-white">
-                <div class="border-bottom pb-2 mb-2 d-flex gap-3 text-muted">
-                  <select class="form-select form-select-sm border-0 w-auto fw-semibold text-dark shadow-none"
-                    style="font-size: 0.75rem;">
-                    <option>Paragraph</option>
-                  </select>
-                  <div class="d-flex gap-2 align-items-center fs-6">
-                    <i class="bi bi-type-bold cursor-pointer text-dark"></i>
-                    <i class="bi bi-type-italic cursor-pointer"></i>
-                    <i class="bi bi-type-underline cursor-pointer"></i>
-                    <i class="bi bi-type-strikethrough cursor-pointer me-2"></i>
-                    <i class="bi bi-list-ul cursor-pointer"></i>
-                    <i class="bi bi-list-ol cursor-pointer me-2"></i>
-                    <i class="bi bi-link cursor-pointer"></i>
-                    <i class="bi bi-quote cursor-pointer"></i>
-                  </div>
-                </div>
-                <textarea class="form-control border-0 shadow-none text-muted" rows="4"
-                  style="font-size: 0.85rem; resize: none;"
+                <textarea class="form-control border-0 shadow-none text-dark" rows="4"
+                  formControlName="contractDescription" style="font-size: 0.85rem; resize: none;"
                   placeholder="Describe the work, objectives, deliverables, and any important details..."></textarea>
-                <div class="text-end text-muted mt-2" style="font-size: 0.65rem;">0/5000</div>
               </div>
             </div>
 
@@ -138,630 +145,117 @@
                 <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Start Date <span
                     class="text-danger">*</span></label>
                 <div class="input-group">
-                  <input type="text" class="form-control border-end-0 text-muted" placeholder="Select start date">
-                  <span class="input-group-text bg-white text-muted"><i class="bi bi-calendar3"></i></span>
+                  <input type="date" class="form-control border-end-0 text-dark" formControlName="contractStartDate">
                 </div>
               </div>
               <div class="col-md-6">
                 <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract End Date <span
                     class="text-danger">*</span></label>
                 <div class="input-group">
-                  <input type="text" class="form-control border-end-0 text-muted" placeholder="Select end date">
-                  <span class="input-group-text bg-white text-muted"><i class="bi bi-calendar3"></i></span>
+                  <input type="date" class="form-control border-end-0 text-dark" formControlName="contractEndDate">
                 </div>
               </div>
+
               <div class="col-md-6">
-                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Status <span
+                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Estimated Budget (₹) <span
                     class="text-danger">*</span></label>
-                <select class="form-select text-dark fw-semibold">
-                  <option>Draft</option>
+                <input type="number" class="form-control text-dark" formControlName="estimatedBudget"
+                  placeholder="Enter total budget">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Status</label>
+                <select class="form-select text-dark fw-semibold" formControlName="status">
+                  <option value="draft">Draft</option>
+                  <option value="open">Open</option>
                 </select>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Visibility <span
-                    class="text-danger">*</span></label>
-                <div class="input-group">
-                  <span class="input-group-text bg-warning bg-opacity-10 text-warning border-end-0"><i
-                      class="bi bi-lock-fill"></i></span>
-                  <select class="form-select border-start-0 text-dark fw-semibold ps-0">
-                    <option>Private (Invite only)</option>
-                  </select>
-                </div>
               </div>
             </div>
 
             <div class="d-flex justify-content-between pt-4 border-top">
-              <button routerLink="/client/manage-contract"
+              <button type="button" routerLink="/manage-contract"
                 class="btn btn-outline-secondary px-4 fw-bold">Cancel</button>
-              <button class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold">Save & Continue <i
+              <button type="button" (click)="nextStep()"
+                class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold">Save & Continue <i
                   class="bi bi-arrow-right ms-1"></i></button>
             </div>
           </div>
-
-          <!-- Right Column -->
-          <div class="col-lg-4">
-            <div class="d-flex flex-column gap-4">
-
-              <div class="glass-card rounded-3 p-4 bg-white border border-light">
-                <div class="d-flex align-items-center gap-2 mb-2">
-                  <div
-                    class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
-                    <i class="bi bi-file-text"></i></div>
-                  <h3 class="fs-6 fw-bold mb-0 text-dark">Contract Summary</h3>
-                </div>
-                <p class="text-muted small mb-4 pb-3 border-bottom" style="font-size: 0.75rem;">Complete the form to see
-                  a summary of this contract.</p>
-
-                <div class="d-flex flex-column gap-3 mb-4" style="font-size: 0.75rem;">
-                  <div class="d-flex justify-content-between"><span class="text-muted">Contract Title</span><span
-                      class="text-dark">-</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Type</span><span
-                      class="text-dark">-</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Category</span><span
-                      class="text-dark">-</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Subject</span><span
-                      class="text-dark">-</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Duration</span><span
-                      class="text-dark">-</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Budget</span><span
-                      class="text-dark">-</span></div>
-                  <div class="d-flex justify-content-between align-items-center"><span
-                      class="text-muted">Status</span><span
-                      class="badge bg-secondary bg-opacity-10 text-secondary">Draft</span></div>
-                  <div class="d-flex justify-content-between align-items-center mt-2 pt-3 border-top">
-                    <span class="text-muted">Created By</span>
-                    <div class="d-flex align-items-center gap-2">
-                      <div class="rounded-circle bg-dark" style="width: 20px; height: 20px;"></div><span
-                        class="fw-bold text-dark">You</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="card border border-warning border-opacity-25 rounded-3 p-4 bg-warning bg-opacity-10">
-                <div class="d-flex align-items-center gap-2 mb-3">
-                  <i class="bi bi-shield-check text-warning fs-5"></i>
-                  <h3 class="fs-6 fw-bold mb-0 text-dark">Platform Guidelines</h3>
-                </div>
-                <p class="text-dark small mb-2" style="font-size: 0.75rem;">Recommended contract budget range per
-                  contract:</p>
-                <h4 class="fw-bold text-primary fs-5 mb-3">₹30,000 - ₹60,000</h4>
-                <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.5;">This helps ensure smooth project
-                  execution, milestone tracking, and secure payment processing for both clients and freelancers.</p>
-              </div>
-
-              <div class="card border border-primary border-opacity-25 rounded-3 p-4"
-                style="background-color: #f8f9fa;">
-                <div class="d-flex align-items-center gap-2 mb-2">
-                  <i class="bi bi-lightbulb text-primary"></i>
-                  <h3 class="fs-6 fw-bold mb-0 text-dark">Tip</h3>
-                </div>
-                <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">Be clear and specific in your
-                  description. It helps attract the right freelancer and avoids misunderstandings later.</p>
-              </div>
-
-            </div>
-          </div>
         </div>
       </div>
-    </div>
+      }
 
 
-    <!-- ==========================================
-       STEP 2: BUDGET & DURATION
-  =========================================== -->
-    <div class="step-container bg-white rounded-4 shadow-sm mb-5 border p-0 overflow-hidden mt-5">
-      <!-- Header & Stepper -->
-      <div class="p-4 border-bottom bg-light bg-opacity-50">
-        <div class="d-flex align-items-start gap-3 mb-4">
-          <button routerLink="/client/manage-contract" class="btn btn-link text-dark p-0 mt-1"><i
-              class="bi bi-arrow-left fs-5"></i></button>
-          <div>
-            <h1 class="fw-bold fs-4 mb-1 text-dark">Create New Contract</h1>
-            <p class="text-muted small mb-0">Fill in the details below to create a new contract</p>
-          </div>
-        </div>
-
-        <!-- Stepper: Step 2 Active -->
-        <div class="d-flex align-items-center w-75 mx-auto mt-2">
-          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-            <div
-              class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
-              style="width: 32px; height: 32px; font-size: 0.8rem;"><i class="bi bi-check fs-5"></i></div>
-            <span class="text-success small mt-2 fw-bold" style="font-size: 0.7rem;">Basic Details</span>
-            <div class="position-absolute top-0 start-50 w-100"
-              style="height: 3px; background-color: #198754; margin-top: 15px; z-index: 1;"></div>
-          </div>
-          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-            <div
-              class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
-              style="width: 32px; height: 32px; font-size: 0.8rem;">2</div>
-            <span class="text-primary small mt-2 fw-bold" style="font-size: 0.7rem;">Budget & Duration</span>
-            <div class="position-absolute top-0 start-50 w-100"
-              style="height: 3px; background-color: #e9ecef; margin-top: 15px; z-index: 1;"></div>
-          </div>
-          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-            <div
-              class="rounded-circle bg-white border border-2 border-secondary text-muted d-flex align-items-center justify-content-center z-2 fw-bold bg-opacity-50"
-              style="width: 32px; height: 32px; font-size: 0.8rem;">3</div>
-            <span class="text-muted small mt-2" style="font-size: 0.7rem;">Terms & Conditions</span>
-            <div class="position-absolute top-0 start-50 w-100"
-              style="height: 3px; background-color: #e9ecef; margin-top: 15px; z-index: 1;"></div>
-          </div>
-          <div class="d-flex flex-column align-items-center position-relative" style="width: 80px;">
-            <div
-              class="rounded-circle bg-white border border-2 border-secondary text-muted d-flex align-items-center justify-content-center z-2 fw-bold bg-opacity-50"
-              style="width: 32px; height: 32px; font-size: 0.8rem;">4</div>
-            <span class="text-muted small mt-2 text-center" style="font-size: 0.7rem;">Review & Create</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Content Step 2 -->
+      <!-- ==========================================
+         STEP 2: TERMS & CONDITIONS
+      =========================================== -->
+      @if (currentStep === 2) {
       <div class="p-4">
         <div class="row g-5">
           <!-- Left Column -->
-          <div class="col-lg-8">
+          <div class="col-lg-8 mx-auto">
             <div class="d-flex align-items-center gap-2 mb-2">
               <div
                 class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
-                <i class="bi bi-wallet2 fs-5"></i></div>
-              <h2 class="fs-5 fw-bold mb-0 text-dark">Budget Details</h2>
-            </div>
-            <p class="text-muted small mb-4">Define the total contract budget and how payments will be handled.</p>
-
-            <div class="row g-4 mb-4">
-              <div class="col-md-6">
-                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Total Contract Budget <span
-                    class="text-danger">*</span></label>
-                <div class="input-group">
-                  <span class="input-group-text bg-white text-muted border-end-0 fw-bold">₹</span>
-                  <input type="text" class="form-control border-start-0 text-dark fw-bold" value="2,00,000">
-                </div>
+                <i class="bi bi-journal-text fs-5"></i>
               </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Currency <span
-                    class="text-danger">*</span></label>
-                <select class="form-select text-dark fw-semibold">
-                  <option>INR - Indian Rupee</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Alert Box -->
-            <div class="card border border-primary border-opacity-25 bg-primary bg-opacity-10 rounded-3 p-4 mb-5">
-              <div class="d-flex gap-2 mb-2">
-                <i class="bi bi-info-circle text-primary fs-5"></i>
-                <div>
-                  <h4 class="fw-bold text-primary fs-6 mb-1">Platform Budget Recommendation</h4>
-                  <p class="text-dark small mb-3" style="font-size: 0.75rem;">For secure payments and smooth project
-                    execution, we recommend keeping each milestone budget between:</p>
-                  <h5 class="fw-bold text-primary fs-5 mb-4">₹30,000 - ₹60,000</h5>
-
-                  <div class="d-flex gap-4 text-center">
-                    <div>
-                      <i class="bi bi-shield-check text-primary fs-4 mb-1 d-block"></i>
-                      <span class="text-primary fw-semibold" style="font-size: 0.65rem;">Secure<br>Payments</span>
-                    </div>
-                    <div>
-                      <i class="bi bi-graph-up text-primary fs-4 mb-1 d-block"></i>
-                      <span class="text-primary fw-semibold" style="font-size: 0.65rem;">Better<br>Tracking</span>
-                    </div>
-                    <div>
-                      <i class="bi bi-lightning text-primary fs-4 mb-1 d-block"></i>
-                      <span class="text-primary fw-semibold" style="font-size: 0.65rem;">Faster<br>Payments</span>
-                    </div>
-                    <div>
-                      <i class="bi bi-shield-exclamation text-primary fs-4 mb-1 d-block"></i>
-                      <span class="text-primary fw-semibold" style="font-size: 0.65rem;">Reduced<br>Risk</span>
-                    </div>
-                    <div>
-                      <i class="bi bi-chat-dots text-primary fs-4 mb-1 d-block"></i>
-                      <span class="text-primary fw-semibold" style="font-size: 0.65rem;">Easier<br>Resolution</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Phase-wise Budgets -->
-            <div class="d-flex justify-content-between align-items-end mb-3">
-              <div>
-                <h3 class="fs-6 fw-bold text-dark mb-1">Enter Phase-wise Budgets</h3>
-                <p class="text-muted mb-0" style="font-size: 0.75rem;">Since your total budget exceeds ₹60,000, please
-                  divide it into multiple phases.</p>
-              </div>
-              <button
-                class="btn btn-outline-primary bg-primary bg-opacity-10 btn-sm fw-semibold rounded-pill px-3 border-0 d-flex align-items-center gap-1">
-                <i class="bi bi-plus"></i> Add Phase
-              </button>
-            </div>
-
-            <div class="table-responsive mb-4">
-              <table class="table table-borderless align-middle mb-0" style="font-size: 0.75rem;">
-                <thead class="text-dark fw-bold border-bottom" style="font-size: 0.7rem;">
-                  <tr>
-                    <th class="pb-2">Phase</th>
-                    <th class="pb-2">Phase Title</th>
-                    <th class="pb-2">Milestone Budget (₹) *</th>
-                    <th class="pb-2">Deliverables (Optional)</th>
-                    <th class="pb-2 text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="pt-3">
-                      <div
-                        class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center fw-bold border border-success border-opacity-25"
-                        style="width: 24px; height: 24px;">1</div>
-                    </td>
-                    <td class="pt-3">
-                      <span class="fw-bold d-block text-dark">Phase 1</span>
-                      <span class="text-muted" style="font-size: 0.65rem;">e.g. Design & Planning</span>
-                    </td>
-                    <td class="pt-3"><input type="text"
-                        class="form-control text-dark border-secondary border-opacity-25 fw-semibold" value="50,000"
-                        style="font-size: 0.8rem;"></td>
-                    <td class="pt-3"><input type="text"
-                        class="form-control text-muted border-secondary border-opacity-25"
-                        placeholder="e.g. UI/UX Design, Wireframes" style="font-size: 0.75rem;"></td>
-                    <td class="text-center pt-3"><i class="bi bi-trash text-danger cursor-pointer fs-5"></i></td>
-                  </tr>
-                  <tr>
-                    <td class="pt-3">
-                      <div
-                        class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center fw-bold border border-success border-opacity-25"
-                        style="width: 24px; height: 24px;">2</div>
-                    </td>
-                    <td class="pt-3">
-                      <span class="fw-bold d-block text-dark">Phase 2</span>
-                      <span class="text-muted" style="font-size: 0.65rem;">e.g. Development</span>
-                    </td>
-                    <td class="pt-3"><input type="text"
-                        class="form-control text-dark border-secondary border-opacity-25 fw-semibold" value="50,000"
-                        style="font-size: 0.8rem;"></td>
-                    <td class="pt-3"><input type="text"
-                        class="form-control text-muted border-secondary border-opacity-25"
-                        placeholder="e.g. Frontend & Backend Development" style="font-size: 0.75rem;"></td>
-                    <td class="text-center pt-3"><i class="bi bi-trash text-danger cursor-pointer fs-5"></i></td>
-                  </tr>
-                  <tr>
-                    <td class="pt-3">
-                      <div
-                        class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center fw-bold border border-success border-opacity-25"
-                        style="width: 24px; height: 24px;">3</div>
-                    </td>
-                    <td class="pt-3">
-                      <span class="fw-bold d-block text-dark">Phase 3</span>
-                      <span class="text-muted" style="font-size: 0.65rem;">e.g. Testing</span>
-                    </td>
-                    <td class="pt-3"><input type="text"
-                        class="form-control text-dark border-secondary border-opacity-25 fw-semibold" value="50,000"
-                        style="font-size: 0.8rem;"></td>
-                    <td class="pt-3"><input type="text"
-                        class="form-control text-muted border-secondary border-opacity-25"
-                        placeholder="e.g. QA Testing, Bug Fixing" style="font-size: 0.75rem;"></td>
-                    <td class="text-center pt-3"><i class="bi bi-trash text-danger cursor-pointer fs-5"></i></td>
-                  </tr>
-                  <tr>
-                    <td class="pt-3">
-                      <div
-                        class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center fw-bold border border-success border-opacity-25"
-                        style="width: 24px; height: 24px;">4</div>
-                    </td>
-                    <td class="pt-3">
-                      <span class="fw-bold d-block text-dark">Phase 4</span>
-                      <span class="text-muted" style="font-size: 0.65rem;">e.g. Deployment</span>
-                    </td>
-                    <td class="pt-3"><input type="text"
-                        class="form-control text-dark border-secondary border-opacity-25 fw-semibold" value="50,000"
-                        style="font-size: 0.8rem;"></td>
-                    <td class="pt-3"><input type="text"
-                        class="form-control text-muted border-secondary border-opacity-25"
-                        placeholder="e.g. Deployment, Handover" style="font-size: 0.75rem;"></td>
-                    <td class="text-center pt-3"><i class="bi bi-trash text-danger cursor-pointer fs-5"></i></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="d-flex gap-5 border-top pt-3 mb-5">
-              <div class="d-flex gap-2 align-items-center">
-                <span class="text-dark fw-bold" style="font-size: 0.8rem;">Total of Phase Budgets</span>
-                <span class="fw-bold text-success fs-5">₹2,00,000</span>
-              </div>
-              <div class="d-flex gap-2 align-items-center">
-                <span class="text-muted fw-semibold" style="font-size: 0.8rem;">Remaining Amount</span>
-                <span class="fw-bold text-success fs-5">₹0</span>
-              </div>
-            </div>
-
-            <div class="d-flex justify-content-between pt-4 border-top">
-              <button class="btn btn-outline-secondary px-4 fw-bold d-flex align-items-center gap-2"><i
-                  class="bi bi-arrow-left"></i> Back</button>
-              <button class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold">Save & Continue <i
-                  class="bi bi-arrow-right ms-1"></i></button>
-            </div>
-          </div>
-
-          <!-- Right Column -->
-          <div class="col-lg-4">
-            <div class="d-flex flex-column gap-4">
-
-              <div class="glass-card rounded-3 p-4 bg-white border border-light">
-                <div class="d-flex align-items-center gap-2 mb-2">
-                  <div
-                    class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
-                    <i class="bi bi-file-text"></i></div>
-                  <h3 class="fs-6 fw-bold mb-0 text-dark">Contract Summary</h3>
-                </div>
-                <p class="text-muted small mb-4 pb-3 border-bottom" style="font-size: 0.75rem;">Complete the form to see
-                  a summary.</p>
-
-                <div class="d-flex flex-column gap-3 mb-4" style="font-size: 0.75rem;">
-                  <div class="d-flex justify-content-between"><span class="text-muted">Title</span><span
-                      class="text-dark fw-semibold text-end">Website Development</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Type</span><span
-                      class="text-dark fw-semibold">Fixed Price</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Category</span><span
-                      class="text-dark fw-semibold">Web Development</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Subject</span><span
-                      class="text-dark fw-semibold text-end">Full Stack Website</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Budget</span><span
-                      class="text-dark fw-semibold">₹2,00,000</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Duration</span><span
-                      class="text-dark">-</span></div>
-                  <div class="d-flex justify-content-between align-items-center"><span
-                      class="text-muted">Status</span><span
-                      class="badge bg-secondary bg-opacity-10 text-secondary">Draft</span></div>
-                  <div class="d-flex justify-content-between align-items-center mt-2 pt-3 border-top">
-                    <span class="text-muted">Created By</span>
-                    <div class="d-flex align-items-center gap-2">
-                      <div class="rounded-circle bg-dark" style="width: 20px; height: 20px;"></div><span
-                        class="fw-bold text-dark">You</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="card border border-warning border-opacity-25 rounded-3 p-4 bg-warning bg-opacity-10">
-                <div class="d-flex align-items-center gap-2 mb-2">
-                  <i class="bi bi-exclamation-triangle text-warning fs-5"></i>
-                  <h3 class="fs-6 fw-bold mb-0 text-dark">Important Note</h3>
-                </div>
-                <p class="text-dark mb-2" style="font-size: 0.75rem; line-height: 1.5;">Large contract amounts will be
-                  split into multiple payments based on platform to ensure secure transactions.</p>
-                <p class="text-muted mb-0" style="font-size: 0.75rem;">You can create phases in the next step.</p>
-              </div>
-
-              <div class="glass-card rounded-3 p-4 bg-white border border-light">
-                <div class="d-flex align-items-center gap-2 mb-4">
-                  <i class="bi bi-rocket-takeoff text-primary fs-5"></i>
-                  <h3 class="fs-6 fw-bold mb-0 text-dark">What Happens Next?</h3>
-                </div>
-
-                <div class="d-flex flex-column gap-3 position-relative ps-1">
-                  <div class="position-absolute top-0 bottom-0 ms-2"
-                    style="left: 0; width: 1px; border-left: 1px dashed #dee2e6; z-index: 1;"></div>
-
-                  <div class="d-flex gap-3 position-relative z-2">
-                    <div
-                      class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0"
-                      style="width: 20px; height: 20px; font-size: 0.6rem;">1</div>
-                    <div>
-                      <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.75rem;">Create Phases</span>
-                      <span class="text-muted" style="font-size: 0.65rem;">Break down the contract into manageable
-                        phases.</span>
-                    </div>
-                  </div>
-                  <div class="d-flex gap-3 position-relative z-2">
-                    <div
-                      class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0"
-                      style="width: 20px; height: 20px; font-size: 0.6rem;">2</div>
-                    <div>
-                      <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.75rem;">Set Milestone
-                        Budgets</span>
-                      <span class="text-muted" style="font-size: 0.65rem;">Assign budget for each phase within the
-                        recommended range.</span>
-                    </div>
-                  </div>
-                  <div class="d-flex gap-3 position-relative z-2">
-                    <div
-                      class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0"
-                      style="width: 20px; height: 20px; font-size: 0.6rem;">3</div>
-                    <div>
-                      <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.75rem;">Define
-                        Deliverables</span>
-                      <span class="text-muted" style="font-size: 0.65rem;">Add deliverables for each milestone.</span>
-                    </div>
-                  </div>
-                  <div class="d-flex gap-3 position-relative z-2">
-                    <div
-                      class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0"
-                      style="width: 20px; height: 20px; font-size: 0.6rem;">4</div>
-                    <div>
-                      <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.75rem;">Set Deadlines</span>
-                      <span class="text-muted" style="font-size: 0.65rem;">Set start and end date for each phase.</span>
-                    </div>
-                  </div>
-                  <div class="d-flex gap-3 position-relative z-2">
-                    <div
-                      class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0"
-                      style="width: 20px; height: 20px; font-size: 0.6rem;">5</div>
-                    <div>
-                      <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.75rem;">Review & Publish</span>
-                      <span class="text-muted" style="font-size: 0.65rem;">Review everything and publish the
-                        contract.</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="card border border-primary border-opacity-25 rounded-3 p-4"
-                style="background-color: #f8f9fa;">
-                <div class="d-flex align-items-center gap-2 mb-2">
-                  <i class="bi bi-question-circle text-primary"></i>
-                  <h3 class="fs-6 fw-bold mb-0 text-dark">Need Help?</h3>
-                </div>
-                <p class="text-muted mb-3" style="font-size: 0.75rem; line-height: 1.5;">Not sure how budget or duration
-                  works? Check our help docs or contact support.</p>
-                <a href="#" class="text-primary text-decoration-none fw-bold text-center w-100 d-block"
-                  style="font-size: 0.75rem;">View Help Center <i class="bi bi-box-arrow-up-right ms-1"></i></a>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- ==========================================
-       STEP 3: TERMS & CONDITIONS
-  =========================================== -->
-    <div class="step-container bg-white rounded-4 shadow-sm mb-5 border p-0 overflow-hidden mt-5">
-      <!-- Header & Stepper -->
-      <div class="p-4 border-bottom bg-light bg-opacity-50">
-        <div class="d-flex align-items-start gap-3 mb-4">
-          <button routerLink="/client/manage-contract" class="btn btn-link text-dark p-0 mt-1"><i
-              class="bi bi-arrow-left fs-5"></i></button>
-          <div>
-            <h1 class="fw-bold fs-4 mb-1 text-dark">Create New Contract</h1>
-            <p class="text-muted small mb-0">Fill in the details below to create a new contract</p>
-          </div>
-        </div>
-
-        <!-- Stepper: Step 3 Active -->
-        <div class="d-flex align-items-center w-75 mx-auto mt-2">
-          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-            <div
-              class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
-              style="width: 32px; height: 32px; font-size: 0.8rem;"><i class="bi bi-check fs-5"></i></div>
-            <span class="text-success small mt-2 fw-bold" style="font-size: 0.7rem;">Basic Details</span>
-            <div class="position-absolute top-0 start-50 w-100"
-              style="height: 3px; background-color: #198754; margin-top: 15px; z-index: 1;"></div>
-          </div>
-          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-            <div
-              class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
-              style="width: 32px; height: 32px; font-size: 0.8rem;"><i class="bi bi-check fs-5"></i></div>
-            <span class="text-success small mt-2 fw-bold" style="font-size: 0.7rem;">Budget & Duration</span>
-            <div class="position-absolute top-0 start-50 w-100"
-              style="height: 3px; background-color: #198754; margin-top: 15px; z-index: 1;"></div>
-          </div>
-          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-            <div
-              class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
-              style="width: 32px; height: 32px; font-size: 0.8rem;">3</div>
-            <span class="text-primary small mt-2 fw-bold" style="font-size: 0.7rem;">Terms & Conditions</span>
-            <div class="position-absolute top-0 start-50 w-100"
-              style="height: 3px; background-color: #e9ecef; margin-top: 15px; z-index: 1;"></div>
-          </div>
-          <div class="d-flex flex-column align-items-center position-relative" style="width: 80px;">
-            <div
-              class="rounded-circle bg-white border border-2 border-secondary text-muted d-flex align-items-center justify-content-center z-2 fw-bold bg-opacity-50"
-              style="width: 32px; height: 32px; font-size: 0.8rem;">4</div>
-            <span class="text-muted small mt-2 text-center" style="font-size: 0.7rem;">Review & Create</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Content Step 3 -->
-      <div class="p-4">
-        <div class="row g-5">
-          <!-- Left Column -->
-          <div class="col-lg-8">
-            <div class="d-flex align-items-center gap-2 mb-2">
-              <div
-                class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
-                <i class="bi bi-journal-text fs-5"></i></div>
               <h2 class="fs-5 fw-bold mb-0 text-dark">Terms & Conditions</h2>
             </div>
             <p class="text-muted small mb-4">Please read and accept the platform terms before posting the contract.</p>
 
             <div class="d-flex flex-column gap-4 mb-5 border rounded-3 p-4 bg-white">
               <div class="d-flex gap-3">
-                <div
-                  class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
-                  style="width: 24px; height: 24px; font-size: 0.7rem;">1</div>
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">1</div>
                 <div>
                   <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Platform Agreement</h4>
-                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I confirm that I am
-                    authorized to create this contract and agree to comply with Talent Hub's platform policies.</p>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I confirm that I am authorized to create this contract and agree to comply with Talent Hub's platform policies.</p>
                 </div>
               </div>
               <div class="d-flex gap-3">
-                <div
-                  class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
-                  style="width: 24px; height: 24px; font-size: 0.7rem;">2</div>
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">2</div>
                 <div>
                   <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Accurate Project Information</h4>
-                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I confirm that the project
-                    details, requirements, budget, and timeline provided are accurate and complete.</p>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I confirm that the project details, requirements, budget, and timeline provided are accurate and complete.</p>
                 </div>
               </div>
               <div class="d-flex gap-3">
-                <div
-                  class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
-                  style="width: 24px; height: 24px; font-size: 0.7rem;">3</div>
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">3</div>
                 <div>
                   <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Contract Budget</h4>
-                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I understand that the total
-                    contract budget must represent the agreed project value and may be processed according to Talent
-                    Hub's payment policies.</p>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I understand that the total contract budget must represent the agreed project value and may be processed according to Talent Hub's payment policies.</p>
                 </div>
               </div>
               <div class="d-flex gap-3">
-                <div
-                  class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
-                  style="width: 24px; height: 24px; font-size: 0.7rem;">4</div>
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">4</div>
                 <div>
                   <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Milestone-Based Work</h4>
-                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I understand that work
-                    progress will be managed through contract phases and milestone submissions within the Contract
-                    Diary.</p>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I understand that work progress will be managed through contract phases and milestone submissions within the Contract Diary.</p>
                 </div>
               </div>
               <div class="d-flex gap-3">
-                <div
-                  class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
-                  style="width: 24px; height: 24px; font-size: 0.7rem;">5</div>
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">5</div>
                 <div>
                   <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Payment Processing</h4>
-                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I understand that all
-                    payments will be processed only through Talent Hub's supported payment system. Off-platform payments
-                    are not allowed and may violate platform policies.</p>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I understand that all payments will be processed only through Talent Hub's supported payment system. Off-platform payments are not allowed and may violate platform policies.</p>
                 </div>
               </div>
               <div class="d-flex gap-3">
-                <div
-                  class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
-                  style="width: 24px; height: 24px; font-size: 0.7rem;">6</div>
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">6</div>
                 <div>
                   <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Review & Approval</h4>
-                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I agree to review submitted
-                    work within the expected review period and provide approval or revision requests promptly.</p>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I agree to review submitted work within the expected review period and provide approval or revision requests promptly.</p>
                 </div>
               </div>
               <div class="d-flex gap-3">
-                <div
-                  class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
-                  style="width: 24px; height: 24px; font-size: 0.7rem;">7</div>
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">7</div>
                 <div>
                   <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Revision Management</h4>
-                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I understand that revision
-                    requests should remain within the agreed project scope. Additional work outside the agreed scope may
-                    require a new contract or additional agreement.</p>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I understand that revision requests should remain within the agreed project scope. Additional work outside the agreed scope may require a new contract or additional agreement.</p>
                 </div>
               </div>
               <div class="d-flex gap-3">
-                <div
-                  class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
-                  style="width: 24px; height: 24px; font-size: 0.7rem;">8</div>
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">8</div>
                 <div>
                   <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Communication Policy</h4>
-                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I agree to communicate
-                    professionally through Talent Hub's messaging and meeting features to maintain project history.</p>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I agree to communicate professionally through Talent Hub's messaging and meeting features to maintain project history.</p>
                 </div>
               </div>
             </div>
@@ -770,17 +264,20 @@
               <h3 class="fs-6 fw-bold text-dark mb-3">Client Acceptance</h3>
               <div class="d-flex flex-column gap-3" style="font-size: 0.8rem;">
                 <div class="form-check">
-                  <input class="form-check-input border-secondary" type="checkbox" id="c1">
+                  <input class="form-check-input border-secondary" type="checkbox" id="c1"
+                    formControlName="agreeToTerms1">
                   <label class="form-check-label text-muted" for="c1">I have read and understood all the above Terms &
                     Conditions.</label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input border-secondary" type="checkbox" id="c2">
+                  <input class="form-check-input border-secondary" type="checkbox" id="c2"
+                    formControlName="agreeToTerms2">
                   <label class="form-check-label text-muted" for="c2">I agree to comply with Talent Hub's platform
                     policies.</label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input border-secondary" type="checkbox" id="c3">
+                  <input class="form-check-input border-secondary" type="checkbox" id="c3"
+                    formControlName="agreeToTerms3">
                   <label class="form-check-label text-muted" for="c3">I understand that once the contract is created, it
                     becomes the official project agreement on the Talent Hub platform.</label>
                 </div>
@@ -788,131 +285,33 @@
             </div>
 
             <div class="d-flex justify-content-between pt-4 border-top">
-              <button class="btn btn-outline-secondary px-4 fw-bold d-flex align-items-center gap-2"><i
+              <button type="button" (click)="previousStep()"
+                class="btn btn-outline-secondary px-4 fw-bold d-flex align-items-center gap-2"><i
                   class="bi bi-arrow-left"></i> Back</button>
-              <button class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold">Continue to Review <i
+              <button type="button" (click)="nextStep()"
+                [disabled]="contractForm.get('agreeToTerms1')?.invalid || contractForm.get('agreeToTerms2')?.invalid || contractForm.get('agreeToTerms3')?.invalid"
+                class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold">Continue to Review <i
                   class="bi bi-arrow-right ms-1"></i></button>
             </div>
           </div>
-
-          <!-- Right Column -->
-          <div class="col-lg-4">
-            <div class="d-flex flex-column gap-4">
-
-              <div class="glass-card rounded-3 p-4 bg-white border border-light">
-                <div class="d-flex align-items-center gap-2 mb-2">
-                  <div
-                    class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
-                    <i class="bi bi-file-text"></i></div>
-                  <h3 class="fs-6 fw-bold mb-0 text-dark">Contract Summary</h3>
-                </div>
-                <p class="text-muted small mb-4 pb-3 border-bottom" style="font-size: 0.75rem;">Complete the form to see
-                  a summary.</p>
-
-                <div class="d-flex flex-column gap-3 mb-4" style="font-size: 0.75rem;">
-                  <div class="d-flex justify-content-between"><span class="text-muted">Title</span><span
-                      class="text-dark fw-semibold text-end">Website Development</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Type</span><span
-                      class="text-dark fw-semibold">Fixed Price</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Category</span><span
-                      class="text-dark fw-semibold">Web Development</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Subject</span><span
-                      class="text-dark fw-semibold text-end">Full Stack Website</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Budget</span><span
-                      class="text-dark fw-semibold">₹2,00,000</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Duration</span><span
-                      class="text-dark fw-semibold text-end">20 May 2026 - 20 Aug 2026<br><span
-                        class="text-muted fw-normal">(92 Days)</span></span></div>
-                  <div class="d-flex justify-content-between align-items-center mt-2 pt-3 border-top">
-                    <span class="text-muted">Created By</span>
-                    <div class="d-flex align-items-center gap-2">
-                      <div class="rounded-circle bg-dark" style="width: 20px; height: 20px;"></div><span
-                        class="fw-bold text-dark">You</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="card border border-primary border-opacity-25 rounded-3 p-4"
-                style="background-color: #f8f9fa;">
-                <div class="d-flex align-items-center gap-2 mb-3">
-                  <i class="bi bi-shield-check text-primary fs-5"></i>
-                  <h3 class="fs-6 fw-bold mb-0 text-dark">Why these terms?</h3>
-                </div>
-                <p class="text-muted mb-3" style="font-size: 0.75rem; line-height: 1.5;">These terms help us ensure a
-                  safe, transparent, and successful experience for both clients and freelancers.</p>
-                <p class="text-muted mb-4" style="font-size: 0.75rem; line-height: 1.5;">By accepting, you agree to
-                  follow our platform guidelines and policies.</p>
-                <a href="#" class="text-primary text-decoration-none fw-bold text-center w-100 d-block"
-                  style="font-size: 0.75rem;">View Full Terms <i class="bi bi-box-arrow-up-right ms-1"></i></a>
-              </div>
-
-            </div>
-          </div>
         </div>
       </div>
-    </div>
+      }
 
 
-    <!-- ==========================================
-       STEP 4: REVIEW & CREATE
-  =========================================== -->
-    <div class="step-container bg-white rounded-4 shadow-sm mb-5 border p-0 overflow-hidden mt-5">
-      <!-- Header & Stepper -->
-      <div class="p-4 border-bottom bg-light bg-opacity-50">
-        <div class="d-flex align-items-start gap-3 mb-4">
-          <button routerLink="/client/manage-contract" class="btn btn-link text-dark p-0 mt-1"><i
-              class="bi bi-arrow-left fs-5"></i></button>
-          <div>
-            <h1 class="fw-bold fs-4 mb-1 text-dark">Create New Contract</h1>
-            <p class="text-muted small mb-0">Fill in the details below to create a new contract</p>
-          </div>
-        </div>
-
-        <!-- Stepper: Step 4 Active -->
-        <div class="d-flex align-items-center w-75 mx-auto mt-2">
-          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-            <div
-              class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
-              style="width: 32px; height: 32px; font-size: 0.8rem;"><i class="bi bi-check fs-5"></i></div>
-            <span class="text-success small mt-2 fw-bold" style="font-size: 0.7rem;">Basic Details</span>
-            <div class="position-absolute top-0 start-50 w-100"
-              style="height: 3px; background-color: #198754; margin-top: 15px; z-index: 1;"></div>
-          </div>
-          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-            <div
-              class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
-              style="width: 32px; height: 32px; font-size: 0.8rem;"><i class="bi bi-check fs-5"></i></div>
-            <span class="text-success small mt-2 fw-bold" style="font-size: 0.7rem;">Budget & Duration</span>
-            <div class="position-absolute top-0 start-50 w-100"
-              style="height: 3px; background-color: #198754; margin-top: 15px; z-index: 1;"></div>
-          </div>
-          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-            <div
-              class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
-              style="width: 32px; height: 32px; font-size: 0.8rem;"><i class="bi bi-check fs-5"></i></div>
-            <span class="text-success small mt-2 fw-bold" style="font-size: 0.7rem;">Terms & Conditions</span>
-            <div class="position-absolute top-0 start-50 w-100"
-              style="height: 3px; background-color: #198754; margin-top: 15px; z-index: 1;"></div>
-          </div>
-          <div class="d-flex flex-column align-items-center position-relative" style="width: 80px;">
-            <div
-              class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
-              style="width: 32px; height: 32px; font-size: 0.8rem;">4</div>
-            <span class="text-primary small mt-2 text-center fw-bold" style="font-size: 0.7rem;">Review & Create</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Content Step 4 -->
+      <!-- ==========================================
+         STEP 3: REVIEW & CREATE
+      =========================================== -->
+      @if (currentStep === 3) {
       <div class="p-4">
         <div class="row g-5">
           <!-- Left Column -->
-          <div class="col-lg-8">
+          <div class="col-lg-8 mx-auto">
             <div class="d-flex align-items-center gap-2 mb-2">
               <div
                 class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
-                <i class="bi bi-eye fs-5"></i></div>
+                <i class="bi bi-eye fs-5"></i>
+              </div>
               <h2 class="fs-5 fw-bold mb-0 text-dark">Review Your Contract</h2>
             </div>
             <p class="text-muted small mb-4">Please review all contract details carefully. You can go back and edit if
@@ -923,167 +322,85 @@
               <!-- Basic Details Review -->
               <div>
                 <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                  <h3 class="fs-6 fw-bold text-dark mb-0">Basic Details</h3>
-                  <a href="#" class="text-primary text-decoration-none fw-semibold d-flex align-items-center gap-1"
-                    style="font-size: 0.75rem;"><i class="bi bi-pencil"></i> Edit</a>
+                  <h3 class="fs-6 fw-bold text-dark mb-0">Basic Details & Budget</h3>
+                  <button type="button" (click)="currentStep = 1"
+                    class="btn btn-link text-primary text-decoration-none fw-semibold d-flex align-items-center gap-1 p-0"
+                    style="font-size: 0.75rem;"><i class="bi bi-pencil"></i> Edit</button>
                 </div>
                 <div class="row g-4" style="font-size: 0.8rem;">
                   <div class="col-md-6">
                     <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Contract Title</span>
-                    <span class="fw-bold text-dark">Website Development</span>
+                    <span class="fw-bold text-dark">{{ contractForm.get('contractTitle')?.value || '-' }}</span>
                   </div>
                   <div class="col-md-6">
                     <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Contract Type</span>
-                    <span class="fw-bold text-dark">Fixed Price</span>
+                    <span class="fw-bold text-dark">{{ contractForm.get('contractType')?.value || '-' }}</span>
                   </div>
                   <div class="col-md-6">
                     <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Category</span>
-                    <span class="fw-bold text-dark">Web Development</span>
-                  </div>
-                  <div class="col-md-6">
-                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Description</span>
-                    <span class="fw-semibold text-muted d-block" style="line-height: 1.5;">Development of a responsive
-                      website with modern UI/UX using Angular and Node.js. Includes admin panel, authentication, and
-                      deployment.</span>
+                    <span class="fw-bold text-dark">{{ contractForm.get('contractCategory')?.value || '-' }}</span>
                   </div>
                   <div class="col-md-6">
                     <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Subject</span>
-                    <span class="fw-bold text-dark">Full Stack Website</span>
+                    <span class="fw-bold text-dark">{{ contractForm.get('contractSubject')?.value || '-' }}</span>
                   </div>
-                </div>
-              </div>
-
-              <!-- Budget Details Review -->
-              <div>
-                <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                  <h3 class="fs-6 fw-bold text-dark mb-0">Budget Details</h3>
-                  <a href="#" class="text-primary text-decoration-none fw-semibold d-flex align-items-center gap-1"
-                    style="font-size: 0.75rem;"><i class="bi bi-pencil"></i> Edit</a>
-                </div>
-                <div class="row g-4 mb-3" style="font-size: 0.8rem;">
-                  <div class="col-md-6">
-                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Total Contract Budget</span>
-                    <span class="fw-bold text-dark fs-6">₹2,00,000</span>
+                  <div class="col-md-12">
+                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Description</span>
+                    <span class="fw-semibold text-muted d-block" style="line-height: 1.5;">{{
+                      contractForm.get('contractDescription')?.value || '-' }}</span>
                   </div>
                   <div class="col-md-6">
-                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Currency</span>
-                    <span class="fw-bold text-dark">INR - Indian Rupee</span>
+                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Budget</span>
+                    <span class="fw-bold text-dark fs-6">₹{{ contractForm.get('estimatedBudget')?.value || 0 }}</span>
                   </div>
                 </div>
-                <p class="text-muted mb-0" style="font-size: 0.75rem;">Large contracts will be split into payments
-                  between ₹30,000 - ₹60,000 as per platform guidelines.</p>
               </div>
 
               <!-- Duration Details Review -->
               <div>
                 <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
                   <h3 class="fs-6 fw-bold text-dark mb-0">Duration Details</h3>
-                  <a href="#" class="text-primary text-decoration-none fw-semibold d-flex align-items-center gap-1"
-                    style="font-size: 0.75rem;"><i class="bi bi-pencil"></i> Edit</a>
                 </div>
                 <div class="row g-4" style="font-size: 0.8rem;">
                   <div class="col-md-6">
                     <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Contract Start Date</span>
-                    <span class="fw-bold text-dark">20 May 2026</span>
+                    <span class="fw-bold text-dark">{{ contractForm.get('contractStartDate')?.value | date:'mediumDate'
+                      }}</span>
                   </div>
                   <div class="col-md-6">
                     <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Contract End Date</span>
-                    <span class="fw-bold text-dark">20 Aug 2026</span>
+                    <span class="fw-bold text-dark">{{ contractForm.get('contractEndDate')?.value | date:'mediumDate'
+                      }}</span>
                   </div>
                   <div class="col-md-6">
                     <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Total Duration</span>
-                    <span class="fw-bold text-dark">92 Days (Approx. 3 Months)</span>
-                  </div>
-                  <div class="col-md-3">
-                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Working Days</span>
-                    <span class="fw-bold text-dark">66 Days</span>
-                  </div>
-                  <div class="col-md-3">
-                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Weeks</span>
-                    <span class="fw-bold text-dark">13 Weeks</span>
+                    <span class="fw-bold text-dark">{{ durationDetails.totalDays }} Days</span>
                   </div>
                 </div>
-              </div>
-
-              <!-- Terms Review -->
-              <div>
-                <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                  <h3 class="fs-6 fw-bold text-dark mb-0">Terms & Conditions</h3>
-                  <a href="#" class="text-primary text-decoration-none fw-semibold d-flex align-items-center gap-1"
-                    style="font-size: 0.75rem;"><i class="bi bi-pencil"></i> Edit</a>
-                </div>
-                <p class="text-dark fw-semibold mb-1" style="font-size: 0.8rem;">You have accepted the platform terms
-                  and conditions.</p>
-                <span class="text-muted d-block" style="font-size: 0.75rem;">Accepted on 21 May 2026, 10:30 AM</span>
               </div>
 
             </div>
 
             <div class="d-flex justify-content-between pt-4 border-top">
-              <button class="btn btn-outline-secondary px-4 fw-bold d-flex align-items-center gap-2"><i
+              <button type="button" (click)="previousStep()"
+                class="btn btn-outline-secondary px-4 fw-bold d-flex align-items-center gap-2"><i
                   class="bi bi-arrow-left"></i> Back</button>
-              <button class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold">Create Contract & Continue
-                <i class="bi bi-arrow-right ms-1"></i></button>
-            </div>
-          </div>
-
-          <!-- Right Column -->
-          <div class="col-lg-4">
-            <div class="d-flex flex-column gap-4">
-
-              <div class="glass-card rounded-3 p-4 bg-white border border-light">
-                <div class="d-flex align-items-center gap-2 mb-2">
-                  <div
-                    class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
-                    <i class="bi bi-file-text"></i></div>
-                  <h3 class="fs-6 fw-bold mb-0 text-dark">Contract Summary</h3>
-                </div>
-                <p class="text-muted small mb-4 pb-3 border-bottom" style="font-size: 0.75rem;">Review summary of your
-                  contract</p>
-
-                <div class="d-flex flex-column gap-3 mb-4" style="font-size: 0.75rem;">
-                  <div class="d-flex justify-content-between"><span class="text-muted">Title</span><span
-                      class="text-dark fw-semibold text-end">Website Development</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Type</span><span
-                      class="text-dark fw-semibold">Fixed Price</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Category</span><span
-                      class="text-dark fw-semibold">Web Development</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Subject</span><span
-                      class="text-dark fw-semibold text-end">Full Stack Website</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Budget</span><span
-                      class="text-dark fw-semibold">₹2,00,000</span></div>
-                  <div class="d-flex justify-content-between"><span class="text-muted">Duration</span><span
-                      class="text-dark fw-semibold text-end">20 May 2026 - 20 Aug 2026<br><span
-                        class="text-muted fw-normal">(92 Days)</span></span></div>
-                  <div class="d-flex justify-content-between align-items-center mt-2 pt-3 border-top">
-                    <span class="text-muted">Created By</span>
-                    <div class="d-flex align-items-center gap-2">
-                      <div class="rounded-circle bg-dark" style="width: 20px; height: 20px; overflow: hidden;"><img
-                          src="https://ui-avatars.com/api/?name=Siva+Prasad&background=random" class="w-100 h-100"
-                          alt=""></div><span class="fw-bold text-dark">Siva Prasad Kurra</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="card border border-success border-opacity-25 bg-success bg-opacity-10 rounded-3 p-4">
-                <div class="d-flex gap-3 align-items-start">
-                  <i class="bi bi-shield-check text-success fs-4"></i>
-                  <div>
-                    <h4 class="fw-bold text-success fs-6 mb-1">Secure & Protected</h4>
-                    <p class="text-dark mb-0" style="font-size: 0.7rem; line-height: 1.5;">Your data and payments are
-                      protected with bank-level security.</p>
-                  </div>
-                </div>
-              </div>
-
+              <button type="submit" [disabled]="isSubmitting"
+                class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold">
+                @if(isSubmitting) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Submitting...
+                } @else {
+                Create Contract & Continue <i class="bi bi-arrow-right ms-1"></i>
+                }
+              </button>
             </div>
           </div>
         </div>
       </div>
+      }
+
     </div>
-
-
-  </div>
+  </form>
 
 </div>

@@ -25,7 +25,7 @@ import { CreateTicket } from '../shared/create-ticket/create-ticket';
 export const FREELANCER_ROUTES: Routes = [
   { path: 'dashboard', component: Dashboard },
   { path: 'find-contracts', component: FindContracts },
-  { path: 'contract-details', component: ContractDetails },
+  { path: 'contract-details/:id', component: ContractDetails },
   { path: 'proposal-offers', component: ProposalOffers },
   { path: 'my-contracts', component: MyContracts },
   { path: 'contract-diary', component: ContractDiary },

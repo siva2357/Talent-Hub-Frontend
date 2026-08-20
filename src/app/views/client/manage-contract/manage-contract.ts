@@ -1,74 +1,64 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-
-interface Contract {
-  id: number;
-  title: string;
-  subject: string;
-  type: string;
-  budget: string;
-  startDate: string;
-  endDate: string;
-  status: 'Completed' | 'Active' | 'Draft';
-}
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { ContractService } from '../../../core/services/contract.service';
+import { Contract } from '../../../core/models/contract.model';
 
 @Component({
   selector: 'app-manage-contract',
-  imports: [RouterLink],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './manage-contract.html',
   styleUrl: './manage-contract.css'
 })
-export class ManageContract {
-  contracts: Contract[] = [
-    {
-      id: 1,
-      title: 'E-Commerce Website',
-      subject: 'Online Store',
-      type: 'Full Stack Development',
-      budget: '₹60,000.00',
-      startDate: 'Jun 30, 2026',
-      endDate: 'Sep 30, 2026',
-      status: 'Completed'
-    },
-    {
-      id: 2,
-      title: 'Mobile App Redesign',
-      subject: 'UI/UX Design',
-      type: 'Design',
-      budget: '₹45,000.00',
-      startDate: 'Jul 15, 2026',
-      endDate: 'Oct 15, 2026',
-      status: 'Active'
-    },
-    {
-      id: 3,
-      title: 'SEO Optimization',
-      subject: 'Digital Marketing',
-      type: 'Marketing',
-      budget: '₹20,000.00',
-      startDate: 'Aug 01, 2026',
-      endDate: 'Nov 01, 2026',
-      status: 'Active'
-    },
-    {
-      id: 4,
-      title: 'CRM Integration',
-      subject: 'Backend System',
-      type: 'Backend Development',
-      budget: '₹85,000.00',
-      startDate: 'Aug 10, 2026',
-      endDate: 'Dec 10, 2026',
-      status: 'Draft'
-    },
-    {
-      id: 5,
-      title: 'Logo & Brand Identity',
-      subject: 'Branding',
-      type: 'Graphic Design',
-      budget: '₹15,000.00',
-      startDate: 'Sep 05, 2026',
-      endDate: 'Sep 25, 2026',
-      status: 'Completed'
+
+export class ManageContract implements OnInit {
+  allContracts: Contract[] = [];
+  isLoading: boolean = true;
+
+  constructor(
+    private contractService: ContractService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    this.fetchContracts();
+  }
+
+  fetchContracts(): void {
+    this.isLoading = true;
+    this.contractService.getMyContracts().subscribe({
+      next: (res) => {
+        this.allContracts = res.contracts || [];
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching contracts:', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  deleteContract(id: string): void {
+    if (confirm('Are you sure you want to delete this contract?')) {
+      this.contractService.deleteContract(id).subscribe({
+        next: () => {
+          this.allContracts = this.allContracts.filter(c => c._id !== id);
+        },
+        error: (err) => console.error('Delete error', err)
+      });
     }
-  ];
+  }
+
+  viewApplicants(id: string): void {
+    this.router.navigate(['/applicants', id]);
+  }
+
+  editContract(id: string): void {
+    this.router.navigate(['/create-contract'], { queryParams: { id } });
+  }
+
+  navigateToCreateContract(): void {
+    this.router.navigate(['/create-contract']);
+  }
 }

@@ -110,421 +110,67 @@
 
     <!-- Contract Cards Grid -->
     <div class="row g-4 mb-4">
-      <!-- Card 1 -->
+      @if (isLoading) {
+      <div class="col-12 text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      } @else if (contracts.length === 0) {
+      <div class="col-12 text-center py-5">
+        <p class="text-muted">No contracts found.</p>
+      </div>
+      } @else {
+      @for (contract of contracts; track contract._id) {
       <div class="col-12 col-md-6 col-lg-4 col-xl-3">
         <div class="card contract-card h-100 border rounded-4 shadow-sm bg-white p-4">
           <div class="d-flex justify-content-between align-items-start mb-3">
             <div
               class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0"
               style="width: 48px; height: 48px;">
-              <i class="bi bi-code-slash fs-4"></i>
+              <i class="bi bi-file-earmark-text fs-4"></i>
             </div>
             <i class="bi bi-bookmark text-muted cursor-pointer hover-text-primary"></i>
           </div>
-          <h3 class="fs-6 fw-bold text-dark mb-2" style="line-height: 1.4;">Frontend Developer for SaaS Dashboard</h3>
+          <h3 class="fs-6 fw-bold mb-2 text-dark" style="line-height: 1.4;">
+            {{ contract.contractTitle }}
+          </h3>
           <div class="d-flex gap-2 mb-3">
-            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">FEATURED</span>
-            <span class="badge bg-info bg-opacity-10 text-info rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">FULL-TIME</span>
+            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-semibold text-uppercase"
+              style="font-size: 0.65rem;">{{ contract.contractType }}</span>
+            <span class="badge bg-info bg-opacity-10 text-info rounded-pill fw-semibold text-uppercase"
+              style="font-size: 0.65rem;">{{ contract.status }}</span>
           </div>
           <p class="text-muted mb-4"
             style="font-size: 0.75rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-            Build a responsive and modern SaaS dashboard using React.js and Tailwind.</p>
+            {{ contract.contractDescription }}</p>
 
           <div class="row g-2 mb-4">
             <div class="col-6">
               <span class="d-block text-muted text-uppercase fw-semibold mb-1"
                 style="font-size: 0.6rem; letter-spacing: 0.5px;">BUDGET</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">₹60,000 - ₹80,000</span>
+              <span class="fw-bold text-dark" style="font-size: 0.85rem;">{{ contract.currency }} {{
+                contract.estimatedBudget }}</span>
             </div>
             <div class="col-6">
               <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">DURATION</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">2 - 3 Months</span>
+                style="font-size: 0.6rem; letter-spacing: 0.5px;">DATES</span>
+              <span class="fw-bold text-dark" style="font-size: 0.75rem;">{{ contract.contractStartDate | date:'MMM d'
+                }} - {{ contract.contractEndDate | date:'MMM d' }}</span>
             </div>
           </div>
 
-          <div class="d-flex flex-wrap gap-2 mb-4 mt-auto">
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">React.js</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">TypeScript</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Tailwind</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+2</span>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+          <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
             <span class="text-muted d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i
-                class="bi bi-clock"></i> Posted 2 days ago</span>
-            <a routerLink="/contract-details"
-              class="text-primary text-decoration-none fw-bold d-flex align-items-center gap-1 cursor-pointer"
-              style="font-size: 0.75rem;">View Details <i class="bi bi-arrow-right"></i></a>
+                class="bi bi-clock"></i> Posted {{ contract.createdAt | date:'shortDate' }}</span>
+            <button (click)="viewDetails(contract._id)"
+              class="btn btn-primary fw-bold d-flex align-items-center gap-1 shadow-none cursor-pointer"
+              style="font-size: 0.75rem;">View Details <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>
       </div>
-
-      <!-- Card 2 -->
-      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-        <div class="card contract-card h-100 border rounded-4 shadow-sm bg-white p-4">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div
-              class="rounded-3 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 48px; height: 48px;">
-              <i class="bi bi-cart3 fs-4"></i>
-            </div>
-            <i class="bi bi-bookmark text-muted cursor-pointer hover-text-primary"></i>
-          </div>
-          <h3 class="fs-6 fw-bold text-dark mb-2" style="line-height: 1.4;">E-commerce Mobile App Development</h3>
-          <div class="d-flex gap-2 mb-3">
-            <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">URGENT</span>
-            <span class="badge bg-purple-soft text-purple rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">LONG-TERM</span>
-          </div>
-          <p class="text-muted mb-4"
-            style="font-size: 0.75rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-            Develop a cross-platform e-commerce app for Android and iOS using Flutter.</p>
-
-          <div class="row g-2 mb-4">
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">BUDGET</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">₹1,20,000 - ₹1,80,000</span>
-            </div>
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">DURATION</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">3 - 6 Months</span>
-            </div>
-          </div>
-
-          <div class="d-flex flex-wrap gap-2 mb-4 mt-auto">
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Flutter</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Dart</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Firebase</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+2</span>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-            <span class="text-muted d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i
-                class="bi bi-clock"></i> Posted 1 day ago</span>
-            <a routerLink="/contract-details"
-              class="text-primary text-decoration-none fw-bold d-flex align-items-center gap-1 cursor-pointer"
-              style="font-size: 0.75rem;">View Details <i class="bi bi-arrow-right"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-        <div class="card contract-card h-100 border rounded-4 shadow-sm bg-white p-4">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div
-              class="rounded-3 bg-purple-soft text-purple d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 48px; height: 48px;">
-              <i class="bi bi-pen fs-4"></i>
-            </div>
-            <i class="bi bi-bookmark text-muted cursor-pointer hover-text-primary"></i>
-          </div>
-          <h3 class="fs-6 fw-bold text-dark mb-2" style="line-height: 1.4;">UI/UX Designer for Fintech Platform</h3>
-          <div class="d-flex gap-2 mb-3">
-            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">FEATURED</span>
-            <span class="badge bg-success bg-opacity-10 text-success rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">REMOTE</span>
-          </div>
-          <p class="text-muted mb-4"
-            style="font-size: 0.75rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-            Design intuitive and beautiful UI/UX for a modern fintech application.</p>
-
-          <div class="row g-2 mb-4">
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">BUDGET</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">₹40,000 - ₹60,000</span>
-            </div>
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">DURATION</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">1 - 2 Months</span>
-            </div>
-          </div>
-
-          <div class="d-flex flex-wrap gap-2 mb-4 mt-auto">
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Figma</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Adobe XD</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">UI Design</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+2</span>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-            <span class="text-muted d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i
-                class="bi bi-clock"></i> Posted 2 weeks ago</span>
-            <a routerLink="/contract-details"
-              class="text-primary text-decoration-none fw-bold d-flex align-items-center gap-1 cursor-pointer"
-              style="font-size: 0.75rem;">View Details <i class="bi bi-arrow-right"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-        <div class="card contract-card h-100 border rounded-4 shadow-sm bg-white p-4">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div
-              class="rounded-3 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 48px; height: 48px;">
-              <i class="bi bi-server fs-4"></i>
-            </div>
-            <i class="bi bi-bookmark text-muted cursor-pointer hover-text-primary"></i>
-          </div>
-          <h3 class="fs-6 fw-bold text-dark mb-2" style="line-height: 1.4;">Backend API Development</h3>
-          <div class="d-flex gap-2 mb-3">
-            <span class="badge bg-warning bg-opacity-10 text-warning-dark rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">HIGH PAY</span>
-            <span class="badge bg-purple-soft text-purple rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">LONG-TERM</span>
-          </div>
-          <p class="text-muted mb-4"
-            style="font-size: 0.75rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-            Develop secure and scalable REST APIs using Node.js and PostgreSQL.</p>
-
-          <div class="row g-2 mb-4">
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">BUDGET</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">₹70,000 - ₹1,20,000</span>
-            </div>
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">DURATION</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">2 - 3 Months</span>
-            </div>
-          </div>
-
-          <div class="d-flex flex-wrap gap-2 mb-4 mt-auto">
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Node.js</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Express.js</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">PostgreSQL</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+2</span>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-            <span class="text-muted d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i
-                class="bi bi-clock"></i> Posted 3 weeks ago</span>
-            <a routerLink="/contract-details"
-              class="text-primary text-decoration-none fw-bold d-flex align-items-center gap-1 cursor-pointer"
-              style="font-size: 0.75rem;">View Details <i class="bi bi-arrow-right"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 5 -->
-      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-        <div class="card contract-card h-100 border rounded-4 shadow-sm bg-white p-4">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div
-              class="rounded-3 bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 48px; height: 48px;">
-              <i class="bi bi-bar-chart-fill fs-4"></i>
-            </div>
-            <i class="bi bi-bookmark text-muted cursor-pointer hover-text-primary"></i>
-          </div>
-          <h3 class="fs-6 fw-bold text-dark mb-2" style="line-height: 1.4;">Data Analytics Dashboard</h3>
-          <div class="d-flex gap-2 mb-3">
-            <span class="badge bg-info bg-opacity-10 text-info rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">DATA ANALYTICS</span>
-            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">DASHBOARD</span>
-          </div>
-          <p class="text-muted mb-4"
-            style="font-size: 0.75rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-            Create an interactive analytics dashboard with real-time data visualization.</p>
-
-          <div class="row g-2 mb-4">
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">BUDGET</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">₹50,000 - ₹70,000</span>
-            </div>
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">DURATION</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">2 - 3 Months</span>
-            </div>
-          </div>
-
-          <div class="d-flex flex-wrap gap-2 mb-4 mt-auto">
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Power BI</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">SQL</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Python</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+2</span>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-            <span class="text-muted d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i
-                class="bi bi-clock"></i> Posted 1 week ago</span>
-            <a routerLink="/contract-details"
-              class="text-primary text-decoration-none fw-bold d-flex align-items-center gap-1 cursor-pointer"
-              style="font-size: 0.75rem;">View Details <i class="bi bi-arrow-right"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 6 -->
-      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-        <div class="card contract-card h-100 border rounded-4 shadow-sm bg-white p-4">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div
-              class="rounded-3 bg-warning bg-opacity-25 text-warning-dark d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 48px; height: 48px;">
-              <i class="bi bi-megaphone-fill fs-4"></i>
-            </div>
-            <i class="bi bi-bookmark text-muted cursor-pointer hover-text-primary"></i>
-          </div>
-          <h3 class="fs-6 fw-bold text-dark mb-2" style="line-height: 1.4;">Marketing Landing Page Development</h3>
-          <div class="d-flex gap-2 mb-3">
-            <span class="badge bg-warning bg-opacity-10 text-warning-dark rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">QUICK PROJECT</span>
-            <span class="badge bg-purple-soft text-purple rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">WEBSITE</span>
-          </div>
-          <p class="text-muted mb-4"
-            style="font-size: 0.75rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-            Build high-converting landing page for marketing campaigns.</p>
-
-          <div class="row g-2 mb-4">
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">BUDGET</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">₹15,000 - ₹25,000</span>
-            </div>
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">DURATION</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">5 - 10 Days</span>
-            </div>
-          </div>
-
-          <div class="d-flex flex-wrap gap-2 mb-4 mt-auto">
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">HTML</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">CSS</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">JavaScript</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+1</span>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-            <span class="text-muted d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i
-                class="bi bi-clock"></i> Posted 3 days ago</span>
-            <a routerLink="/contract-details"
-              class="text-primary text-decoration-none fw-bold d-flex align-items-center gap-1 cursor-pointer"
-              style="font-size: 0.75rem;">View Details <i class="bi bi-arrow-right"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 7 -->
-      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-        <div class="card contract-card h-100 border rounded-4 shadow-sm bg-white p-4">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div
-              class="rounded-3 bg-teal bg-opacity-10 text-teal d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 48px; height: 48px;">
-              <i class="bi bi-shield-check fs-4"></i>
-            </div>
-            <i class="bi bi-bookmark text-muted cursor-pointer hover-text-primary"></i>
-          </div>
-          <h3 class="fs-6 fw-bold text-dark mb-2" style="line-height: 1.4;">DevOps CI/CD Setup</h3>
-          <div class="d-flex gap-2 mb-3">
-            <span class="badge bg-teal bg-opacity-10 text-teal rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">DEVOPS</span>
-            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">INFRASTRUCTURE</span>
-          </div>
-          <p class="text-muted mb-4"
-            style="font-size: 0.75rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-            Set up CI/CD pipeline using GitHub Actions and Docker.</p>
-
-          <div class="row g-2 mb-4">
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">BUDGET</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">₹35,000 - ₹50,000</span>
-            </div>
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">DURATION</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">1 - 2 Weeks</span>
-            </div>
-          </div>
-
-          <div class="d-flex flex-wrap gap-2 mb-4 mt-auto">
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Docker</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">GitHub Actions</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">AWS</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+2</span>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-            <span class="text-muted d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i
-                class="bi bi-clock"></i> Posted 1 day ago</span>
-            <a routerLink="/contract-details"
-              class="text-primary text-decoration-none fw-bold d-flex align-items-center gap-1 cursor-pointer"
-              style="font-size: 0.75rem;">View Details <i class="bi bi-arrow-right"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 8 -->
-      <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-        <div class="card contract-card h-100 border rounded-4 shadow-sm bg-white p-4">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div
-              class="rounded-3 bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 48px; height: 48px;">
-              <i class="bi bi-phone fs-4"></i>
-            </div>
-            <i class="bi bi-bookmark text-muted cursor-pointer hover-text-primary"></i>
-          </div>
-          <h3 class="fs-6 fw-bold text-dark mb-2" style="line-height: 1.4;">Android App Development</h3>
-          <div class="d-flex gap-2 mb-3">
-            <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">MOBILE</span>
-            <span class="badge bg-success bg-opacity-10 text-success rounded-pill fw-semibold"
-              style="font-size: 0.65rem;">ANDROID</span>
-          </div>
-          <p class="text-muted mb-4"
-            style="font-size: 0.75rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-            Develop a native Android app with modern architecture and Kotlin.</p>
-
-          <div class="row g-2 mb-4">
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">BUDGET</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">₹45,000 - ₹75,000</span>
-            </div>
-            <div class="col-6">
-              <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                style="font-size: 0.6rem; letter-spacing: 0.5px;">DURATION</span>
-              <span class="fw-bold text-dark" style="font-size: 0.85rem;">2 - 3 Months</span>
-            </div>
-          </div>
-
-          <div class="d-flex flex-wrap gap-2 mb-4 mt-auto">
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Kotlin</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">MVVM</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Retrofit</span>
-            <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+2</span>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-            <span class="text-muted d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i
-                class="bi bi-clock"></i> Posted 5 days ago</span>
-            <a routerLink="/contract-details"
-              class="text-primary text-decoration-none fw-bold d-flex align-items-center gap-1 cursor-pointer"
-              style="font-size: 0.75rem;">View Details <i class="bi bi-arrow-right"></i></a>
-          </div>
-        </div>
-      </div>
+      }
+      }
     </div>
 
     <!-- Pagination -->

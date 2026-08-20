@@ -65,9 +65,10 @@
 
     <!-- Action Button -->
     <div class="d-flex justify-content-end mb-3">
-      <button routerLink="/create-contract" class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4">Post
+      <button (click)="navigateToCreateContract()" class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4">Post
         Contract</button>
     </div>
+
 
     <!-- Data Table Section -->
     <section class="glass-card rounded-3 mb-4">
@@ -88,55 +89,63 @@
               </tr>
             </thead>
             <tbody style="font-family: serif;">
-              @for (contract of contracts; track contract.id) {
-              <tr>
-                <td class="ps-4">{{ contract.id }}</td>
-                <td>{{ contract.title }}</td>
-                <td>{{ contract.subject }}</td>
-                <td>{{ contract.type }}</td>
-                <td>{{ contract.budget }}</td>
-                <td>{{ contract.startDate }}</td>
-                <td>{{ contract.endDate }}</td>
-                <td>
-                  <span class="badge rounded-pill px-3 border border-opacity-25 bg-opacity-25"
-                    [class.bg-success]="contract.status === 'Completed'"
-                    [class.text-success]="contract.status === 'Completed'"
-                    [class.border-success]="contract.status === 'Completed'"
-                    [class.bg-primary]="contract.status === 'Active'"
-                    [class.text-primary]="contract.status === 'Active'"
-                    [class.border-primary]="contract.status === 'Active'"
-                    [class.bg-secondary]="contract.status === 'Draft'"
-                    [class.text-secondary]="contract.status === 'Draft'"
-                    [class.border-secondary]="contract.status === 'Draft'">
-                    {{ contract.status }}
-                  </span>
-                </td>
-                <td class="pe-4">
-                  <div class="dropdown">
-                    <button class="btn btn-link text-dark p-0 border-0" type="button" data-bs-toggle="dropdown"
-                      aria-expanded="false">
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                      <li><a class="dropdown-item cursor-pointer" routerLink="/applicants"><i
-                            class="bi bi-people me-2 text-primary"></i> Applicants</a></li>
-
-                      <li><a class="dropdown-item cursor-pointer" routerLink="/create-contract"><i
-                            class="bi bi-pencil me-2 text-warning"></i> Edit</a></li>
-                      <li>
-                        <hr class="dropdown-divider">
-                      </li>
-                      <li><a class="dropdown-item text-danger"><i class="bi bi-trash me-2"></i> Delete</a></li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-              } @empty {
-              <tr>
-                <td colspan="9" class="py-5 text-center text-muted">
-                  <p class="mb-0">No data available</p>
-                </td>
-              </tr>
+              @if(isLoading) {
+                <tr>
+                  <td colspan="9" class="py-5 text-center text-muted">
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Loading contracts...
+                  </td>
+                </tr>
+              } @else {
+                @for (contract of allContracts; track contract._id; let i = $index) {
+                <tr>
+                  <td class="ps-4">{{ i + 1 }}</td>
+                  <td>{{ contract.contractTitle }}</td>
+                  <td>{{ contract.contractSubject }}</td>
+                  <td>{{ contract.contractType }}</td>
+                  <td>{{ contract.estimatedBudget }} {{ contract.currency }}</td>
+                  <td>{{ contract.contractStartDate | date:'mediumDate' }}</td>
+                  <td>{{ contract.contractEndDate | date:'mediumDate' }}</td>
+                  <td>
+                    <span class="badge rounded-pill px-3 border border-opacity-25 bg-opacity-25"
+                      [class.bg-success]="contract.status === 'completed' || contract.status === 'closed'"
+                      [class.text-success]="contract.status === 'completed' || contract.status === 'closed'"
+                      [class.border-success]="contract.status === 'completed' || contract.status === 'closed'"
+                      [class.bg-primary]="contract.status === 'open' || contract.status === 'in progress'"
+                      [class.text-primary]="contract.status === 'open' || contract.status === 'in progress'"
+                      [class.border-primary]="contract.status === 'open' || contract.status === 'in progress'"
+                      [class.bg-secondary]="contract.status === 'draft'"
+                      [class.text-secondary]="contract.status === 'draft'"
+                      [class.border-secondary]="contract.status === 'draft'" style="text-transform: capitalize;">
+                      {{ contract.status }}
+                    </span>
+                  </td>
+                  <td class="pe-4">
+                    <div class="dropdown">
+                      <button class="btn btn-link text-dark p-0 border-0" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-three-dots-vertical"></i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                        <li><a class="dropdown-item cursor-pointer" (click)="viewApplicants(contract._id)"><i
+                              class="bi bi-people me-2 text-primary"></i> Applicants</a></li>
+                        <li><a class="dropdown-item cursor-pointer" (click)="editContract(contract._id)"><i
+                              class="bi bi-pencil me-2 text-warning"></i> Edit</a></li>
+                        <li>
+                          <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger cursor-pointer" (click)="deleteContract(contract._id)"><i class="bi bi-trash me-2"></i> Delete</a></li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+                } @empty {
+                <tr>
+                  <td colspan="9" class="py-5 text-center text-muted">
+                    <p class="mb-0">No contracts found</p>
+                  </td>
+                </tr>
+                }
               }
             </tbody>
           </table>
