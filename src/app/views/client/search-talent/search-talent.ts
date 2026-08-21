@@ -29,8 +29,8 @@ export class SearchTalent implements OnInit {
     this.profileService.getAllFreelancers().subscribe({
       next: (res) => {
         this.isLoading = false;
-        if (res.success && res.data) {
-          this.freelancers = res.data;
+        if (res.success && (res.items || res.data)) {
+          this.freelancers = res.items || res.data;
         }
       },
       error: (err) => {
