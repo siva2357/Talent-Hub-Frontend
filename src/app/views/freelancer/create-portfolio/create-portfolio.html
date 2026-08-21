@@ -1,6 +1,6 @@
 <div class="management-container p-4 d-flex justify-content-center align-items-start bg-light" style="min-height: 100vh;">
   
-  <div class="glass-card rounded-4 bg-white w-100 mx-auto" style="max-width: 1000px;">
+  <form [formGroup]="portfolioForm" (ngSubmit)="onSubmit()" class="glass-card rounded-4 bg-white w-100 mx-auto" style="max-width: 1000px;">
     
     <!-- Header -->
     <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
@@ -31,28 +31,31 @@
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Project Title <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" placeholder="e.g. Real-time Analytics Dashboard" style="font-size: 0.85rem;">
+                <input type="text" formControlName="title" class="form-control" placeholder="e.g. Real-time Analytics Dashboard" style="font-size: 0.85rem;">
               </div>
               <div class="col-md-6">
                 <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Project Category / Type <span class="text-danger">*</span></label>
-                <select class="form-select text-muted" style="font-size: 0.85rem;">
-                  <option>Select category / type</option>
+                <select formControlName="projectType" class="form-select text-muted" style="font-size: 0.85rem;">
+                  <option value="">Select category / type</option>
+                  @for (type of projectTypes; track type) {
+                    <option [value]="type">{{ type }}</option>
+                  }
                 </select>
               </div>
               
               <div class="col-md-6">
                 <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Your Role / Contribution <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" placeholder="e.g. Frontend Lead, Fullstack Architect" style="font-size: 0.85rem;">
+                <input type="text" formControlName="role" class="form-control" placeholder="e.g. Frontend Lead, Fullstack Architect" style="font-size: 0.85rem;">
               </div>
               <div class="col-md-6">
                 <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Project Duration</label>
                 <div class="d-flex gap-2">
                   <div class="input-group">
                     <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-calendar"></i></span>
-                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Start Date" style="font-size: 0.85rem;">
+                    <input type="date" formControlName="startDate" class="form-control border-start-0 ps-0" style="font-size: 0.85rem;">
                   </div>
                   <div class="input-group">
-                    <input type="text" class="form-control" placeholder="End Date" style="font-size: 0.85rem;">
+                    <input type="date" formControlName="endDate" class="form-control" style="font-size: 0.85rem;">
                   </div>
                 </div>
               </div>
@@ -72,10 +75,10 @@
                     <button class="btn btn-sm btn-light border-0"><i class="bi bi-link-45deg"></i></button>
                     <button class="btn btn-sm btn-light border-0"><i class="bi bi-image"></i></button>
                     <div class="border-end mx-1"></div>
-                    <button class="btn btn-sm btn-light border-0 ms-auto"><i class="bi bi-arrow-counterclockwise"></i></button>
-                    <button class="btn btn-sm btn-light border-0"><i class="bi bi-arrow-clockwise"></i></button>
+                    <button type="button" class="btn btn-sm btn-light border-0 ms-auto"><i class="bi bi-arrow-counterclockwise"></i></button>
+                    <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-arrow-clockwise"></i></button>
                   </div>
-                  <textarea class="form-control border-0 bg-white shadow-none p-3" rows="5" placeholder="Describe the scope, challenges solved, and deliverables..." style="font-size: 0.85rem; resize: none;"></textarea>
+                  <textarea formControlName="description" class="form-control border-0 bg-white shadow-none p-3" rows="5" placeholder="Describe the scope, challenges solved, and deliverables..." style="font-size: 0.85rem; resize: none;"></textarea>
                   <div class="bg-white p-2 text-end text-muted border-top" style="font-size: 0.7rem;">0 / 1000</div>
                 </div>
               </div>
@@ -88,14 +91,18 @@
             <p class="text-muted mb-3" style="font-size: 0.75rem;">Add images or videos to showcase your project (Max size: 5MB per file)</p>
             
             <!-- Upload Area -->
-            <div class="border border-2 border-dashed rounded-4 p-5 text-center cursor-pointer hover-bg-light transition-all bg-light bg-opacity-50">
+            <label 
+              class="border border-2 border-dashed rounded-4 p-5 text-center cursor-pointer hover-bg-light transition-all bg-light bg-opacity-50 d-block"
+              (dragover)="onDragOver($event)"
+              (drop)="onDrop($event)">
+              <input type="file" multiple class="d-none" (change)="onFileSelected($event)" accept="image/*,video/*">
               <i class="bi bi-cloud-arrow-up text-primary fs-1 mb-2 d-block"></i>
               <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.85rem;">Drag & drop files here or click to browse</span>
               <span class="text-muted" style="font-size: 0.7rem;">Supported formats: Image (JPG, PNG, WEBP) / Video (MP4, WEBM)</span>
-            </div>
+            </label>
             <div class="d-flex justify-content-between text-muted mt-2 px-1" style="font-size: 0.7rem;">
               <span>Preview (Max 6 files)</span>
-              <span>0 / 6</span>
+              <span>{{ selectedFiles.length }} / 6</span>
             </div>
           </div>
 
@@ -110,13 +117,13 @@
             
             <div class="mb-4">
               <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Technologies Used (comma-separated) <span class="text-danger">*</span></label>
-              <input type="text" class="form-control mb-1" placeholder="e.g. Angular, TypeScript, Bootstrap, Node.js, MongoDB" style="font-size: 0.85rem;">
+              <input type="text" formControlName="tags" class="form-control mb-1" placeholder="e.g. Angular, TypeScript, Bootstrap, Node.js, MongoDB" style="font-size: 0.85rem;">
               <span class="text-muted" style="font-size: 0.7rem;">Add all technologies, frameworks, libraries used in this project.</span>
             </div>
 
             <div class="mb-4">
               <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;"><i class="bi bi-link-45deg"></i> Project URL / Live Demo</label>
-              <input type="text" class="form-control mb-1" placeholder="e.g. https://yourproject.com" style="font-size: 0.85rem;">
+              <input type="text" formControlName="projectUrl" class="form-control mb-1" placeholder="e.g. https://yourproject.com" style="font-size: 0.85rem;">
               <span class="text-muted" style="font-size: 0.7rem;">Live preview or hosted project URL (if available)</span>
             </div>
 
@@ -190,11 +197,15 @@
         </div>
       </div>
       <div class="d-flex gap-3">
-        <button routerLink="/portfolio" class="btn btn-white border fw-semibold shadow-sm px-4" style="font-size: 0.85rem;">Cancel</button>
-        <button class="btn btn-outline-primary fw-semibold shadow-sm px-4 bg-white" style="font-size: 0.85rem;">Save as Draft</button>
-        <button class="btn btn-primary rounded-pill fw-semibold shadow-sm fw-bold d-flex align-items-center gap-2 px-4 shadow-sm" style="font-size: 0.85rem;"><i class="bi bi-send"></i> Publish Portfolio</button>
+        <button type="button" routerLink="/portfolio" class="btn btn-white border fw-semibold shadow-sm px-4" style="font-size: 0.85rem;" [disabled]="isSubmitting">Cancel</button>
+        <button type="button" class="btn btn-outline-primary fw-semibold shadow-sm px-4 bg-white" style="font-size: 0.85rem;" [disabled]="isSubmitting">Save as Draft</button>
+        <button type="submit" class="btn btn-primary rounded-pill fw-semibold shadow-sm fw-bold d-flex align-items-center gap-2 px-4 shadow-sm" style="font-size: 0.85rem;" [disabled]="isSubmitting || portfolioForm.invalid">
+          <i class="bi bi-send" *ngIf="!isSubmitting"></i>
+          <span class="spinner-border spinner-border-sm" *ngIf="isSubmitting"></span>
+          {{ isSubmitting ? 'Publishing...' : 'Publish Portfolio' }}
+        </button>
       </div>
     </div>
 
-  </div>
+  </form>
 </div>

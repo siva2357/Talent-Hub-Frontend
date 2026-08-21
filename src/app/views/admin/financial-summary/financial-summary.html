@@ -29,8 +29,8 @@
             <i class="bi bi-graph-up-arrow text-primary fs-4"></i>
           </div>
             <div>
-              <span class="d-block text-muted small fw-semibold">Total Volume</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹60,000</span>
+              <span class="d-block text-muted small fw-semibold">Platform Fees Collected</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">₹{{ stats?.platformCommissions | number:'1.0-0' }}</span>
             </div>
           </div>
         </div>
@@ -39,11 +39,11 @@
         <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
           <div class="card-body d-flex align-items-center gap-3">
           <div class="stat-icon commission-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background-color: #e0f0ff;">
-            <i class="bi bi-cash-coin text-primary fs-4"></i>
+            <i class="bi bi-clock-history text-primary fs-4"></i>
           </div>
             <div>
-              <span class="d-block text-muted small fw-semibold">Commissions Collected</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹60,000</span>
+              <span class="d-block text-muted small fw-semibold">Pending Withdrawals</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">₹{{ stats?.pendingWithdrawals | number:'1.0-0' }}</span>
             </div>
           </div>
         </div>
@@ -52,11 +52,11 @@
         <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
           <div class="card-body d-flex align-items-center gap-3">
           <div class="stat-icon escrow-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background-color: #e0f0ff;">
-            <i class="bi bi-safe2 text-primary fs-4"></i>
+            <i class="bi bi-check-circle-fill text-primary fs-4"></i>
           </div>
             <div>
-              <span class="d-block text-muted small fw-semibold">Escrow held balance</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹60,000</span>
+              <span class="d-block text-muted small fw-semibold">Successful Payouts</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ stats?.successfulPayouts | number:'1.0-0' }}</span>
             </div>
           </div>
         </div>
@@ -69,7 +69,7 @@
           </div>
             <div>
               <span class="d-block text-muted small fw-semibold">Audited Growth</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹60,000</span>
+              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ stats?.growthPercent }}%</span>
             </div>
           </div>
         </div>
@@ -134,36 +134,43 @@
                 <th scope="col" class="py-3"><i class="bi bi-person-workspace text-primary me-1"></i> Freelancer</th>
                 <th scope="col" class="py-3"><i class="bi bi-credit-card text-primary me-1"></i> Client Payment</th>
                 <th scope="col" class="py-3"><i class="bi bi-wallet2 text-primary me-1"></i> Freelancer Payout</th>
-                <th scope="col" class="py-3"><i class="bi bi-currency-dollar text-primary me-1"></i> Commission</th>
+                <th scope="col" class="py-3"><i class="bi bi-currency-dollar text-primary me-1"></i> Platform Fee</th>
                 <th scope="col" class="pe-4 py-3"><i class="bi bi-activity text-primary me-1"></i> Status</th>
               </tr>
             </thead>
             <tbody class="border-top-0">
-              <tr>
-                <td class="ps-4 fw-semibold text-muted">1</td>
-                <td><span class="d-block fw-bold text-dark">E-commerce Website</span></td>
+              <tr *ngFor="let txn of transactions; let i = index">
+                <td class="ps-4 fw-semibold text-muted">{{ i + 1 }}</td>
+                <td><span class="d-block fw-bold text-dark">{{ txn.contractTitle }}</span></td>
                 <td>
-                  <span class="d-block text-dark fw-semibold" style="font-size: 0.85rem;">Siva Prasad Kurra</span>
+                  <span class="d-block text-dark fw-semibold" style="font-size: 0.85rem;">{{ txn.clientName }}</span>
                 </td>
                 <td>
-                  <span class="d-block text-dark fw-semibold" style="font-size: 0.85rem;">Siva Prasad Kurra</span>
+                  <span class="d-block text-dark fw-semibold" style="font-size: 0.85rem;">{{ txn.freelancerName }}</span>
                 </td>
-                <td><span class="text-muted fw-semibold">₹66,000</span></td>
-                <td><span class="text-muted fw-semibold">₹55,500</span></td>
+                <td><span class="text-muted fw-semibold">₹{{ txn.budget }}</span></td>
+                <td><span class="text-muted fw-semibold">₹{{ txn.freelancerPayment }}</span></td>
                 <td><span
-                    class="badge bg-purple-soft text-purple border border-purple border-opacity-25 rounded-pill px-3 py-1">₹10,500</span>
+                    class="badge bg-purple-soft text-purple border border-purple border-opacity-25 rounded-pill px-3 py-1">₹{{ txn.platformFee }}</span>
                 </td>
-                <td class="pe-4">
-                  <span
+                <td class="pe-4 d-flex align-items-center gap-2">
+                  <span *ngIf="txn.status === 'Completed'"
                     class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"><i
                       class="bi bi-check-circle-fill" style="font-size: 0.5rem;"></i> Completed</span>
+                  <span *ngIf="txn.status === 'Pending' && txn.type === 'Payout'"
+                    class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"><i
+                      class="bi bi-clock-history" style="font-size: 0.5rem;"></i> Pending Payout</span>
+                  
+                  <button *ngIf="txn.status === 'Pending' && txn.type === 'Payout'" 
+                    class="btn btn-sm btn-primary rounded-pill shadow-sm" 
+                    (click)="openPayoutModal(txn.id, txn.freelancerPayment)">Process Payout</button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
         <!-- Empty State / No Data Placeholder -->
-        <div class="py-5 text-center text-muted" style="font-family: serif;">
+        <div *ngIf="!transactions || transactions.length === 0" class="py-5 text-center text-muted" style="font-family: serif;">
           <p class="mb-0">No data available</p>
         </div>
       </div>
@@ -195,3 +202,48 @@
     </div>
   </div>
 </div>
+
+<!-- Process Payout Modal (Simulated) -->
+<div class="modal fade" id="payoutModal" tabindex="-1" aria-labelledby="payoutModalLabel" aria-hidden="true" [class.show]="isPayoutModalOpen" [style.display]="isPayoutModalOpen ? 'block' : 'none'">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+      <div class="modal-header border-0 bg-light pb-2">
+        <h5 class="modal-title fw-bold" id="payoutModalLabel">Confirm Payout</h5>
+        <button type="button" class="btn-close shadow-none" (click)="closePayoutModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body pt-3 pb-4">
+        <p class="text-muted mb-4">You are about to process a manual payout for this transaction via RazorpayX. Please review the details below.</p>
+        
+        <div class="bg-light bg-opacity-50 p-3 rounded-3 mb-3 border border-light">
+           <div class="d-flex justify-content-between mb-2">
+             <span class="text-muted small fw-semibold">Transaction ID</span>
+             <span class="text-dark small fw-bold">{{ selectedTransactionId }}</span>
+           </div>
+           <div class="d-flex justify-content-between mb-2">
+             <span class="text-muted small fw-semibold">Payout Amount</span>
+             <span class="text-dark small fw-bold fs-6 text-success">₹{{ selectedTransactionAmount | number:'1.0-0' }}</span>
+           </div>
+           <div class="d-flex justify-content-between">
+             <span class="text-muted small fw-semibold">Payout Method</span>
+             <span class="text-dark small fw-bold">RazorpayX</span>
+           </div>
+        </div>
+
+        <div class="alert alert-warning d-flex align-items-start gap-2 mb-0" role="alert">
+          <i class="bi bi-exclamation-triangle-fill mt-1"></i>
+          <div class="small">
+            This action cannot be undone. The funds will be deducted from the platform's escrow balance and transferred to the freelancer's account.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 pt-0 pb-3 justify-content-end">
+        <button type="button" class="btn btn-light rounded-pill px-4 text-muted fw-semibold" (click)="closePayoutModal()">Cancel</button>
+        <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="confirmPayout()" [disabled]="isProcessing">
+          <span *ngIf="isProcessing" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          {{ isProcessing ? 'Processing...' : 'Confirm Payout' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="isPayoutModalOpen"></div>

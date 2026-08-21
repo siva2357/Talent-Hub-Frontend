@@ -21,12 +21,13 @@
   </div>
 
   <!-- Main Content Card -->
-  <div class="card shadow-sm border-light rounded-4 mb-4 bg-white bg-opacity-75">
+  <form [formGroup]="blogForm" (ngSubmit)="onSubmit(false)">
+    <div class="card shadow-sm border-light rounded-4 mb-4 bg-white bg-opacity-75">
     <div class="card-body p-4">
       <div class="mb-4">
         <label class="form-label fw-bold text-dark small mb-2"><i class="bi bi-fonts text-muted me-2"></i>Article Title <span class="text-danger">*</span></label>
-        <input type="text" class="form-control rounded-pill px-4 shadow-sm py-2" placeholder="Enter an engaging title for your article...">
-        <div class="text-end text-muted mt-1" style="font-size: 0.7rem;">0/150</div>
+        <input type="text" formControlName="title" class="form-control rounded-pill px-4 shadow-sm py-2" placeholder="Enter an engaging title for your article...">
+        <div class="text-end text-muted mt-1" style="font-size: 0.7rem;">{{ blogForm.get('title')?.value?.length || 0 }}/150</div>
       </div>
 
       <div>
@@ -74,7 +75,7 @@
             </div>
           </div>
           <!-- Editor Area -->
-          <textarea class="form-control border-0 rounded-bottom" rows="10" placeholder="Write your blog content here..."></textarea>
+          <textarea formControlName="content" class="form-control border-0 rounded-bottom" rows="10" placeholder="Write your blog content here..."></textarea>
         </div>
         <div class="d-flex justify-content-end gap-3 text-muted mt-2" style="font-size: 0.7rem;">
           <span>Words: 0</span>
@@ -90,8 +91,11 @@
       <div class="card shadow-sm border-light rounded-4 h-100 bg-white bg-opacity-75">
         <div class="card-body p-4">
           <label class="form-label fw-bold text-dark small mb-3"><i class="bi bi-folder text-muted me-2"></i>Category <span class="text-danger">*</span></label>
-          <select class="form-select text-muted rounded-pill px-4 shadow-sm py-2">
-            <option selected>Select a category</option>
+          <select formControlName="category" class="form-select text-muted rounded-pill px-4 shadow-sm py-2">
+            <option value="">Select a category</option>
+            <option value="Career">Career</option>
+            <option value="Technology">Technology</option>
+            <option value="Platform News">Platform News</option>
           </select>
         </div>
       </div>
@@ -100,9 +104,9 @@
       <div class="card shadow-sm border-light rounded-4 h-100 bg-white bg-opacity-75">
         <div class="card-body p-4">
           <label class="form-label fw-bold text-dark small mb-3"><i class="bi bi-gear text-muted me-2"></i>Status <span class="text-danger">*</span></label>
-          <select class="form-select text-dark rounded-pill px-4 shadow-sm py-2">
-            <option selected>&#9675; Draft</option>
-            <option>Published</option>
+          <select formControlName="status" class="form-select text-dark rounded-pill px-4 shadow-sm py-2">
+            <option value="Draft">&#9675; Draft</option>
+            <option value="Published">Published</option>
           </select>
         </div>
       </div>
@@ -116,12 +120,19 @@
       <div class="card shadow-sm border-light rounded-4 h-100 bg-white bg-opacity-75">
         <div class="card-body p-4">
           <label class="form-label fw-bold text-dark small mb-3"><i class="bi bi-cloud-upload text-muted me-2"></i>Featured Image / Video</label>
-          <div class="border border-2 border-primary border-opacity-25 rounded-4 border-dashed p-4 text-center bg-primary bg-opacity-10 transition-all hover-bg-light cursor-pointer">
+          <label 
+            class="border border-2 border-primary border-opacity-25 rounded-4 border-dashed p-4 text-center bg-primary bg-opacity-10 transition-all hover-bg-light cursor-pointer d-block"
+            (dragover)="onDragOver($event)"
+            (drop)="onDropFeaturedMedia($event)">
+            <input type="file" class="d-none" (change)="onFeaturedMediaSelected($event)" accept="image/*,video/*">
             <h4 class="text-primary fs-3 mb-2"><i class="bi bi-cloud-arrow-up"></i></h4>
             <p class="text-dark fw-bold small mb-1">Drag & drop your file here</p>
             <p class="text-primary small mb-0">or click to browse</p>
-          </div>
+          </label>
           <p class="text-muted mt-2 mb-0 text-center" style="font-size: 0.65rem;">Supports: Images, Videos, GIFs • Max size: 50MB</p>
+          <div *ngIf="featuredMediaPreview" class="mt-3 text-center">
+            <img [src]="featuredMediaPreview" class="img-fluid rounded shadow-sm" style="max-height: 150px;">
+          </div>
         </div>
       </div>
     </div>
@@ -131,7 +142,7 @@
       <div class="card shadow-sm border-light rounded-4 h-100 bg-white bg-opacity-75">
         <div class="card-body p-4">
           <label class="form-label fw-bold text-dark small mb-3"><i class="bi bi-tags text-muted me-2"></i>Tags (Optional)</label>
-          <input type="text" class="form-control rounded-pill px-4 shadow-sm py-2 mb-2" placeholder="Enter tags separated by commas">
+          <input type="text" formControlName="tags" class="form-control rounded-pill px-4 shadow-sm py-2 mb-2" placeholder="Enter tags separated by commas">
           <p class="text-muted mb-4" style="font-size: 0.7rem;">Example: JavaScript, Web Development, Tutorial, Angular</p>
           <p class="text-muted small mb-0" style="font-size: 0.75rem;">Add relevant tags to help readers find your article.</p>
         </div>
@@ -144,13 +155,18 @@
         <div class="card-body p-4">
           <label class="form-label fw-bold text-dark small mb-3"><i class="bi bi-image text-muted me-2"></i>Blog Banner</label>
           <div class="d-flex gap-3">
-            <div class="rounded-4 flex-shrink-0 border border-light shadow-sm" style="width: 120px; height: 80px; background: linear-gradient(135deg, #a78bfa 0%, #38bdf8 50%, #f472b6 100%);"></div>
+            <div class="rounded-4 flex-shrink-0 border border-light shadow-sm overflow-hidden" style="width: 120px; height: 80px; background: linear-gradient(135deg, #a78bfa 0%, #38bdf8 50%, #f472b6 100%);">
+              <img *ngIf="blogBannerPreview" [src]="blogBannerPreview" class="w-100 h-100 object-fit-cover">
+            </div>
             <div>
               <p class="text-dark small fw-semibold mb-1" style="font-size: 0.75rem;">This will be used as the banner image for your blog post.</p>
               <p class="text-muted mb-2" style="font-size: 0.65rem;">Recommended size: 1200x630px</p>
               <div class="d-flex gap-2">
-                <button class="btn btn-outline-primary btn-sm rounded-pill px-3 bg-white shadow-sm">Upload</button>
-                <button class="btn btn-outline-danger btn-sm rounded-pill px-3 bg-white border-opacity-50 shadow-sm">Clear</button>
+                <label class="btn btn-outline-primary btn-sm rounded-pill px-3 bg-white shadow-sm mb-0">
+                  Upload
+                  <input type="file" class="d-none" (change)="onBannerSelected($event)" accept="image/*">
+                </label>
+                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 bg-white border-opacity-50 shadow-sm" (click)="clearBanner()">Clear</button>
               </div>
             </div>
           </div>
@@ -161,11 +177,16 @@
 
   <!-- Action Footer -->
   <div class="d-flex justify-content-between align-items-center pt-3 border-top border-light mt-4 mb-2">
-    <button routerLink="/blog-manager" class="btn btn-outline-secondary rounded-pill bg-white text-dark shadow-sm px-4 fw-semibold cursor-pointer"><i class="bi bi-x-lg me-1"></i> Cancel</button>
+    <button type="button" routerLink="/blog-manager" class="btn btn-outline-secondary rounded-pill bg-white text-dark shadow-sm px-4 fw-semibold cursor-pointer" [disabled]="isSubmitting"><i class="bi bi-x-lg me-1"></i> Cancel</button>
     <div class="d-flex gap-3">
-      <button class="btn btn-outline-primary rounded-pill bg-white shadow-sm px-4 fw-semibold d-flex align-items-center gap-2"><i class="bi bi-save"></i> Save as Draft</button>
-      <button class="btn btn-primary rounded-pill shadow-sm px-4 fw-semibold d-flex align-items-center gap-2"><i class="bi bi-send"></i> Publish Blog</button>
+      <button type="button" class="btn btn-outline-primary rounded-pill bg-white shadow-sm px-4 fw-semibold d-flex align-items-center gap-2" [disabled]="isSubmitting" (click)="onSubmit(true)"><i class="bi bi-save"></i> Save as Draft</button>
+      <button type="submit" class="btn btn-primary rounded-pill shadow-sm px-4 fw-semibold d-flex align-items-center gap-2" [disabled]="isSubmitting || blogForm.invalid">
+        <i class="bi bi-send" *ngIf="!isSubmitting"></i>
+        <span class="spinner-border spinner-border-sm" *ngIf="isSubmitting"></span>
+        {{ isSubmitting ? 'Publishing...' : 'Publish Blog' }}
+      </button>
     </div>
   </div>
+  </form>
 </div>
 </div>

@@ -52,6 +52,20 @@
         <div class="card border border-light shadow-sm rounded-4 bg-white p-3 h-100">
           <div class="d-flex justify-content-between align-items-start mb-2">
             <div
+              class="rounded-3 bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center flex-shrink-0"
+              style="width: 40px; height: 40px;"><i class="bi bi-tag fs-5"></i></div>
+            <span class="text-muted" style="font-size: 0.7rem;"><i class="bi bi-info-circle"></i></span>
+          </div>
+          <span class="d-block text-muted text-uppercase fw-semibold mb-1"
+            style="font-size: 0.65rem; letter-spacing: 0.5px;">PLATFORM FEES</span>
+          <span class="fw-bold text-dark fs-4 d-block mb-2">{{ stats.platformFees | currency:'INR' }}</span>
+          <span class="text-muted" style="font-size: 0.7rem;">7.5% deduction applied</span>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card border border-light shadow-sm rounded-4 bg-white p-3 h-100">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div
               class="rounded-3 bg-purple-soft text-purple d-flex align-items-center justify-content-center flex-shrink-0"
               style="width: 40px; height: 40px;"><i class="bi bi-box-arrow-in-down fs-5"></i></div>
             <span class="text-muted" style="font-size: 0.7rem;"><i class="bi bi-info-circle"></i></span>
@@ -59,8 +73,7 @@
           <span class="d-block text-muted text-uppercase fw-semibold mb-1"
             style="font-size: 0.65rem; letter-spacing: 0.5px;">TOTAL RECEIVED</span>
           <span class="fw-bold text-dark fs-4 d-block mb-2">{{ stats.totalReceived | currency:'INR' }}</span>
-          <span class="text-success fw-semibold" style="font-size: 0.75rem;"><i class="bi bi-arrow-up-right"></i>
-            10.2%</span> <span class="text-muted" style="font-size: 0.7rem;">from last month</span>
+          <span class="text-muted" style="font-size: 0.7rem;">Released by clients</span>
         </div>
       </div>
       <div class="col">
@@ -68,14 +81,13 @@
           <div class="d-flex justify-content-between align-items-start mb-2">
             <div
               class="rounded-3 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 40px; height: 40px;"><i class="bi bi-calculator fs-5"></i></div>
+              style="width: 40px; height: 40px;"><i class="bi bi-bank fs-5"></i></div>
             <span class="text-muted" style="font-size: 0.7rem;"><i class="bi bi-info-circle"></i></span>
           </div>
           <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-            style="font-size: 0.65rem; letter-spacing: 0.5px;">PENDING PAYOUTS</span>
-          <span class="fw-bold text-dark fs-4 d-block mb-2">{{ stats.pendingPayouts | currency:'INR' }}</span>
-          <span class="text-success fw-semibold" style="font-size: 0.75rem;"><i class="bi bi-arrow-up-right"></i>
-            4.5%</span> <span class="text-muted" style="font-size: 0.7rem;">from last month</span>
+            style="font-size: 0.65rem; letter-spacing: 0.5px;">WITHDRAWN AMOUNT</span>
+          <span class="fw-bold text-dark fs-4 d-block mb-2">{{ stats.withdrawnAmount | currency:'INR' }}</span>
+          <span class="text-muted" style="font-size: 0.7rem;">Net transferred to bank</span>
         </div>
       </div>
       <div class="col">
@@ -89,7 +101,7 @@
           <span class="d-block text-muted text-uppercase fw-semibold mb-1"
             style="font-size: 0.65rem; letter-spacing: 0.5px;">PENDING WITHDRAWAL</span>
           <span class="fw-bold text-dark fs-4 d-block mb-2">{{ stats.pendingWithdrawal | currency:'INR' }}</span>
-          <span class="text-muted" style="font-size: 0.7rem;">No pending withdrawal</span>
+          <span class="text-muted" style="font-size: 0.7rem;">Waiting admin approval</span>
         </div>
       </div>
       <div class="col">
@@ -101,7 +113,7 @@
             <span class="text-muted" style="font-size: 0.7rem;"><i class="bi bi-info-circle"></i></span>
           </div>
           <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-            style="font-size: 0.65rem; letter-spacing: 0.5px;">AVAILABLE BALANCE</span>
+            style="font-size: 0.65rem; letter-spacing: 0.5px;">TOTAL BALANCE</span>
           <span class="fw-bold text-dark fs-4 d-block mb-2">{{ stats.availableBalance | currency:'INR' }}</span>
           <span class="text-muted" style="font-size: 0.7rem;">Ready to withdraw</span>
         </div>
@@ -133,9 +145,11 @@
             <tr>
               <th class="fw-semibold py-3 ps-4 border-bottom-0">Contract</th>
               <th class="fw-semibold py-3 border-bottom-0">Contract Type</th>
-              <th class="fw-semibold py-3 border-bottom-0">Earning Status</th>
+              <th class="fw-semibold py-3 border-bottom-0">Contract Status</th>
               <th class="fw-semibold py-3 border-bottom-0">Earned Amount</th>
+              <th class="fw-semibold py-3 border-bottom-0">Platform Fee</th>
               <th class="fw-semibold py-3 border-bottom-0">Received Amount</th>
+              <th class="fw-semibold py-3 border-bottom-0">Withdrawn Amount</th>
               <th class="fw-semibold py-3 border-bottom-0">Date</th>
               <th class="fw-semibold py-3 border-bottom-0 pe-4">Action</th>
             </tr>
@@ -143,11 +157,11 @@
           <tbody>
           @if (loading) {
             <tr>
-              <td colspan="7" class="text-center py-4 text-muted">Loading transactions...</td>
+              <td colspan="9" class="text-center py-4 text-muted">Loading transactions...</td>
             </tr>
           } @else if (contractEarnings.length === 0) {
             <tr>
-              <td colspan="7" class="text-center py-4 text-muted">No earning history found.</td>
+              <td colspan="9" class="text-center py-4 text-muted">No contract earnings found.</td>
             </tr>
           } @else {
             @for (contract of contractEarnings; track contract.contractId || contract._id) {
@@ -168,15 +182,17 @@
                   <span class="text-muted" style="font-size: 0.7rem;">{{ (contract.budget || contract.amount) | currency:'INR' }}</span>
                 </td>
                 <td class="py-3">
-                  <span class="badge rounded px-2 py-1"
-                    [ngClass]="{'bg-success bg-opacity-10 text-success border border-success border-opacity-25': contract.status?.toLowerCase() === 'completed',
-                                'bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25': contract.status?.toLowerCase() === 'ongoing' || contract.status?.toLowerCase() === 'in-progress' || contract.status?.toLowerCase() === 'active',
-                                'bg-warning bg-opacity-10 text-warning-dark border border-warning border-opacity-25': contract.status?.toLowerCase() === 'pending' || contract.status?.toLowerCase() === 'created'}">
+                  <span class="badge rounded-pill px-3 py-2"
+                    [ngClass]="{'bg-success': contract.status?.toLowerCase() === 'completed',
+                                'bg-primary': contract.status?.toLowerCase() === 'ongoing' || contract.status?.toLowerCase() === 'in-progress' || contract.status?.toLowerCase() === 'active',
+                                'bg-warning text-dark': contract.status?.toLowerCase() === 'pending' || contract.status?.toLowerCase() === 'created'}">
                     {{ contract.status | titlecase }}
                   </span>
                 </td>
-                <td class="py-3 fw-bold text-dark">{{ (contract.earned || contract.earnedAmount || contract.amount || 0) | currency:'INR' }}</td>
-                <td class="py-3 fw-bold text-success">{{ (contract.receivedAmount || 0) | currency:'INR' }}</td>
+                <td class="py-3 fw-bold text-dark">{{ (contract.budget || contract.earned || 0) | currency:'INR' }}</td>
+                <td class="py-3 fw-bold text-danger">{{ (contract.platformFeesDeducted || 0) | currency:'INR' }}</td>
+                <td class="py-3 fw-bold text-primary">{{ ((contract.budget || contract.earned || 0) - (contract.platformFeesDeducted || 0)) | currency:'INR' }}</td>
+                <td class="py-3 fw-bold text-success">{{ (contract.netWithdrawnAmount || 0) | currency:'INR' }}</td>
                 <td class="py-3">
                   <span class="d-block text-dark fw-semibold">{{ (contract.lastPaymentDate || contract.startDate || contract.date || contract.createdAt) | date:'mediumDate' }}</span>
                   <span class="text-muted" style="font-size: 0.7rem;">{{ contract.completion ? (contract.completion + '% Completed') : (contract.milestone || 'N/A') }}</span>
@@ -185,10 +201,18 @@
                   <div class="d-flex gap-2 align-items-center">
                     <button class="btn btn-outline-primary btn-sm fw-semibold bg-white d-flex align-items-center gap-1 px-3 rounded-pill" style="font-size: 0.75rem;"><i class="bi bi-eye"></i> View Details</button>
                     
-                    @if (contract.status?.toLowerCase() === 'completed' && ((contract.receivedAmount || 0) - (contract.withdrawnAmount || 0)) > 0) {
-                      <button class="btn btn-success btn-sm fw-semibold d-flex align-items-center gap-1 px-3 rounded-pill" style="font-size: 0.75rem;" (click)="withdraw(contract)" [disabled]="isWithdrawing">
-                        <i class="bi bi-cash-coin"></i> Withdraw
-                      </button>
+                    @if (contract.status?.toLowerCase() === 'completed') {
+                      <button class="btn btn-outline-secondary btn-sm fw-semibold bg-white d-flex align-items-center gap-1 px-3 rounded-pill" style="font-size: 0.75rem;" (click)="downloadInvoice(contract.contractId)"><i class="bi bi-download"></i> Invoice</button>
+
+                      @if ((contract.pendingWithdrawnAmount || 0) > 0) {
+                        <span class="badge bg-warning text-dark border rounded-pill d-flex align-items-center px-3 py-2" style="font-size: 0.75rem;"><i class="bi bi-hourglass-split me-1"></i> Pending Withdrawal</span>
+                      } @else if (((contract.receivedAmount || 0) - ((contract.grossWithdrawnAmount || contract.withdrawnAmount) || 0)) > 0) {
+                        <button class="btn btn-success btn-sm fw-semibold d-flex align-items-center gap-1 px-3 rounded-pill" style="font-size: 0.75rem;" (click)="withdraw(contract)" [disabled]="isWithdrawing">
+                          <i class="bi bi-cash-coin"></i> Withdraw
+                        </button>
+                      } @else {
+                        <span class="badge bg-success border rounded-pill d-flex align-items-center px-3 py-2" style="font-size: 0.75rem;"><i class="bi bi-check2-circle me-1"></i> Withdrawn Successfully</span>
+                      }
                     } @else {
                       <button class="btn btn-light btn-sm text-muted rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-three-dots-vertical"></i></button>
                     }
