@@ -54,7 +54,7 @@ export class FinancialSummary implements OnInit {
     this.transactionService.getInvoices().subscribe({
       next: (res: any) => {
         if (res.success) {
-          this.invoices = res.invoices || [];
+          this.invoices = (res.invoices || []).filter((inv: any) => inv.type === 'Escrow Funded' || inv.type === 'Deposit');
         }
       },
       error: (err: any) => console.error("Error fetching invoices", err)
@@ -63,7 +63,8 @@ export class FinancialSummary implements OnInit {
     this.transactionService.getTransactions().subscribe({
       next: (res: any) => {
         if (res.success) {
-          this.transactions = res.transactions || [];
+          // Filter to show only contract funding and deposit, not individual phase payments
+          this.transactions = (res.transactions || []).filter((txn: any) => txn.type === 'Escrow Funded' || txn.type === 'Deposit');
         }
         this.loading = false;
       },

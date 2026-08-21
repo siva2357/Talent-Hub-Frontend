@@ -24,7 +24,7 @@
               style="width: 32px; height: 32px; border: 2px solid var(--primary-color);">
               <i class="bi bi-file-earmark-plus text-primary"></i>
             </div>
-            Create New Phase
+            {{ isEditMode ? 'Edit Phase' : 'Create New Phase' }}
           </h1>
           <p class="text-muted small mb-0 ms-5">Define phase details, deliverables, instructions and upload references
           </p>
@@ -248,7 +248,7 @@
           class="bi bi-x me-1"></i> Cancel</button>
       <div class="d-flex gap-2">
         <button class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4" (click)="createPhase()"><i
-            class="bi bi-plus-circle me-1"></i> Create Phase</button>
+            class="bi me-1" [ngClass]="isEditMode ? 'bi-check2' : 'bi-plus-circle'"></i> {{ isEditMode ? 'Save Changes' : 'Create Phase' }}</button>
       </div>
     </div>
   </div>

@@ -32,4 +32,12 @@ export class ProfileService {
   updateProfile(profileData: any): Observable<any> {
     return this.http.put<any>(`${this.API_URL}/update`, profileData);
   }
+
+  getAllFreelancers(): Observable<any> {
+    return this.http.get<any>(`${this.API_URL}/freelancers`);
+  }
+
+  getProfileById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.API_URL}/user/${id}`);
+  }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProjectTypeEnum } from '../../../models/portfolio.enum';
@@ -23,12 +23,15 @@ export class CreatePortfolio implements OnInit {
   
   isSubmitting = false;
   uploadProgress = 0;
+  portfolioId: string | null = null;
+  isEditMode = false;
 
   constructor(
     private fb: FormBuilder,
     private portfolioService: PortfolioService,
     private fileService: FileService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -41,6 +44,41 @@ export class CreatePortfolio implements OnInit {
       description: ['', [Validators.required]],
       projectUrl: [''],
       tags: ['']
+    });
+
+    this.route.paramMap.subscribe(params => {
+      this.portfolioId = params.get('id');
+      if (this.portfolioId) {
+        this.isEditMode = true;
+        this.loadPortfolioData(this.portfolioId);
+      }
+    });
+  }
+
+  loadPortfolioData(id: string) {
+    this.portfolioService.getPortfolioById(id).subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          const p = res.data;
+          this.portfolioForm.patchValue({
+            title: p.title,
+            projectType: p.projectType,
+            role: p.role,
+            startDate: p.startDate ? new Date(p.startDate).toISOString().split('T')[0] : '',
+            endDate: p.endDate ? new Date(p.endDate).toISOString().split('T')[0] : '',
+            description: p.description,
+            projectUrl: p.projectUrl,
+            tags: p.tags ? p.tags.join(', ') : ''
+          });
+          if (p.media && p.media.length > 0) {
+            this.previews = p.media.map((m: any) => m.url);
+            // We aren't fully re-constructing File objects for existing media 
+            // since they are already uploaded. We might need logic to handle mixed 
+            // existing and new media, but for now we skip re-uploading existing.
+          }
+        }
+      },
+      error: (err) => console.error('Error fetching portfolio for edit', err)
     });
   }
 
@@ -128,9 +166,15 @@ export class CreatePortfolio implements OnInit {
       };
 
       // 3. Submit portfolio
-      await this.portfolioService.createPortfolio(payload).toPromise();
+      if (this.isEditMode && this.portfolioId) {
+        // Just merge existing media if we skipped creating File objects for them
+        // A more robust app would track deleted existing media vs new media
+        await this.portfolioService.updatePortfolio(this.portfolioId, payload).toPromise();
+      } else {
+        await this.portfolioService.createPortfolio(payload).toPromise();
+      }
       
-      this.router.navigate(['/portfolio']);
+      this.router.navigate(['/freelancer/portfolio']);
       
     } catch (error) {
       console.error('Error creating portfolio', error);

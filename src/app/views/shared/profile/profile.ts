@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { ProfileService } from '../../../core/services/profile.service';
 import { TokenService } from '../../../core/services/token.service';
 
@@ -14,6 +14,7 @@ import { TokenService } from '../../../core/services/token.service';
 export class Profile implements OnInit {
   private profileService = inject(ProfileService);
   private tokenService = inject(TokenService);
+  private route = inject(ActivatedRoute);
 
   role: string = '';
   userData: any = null;
@@ -21,21 +22,38 @@ export class Profile implements OnInit {
   contracts: any[] = [];
   isLoading: boolean = true;
   error: string = '';
+  isPublicView: boolean = false;
 
   ngOnInit() {
     this.role = this.tokenService.getRole()?.toLowerCase() || '';
-    this.loadProfileData();
+    
+    this.route.queryParams.subscribe(params => {
+      if (params['id']) {
+        this.isPublicView = true;
+        this.loadProfileData(params['id']);
+      } else {
+        this.isPublicView = false;
+        this.loadProfileData();
+      }
+    });
   }
 
-  loadProfileData() {
+  loadProfileData(id?: string) {
     this.isLoading = true;
-    this.profileService.getMyProfile().subscribe({
+    
+    const request = id ? this.profileService.getProfileById(id) : this.profileService.getMyProfile();
+    
+    request.subscribe({
       next: (res: any) => {
         if (res.success) {
           this.userData = res.user;
           this.profileData = res.profile;
           this.contracts = res.contracts || [];
-          this.role = this.userData.role.toLowerCase();
+          if (!id) {
+            this.role = this.userData.role.toLowerCase();
+          } else {
+            this.role = this.userData.role.toLowerCase();
+          }
         }
         this.isLoading = false;
       },

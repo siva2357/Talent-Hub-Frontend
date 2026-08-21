@@ -1,7 +1,10 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, PLATFORM_ID, Inject, OnInit } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import Chart from 'chart.js/auto';
 import { TokenService } from '../../../core/services/token.service';
+import { ProfileService } from '../../../core/services/profile.service';
+import { ContractService } from '../../../core/services/contract.service';
+import { TransactionService } from '../../../core/services/transaction.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,20 +12,98 @@ import { TokenService } from '../../../core/services/token.service';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
-export class Dashboard implements AfterViewInit {
+export class Dashboard implements AfterViewInit, OnInit {
   role: string = '';
   charts: Chart[] = [];
+
+  // Dynamic Data
+  userName: string = 'User';
+  activeContracts: number = 0;
+  totalSpent: number = 0;
+  vaultBalance: number = 0;
+  pendingProposals: number = 0;
+  totalEarnings: number = 0;
 
   @ViewChild('clientsChart') clientsChart!: ElementRef;
   @ViewChild('freelancersChart') freelancersChart!: ElementRef;
   @ViewChild('revenueChart') revenueChart!: ElementRef;
   @ViewChild('contractsChart') contractsChart!: ElementRef;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private tokenService: TokenService) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object, 
+    private tokenService: TokenService,
+    private profileService: ProfileService,
+    private contractService: ContractService,
+    private transactionService: TransactionService
+  ) {
     const userRole = this.tokenService.getRole();
     if (userRole) {
       this.role = userRole.toLowerCase();
     }
+  }
+
+  ngOnInit() {
+    if (this.role === 'client') {
+      this.loadClientData();
+    } else if (this.role === 'freelancer') {
+      this.loadFreelancerData();
+    }
+  }
+
+  loadClientData() {
+    this.profileService.getMyProfile().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.userName = `${res.data.firstName} ${res.data.lastName}`;
+        }
+      },
+      error: (err) => console.error('Error fetching profile', err)
+    });
+
+    this.contractService.getMyContracts().subscribe({
+      next: (res) => {
+        if (res.success && res.contracts) {
+          this.activeContracts = res.contracts.filter(c => c.status === 'open' || c.status === 'in progress').length;
+        }
+      },
+      error: (err) => console.error('Error fetching contracts', err)
+    });
+
+    this.transactionService.getFinanceStats().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.totalSpent = res.data.totalSpent || 0;
+          this.vaultBalance = res.data.vaultBalance || 0;
+        }
+      },
+      error: (err) => console.error('Error fetching finance stats', err)
+    });
+  }
+
+  loadFreelancerData() {
+    this.profileService.getMyProfile().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.userName = `${res.data.firstName} ${res.data.lastName}`;
+        }
+      }
+    });
+    this.transactionService.getFinanceStats().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.totalEarnings = res.data.totalEarnings || 0;
+          this.vaultBalance = res.data.vaultBalance || 0;
+        }
+      }
+    });
+    this.contractService.getFreelancerMyContracts().subscribe({
+      next: (res) => {
+        if (res.success && res.contracts) {
+          this.activeContracts = res.contracts.filter(c => c.status === 'open' || c.status === 'in progress').length;
+        }
+      },
+      error: (err) => console.error('Error fetching contracts', err)
+    });
   }
 
   setRole(newRole: string) {
