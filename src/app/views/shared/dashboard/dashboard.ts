@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import Chart from 'chart.js/auto';
+import { TokenService } from '../../../core/services/token.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,7 +10,7 @@ import Chart from 'chart.js/auto';
   styleUrl: './dashboard.css'
 })
 export class Dashboard implements AfterViewInit {
-  role: string = 'admin';
+  role: string = '';
   charts: Chart[] = [];
 
   @ViewChild('clientsChart') clientsChart!: ElementRef;
@@ -17,7 +18,12 @@ export class Dashboard implements AfterViewInit {
   @ViewChild('revenueChart') revenueChart!: ElementRef;
   @ViewChild('contractsChart') contractsChart!: ElementRef;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private tokenService: TokenService) {
+    const userRole = this.tokenService.getRole();
+    if (userRole) {
+      this.role = userRole.toLowerCase();
+    }
+  }
 
   setRole(newRole: string) {
     this.role = newRole;

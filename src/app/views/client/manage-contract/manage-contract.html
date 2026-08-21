@@ -13,124 +13,185 @@
 
   <!-- Main Content Wrapper (Glassmorphism) -->
   <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
-  <!-- Header -->
-  <header class="mb-4 d-flex justify-content-between align-items-center">
-    <div>
-      <h1 class="fw-bold fs-4 mb-1">Your Contracts</h1>
-      <p class="text-muted small mb-0">Manage your active, completed, and draft contracts in one place.</p>
-    </div>
-  </header>
+    <!-- Header -->
+    <header class="mb-4 d-flex justify-content-between align-items-center">
+      <div>
+        <h1 class="fw-bold fs-4 mb-1">Your Contracts</h1>
+        <p class="text-muted small mb-0">Manage your active, completed, and draft contracts in one place.</p>
+      </div>
+    </header>
 
-  <!-- Filter Section -->
-  <section class="glass-card rounded-3 mb-4">
-    <div class="card-body p-4">
-      <div class="row g-3 align-items-center mb-3">
-        <div class="col-md-5 col-lg-5">
-          <div class="input-group">
-            <span class="input-group-text bg-white border-end-0 text-primary"><i class="bi bi-search"></i>&#128269;</span>
-            <input type="text" class="form-control border-start-0 ps-0" placeholder="Search by Ticket .....">
+    <!-- Filter Section -->
+    <section class="glass-card rounded-3 mb-4">
+      <div class="card-body p-4">
+        <div class="row g-3 align-items-center mb-3">
+          <div class="col-md-5 col-lg-5">
+            <div class="input-group">
+              <span class="input-group-text bg-white border-end-0 text-primary"><i
+                  class="bi bi-search"></i>&#128269;</span>
+              <input type="text" class="form-control border-start-0 ps-0" placeholder="Search by Ticket .....">
+            </div>
+          </div>
+          <div class="col-md-2 col-lg-2">
+            <select class="form-select text-muted">
+              <option selected>Select All</option>
+            </select>
+          </div>
+          <div class="col-md-2 col-lg-2">
+            <select class="form-select text-muted">
+              <option selected>Select All</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-lg-3 d-flex gap-2">
+            <button class="btn btn-primary rounded-pill fw-semibold shadow-sm flex-grow-1">Apply</button>
+            <button class="btn btn-outline-primary flex-grow-1 bg-white">Reset</button>
           </div>
         </div>
-        <div class="col-md-2 col-lg-2">
-          <select class="form-select text-muted">
-            <option selected>Select All</option>
-          </select>
-        </div>
-        <div class="col-md-2 col-lg-2">
-          <select class="form-select text-muted">
-            <option selected>Select All</option>
-          </select>
-        </div>
-        <div class="col-md-3 col-lg-3 d-flex gap-2">
-          <button class="btn btn-primary rounded-pill fw-semibold shadow-sm flex-grow-1">Apply</button>
-          <button class="btn btn-outline-primary flex-grow-1 bg-white">Reset</button>
-        </div>
-      </div>
-      
-      <div class="d-flex align-items-center flex-wrap gap-2">
-        <span class="text-dark small fw-semibold me-2">Active Filters :</span>
-        <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-          Tag <span class="badge-close">&times;</span>
-        </span>
-        <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-          Tag <span class="badge-close">&times;</span>
-        </span>
-        <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-          Tag <span class="badge-close">&times;</span>
-        </span>
-      </div>
-    </div>
-  </section>
 
-  <!-- Action Button -->
-  <div class="d-flex justify-content-end mb-3">
-    <button class="btn btn-primary rounded-pill fw-semibold shadow-sm shadow-sm px-4">Post Contract</button>
+        <div class="d-flex align-items-center flex-wrap gap-2">
+          <span class="text-dark small fw-semibold me-2">Active Filters :</span>
+          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
+            Tag <span class="badge-close">&times;</span>
+          </span>
+          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
+            Tag <span class="badge-close">&times;</span>
+          </span>
+          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
+            Tag <span class="badge-close">&times;</span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Button -->
+    <div class="d-flex justify-content-end mb-3">
+      <button (click)="navigateToCreateContract()" class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4">Post
+        Contract</button>
+    </div>
+
+
+    <!-- Data Table Section -->
+    <section class="glass-card rounded-3 mb-4">
+      <div class="card-body p-0">
+        <div class="table-responsive overflow-visible">
+          <table class="table table-hover align-middle text-center mb-0">
+            <thead class="table-light text-dark font-monospace small" style="font-family: serif !important;">
+              <tr>
+                <th scope="col" class="ps-4 fw-bold">S.NO</th>
+                <th scope="col" class="fw-bold">Contract title</th>
+                <th scope="col" class="fw-bold">Subject</th>
+                <th scope="col" class="fw-bold">Contract Type</th>
+                <th scope="col" class="fw-bold">Budget</th>
+                <th scope="col" class="fw-bold">Start Date</th>
+                <th scope="col" class="fw-bold">End Date</th>
+                <th scope="col" class="fw-bold">Funds Status</th>
+                <th scope="col" class="fw-bold">Status</th>
+                <th scope="col" class="pe-4 fw-bold">Actions</th>
+              </tr>
+            </thead>
+            <tbody style="font-family: serif;">
+              @if(isLoading) {
+                <tr>
+                  <td colspan="9" class="py-5 text-center text-muted">
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Loading contracts...
+                  </td>
+                </tr>
+              } @else {
+                @for (contract of allContracts; track contract._id; let i = $index) {
+                <tr>
+                  <td class="ps-4">{{ i + 1 }}</td>
+                  <td>{{ contract.contractTitle }}</td>
+                  <td>{{ contract.contractSubject }}</td>
+                  <td>{{ contract.contractType }}</td>
+                  <td>{{ contract.estimatedBudget }} {{ contract.currency }}</td>
+                  <td>{{ contract.contractStartDate | date:'mediumDate' }}</td>
+                  <td>{{ contract.contractEndDate | date:'mediumDate' }}</td>
+                  <td>
+                    @if (contract.funded && contract.funded > 0) {
+                      <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2">Fully Paid</span>
+                    } @else {
+                      <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-2">Pending</span>
+                    }
+                  </td>
+                  <td>
+                    <span class="badge rounded-pill px-3 border border-opacity-25 bg-opacity-25"
+                      [class.bg-success]="contract.status === 'completed' || contract.status === 'closed'"
+                      [class.text-success]="contract.status === 'completed' || contract.status === 'closed'"
+                      [class.border-success]="contract.status === 'completed' || contract.status === 'closed'"
+                      [class.bg-primary]="contract.status === 'open' || contract.status === 'in progress'"
+                      [class.text-primary]="contract.status === 'open' || contract.status === 'in progress'"
+                      [class.border-primary]="contract.status === 'open' || contract.status === 'in progress'"
+                      [class.bg-secondary]="contract.status === 'draft'"
+                      [class.text-secondary]="contract.status === 'draft'"
+                      [class.border-secondary]="contract.status === 'draft'" style="text-transform: capitalize;">
+                      {{ contract.status }}
+                    </span>
+                  </td>
+                  <td class="pe-4">
+                    <div class="dropdown">
+                      <button class="btn btn-link text-dark p-0 border-0" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-three-dots-vertical"></i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                        <li><a class="dropdown-item cursor-pointer" (click)="viewApplicants(contract._id)"><i
+                              class="bi bi-people me-2 text-primary"></i> Applicants</a></li>
+                        <li><a class="dropdown-item cursor-pointer" (click)="viewContractProgress(contract._id)"><i
+                              class="bi bi-graph-up me-2 text-secondary"></i> Contract Progress</a></li>
+                        <li><a class="dropdown-item cursor-pointer" (click)="editContract(contract._id)"><i
+                              class="bi bi-pencil me-2 text-warning"></i> Edit</a></li>
+                        
+                        @if (!isFullyFunded(contract)) {
+                          <li><a class="dropdown-item cursor-pointer fw-bold text-success" (click)="fundContract(contract)"><i
+                                class="bi bi-credit-card me-2 text-success"></i> Fund Contract</a></li>
+                        }
+                        <li>
+                          <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger cursor-pointer" (click)="deleteContract(contract._id)"><i class="bi bi-trash me-2"></i> Delete</a></li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+                } @empty {
+                <tr>
+                  <td colspan="9" class="py-5 text-center text-muted">
+                    <p class="mb-0">No contracts found</p>
+                  </td>
+                </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pagination -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+      <div class="d-flex align-items-center gap-2">
+        <span class="small text-dark">Show</span>
+        <select class="form-select form-select-sm" style="width: 70px;">
+          <option selected>10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+        <span class="small text-dark">Entries</span>
+      </div>
+
+      <span class="small text-dark">Showing 1-50 of 500</span>
+
+      <nav aria-label="Table pagination">
+        <ul class="pagination pagination-sm mb-0 gap-1">
+          <li class="page-item"><a class="page-link text-primary rounded" href="#">&lsaquo;</a></li>
+          <li class="page-item"><a class="page-link text-primary rounded" href="#">&laquo;</a></li>
+          <li class="page-item active"><a class="page-link rounded" href="#">1</a></li>
+          <li class="page-item"><a class="page-link text-primary rounded" href="#">&rsaquo;</a></li>
+          <li class="page-item"><a class="page-link text-primary rounded" href="#">&raquo;</a></li>
+        </ul>
+      </nav>
+    </div>
   </div>
-
-  <!-- Data Table Section -->
-  <section class="glass-card rounded-3 mb-4">
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-hover align-middle text-center mb-0">
-          <thead class="table-light text-dark font-monospace small" style="font-family: serif !important;">
-            <tr>
-              <th scope="col" class="ps-4 fw-bold">S.NO</th>
-              <th scope="col" class="fw-bold">Contract title</th>
-              <th scope="col" class="fw-bold">Subject</th>
-              <th scope="col" class="fw-bold">Contract Type</th>
-              <th scope="col" class="fw-bold">Budget</th>
-              <th scope="col" class="fw-bold">Start Date</th>
-              <th scope="col" class="fw-bold">End Date</th>
-              <th scope="col" class="fw-bold">Status</th>
-              <th scope="col" class="pe-4 fw-bold">Actions</th>
-            </tr>
-          </thead>
-          <tbody style="font-family: serif;">
-            <tr>
-              <td class="ps-4">1</td>
-              <td>E-Commerce Website</td>
-              <td>Online Store</td>
-              <td>Full Stack Development</td>
-              <td>₹60,000.00</td>
-              <td>Jun 30, 2026</td>
-              <td>Sep 30, 2026</td>
-              <td><span class="badge bg-success bg-opacity-25 text-success rounded-pill px-3 border border-success border-opacity-25">Completed</span></td>
-              <td class="pe-4"><input class="form-check-input border-secondary" type="checkbox" value="" style="width: 20px; height: 20px;"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- Empty State / No Data Placeholder -->
-      <div class="py-5 text-center text-muted border-top" style="font-family: serif;">
-        <p class="mb-0">No data available</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pagination -->
-  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-    <div class="d-flex align-items-center gap-2">
-      <span class="small text-dark">Show</span>
-      <select class="form-select form-select-sm" style="width: 70px;">
-        <option selected>10</option>
-        <option value="20">20</option>
-        <option value="50">50</option>
-      </select>
-      <span class="small text-dark">Entries</span>
-    </div>
-    
-    <span class="small text-dark">Showing 1-50 of 500</span>
-    
-    <nav aria-label="Table pagination">
-      <ul class="pagination pagination-sm mb-0 gap-1">
-        <li class="page-item"><a class="page-link text-primary rounded" href="#">&lsaquo;</a></li>
-        <li class="page-item"><a class="page-link text-primary rounded" href="#">&laquo;</a></li>
-        <li class="page-item active"><a class="page-link rounded" href="#">1</a></li>
-        <li class="page-item"><a class="page-link text-primary rounded" href="#">&rsaquo;</a></li>
-        <li class="page-item"><a class="page-link text-primary rounded" href="#">&raquo;</a></li>
-      </ul>
-    </nav>
-  </div>
-</div>
 
 </div>

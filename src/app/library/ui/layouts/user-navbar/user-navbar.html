@@ -21,7 +21,7 @@
     <div class="d-flex align-items-center gap-3">
 
         <!-- Chat Icon -->
-        <button class="btn btn-light position-relative icon-btn" aria-label="Messages">
+        <button routerLink="/chat-page" class="btn btn-light position-relative icon-btn" aria-label="Messages">
             <i class="bi bi-chat-dots fs-5 text-secondary"></i>
             <span
                 class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
@@ -55,13 +55,13 @@
             </button>
 
             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="userProfileDropdown">
-                <li><a class="dropdown-item py-2" href="#"><i class="bi bi-person me-2"></i> My Profile</a></li>
-                <li><a class="dropdown-item py-2" href="#"><i class="bi bi-gear me-2"></i> Settings</a></li>
+                <li><a class="dropdown-item py-2" routerLink="/profile"><i class="bi bi-person me-2"></i> My Profile</a></li>
+                <li><a class="dropdown-item py-2" routerLink="/account-settings"><i class="bi bi-gear me-2"></i> Account Settings</a></li>
+                <li><a class="dropdown-item py-2" routerLink="/contact-support"><i class="bi bi-headset me-2"></i> Contact Support</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item py-2 text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>
-                        Logout</a></li>
+                <li><a class="dropdown-item py-2 text-danger" routerLink="/login"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
             </ul>
         </div>
 

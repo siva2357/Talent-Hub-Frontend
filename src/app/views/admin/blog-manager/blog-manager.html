@@ -19,7 +19,7 @@
         <h1 class="fw-bold fs-4 mb-1">Public Blog Publisher</h1>
         <p class="text-muted small mb-0">Write articles, manage publication releases, and view platform blogs.</p>
       </div>
-      <button class="btn btn-primary rounded-pill shadow-sm px-4 fw-semibold"><i class="bi bi-plus-lg me-1"></i> Add
+      <button routerLink="/create-blog" class="btn btn-primary rounded-pill shadow-sm px-4 fw-semibold"><i class="bi bi-plus-lg me-1"></i> Add
         Blog</button>
     </header>
 
@@ -92,45 +92,62 @@
               </tr>
             </thead>
             <tbody class="border-top-0">
-              <tr>
-                <td class="ps-4 text-start fw-semibold text-muted">1</td>
-                <td class="text-start">
-                  <div
-                    class="rounded-3 shadow-sm overflow-hidden border border-light bg-white d-flex align-items-center justify-content-center"
-                    style="width: 56px; height: 40px; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);">
-                    <i class="bi bi-image text-muted" style="font-size: 1.2rem;"></i>
-                  </div>
-                </td>
-                <td class="text-start">
-                  <span class="d-block fw-bold text-dark text-truncate" style="max-width: 200px;">AI Talent
-                    Matching</span>
-                </td>
-                <td><span
-                    class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1">Career</span>
-                </td>
-                <td>
-                  <span
-                    class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"><i
-                      class="bi bi-check-circle-fill" style="font-size: 0.5rem;"></i> Published</span>
-                </td>
-                <td><span class="text-muted fw-semibold" style="font-size: 0.85rem;">August 1st, 2026</span></td>
-                <td class="pe-4">
-                  <div class="d-flex justify-content-center gap-2">
-                    <button
-                      class="btn btn-sm btn-light text-success rounded-circle shadow-sm border border-light d-flex justify-content-center align-items-center hover-bg-light"
-                      style="width: 32px; height: 32px;" title="Edit"><i class="bi bi-pencil-fill"></i></button>
-                    <button
-                      class="btn btn-sm btn-light text-danger rounded-circle shadow-sm border border-light d-flex justify-content-center align-items-center hover-bg-light"
-                      style="width: 32px; height: 32px;" title="Delete"><i class="bi bi-trash3-fill"></i></button>
-                  </div>
-                </td>
-              </tr>
+              @if (isLoading) {
+                <tr>
+                  <td colspan="7" class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </td>
+                </tr>
+              } @else if (blogs.length === 0) {
+                <tr>
+                  <td colspan="7" class="text-center py-5">
+                    <div class="d-flex flex-column align-items-center">
+                      <i class="bi bi-journal-x fs-1 text-muted mb-2"></i>
+                      <h3 class="fs-5 fw-bold text-dark mb-1">No Blogs Found</h3>
+                      <p class="text-muted mb-3">You haven't created any blogs yet.</p>
+                      <button routerLink="/create-blog" class="btn btn-primary rounded-pill px-4"><i class="bi bi-plus"></i> Create Your First Blog</button>
+                    </div>
+                  </td>
+                </tr>
+              } @else {
+                @for (b of blogs; track b._id; let i = $index) {
+                  <tr>
+                    <td class="ps-4 text-start fw-semibold text-muted">{{ i + 1 }}</td>
+                    <td class="text-start">
+                      <div class="rounded-3 shadow-sm overflow-hidden border border-light bg-white d-flex align-items-center justify-content-center" style="width: 56px; height: 40px; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);">
+                        @if (b.featuredMedia) {
+                          <img [src]="b.featuredMedia" class="w-100 h-100 object-fit-cover" alt="Blog Image">
+                        } @else {
+                          <i class="bi bi-image text-muted" style="font-size: 1.2rem;"></i>
+                        }
+                      </div>
+                    </td>
+                    <td class="text-start">
+                      <span class="d-block fw-bold text-dark text-truncate" style="max-width: 200px;">{{ b.title }}</span>
+                    </td>
+                    <td>
+                      <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1">{{ b.category }}</span>
+                    </td>
+                    <td>
+                      @if (b.status === 'Published') {
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"><i class="bi bi-check-circle-fill" style="font-size: 0.5rem;"></i> Published</span>
+                      } @else {
+                        <span class="badge bg-warning bg-opacity-10 text-warning-dark border border-warning border-opacity-25 rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"><i class="bi bi-dash-circle-fill" style="font-size: 0.5rem;"></i> Draft</span>
+                      }
+                    </td>
+                    <td><span class="text-muted fw-semibold" style="font-size: 0.85rem;">{{ b.createdAt | date:'mediumDate' }}</span></td>
+                    <td class="pe-4">
+                      <div class="d-flex justify-content-center gap-2">
+                        <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm border border-light d-flex justify-content-center align-items-center hover-bg-light" style="width: 32px; height: 32px;" title="Delete" (click)="deleteBlog(b._id)"><i class="bi bi-trash3-fill"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              }
             </tbody>
           </table>
-        </div>
-        <!-- Empty State / No Data Placeholder -->
-        <div class="py-5 text-center text-muted border-top" style="font-family: serif;">
-          <p class="mb-0">No data available</p>
         </div>
       </div>
     </section>

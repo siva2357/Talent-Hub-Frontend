@@ -1,4 +1,4 @@
-<div class="dashboard-container position-relative p-4">
+<form [formGroup]="offerForm" (ngSubmit)="onSubmit()" class="dashboard-container position-relative p-4">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -13,467 +13,292 @@
 
   <!-- Main Content Wrapper (Glassmorphism) -->
   <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
-  <!-- Top Navigation & Stepper -->
-  <div class="d-flex justify-content-between align-items-start mb-4">
-    <div>
-      <a href="#" class="text-primary text-decoration-none fw-semibold small d-flex align-items-center gap-1 mb-3">
-        <i class="bi bi-arrow-left"></i> Back to Proposals
-      </a>
-      <h1 class="fw-bold fs-3 mb-1 text-dark">Legal Contract Agreement</h1>
-      <p class="text-muted small mb-0">Review the terms below and send a legally binding offer to your freelancer.</p>
-    </div>
-    
-    <!-- Custom Top Stepper -->
-    <div class="d-flex align-items-center mt-3 d-none d-lg-flex" style="width: 500px;">
-      <!-- Step 1 -->
-      <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center z-2" style="width: 24px; height: 24px; font-size: 0.7rem;"><i class="bi bi-check"></i></div>
-        <span class="text-dark small mt-2 fw-semibold" style="font-size: 0.65rem;">Job Posted</span>
-        <div class="position-absolute top-0 start-50 w-100" style="height: 2px; background-color: #0d6efd; margin-top: 11px; z-index: 1;"></div>
+    <!-- Top Navigation & Stepper -->
+    <div class="d-flex justify-content-between align-items-start mb-4">
+      <div>
+        <a routerLink="/applicants"
+          class="text-primary text-decoration-none fw-semibold small d-flex align-items-center gap-1 mb-3 cursor-pointer">
+          <i class="bi bi-arrow-left"></i> Back to Proposals
+        </a>
+        <h1 class="fw-bold fs-3 mb-1 text-dark">Legal Contract Agreement</h1>
+        <p class="text-muted small mb-0">Review the terms below and send a legally binding offer to your freelancer.</p>
       </div>
-      <!-- Step 2 -->
-      <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center z-2" style="width: 24px; height: 24px; font-size: 0.7rem;"><i class="bi bi-check"></i></div>
-        <span class="text-dark small mt-2 fw-semibold" style="font-size: 0.65rem;">Applications</span>
-        <div class="position-absolute top-0 start-50 w-100" style="height: 2px; background-color: #0d6efd; margin-top: 11px; z-index: 1;"></div>
-      </div>
-      <!-- Step 3 -->
-      <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center z-2" style="width: 24px; height: 24px; font-size: 0.7rem;"><i class="bi bi-check"></i></div>
-        <span class="text-dark small mt-2 fw-semibold" style="font-size: 0.65rem;">Select Freelancer</span>
-        <div class="position-absolute top-0 start-50 w-100" style="height: 2px; background-color: #0d6efd; margin-top: 11px; z-index: 1;"></div>
-      </div>
-      <!-- Step 4 (Current) -->
-      <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center z-2" style="width: 24px; height: 24px; font-size: 0.7rem;">4</div>
-        <span class="text-primary small mt-2 fw-bold" style="font-size: 0.65rem;">Legal Agreement</span>
-        <div class="position-absolute top-0 start-50 w-100" style="height: 2px; background-color: #e9ecef; margin-top: 11px; z-index: 1;"></div>
-      </div>
-      <!-- Step 5 -->
-      <div class="d-flex flex-column align-items-center position-relative" style="width: 50px;">
-        <div class="rounded-circle bg-white border border-secondary text-muted d-flex align-items-center justify-content-center z-2" style="width: 24px; height: 24px; font-size: 0.7rem;">5</div>
-        <span class="text-muted small mt-2" style="font-size: 0.65rem;">Offer Sent</span>
-      </div>
-    </div>
-  </div>
 
-  <!-- Contract Summary Card -->
-  <div class="glass-card rounded-3 mb-4 p-4 bg-white">
-    <h3 class="fs-6 fw-bold text-dark mb-4 d-flex align-items-center gap-2">
-      <i class="bi bi-file-earmark-text text-primary"></i> Contract Summary
-    </h3>
-    
-    <div class="row align-items-center g-4">
-      <div class="col-md-3 border-end pe-4">
-        <div class="d-flex align-items-center gap-3">
-          <div class="rounded-circle bg-dark flex-shrink-0" style="width: 48px; height: 48px;"></div>
-          <div>
-            <h4 class="fw-bold text-dark mb-0 fs-6">John Smith</h4>
-            <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Senior Full Stack Developer</span>
-            <div class="d-flex align-items-center gap-2">
-              <span class="text-muted" style="font-size: 0.65rem;">john.smith@email.com</span>
-              <span class="badge bg-warning text-dark px-1 rounded d-flex align-items-center gap-1" style="font-size: 0.65rem;"><i class="bi bi-star-fill text-dark" style="font-size: 0.5rem;"></i> 4.9</span>
+      <!-- Stepper Removed -->
+    </div>
+
+    <div class="row g-4 mb-5 pb-5">
+      <!-- Left Column (Form Fields) -->
+      <div class="col-lg-8 mx-auto">
+
+        <!-- Contract Summary Card -->
+        <div class="glass-card rounded-3 mb-5 p-4 bg-white border shadow-sm">
+          <h3 class="fs-6 fw-bold text-dark mb-4 d-flex align-items-center gap-2">
+            <i class="bi bi-file-earmark-text text-primary"></i> Contract Summary
+          </h3>
+
+          <div class="d-flex flex-column gap-3">
+            <!-- Contract Title -->
+            <div class="p-3 border rounded-3 bg-light d-flex  gap-3">
+              <div class="d-flex align-items-center gap-2">
+                <span class="text-muted" style="font-size: 0.75rem;">Contract Subject:</span>
+                <span class="fw-bold text-dark" style="font-size: 0.85rem;">{{
+                  applicationData?.contractId?.contractSubject || 'Backend' }}</span>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="text-muted" style="font-size: 0.75rem;">Contract Title:</span>
+                <span class="fw-bold text-dark" style="font-size: 0.85rem;">{{
+                  applicationData?.contractId?.contractTitle || 'Contract Title' }}</span>
+                <span class="badge bg-primary bg-opacity-10 text-primary rounded px-2 text-capitalize ms-2"
+                  style="font-size: 0.65rem;">{{ applicationData?.contractId?.contractType || 'Hourly' }}</span>
+              </div>
+            </div>
+
+            <!-- Freelancer Info -->
+            <div class="d-flex align-items-center gap-3 p-3 border rounded-3 bg-light">
+              <div class="rounded-circle bg-dark flex-shrink-0" style="width: 48px; height: 48px;"></div>
+              <div>
+                <h4 class="fw-bold text-dark mb-0 fs-6">{{ applicationData?.freelancerId?.registrationDetails?.fullName
+                  || 'John Smith' }}</h4>
+                <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">{{
+                  applicationData?.freelancerId?.headline || 'Freelancer' }}</span>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="text-muted" style="font-size: 0.65rem;">{{
+                    applicationData?.freelancerId?.registrationDetails?.email || 'email@example.com' }}</span>
+                  <span class="badge bg-warning text-dark px-1 rounded d-flex align-items-center gap-1"
+                    style="font-size: 0.65rem;"><i class="bi bi-star-fill text-dark" style="font-size: 0.5rem;"></i> {{
+                    applicationData?.freelancerId?.rating || '4.9' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 1. Scope of Work -->
+        <div class="mb-5">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+              style="width: 24px; height: 24px; font-size: 0.75rem;">1</div>
+            <h2 class="fs-6 fw-bold mb-0 text-dark">Scope of Work</h2>
+          </div>
+          <p class="text-muted small mb-3">Define the exact deliverables, responsibilities and expectations.</p>
+
+          <div class="border rounded-3 p-2 bg-white">
+            <div class="border-bottom pb-2 mb-2 d-flex gap-3 text-muted">
+              <select class="form-select form-select-sm border-0 w-auto fw-semibold text-dark shadow-none"
+                style="font-size: 0.75rem;">
+                <option>Normal</option>
+              </select>
+              <div class="d-flex gap-2 align-items-center fs-6">
+                <i class="bi bi-type-bold cursor-pointer text-dark"></i>
+                <i class="bi bi-type-italic cursor-pointer"></i>
+                <i class="bi bi-type-underline cursor-pointer"></i>
+                <i class="bi bi-type-strikethrough cursor-pointer me-2"></i>
+
+                <i class="bi bi-list-ul cursor-pointer"></i>
+                <i class="bi bi-quote cursor-pointer me-2"></i>
+
+                <i class="bi bi-code cursor-pointer"></i>
+                <i class="bi bi-link cursor-pointer"></i>
+                <i class="bi bi-image cursor-pointer"></i>
+                <i class="bi bi-play-btn cursor-pointer"></i>
+                <i class="bi bi-table cursor-pointer me-2"></i>
+
+                <i class="bi bi-arrow-counterclockwise cursor-pointer"></i>
+                <i class="bi bi-arrow-clockwise cursor-pointer text-light"></i>
+              </div>
+            </div>
+            <textarea formControlName="scopeOfWork" class="form-control border-0 shadow-none text-muted" rows="6"
+              style="font-size: 0.8rem; resize: none;"
+              placeholder="Describe the scope of work in detail. Be clear about deliverables, milestones and responsibilities..."></textarea>
+            <div class="text-end text-muted mt-2" style="font-size: 0.65rem;">0 / 2500</div>
+          </div>
+        </div>
+
+        <!-- 2. Additional Terms & Conditions -->
+        <div class="mb-5">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+              style="width: 24px; height: 24px; font-size: 0.75rem;">2</div>
+            <h2 class="fs-6 fw-bold mb-0 text-dark">Additional Terms & Conditions <span
+                class="text-muted fw-normal fs-6">(Optional)</span></h2>
+          </div>
+          <p class="text-muted small mb-3">Add any legal clauses, NDA, IP ownership, confidentiality or other terms.</p>
+
+          <div class="border rounded-3 p-2 bg-white">
+            <div class="border-bottom pb-2 mb-2 d-flex gap-3 text-muted">
+              <select class="form-select form-select-sm border-0 w-auto fw-semibold text-dark shadow-none"
+                style="font-size: 0.75rem;">
+                <option>Normal</option>
+              </select>
+              <div class="d-flex gap-2 align-items-center fs-6">
+                <i class="bi bi-type-bold cursor-pointer text-dark"></i>
+                <i class="bi bi-type-italic cursor-pointer"></i>
+                <i class="bi bi-type-underline cursor-pointer"></i>
+                <i class="bi bi-type-strikethrough cursor-pointer me-2"></i>
+                <i class="bi bi-list-ul cursor-pointer"></i>
+                <i class="bi bi-quote cursor-pointer me-2"></i>
+                <i class="bi bi-code cursor-pointer"></i>
+                <i class="bi bi-link cursor-pointer"></i>
+                <i class="bi bi-image cursor-pointer"></i>
+                <i class="bi bi-play-btn cursor-pointer"></i>
+                <i class="bi bi-table cursor-pointer me-2"></i>
+                <i class="bi bi-arrow-counterclockwise cursor-pointer"></i>
+                <i class="bi bi-arrow-clockwise cursor-pointer text-light"></i>
+              </div>
+            </div>
+            <textarea formControlName="additionalTerms" class="form-control border-0 shadow-none text-muted" rows="4"
+              style="font-size: 0.8rem; resize: none;"
+              placeholder="Add additional legal terms, conditions or clauses here..."></textarea>
+            <div class="text-end text-muted mt-2" style="font-size: 0.65rem;">0 / 2000</div>
+          </div>
+        </div>
+
+        <!-- 3. Contract Budget & Duration -->
+        <div class="mb-5">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+              style="width: 24px; height: 24px; font-size: 0.75rem;">3</div>
+            <h2 class="fs-6 fw-bold mb-0 text-dark">Contract Budget & Duration</h2>
+          </div>
+          <p class="text-muted small mb-3">Overview of the allocated budget and project timeline.</p>
+
+          <div class="border rounded-3 p-4 bg-white d-flex flex-column gap-3">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-3">
+              <span class="text-muted fw-semibold" style="font-size: 0.8rem;">Allocated Budget</span>
+              <span class="fw-bold text-success fs-5">₹{{ applicationData?.contractId?.estimatedBudget || '0' }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-3">
+              <span class="text-muted fw-semibold" style="font-size: 0.8rem;">Contract Duration</span>
+              <span class="fw-bold text-dark" style="font-size: 0.8rem;">{{ applicationData?.contractId?.duration ||
+                'Timeline' }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-muted fw-semibold" style="font-size: 0.8rem;">Budget Type</span>
+              <span class="fw-bold text-dark text-capitalize" style="font-size: 0.8rem;">{{
+                applicationData?.contractId?.contractType || 'Fixed Price' }}</span>
             </div>
           </div>
         </div>
-      </div>
-      
-      <div class="col-md-3 border-end px-4">
-        <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Contract</span>
-        <span class="fw-bold text-dark d-block mb-2" style="font-size: 0.8rem;">AI Powered CRM Platform</span>
-        <div class="d-flex gap-2">
-          <span class="badge bg-primary bg-opacity-10 text-primary rounded px-2" style="font-size: 0.65rem;">Fixed Price</span>
-          <span class="badge bg-success bg-opacity-10 text-success rounded px-2" style="font-size: 0.65rem;">Full Time</span>
-        </div>
-      </div>
-      
-      <div class="col-md-2 border-end px-4">
-        <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Budget</span>
-        <span class="fw-bold text-dark d-block fs-5">₹60,000</span>
-        <span class="text-muted d-block" style="font-size: 0.65rem;">(Fixed Price)</span>
-      </div>
-      
-      <div class="col-md-2 border-end px-4">
-        <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Duration</span>
-        <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.8rem;"><i class="bi bi-calendar3 text-muted me-1"></i> 3 Months</span>
-        <span class="text-muted d-block" style="font-size: 0.65rem;">Jul 23, 2026 - Oct 23, 2026</span>
-      </div>
-      
-      <div class="col-md-2 ps-4">
-        <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Project Start</span>
-        <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.8rem;"><i class="bi bi-calendar-event text-muted me-1"></i> Jul 30, 2026</span>
-        <span class="text-muted d-block" style="font-size: 0.65rem;">Thursday</span>
-      </div>
-    </div>
-  </div>
 
-  <div class="row g-4 mb-5 pb-5">
-    <!-- Left Column (Form Fields) -->
-    <div class="col-lg-8">
-      
-      <!-- 1. Scope of Work -->
-      <div class="mb-5">
-        <div class="d-flex align-items-center gap-2 mb-1">
-          <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; font-size: 0.75rem;">1</div>
-          <h2 class="fs-6 fw-bold mb-0 text-dark">Scope of Work</h2>
-        </div>
-        <p class="text-muted small mb-3">Define the exact deliverables, responsibilities and expectations.</p>
-        
-        <div class="border rounded-3 p-2 bg-white">
-          <div class="border-bottom pb-2 mb-2 d-flex gap-3 text-muted">
-            <select class="form-select form-select-sm border-0 w-auto fw-semibold text-dark shadow-none" style="font-size: 0.75rem;">
-              <option>Normal</option>
-            </select>
-            <div class="d-flex gap-2 align-items-center fs-6">
-              <i class="bi bi-type-bold cursor-pointer text-dark"></i>
-              <i class="bi bi-type-italic cursor-pointer"></i>
-              <i class="bi bi-type-underline cursor-pointer"></i>
-              <i class="bi bi-type-strikethrough cursor-pointer me-2"></i>
-              
-              <i class="bi bi-list-ul cursor-pointer"></i>
-              <i class="bi bi-quote cursor-pointer me-2"></i>
-              
-              <i class="bi bi-code cursor-pointer"></i>
-              <i class="bi bi-link cursor-pointer"></i>
-              <i class="bi bi-image cursor-pointer"></i>
-              <i class="bi bi-play-btn cursor-pointer"></i>
-              <i class="bi bi-table cursor-pointer me-2"></i>
-              
-              <i class="bi bi-arrow-counterclockwise cursor-pointer"></i>
-              <i class="bi bi-arrow-clockwise cursor-pointer text-light"></i>
+        <!-- 4. Digital Signature -->
+        <div class="mb-5">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+              style="width: 24px; height: 24px; font-size: 0.75rem;">4</div>
+            <h2 class="fs-6 fw-bold mb-0 text-dark">Digital Signature</h2>
+          </div>
+          <p class="text-muted small mb-3">Upload your digital signature. This will be used on the official contract.
+          </p>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div
+                class="border border-2 border-dashed rounded-3 p-4 d-flex flex-column align-items-center justify-content-center text-center h-100 bg-white"
+                style="cursor: pointer;" (click)="fileInput.click()">
+                <input type="file" #fileInput (change)="onFileSelected($event)"
+                  accept="image/png, image/jpeg, image/webp" class="d-none">
+                <i class="bi bi-cloud-upload text-primary fs-2 mb-2"></i>
+                <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.75rem;">Drag & drop your signature
+                  here</span>
+                <span class="text-muted small d-block mb-3" style="font-size: 0.7rem;">or</span>
+                <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-semibold mb-3">Browse
+                  Files</button>
+                <span class="text-muted" style="font-size: 0.65rem;">PNG, JPG, WEBP (Max. 5MB)</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="border rounded-3 p-3 bg-white h-100 position-relative">
+                @if (signaturePreview) {
+                <div class="position-absolute top-0 end-0 p-3">
+                  <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center"
+                    style="width: 20px; height: 20px;"><i class="bi bi-check" style="font-size: 0.8rem;"></i></div>
+                </div>
+                }
+                <span class="fw-bold text-dark d-block mb-3" style="font-size: 0.75rem;">Signature Preview</span>
+
+                @if (signaturePreview) {
+                <div class="d-flex justify-content-center py-3 mb-3">
+                  <img [src]="signaturePreview" alt="Signature Preview"
+                    style="max-height: 100px; max-width: 100%; object-fit: contain;">
+                </div>
+                } @else {
+                <div class="d-flex justify-content-center align-items-center py-3 mb-3 text-muted"
+                  style="height: 100px; background-color: #f8f9fa; border-radius: 8px;">
+                  No signature uploaded yet
+                </div>
+                }
+
+                <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">{{ fileName || 'No file selected'
+                  }}</span>
+                <span class="text-muted d-block mb-2" style="font-size: 0.65rem;">Status: {{ signaturePreview ? 'Ready
+                  for submission' : 'Pending upload' }}</span>
+                @if (signaturePreview) {
+                <a href="javascript:void(0)" (click)="fileInput.click()"
+                  class="text-primary text-decoration-none fw-semibold d-flex align-items-center gap-1"
+                  style="font-size: 0.7rem;">
+                  <i class="bi bi-arrow-repeat"></i> Replace Signature
+                </a>
+                }
+              </div>
             </div>
           </div>
-          <textarea class="form-control border-0 shadow-none text-muted" rows="6" style="font-size: 0.8rem; resize: none;" placeholder="Describe the scope of work in detail. Be clear about deliverables, milestones and responsibilities..."></textarea>
-          <div class="text-end text-muted mt-2" style="font-size: 0.65rem;">0 / 2500</div>
         </div>
-      </div>
 
-      <!-- 2. Additional Terms & Conditions -->
-      <div class="mb-5">
-        <div class="d-flex align-items-center gap-2 mb-1">
-          <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; font-size: 0.75rem;">2</div>
-          <h2 class="fs-6 fw-bold mb-0 text-dark">Additional Terms & Conditions <span class="text-muted fw-normal fs-6">(Optional)</span></h2>
-        </div>
-        <p class="text-muted small mb-3">Add any legal clauses, NDA, IP ownership, confidentiality or other terms.</p>
-        
-        <div class="border rounded-3 p-2 bg-white">
-           <div class="border-bottom pb-2 mb-2 d-flex gap-3 text-muted">
-            <select class="form-select form-select-sm border-0 w-auto fw-semibold text-dark shadow-none" style="font-size: 0.75rem;">
-              <option>Normal</option>
-            </select>
-            <div class="d-flex gap-2 align-items-center fs-6">
-              <i class="bi bi-type-bold cursor-pointer text-dark"></i>
-              <i class="bi bi-type-italic cursor-pointer"></i>
-              <i class="bi bi-type-underline cursor-pointer"></i>
-              <i class="bi bi-type-strikethrough cursor-pointer me-2"></i>
-              <i class="bi bi-list-ul cursor-pointer"></i>
-              <i class="bi bi-quote cursor-pointer me-2"></i>
-              <i class="bi bi-code cursor-pointer"></i>
-              <i class="bi bi-link cursor-pointer"></i>
-              <i class="bi bi-image cursor-pointer"></i>
-              <i class="bi bi-play-btn cursor-pointer"></i>
-              <i class="bi bi-table cursor-pointer me-2"></i>
-              <i class="bi bi-arrow-counterclockwise cursor-pointer"></i>
-              <i class="bi bi-arrow-clockwise cursor-pointer text-light"></i>
+        <!-- 5. Legal Confirmation -->
+        <div class="mb-4">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+              style="width: 24px; height: 24px; font-size: 0.75rem;">5</div>
+            <h2 class="fs-6 fw-bold mb-0 text-dark">Legal Confirmation</h2>
+          </div>
+          <p class="text-muted small mb-3">Please read and confirm the points below.</p>
+
+          <div class="d-flex flex-column gap-2" style="font-size: 0.75rem;">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" formControlName="confirmAccuracy" id="check1">
+              <label class="form-check-label text-dark" for="check1">I confirm that the project details, scope of work,
+                and payment terms are accurate and complete.</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" formControlName="confirmSignatureAuth" id="check2">
+              <label class="form-check-label text-dark" for="check2">I own the uploaded digital signature and authorize
+                its use on this contract.</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" formControlName="confirmLegallyBinding" id="check3">
+              <label class="form-check-label text-dark" for="check3">I understand that this contract will be legally
+                binding once accepted by the freelancer.</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" formControlName="confirmTermsPrivacy" id="check4">
+              <label class="form-check-label text-dark" for="check4">I agree to the platform's <a href="#"
+                  class="text-primary text-decoration-none">Terms of Service</a> and <a href="#"
+                  class="text-primary text-decoration-none">Privacy Policy</a>.</label>
             </div>
           </div>
-          <textarea class="form-control border-0 shadow-none text-muted" rows="4" style="font-size: 0.8rem; resize: none;" placeholder="Add additional legal terms, conditions or clauses here..."></textarea>
-          <div class="text-end text-muted mt-2" style="font-size: 0.65rem;">0 / 2000</div>
         </div>
-      </div>
 
-      <!-- 3. Payment Schedule -->
-      <div class="mb-5">
-        <div class="d-flex align-items-center gap-2 mb-1">
-          <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; font-size: 0.75rem;">3</div>
-          <h2 class="fs-6 fw-bold mb-0 text-dark">Payment Schedule</h2>
-        </div>
-        <p class="text-muted small mb-3">Define milestone based payments for this contract.</p>
-        
-        <div class="table-responsive mb-3">
-          <table class="table table-borderless align-middle mb-0" style="font-size: 0.75rem;">
-            <thead class="text-dark fw-bold border-bottom" style="font-size: 0.7rem;">
-              <tr>
-                <th class="pb-2">Milestone</th>
-                <th class="pb-2">Description</th>
-                <th class="pb-2">Amount (₹)</th>
-                <th class="pb-2">Release Date</th>
-                <th class="pb-2 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="pt-3"><div class="rounded bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px;">1</div></td>
-                <td class="pt-3"><input type="text" class="form-control form-control-sm text-dark bg-white" value="Design & Wireframes" style="font-size: 0.75rem;"></td>
-                <td class="pt-3"><input type="text" class="form-control form-control-sm text-dark bg-white" value="20,000" style="font-size: 0.75rem;"></td>
-                <td class="pt-3">
-                  <div class="input-group input-group-sm">
-                    <input type="text" class="form-control bg-white text-dark border-end-0" value="Jul 30, 2026" style="font-size: 0.75rem;">
-                    <span class="input-group-text bg-white text-muted"><i class="bi bi-calendar3"></i></span>
-                  </div>
-                </td>
-                <td class="text-center pt-3"><i class="bi bi-trash text-danger cursor-pointer fs-5"></i></td>
-              </tr>
-              <tr>
-                <td class="pt-3"><div class="rounded bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px;">2</div></td>
-                <td class="pt-3"><input type="text" class="form-control form-control-sm text-dark bg-white" value="Development" style="font-size: 0.75rem;"></td>
-                <td class="pt-3"><input type="text" class="form-control form-control-sm text-dark bg-white" value="30,000" style="font-size: 0.75rem;"></td>
-                <td class="pt-3">
-                  <div class="input-group input-group-sm">
-                    <input type="text" class="form-control bg-white text-dark border-end-0" value="Aug 30, 2026" style="font-size: 0.75rem;">
-                    <span class="input-group-text bg-white text-muted"><i class="bi bi-calendar3"></i></span>
-                  </div>
-                </td>
-                <td class="text-center pt-3"><i class="bi bi-trash text-danger cursor-pointer fs-5"></i></td>
-              </tr>
-              <tr>
-                <td class="pt-3"><div class="rounded bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px;">3</div></td>
-                <td class="pt-3"><input type="text" class="form-control form-control-sm text-dark bg-white" value="Testing & Deployment" style="font-size: 0.75rem;"></td>
-                <td class="pt-3"><input type="text" class="form-control form-control-sm text-dark bg-white" value="10,000" style="font-size: 0.75rem;"></td>
-                <td class="pt-3">
-                  <div class="input-group input-group-sm">
-                    <input type="text" class="form-control bg-white text-dark border-end-0" value="Sep 30, 2026" style="font-size: 0.75rem;">
-                    <span class="input-group-text bg-white text-muted"><i class="bi bi-calendar3"></i></span>
-                  </div>
-                </td>
-                <td class="text-center pt-3"><i class="bi bi-trash text-danger cursor-pointer fs-5"></i></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        
-        <div class="d-flex justify-content-between align-items-center">
-          <button class="btn btn-outline-primary bg-primary bg-opacity-10 btn-sm fw-semibold rounded-pill px-3 border-0 d-flex align-items-center gap-1">
-            <i class="bi bi-plus"></i> Add Milestone
+        <!-- Action Buttons at the bottom of the form -->
+        <div class="d-flex justify-content-between align-items-center pt-4 border-top mt-5">
+          <button type="button" routerLink="/applicants"
+            class="btn btn-outline-secondary bg-white text-dark px-4 fw-semibold shadow-sm cursor-pointer">Cancel</button>
+          <button type="submit" [disabled]="isSubmitting"
+            class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
+            <i class="bi bi-send"></i> Generate & Send Legal Offer
+            @if (isSubmitting) {
+            <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
+            } @else {
+            <i class="bi bi-arrow-right ms-1"></i>
+            }
           </button>
-          <div class="d-flex gap-3 align-items-center">
-            <span class="fw-bold text-dark" style="font-size: 0.8rem;">Total Amount:</span>
-            <span class="fw-bold text-success fs-5">₹60,000</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4. Digital Signature -->
-      <div class="mb-5">
-        <div class="d-flex align-items-center gap-2 mb-1">
-          <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; font-size: 0.75rem;">4</div>
-          <h2 class="fs-6 fw-bold mb-0 text-dark">Digital Signature</h2>
-        </div>
-        <p class="text-muted small mb-3">Upload your digital signature. This will be used on the official contract.</p>
-        
-        <div class="row g-4">
-          <div class="col-md-6">
-            <div class="border border-2 border-dashed rounded-3 p-4 d-flex flex-column align-items-center justify-content-center text-center h-100 bg-white">
-              <i class="bi bi-cloud-upload text-primary fs-2 mb-2"></i>
-              <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.75rem;">Drag & drop your signature here</span>
-              <span class="text-muted small d-block mb-3" style="font-size: 0.7rem;">or</span>
-              <button class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-semibold mb-3">Browse Files</button>
-              <span class="text-muted" style="font-size: 0.65rem;">PNG, JPG, WEBP (Max. 5MB)</span>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="border rounded-3 p-3 bg-white h-100 position-relative">
-              <div class="position-absolute top-0 end-0 p-3">
-                <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 20px; height: 20px;"><i class="bi bi-check" style="font-size: 0.8rem;"></i></div>
-              </div>
-              <span class="fw-bold text-dark d-block mb-3" style="font-size: 0.75rem;">Signature Preview</span>
-              <div class="d-flex justify-content-center py-3 mb-3" style="font-family: 'Brush Script MT', cursive; font-size: 3rem; color: #333;">
-                John Smith
-              </div>
-              <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">Client signature.png</span>
-              <span class="text-muted d-block mb-2" style="font-size: 0.65rem;">Uploaded on Jul 21, 2026 04:45 PM</span>
-              <a href="#" class="text-primary text-decoration-none fw-semibold d-flex align-items-center gap-1" style="font-size: 0.7rem;">
-                <i class="bi bi-arrow-repeat"></i> Replace Signature
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 5. Legal Confirmation -->
-      <div class="mb-4">
-        <div class="d-flex align-items-center gap-2 mb-1">
-          <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; font-size: 0.75rem;">5</div>
-          <h2 class="fs-6 fw-bold mb-0 text-dark">Legal Confirmation</h2>
-        </div>
-        <p class="text-muted small mb-3">Please read and confirm the points below.</p>
-        
-        <div class="d-flex flex-column gap-2" style="font-size: 0.75rem;">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" checked id="check1">
-            <label class="form-check-label text-dark" for="check1">I confirm that the project details, scope of work, and payment terms are accurate and complete.</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" checked id="check2">
-            <label class="form-check-label text-dark" for="check2">I own the uploaded digital signature and authorize its use on this contract.</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" checked id="check3">
-            <label class="form-check-label text-dark" for="check3">I understand that this contract will be legally binding once accepted by the freelancer.</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" checked id="check4">
-            <label class="form-check-label text-dark" for="check4">I agree to the platform's <a href="#" class="text-primary text-decoration-none">Terms of Service</a> and <a href="#" class="text-primary text-decoration-none">Privacy Policy</a>.</label>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Right Column (Sidebar) -->
-    <div class="col-lg-4">
-      <div class="d-flex flex-column gap-4">
-        
-        <!-- Contract Overview -->
-        <div class="glass-card rounded-3 p-4 bg-white">
-          <h3 class="fs-6 fw-bold text-dark mb-4">Contract Overview</h3>
-          <div class="d-flex flex-column gap-3" style="font-size: 0.75rem;">
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Contract Title</span>
-              <span class="text-dark fw-semibold text-end">AI Powered CRM Platform</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Contract Type</span>
-              <span class="text-dark fw-semibold">Fixed Price</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Budget</span>
-              <span class="text-dark fw-semibold">₹60,000</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Duration</span>
-              <span class="text-dark fw-semibold">3 Months</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Start Date</span>
-              <span class="text-dark fw-semibold">Jul 30, 2026</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">End Date</span>
-              <span class="text-dark fw-semibold">Oct 23, 2026</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Category</span>
-              <span class="text-dark fw-semibold">Web Development</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Progress Checklist -->
-        <div class="glass-card rounded-3 p-4 bg-white">
-          <h3 class="fs-6 fw-bold text-dark mb-4">Progress Checklist</h3>
-          
-          <div class="d-flex flex-column gap-3" style="font-size: 0.75rem;">
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="d-flex align-items-center gap-2">
-                <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 20px; height: 20px; font-size: 0.7rem;"><i class="bi bi-check"></i></div>
-                <span class="text-dark">Project Created</span>
-              </div>
-              <span class="text-muted small">Completed</span>
-            </div>
-            
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="d-flex align-items-center gap-2">
-                <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 20px; height: 20px; font-size: 0.7rem;"><i class="bi bi-check"></i></div>
-                <span class="text-dark">Freelancer Selected</span>
-              </div>
-              <span class="text-muted small">Completed</span>
-            </div>
-            
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="d-flex align-items-center gap-2">
-                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 20px; height: 20px; font-size: 0.65rem;">3</div>
-                <span class="text-dark fw-bold">Legal Agreement</span>
-              </div>
-              <span class="text-primary fw-bold small">In Progress</span>
-            </div>
-            
-            <div class="d-flex justify-content-between align-items-center opacity-50">
-              <div class="d-flex align-items-center gap-2">
-                <div class="rounded-circle bg-light border border-secondary text-muted d-flex align-items-center justify-content-center fw-bold" style="width: 20px; height: 20px; font-size: 0.65rem;">4</div>
-                <span class="text-dark">Offer Sent</span>
-              </div>
-              <span class="text-muted small">Pending</span>
-            </div>
-            
-            <div class="d-flex justify-content-between align-items-center opacity-50">
-              <div class="d-flex align-items-center gap-2">
-                <div class="rounded-circle bg-light border border-secondary text-muted d-flex align-items-center justify-content-center fw-bold" style="width: 20px; height: 20px; font-size: 0.65rem;">5</div>
-                <span class="text-dark">Freelancer Acceptance</span>
-              </div>
-              <span class="text-muted small">Pending</span>
-            </div>
-            
-            <div class="d-flex justify-content-between align-items-center opacity-50">
-              <div class="d-flex align-items-center gap-2">
-                <div class="rounded-circle bg-light border border-secondary text-muted d-flex align-items-center justify-content-center fw-bold" style="width: 20px; height: 20px; font-size: 0.65rem;">6</div>
-                <span class="text-dark">Contract Active</span>
-              </div>
-              <span class="text-muted small">Pending</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Contract Details -->
-        <div class="glass-card rounded-3 p-4 bg-white">
-          <h3 class="fs-6 fw-bold text-dark mb-4">Contract Details</h3>
-          <div class="d-flex flex-column gap-3" style="font-size: 0.75rem;">
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Estimated PDF Pages</span>
-              <span class="text-dark fw-semibold text-end">8-10 Pages</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Language</span>
-              <span class="text-dark fw-semibold">English</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Governing Law</span>
-              <span class="text-dark fw-semibold">Indian Law</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Jurisdiction</span>
-              <span class="text-dark fw-semibold">Hyderabad, India</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Offer Validity</span>
-              <span class="text-dark fw-semibold">7 Days</span>
-            </div>
-            <div class="d-flex justify-content-between">
-              <span class="text-muted">Created On</span>
-              <span class="text-dark fw-semibold">Jul 21, 2026</span>
-            </div>
-          </div>
-        </div>
-        
-        <!-- What happens next? -->
-        <div class="card shadow-sm border border-primary border-opacity-25 rounded-3 p-4" style="background-color: #fbf8ff;">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <h3 class="fs-6 fw-bold text-dark mb-0" style="color: #4338ca !important;">What happens next?</h3>
-            <i class="bi bi-shield-check fs-4" style="color: #4338ca;"></i>
-          </div>
-          <ul class="list-unstyled mb-0 d-flex flex-column gap-3" style="font-size: 0.75rem; color: #4b5563;">
-            <li><i class="bi bi-check text-success fs-6 me-2"></i>A legal PDF will be generated</li>
-            <li><i class="bi bi-check text-success fs-6 me-2"></i>Freelancer will receive an email</li>
-            <li><i class="bi bi-check text-success fs-6 me-2"></i>Offer will appear in their dashboard</li>
-            <li><i class="bi bi-check text-success fs-6 me-2"></i>You will be notified on acceptance</li>
-          </ul>
         </div>
 
       </div>
+
+      <!-- Right Column Removed -->
     </div>
   </div>
-</div>
 
-<!-- Sticky Footer -->
-<div class="position-fixed bottom-0 start-0 w-100 bg-white border-top p-3 shadow-lg z-3 d-flex justify-content-between align-items-center" style="margin-left: var(--sidebar-width, 250px); width: calc(100% - var(--sidebar-width, 250px)) !important;">
-  <button class="btn btn-outline-secondary bg-white text-dark px-4 fw-semibold shadow-sm">Cancel</button>
-  <div class="d-flex gap-3">
-    <button class="btn btn-outline-secondary bg-white text-dark px-4 fw-semibold shadow-sm d-flex align-items-center gap-2"><i class="bi bi-eye"></i> Preview PDF</button>
-    <button class="btn btn-outline-secondary bg-white text-dark px-4 fw-semibold shadow-sm d-flex align-items-center gap-2"><i class="bi bi-download"></i> Download Draft</button>
-    <button class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
-      <i class="bi bi-send"></i> Generate & Send Legal Offer <i class="bi bi-arrow-right ms-1"></i>
-    </button>
-  </div>
-</div>
-
-</div>
+</form>

@@ -15,6 +15,9 @@
   <div class="position-relative z-1 mx-auto" style="max-width: 1400px; margin-top: 1rem;">
   
   <div class="mb-4">
+    <a routerLink="/contact-support" class="text-muted fw-semibold text-decoration-none d-inline-flex align-items-center gap-2 mb-3 hover-text-primary" style="font-size: 0.85rem;">
+      <i class="bi bi-arrow-left"></i> Back to Support Tickets
+    </a>
     <h1 class="fw-bold fs-3 text-dark mb-1">Contact Support</h1>
     <p class="text-muted" style="font-size: 0.85rem;">Get help with your queries, technical issues, or any platform-related concerns.</p>
   </div>
@@ -30,7 +33,10 @@
         <div class="row g-3">
           <!-- Category Card 1 -->
           <div class="col-md-6 col-lg-4">
-            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer">
+            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer" 
+                 [class.border-primary]="ticketForm.get('category')?.value === 'General Support'"
+                 [class.shadow-sm]="ticketForm.get('category')?.value === 'General Support'"
+                 (click)="setCategory('General Support')">
               <div class="d-flex gap-3 align-items-start">
                 <div class="bg-purple-soft text-purple rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
                   <i class="bi bi-headset fs-5"></i>
@@ -44,7 +50,11 @@
           </div>
           <!-- Category Card 2 -->
           <div class="col-md-6 col-lg-4">
-            <div class="glass-card border-success border-opacity-50 shadow-sm rounded-3 h-100 p-3 hover-card cursor-pointer">
+            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer"
+                 [class.border-success]="ticketForm.get('category')?.value === 'Technical Issue'"
+                 [class.border-opacity-50]="ticketForm.get('category')?.value === 'Technical Issue'"
+                 [class.shadow-sm]="ticketForm.get('category')?.value === 'Technical Issue'"
+                 (click)="setCategory('Technical Issue')">
               <div class="d-flex gap-3 align-items-start">
                 <div class="bg-success bg-opacity-10 text-success rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
                   <i class="bi bi-wrench-adjustable fs-5"></i>
@@ -58,7 +68,10 @@
           </div>
           <!-- Category Card 3 -->
           <div class="col-md-6 col-lg-4">
-            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer">
+            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer"
+                 [class.border-primary]="ticketForm.get('category')?.value === 'Billing & Payments'"
+                 [class.shadow-sm]="ticketForm.get('category')?.value === 'Billing & Payments'"
+                 (click)="setCategory('Billing & Payments')">
               <div class="d-flex gap-3 align-items-start">
                 <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
                   <i class="bi bi-receipt fs-5"></i>
@@ -72,7 +85,10 @@
           </div>
           <!-- Category Card 4 -->
           <div class="col-md-6 col-lg-4">
-            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer">
+            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer"
+                 [class.border-primary]="ticketForm.get('category')?.value === 'Contract & Proposals'"
+                 [class.shadow-sm]="ticketForm.get('category')?.value === 'Contract & Proposals'"
+                 (click)="setCategory('Contract & Proposals')">
               <div class="d-flex gap-3 align-items-start">
                 <div class="bg-warning bg-opacity-10 text-warning-dark rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
                   <i class="bi bi-clipboard2-check fs-5"></i>
@@ -86,7 +102,10 @@
           </div>
           <!-- Category Card 5 -->
           <div class="col-md-6 col-lg-4">
-            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer">
+            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer"
+                 [class.border-primary]="ticketForm.get('category')?.value === 'Account & Profile'"
+                 [class.shadow-sm]="ticketForm.get('category')?.value === 'Account & Profile'"
+                 (click)="setCategory('Account & Profile')">
               <div class="d-flex gap-3 align-items-start">
                 <div class="bg-purple-soft text-purple rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
                   <i class="bi bi-person-badge fs-5"></i>
@@ -100,7 +119,10 @@
           </div>
           <!-- Category Card 6 -->
           <div class="col-md-6 col-lg-4">
-            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer">
+            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer"
+                 [class.border-primary]="ticketForm.get('category')?.value === 'Project & Delivery'"
+                 [class.shadow-sm]="ticketForm.get('category')?.value === 'Project & Delivery'"
+                 (click)="setCategory('Project & Delivery')">
               <div class="d-flex gap-3 align-items-start">
                 <div class="bg-info bg-opacity-10 text-info rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
                   <i class="bi bi-box-seam fs-5"></i>
@@ -114,7 +136,10 @@
           </div>
           <!-- Category Card 7 -->
           <div class="col-md-6 col-lg-4">
-            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer">
+            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer"
+                 [class.border-primary]="ticketForm.get('category')?.value === 'Disputes & Resolution'"
+                 [class.shadow-sm]="ticketForm.get('category')?.value === 'Disputes & Resolution'"
+                 (click)="setCategory('Disputes & Resolution')">
               <div class="d-flex gap-3 align-items-start">
                 <div class="bg-danger bg-opacity-10 text-danger rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
                   <i class="bi bi-scales fs-5"></i>
@@ -128,7 +153,10 @@
           </div>
           <!-- Category Card 8 -->
           <div class="col-md-6 col-lg-4">
-            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer">
+            <div class="glass-card border-0 rounded-3 h-100 p-3 hover-card cursor-pointer"
+                 [class.border-primary]="ticketForm.get('category')?.value === 'Feature Request'"
+                 [class.shadow-sm]="ticketForm.get('category')?.value === 'Feature Request'"
+                 (click)="setCategory('Feature Request')">
               <div class="d-flex gap-3 align-items-start">
                 <div class="bg-secondary bg-opacity-10 text-secondary rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
                   <i class="bi bi-lightbulb fs-5"></i>
@@ -147,19 +175,24 @@
       <div class="glass-card border-0 rounded-4 p-4">
         <h2 class="fs-6 fw-bold text-dark mb-4">Describe Your Issue</h2>
         
-        <form>
+        <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
           <div class="row g-3 mb-4">
             <div class="col-md-8">
               <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Subject <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" placeholder="Enter a brief summary of your issue" style="font-size: 0.85rem;">
+              <input type="text" formControlName="subject" class="form-control" placeholder="Enter a brief summary of your issue" style="font-size: 0.85rem;">
             </div>
             <div class="col-md-4">
               <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Category <span class="text-danger">*</span></label>
-              <select class="form-select" style="font-size: 0.85rem;">
-                <option selected disabled>Select a category</option>
-                <option value="1">Technical Issue</option>
-                <option value="2">Billing & Payments</option>
-                <option value="3">General Support</option>
+              <select formControlName="category" class="form-select" style="font-size: 0.85rem;">
+                <option value="">Select a category</option>
+                <option value="General Support">General Support</option>
+                <option value="Technical Issue">Technical Issue</option>
+                <option value="Billing & Payments">Billing & Payments</option>
+                <option value="Contract & Proposals">Contract & Proposals</option>
+                <option value="Account & Profile">Account & Profile</option>
+                <option value="Project & Delivery">Project & Delivery</option>
+                <option value="Disputes & Resolution">Disputes & Resolution</option>
+                <option value="Feature Request">Feature Request</option>
               </select>
             </div>
           </div>
@@ -184,8 +217,8 @@
                 <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-emoji-smile"></i></button>
                 <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-image"></i></button>
               </div>
-              <textarea class="form-control border-0 shadow-none p-3" rows="6" placeholder="Please describe your issue in detail..." style="font-size: 0.85rem; resize: none;"></textarea>
-              <div class="text-end p-2 bg-white text-muted" style="font-size: 0.7rem;">0 / 1000</div>
+              <textarea formControlName="description" class="form-control border-0 shadow-none p-3" rows="6" placeholder="Please describe your issue in detail..." style="font-size: 0.85rem; resize: none;"></textarea>
+              <div class="text-end p-2 bg-white text-muted" style="font-size: 0.7rem;">{{ ticketForm.get('description')?.value?.length || 0 }} / 1000</div>
             </div>
           </div>
 
@@ -197,10 +230,26 @@
               <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Attach Files (Optional)</span>
               <p class="text-muted mb-2" style="font-size: 0.75rem;">Upload screenshots, documents or any files that can help us understand the issue.</p>
               
-              <div class="border border-2 border-dashed border-primary border-opacity-25 rounded-3 bg-primary bg-opacity-10 text-center p-4 cursor-pointer hover-bg-light">
+              <label class="border border-2 border-dashed border-primary border-opacity-25 rounded-3 bg-primary bg-opacity-10 text-center p-4 cursor-pointer hover-bg-light d-block"
+                     (dragover)="onDragOver($event)"
+                     (drop)="onDrop($event)">
+                <input type="file" class="d-none" multiple (change)="onFileSelected($event)" accept="image/*,application/pdf">
                 <i class="bi bi-cloud-arrow-up text-primary fs-3 mb-2 d-block"></i>
                 <span class="d-block fw-semibold text-dark mb-1" style="font-size: 0.85rem;">Drag & drop files here or click to browse</span>
                 <span class="text-muted" style="font-size: 0.75rem;">Supported formats: JPG, PNG, PDF (Max size: 5MB)</span>
+              </label>
+
+              <!-- Uploaded files preview -->
+              <div class="mt-3 d-flex flex-column gap-2" *ngIf="attachments.length > 0">
+                <div *ngFor="let file of attachments; let i = index" class="d-flex justify-content-between align-items-center bg-light rounded p-2 border">
+                  <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <i class="bi bi-file-earmark text-primary"></i>
+                    <span class="text-truncate text-dark" style="font-size: 0.75rem; max-width: 200px;">{{ file.name }}</span>
+                  </div>
+                  <button type="button" class="btn btn-sm text-danger border-0 p-0" (click)="removeAttachment(i)">
+                    <i class="bi bi-x-circle-fill"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -209,8 +258,10 @@
             <div class="d-flex align-items-center gap-2 text-muted" style="font-size: 0.8rem;">
               <i class="bi bi-info-circle-fill text-primary"></i> Our team typically responds within 2-6 hours.
             </div>
-            <button type="button" class="btn btn-primary px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm">
-              <i class="bi bi-send-fill"></i> Submit Ticket
+            <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm" [disabled]="isSubmitting || ticketForm.invalid">
+              <i class="bi bi-send-fill" *ngIf="!isSubmitting"></i>
+              <span class="spinner-border spinner-border-sm" *ngIf="isSubmitting"></span>
+              {{ isSubmitting ? 'Submitting...' : 'Submit Ticket' }}
             </button>
           </div>
         </form>

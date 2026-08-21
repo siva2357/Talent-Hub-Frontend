@@ -25,11 +25,11 @@ import { CreateTicket } from '../shared/create-ticket/create-ticket';
 export const FREELANCER_ROUTES: Routes = [
   { path: 'dashboard', component: Dashboard },
   { path: 'find-contracts', component: FindContracts },
-  { path: 'contract-details', component: ContractDetails },
+  { path: 'contract-details/:id', component: ContractDetails },
   { path: 'proposal-offers', component: ProposalOffers },
   { path: 'my-contracts', component: MyContracts },
-  { path: 'contract-diary', component: ContractDiary },
-  { path: 'contract-phase-details', component: ContractPhaseDetails },
+  { path: 'contract-diary/:id', component: ContractDiary },
+  { path: 'contract-phase-details/:id', component: ContractPhaseDetails },
   { path: 'finance-overview', component: FinanceOverview },
   { path: 'portfolio', component: Portfolio },
   { path: 'profile', component: Profile },
@@ -38,8 +38,8 @@ export const FREELANCER_ROUTES: Routes = [
   { path: 'create-ticket', component: CreateTicket },
   { path: 'create-portfolio', component: CreatePortfolio },
   { path: 'feedback-reports', component: FeedbackReports },
-  { path: 'view-contract-offer', component: ViewContractOffer },
-  { path: 'legal-contract-acceptance', component: LegalContractAcceptance },
+  { path: 'view-contract-offer/:id', component: ViewContractOffer },
+  { path: 'legal-contract-acceptance/:id', component: LegalContractAcceptance },
   { path: 'meet-page', component: MeetPage },
   { path: 'chat-page', component: ChatPage }
 ];

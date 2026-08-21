@@ -21,8 +21,7 @@ export class Signup {
 
   continue(): void {
     if (this.selectedRole) {
-      // You can also pass the selected role as a query parameter or via state if needed
-      this.router.navigate(['/register']);
+      this.router.navigate(['/register'], { queryParams: { role: this.selectedRole } });
     }
   }
 }

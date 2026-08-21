@@ -19,7 +19,7 @@
       <h1 class="fw-bold fs-3 mb-1 text-dark d-flex align-items-center gap-2">My Professional Portfolio <i class="bi bi-star-fill text-primary" style="font-size: 1rem; padding: 4px; border-radius: 50%; background-color: rgba(13, 110, 253, 0.1);"></i></h1>
       <p class="text-muted small mb-0">Showcase your best work, projects, and achievements to potential clients & recruiters.</p>
     </div>
-    <button class="btn btn-primary rounded-pill fw-semibold shadow-sm fw-bold d-flex align-items-center gap-2 px-3 shadow-sm" style="font-size: 0.85rem;"><i class="bi bi-plus"></i> Add New Project</button>
+    <button routerLink="/create-portfolio" class="btn btn-primary rounded-pill fw-semibold shadow-sm fw-bold d-flex align-items-center gap-2 px-3 shadow-sm" style="font-size: 0.85rem;"><i class="bi bi-plus"></i> Add New Project</button>
   </div>
 
   <!-- Top Metric Cards -->
@@ -125,165 +125,74 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Row 1 -->
-          <tr class="border-top border-light">
-            <td class="py-3 ps-4 fw-bold text-dark">1</td>
-            <td class="py-3">
-              <div class="rounded-3 bg-light border overflow-hidden d-flex align-items-center justify-content-center" style="width: 80px; height: 50px;">
-                <i class="bi bi-image text-muted fs-4"></i>
-              </div>
-            </td>
-            <td class="py-3">
-              <h3 class="fs-6 fw-bold text-dark mb-1">E-commerce Dashboard</h3>
-              <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.4;">Analytics dashboard for online store performance tracking.</p>
-            </td>
-            <td class="py-3"><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1">Web Application</span></td>
-            <td class="py-3 text-dark fw-semibold">Frontend Developer</td>
-            <td class="py-3">
-              <div class="d-flex flex-wrap gap-1">
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Angular</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">TypeScript</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Chart.js</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+1</span>
-              </div>
-            </td>
-            <td class="py-3"><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2 py-1">Completed</span></td>
-            <td class="py-3 pe-4">
-              <div class="d-flex gap-2">
-                <button class="btn btn-light btn-sm text-primary rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-eye"></i></button>
-                <button class="btn btn-light btn-sm text-primary rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-light btn-sm text-muted rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-three-dots-vertical"></i></button>
-              </div>
-            </td>
-          </tr>
-
-          <!-- Row 2 -->
-          <tr class="border-top border-light">
-            <td class="py-3 ps-4 fw-bold text-dark">2</td>
-            <td class="py-3">
-              <div class="rounded-3 bg-light border overflow-hidden d-flex align-items-center justify-content-center" style="width: 80px; height: 50px;">
-                <i class="bi bi-phone text-muted fs-4"></i>
-              </div>
-            </td>
-            <td class="py-3">
-              <h3 class="fs-6 fw-bold text-dark mb-1">Task Management App</h3>
-              <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.4;">Mobile application for team task management and collaboration.</p>
-            </td>
-            <td class="py-3"><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1">Mobile Application</span></td>
-            <td class="py-3 text-dark fw-semibold">Full Stack Developer</td>
-            <td class="py-3">
-              <div class="d-flex flex-wrap gap-1">
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">React Native</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Redux</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Node.js</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+1</span>
-              </div>
-            </td>
-            <td class="py-3"><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2 py-1">Completed</span></td>
-            <td class="py-3 pe-4">
-              <div class="d-flex gap-2">
-                <button class="btn btn-light btn-sm text-primary rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-eye"></i></button>
-                <button class="btn btn-light btn-sm text-primary rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-light btn-sm text-muted rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-three-dots-vertical"></i></button>
-              </div>
-            </td>
-          </tr>
-
-          <!-- Row 3 -->
-          <tr class="border-top border-light">
-            <td class="py-3 ps-4 fw-bold text-dark">3</td>
-            <td class="py-3">
-              <div class="rounded-3 bg-light border overflow-hidden d-flex align-items-center justify-content-center" style="width: 80px; height: 50px;">
-                <i class="bi bi-laptop text-muted fs-4"></i>
-              </div>
-            </td>
-            <td class="py-3">
-              <h3 class="fs-6 fw-bold text-dark mb-1">Agency Landing Page</h3>
-              <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.4;">Modern landing page for digital marketing agency.</p>
-            </td>
-            <td class="py-3"><span class="badge bg-purple-soft text-purple border border-secondary border-opacity-25 rounded px-2 py-1">Website</span></td>
-            <td class="py-3 text-dark fw-semibold">Frontend Developer</td>
-            <td class="py-3">
-              <div class="d-flex flex-wrap gap-1">
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">HTML</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">CSS</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Bootstrap</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+1</span>
-              </div>
-            </td>
-            <td class="py-3"><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2 py-1">Completed</span></td>
-            <td class="py-3 pe-4">
-              <div class="d-flex gap-2">
-                <button class="btn btn-light btn-sm text-primary rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-eye"></i></button>
-                <button class="btn btn-light btn-sm text-primary rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-light btn-sm text-muted rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-three-dots-vertical"></i></button>
-              </div>
-            </td>
-          </tr>
-
-          <!-- Row 4 -->
-          <tr class="border-top border-light opacity-75">
-            <td class="py-3 ps-4 fw-bold text-dark">4</td>
-            <td class="py-3">
-              <div class="rounded-3 bg-light border overflow-hidden d-flex align-items-center justify-content-center" style="width: 80px; height: 50px;">
-                <i class="bi bi-image text-muted fs-4"></i>
-              </div>
-            </td>
-            <td class="py-3">
-              <h3 class="fs-6 fw-bold text-dark mb-1">Fitness Tracking App</h3>
-              <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.4;">Web app for tracking workouts and nutrition.</p>
-            </td>
-            <td class="py-3"><span class="badge bg-warning bg-opacity-10 text-warning-dark border border-warning border-opacity-25 rounded px-2 py-1">Web Application</span></td>
-            <td class="py-3 text-dark fw-semibold">Full Stack Developer</td>
-            <td class="py-3">
-              <div class="d-flex flex-wrap gap-1">
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Next.js</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Firebase</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Tailwind</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+1</span>
-              </div>
-            </td>
-            <td class="py-3"><span class="badge bg-warning bg-opacity-10 text-warning-dark border border-warning border-opacity-25 rounded-pill px-2 py-1">Draft</span></td>
-            <td class="py-3 pe-4">
-              <div class="d-flex gap-2">
-                <button class="btn btn-light btn-sm text-primary rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-eye"></i></button>
-                <button class="btn btn-light btn-sm text-primary rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-light btn-sm text-muted rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-three-dots-vertical"></i></button>
-              </div>
-            </td>
-          </tr>
-
-          <!-- Row 5 -->
-          <tr class="border-top border-light opacity-75">
-            <td class="py-3 ps-4 fw-bold text-dark">5</td>
-            <td class="py-3">
-              <div class="rounded-3 bg-light border overflow-hidden d-flex align-items-center justify-content-center" style="width: 80px; height: 50px;">
-                <i class="bi bi-image text-muted fs-4"></i>
-              </div>
-            </td>
-            <td class="py-3">
-              <h3 class="fs-6 fw-bold text-dark mb-1">Analytics Dashboard</h3>
-              <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.4;">Business intelligence dashboard with real-time data.</p>
-            </td>
-            <td class="py-3"><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1">Web Application</span></td>
-            <td class="py-3 text-dark fw-semibold">Frontend Developer</td>
-            <td class="py-3">
-              <div class="d-flex flex-wrap gap-1">
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Vue.js</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">D3.js</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">Axios</span>
-                <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+1</span>
-              </div>
-            </td>
-            <td class="py-3"><span class="badge bg-warning bg-opacity-10 text-warning-dark border border-warning border-opacity-25 rounded-pill px-2 py-1">Draft</span></td>
-            <td class="py-3 pe-4">
-              <div class="d-flex gap-2">
-                <button class="btn btn-light btn-sm text-primary rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-eye"></i></button>
-                <button class="btn btn-light btn-sm text-primary rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-light btn-sm text-muted rounded-circle border d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;"><i class="bi bi-three-dots-vertical"></i></button>
-              </div>
-            </td>
-          </tr>
+          @if (isLoading) {
+            <tr>
+              <td colspan="8" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </td>
+            </tr>
+          } @else if (portfolios.length === 0) {
+            <tr>
+              <td colspan="8" class="text-center py-5">
+                <div class="d-flex flex-column align-items-center">
+                  <i class="bi bi-folder-x fs-1 text-muted mb-2"></i>
+                  <h3 class="fs-5 fw-bold text-dark mb-1">No Projects Found</h3>
+                  <p class="text-muted mb-3">You haven't added any projects to your portfolio yet.</p>
+                  <button routerLink="/create-portfolio" class="btn btn-primary rounded-pill px-4"><i class="bi bi-plus"></i> Add New Project</button>
+                </div>
+              </td>
+            </tr>
+          } @else {
+            @for (p of portfolios; track p._id; let i = $index) {
+              <tr class="border-top border-light" [class.opacity-75]="p.status === 'Draft'">
+                <td class="py-3 ps-4 fw-bold text-dark">{{ i + 1 }}</td>
+                <td class="py-3">
+                  <div class="rounded-3 bg-light border overflow-hidden d-flex align-items-center justify-content-center" style="width: 80px; height: 50px;">
+                    @if (p.media && p.media.length > 0) {
+                      <img [src]="p.media[0].url" class="w-100 h-100 object-fit-cover" alt="Project image">
+                    } @else {
+                      <i class="bi bi-image text-muted fs-4"></i>
+                    }
+                  </div>
+                </td>
+                <td class="py-3">
+                  <h3 class="fs-6 fw-bold text-dark mb-1">{{ p.title }}</h3>
+                  <p class="text-muted mb-0 text-truncate" style="font-size: 0.7rem; line-height: 1.4; max-width: 200px;">{{ p.description }}</p>
+                </td>
+                <td class="py-3"><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1">{{ p.projectType || 'Project' }}</span></td>
+                <td class="py-3 text-dark fw-semibold">{{ p.role }}</td>
+                <td class="py-3">
+                  <div class="d-flex flex-wrap gap-1">
+                    @for (tag of (p.tags || []).slice(0, 3); track tag) {
+                      <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">{{ tag }}</span>
+                    }
+                    @if ((p.tags || []).length > 3) {
+                      <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+{{ p.tags.length - 3 }}</span>
+                    }
+                  </div>
+                </td>
+                <td class="py-3">
+                  @if (p.status === 'Published') {
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2 py-1">Published</span>
+                  } @else {
+                    <span class="badge bg-warning bg-opacity-10 text-warning-dark border border-warning border-opacity-25 rounded-pill px-2 py-1">Draft</span>
+                  }
+                </td>
+                <td class="py-3 pe-4">
+                  <div class="d-flex justify-content-end">
+                    <div class="dropdown">
+                      <button class="btn btn-light btn-sm text-muted rounded-circle border d-flex align-items-center justify-content-center" data-bs-toggle="dropdown" style="width: 28px; height: 28px;"><i class="bi bi-three-dots-vertical"></i></button>
+                      <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                        <li><a class="dropdown-item text-danger" href="javascript:void(0)" (click)="deletePortfolio(p._id)"><i class="bi bi-trash me-2"></i> Delete</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            }
+          }
         </tbody>
       </table>
     </div>

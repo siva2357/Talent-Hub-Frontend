@@ -13,240 +13,283 @@
 
   <!-- Main Content Wrapper (Glassmorphism) -->
   <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
-  <!-- Header -->
-  <header class="mb-4">
-    <div class="glass-card">
-      <div class="card-body p-4">
+    <!-- Header -->
+    <header class="mb-4">
+      <div class="glass-card border-0 rounded-4 p-4">
         <h1 class="fw-bold fs-4 mb-1 text-dark"><i class="bi bi-headset text-primary me-2"></i>Support Desk Tickets</h1>
-        <p class="text-muted small mb-0">Manage customer service requests, reply to client & freelancer tickets, and assign status logs.</p>
+        <p class="text-muted small mb-0">Manage customer service requests, reply to client & freelancer tickets, and
+          assign status logs.</p>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <!-- Stats Row -->
-  <section class="row g-3 mb-4">
-    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-      <div class="glass-card stat-card h-100">
-        <div class="card-body d-flex align-items-center gap-3 p-4">
-          <div class="stat-icon pending-icon flex-shrink-0 d-flex justify-content-center align-items-center border border-warning border-opacity-25 rounded-circle bg-warning bg-opacity-10" style="width: 56px; height: 56px;">
-            <i class="bi bi-hourglass-split text-warning fs-3"></i>
+    <!-- Support Tickets Table Card -->
+    <div class="glass-card border-0 rounded-4 overflow-hidden mb-4 shadow-sm">
+      <div class="card-header bg-transparent border-bottom p-4">
+        <div class="row align-items-center g-3">
+          <div class="col-md-6 col-lg-4">
+            <div class="position-relative">
+              <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+              <input type="text" class="form-control ps-5 bg-light border-0 shadow-none"
+                placeholder="Search tickets, names, or IDs..." [(ngModel)]="searchTerm"
+                (ngModelChange)="applyFilters()">
+            </div>
           </div>
-          <div>
-            <span class="d-block text-muted small fw-semibold text-uppercase" style="font-size: 0.75rem;">Pending Tickets</span>
-            <span class="d-block fs-4 fw-bold text-dark mt-1">24</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-      <div class="glass-card stat-card h-100">
-        <div class="card-body d-flex align-items-center gap-3 p-4">
-          <div class="stat-icon open-icon flex-shrink-0 d-flex justify-content-center align-items-center border border-primary border-opacity-25 rounded-circle bg-primary bg-opacity-10" style="width: 56px; height: 56px;">
-            <i class="bi bi-envelope-open text-primary fs-3"></i>
-          </div>
-          <div>
-            <span class="d-block text-muted small fw-semibold text-uppercase" style="font-size: 0.75rem;">Open Tickets</span>
-            <span class="d-block fs-4 fw-bold text-dark mt-1">12</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-      <div class="glass-card stat-card h-100">
-        <div class="card-body d-flex align-items-center gap-3 p-4">
-          <div class="stat-icon closed-icon flex-shrink-0 d-flex justify-content-center align-items-center border border-secondary border-opacity-25 rounded-circle bg-secondary bg-opacity-10" style="width: 56px; height: 56px;">
-            <i class="bi bi-folder-check text-secondary fs-3"></i>
-          </div>
-          <div>
-            <span class="d-block text-muted small fw-semibold text-uppercase" style="font-size: 0.75rem;">Closed Tickets</span>
-            <span class="d-block fs-4 fw-bold text-dark mt-1">142</span>
+          <div class="col-md-6 col-lg-8 d-flex justify-content-md-end gap-3">
+            <select class="form-select w-auto bg-light border-0 shadow-none text-muted fw-semibold"
+              [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+              <option value="">All Statuses</option>
+              <option value="Open">Open</option>
+              <option value="WaitingForAdmin">Waiting for Admin</option>
+              <option value="WaitingForUser">Waiting for User</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Closed">Closed</option>
+            </select>
+            <select class="form-select w-auto bg-light border-0 shadow-none text-muted fw-semibold">
+              <option value="">All Categories</option>
+            </select>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-      <div class="glass-card stat-card h-100">
-        <div class="card-body d-flex align-items-center gap-3 p-4">
-          <div class="stat-icon resolved-icon flex-shrink-0 d-flex justify-content-center align-items-center border border-success border-opacity-25 rounded-circle bg-success bg-opacity-10" style="width: 56px; height: 56px;">
-            <i class="bi bi-shield-check text-success fs-3"></i>
-          </div>
-          <div>
-            <span class="d-block text-muted small fw-semibold text-uppercase" style="font-size: 0.75rem;">Resolved Tickets</span>
-            <span class="d-block fs-4 fw-bold text-dark mt-1">350</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Filter Section -->
-  <section class="glass-card mb-4">
-    <div class="card-body p-4">
-      <div class="row g-3 align-items-center mb-3">
-        <div class="col-md-4 col-lg-4">
-          <div class="input-group shadow-sm rounded-pill overflow-hidden border border-primary border-opacity-25 bg-white">
-            <span class="input-group-text bg-transparent border-0 text-primary ps-4"><i class="bi bi-search"></i></span>
-            <input type="text" class="form-control border-0 shadow-none ps-2 py-2" placeholder="Search by Ticket ID...">
-          </div>
-        </div>
-        <div class="col-md-3 col-lg-3">
-          <select class="form-select text-muted rounded-pill shadow-sm px-4 py-2 border-light">
-            <option selected>Status: All</option>
-            <option>Open</option>
-            <option>Closed</option>
-          </select>
-        </div>
-        <div class="col-md-3 col-lg-3">
-          <select class="form-select text-muted rounded-pill shadow-sm px-4 py-2 border-light">
-            <option selected>Priority: All</option>
-            <option>High</option>
-            <option>Medium</option>
-          </select>
-        </div>
-        <div class="col-md-2 col-lg-2 d-flex gap-2">
-          <button class="btn btn-primary rounded-pill flex-grow-1 shadow-sm fw-semibold">Apply</button>
-          <button class="btn btn-outline-secondary rounded-pill flex-grow-1 shadow-sm fw-semibold bg-white">Reset</button>
-        </div>
-      </div>
-      
-      <div class="d-flex align-items-center flex-wrap gap-2 mt-3 pt-3 border-top border-light">
-        <span class="text-dark small fw-semibold me-2"><i class="bi bi-funnel text-muted me-1"></i>Active Filters :</span>
-        <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 d-flex align-items-center gap-1 px-3 py-2 fw-semibold">
-          High Priority <i class="bi bi-x-circle-fill ms-1" style="cursor:pointer;"></i>
-        </span>
-        <span class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 d-flex align-items-center gap-1 px-3 py-2 fw-semibold">
-          Open <i class="bi bi-x-circle-fill ms-1" style="cursor:pointer;"></i>
-        </span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Split View Section -->
-  <div class="row g-4">
-    
-    <!-- Left Column: Tickets List -->
-    <div class="col-12 col-lg-3">
-      <div class="d-flex justify-content-between align-items-center mb-3 px-1">
-        <h3 class="fs-6 fw-bold mb-0 text-dark"><i class="bi bi-list-ul text-primary me-2"></i>Tickets (1)</h3>
-      </div>
-      
-      <div class="card shadow-sm border-primary rounded-4 overflow-hidden ticket-list-card active-ticket bg-white bg-opacity-75" style="border-width: 2px !important;">
-        <div class="card-body p-3">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="small fw-bold">ID: <span class="text-primary">TKT-2026-8129</span></span>
-            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-3 py-1">Closed</span>
-          </div>
-          <h4 class="fs-6 fw-bold mb-1 text-dark">Interview Phase - room-connection</h4>
-          <p class="text-muted small mb-3 text-truncate">User encountered a bug when trying to connect to the room.</p>
-          <hr class="my-2 border-light">
-          <div class="d-flex justify-content-between align-items-center mt-2">
-            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-2" style="font-size: 0.65rem;"><i class="bi bi-person-fill"></i> Client</span>
-            <span class="text-dark fw-semibold" style="font-size: 0.7rem;">Siva Prasad Kurra</span>
-            <span class="text-muted fw-semibold" style="font-size: 0.7rem;"><i class="bi bi-calendar3 text-muted me-1"></i>Jul 01, 2026</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Middle Column: Conversation Thread -->
-    <div class="col-12 col-lg-6">
-      <div class="glass-card h-100">
-        <div class="card-body p-4 d-flex flex-column h-100">
-          <!-- Conversation Header -->
-          <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-light">
-            <div class="d-flex align-items-center gap-2">
-               <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill border border-primary border-opacity-25 px-3 py-1 fw-semibold"><i class="bi bi-person-fill me-1"></i>Client</span>
-               <span class="small fw-bold text-dark">Ticket ID: <span class="text-primary">TKT-2026-8129</span></span>
-            </div>
-            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-3 py-1 fw-semibold">Closed</span>
-          </div>
-          <h2 class="fs-5 fw-bold mb-1 text-dark">Interview Phase - room-connection</h2>
-          <p class="text-muted small mb-4 fw-semibold"><i class="bi bi-envelope text-muted me-1"></i>Submitted by Siva Prasad Kurra (sivakurra.ksp2357@gmail.com) • <i class="bi bi-calendar3 ms-2 me-1"></i>Jul 01, 2026</p>
-          
-          <div class="position-relative mb-4 text-center">
-            <hr class="border-light w-100 position-absolute top-50 translate-middle-y z-n1">
-            <span class="bg-white px-3 text-primary fw-bold rounded-pill border border-light shadow-sm" style="font-size: 0.75rem;"><i class="bi bi-chat-text me-1"></i> CONVERSATION THREAD</span>
-          </div>
-
-          <!-- Chat area -->
-          <div class="chat-container mb-4 flex-grow-1 overflow-auto pe-2" style="max-height: 400px;">
-            <!-- Received Message -->
-            <div class="message-bubble received p-3 rounded-4 mb-4 shadow-sm border border-light w-75 bg-white bg-opacity-75">
-              <p class="fw-bold text-dark small mb-2">Hello, I am getting an error when I try to join the interview room. Please see the screenshot below.</p>
-              <div class="bg-dark rounded p-2 mb-2" style="height: 120px; position: relative; overflow: hidden; border-radius: 12px;">
-                <!-- Placeholder for image -->
-                <div style="background: linear-gradient(90deg, #1f2937, #374151); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                  <span class="text-white" style="font-size: 0.75rem;"><i class="bi bi-image me-1"></i> [Dashboard Error Screenshot]</span>
-                </div>
-              </div>
-              <p class="text-muted mb-0" style="font-size: 0.65rem;">Siva Prasad Kurra • Jul 01, 2026 at 10:45 AM</p>
-            </div>
-
-            <!-- Sent Message -->
-            <div class="message-bubble sent p-3 rounded-4 mb-4 shadow-sm border border-primary border-opacity-25 bg-primary bg-opacity-10 w-75 ms-auto text-end">
-              <p class="fw-semibold text-dark small mb-1">Hi Siva, we've identified the issue and deployed a hotfix. Please refresh your page and try joining again.</p>
-              <p class="text-primary mb-0 fw-semibold" style="font-size: 0.65rem;">You • Jul 01, 2026 at 11:15 AM</p>
-            </div>
-          </div>
-
-          <!-- Ticket Closed Box -->
-          <div class="bg-secondary bg-opacity-10 border border-secondary border-opacity-25 rounded-4 p-3 d-flex align-items-center gap-3 mb-4">
-             <div class="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
-               <i class="bi bi-check2-all fs-5"></i>
-             </div>
-             <div>
-               <p class="mb-0 fw-bold text-dark small">Ticket Closed</p>
-               <p class="mb-0 text-muted fw-semibold" style="font-size: 0.75rem;">This ticket has been completed and archived.</p>
-             </div>
-          </div>
-
-          <!-- Reply Box -->
-          <div class="mt-auto">
-            <p class="fw-bold text-dark small mb-2"><i class="bi bi-reply-fill text-primary me-1"></i>Write a Response</p>
-            <textarea class="form-control rounded-4 mb-3 p-3 shadow-sm" rows="3" placeholder="Type your message to reopen the ticket..." disabled></textarea>
-            <div class="d-flex justify-content-end">
-              <button class="btn btn-primary rounded-pill shadow-sm px-4 fw-semibold d-flex justify-content-center align-items-center gap-2" disabled><i class="bi bi-send"></i> Send Reply</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right Column: Ticket Details Sidebar -->
-    <div class="col-12 col-lg-3">
-      <div class="glass-card h-100">
-        <div class="card-body p-4">
-          <h3 class="fs-6 fw-bold mb-4 text-dark"><i class="bi bi-info-circle text-primary me-2"></i>Ticket details</h3>
-          
-          <div class="d-flex flex-column gap-3">
-            <div class="d-flex justify-content-between align-items-center border-bottom border-light pb-2">
-              <span class="text-muted fw-semibold small">Ticket ID</span>
-              <span class="text-dark fw-bold small">TKT-2026-8129</span>
-            </div>
-            <div class="d-flex justify-content-between align-items-center border-bottom border-light pb-2">
-              <span class="text-muted fw-semibold small">Status</span>
-              <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-2 py-1" style="font-size: 0.7rem;">Closed</span>
-            </div>
-            <div class="d-flex justify-content-between align-items-center border-bottom border-light pb-2">
-              <span class="text-muted fw-semibold small">Category</span>
-              <span class="text-dark fw-semibold small">Technical Issue</span>
-            </div>
-            <div class="d-flex justify-content-between align-items-center border-bottom border-light pb-2">
-              <span class="text-muted fw-semibold small">User type</span>
-              <span class="text-dark fw-semibold small">Client</span>
-            </div>
-            <div class="d-flex justify-content-between align-items-center border-bottom border-light pb-2">
-              <span class="text-muted fw-semibold small">Created by</span>
-              <span class="text-dark fw-semibold small">Siva Prasad Kurra</span>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-muted fw-semibold small">Last updated</span>
-              <span class="text-dark fw-semibold small">Jul 01, 2026</span>
-            </div>
-          </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0 custom-table">
+            <thead class="bg-light bg-opacity-50">
+              <tr>
+                <th class="border-0 text-muted fw-bold text-uppercase"
+                  style="font-size: 0.75rem; letter-spacing: 0.5px; padding: 1rem 1.5rem;">Ticket ID</th>
+                <th class="border-0 text-muted fw-bold text-uppercase"
+                  style="font-size: 0.75rem; letter-spacing: 0.5px; padding: 1rem 1.5rem;">User</th>
+                <th class="border-0 text-muted fw-bold text-uppercase"
+                  style="font-size: 0.75rem; letter-spacing: 0.5px; padding: 1rem 1.5rem;">Subject / Category</th>
+                <th class="border-0 text-muted fw-bold text-uppercase"
+                  style="font-size: 0.75rem; letter-spacing: 0.5px; padding: 1rem 1.5rem;">Status</th>
+                <th class="border-0 text-muted fw-bold text-uppercase"
+                  style="font-size: 0.75rem; letter-spacing: 0.5px; padding: 1rem 1.5rem;">Date Opened</th>
+                <th class="border-0 text-muted fw-bold text-uppercase text-end"
+                  style="font-size: 0.75rem; letter-spacing: 0.5px; padding: 1rem 1.5rem;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (isLoading) {
+                <tr>
+                  <td colspan="6" class="text-center py-5 text-muted">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </td>
+                </tr>
+              } @else {
+                @for (t of filteredTickets; track t.ticketId) {
+                  <tr class="align-middle">
+                    <td style="padding: 1rem 1.5rem;">
+                      <span class="fw-semibold text-primary" style="font-size: 0.85rem;">{{ t.ticketId }}</span>
+                    </td>
+                    <td style="padding: 1rem 1.5rem;">
+                      <div class="d-flex align-items-center gap-3">
+                        <div
+                          class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center fw-bold"
+                          style="width: 35px; height: 35px; font-size: 0.85rem;">
+                          {{ t.userName.charAt(0) }}
+                        </div>
+                        <div>
+                          <h6 class="mb-0 fw-bold text-dark" style="font-size: 0.85rem;">{{ t.userName }}</h6>
+                          <span class="text-muted" style="font-size: 0.75rem;">{{ t.userEmail }} ({{ t.userType }})</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="padding: 1rem 1.5rem;">
+                      <span class="d-block text-dark fw-semibold text-truncate"
+                        style="max-width: 250px; font-size: 0.85rem;">{{ t.subject }}</span>
+                      <span class="text-muted" style="font-size: 0.75rem;">{{ t.category }}</span>
+                    </td>
+                    <td style="padding: 1rem 1.5rem;">
+                      <span class="badge rounded-pill px-3 py-2 fw-semibold" [ngClass]="getStatusBadgeClass(t.status)"
+                        style="font-size: 0.75rem;">
+                        {{ t.status }}
+                      </span>
+                    </td>
+                    <td style="padding: 1rem 1.5rem;">
+                      <div class="d-flex flex-column gap-1">
+                        <span class="text-dark fw-semibold" style="font-size: 0.85rem;">{{ t.createdAt | date:'mediumDate'
+                          }}</span>
+                      </div>
+                    </td>
+                    <td class="text-end" style="padding: 1rem 1.5rem;">
+                      <button class="btn btn-light btn-sm text-primary fw-semibold border shadow-sm px-3"
+                        (click)="openTicketModal(t)">
+                        View <i class="bi bi-arrow-right ms-1"></i>
+                      </button>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="6" class="text-center py-5 text-muted">No tickets found.</td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Ticket Details Modal -->
+<div class="modal fade" id="ticketDetailsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+    @if (selectedTicket) {
+      <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+
+      <!-- Modal Header -->
+      <div class="modal-header border-bottom bg-light bg-opacity-50 p-4">
+        <div>
+          <div class="d-flex align-items-center gap-3 mb-2">
+            <h5 class="modal-title fw-bold text-dark mb-0 fs-4">{{ selectedTicket.subject }}</h5>
+            <span class="badge rounded-pill px-3 py-1 fw-semibold"
+              [ngClass]="getStatusBadgeClass(selectedTicket.status)" style="font-size: 0.75rem;">
+              {{ selectedTicket.status }}
+            </span>
+
+
+          </div>
+          <div class="d-flex gap-4 text-muted fw-semibold" style="font-size: 0.8rem;">
+            <span class="d-flex align-items-center gap-1"><i class="bi bi-ticket-detailed text-primary"></i> {{
+              selectedTicket.ticketId }}</span>
+            <span class="d-flex align-items-center gap-1"><i class="bi bi-person text-primary"></i> {{
+              selectedTicket.userName }} ({{ selectedTicket.userType }})</span>
+            <span class="d-flex align-items-center gap-1"><i class="bi bi-folder2-open text-primary"></i> {{
+              selectedTicket.category }}</span>
+            <span class="d-flex align-items-center gap-1"><i class="bi bi-clock-history text-primary"></i> {{
+              selectedTicket.createdAt | date:'short' }}</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body p-4 bg-light bg-opacity-25">
+
+        <!-- Original Message -->
+        <div class="d-flex gap-3 mb-4">
+          <div class="bg-light rounded-circle border d-flex justify-content-center align-items-center flex-shrink-0"
+            style="width: 45px; height: 45px;">
+            <span class="text-primary fw-bold">{{ selectedTicket.userName.charAt(0) }}</span>
+          </div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="fw-bold text-dark" style="font-size: 0.9rem;">{{ selectedTicket.userName }}</span>
+              <span class="text-muted" style="font-size: 0.75rem;">{{ selectedTicket.createdAt | date:'shortTime'
+                }}</span>
+            </div>
+            <div class="bg-white border p-3 rounded-4 rounded-top-0 rounded-end-4 shadow-sm">
+              <p class="text-dark mb-0" style="font-size: 0.85rem; line-height: 1.6; white-space: pre-line;">
+                {{ selectedTicket.message }}
+              </p>
+
+              <!-- Attachments -->
+              @if (selectedTicket.attachments?.length > 0) {
+                <div class="mt-3 pt-3 border-top d-flex gap-3 flex-wrap">
+                  @for (att of selectedTicket.attachments; track att.name) {
+                    <a [href]="att.url" target="_blank"
+                      class="d-flex align-items-center gap-2 bg-light border p-2 rounded-3 cursor-pointer hover-bg-white text-decoration-none">
+                      <div
+                        class="bg-primary bg-opacity-10 text-primary rounded p-2 d-flex justify-content-center align-items-center">
+                        <i class="bi bi-file-earmark-text"></i>
+                      </div>
+                      <div>
+                        <span class="d-block fw-semibold text-dark text-truncate"
+                          style="font-size: 0.8rem; max-width: 150px;">{{ att.name }}</span>
+                      </div>
+                    </a>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Replies -->
+        @for (reply of selectedTicket.replies; track $index) {
+          <div class="d-flex gap-3 mb-4">
+            <div class="rounded-circle border d-flex justify-content-center align-items-center flex-shrink-0 shadow-sm"
+              [ngClass]="reply.isAdmin ? 'bg-primary border-primary text-white' : 'bg-light border-light text-primary fw-bold'"
+              style="width: 45px; height: 45px;">
+              @if (reply.isAdmin) {
+                <i class="bi bi-headset fs-5"></i>
+              } @else {
+                <span>{{ selectedTicket.userName.charAt(0) }}</span>
+              }
+            </div>
+            <div class="flex-grow-1">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold text-dark d-flex align-items-center gap-2" style="font-size: 0.9rem;">
+                  {{ reply.isAdmin ? 'Support Team' : selectedTicket.userName }}
+                  @if (reply.isAdmin) {
+                    <span
+                      class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2"
+                      style="font-size: 0.65rem;">Admin</span>
+                  }
+                </span>
+                <span class="text-muted" style="font-size: 0.75rem;">{{ reply.createdAt | date:'shortTime' }}</span>
+              </div>
+              <div class="p-3 border rounded-4 rounded-top-0 rounded-end-4 shadow-sm"
+                [ngClass]="reply.isAdmin ? 'bg-primary bg-opacity-10 border-primary border-opacity-25' : 'bg-white border-light'">
+                <p class="text-dark mb-0" style="font-size: 0.85rem; line-height: 1.6; white-space: pre-line;">
+                  {{ reply.message }}
+                </p>
+              </div>
+            </div>
+          </div>
+        }
+
+      </div>
+
+      <!-- Modal Footer (Reply Area) -->
+      @if (selectedTicket.status !== 'Closed') {
+        <div class="modal-footer flex-column align-items-stretch border-top bg-white p-4">
+          <div class="mb-3">
+            <label class="form-label fw-bold text-dark" style="font-size: 0.85rem;">Reply to Ticket</label>
+            <textarea class="form-control shadow-none rounded-3 bg-light border-light focus-within-shadow" rows="4"
+              placeholder="Type your response here..." style="font-size: 0.85rem;" [(ngModel)]="replyMessage"></textarea>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+              <select class="form-select form-select-sm shadow-none fw-semibold text-dark bg-light border-light"
+                style="width: 180px;" #statusSelect (change)="changeStatus(statusSelect.value)"
+                [value]="selectedTicket.status">
+                <option value="Open">Status: Open</option>
+                <option value="WaitingForUser">Status: Waiting for User</option>
+                <option value="WaitingForAdmin">Status: Waiting for Admin</option>
+                <option value="Resolved">Status: Resolved</option>
+                <option value="Closed">Status: Closed</option>
+              </select>
+            </div>
+            <button type="button"
+              class="btn btn-primary px-4 fw-semibold shadow-sm d-flex align-items-center gap-2 rounded-pill"
+              (click)="submitReply()" [disabled]="isReplying || !replyMessage.trim()">
+              @if (!isReplying) {
+                <i class="bi bi-send-fill"></i>
+              } @else {
+                <span class="spinner-border spinner-border-sm"></span>
+              }
+              {{ isReplying ? 'Sending...' : 'Send Reply' }}
+            </button>
+          </div>
+        </div>
+      }
+
+      @if (selectedTicket.status === 'Closed') {
+        <div class="modal-footer flex-column align-items-stretch border-top bg-light p-4 text-center">
+          <p class="text-muted mb-0 fw-semibold" style="font-size: 0.85rem;"><i
+              class="bi bi-lock-fill text-muted me-1"></i> This ticket is closed.</p>
+          <button class="btn btn-outline-primary btn-sm mt-2 rounded-pill shadow-sm" (click)="changeStatus('Open')">Reopen
+            Ticket</button>
+        </div>
+      }
+
+    </div>
+  }
+  </div>
 </div>

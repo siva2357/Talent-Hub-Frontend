@@ -14,17 +14,22 @@
 
   <div class="position-relative z-1 mx-auto" style="max-width: 1400px; margin-top: 1rem;">
   
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h1 class="fw-bold fs-3 text-dark mb-1 d-flex align-items-center gap-2">
-        My Support Tickets 
-        <span class="badge bg-light text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.75rem;">Clear View</span>
-      </h1>
-      <p class="text-muted mb-0" style="font-size: 0.85rem;">Track and manage all your support requests in one place.</p>
+  <div class="mb-4">
+    <a routerLink="/dashboard" class="text-muted fw-semibold text-decoration-none d-inline-flex align-items-center gap-2 mb-3 hover-text-primary" style="font-size: 0.85rem;">
+      <i class="bi bi-arrow-left"></i> Back to Dashboard
+    </a>
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h1 class="fw-bold fs-3 text-dark mb-1 d-flex align-items-center gap-2">
+          My Support Tickets 
+          <span class="badge bg-light text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.75rem;">Clear View</span>
+        </h1>
+        <p class="text-muted mb-0" style="font-size: 0.85rem;">Track and manage all your support requests in one place.</p>
+      </div>
+      <button routerLink="/create-ticket" class="btn btn-primary px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm">
+        <i class="bi bi-plus-lg"></i> Create New Ticket
+      </button>
     </div>
-    <button class="btn btn-primary px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm">
-      <i class="bi bi-plus-lg"></i> Create New Ticket
-    </button>
   </div>
 
   <!-- Top Metrics Row -->
@@ -36,7 +41,7 @@
         </div>
         <div>
           <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.75rem;">All Tickets</span>
-          <span class="fw-bold text-dark fs-4 lh-1">12</span>
+          <span class="fw-bold text-dark fs-4 lh-1">{{ totalTickets }}</span>
         </div>
       </div>
     </div>
@@ -47,7 +52,7 @@
         </div>
         <div>
           <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.75rem;">Open</span>
-          <span class="fw-bold text-dark fs-4 lh-1">3</span>
+          <span class="fw-bold text-dark fs-4 lh-1">{{ openTickets }}</span>
         </div>
       </div>
     </div>
@@ -57,8 +62,8 @@
           <i class="bi bi-file-earmark-text fs-5"></i>
         </div>
         <div>
-          <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.75rem;">In Progress</span>
-          <span class="fw-bold text-dark fs-4 lh-1">2</span>
+          <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.75rem;">Resolved</span>
+          <span class="fw-bold text-dark fs-4 lh-1">{{ resolvedTickets }}</span>
         </div>
       </div>
     </div>
@@ -68,35 +73,28 @@
           <i class="bi bi-geo-alt fs-5"></i>
         </div>
         <div>
-          <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.75rem;">Waiting</span>
-          <span class="fw-bold text-dark fs-4 lh-1">1</span>
-        </div>
-      </div>
-    </div>
-    <div class="glass-card border-0 rounded-4 flex-grow-1 p-3">
-      <div class="d-flex align-items-center gap-3">
-        <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px;">
-          <i class="bi bi-check-circle fs-5"></i>
-        </div>
-        <div>
-          <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.75rem;">Resolved</span>
-          <span class="fw-bold text-dark fs-4 lh-1">4</span>
-        </div>
-      </div>
-    </div>
-    <div class="glass-card border-0 rounded-4 flex-grow-1 p-3">
-      <div class="d-flex align-items-center gap-3">
-        <div class="bg-secondary bg-opacity-10 text-secondary rounded-circle d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px;">
-          <i class="bi bi-shield-check fs-5"></i>
-        </div>
-        <div>
           <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.75rem;">Closed</span>
-          <span class="fw-bold text-dark fs-4 lh-1">2</span>
+          <span class="fw-bold text-dark fs-4 lh-1">{{ closedTickets }}</span>
         </div>
       </div>
     </div>
   </div>
+  
+  <!-- Empty State -->
+  @if (!isLoading && tickets.length === 0) {
+  <div class="glass-card border-0 rounded-4 p-5 text-center my-4">
+    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center mx-auto mb-3" style="width: 80px; height: 80px;">
+      <i class="bi bi-headset fs-1"></i>
+    </div>
+    <h2 class="fs-4 fw-bold text-dark mb-2">No Support Tickets Yet</h2>
+    <p class="text-muted mb-4 max-w-md mx-auto">You haven't opened any support tickets. If you need help with your account, billing, or any technical issues, we are here for you.</p>
+    <button routerLink="/create-ticket" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm">
+      <i class="bi bi-plus-lg me-1"></i> Create Your First Ticket
+    </button>
+  </div>
+  }
 
+  @if (!isLoading && tickets.length > 0) {
   <div class="row g-4">
     <!-- Left Column (Ticket List) -->
     <div class="col-lg-3 d-flex flex-column gap-3">
@@ -118,106 +116,36 @@
       </div>
 
       <!-- Ticket Items -->
-      <div class="glass-card border-primary shadow-sm rounded-4 p-3 cursor-pointer position-relative overflow-hidden">
+      @for (t of tickets; track t.ticketId) {
+      <div class="glass-card border-0 shadow-sm rounded-4 p-3 cursor-pointer position-relative overflow-hidden hover-card mb-2"
+           [class.border-primary]="selectedTicket?.ticketId === t.ticketId"
+           (click)="selectTicket(t)">
         <!-- Active indicator line -->
+        @if (selectedTicket?.ticketId === t.ticketId) {
         <div class="position-absolute start-0 top-0 bottom-0 bg-primary" style="width: 4px;"></div>
+        }
+        
         <div class="d-flex justify-content-between align-items-start mb-2 ms-1">
-          <span class="fw-semibold text-muted" style="font-size: 0.7rem;">TKT-2024-0120</span>
-          <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded px-2 py-1" style="font-size: 0.65rem;">Closed</span>
+          <span class="fw-semibold text-muted" style="font-size: 0.7rem;">{{ t.ticketId }}</span>
+          <span class="badge rounded px-2 py-1" style="font-size: 0.65rem;" [ngClass]="getStatusBadgeClass(t.status)">{{ t.status }}</span>
         </div>
         <div class="d-flex gap-2 align-items-start mb-2 ms-1">
-          <div class="bg-purple-soft text-purple rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 24px; height: 24px;">
-            <i class="bi bi-briefcase" style="font-size: 0.7rem;"></i>
+          <div class="rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" [ngClass]="getCategoryBg(t.category)" style="width: 24px; height: 24px;">
+            <i class="bi" [ngClass]="getCategoryIcon(t.category)" style="font-size: 0.7rem;"></i>
           </div>
-          <h3 class="fw-bold text-dark fs-6 mb-0 lh-sm">Interview Room Connection Issue</h3>
+          <h3 class="fw-bold text-dark fs-6 mb-0 lh-sm">{{ t.subject }}</h3>
         </div>
         <div class="ms-1 mb-2">
-          <span class="d-flex align-items-center gap-1 text-muted" style="font-size: 0.7rem;"><i class="bi bi-clock"></i> Created on 24 Jul 2024</span>
+          <span class="d-flex align-items-center gap-1 text-muted" style="font-size: 0.7rem;"><i class="bi bi-clock"></i> Created on {{ t.createdAt | date:'mediumDate' }}</span>
         </div>
         <div class="d-flex gap-3 ms-1 text-muted fw-semibold" style="font-size: 0.7rem;">
-          <span class="d-flex align-items-center gap-1"><i class="bi bi-chat-dots"></i> 2 replies</span>
-          <span class="d-flex align-items-center gap-1"><i class="bi bi-paperclip"></i> Attachment</span>
+          <span class="d-flex align-items-center gap-1"><i class="bi bi-chat-dots"></i> {{ t.replies?.length || 0 }} replies</span>
+          @if (t.attachments?.length > 0) {
+          <span class="d-flex align-items-center gap-1"><i class="bi bi-paperclip"></i> {{ t.attachments.length }} Attachment(s)</span>
+          }
         </div>
       </div>
-
-      <div class="glass-card border-0 rounded-4 p-3 cursor-pointer hover-card">
-        <div class="d-flex justify-content-between align-items-start mb-2">
-          <span class="fw-semibold text-muted" style="font-size: 0.7rem;">TKT-2024-0119</span>
-          <span class="badge bg-warning bg-opacity-10 text-warning-dark border border-warning border-opacity-50 rounded px-2 py-1" style="font-size: 0.65rem;">Open</span>
-        </div>
-        <div class="d-flex gap-2 align-items-start mb-2">
-          <div class="bg-warning bg-opacity-10 text-warning-dark rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 24px; height: 24px;">
-            <i class="bi bi-wallet2" style="font-size: 0.7rem;"></i>
-          </div>
-          <h3 class="fw-bold text-dark fs-6 mb-0 lh-sm">Payment Release Confirmation</h3>
-        </div>
-        <div class="mb-2">
-          <span class="d-flex align-items-center gap-1 text-muted" style="font-size: 0.7rem;"><i class="bi bi-clock"></i> Created on 22 Jul 2024</span>
-        </div>
-        <div class="d-flex gap-3 text-muted fw-semibold" style="font-size: 0.7rem;">
-          <span class="d-flex align-items-center gap-1"><i class="bi bi-chat-dots"></i> 1 reply</span>
-          <span class="d-flex align-items-center gap-1"><i class="bi bi-paperclip"></i> 2 attachments</span>
-        </div>
-      </div>
-
-      <div class="glass-card border-0 rounded-4 p-3 cursor-pointer hover-card">
-        <div class="d-flex justify-content-between align-items-start mb-2">
-          <span class="fw-semibold text-muted" style="font-size: 0.7rem;">TKT-2024-0118</span>
-          <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-50 rounded px-2 py-1" style="font-size: 0.65rem;">In Progress</span>
-        </div>
-        <div class="d-flex gap-2 align-items-start mb-2">
-          <div class="bg-purple-soft text-purple rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 24px; height: 24px;">
-            <i class="bi bi-file-earmark-text" style="font-size: 0.7rem;"></i>
-          </div>
-          <h3 class="fw-bold text-dark fs-6 mb-0 lh-sm">Access to Exclusive Approval</h3>
-        </div>
-        <div class="mb-2">
-          <span class="d-flex align-items-center gap-1 text-muted" style="font-size: 0.7rem;"><i class="bi bi-clock"></i> Created on 18 Jul 2024</span>
-        </div>
-        <div class="d-flex gap-3 text-muted fw-semibold" style="font-size: 0.7rem;">
-          <span class="d-flex align-items-center gap-1"><i class="bi bi-chat-dots"></i> 1 reply</span>
-          <span class="d-flex align-items-center gap-1"><i class="bi bi-paperclip"></i> 1 attachment</span>
-        </div>
-      </div>
-      
-      <div class="glass-card border-0 rounded-4 p-3 cursor-pointer hover-card">
-        <div class="d-flex justify-content-between align-items-start mb-2">
-          <span class="fw-semibold text-muted" style="font-size: 0.7rem;">TKT-2024-0117</span>
-          <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-50 rounded px-2 py-1" style="font-size: 0.65rem;">Resolved</span>
-        </div>
-        <div class="d-flex gap-2 align-items-start mb-2">
-          <div class="bg-success bg-opacity-10 text-success rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 24px; height: 24px;">
-            <i class="bi bi-image" style="font-size: 0.7rem;"></i>
-          </div>
-          <h3 class="fw-bold text-dark fs-6 mb-0 lh-sm">Portfolio Upload Not Working</h3>
-        </div>
-        <div class="mb-2">
-          <span class="d-flex align-items-center gap-1 text-muted" style="font-size: 0.7rem;"><i class="bi bi-clock"></i> Created on 16 Jul 2024</span>
-        </div>
-        <div class="d-flex gap-3 text-muted fw-semibold" style="font-size: 0.7rem;">
-          <span class="d-flex align-items-center gap-1"><i class="bi bi-chat-dots"></i> 2 replies</span>
-          <span class="d-flex align-items-center gap-1"><i class="bi bi-paperclip"></i> 2 attachments</span>
-        </div>
-      </div>
-
-      <div class="glass-card border-0 rounded-4 p-3 cursor-pointer hover-card">
-        <div class="d-flex justify-content-between align-items-start mb-2">
-          <span class="fw-semibold text-muted" style="font-size: 0.7rem;">TKT-2024-0116</span>
-          <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded px-2 py-1" style="font-size: 0.65rem;">Closed</span>
-        </div>
-        <div class="d-flex gap-2 align-items-start mb-2">
-          <div class="bg-success bg-opacity-10 text-success rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 24px; height: 24px;">
-            <i class="bi bi-briefcase" style="font-size: 0.7rem;"></i>
-          </div>
-          <h3 class="fw-bold text-dark fs-6 mb-0 lh-sm">Application Status Query</h3>
-        </div>
-        <div class="mb-2">
-          <span class="d-flex align-items-center gap-1 text-muted" style="font-size: 0.7rem;"><i class="bi bi-clock"></i> Created on 12 Jul 2024</span>
-        </div>
-        <div class="d-flex gap-3 text-muted fw-semibold" style="font-size: 0.7rem;">
-          <span class="d-flex align-items-center gap-1"><i class="bi bi-chat-dots"></i> 0 replies</span>
-        </div>
-      </div>
+      }
 
       <!-- Pagination -->
       <nav class="mt-2 d-flex justify-content-center">
@@ -233,6 +161,7 @@
     </div>
 
     <!-- Middle Column (Ticket Thread) -->
+    @if (selectedTicket) {
     <div class="col-lg-6">
       <div class="glass-card border-0 rounded-4 h-100 d-flex flex-column overflow-hidden">
         
@@ -240,142 +169,112 @@
         <div class="p-4 border-bottom bg-white flex-shrink-0 z-1">
           <div class="d-flex justify-content-between align-items-start mb-3">
             <div class="d-flex gap-3 align-items-center">
-              <div class="bg-purple-soft text-purple rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px;">
-                <i class="bi bi-briefcase fs-4"></i>
+              <div class="rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" [ngClass]="getCategoryBg(selectedTicket.category)" style="width: 48px; height: 48px;">
+                <i class="bi fs-4" [ngClass]="getCategoryIcon(selectedTicket.category)"></i>
               </div>
               <div>
-                <h2 class="fw-bold fs-5 text-dark mb-1 d-flex align-items-center gap-2">
-                  Interview Room Connection Issue 
-                  <span class="badge bg-light text-primary border rounded px-2 py-1" style="font-size: 0.7rem;">TKT-2024-0120</span>
-                </h2>
-                <div class="d-flex flex-wrap align-items-center gap-3 text-muted fw-semibold" style="font-size: 0.75rem;">
-                  <span>Created on 24 Jul 2024</span>
-                  <span class="d-flex align-items-center gap-1">Category: <span class="text-primary">Interviews</span></span>
-                  <span class="d-flex align-items-center gap-1">Priority: <span class="text-danger">High</span></span>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <span class="fw-semibold text-muted" style="font-size: 0.75rem;">{{ selectedTicket.ticketId }}</span>
+                  <span class="badge rounded px-2 py-1" style="font-size: 0.65rem;" [ngClass]="getStatusBadgeClass(selectedTicket.status)">{{ selectedTicket.status }}</span>
                 </div>
+                <h2 class="fs-5 fw-bold text-dark mb-0 lh-sm">{{ selectedTicket.subject }}</h2>
               </div>
             </div>
-            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-50 rounded-pill px-3 py-2 d-flex align-items-center gap-1 shadow-sm" style="font-size: 0.75rem;"><i class="bi bi-check2"></i> Closed</span>
+            @if (selectedTicket.status !== 'Resolved' && selectedTicket.status !== 'Closed') {
+            <button class="btn btn-outline-success btn-sm rounded-pill fw-semibold shadow-sm px-3" (click)="resolveTicket()">
+              <i class="bi bi-check2-circle"></i> Mark Resolved
+            </button>
+            }
           </div>
-
-          <!-- Tabs -->
-          <ul class="nav nav-underline border-bottom-0 gap-4" style="font-size: 0.85rem;">
-            <li class="nav-item">
-              <a class="nav-link active fw-bold text-primary px-0 pb-2" href="#">Conversation</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-muted px-0 pb-2 hover-text-primary" href="#">Details</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-muted px-0 pb-2 hover-text-primary" href="#">Attachments <span class="badge bg-light text-dark rounded-pill border ms-1">2</span></a>
-            </li>
-          </ul>
+          <div class="d-flex flex-wrap gap-4 text-muted" style="font-size: 0.75rem;">
+            <span class="d-flex align-items-center gap-1"><i class="bi bi-folder text-primary"></i> {{ selectedTicket.category }}</span>
+            <span class="d-flex align-items-center gap-1"><i class="bi bi-clock text-primary"></i> Opened {{ selectedTicket.createdAt | date:'mediumDate' }}</span>
+          </div>
         </div>
 
-        <!-- Scrollable Thread -->
-        <div class="flex-grow-1 overflow-y-auto p-4 d-flex flex-column gap-4 bg-light bg-opacity-50" style="background-color: #fbfbfd;">
+        <!-- Message Thread -->
+        <div class="p-4 overflow-y-auto flex-grow-1 bg-light bg-opacity-50" style="max-height: 500px;">
           
-          <!-- Banner -->
-          <div class="bg-success bg-opacity-10 border border-success border-opacity-25 rounded-3 p-2 text-center text-success fw-semibold d-flex align-items-center justify-content-center gap-2 shadow-sm" style="font-size: 0.8rem;">
-            <i class="bi bi-check-circle-fill"></i> This ticket has been resolved on 27 Jul 2024, 02:15 PM
-          </div>
-
-          <!-- Message User (Self) -->
-          <div class="d-flex gap-3 align-items-start ms-5 ms-auto">
-            <div class="d-flex flex-column gap-1 align-items-end">
-              <div class="bg-primary bg-opacity-10 text-dark p-3 rounded-4 rounded-top-0 rounded-start-4 shadow-sm border border-primary border-opacity-10" style="font-size: 0.85rem; max-width: 450px; line-height: 1.5;">
-                Hi Support Team,<br>
-                I am facing issue while joining the interview room.<br>
-                Buffer is not loading and page shows blank.
-              </div>
-              <span class="text-muted me-1" style="font-size: 0.7rem;">Jul 24, 02:15 PM</span>
+          <!-- Original Message -->
+          <div class="d-flex gap-3 mb-4">
+            <div class="bg-white rounded-circle shadow-sm border border-light d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
+              <i class="bi bi-person-fill text-muted fs-5"></i>
             </div>
-            <img src="https://i.pravatar.cc/150?u=a042581f4e29026704a" class="rounded-circle object-fit-cover flex-shrink-0" width="36" height="36" alt="Avatar">
-          </div>
-
-          <!-- Message Support -->
-          <div class="d-flex gap-3 align-items-start me-5">
-            <img src="https://i.pravatar.cc/150?u=a042581f4e29026704z" class="rounded-circle object-fit-cover flex-shrink-0" width="36" height="36" alt="Avatar">
-            <div class="d-flex flex-column gap-1">
+            <div class="flex-grow-1 max-w-75">
               <div class="d-flex align-items-center gap-2 mb-1">
-                <span class="fw-bold text-dark" style="font-size: 0.8rem;">Support Team</span>
-                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2" style="font-size: 0.6rem;">Official</span>
+                <span class="fw-bold text-dark" style="font-size: 0.85rem;">{{ selectedTicket.userName }}</span>
+                <span class="text-muted" style="font-size: 0.7rem;">{{ selectedTicket.createdAt | date:'short' }}</span>
               </div>
-              <div class="bg-white border text-dark p-3 rounded-4 rounded-top-0 rounded-end-4 shadow-sm" style="font-size: 0.85rem; max-width: 450px; line-height: 1.5;">
-                Hi Siva,<br>
-                Thanks for reaching out. Could you please share a screenshot of the issue so we can check this quickly?
-              </div>
-              <span class="text-muted ms-1" style="font-size: 0.7rem;">Jul 24, 02:17 PM</span>
-            </div>
-          </div>
-
-          <!-- Message User (Self) + Attachment -->
-          <div class="d-flex gap-3 align-items-start ms-5 ms-auto">
-            <div class="d-flex flex-column gap-1 align-items-end">
-              <div class="bg-primary bg-opacity-10 text-dark p-3 rounded-4 rounded-top-0 rounded-start-4 shadow-sm border border-primary border-opacity-10" style="font-size: 0.85rem; max-width: 450px; line-height: 1.5;">
-                Sure, attaching the screenshot.<br>
-                <!-- Attachment block inside message -->
-                <div class="mt-2 bg-white border rounded-3 p-2 d-flex align-items-center gap-3 shadow-sm">
-                  <div class="bg-light rounded p-1">
-                    <i class="bi bi-image text-primary fs-3"></i>
-                  </div>
-                  <div class="flex-grow-1">
-                    <span class="d-block fw-bold text-dark text-truncate" style="font-size: 0.8rem; max-width: 150px;">interview-room-error.png</span>
-                    <span class="text-muted" style="font-size: 0.7rem;">2.4 MB · PNG</span>
-                  </div>
+              <div class="bg-white p-3 rounded-3 shadow-sm border border-light position-relative">
+                <div class="position-absolute top-0 start-0 translate-middle" style="width: 12px; height: 12px; background-color: white; transform: rotate(45deg); margin-left: -5px; margin-top: 20px; border-left: 1px solid var(--bs-border-color-translucent); border-bottom: 1px solid var(--bs-border-color-translucent);"></div>
+                <p class="text-muted mb-0" style="font-size: 0.85rem; line-height: 1.5; white-space: pre-line;">
+                  {{ selectedTicket.message }}
+                </p>
+                @if (selectedTicket.attachments?.length > 0) {
+                <div class="mt-3 d-flex flex-wrap gap-2">
+                  @for (att of selectedTicket.attachments; track att.name) {
+                  <a [href]="att.url" target="_blank" class="btn btn-sm btn-light border d-flex align-items-center gap-2 text-decoration-none">
+                    <i class="bi bi-file-earmark-image text-primary"></i>
+                    <span class="text-dark" style="font-size: 0.75rem;">{{ att.name }}</span>
+                  </a>
+                  }
                 </div>
+                }
               </div>
-              <span class="text-muted me-1" style="font-size: 0.7rem;">Jul 24, 02:20 PM <i class="bi bi-check-all text-primary"></i></span>
-            </div>
-            <img src="https://i.pravatar.cc/150?u=a042581f4e29026704a" class="rounded-circle object-fit-cover flex-shrink-0" width="36" height="36" alt="Avatar">
-          </div>
-
-          <!-- Message Support -->
-          <div class="d-flex gap-3 align-items-start me-5">
-            <img src="https://i.pravatar.cc/150?u=a042581f4e29026704z" class="rounded-circle object-fit-cover flex-shrink-0" width="36" height="36" alt="Avatar">
-            <div class="d-flex flex-column gap-1">
-              <div class="d-flex align-items-center gap-2 mb-1">
-                <span class="fw-bold text-dark" style="font-size: 0.8rem;">Support Team</span>
-                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2" style="font-size: 0.6rem;">Official</span>
-              </div>
-              <div class="bg-white border text-dark p-3 rounded-4 rounded-top-0 rounded-end-4 shadow-sm" style="font-size: 0.85rem; max-width: 450px; line-height: 1.5;">
-                Thanks for the screenshot. The issue has been fixed.<br>
-                Please try re-joining. Let us know if you still face any issues. <i class="bi bi-check-circle-fill text-success"></i>
-              </div>
-              <span class="text-muted ms-1" style="font-size: 0.7rem;">Jul 24, 02:45 PM</span>
             </div>
           </div>
 
-          <!-- Feedback Box -->
-          <div class="mt-4 bg-white border border-warning border-opacity-25 shadow-sm rounded-4 p-3 d-flex justify-content-between align-items-center mx-3">
-            <span class="fw-semibold text-dark" style="font-size: 0.85rem;">Was this resolution helpful?</span>
-            <div class="d-flex align-items-center gap-1 text-warning fs-5">
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-half"></i>
-              <span class="text-dark fw-bold ms-2" style="font-size: 0.85rem;">4.8/5</span>
+          <!-- Replies -->
+          @for (reply of selectedTicket.replies; track $index) {
+          <div class="d-flex gap-3 mb-4" [class.flex-row-reverse]="reply.isAdmin">
+            <div class="bg-white rounded-circle shadow-sm border border-light d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
+              <i class="bi" [class.bi-person-fill]="!reply.isAdmin" [class.bi-headset]="reply.isAdmin" class="text-muted fs-5"></i>
             </div>
-            <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-semibold" style="font-size: 0.75rem;">Leave Feedback</button>
+            <div class="flex-grow-1 max-w-75" [class.text-end]="reply.isAdmin">
+              <div class="d-flex align-items-center gap-2 mb-1" [class.justify-content-end]="reply.isAdmin">
+                <span class="fw-bold text-dark" style="font-size: 0.85rem;">{{ reply.isAdmin ? 'Support Team' : selectedTicket.userName }}</span>
+                <span class="text-muted" style="font-size: 0.7rem;">{{ reply.createdAt | date:'short' }}</span>
+              </div>
+              <div class="p-3 rounded-3 shadow-sm border border-light position-relative d-inline-block text-start" [class.bg-primary]="reply.isAdmin" [class.text-white]="reply.isAdmin" [class.bg-white]="!reply.isAdmin">
+                <p class="mb-0" style="font-size: 0.85rem; line-height: 1.5; white-space: pre-line;">
+                  {{ reply.message }}
+                </p>
+              </div>
+            </div>
           </div>
+          }
 
         </div>
 
-        <!-- Footer / Alert -->
-        <div class="p-3 border-top bg-white flex-shrink-0 z-1 d-flex justify-content-between align-items-center gap-3">
-          <div class="d-flex gap-2 align-items-center text-muted" style="font-size: 0.8rem; line-height: 1.3;">
-            <i class="bi bi-info-circle-fill text-primary fs-5"></i> 
-            <span>Ticket is closed. You can view the report or create a new ticket for further assistance.</span>
-          </div>
-          <div class="d-flex gap-2 flex-shrink-0">
-            <button class="btn btn-outline-primary fw-semibold shadow-sm" style="font-size: 0.85rem;">Reopen Ticket</button>
-            <button class="btn btn-primary fw-semibold shadow-sm" style="font-size: 0.85rem;">Create New Ticket</button>
+        <!-- Reply Input -->
+        @if (selectedTicket.status !== 'Closed') {
+        <div class="p-3 border-top bg-white mt-auto z-1">
+          <div class="border rounded-4 overflow-hidden bg-light focus-within-shadow">
+            <textarea class="form-control border-0 bg-transparent shadow-none p-3 pb-0" rows="3" placeholder="Type your reply here..." style="font-size: 0.85rem; resize: none;" [(ngModel)]="replyMessage"></textarea>
+            <div class="d-flex justify-content-between align-items-center p-2 bg-light">
+              <div class="d-flex gap-1"></div>
+              <button class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm d-flex align-items-center gap-2" (click)="submitReply()" [disabled]="isReplying || !replyMessage.trim()">
+                @if (!isReplying) {
+                <i class="bi bi-send-fill"></i>
+                } @else {
+                <span class="spinner-border spinner-border-sm"></span>
+                }
+                {{ isReplying ? 'Sending...' : 'Send Reply' }}
+              </button>
+            </div>
           </div>
         </div>
+        }
+        
+        @if (selectedTicket.status === 'Closed') {
+        <div class="p-3 border-top bg-light mt-auto text-center">
+          <p class="text-muted mb-0 small"><i class="bi bi-lock-fill text-muted me-1"></i> This ticket has been closed. You can no longer reply.</p>
+        </div>
+        }
 
       </div>
     </div>
+    }
 
     <!-- Right Column (Ticket Information) -->
     <div class="col-lg-3 d-flex flex-column gap-4">
@@ -527,6 +426,7 @@
 
     </div>
   </div>
+  }
 
   </div>
 </div>
