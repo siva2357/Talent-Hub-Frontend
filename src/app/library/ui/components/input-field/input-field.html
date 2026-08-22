@@ -1,333 +1,66 @@
-<div class="input-showcase border border-dark border-1 rounded-3"
-    style="padding: 40px; font-family: 'Inter', sans-serif; background: #fff; max-width: 1400px; margin: 0 auto; color: #000000;">
+<div class="input-showcase p-4" style="font-family: 'Inter', sans-serif; background: #f9fafb; min-height: 100vh; color: #000;">
     
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
-        <div>
-            <h1 style="font-size: 28px; font-weight: 700; margin-bottom: 8px;">Input Field Component</h1>
-            <p style="color: #666; margin-bottom: 24px;">Reusable input component with multiple variants, states, and validation.</p>
-            <div style="display: flex; gap: 12px;">
-                <span style="font-size: 12px; font-weight: 500; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 12px; color: #374151;"><i class="bi bi-ui-radios text-primary me-1"></i> Multiple Types</span>
-                <span style="font-size: 12px; font-weight: 500; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 12px; color: #374151;"><i class="bi bi-check2-square text-primary me-1"></i> Form Validation</span>
-                <span style="font-size: 12px; font-weight: 500; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 12px; color: #374151;"><i class="bi bi-pentagon text-primary me-1"></i> Icon Support</span>
-                <span style="font-size: 12px; font-weight: 500; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 12px; color: #374151;"><i class="bi bi-circle-half text-primary me-1"></i> Glassmorphism</span>
-                <span style="font-size: 12px; font-weight: 500; border: 1px solid #e5e7eb; border-radius: 4px; padding: 6px 12px; color: #374151;"><i class="bi bi-laptop text-primary me-1"></i> Responsive</span>
+    <div class="card shadow-sm border-0 rounded-4 p-4 mx-auto" style="max-width: 800px; background: #fff;">
+        <h2 class="mb-4" style="font-weight: 700; color: #111827;">Input Fields</h2>
+
+        <div style="margin-bottom: 24px;">
+            <label class="form-label">Text Input</label>
+            <input type="text" class="form-control rounded-3" placeholder="Enter text">
+        </div>
+
+        <div style="margin-bottom: 24px;">
+            <label class="form-label">Email Input</label>
+            <input type="email" class="form-control rounded-3" placeholder="Enter email">
+        </div>
+
+        <div style="margin-bottom: 24px;">
+            <label class="form-label">Password Input</label>
+            <input type="password" class="form-control rounded-3" placeholder="Enter password">
+        </div>
+
+        <div style="margin-bottom: 24px;">
+            <label class="form-label">Date Input</label>
+            <input type="date" class="form-control rounded-3" placeholder="Select date">
+        </div>
+
+        <div style="margin-bottom: 24px;">
+            <label class="form-label">Textarea</label>
+            <textarea class="form-control rounded-3" placeholder="Enter text here..."></textarea>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+            <label class="form-label">Select Dropdown</label>
+            <select class="form-select rounded-3">
+                <option selected disabled>Select an option</option>
+                <option>Option 1</option>
+                <option>Option 2</option>
+                <option>Option 3</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+            <label class="form-label">Multi-Select Dropdown</label>
+            <div class="dropdown">
+                <button class="form-control rounded-3 text-start d-flex justify-content-between align-items-center bg-white" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #6b7280; width: 100%;">
+                    <span>Select options</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5l6 6 6-6"/></svg>
+                </button>
+                <div class="dropdown-menu w-100 p-2 shadow-sm mt-1 rounded-3" style="border: 1px solid #d1d5db;">
+                    <label class="dropdown-item d-flex align-items-center gap-2 m-0 rounded-2" style="font-size: 14px; cursor: pointer; color: #374151;">
+                        <input type="checkbox" class="form-check-input mt-0" style="cursor: pointer;" checked> Option A
+                    </label>
+                    <label class="dropdown-item d-flex align-items-center gap-2 m-0 rounded-2" style="font-size: 14px; cursor: pointer; color: #374151;">
+                        <input type="checkbox" class="form-check-input mt-0" style="cursor: pointer;"> Option B
+                    </label>
+                    <label class="dropdown-item d-flex align-items-center gap-2 m-0 rounded-2" style="font-size: 14px; cursor: pointer; color: #374151;">
+                        <input type="checkbox" class="form-check-input mt-0" style="cursor: pointer;" checked> Option C
+                    </label>
+                    <label class="dropdown-item d-flex align-items-center gap-2 m-0 rounded-2" style="font-size: 14px; cursor: pointer; color: #374151;">
+                        <input type="checkbox" class="form-check-input mt-0" style="cursor: pointer;"> Option D
+                    </label>
+                </div>
             </div>
         </div>
+
     </div>
-
-    <div style="display: flex; gap: 40px; margin-bottom: 40px;">
-        <!-- COLUMN 1: Basic & Select -->
-        <div style="flex: 1; display: flex; flex-direction: column; gap: 40px;">
-            
-            <!-- 1. BASIC INPUTS -->
-            <section>
-                <h2 style="font-size: 14px; font-weight: 700; color: #2563eb; text-transform: uppercase; margin-bottom: 24px;">1. Basic Inputs</h2>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
-                    <div>
-                        <label class="form-label">Text Input</label>
-                        <div class="input-group">
-                            <span class="input-icon"><i class="bi bi-person"></i></span>
-                            <input type="text" class="form-control" placeholder="Enter your name">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="form-label">Text Input (With Icon)</label>
-                        <div class="input-group">
-                            <span class="input-icon"><i class="bi bi-envelope"></i></span>
-                            <input type="email" class="form-control" placeholder="Enter your email">
-                        </div>
-                    </div>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
-                    <div>
-                        <label class="form-label">Password Input</label>
-                        <div class="input-group left-right-icon">
-                            <span class="input-icon"><i class="bi bi-lock"></i></span>
-                            <input type="password" class="form-control" value="password123" placeholder="Password">
-                            <span class="input-icon-right"><i class="bi bi-eye"></i></span>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="form-label">Password (Visible)</label>
-                        <div class="input-group left-right-icon">
-                            <span class="input-icon"><i class="bi bi-unlock"></i></span>
-                            <input type="text" class="form-control" value="TalentHub@123">
-                            <span class="input-icon-right"><i class="bi bi-eye-slash"></i></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
-                    <div>
-                        <label class="form-label">Number Input</label>
-                        <div class="input-group">
-                            <span class="input-icon"><i class="bi bi-hash"></i></span>
-                            <input type="number" class="form-control" value="9876543210">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="form-label">Date Input</label>
-                        <div class="input-group">
-                            <span class="input-icon"><i class="bi bi-calendar"></i></span>
-                            <input type="text" class="form-control" value="21 May 2025">
-                        </div>
-                    </div>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-                    <div>
-                        <label class="form-label">Disabled Input</label>
-                        <div class="input-group">
-                            <span class="input-icon"><i class="bi bi-person"></i></span>
-                            <input type="text" class="form-control" placeholder="This field is disabled" disabled>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="form-label">Input with Value</label>
-                        <div class="input-group">
-                            <span class="input-icon"><i class="bi bi-person"></i></span>
-                            <input type="text" class="form-control" value="Siva Prasad Kurra">
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 2. SELECT DROPDOWN -->
-            <section>
-                <h2 style="font-size: 14px; font-weight: 700; color: #2563eb; text-transform: uppercase; margin-bottom: 24px;">2. Select Dropdown</h2>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-                    <div>
-                        <label class="form-label">Select Option</label>
-                        <div class="input-group">
-                            <span class="input-icon"><i class="bi bi-person"></i></span>
-                            <select class="form-select">
-                                <option selected disabled>Select your role</option>
-                                <option>Freelancer</option>
-                                <option>Client</option>
-                                <option>Admin</option>
-                                <option>Recruiter</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="form-label">Select (With Icon)</label>
-                        <div class="input-group">
-                            <span class="input-icon"><i class="bi bi-building"></i></span>
-                            <select class="form-select">
-                                <option selected disabled>Select company size</option>
-                                <option>1 - 10 employees</option>
-                                <option>11 - 50 employees</option>
-                                <option>51 - 200 employees</option>
-                                <option>201 + employees</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- COLUMN 2: Multi-Select, Textarea, Filter -->
-        <div style="flex: 1; display: flex; flex-direction: column; gap: 40px;">
-            
-            <!-- 3. MULTI-SELECT DROPDOWN -->
-            <section>
-                <h2 style="font-size: 14px; font-weight: 700; color: #2563eb; text-transform: uppercase; margin-bottom: 24px;">3. Multi-Select Dropdown</h2>
-                <label class="form-label">Multi Select Options</label>
-                <div style="border: 1px solid #d1d5db; border-radius: 6px; padding: 4px;">
-                    <div class="input-group" style="margin-bottom: 8px;">
-                        <span class="input-icon"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control" style="border: none;" placeholder="Select skills...">
-                    </div>
-                    <div style="border-top: 1px solid #e5e7eb; padding: 12px;">
-                        <div class="input-group filter-mode" style="margin-bottom: 12px;">
-                            <span class="input-icon"><i class="bi bi-search"></i></span>
-                            <input type="text" class="form-control" style="border-radius: 4px;" placeholder="Search skills...">
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
-                            <label style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" checked> Angular</label>
-                            <label style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" checked> React.js</label>
-                            <label style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" checked> Node.js</label>
-                            <label style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" checked> Python</label>
-                            <label style="display: flex; align-items: center; gap: 8px;"><input type="checkbox"> UI/UX Design</label>
-                            <label style="display: flex; align-items: center; gap: 8px;"><input type="checkbox"> DevOps</label>
-                        </div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-top: 1px solid #e5e7eb; font-size: 12px;">
-                        <span style="color: #2563eb; font-weight: 500;">4 selected</span>
-                        <span style="color: #2563eb; cursor: pointer;">Clear all</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 4. TEXTAREA -->
-            <section>
-                <h2 style="font-size: 14px; font-weight: 700; color: #2563eb; text-transform: uppercase; margin-bottom: 24px;">4. Textarea</h2>
-                <label class="form-label">Message</label>
-                <div class="input-group" style="align-items: flex-start;">
-                    <span class="input-icon" style="top: 20px;"><i class="bi bi-chat-left-text"></i></span>
-                    <textarea class="form-control" placeholder="Type your message here..."></textarea>
-                </div>
-                <div style="text-align: right; font-size: 12px; color: #9ca3af; margin-top: 4px;">0 / 500</div>
-            </section>
-
-            <!-- 5. FILTER MODE (COMPACT) -->
-            <section>
-                <h2 style="font-size: 14px; font-weight: 700; color: #2563eb; text-transform: uppercase; margin-bottom: 24px;">5. Filter Mode (Compact)</h2>
-                <div style="display: flex; gap: 12px; margin-bottom: 16px; align-items: center;" class="filter-mode">
-                    <div class="input-group" style="flex: 2;">
-                        <span class="input-icon"><i class="bi bi-search"></i></span>
-                        <input type="text" class="form-control" placeholder="Search...">
-                    </div>
-                    <div style="flex: 1;">
-                        <select class="form-select">
-                            <option>Category</option>
-                        </select>
-                    </div>
-                    <div style="flex: 1;">
-                        <select class="form-select">
-                            <option>Status</option>
-                        </select>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 12px;">
-                    <button class="btn btn-primary btn-sm" style="font-size: 13px;"><i class="bi bi-funnel me-1"></i> Apply Filters</button>
-                    <button class="btn btn-outline-secondary btn-sm" style="font-size: 13px;"><i class="bi bi-arrow-counterclockwise me-1"></i> Reset</button>
-                </div>
-            </section>
-        </div>
-
-        <!-- COLUMN 3: States & Validation -->
-        <div style="flex: 1; display: flex; flex-direction: column; gap: 40px;">
-            
-            <!-- 6. STATES -->
-            <section>
-                <h2 style="font-size: 14px; font-weight: 700; color: #2563eb; text-transform: uppercase; margin-bottom: 24px;">6. States</h2>
-                
-                <div style="margin-bottom: 16px;">
-                    <label class="form-label">Default State</label>
-                    <div class="input-group">
-                        <span class="input-icon"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control" placeholder="Default input">
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 16px;">
-                    <label class="form-label">Focus State</label>
-                    <div class="input-group">
-                        <span class="input-icon" style="color: #2563eb;"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control focused" placeholder="Focused input">
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 16px;">
-                    <label class="form-label">Hover State</label>
-                    <div class="input-group">
-                        <span class="input-icon"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control hover" placeholder="Hover over me">
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 16px;">
-                    <label class="form-label">Disabled State</label>
-                    <div class="input-group">
-                        <span class="input-icon"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control disabled" disabled placeholder="Disabled input">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="form-label">Read Only State</label>
-                    <div class="input-group left-right-icon">
-                        <span class="input-icon"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control readonly" readonly placeholder="Read only input">
-                        <span class="input-icon-right"><i class="bi bi-lock"></i></span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 7. VALIDATION STATES -->
-            <section>
-                <h2 style="font-size: 14px; font-weight: 700; color: #2563eb; text-transform: uppercase; margin-bottom: 24px;">7. Validation States</h2>
-                
-                <div style="margin-bottom: 16px;">
-                    <label class="form-label">Success State</label>
-                    <div class="input-group left-right-icon">
-                        <span class="input-icon" style="color: #10b981;"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control is-valid" value="Valid input">
-                        <span class="input-icon-right" style="color: #10b981;"><i class="bi bi-check-circle"></i></span>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 16px;">
-                    <label class="form-label">Error State</label>
-                    <div class="input-group left-right-icon">
-                        <span class="input-icon" style="color: #ef4444;"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control is-invalid" value="Invalid input">
-                        <span class="input-icon-right" style="color: #ef4444;"><i class="bi bi-exclamation-circle"></i></span>
-                    </div>
-                    <div class="invalid-feedback">Please enter a valid value.</div>
-                </div>
-
-                <div>
-                    <label class="form-label">Required Field</label>
-                    <div class="input-group left-right-icon">
-                        <span class="input-icon" style="color: #ef4444;"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control is-invalid" placeholder="This field is required">
-                    </div>
-                    <div class="invalid-feedback">This field is required.</div>
-                </div>
-            </section>
-        </div>
-    </div>
-
-    <!-- 8. ERROR & HELPER MESSAGES -->
-    <section>
-        <h2 style="font-size: 14px; font-weight: 700; color: #2563eb; text-transform: uppercase; margin-bottom: 24px;">8. Error & Helper Messages</h2>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
-            
-            <div>
-                <label class="form-label">Error Message</label>
-                <div class="input-group left-right-icon mb-1">
-                    <span class="input-icon" style="color: #ef4444;"><i class="bi bi-envelope"></i></span>
-                    <input type="text" class="form-control is-invalid" value="Invalid email address">
-                    <span class="input-icon-right" style="color: #ef4444;"><i class="bi bi-exclamation-circle"></i></span>
-                </div>
-                <div class="invalid-feedback">Please enter a valid email address.</div>
-            </div>
-
-            <div>
-                <label class="form-label">Helper Text</label>
-                <div class="input-group mb-1">
-                    <span class="input-icon"><i class="bi bi-lock"></i></span>
-                    <input type="password" class="form-control" placeholder="Enter a strong password">
-                </div>
-                <div class="form-text">Use at least 8 characters with letters and numbers.</div>
-            </div>
-
-            <div>
-                <label class="form-label">Success Message</label>
-                <div class="input-group left-right-icon mb-1">
-                    <span class="input-icon" style="color: #10b981;"><i class="bi bi-chat-left-text"></i></span>
-                    <input type="text" class="form-control is-valid" value="Message sent successfully">
-                    <span class="input-icon-right" style="color: #10b981;"><i class="bi bi-check-circle"></i></span>
-                </div>
-                <div class="form-text" style="color: #10b981;">Your message has been sent.</div>
-            </div>
-
-            <div>
-                <label class="form-label">Warning Message</label>
-                <div class="input-group left-right-icon mb-1">
-                    <span class="input-icon" style="color: #f59e0b;"><i class="bi bi-hdd"></i></span>
-                    <input type="text" class="form-control" style="border-color: #f59e0b;" value="Storage almost full">
-                    <span class="input-icon-right" style="color: #f59e0b;"><i class="bi bi-exclamation-triangle"></i></span>
-                </div>
-                <div class="form-text" style="color: #f59e0b;">You are using 90% of your storage.</div>
-            </div>
-
-        </div>
-    </section>
-
 </div>

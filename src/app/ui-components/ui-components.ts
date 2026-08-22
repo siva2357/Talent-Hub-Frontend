@@ -20,6 +20,11 @@ import { ProfileAvatar } from '../library/shared/components/profile-avatar/profi
 import { NotificationDropdown } from '../library/shared/components/notification-dropdown/notification-dropdown';
 import { FileUpload } from '../library/shared/components/file-upload/file-upload';
 import { FilePreview } from '../library/shared/components/file-preview/file-preview';
+import { TalentCard } from '../library/shared/components/talent-card/talent-card';
+import { MeetCard } from '../library/shared/components/meet-card/meet-card';
+import { StatCard } from '../library/shared/components/stat-card/stat-card';
+import { SupportTicket } from '../library/shared/components/support-ticket/support-ticket';
+import { ContractCard } from '../library/shared/components/contract-card/contract-card';
 
 import { UserNavbar } from '../library/ui/layouts/user-navbar/user-navbar';
 
@@ -31,7 +36,8 @@ import { UserNavbar } from '../library/ui/layouts/user-navbar/user-navbar';
     Sidebar,
     UserNavbar,
     Accordion, Alert, Badge, Button, Chip, Dropdown, InputField, Loader, Modal, Pagination, Table, Toast,
-    Timeline, ProfileAvatar, NotificationDropdown, FileUpload, FilePreview
+    Timeline, ProfileAvatar, NotificationDropdown, FileUpload, FilePreview,
+    TalentCard, MeetCard, StatCard, SupportTicket, ContractCard
   ],
   templateUrl: './ui-components.html',
   styleUrl: './ui-components.css'

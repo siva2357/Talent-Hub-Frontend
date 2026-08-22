@@ -1,139 +1,30 @@
-/* Bootstrap-style Input Field Classes with Custom Theme Colors */
+/* Custom Input Field Styles */
 
-/* Base Input Styles */
 .form-control, .form-select {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
   color: #111827;
   background-color: #ffffff;
   border: 1px solid #d1d5db;
-  border-radius: 6px;
   padding: 10px 14px;
   transition: all 0.2s ease-in-out;
   width: 100%;
-  appearance: none; /* for select */
 }
 
-/* Placeholder */
 .form-control::placeholder {
   color: #9ca3af;
 }
 
-/* Hover State */
-.form-control:hover, .form-select:hover, .form-control.hover {
+.form-control:hover, .form-select:hover {
   border-color: #9ca3af;
 }
 
-/* Focus State */
-.form-control:focus, .form-select:focus, .form-control.focused {
+.form-control:focus, .form-select:focus {
   border-color: #2563eb;
   outline: 0;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* Disabled & Read Only */
-.form-control:disabled, .form-select:disabled, 
-.form-control[readonly], .form-control.disabled, .form-control.readonly {
-  background-color: #f9fafb;
-  color: #6b7280;
-  border-color: #e5e7eb;
-  cursor: not-allowed;
-}
-
-/* Input Groups (Icons) */
-.input-group {
-  display: flex;
-  align-items: center;
-  position: relative;
-  width: 100%;
-}
-
-.input-group .form-control, .input-group .form-select {
-  padding-left: 38px; /* Space for left icon */
-}
-
-.input-group.right-icon .form-control {
-  padding-left: 14px;
-  padding-right: 38px; /* Space for right icon */
-}
-
-/* For inputs with both left and right icons */
-.input-group.left-right-icon .form-control {
-  padding-left: 38px;
-  padding-right: 38px;
-}
-
-.input-group .input-icon,
-.input-group .input-icon-right {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px; /* Size of Bootstrap icons */
-  color: #6b7280;
-}
-
-.input-group .input-icon {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  z-index: 10;
-}
-
-.input-group.right-icon .input-icon-right,
-.input-group.left-right-icon .input-icon-right {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  z-index: 10;
-}
-
-/* Select chevron override */
-.form-select {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 12px 12px;
-  padding-right: 32px;
-}
-
-.input-group .form-select {
-  padding-left: 38px;
-}
-
-/* Validation States */
-.form-control.is-valid, .form-select.is-valid {
-  border-color: #10b981;
-  padding-right: 38px;
-  background-image: none;
-}
-.form-control.is-valid:focus, .form-select.is-valid:focus {
-  border-color: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-}
-
-.form-control.is-invalid, .form-select.is-invalid {
-  border-color: #ef4444;
-  padding-right: 38px;
-  background-image: none;
-}
-.form-control.is-invalid:focus, .form-select.is-invalid:focus {
-  border-color: #ef4444;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-}
-
-.invalid-feedback {
-  display: block;
-  width: 100%;
-  margin-top: 4px;
-  font-size: 12px;
-  color: #ef4444;
-}
-
-/* Labels */
 .form-label {
   display: block;
   margin-bottom: 6px;
@@ -142,28 +33,23 @@
   color: #374151;
 }
 
-/* Helper Text */
-.form-text {
-  display: block;
-  margin-top: 4px;
-  font-size: 12px;
-  color: #6b7280;
-}
-
-/* Textarea */
 textarea.form-control {
   min-height: 100px;
   resize: vertical;
 }
 
-/* Filter Mode Compact */
-.filter-mode .form-control, .filter-mode .form-select {
-  padding: 8px 12px;
-  font-size: 13px;
+/* Select chevron override */
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px 12px;
+  padding-right: 32px;
 }
-.filter-mode .input-group .form-control {
-  padding-left: 32px;
-}
-.filter-mode .input-icon {
-  left: 10px;
+
+/* Multi-select fix for background image */
+.form-select[multiple] {
+  background-image: none;
+  padding-right: 14px;
 }
