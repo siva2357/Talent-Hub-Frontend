@@ -1,71 +1,49 @@
-/* Custom styling for standard Bootstrap table to match Talent-Hub UI */
 .table-component-wrapper {
-  padding: 40px; 
-  font-family: 'Inter', sans-serif; 
-  background: #fff;
-}
-
-/* Blue Theme Outer Wrapper */
-.table-responsive-wrapper {
-  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1), 0 2px 4px -1px rgba(37, 99, 235, 0.06);
-  border: 1px solid #bfdbfe; /* Light blue border */
+  width: 100%;
+  background: #ffffff;
   border-radius: 8px;
-  background: #fff;
 }
 
-.table-custom {
-  margin-bottom: 0;
-  white-space: nowrap; /* Ensures columns don't aggressively wrap on small screens */
+/* ngx-datatable */
+
+:host ::ng-deep .ngx-datatable.bootstrap {
+  box-shadow: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
 }
 
-/* Blue Theme Header */
-.table-custom thead th {
-  background-color: #eff6ff; /* Soft blue background */
-  border-bottom: 1px solid #bfdbfe; /* Blue border */
-  color: #1e40af; /* Deep blue text */
-  font-weight: 700;
-  font-size: 12px;
-  text-transform: uppercase;
-  padding: 16px 24px;
-  letter-spacing: 0.05em;
-  border-top: none;
-}
-
-.table-custom tbody td {
-  padding: 16px 24px;
-  vertical-align: middle;
-  color: #1f2937;
-  font-size: 14px;
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-header {
+  background-color: #f9fafb;
   border-bottom: 1px solid #e5e7eb;
-  font-weight: 500;
 }
 
-.table-custom tbody tr:last-child td {
-  border-bottom: none;
-}
-
-/* Blue Theme Hover */
-.table-custom tbody tr:hover {
-  background-color: #f0f9ff; /* Subtle sky-blue hover */
-}
-
-/* Status Badges */
-.status-badge {
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-header-cell {
+  color: #111827;
+  font-size: 13px;
   font-weight: 600;
-  display: inline-block;
+  padding: 14px 16px;
 }
-.status-active {
-  background-color: #dcfce7;
-  color: #166534;
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body-row {
+  border-bottom: 1px solid #e5e7eb;
 }
-.status-leave {
-  background-color: #fef9c3;
-  color: #854d0e;
-}
-.status-inactive {
-  background-color: #f3f4f6;
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body-cell {
   color: #4b5563;
+  font-size: 13px;
+  padding: 14px 16px;
 }
+
+/* Override overflow to prevent dropdown clipping */
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body,
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-row-wrapper,
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body-row,
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body-cell {
+  overflow: visible !important;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body-row:hover {
+  background-color: #f9fafb;
+}
+
+

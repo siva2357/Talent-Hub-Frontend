@@ -1,0 +1,508 @@
+.talent-card {
+    width: 100%;
+    max-width: 520px;
+    min-height: 100%;
+
+    padding: 24px;
+
+    background: #ffffff;
+
+    /* Visible secondary grey border */
+    border: 1px solid #dfe4ea;
+    border-radius: 16px;
+
+    box-shadow:
+        0 4px 14px rgba(15, 23, 42, 0.04);
+
+    font-family: 'Inter', sans-serif;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.talent-card:hover {
+    transform: translateY(-2px);
+
+    border-color: #d5dbe3;
+
+    box-shadow:
+        0 10px 24px rgba(15, 23, 42, 0.07);
+}
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.talent-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    margin-bottom: 24px;
+}
+
+.talent-profile {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    min-width: 0;
+}
+
+.talent-avatar {
+    width: 64px;
+    height: 64px;
+
+    flex-shrink: 0;
+
+    padding: 2px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(135deg,
+            #2563eb,
+            #6366f1);
+}
+
+.talent-avatar img,
+.talent-avatar-placeholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+    font-size: 22px;
+}
+
+.talent-info {
+    min-width: 0;
+}
+
+.talent-name {
+    margin: 0 0 7px;
+
+    color: #111827;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    line-height: 1.35;
+}
+
+.talent-location {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    color: #64748b;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.talent-location i {
+    color: #2563eb;
+
+    font-size: 11px;
+}
+
+
+/* =========================================
+   PROFILE STATUS
+   ========================================= */
+
+.talent-status {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    flex-shrink: 0;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    text-transform: capitalize;
+
+    white-space: nowrap;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+}
+
+.status-active {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+.status-active .status-dot {
+    background: #22c55e;
+}
+
+.status-inactive {
+    background: #f8fafc;
+    color: #64748b;
+}
+
+.status-inactive .status-dot {
+    background: #94a3b8;
+}
+
+
+/* =========================================
+   SKILLS SECTION
+   ========================================= */
+
+.talent-section {
+    margin-bottom: 24px;
+}
+
+.talent-section-label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #64748b;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================
+   SKILLS
+   ========================================= */
+
+.talent-skills {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.talent-skill {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 6px 11px;
+
+    border: 1px solid #dbeafe;
+    border-radius: 999px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    line-height: 1;
+}
+
+.talent-skill-more {
+    border-color: #e2e8f0;
+
+    background: #f8fafc;
+
+    color: #64748b;
+}
+
+
+/* =========================================
+   STATISTICS
+   2 COLUMNS × 2 ROWS
+   ========================================= */
+
+.talent-statistics {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 24px;
+}
+
+.talent-stat {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+
+    background: #f8fafc;
+
+    box-shadow:
+        0 2px 8px rgba(15, 23, 42, 0.03);
+}
+
+
+/* =========================================
+   STAT ICON
+   ========================================= */
+
+.talent-stat-icon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    font-size: 14px;
+}
+
+
+/* Active */
+
+.talent-stat-icon-active {
+    background: #eff6ff;
+
+    color: #3b82f6;
+}
+
+
+/* Completed */
+
+.talent-stat-icon-completed {
+    background: #f0fdf4;
+
+    color: #22c55e;
+}
+
+
+/* Job Success */
+
+.talent-stat-icon-success {
+    background: #eff6ff;
+
+    color: #2563eb;
+}
+
+
+/* Risk */
+
+.talent-stat-icon-risk {
+    background: #f8fafc;
+
+    color: #64748b;
+}
+
+
+/* =========================================
+   STAT CONTENT
+   ========================================= */
+
+.talent-stat-content {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.talent-stat-content strong {
+    overflow: hidden;
+
+    color: #111827;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    text-overflow: ellipsis;
+}
+
+.talent-stat-content span {
+    overflow: hidden;
+
+    color: #64748b;
+
+    font-size: 10px;
+    font-weight: 500;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================
+   FOOTER
+   ========================================= */
+
+.talent-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #eef2f7;
+}
+
+
+/* =========================================
+   SAVE BUTTON
+   ========================================= */
+
+.talent-save-button {
+    width: 40px;
+    height: 40px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    color: #64748b;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.talent-save-button:hover,
+.talent-save-button.saved {
+    border-color: #bfdbfe;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+}
+
+
+/* =========================================
+   VIEW PROFILE BUTTON
+   ========================================= */
+
+.talent-profile-button {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 9px 16px;
+
+    border: 1px solid #2563eb;
+    border-radius: 999px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.talent-profile-button:hover {
+    border-color: #1d4ed8;
+
+    background: #1d4ed8;
+
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.talent-profile-button i {
+    font-size: 11px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 480px) {
+
+    .talent-card {
+        padding: 18px;
+    }
+
+    .talent-card-header {
+        flex-direction: column;
+    }
+
+    .talent-status {
+        align-self: flex-start;
+    }
+
+    .talent-avatar {
+        width: 56px;
+        height: 56px;
+    }
+
+    .talent-name {
+        font-size: 15px;
+    }
+
+    .talent-statistics {
+        grid-template-columns: 1fr;
+    }
+
+    .talent-card-footer {
+        gap: 10px;
+    }
+
+}

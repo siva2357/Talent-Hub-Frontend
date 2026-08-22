@@ -1,135 +1,23 @@
-<div class="badge-showcase border border-dark border-1 rounded-3"
-    style="padding: 40px; font-family: 'Inter', sans-serif; background: #fff; max-width: 1000px; margin: 0 auto; color: #000000;">
-    <h1 style="font-size: 18px; font-weight: 700; color: #2563eb; margin-bottom: 8px;">2. BADGES</h1>
-    <p style="color: #6b7280; font-size: 13px; margin-bottom: 32px;">Badges highlight status, counts, or labels.</p>
+<span class="badge" [class]="'badge ' +
+    (style === 'outline'
+      ? 'badge-outline-' + variant
+      : style === 'subtle'
+        ? 'bg-' + variant + '-subtle'
+        : 'bg-' + variant) +
+    (rounded ? ' rounded-pill' : '')">
 
-    <div style="display: flex; flex-direction: column; gap: 40px;">
+    @if (icon) {
+    <i [class]="icon"></i>
+    }
 
-        <!-- 2.1. STATUS BADGES -->
-        <section>
-            <h2
-                style="font-size: 12px; font-weight: 700; color: #4b5563; text-transform: uppercase; margin-bottom: 16px;">
-                2.1. Status Badges</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 16px;">
-                <span class="badge bg-primary-subtle">
-                    <i class="bi bi-circle-fill" style="font-size: 8px;"></i> New
-                </span>
-                <span class="badge bg-primary-subtle">
-                    <i class="bi bi-circle-half"></i> In Progress
-                </span>
-                <span class="badge badge-outline-success">
-                    Completed
-                </span>
-                <span class="badge bg-warning-subtle">
-                    On Hold
-                </span>
-                <span class="badge bg-danger-subtle">
-                    Cancelled
-                </span>
-                <span class="badge bg-secondary-subtle">
-                    Draft
-                </span>
-            </div>
-        </section>
+    @if (label) {
+    <span>{{ label }}</span>
+    }
 
-        <!-- 2.2. VARIANT BADGES -->
-        <section>
-            <h2
-                style="font-size: 12px; font-weight: 700; color: #4b5563; text-transform: uppercase; margin-bottom: 16px;">
-                2.2. Variant Badges</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 16px;">
-                <span class="badge bg-primary">Primary</span>
-                <span class="badge bg-secondary-subtle">Secondary</span>
-                <span class="badge badge-outline-success">Success</span>
-                <span class="badge badge-outline-warning">Warning</span>
-                <span class="badge badge-outline-danger">Danger</span>
-                <span class="badge badge-outline-info">Info</span>
-            </div>
-        </section>
+    @if (count !== null) {
+    <span class="badge-count">
+        {{ count }}
+    </span>
+    }
 
-        <!-- 2.3. OUTLINE BADGES -->
-        <section>
-            <h2
-                style="font-size: 12px; font-weight: 700; color: #4b5563; text-transform: uppercase; margin-bottom: 16px;">
-                2.3. Outline Badges</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 16px;">
-                <span class="badge badge-outline-primary">Primary</span>
-                <span class="badge badge-outline-secondary">Secondary</span>
-                <span class="badge badge-outline-success">Success</span>
-                <span class="badge badge-outline-warning">Warning</span>
-                <span class="badge badge-outline-danger">Danger</span>
-                <span class="badge badge-outline-info">Info</span>
-            </div>
-        </section>
-
-        <!-- 2.4. BADGES WITH ICONS -->
-        <section>
-            <h2
-                style="font-size: 12px; font-weight: 700; color: #4b5563; text-transform: uppercase; margin-bottom: 16px;">
-                2.4. Badges With Icons</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 16px;">
-                <span class="badge badge-outline-success">
-                    <i class="bi bi-check-lg"></i> Verified
-                </span>
-                <span class="badge badge-outline-primary">
-                    <i class="bi bi-info-circle-fill"></i> Information
-                </span>
-                <span class="badge badge-outline-warning">
-                    <i class="bi bi-exclamation-triangle-fill"></i> Warning
-                </span>
-                <span class="badge bg-danger-subtle">
-                    <i class="bi bi-shield-fill-exclamation"></i> Error
-                </span>
-                <span class="badge badge-outline-purple">
-                    <i class="bi bi-star-fill"></i> Featured
-                </span>
-            </div>
-        </section>
-
-        <!-- 2.5. COUNT BADGES -->
-        <section>
-            <h2
-                style="font-size: 12px; font-weight: 700; color: #4b5563; text-transform: uppercase; margin-bottom: 16px;">
-                2.5. Count Badges</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 24px;">
-
-                <div class="count-badge-container">
-                    <i class="bi bi-envelope"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        12
-                    </span>
-                </div>
-
-                <div class="count-badge-container">
-                    <i class="bi bi-bell"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        8
-                    </span>
-                </div>
-
-                <div class="count-badge-container">
-                    <i class="bi bi-cart3"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        3
-                    </span>
-                </div>
-
-                <div class="count-badge-container">
-                    <i class="bi bi-chat-left-text"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        5
-                    </span>
-                </div>
-
-                <div class="count-badge-container">
-                    <i class="bi bi-people"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        21
-                    </span>
-                </div>
-
-            </div>
-        </section>
-
-    </div>
-</div>
+</span>

@@ -23,12 +23,37 @@
               <app-badge></app-badge>
               <app-button></app-button>
               <app-chip></app-chip>
-              <app-dropdown></app-dropdown>
               <app-input-field></app-input-field>
               <app-loader></app-loader>
               <app-modal></app-modal>
               <app-pagination></app-pagination>
-              <app-table></app-table>
+              <app-table [columns]="tableColumns" [data]="tableData"></app-table>
+
+              <ng-template #statusTemplate let-value>
+                <span class="badge" [ngClass]="{
+                  'bg-success': value === 'Active',
+                  'bg-warning': value === 'On Leave',
+                  'bg-danger': value === 'Inactive'
+                }">{{ value }}</span>
+              </ng-template>
+
+              <ng-template #actionsTemplate let-value>
+                <div class="dropdown">
+                  <button class="btn btn-link text-dark p-0 text-decoration-none" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li><a class="dropdown-item" href="javascript:void(0)">View</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0)">Edit</a></li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item text-danger" href="javascript:void(0)">Delete</a></li>
+                  </ul>
+                </div>
+              </ng-template>
+
               <app-toast></app-toast>
             </div>
           </div>
@@ -48,7 +73,6 @@
               <app-timeline></app-timeline>
               <app-talent-card></app-talent-card>
               <app-meet-card></app-meet-card>
-              <app-stat-card></app-stat-card>
               <app-support-ticket></app-support-ticket>
               <app-contract-card></app-contract-card>
             </div>

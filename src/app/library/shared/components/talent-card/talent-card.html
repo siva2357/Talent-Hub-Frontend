@@ -1,86 +1,253 @@
-<div class="card talent-card border-0 rounded-4 p-4 position-relative" style="max-width: 480px; font-family: 'Inter', sans-serif; background: linear-gradient(145deg, #ffffff, #f9fafb); box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);">
-    <!-- Decorative background element -->
-    <div class="position-absolute top-0 end-0 p-3 opacity-25">
-        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="80" cy="20" r="40" fill="url(#paint0_linear)"/>
-            <defs>
-                <linearGradient id="paint0_linear" x1="40" y1="-20" x2="120" y2="60" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#4f46e5" stop-opacity="0.3"/>
-                    <stop offset="1" stop-color="#818cf8" stop-opacity="0"/>
-                </linearGradient>
-            </defs>
-        </svg>
+@if (talent) {
+
+<div class="talent-card">
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+
+    <div class="talent-card-header">
+
+        <div class="talent-profile">
+
+            <!-- Profile Image -->
+
+            <div class="talent-avatar">
+
+                @if (talent.profilePhoto) {
+
+                <img [src]="talent.profilePhoto" [alt]="talent.fullName" />
+
+                } @else {
+
+                <div class="talent-avatar-placeholder">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+                }
+
+            </div>
+
+
+            <!-- Profile Information -->
+
+            <div class="talent-info">
+
+                <h6 class="talent-name">
+                    {{ talent.fullName }}
+                </h6>
+
+
+                @if (location) {
+
+                <div class="talent-location">
+
+                    <i class="bi bi-geo-alt-fill"></i>
+
+                    <span>
+                        {{ location }}
+                    </span>
+
+                </div>
+
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- Profile Status -->
+
+        <span class="talent-status" [class.status-active]="isActive" [class.status-inactive]="!isActive">
+
+            <span class="status-dot"></span>
+
+            {{ talent.status }}
+
+        </span>
+
     </div>
 
-    <div class="d-flex justify-content-between align-items-start mb-4 position-relative z-1">
-        <div class="d-flex align-items-center gap-3">
-            <div class="position-relative">
-                <div class="rounded-circle p-1" style="background: linear-gradient(45deg, #4f46e5, #ec4899);">
-                    <img src="https://ui-avatars.com/api/?name=Siva+Prasad&background=1e1b4b&color=fff&size=72" class="rounded-circle border border-3 border-white" width="72" height="72" alt="Avatar">
-                </div>
-            </div>
-            <div>
-                <h4 class="mb-1 fw-bolder text-dark" style="letter-spacing: -0.5px;">Siva Prasad Kurra</h4>
-                <div class="d-flex flex-column gap-1">
-                    <span class="text-secondary small fw-medium"><i class="bi bi-geo-alt-fill text-primary opacity-75 me-1"></i> Hyderabad, India</span>
-                    <span class="text-secondary small fw-medium"><i class="bi bi-briefcase-fill text-primary opacity-75 me-1"></i> Freelance Developer</span>
-                </div>
-            </div>
+
+    <!-- =========================================
+         SKILLS
+         ========================================= -->
+
+    @if (talent.skills.length) {
+
+    <div class="talent-section">
+
+        <span class="talent-section-label">
+            TOP SKILLS
+        </span>
+
+
+        <div class="talent-skills">
+
+            @for (skill of visibleSkills; track skill) {
+
+            <span class="talent-skill">
+                {{ skill }}
+            </span>
+
+            }
+
+
+            @if (remainingSkills > 0) {
+
+            <span class="talent-skill talent-skill-more">
+                +{{ remainingSkills }} More
+            </span>
+
+            }
+
         </div>
-        <div class="text-center bg-white rounded-3 p-2 shadow-sm border" style="border-color: #f1f5f9;">
-            <div class="fw-bolder text-dark fs-5 lh-1">100<span style="font-size: 12px; color: #10b981;">%</span></div>
-            <span class="d-block mt-1 text-muted fw-bold" style="font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px;">Success</span>
-        </div>
+
     </div>
 
-    <div class="mb-4 position-relative z-1">
-        <h6 class="text-uppercase text-muted fw-bold mb-3" style="font-size: 11px; letter-spacing: 1px;">Top Skills</h6>
-        <div class="d-flex flex-wrap gap-2">
-            <span class="badge rounded-pill fw-medium px-3 py-2 shadow-sm" style="background-color: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe;">Angular</span>
-            <span class="badge rounded-pill fw-medium px-3 py-2 shadow-sm" style="background-color: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0;">Node.js</span>
-            <span class="badge rounded-pill fw-medium px-3 py-2 shadow-sm" style="background-color: #fff7ed; color: #ea580c; border: 1px solid #fed7aa;">UI/UX</span>
-            <span class="badge rounded-pill fw-medium px-3 py-2 shadow-sm" style="background-color: #f8fafc; color: #475569; border: 1px solid #e2e8f0;">+3 More</span>
+    }
+
+
+    <!-- =========================================
+         CONTRACT STATISTICS
+         ========================================= -->
+
+    <!-- =========================================
+     CONTRACT STATISTICS
+     ========================================= -->
+
+    <div class="talent-statistics">
+
+        <!-- Active Contracts -->
+
+        <div class="talent-stat">
+
+            <div class="talent-stat-icon talent-stat-icon-active">
+                <i class="bi bi-rocket-takeoff-fill"></i>
+            </div>
+
+            <div class="talent-stat-content">
+
+                <strong>
+                    {{ talent.activeContracts ||0 }}
+                </strong>
+
+                <span>
+                    Active Contracts
+                </span>
+
+            </div>
+
         </div>
+
+
+        <!-- Completed Contracts -->
+
+        <div class="talent-stat">
+
+            <div class="talent-stat-icon talent-stat-icon-completed">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+
+            <div class="talent-stat-content">
+
+                <strong>
+                    {{ talent.completedContracts ||0}}
+                </strong>
+
+                <span>
+                    Completed
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Job Success -->
+
+        <div class="talent-stat">
+
+            <div class="talent-stat-icon talent-stat-icon-success">
+                <i class="bi bi-graph-up-arrow"></i>
+            </div>
+
+            <div class="talent-stat-content">
+
+                <strong>
+                    @if (talent.jobSuccessRate !== undefined) {
+                    {{ talent.jobSuccessRate }}%
+                    } @else {
+                    N/A
+                    }
+                </strong>
+
+                <span>
+                    Job Success
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Risk Status -->
+
+        <div class="talent-stat">
+
+            <div class="talent-stat-icon talent-stat-icon-risk">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div class="talent-stat-content">
+
+                <strong>
+                    {{ talent.riskStatus || 'N/A' }}
+                </strong>
+
+                <span>
+                    Risk Status
+                </span>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="row g-3 mb-4 position-relative z-1">
-        <div class="col-6">
-            <div class="p-3 rounded-4 bg-white border shadow-sm h-100 d-flex align-items-center gap-3">
-                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: #eff6ff; color: #3b82f6;">
-                    <i class="bi bi-rocket-takeoff-fill"></i>
-                </div>
-                <div>
-                    <h4 class="mb-0 fw-bolder text-dark lh-1">0</h4>
-                    <span class="text-muted" style="font-size: 12px; font-weight: 500;">Active</span>
-                </div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="p-3 rounded-4 bg-white border shadow-sm h-100 d-flex align-items-center gap-3">
-                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: #f0fdf4; color: #22c55e;">
-                    <i class="bi bi-check-circle-fill"></i>
-                </div>
-                <div>
-                    <h4 class="mb-0 fw-bolder text-dark lh-1">1</h4>
-                    <span class="text-muted" style="font-size: 12px; font-weight: 500;">Completed</span>
-                </div>
-            </div>
-        </div>
+
+    <!-- =========================================
+         FOOTER
+         ========================================= -->
+
+    <div class="talent-card-footer">
+
+        <!-- Save -->
+
+        <button type="button" class="talent-save-button" [class.saved]="talent.isSaved" aria-label="Save Talent"
+            (click)="onSave()">
+
+            <i class="bi" [class.bi-bookmark-fill]="talent.isSaved" [class.bi-bookmark]="!talent.isSaved">
+            </i>
+
+        </button>
+
+
+        <!-- View Profile -->
+
+        <button type="button" class="talent-profile-button" (click)="onViewProfile()">
+
+            View Profile
+
+            <i class="bi bi-arrow-right"></i>
+
+        </button>
+
     </div>
 
-    <div class="d-flex justify-content-between align-items-center pt-4 border-top position-relative z-1 mt-2">
-        <div class="d-flex align-items-center gap-2 px-3 py-2 rounded-pill shadow-sm" style="background-color: #ecfdf5; border: 1px solid #d1fae5;">
-            <span class="spinner-grow spinner-grow-sm text-success" role="status" style="width: 8px; height: 8px;"></span>
-            <span class="fw-bold text-success" style="font-size: 12px;">Available</span>
-        </div>
-        
-        <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center bg-white" style="width: 44px; height: 44px; color: #4f46e5; border: 1px solid #e2e8f0;" aria-label="Save Profile">
-                <i class="bi bi-bookmark-heart-fill fs-6"></i>
-            </button>
-            <button class="btn rounded-pill px-4 py-2 fw-bold text-white shadow-sm" style="background: linear-gradient(45deg, #4f46e5, #6366f1); border: none;">
-                View Profile
-            </button>
-        </div>
-    </div>
 </div>
+
+}

@@ -1,74 +1,20 @@
-<div class="table-component-wrapper border border-dark border-1 rounded-3">
+<div class="table-component-wrapper">
 
-    <!-- Showcase Headers (Can be removed when used in actual production views) -->
-    <h1 style="font-size: 20px; font-weight: 700; color: #111827; margin-bottom: 4px; text-transform: uppercase;">
-        REUSABLE DYNAMIC TABLE</h1>
-    <p style="color: #6b7280; font-size: 13px; margin-bottom: 40px;">This table uses modern Angular &#64;for and &#64;if
-        control flow syntax.</p>
+    <ngx-datatable class="bootstrap" [rows]="data" [columnMode]="columnModeEnum.force" [headerHeight]="50"
+        [footerHeight]="50" rowHeight="auto" [limit]="10">
 
-    <!-- Responsive wrapper for mobile scrolling -->
-    <div class="table-responsive table-responsive-wrapper">
-        <table class="table table-custom table-hover">
-
-            <!-- Dynamic Header -->
-            <thead>
-                <tr>
-                    @for (col of columns; track col.field) {
-                    <th scope="col" [class.text-end]="col.type === 'actions'">
-                        {{ col.headerName }}
-                    </th>
-                    }
-                </tr>
-            </thead>
-
-            <!-- Dynamic Body -->
-            <tbody>
-                @for (row of data; track $index) {
-                <tr>
-
-                    @for (col of columns; track col.field) {
-                    <td [class.text-end]="col.type === 'actions'">
-
-                        <!-- Cell Type: Text (Default) -->
-                        @if (!col.type || col.type === 'text') {
-                        <span [style.color]="col.field !== 'name' ? '#4b5563' : '#111827'">
-                            {{ row[col.field] }}
-                        </span>
-                        }
-
-                        <!-- Cell Type: Badge -->
-                        @if (col.type === 'badge') {
-                        <span class="status-badge" [ngClass]="{
-                          'status-active': row[col.field] === 'Active' || row[col.field] === 'Success' || row[col.field] === 'Completed',
-                          'status-leave': row[col.field] === 'On Leave' || row[col.field] === 'Pending' || row[col.field] === 'Warning',
-                          'status-inactive': row[col.field] === 'Inactive' || row[col.field] === 'Failed'
-                        }">
-                            {{ row[col.field] }}
-                        </span>
-                        }
-
-                        <!-- Cell Type: Actions -->
-                        @if (col.type === 'actions') {
-                        <button class="btn btn-sm btn-light text-primary border-0 me-2"><i
-                                class="bi bi-pencil"></i></button>
-                        <button class="btn btn-sm btn-light text-danger border-0"><i class="bi bi-trash"></i></button>
-                        }
-
-                    </td>
-                    }
-
-                </tr>
-                } @empty {
-                <!-- Empty State -->
-                <tr>
-                    <td [attr.colspan]="columns.length" class="text-center py-5 text-muted">
-                        <i class="bi bi-inbox fs-2 mb-2 d-block"></i>
-                        No records found.
-                    </td>
-                </tr>
+        @for (column of columns; track column.field) {
+        <ngx-datatable-column name="{{column.headerName}}" prop="{{column.field}}">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                @if (column.cellTemplate) {
+                <ng-container
+                    *ngTemplateOutlet="column.cellTemplate; context: { $implicit: value, row: row }"></ng-container>
+                } @else {
+                {{ value }}
                 }
+            </ng-template>
+        </ngx-datatable-column>
+        }
+    </ngx-datatable>
 
-            </tbody>
-        </table>
-    </div>
 </div>

@@ -1,102 +1,43 @@
-<div class="border border-dark border-1 rounded-3"
-    style="padding: 40px; font-family: 'Inter', sans-serif; background: #fff; max-width: 800px;">
-    <h1 style="font-size: 14px; font-weight: 700; color: #2563eb; margin-bottom: 40px; text-transform: uppercase;">TOAST
-        VARIANTS</h1>
+<div class="toast" [class]="'toast toast-' + variant" role="alert" aria-live="assertive" aria-atomic="true">
 
-    <!-- Success -->
-    <div class="toast-showcase-row">
-        <div class="toast-showcase-desc">
-            <h2 class="text-success">Success</h2>
-            <p>Indicates a successful action or operation.</p>
+    @if (icon) {
+
+    <i [class]="icon + ' toast-icon-custom'" aria-hidden="true">
+    </i>
+
+    }
+
+
+    <div class="toast-body">
+
+        @if (title) {
+
+        <div class="toast-heading">
+            {{ title }}
         </div>
-        <div class="toast toast-success" role="alert" aria-live="assertive" aria-atomic="true">
-            <i class="bi bi-check-circle-fill toast-icon-custom"></i>
-            <div class="toast-body">
-                <div class="toast-heading">Success!</div>
-                <p>Your changes have been saved successfully.</p>
-            </div>
-            <button type="button" class="btn-close" aria-label="Close"><i class="bi bi-x"></i></button>
-        </div>
+
+        }
+
+
+        @if (message) {
+
+        <p>
+            {{ message }}
+        </p>
+
+        }
+
     </div>
 
-    <!-- Error/Danger -->
-    <div class="toast-showcase-row">
-        <div class="toast-showcase-desc">
-            <h2 class="text-danger">Error</h2>
-            <p>Indicates an error that prevented an action.</p>
-        </div>
-        <div class="toast toast-danger" role="alert" aria-live="assertive" aria-atomic="true">
-            <i class="bi bi-x-circle-fill toast-icon-custom"></i>
-            <div class="toast-body">
-                <div class="toast-heading">Something went wrong!</div>
-                <p>We couldn't complete your request. Please try again.</p>
-            </div>
-            <button type="button" class="btn-close" aria-label="Close"><i class="bi bi-x"></i></button>
-        </div>
-    </div>
 
-    <!-- Warning -->
-    <div class="toast-showcase-row">
-        <div class="toast-showcase-desc">
-            <h2 class="text-warning">Warning</h2>
-            <p>Indicates a warning that needs attention.</p>
-        </div>
-        <div class="toast toast-warning" role="alert" aria-live="assertive" aria-atomic="true">
-            <i class="bi bi-exclamation-triangle toast-icon-custom"></i>
-            <div class="toast-body">
-                <div class="toast-heading">Warning!</div>
-                <p>Please review the information before proceeding.</p>
-            </div>
-            <button type="button" class="btn-close" aria-label="Close"><i class="bi bi-x"></i></button>
-        </div>
-    </div>
+    @if (closable) {
 
-    <!-- Info -->
-    <div class="toast-showcase-row">
-        <div class="toast-showcase-desc">
-            <h2 class="text-primary">Info</h2>
-            <p>Provides general information or updates.</p>
-        </div>
-        <div class="toast toast-info" role="alert" aria-live="assertive" aria-atomic="true">
-            <i class="bi bi-info-circle-fill toast-icon-custom"></i>
-            <div class="toast-body">
-                <div class="toast-heading">Information</div>
-                <p>This is a general information message for you.</p>
-            </div>
-            <button type="button" class="btn-close" aria-label="Close"><i class="bi bi-x"></i></button>
-        </div>
-    </div>
+    <button type="button" class="btn-close" aria-label="Close" (click)="onClose()">
 
-    <!-- Neutral -->
-    <div class="toast-showcase-row">
-        <div class="toast-showcase-desc">
-            <h2 class="text-secondary">Neutral</h2>
-            <p>Indicates a neutral update or status.</p>
-        </div>
-        <div class="toast toast-secondary" role="alert" aria-live="assertive" aria-atomic="true">
-            <i class="bi bi-dash-circle toast-icon-custom"></i>
-            <div class="toast-body">
-                <div class="toast-heading">Update</div>
-                <p>Your session will expire in 5 minutes.</p>
-            </div>
-            <button type="button" class="btn-close" aria-label="Close"><i class="bi bi-x"></i></button>
-        </div>
-    </div>
+        <i class="bi bi-x"></i>
 
-    <!-- Custom / Primary -->
-    <div class="toast-showcase-row">
-        <div class="toast-showcase-desc">
-            <h2 style="color: #8b5cf6;">Custom / Primary</h2>
-            <p>Used for branded or custom messages.</p>
-        </div>
-        <div class="toast toast-primary" role="alert" aria-live="assertive" aria-atomic="true">
-            <i class="bi bi-star-fill toast-icon-custom"></i>
-            <div class="toast-body">
-                <div class="toast-heading">New Feature Available!</div>
-                <p>Check out the new dashboard experience.</p>
-            </div>
-            <button type="button" class="btn-close" aria-label="Close"><i class="bi bi-x"></i></button>
-        </div>
-    </div>
+    </button>
+
+    }
 
 </div>

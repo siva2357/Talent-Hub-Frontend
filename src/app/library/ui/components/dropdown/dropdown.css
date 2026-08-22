@@ -3,30 +3,71 @@
 .custom-dropdown {
   border: 1px solid #f3f4f6;
   border-radius: 8px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025) !important;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.05),
+    0 4px 6px -2px rgba(0, 0, 0, 0.025) !important;
   padding: 12px 0;
-  min-width: 260px; /* Matched the slightly wider look from the design */
+  min-width: 260px;
   font-family: 'Inter', sans-serif;
 }
+
+
+/* =========================================
+   COMMON DROPDOWN ITEM
+   ========================================= */
 
 .custom-dropdown .dropdown-item {
   padding: 14px 24px;
   font-size: 14px;
   font-weight: 500;
   color: #374151;
+
   display: flex;
   align-items: center;
-  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+
+  transition:
+    background-color 0.15s ease-in-out,
+    color 0.15s ease-in-out;
+
+  border: 0;
+  background: transparent;
 }
 
-.custom-dropdown .dropdown-item i {
+
+/* =========================================
+   ICON MODE
+   ========================================= */
+
+.custom-dropdown.dropdown-icon-mode .dropdown-item i {
   color: #6b7280;
   font-size: 18px;
+
   display: inline-flex;
-  width: 24px;
+  align-items: center;
   justify-content: center;
+
+  width: 24px;
+  min-width: 24px;
+
+  margin-right: 12px;
+
   transition: color 0.15s ease-in-out;
 }
+
+
+/* =========================================
+   TEXT MODE
+   ========================================= */
+
+.custom-dropdown.dropdown-text-mode .dropdown-item {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+
+/* =========================================
+   HOVER / FOCUS
+   ========================================= */
 
 .custom-dropdown .dropdown-item:hover,
 .custom-dropdown .dropdown-item:focus {
@@ -34,9 +75,36 @@
   color: #111827;
 }
 
-.custom-dropdown .dropdown-item:hover i,
-.custom-dropdown .dropdown-item:focus i {
+
+/* Icon hover */
+
+.custom-dropdown.dropdown-icon-mode .dropdown-item:hover i,
+.custom-dropdown.dropdown-icon-mode .dropdown-item:focus i {
   color: #111827;
 }
 
-/* Add a bit of spacing between items if desired, but design looks flush */
+
+/* =========================================
+   ACTIVE / SELECTED
+   ========================================= */
+
+.custom-dropdown .dropdown-item.active {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+
+/* =========================================
+   DISABLED
+   ========================================= */
+
+.custom-dropdown .dropdown-item:disabled {
+  color: #9ca3af;
+  background-color: transparent;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.custom-dropdown.dropdown-icon-mode .dropdown-item:disabled i {
+  color: #9ca3af;
+}

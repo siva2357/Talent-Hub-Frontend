@@ -1,4 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
+type BadgeVariant =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'info'
+  | 'purple';
+
+type BadgeStyle =
+  | 'solid'
+  | 'subtle'
+  | 'outline';
 
 @Component({
   selector: 'app-badge',
@@ -7,5 +21,16 @@ import { Component } from '@angular/core';
   styleUrl: './badge.css'
 })
 export class Badge {
-  // Static representation, dynamic logic will be added later
+
+  @Input() label: string = 'badge';
+
+  @Input() variant: BadgeVariant = 'primary';
+
+  @Input() style: BadgeStyle = 'solid';
+
+  @Input() icon: string = '';
+
+  @Input() count: number | string | null = null;
+
+  @Input() rounded: boolean = false;
 }

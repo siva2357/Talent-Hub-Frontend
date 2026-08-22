@@ -1,0 +1,614 @@
+/* =========================================
+   MEET CARD
+   ========================================= */
+
+.meet-card {
+    width: 100%;
+    max-width: 520px;
+    min-height: 100%;
+
+    padding: 24px;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 16px;
+
+    box-shadow:
+        0 4px 14px rgba(15, 23, 42, 0.04);
+
+    font-family: 'Inter', sans-serif;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.meet-card:hover {
+    transform: translateY(-2px);
+
+    border-color: #d5dbe3;
+
+    box-shadow:
+        0 10px 24px rgba(15, 23, 42, 0.07);
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.meet-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+}
+
+.meet-card-title {
+    min-width: 0;
+    flex: 1;
+}
+
+.meet-card-title h6 {
+    margin: 0 0 10px;
+
+    color: #111827;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================
+   TAGS
+   ========================================= */
+
+.meet-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.meet-tag {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 6px 10px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    line-height: 1;
+}
+
+.meet-tag-primary {
+    border-color: #dbeafe;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+}
+
+
+/* =========================================
+   STATUS
+   TOP RIGHT ONLY
+   ========================================= */
+
+.meet-status {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    flex-shrink: 0;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    text-transform: capitalize;
+
+    white-space: nowrap;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+}
+
+
+/* Completed */
+
+.status-completed {
+    background: #f0fdf4;
+
+    color: #15803d;
+}
+
+.status-completed .status-dot {
+    background: #22c55e;
+}
+
+
+/* Upcoming */
+
+.status-upcoming {
+    background: #eff6ff;
+
+    color: #2563eb;
+}
+
+.status-upcoming .status-dot {
+    background: #3b82f6;
+}
+
+
+/* Scheduled */
+
+.status-scheduled {
+    background: #eff6ff;
+
+    color: #2563eb;
+}
+
+.status-scheduled .status-dot {
+    background: #3b82f6;
+}
+
+
+/* Pending */
+
+.status-pending {
+    background: #fff7ed;
+
+    color: #c2410c;
+}
+
+.status-pending .status-dot {
+    background: #f97316;
+}
+
+
+/* Cancelled */
+
+.status-cancelled {
+    background: #fef2f2;
+
+    color: #b91c1c;
+}
+
+.status-cancelled .status-dot {
+    background: #ef4444;
+}
+
+
+/* =========================================
+   PERSON
+   ========================================= */
+
+.meet-person {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+.meet-person-avatar {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border: 1px solid #dbeafe;
+    border-radius: 50%;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.meet-person-info {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+
+    min-width: 0;
+}
+
+.meet-person-label {
+    color: #94a3b8;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 0.8px;
+}
+
+.meet-person-info strong {
+    overflow: hidden;
+
+    color: #334155;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   DESCRIPTION
+   ========================================= */
+
+.meet-description {
+    margin: 0 0 20px;
+
+    color: #64748b;
+
+    font-size: 13px;
+    font-weight: 400;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   DATE / TIME
+   ========================================= */
+
+.meet-details {
+    display: flex;
+    align-items: stretch;
+
+    margin-bottom: 16px;
+    padding: 15px;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 12px;
+
+    background: #f8fafc;
+}
+
+.meet-detail {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 0;
+}
+
+.meet-detail-icon {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    color: #2563eb;
+
+    font-size: 13px;
+
+    box-shadow:
+        0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+.meet-detail>div:last-child {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+
+    min-width: 0;
+}
+
+.meet-detail-label {
+    color: #94a3b8;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 0.8px;
+}
+
+.meet-detail strong {
+    color: #334155;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.meet-detail-divider {
+    width: 1px;
+
+    margin: 0 14px;
+
+    background: #e2e8f0;
+}
+
+
+/* =========================================
+   MEETING LINK
+   ========================================= */
+
+.meet-link-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+    padding: 14px;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 12px;
+
+    background: #ffffff;
+}
+
+.meet-link-content {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.meet-link-label {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    color: #475569;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.meet-link-label i {
+    color: #64748b;
+}
+
+.meet-link {
+    display: block;
+
+    max-width: 230px;
+
+    overflow: hidden;
+
+    color: #2563eb;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   JOIN BUTTON
+   ========================================= */
+
+.meet-join-button {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    flex-shrink: 0;
+
+    padding: 9px 16px;
+
+    border: 1px solid #2563eb;
+    border-radius: 999px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.meet-join-button:hover {
+    border-color: #1d4ed8;
+
+    background: #1d4ed8;
+
+    box-shadow:
+        0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.meet-join-button i {
+    font-size: 10px;
+}
+
+
+/* =========================================
+   FOOTER
+   ========================================= */
+
+.meet-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #eef2f7;
+}
+
+.meet-contract {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    min-width: 0;
+
+    color: #64748b;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.meet-contract i {
+    color: #94a3b8;
+}
+
+
+/* =========================================
+   VIEW DETAILS
+   ========================================= */
+
+.meet-view-button {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    flex-shrink: 0;
+
+    padding: 9px 14px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+
+    background: #ffffff;
+
+    color: #374151;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.meet-view-button:hover {
+    border-color: #bfdbfe;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+}
+
+.meet-view-button i {
+    font-size: 10px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 480px) {
+
+    .meet-card {
+        padding: 18px;
+    }
+
+    .meet-card-header {
+        gap: 10px;
+    }
+
+    .meet-card-title h6 {
+        font-size: 15px;
+    }
+
+    .meet-details {
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+    .meet-detail-divider {
+        width: 100%;
+        height: 1px;
+
+        margin: 0;
+    }
+
+    .meet-link-section {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .meet-link {
+        max-width: 100%;
+    }
+
+    .meet-join-button {
+        width: 100%;
+
+        justify-content: center;
+    }
+
+    .meet-card-footer {
+        align-items: flex-start;
+    }
+
+}

@@ -8,6 +8,7 @@ import { TransactionService } from '../../../core/services/transaction.service';
 import { AdminService } from '../../../core/services/admin.service';
 import { DashboardService } from '../../../core/services/dashboard.service';
 
+
 @Component({
   selector: 'app-dashboard',
   imports: [CommonModule],
@@ -26,7 +27,7 @@ export class Dashboard implements AfterViewInit, OnInit {
   pendingProposals: number = 0;
   totalEarnings: number = 0;
   activities: any[] = [];
-  
+
   // Admin Stats
   totalClients: number = 0;
   totalFreelancers: number = 0;
@@ -38,7 +39,7 @@ export class Dashboard implements AfterViewInit, OnInit {
   @ViewChild('contractsChart') contractsChart!: ElementRef;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object, 
+    @Inject(PLATFORM_ID) private platformId: Object,
     private tokenService: TokenService,
     private profileService: ProfileService,
     private contractService: ContractService,
@@ -62,6 +63,11 @@ export class Dashboard implements AfterViewInit, OnInit {
     }
   }
 
+
+
+
+
+
   loadAdminData() {
     this.adminService.getAdminStats().subscribe({
       next: (res) => {
@@ -70,7 +76,7 @@ export class Dashboard implements AfterViewInit, OnInit {
           this.totalFreelancers = res.totalFreelancers || 0;
           this.activeContracts = res.activeContracts || 0;
           this.totalCommissions = res.totalCommissions || 0;
-          
+
           if (res.chartData) {
             setTimeout(() => this.initAdminCharts(res.chartData), 100);
           }
@@ -85,7 +91,7 @@ export class Dashboard implements AfterViewInit, OnInit {
       next: (res) => {
         if (res.success) {
           this.userName = res.fullName || 'User';
-          
+
           res.stats?.forEach((stat: any) => {
             if (stat.label === 'Active Contracts') this.activeContracts = parseInt(stat.value, 10);
             if (stat.label === 'Total Spent') this.totalSpent = parseFloat(stat.value.replace(/[^0-9.-]+/g, ''));
@@ -105,7 +111,7 @@ export class Dashboard implements AfterViewInit, OnInit {
       next: (res) => {
         if (res.success) {
           this.userName = res.fullName || 'User';
-          
+
           res.stats?.forEach((stat: any) => {
             if (stat.label === 'Active Contracts') this.activeContracts = parseInt(stat.value, 10);
             if (stat.label === 'Total Earnings') this.totalEarnings = parseFloat(stat.value.replace(/[^0-9.-]+/g, ''));
@@ -186,7 +192,7 @@ export class Dashboard implements AfterViewInit, OnInit {
     if (this.contractsChart) {
       const contractData = chartData.contracts || [0, 0, 0, 0];
       const hasContractData = contractData.some((val: number) => val > 0);
-      
+
       this.charts.push(new Chart(this.contractsChart.nativeElement, {
         type: 'doughnut',
         data: {

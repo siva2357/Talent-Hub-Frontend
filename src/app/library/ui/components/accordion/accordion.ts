@@ -1,4 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
+export interface AccordionItem {
+  title: string;
+  content: string;
+  icon?: string;
+  expanded?: boolean;
+}
 
 @Component({
   selector: 'app-accordion',
@@ -7,5 +14,24 @@ import { Component } from '@angular/core';
   styleUrl: './accordion.css'
 })
 export class Accordion {
-  // Static representation, dynamic logic will be added later
+
+  @Input() items: AccordionItem[] = [];
+
+  @Input() multiple: boolean = false;
+
+  toggle(index: number): void {
+    const item = this.items[index];
+
+    if (!this.multiple) {
+      this.items.forEach((accordionItem, itemIndex) => {
+        accordionItem.expanded = itemIndex === index
+          ? !item.expanded
+          : false;
+      });
+
+      return;
+    }
+
+    item.expanded = !item.expanded;
+  }
 }

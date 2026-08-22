@@ -1,66 +1,120 @@
-<div class="input-showcase p-4" style="font-family: 'Inter', sans-serif; background: #f9fafb; min-height: 100vh; color: #000;">
-    
-    <div class="card shadow-sm border-0 rounded-4 p-4 mx-auto" style="max-width: 800px; background: #fff;">
-        <h2 class="mb-4" style="font-weight: 700; color: #111827;">Input Fields</h2>
+<div>
 
-        <div style="margin-bottom: 24px;">
-            <label class="form-label">Text Input</label>
-            <input type="text" class="form-control rounded-3" placeholder="Enter text">
-        </div>
+    @if (label) {
+    <label class="form-label">
+        {{ label }}
 
-        <div style="margin-bottom: 24px;">
-            <label class="form-label">Email Input</label>
-            <input type="email" class="form-control rounded-3" placeholder="Enter email">
-        </div>
+        @if (required) {
+        <span>*</span>
+        }
+    </label>
+    }
 
-        <div style="margin-bottom: 24px;">
-            <label class="form-label">Password Input</label>
-            <input type="password" class="form-control rounded-3" placeholder="Enter password">
-        </div>
+    @if (
+    type === 'text' ||
+    type === 'email' ||
+    type === 'password' ||
+    type === 'date'
+    ) {
 
-        <div style="margin-bottom: 24px;">
-            <label class="form-label">Date Input</label>
-            <input type="date" class="form-control rounded-3" placeholder="Select date">
-        </div>
+    <div class="input-group">
 
-        <div style="margin-bottom: 24px;">
-            <label class="form-label">Textarea</label>
-            <textarea class="form-control rounded-3" placeholder="Enter text here..."></textarea>
-        </div>
+        @if (showIcon && icon) {
+        <span class="input-group-text">
+            <i [class]="icon"></i>
+        </span>
+        }
 
-        <div style="margin-bottom: 24px;">
-            <label class="form-label">Select Dropdown</label>
-            <select class="form-select rounded-3">
-                <option selected disabled>Select an option</option>
-                <option>Option 1</option>
-                <option>Option 2</option>
-                <option>Option 3</option>
-            </select>
-        </div>
-
-        <div style="margin-bottom: 24px;">
-            <label class="form-label">Multi-Select Dropdown</label>
-            <div class="dropdown">
-                <button class="form-control rounded-3 text-start d-flex justify-content-between align-items-center bg-white" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #6b7280; width: 100%;">
-                    <span>Select options</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5l6 6 6-6"/></svg>
-                </button>
-                <div class="dropdown-menu w-100 p-2 shadow-sm mt-1 rounded-3" style="border: 1px solid #d1d5db;">
-                    <label class="dropdown-item d-flex align-items-center gap-2 m-0 rounded-2" style="font-size: 14px; cursor: pointer; color: #374151;">
-                        <input type="checkbox" class="form-check-input mt-0" style="cursor: pointer;" checked> Option A
-                    </label>
-                    <label class="dropdown-item d-flex align-items-center gap-2 m-0 rounded-2" style="font-size: 14px; cursor: pointer; color: #374151;">
-                        <input type="checkbox" class="form-check-input mt-0" style="cursor: pointer;"> Option B
-                    </label>
-                    <label class="dropdown-item d-flex align-items-center gap-2 m-0 rounded-2" style="font-size: 14px; cursor: pointer; color: #374151;">
-                        <input type="checkbox" class="form-check-input mt-0" style="cursor: pointer;" checked> Option C
-                    </label>
-                    <label class="dropdown-item d-flex align-items-center gap-2 m-0 rounded-2" style="font-size: 14px; cursor: pointer; color: #374151;">
-                        <input type="checkbox" class="form-check-input mt-0" style="cursor: pointer;"> Option D
-                    </label>
-                </div>
-            </div>
-        </div>
+        <input [type]="type" class="form-control" [placeholder]="placeholder" [value]="value" [disabled]="disabled"
+            [readonly]="readonly" [required]="required" (input)="onValueChange($event)">
 
     </div>
+
+    }
+
+    @if (type === 'textarea') {
+
+    <textarea class="form-control rounded-3" [placeholder]="placeholder" [value]="value" [disabled]="disabled"
+        [readonly]="readonly" [required]="required" (input)="onValueChange($event)"></textarea>
+
+    }
+
+    @if (type === 'select') {
+
+    <select class="form-select rounded-3" [value]="value" [disabled]="disabled" [required]="required"
+        (change)="onSelectChange($event)">
+
+        @if (placeholder) {
+        <option value="" disabled>
+            {{ placeholder }}
+        </option>
+        }
+
+        @for (option of options; track option.value) {
+        <option [value]="option.value" [disabled]="option.disabled">
+            {{ option.label }}
+        </option>
+        }
+
+    </select>
+
+    }
+
+    @if (type === 'multiselect') {
+
+    <div class="dropdown">
+
+        <button type="button"
+            class="form-control rounded-3 text-start d-flex justify-content-between align-items-center bg-white"
+            [disabled]="disabled" (click)="toggleDropdown()">
+
+            <span>
+                @if (selectedLabels) {
+                {{ selectedLabels }}
+                } @else {
+                {{ placeholder || 'Select options' }}
+                }
+            </span>
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16" fill="none"
+                stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 5l6 6 6-6" />
+            </svg>
+
+        </button>
+
+        @if (isDropdownOpen) {
+
+        <div class="dropdown-menu show w-100 p-2 shadow-sm mt-1 rounded-3" style="border: 1px solid #d1d5db;">
+
+            @for (option of options; track option.value) {
+
+            <label class="dropdown-item d-flex align-items-center gap-2 m-0 rounded-2">
+
+                <input type="checkbox" class="form-check-input mt-0" [checked]="isSelected(option.value)"
+                    [disabled]="option.disabled || disabled || readonly" (change)="toggleOption(option)">
+
+                {{ option.label }}
+
+            </label>
+
+            }
+
+        </div>
+
+        }
+
+    </div>
+
+    }
+
+    @if (validationMessage) {
+
+    <div class="input-validation-message" [class.text-success]="validation === 'success'"
+        [class.text-danger]="validation === 'error'">
+        {{ validationMessage }}
+    </div>
+
+    }
+
 </div>

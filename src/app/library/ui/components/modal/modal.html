@@ -1,313 +1,80 @@
-<div class="modal-showcase border border-dark border-1 rounded-3"
-    style="padding: 40px; font-family: 'Inter', sans-serif; background: #fff; max-width: 1400px; margin: 0 auto; color: #000000;">
+@if (open) {
 
-    <div style="display: flex; gap: 40px;">
+<div class="modal-backdrop-custom">
 
-        <!-- LEFT COLUMN: Modal Variants -->
-        <div style="flex: 2; display: flex; flex-direction: column; gap: 48px;">
+    <div class="modal-dialog" [class]="'modal-dialog modal-' + size">
 
-            <!-- 1. MODAL VARIANT - WITHOUT ICONS -->
-            <section>
-                <h2
-                    style="font-size: 14px; font-weight: 700; color: #2563eb; text-transform: uppercase; margin-bottom: 8px;">
-                    1. Modal Variant - Without Icons</h2>
-                <p style="color: #6b7280; font-size: 13px; margin-bottom: 24px;">Used for simple confirmations and basic
-                    actions. All modals use Medium size.</p>
+        <div class="modal-content">
 
-                <div class="modal-grid-wrapper"
-                    style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
+            <div class="modal-body custom-p position-relative" [class.modal-centered]="variant === 'icon'">
 
-                    <!-- Block Client -->
-                    <div class="modal-dialog modal-md">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <h3 class="modal-custom-title">Block Client?</h3>
-                                <p class="modal-custom-text">Do you want to block this client? The client will not be
-                                    able to contact or hire you until you unblock them.</p>
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button class="btn btn-outline-secondary btn-sm">Cancel</button>
-                                    <button class="btn btn-warning btn-sm">Block Client</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                @if (showClose) {
+                <button type="button" class="custom-close" aria-label="Close" (click)="onClose()">
 
-                    <!-- Unblock Client -->
-                    <div class="modal-dialog modal-md">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <h3 class="modal-custom-title">Unblock Client?</h3>
-                                <p class="modal-custom-text">Do you want to unblock this client? The client will be able
-                                    to contact and hire you again.</p>
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button class="btn btn-outline-secondary btn-sm">Cancel</button>
-                                    <button class="btn btn-success btn-sm">Unblock Client</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <i class="bi bi-x-lg"></i>
 
-                    <!-- Archive Contract -->
-                    <div class="modal-dialog modal-md">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <h3 class="modal-custom-title">Archive Contract?</h3>
-                                <p class="modal-custom-text">Do you want to archive this contract? You can view it in
-                                    the archive section whenever you need.</p>
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button class="btn btn-outline-secondary btn-sm">Cancel</button>
-                                    <button class="btn btn-primary btn-sm">Archive Contract</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                </button>
+                }
 
-                    <!-- Delete Post -->
-                    <div class="modal-dialog modal-md">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <h3 class="modal-custom-title">Delete Post?</h3>
-                                <p class="modal-custom-text">Are you sure you want to delete this post? This action
-                                    cannot be undone and all related data will be permanently removed.</p>
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button class="btn btn-outline-secondary btn-sm">Cancel</button>
-                                    <button class="btn btn-danger btn-sm">Delete Post</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Delete Contract -->
-                    <div class="modal-dialog modal-md">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <h3 class="modal-custom-title">Delete Contract?</h3>
-                                <p class="modal-custom-text">Are you sure you want to delete this contract? This action
-                                    cannot be undone and all related records will be permanently removed.</p>
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button class="btn btn-outline-secondary btn-sm">Cancel</button>
-                                    <button class="btn btn-danger btn-sm">Delete Contract</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                @if (variant === 'icon') {
 
-                    <!-- Delete User -->
-                    <div class="modal-dialog modal-md">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <h3 class="modal-custom-title">Delete User?</h3>
-                                <p class="modal-custom-text">Are you sure you want to delete this user? This action
-                                    cannot be undone and all user data will be permanently removed.</p>
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button class="btn btn-outline-secondary btn-sm">Cancel</button>
-                                    <button class="btn btn-danger btn-sm">Delete User</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="modal-icon-container" [class]="'modal-icon-container icon-' + iconVariant">
+
+                    <i [class]="icon"></i>
 
                 </div>
-            </section>
 
-            <!-- 2. MODAL VARIANT - WITH ICONS -->
-            <section>
-                <h2
-                    style="font-size: 14px; font-weight: 700; color: #2563eb; text-transform: uppercase; margin-bottom: 8px;">
-                    2. Modal Variant - With Icons</h2>
-                <p style="color: #6b7280; font-size: 13px; margin-bottom: 24px;">Used for important actions that need
-                    clear visual indication. All modals use Medium size.</p>
+                }
 
-                <div class="modal-grid-wrapper"
-                    style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
 
-                    <!-- Block Client -->
-                    <div class="modal-dialog modal-md">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative modal-centered">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <div class="modal-icon-container icon-warning"><i class="bi bi-lock"></i></div>
-                                <h3 class="modal-custom-title">Block Client?</h3>
-                                <p class="modal-custom-text">Do you want to block this client? The client will not be
-                                    able to contact or hire you until you unblock them.</p>
-                                <div class="d-flex gap-2 w-100">
-                                    <button class="btn btn-outline-secondary btn-sm flex-fill">Cancel</button>
-                                    <button class="btn btn-warning btn-sm flex-fill">Block Client</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                @if (title) {
+                <h3 class="modal-custom-title">
+                    {{ title }}
+                </h3>
+                }
 
-                    <!-- Unblock Client -->
-                    <div class="modal-dialog modal-md">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative modal-centered">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <div class="modal-icon-container icon-success"><i class="bi bi-unlock"></i></div>
-                                <h3 class="modal-custom-title">Unblock Client?</h3>
-                                <p class="modal-custom-text">Do you want to unblock this client? The client will be able
-                                    to contact and hire you again.</p>
-                                <div class="d-flex gap-2 w-100">
-                                    <button class="btn btn-outline-secondary btn-sm flex-fill">Cancel</button>
-                                    <button class="btn btn-success btn-sm flex-fill">Unblock Client</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Archive Contract -->
-                    <div class="modal-dialog modal-md">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative modal-centered">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <div class="modal-icon-container icon-primary"><i class="bi bi-folder2-open"></i></div>
-                                <h3 class="modal-custom-title">Archive Contract?</h3>
-                                <p class="modal-custom-text">Do you want to archive this contract? You can view it in
-                                    the archive section whenever you need.</p>
-                                <div class="d-flex gap-2 w-100">
-                                    <button class="btn btn-outline-secondary btn-sm flex-fill">Cancel</button>
-                                    <button class="btn btn-primary btn-sm flex-fill">Archive Contract</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                @if (message) {
+                <p class="modal-custom-text">
+                    {{ message }}
+                </p>
+                }
 
-                    <!-- Delete Post -->
-                    <div class="modal-dialog modal-md">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative modal-centered">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <div class="modal-icon-container icon-danger"><i class="bi bi-trash"></i></div>
-                                <h3 class="modal-custom-title">Delete Post?</h3>
-                                <p class="modal-custom-text">Are you sure you want to delete this post? This action
-                                    cannot be undone and all related data will be permanently removed.</p>
-                                <div class="d-flex gap-2 w-100">
-                                    <button class="btn btn-outline-secondary btn-sm flex-fill">Cancel</button>
-                                    <button class="btn btn-danger btn-sm flex-fill">Delete Post</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Delete Contract -->
-                    <div class="modal-dialog modal-md">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative modal-centered">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <div class="modal-icon-container icon-danger"><i class="bi bi-file-earmark-text"></i>
-                                </div>
-                                <h3 class="modal-custom-title">Delete Contract?</h3>
-                                <p class="modal-custom-text">Are you sure you want to delete this contract? This action
-                                    cannot be undone and all related records will be permanently removed.</p>
-                                <div class="d-flex gap-2 w-100">
-                                    <button class="btn btn-outline-secondary btn-sm flex-fill">Cancel</button>
-                                    <button class="btn btn-danger btn-sm flex-fill">Delete Contract</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                @if (showActions) {
 
-                    <!-- Delete User -->
-                    <div class="modal-dialog modal-md">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative modal-centered">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <div class="modal-icon-container icon-purple"><i class="bi bi-person-x"></i></div>
-                                <h3 class="modal-custom-title">Delete User?</h3>
-                                <p class="modal-custom-text">Are you sure you want to delete this user? This action
-                                    cannot be undone and all user data will be permanently removed.</p>
-                                <div class="d-flex gap-2 w-100">
-                                    <button class="btn btn-outline-secondary btn-sm flex-fill">Cancel</button>
-                                    <button class="btn btn-danger btn-sm flex-fill">Delete User</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div [class]="variant === 'icon'
+                        ? 'd-flex gap-2 w-100'
+                        : 'd-flex justify-content-end gap-2'">
+
+                    @if (showCancel) {
+                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                        [class.flex-fill]="variant === 'icon'" (click)="onCancel()">
+
+                        {{ cancelLabel }}
+
+                    </button>
+                    }
+
+
+                    <button type="button" class="btn btn-sm" [class]="'btn-' + confirmVariant"
+                        [class.flex-fill]="variant === 'icon'" (click)="onConfirm()">
+
+                        {{ confirmLabel }}
+
+                    </button>
 
                 </div>
-            </section>
 
-        </div>
+                }
 
-        <!-- RIGHT COLUMN: Modal Sizes -->
-        <div style="flex: 1; display: flex; flex-direction: column; gap: 32px; max-width: 450px;">
-            <h2
-                style="font-size: 14px; font-weight: 700; color: #2563eb; text-transform: uppercase; margin-bottom: -16px;">
-                Modal Sizes (Reference)</h2>
-
-            <!-- Small -->
-            <div>
-                <p style="font-size: 13px; font-weight: 600; margin-bottom: 12px;">Small (400px)</p>
-                <div
-                    style="border: 1px dashed #cbd5e1; border-radius: 12px; padding: 24px; background: #f8fafc; display: flex; justify-content: center;">
-                    <div class="modal-dialog modal-sm w-100 m-0">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <h3 class="modal-custom-title">Small Modal</h3>
-                                <p class="modal-custom-text">This is a small modal example.</p>
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button class="btn btn-outline-secondary btn-sm">Cancel</button>
-                                    <button class="btn btn-primary btn-sm">Confirm</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Medium -->
-            <div>
-                <p style="font-size: 13px; font-weight: 600; margin-bottom: 12px;">Medium (600px)</p>
-                <div
-                    style="border: 1px dashed #cbd5e1; border-radius: 12px; padding: 24px; background: #f8fafc; display: flex; justify-content: center;">
-                    <div class="modal-dialog modal-md w-100 m-0">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <h3 class="modal-custom-title">Medium Modal</h3>
-                                <p class="modal-custom-text">This is a medium modal example with more content and
-                                    details to describe the action.</p>
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button class="btn btn-outline-secondary btn-sm">Cancel</button>
-                                    <button class="btn btn-primary btn-sm">Confirm</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Large -->
-            <div>
-                <p style="font-size: 13px; font-weight: 600; margin-bottom: 12px;">Large (800px)</p>
-                <div
-                    style="border: 1px dashed #cbd5e1; border-radius: 12px; padding: 24px; background: #f8fafc; display: flex; justify-content: center;">
-                    <div class="modal-dialog modal-lg w-100 m-0">
-                        <div class="modal-content">
-                            <div class="modal-body custom-p position-relative">
-                                <button class="custom-close"><i class="bi bi-x-lg"></i></button>
-                                <h3 class="modal-custom-title">Large Modal</h3>
-                                <p class="modal-custom-text">This is a large modal example with even more content and
-                                    details. It is used when you need to display more information to the user before
-                                    they take an action.</p>
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button class="btn btn-outline-secondary btn-sm">Cancel</button>
-                                    <button class="btn btn-primary btn-sm">Confirm</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
         </div>
+
     </div>
 
 </div>
+
+}

@@ -278,6 +278,8 @@
     }
     @else if (role === 'client') {
     <!-- Header Section -->
+
+
     <header class="mb-4 d-flex justify-content-between align-items-start">
       <div>
         <h1 class="fw-bold fs-4 mb-1">Welcome back, {{ userName }}</h1>
@@ -364,7 +366,8 @@
                   }"></i>
                 </div>
                 <div class="feed-details flex-grow-1 ms-3">
-                  <p class="mb-0 small text-dark"><strong class="fw-bold">{{ activity.user }}</strong> {{ activity.action }}</p>
+                  <p class="mb-0 small text-dark"><strong class="fw-bold">{{ activity.user }}</strong> {{
+                    activity.action }}</p>
                   <span class="text-muted" style="font-size: 0.75rem;">{{ activity.project }}</span>
                 </div>
                 <span class="badge badge-recent ms-3">{{ activity.time }}</span>

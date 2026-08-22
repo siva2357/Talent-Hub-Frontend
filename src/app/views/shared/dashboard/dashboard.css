@@ -20,7 +20,7 @@
 .top-left {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
   top: -150px;
   left: -150px;
 }
@@ -28,7 +28,7 @@
 .bottom-right {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
   bottom: -200px;
   right: -200px;
 }
@@ -60,9 +60,20 @@
   border: 1px dashed rgba(168, 85, 247, 0.15);
 }
 
-.circle-1 { width: 300px; height: 300px; }
-.circle-2 { width: 500px; height: 500px; }
-.circle-3 { width: 700px; height: 700px; }
+.circle-1 {
+  width: 300px;
+  height: 300px;
+}
+
+.circle-2 {
+  width: 500px;
+  height: 500px;
+}
+
+.circle-3 {
+  width: 700px;
+  height: 700px;
+}
 
 /* Premium Card (Glassmorphism) */
 .glass-card {
@@ -94,7 +105,7 @@
 .control-item {
   transition: all 0.2s ease;
   cursor: pointer;
-  background-color: rgba(255,255,255,0.8);
+  background-color: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(168, 85, 247, 0.1) !important;
 }
 
@@ -128,4 +139,36 @@
 .chart-placeholder {
   width: 100%;
   height: 250px;
+}
+
+
+
+
+
+
+
+.contract-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.contract-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .contract-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .contract-card-grid {
+    grid-template-columns: 1fr;
+  }
 }
