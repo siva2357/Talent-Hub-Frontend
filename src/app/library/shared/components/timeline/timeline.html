@@ -1,0 +1,155 @@
+@if (steps.length) {
+
+<div class="timeline-container">
+
+    @for (step of steps; track $index) {
+
+    <div class="timeline-step" [class]="modeClass" [class.completed]="step.status === 'completed'"
+        [class.active]="step.status === 'active'" [class.disabled]="step.status === 'disabled'"
+        [class.error]="step.status === 'error'" [class.skipped]="step.status === 'skipped'">
+
+
+        <!-- Optional Status Label -->
+
+        @if (showStatusLabel) {
+
+        <div class="timeline-title-top">
+
+            {{ step.status | titlecase }}
+
+        </div>
+
+        }
+
+
+        <!-- NODE + LINES -->
+
+        <div class="timeline-node-wrapper">
+
+
+            <!-- LEFT LINE -->
+
+            <div class="timeline-line left-line" [class.completed-line]="isLeftLineCompleted($index)">
+            </div>
+
+
+            <!-- NODE -->
+
+            <div class="timeline-node" [class.final-node]="$last && step.status === 'upcoming'"
+                [class.solid]="step.status === 'disabled'">
+
+
+                <!-- =========================
+                     WITH ICON
+                     ========================= -->
+
+                @if (mode === 'with-icon') {
+
+                <div class="halo"></div>
+
+                <i [class]="getStepIcon(step)"></i>
+
+                }
+
+
+                <!-- =========================
+                     NUMBERED
+                     ========================= -->
+
+                @else if (mode === 'numbered') {
+
+                {{ $index + 1 }}
+
+                }
+
+
+                <!-- =========================
+                     MINIMAL
+                     ========================= -->
+
+                @else if (mode === 'minimal') {
+
+                @if (step.status === 'completed') {
+
+                <i class="bi bi-check"></i>
+
+                } @else if (step.status === 'active') {
+
+                <!-- Empty active node -->
+
+                }
+
+                }
+
+
+                <!-- =========================
+                     DEFAULT
+                     ========================= -->
+
+                @else {
+
+                @if (step.status === 'completed') {
+
+                <i class="bi bi-check"></i>
+
+                } @else if (step.status === 'active') {
+
+                <div class="timeline-inner-dot"></div>
+
+                } @else if (step.status === 'error') {
+
+                <div class="timeline-inner-dot-error"></div>
+
+                } @else if (step.status === 'skipped') {
+
+                <i class="bi bi-x"></i>
+
+                } @else if ($last) {
+
+                <div class="timeline-inner-dot-gray"></div>
+
+                }
+
+                }
+
+            </div>
+
+
+            <!-- RIGHT LINE -->
+
+            <div class="timeline-line right-line" [class.completed-line]="isRightLineCompleted($index)">
+            </div>
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div class="timeline-content">
+
+            <div class="timeline-title">
+
+                {{ step.title }}
+
+            </div>
+
+
+            @if (step.description) {
+
+            <div class="timeline-desc">
+
+                {{ step.description }}
+
+            </div>
+
+            }
+
+        </div>
+
+    </div>
+
+    }
+
+</div>
+
+}

@@ -1,0 +1,80 @@
+@if (open) {
+
+<div class="modal-backdrop-custom">
+
+    <div class="modal-dialog" [class]="'modal-dialog modal-' + size">
+
+        <div class="modal-content">
+
+            <div class="modal-body custom-p position-relative" [class.modal-centered]="variant === 'icon'">
+
+                @if (showClose) {
+                <button type="button" class="custom-close" aria-label="Close" (click)="onClose()">
+
+                    <i class="bi bi-x-lg"></i>
+
+                </button>
+                }
+
+
+                @if (variant === 'icon') {
+
+                <div class="modal-icon-container" [class]="'modal-icon-container icon-' + iconVariant">
+
+                    <i [class]="icon"></i>
+
+                </div>
+
+                }
+
+
+                @if (title) {
+                <h3 class="modal-custom-title">
+                    {{ title }}
+                </h3>
+                }
+
+
+                @if (message) {
+                <p class="modal-custom-text">
+                    {{ message }}
+                </p>
+                }
+
+
+                @if (showActions) {
+
+                <div [class]="variant === 'icon'
+                        ? 'd-flex gap-2 w-100'
+                        : 'd-flex justify-content-end gap-2'">
+
+                    @if (showCancel) {
+                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                        [class.flex-fill]="variant === 'icon'" (click)="onCancel()">
+
+                        {{ cancelLabel }}
+
+                    </button>
+                    }
+
+
+                    <button type="button" class="btn btn-sm" [class]="'btn-' + confirmVariant"
+                        [class.flex-fill]="variant === 'icon'" (click)="onConfirm()">
+
+                        {{ confirmLabel }}
+
+                    </button>
+
+                </div>
+
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+}

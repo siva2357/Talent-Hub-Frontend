@@ -1,0 +1,29 @@
+<div class="alert d-flex w-100" [class]="'alert alert-' + variant" [class.align-items-start]="mode === 'default'"
+    [class.align-items-center]="mode === 'single-line'" [class.single-line]="mode === 'single-line'" role="alert">
+
+    @if (showIcon && icon) {
+    <i [class]="icon + ' alert-icon-custom me-3'" aria-hidden="true">
+    </i>
+    }
+
+    <div class="flex-grow-1">
+
+        @if (title) {
+        <h4 class="alert-heading">
+            {{ title }}
+        </h4>
+        }
+
+        @if (message) {
+        <p>{{ message }}</p>
+        }
+
+    </div>
+
+    @if (closable) {
+    <button type="button" class="btn-close ms-2" aria-label="Close" (click)="onClose()">
+        <i class="bi bi-x"></i>
+    </button>
+    }
+
+</div>

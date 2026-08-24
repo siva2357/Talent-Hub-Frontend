@@ -1,0 +1,211 @@
+<div class="management-container p-4 d-flex justify-content-center align-items-start bg-light" style="min-height: 100vh;">
+  
+  <form [formGroup]="portfolioForm" (ngSubmit)="onSubmit()" class="glass-card rounded-4 bg-white w-100 mx-auto" style="max-width: 1000px;">
+    
+    <!-- Header -->
+    <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+        <div class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px;">
+          <i class="bi bi-file-earmark-plus fs-4"></i>
+        </div>
+        <div>
+          <h1 class="fs-5 fw-bold text-dark mb-1">Add Portfolio Project</h1>
+          <p class="text-muted small mb-0">Showcase your work and attract potential clients.</p>
+        </div>
+      </div>
+      <button routerLink="/portfolio" class="btn btn-light text-muted border rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+        <i class="bi bi-x fs-5"></i>
+      </button>
+    </div>
+
+    <div class="card-body p-4 p-md-5">
+      <div class="row g-5">
+        
+        <!-- Left Column -->
+        <div class="col-lg-6">
+          
+          <!-- Project Information -->
+          <div class="mb-5">
+            <h2 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-4"><i class="bi bi-file-earmark-text text-primary"></i> Project Information</h2>
+            
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Project Title <span class="text-danger">*</span></label>
+                <input type="text" formControlName="title" class="form-control" placeholder="e.g. Real-time Analytics Dashboard" style="font-size: 0.85rem;">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Project Category / Type <span class="text-danger">*</span></label>
+                <select formControlName="projectType" class="form-select text-muted" style="font-size: 0.85rem;">
+                  <option value="">Select category / type</option>
+                  @for (type of projectTypes; track type) {
+                    <option [value]="type">{{ type }}</option>
+                  }
+                </select>
+              </div>
+              
+              <div class="col-md-6">
+                <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Your Role / Contribution <span class="text-danger">*</span></label>
+                <input type="text" formControlName="role" class="form-control" placeholder="e.g. Frontend Lead, Fullstack Architect" style="font-size: 0.85rem;">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Project Duration</label>
+                <div class="d-flex gap-2">
+                  <div class="input-group">
+                    <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-calendar"></i></span>
+                    <input type="date" formControlName="startDate" class="form-control border-start-0 ps-0" style="font-size: 0.85rem;">
+                  </div>
+                  <div class="input-group">
+                    <input type="date" formControlName="endDate" class="form-control" style="font-size: 0.85rem;">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 mt-4">
+                <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Project Description <span class="text-danger">*</span></label>
+                
+                <!-- Rich Text Editor Placeholder -->
+                <div class="border rounded-3 overflow-hidden">
+                  <div class="bg-light border-bottom p-2 d-flex flex-wrap gap-2 text-muted" style="font-size: 0.8rem;">
+                    <button class="btn btn-sm btn-light border-0"><i class="bi bi-type-bold"></i></button>
+                    <button class="btn btn-sm btn-light border-0"><i class="bi bi-type-italic"></i></button>
+                    <button class="btn btn-sm btn-light border-0"><i class="bi bi-type-underline"></i></button>
+                    <button class="btn btn-sm btn-light border-0"><i class="bi bi-list-ul"></i></button>
+                    <button class="btn btn-sm btn-light border-0"><i class="bi bi-list-ol"></i></button>
+                    <div class="border-end mx-1"></div>
+                    <button class="btn btn-sm btn-light border-0"><i class="bi bi-link-45deg"></i></button>
+                    <button class="btn btn-sm btn-light border-0"><i class="bi bi-image"></i></button>
+                    <div class="border-end mx-1"></div>
+                    <button type="button" class="btn btn-sm btn-light border-0 ms-auto"><i class="bi bi-arrow-counterclockwise"></i></button>
+                    <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-arrow-clockwise"></i></button>
+                  </div>
+                  <textarea formControlName="description" class="form-control border-0 bg-white shadow-none p-3" rows="5" placeholder="Describe the scope, challenges solved, and deliverables..." style="font-size: 0.85rem; resize: none;"></textarea>
+                  <div class="bg-white p-2 text-end text-muted border-top" style="font-size: 0.7rem;">0 / 1000</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Showcase Media -->
+          <div>
+            <h2 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-4"><i class="bi bi-image text-primary"></i> Project Showcase Media</h2>
+            <p class="text-muted mb-3" style="font-size: 0.75rem;">Add images or videos to showcase your project (Max size: 5MB per file)</p>
+            
+            <!-- Upload Area -->
+            <label 
+              class="border border-2 border-dashed rounded-4 p-5 text-center cursor-pointer hover-bg-light transition-all bg-light bg-opacity-50 d-block"
+              (dragover)="onDragOver($event)"
+              (drop)="onDrop($event)">
+              <input type="file" multiple class="d-none" (change)="onFileSelected($event)" accept="image/*,video/*">
+              <i class="bi bi-cloud-arrow-up text-primary fs-1 mb-2 d-block"></i>
+              <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.85rem;">Drag & drop files here or click to browse</span>
+              <span class="text-muted" style="font-size: 0.7rem;">Supported formats: Image (JPG, PNG, WEBP) / Video (MP4, WEBM)</span>
+            </label>
+            <div class="d-flex justify-content-between text-muted mt-2 px-1" style="font-size: 0.7rem;">
+              <span>Preview (Max 6 files)</span>
+              <span>{{ selectedFiles.length }} / 6</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-lg-6">
+          
+          <!-- Technologies & Links -->
+          <div class="mb-5">
+            <h2 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-4"><i class="bi bi-code-slash text-primary"></i> Technologies & Links</h2>
+            
+            <div class="mb-4">
+              <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Technologies Used (comma-separated) <span class="text-danger">*</span></label>
+              <input type="text" formControlName="tags" class="form-control mb-1" placeholder="e.g. Angular, TypeScript, Bootstrap, Node.js, MongoDB" style="font-size: 0.85rem;">
+              <span class="text-muted" style="font-size: 0.7rem;">Add all technologies, frameworks, libraries used in this project.</span>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;"><i class="bi bi-link-45deg"></i> Project URL / Live Demo</label>
+              <input type="text" formControlName="projectUrl" class="form-control mb-1" placeholder="e.g. https://yourproject.com" style="font-size: 0.85rem;">
+              <span class="text-muted" style="font-size: 0.7rem;">Live preview or hosted project URL (if available)</span>
+            </div>
+
+            <div>
+              <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;"><i class="bi bi-github"></i> GitHub Repository (Optional)</label>
+              <input type="text" class="form-control mb-1" placeholder="e.g. https://github.com/username/project" style="font-size: 0.85rem;">
+              <span class="text-muted" style="font-size: 0.7rem;">Link to your GitHub repository</span>
+            </div>
+          </div>
+
+          <!-- Additional Details -->
+          <div>
+            <h2 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-4"><i class="bi bi-info-circle text-primary"></i> Additional Details</h2>
+            
+            <div class="row g-4 mb-4">
+              <div class="col-md-6">
+                <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Project Status <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text bg-white border-end-0"><i class="bi bi-circle-fill text-success" style="font-size: 0.5rem;"></i></span>
+                  <select class="form-select border-start-0 ps-0 fw-semibold text-dark" style="font-size: 0.85rem;">
+                    <option>Published</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Visibility <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text bg-white border-end-0"><i class="bi bi-globe text-primary"></i></span>
+                  <select class="form-select border-start-0 ps-0 fw-semibold text-dark" style="font-size: 0.85rem;">
+                    <option>Public</option>
+                  </select>
+                </div>
+                <span class="text-muted d-block mt-1" style="font-size: 0.7rem;">Anyone can view this project.</span>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center p-3 border rounded-3 bg-light mb-4">
+              <div>
+                <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.8rem;">Featured Project</span>
+                <span class="text-muted" style="font-size: 0.7rem;">Show this project on top of your portfolio</span>
+              </div>
+              <div class="form-check form-switch fs-5 mb-0">
+                <input class="form-check-input cursor-pointer" type="checkbox" role="switch" checked>
+              </div>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Client / Company (Optional)</label>
+                <input type="text" class="form-control" placeholder="e.g. Acme Inc." style="font-size: 0.85rem;">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-dark fw-semibold" style="font-size: 0.8rem;">Team Size (Optional)</label>
+                <input type="text" class="form-control" placeholder="e.g. 4" style="font-size: 0.85rem;">
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="card-footer bg-white border-top p-4 d-flex justify-content-between align-items-center rounded-bottom-4">
+      <div class="d-flex align-items-center gap-3 bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-3">
+        <i class="bi bi-info-circle-fill"></i>
+        <div>
+          <span class="d-block fw-bold" style="font-size: 0.75rem;">You can edit these details anytime</span>
+          <span class="text-muted" style="font-size: 0.7rem;">Keep your portfolio updated to attract more clients.</span>
+        </div>
+      </div>
+      <div class="d-flex gap-3">
+        <button type="button" routerLink="/portfolio" class="btn btn-white border fw-semibold shadow-sm px-4" style="font-size: 0.85rem;" [disabled]="isSubmitting">Cancel</button>
+        <button type="button" class="btn btn-outline-primary fw-semibold shadow-sm px-4 bg-white" style="font-size: 0.85rem;" [disabled]="isSubmitting">Save as Draft</button>
+        <button type="submit" class="btn btn-primary rounded-pill fw-semibold shadow-sm fw-bold d-flex align-items-center gap-2 px-4 shadow-sm" style="font-size: 0.85rem;" [disabled]="isSubmitting || portfolioForm.invalid">
+          <i class="bi bi-send" *ngIf="!isSubmitting"></i>
+          <span class="spinner-border spinner-border-sm" *ngIf="isSubmitting"></span>
+          {{ isSubmitting ? 'Publishing...' : 'Publish Portfolio' }}
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>

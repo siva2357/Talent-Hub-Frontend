@@ -1,0 +1,27 @@
+<ul class="dropdown-menu custom-dropdown shadow show" [class.dropdown-icon-mode]="mode === 'icon'"
+    [class.dropdown-text-mode]="mode === 'text'">
+
+    @for (item of items; track item.value) {
+
+    <li>
+
+        <button type="button" class="dropdown-item" [disabled]="item.disabled" (click)="onItemClick(item)">
+
+            @if (mode === 'icon' && item.icon) {
+
+            <i [class]="item.icon" aria-hidden="true">
+            </i>
+
+            }
+
+            <span>
+                {{ item.label }}
+            </span>
+
+        </button>
+
+    </li>
+
+    }
+
+</ul>

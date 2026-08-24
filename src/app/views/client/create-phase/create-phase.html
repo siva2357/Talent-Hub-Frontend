@@ -1,0 +1,256 @@
+<div class="dashboard-container position-relative p-4">
+  <!-- Decorative background wrapper -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper (Glassmorphism) -->
+  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
+    <!-- Header -->
+    <header class="mb-4 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <a [routerLink]="['/contract-progress', contractId]" class="text-dark text-decoration-none me-3"><i
+            class="bi bi-arrow-left fs-4"></i></a>
+        <div>
+          <h1 class="fw-bold fs-4 mb-1 text-dark d-flex align-items-center gap-2">
+            <div class="rounded-circle d-flex align-items-center justify-content-center"
+              style="width: 32px; height: 32px; border: 2px solid var(--primary-color);">
+              <i class="bi bi-file-earmark-plus text-primary"></i>
+            </div>
+            {{ isEditMode ? 'Edit Phase' : 'Create New Phase' }}
+          </h1>
+          <p class="text-muted small mb-0 ms-5">Define phase details, deliverables, instructions and upload references
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Split -->
+    <div class="row g-4 mb-5" [formGroup]="phaseForm">
+
+      <!-- Left Column (Form Fields) -->
+      <div class="col-lg-8">
+
+        <!-- 1. Basic Details -->
+        <div class="mb-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+              style="width: 24px; height: 24px; font-size: 0.75rem;">1</div>
+            <h2 class="fs-6 fw-bold mb-0 text-dark">Basic Details</h2>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-12">
+              <label class="form-label fw-bold text-dark small mb-1">Phase Name <span
+                  class="text-danger">*</span></label>
+              <input type="text" class="form-control" formControlName="phaseName"
+                placeholder="Frontend Development - Dashboard">
+              <div class="text-end text-muted mt-1" style="font-size: 0.65rem;">{{
+                phaseForm.get('phaseName')?.value?.length || 0 }}/100</div>
+            </div>
+
+            <div class="col-md-6 mt-3">
+              <label class="form-label fw-bold text-dark small mb-1">Deadline <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-white text-muted"><i class="bi bi-calendar3"></i></span>
+                <input type="date" class="form-control border-start-0 ps-0" formControlName="deadline">
+              </div>
+              <div class="text-muted mt-1" style="font-size: 0.65rem;">Select deadline</div>
+            </div>
+            <div class="col-md-6 mt-3">
+              <label class="form-label fw-bold text-dark small mb-1">Phase Budget (₹) <span
+                  class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-white text-muted">₹</span>
+                <input type="number" class="form-control border-start-0 ps-0" formControlName="budget"
+                  placeholder="15000">
+              </div>
+              <div class="text-muted mt-1" style="font-size: 0.65rem;">Set budget for this phase</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Deliverables -->
+        <div class="mb-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+              style="width: 24px; height: 24px; font-size: 0.75rem;">2</div>
+            <h2 class="fs-6 fw-bold mb-0 text-dark">Deliverables</h2>
+          </div>
+          <p class="text-muted small mb-3">List all expected deliverables for this phase</p>
+
+          <div class="d-flex flex-column gap-2 mb-3" formArrayName="deliverables">
+            @for (deliverable of deliverables.controls; track $index) {
+            <div class="input-group">
+              <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-grip-vertical"></i></span>
+              <span class="input-group-text bg-white border-start-0 border-end-0 px-2"><i
+                  class="bi bi-check-square-fill text-primary"></i></span>
+              <input type="text" class="form-control border-start-0 border-end-0 ps-0" [formControlName]="$index"
+                placeholder="Enter deliverable">
+              <span class="input-group-text bg-white text-danger cursor-pointer" (click)="removeDeliverable($index)"><i
+                  class="bi bi-trash"></i></span>
+            </div>
+            }
+          </div>
+          <button class="btn btn-outline-primary btn-sm bg-white fw-bold w-100 py-2 border-dashed"
+            (click)="addDeliverable()">+ Add Deliverable</button>
+        </div>
+
+        <!-- 4. Acceptance Criteria -->
+        <div class="mb-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+              style="width: 24px; height: 24px; font-size: 0.75rem;">3</div>
+            <h2 class="fs-6 fw-bold mb-0 text-dark">Acceptance Criteria</h2>
+          </div>
+          <p class="text-muted small mb-3">Define completion criteria for this phase</p>
+
+          <div class="d-flex flex-column gap-2 mb-3" formArrayName="acceptanceCriteria">
+            @for (criteria of acceptanceCriteria.controls; track $index) {
+            <div class="input-group">
+              <span class="input-group-text bg-white text-muted border-end-0 px-2"><i
+                  class="bi bi-check-square-fill text-primary"></i></span>
+              <input type="text" class="form-control border-start-0 border-end-0 ps-0" [formControlName]="$index"
+                placeholder="Enter criteria">
+              <span class="input-group-text bg-white text-danger cursor-pointer" (click)="removeCriteria($index)"><i
+                  class="bi bi-trash"></i></span>
+            </div>
+            }
+          </div>
+          <button class="btn btn-outline-primary btn-sm bg-white fw-bold w-100 py-2 border-dashed"
+            (click)="addCriteria()">+ Add Criteria</button>
+        </div>
+
+      </div>
+
+      <!-- Middle/Right Column -->
+      <div class="col-lg-4">
+
+        <!-- Budget Summary -->
+        <div class="glass-card rounded-3 mb-4 p-3 bg-white">
+          <h3 class="fs-6 fw-bold mb-3 d-flex align-items-center gap-2"><i class="bi bi-wallet2 text-primary"></i>
+            Budget Summary</h3>
+          <ul class="list-group list-group-flush small">
+            <li class="list-group-item d-flex justify-content-between px-0 py-2 border-0">
+              <span class="text-muted">Total Contract Budget</span>
+              <span class="fw-bold" style="color: #a855f7;">₹{{ contract?.estimatedBudget | number }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between px-0 py-2 border-0">
+              <span class="text-muted">This Phase Budget</span>
+              <span class="fw-bold text-warning">₹{{ phaseForm.get('budget')?.value || 0 | number }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between px-0 py-2 border-0 border-top mt-2 pt-3">
+              <span class="text-dark fw-bold">Remaining Budget</span>
+              <span class="fw-bold fs-6" [ngClass]="((contract?.estimatedBudget || 0) - (contract?.spent || 0) - (phaseForm.get('budget')?.value || 0)) < 0 ? 'text-danger' : 'text-success'">
+                ₹{{ (contract?.estimatedBudget || 0) - (contract?.spent || 0) - (phaseForm.get('budget')?.value || 0) | number }}
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Phase Preview -->
+        <div class="glass-card rounded-3 mb-4 p-4 bg-white border border-light shadow-sm">
+          <h3 class="fs-6 fw-bold mb-4 d-flex align-items-center gap-2 border-bottom pb-2"><i
+              class="bi bi-eye text-primary"></i> Phase Preview</h3>
+
+          <div class="mb-3">
+            <p class="text-muted small mb-1 text-uppercase fw-semibold"
+              style="font-size: 0.65rem; letter-spacing: 0.5px;">Phase Name</p>
+            <p class="fw-bold text-dark mb-0 fs-6">{{ phaseForm.get('phaseName')?.value || 'Untitled Phase' }}</p>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-6">
+              <div class="p-2 rounded bg-light border border-secondary border-opacity-10 h-100">
+                <p class="text-muted small mb-1" style="font-size: 0.65rem;"><i class="bi bi-calendar3 me-1"></i>
+                  Deadline</p>
+                <p class="fw-semibold text-dark small mb-0">{{ phaseForm.get('deadline')?.value ?
+                  (phaseForm.get('deadline')?.value | date:'MMM dd, yyyy') : 'Not set' }}</p>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-2 rounded bg-light border border-secondary border-opacity-10 h-100">
+                <p class="text-muted small mb-1" style="font-size: 0.65rem;"><i class="bi bi-wallet2 me-1"></i> Budget
+                </p>
+                <p class="fw-bold text-dark small mb-0 text-success">₹{{ phaseForm.get('budget')?.value || 0 | number }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3 rounded border border-primary border-opacity-10 bg-primary bg-opacity-10">
+            <p class="text-primary fw-bold small mb-2 d-flex justify-content-between align-items-center"
+              style="font-size: 0.75rem;">
+              Deliverables
+              <span class="badge bg-primary rounded-pill">{{ deliverables.length }}</span>
+            </p>
+            <ul class="list-unstyled small text-dark mb-0 d-flex flex-column gap-2" style="font-size: 0.75rem;">
+              @for (d of deliverables.controls; track $index) {
+              <li *ngIf="d.value && $index < 4"
+                class="d-flex align-items-start gap-2 bg-white p-2 rounded border shadow-sm">
+                <i class="bi bi-check-circle-fill text-success mt-1" style="font-size: 0.7rem;"></i>
+                <span class="text-truncate">{{ d.value }}</span>
+              </li>
+              }
+              <li *ngIf="deliverables.length > 4" class="text-muted text-center pt-2"
+                style="font-size: 0.7rem; font-style: italic;">
+                +{{ deliverables.length - 4 }} more items
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- AI Assistant -->
+        <div class="glass-card rounded-3 p-3 bg-white border border-primary border-opacity-25">
+          <h3 class="fs-6 fw-bold mb-2 d-flex align-items-center gap-2" style="color: #a855f7;"><i
+              class="bi bi-stars"></i> AI Assistant</h3>
+          <p class="text-muted mb-3" style="font-size: 0.7rem;">Based on your contract and similar projects, here are my
+            suggestions</p>
+
+          <ul class="list-group list-group-flush small mb-3" style="font-size: 0.75rem;">
+            <li class="list-group-item d-flex justify-content-between px-0 py-1 border-0">
+              <span class="text-muted"><i class="bi bi-clock me-1 text-success"></i> Estimated Duration</span>
+              <span class="fw-bold">12 - 15 days</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between px-0 py-1 border-0">
+              <span class="text-muted"><i class="bi bi-wallet2 me-1 text-success"></i> Recommended Budget</span>
+              <span class="fw-bold">₹12,000 - ₹18,000</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between px-0 py-1 border-0">
+              <span class="text-muted"><i class="bi bi-bar-chart me-1 text-success"></i> Complexity Level</span>
+              <span class="fw-bold">Medium</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between px-0 py-1 border-0">
+              <span class="text-muted"><i class="bi bi-shield me-1 text-warning"></i> Potential Risk</span>
+              <span class="fw-bold">Low</span>
+            </li>
+          </ul>
+
+          <button class="btn btn-outline-primary btn-sm w-100 fw-bold border-opacity-50"
+            style="color: #a855f7; border-color: #a855f7;">
+            <i class="bi bi-magic"></i> Apply Suggestions
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="d-flex justify-content-between ">
+      <button type="button" (click)="resetForm()" class="btn btn-link text-dark text-decoration-none px-0"><i
+          class="bi bi-x me-1"></i> Cancel</button>
+      <div class="d-flex gap-2">
+        <button class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4" (click)="createPhase()"><i
+            class="bi me-1" [ngClass]="isEditMode ? 'bi-check2' : 'bi-plus-circle'"></i> {{ isEditMode ? 'Save Changes' : 'Create Phase' }}</button>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,83 @@
+<div class="d-flex flex-column vh-100 overflow-hidden">
+
+  <!-- Navbar now spans full width on top -->
+  <app-user-navbar (toggleSidebar)="sidebar.toggleSidebar()"></app-user-navbar>
+
+  <div class="d-flex flex-grow-1 overflow-hidden">
+    <app-sidebar #sidebar></app-sidebar>
+    <main class="flex-grow-1 bg-light overflow-y-auto">
+      <div class="container-fluid py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2>UI Library</h2>
+        </div>
+
+        <hr>
+
+        <!-- UI Library Components Section -->
+        <div class="row mt-4 mb-5">
+          <div class="col-12">
+            <h4 class="mb-4">UI Library Components</h4>
+            <div class="d-flex flex-column gap-4">
+              <app-accordion></app-accordion>
+              <app-alert></app-alert>
+              <app-badge></app-badge>
+              <app-button></app-button>
+              <app-chip></app-chip>
+              <app-input-field></app-input-field>
+              <app-loader></app-loader>
+              <app-modal></app-modal>
+              <app-pagination></app-pagination>
+              <app-table [columns]="tableColumns" [data]="tableData"></app-table>
+
+              <ng-template #statusTemplate let-value>
+                <span class="badge" [ngClass]="{
+                  'bg-success': value === 'Active',
+                  'bg-warning': value === 'On Leave',
+                  'bg-danger': value === 'Inactive'
+                }">{{ value }}</span>
+              </ng-template>
+
+              <ng-template #actionsTemplate let-value>
+                <div class="dropdown">
+                  <button class="btn btn-link text-dark p-0 text-decoration-none" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li><a class="dropdown-item" href="javascript:void(0)">View</a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0)">Edit</a></li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item text-danger" href="javascript:void(0)">Delete</a></li>
+                  </ul>
+                </div>
+              </ng-template>
+
+              <app-toast></app-toast>
+            </div>
+          </div>
+        </div>
+
+        <hr>
+
+        <!-- Shared UI Components Section -->
+        <div class="row mt-5">
+          <div class="col-12">
+            <h4 class="mb-4">Shared UI Components</h4>
+            <div class="d-flex flex-column gap-4">
+              <app-file-preview></app-file-preview>
+              <app-file-upload></app-file-upload>
+              <app-notification-dropdown></app-notification-dropdown>
+              <app-profile-avatar></app-profile-avatar>
+              <app-timeline></app-timeline>
+              <app-talent-card></app-talent-card>
+              <app-meet-card></app-meet-card>
+              <app-support-ticket></app-support-ticket>
+              <app-contract-card></app-contract-card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>

@@ -1,0 +1,370 @@
+<div class="row g-0 w-100">
+  <!-- Left Column: Vertical Timeline -->
+  <div class="col-md-4 border-end p-4 bg-light bg-opacity-25" style="max-height: 600px; overflow-y: auto;">
+
+    <div class="d-flex flex-column gap-0 position-relative ps-2">
+      <!-- Continuous Vertical Line -->
+      <div class="position-absolute top-0 bottom-0"
+        style="left: 20px; width: 2px; background-color: #dee2e6; z-index: 1;"></div>
+      <!-- Completed portion of line -->
+      <div class="position-absolute top-0" [style.height]="((getTimelineIndex() - 1) / 7) * 100 + '%'"
+        style="left: 20px; width: 2px; background-color: #0d6efd; z-index: 1; transition: height 0.3s ease;"></div>
+
+      @for (step of getFilteredTimelineSteps(); track step.id; let i = $index) {
+      <!-- Step -->
+      <div class="d-flex align-items-start position-relative z-2 mb-4"
+        [ngClass]="{'bg-white p-2 rounded-3 shadow-sm border border-primary border-opacity-25 ms-n2 me-2': getTimelineIndex() === step.id, 'ms-2': getTimelineIndex() < step.id}">
+
+        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 mt-1 shadow-sm"
+          [ngClass]="getTimelineIndex() > step.id ? 'bg-primary text-white' : (getTimelineIndex() === step.id ? 'bg-primary text-white' : 'bg-light border border-secondary text-muted')"
+          style="width: 28px; height: 28px; font-size: 0.75rem;">
+          {{ step.id }}
+        </div>
+
+        <div class="ms-3 flex-grow-1" [ngClass]="{'opacity-75': getTimelineIndex() < step.id}">
+          <span class="fw-bold d-block mb-1"
+            [ngClass]="getTimelineIndex() >= step.id ? (getTimelineIndex() === step.id ? 'text-primary' : 'text-dark') : 'text-dark'"
+            style="font-size: 0.85rem;">{{ step.title }}</span>
+          <span class="text-muted d-block" style="font-size: 0.7rem;">
+            @if (getTimelineIndex() > step.id) {
+            Completed
+            } @else if (getTimelineIndex() === step.id) {
+            Current Stage
+            } @else {
+            Pending
+            }
+          </span>
+        </div>
+
+        <div class="ms-auto mt-1">
+          @if (getTimelineIndex() > step.id) {
+          <i class="bi bi-check-circle text-primary fs-5"></i>
+          } @else if (getTimelineIndex() === step.id) {
+          <span
+            class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1"
+            style="font-size: 0.65rem;">Current</span>
+          }
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+
+  <!-- Middle Column: Action/Detail Card -->
+  <div class="col-md-5 border-end p-4">
+
+    @if (applicationDetails?.applicationStatus === 'rejected') {
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <h2 class="fw-bold fs-5 mb-0 text-danger">Application Rejected</h2>
+    </div>
+    <p class="text-muted small mb-4" style="font-size: 0.85rem;">This candidate has been rejected and will not proceed
+      further in the recruitment workflow.</p>
+    } @else if (applicationDetails?.applicationStatus === 'hired') {
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <h2 class="fw-bold fs-5 mb-0 text-success">Candidate Hired</h2>
+    </div>
+    
+    <div class="alert alert-success d-flex align-items-center border-0 shadow-sm rounded-4 p-3 mb-4" role="alert" style="background-color: #f0fdf4; color: #166534;">
+      <i class="bi bi-info-circle-fill fs-4 me-3"></i>
+      <div>
+        <h6 class="fw-bold mb-1">Next Steps Required</h6>
+        <p class="mb-0 small" style="font-size: 0.85rem;">
+          The candidate is hired! Please generate and send a contract offer to the freelancer for onboarding within <strong>24 hours</strong>.
+        </p>
+      </div>
+    </div>
+
+    } @else if (applicationDetails?.applicationStatus === 'application submitted') {
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <h2 class="fw-bold fs-5 mb-0 text-dark">Application Submitted</h2>
+      <span
+        class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded px-2 py-1"
+        style="font-size: 0.65rem;">Current</span>
+    </div>
+    <p class="text-muted small mb-4" style="font-size: 0.85rem;">Review the candidate's application and decide whether
+      to shortlist or reject.</p>
+    <div class="d-flex gap-3 mt-4">
+      <button class="btn btn-success fw-bold d-flex align-items-center gap-2 px-4" (click)="shortlistCandidate()">
+        <i class="bi bi-check2-circle"></i> Shortlist
+      </button>
+      <button class="btn btn-outline-danger bg-white fw-bold d-flex align-items-center gap-2 px-4"
+        (click)="rejectCandidate()">
+        <i class="bi bi-x-circle"></i> Reject
+      </button>
+    </div>
+
+    } @else if (applicationDetails?.applicationStatus === 'shortlisted') {
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <h2 class="fw-bold fs-5 mb-0 text-dark">Assessment Stage</h2>
+      <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 rounded px-2 py-1"
+        style="font-size: 0.65rem;">Current</span>
+    </div>
+    <p class="text-muted small mb-4" style="font-size: 0.85rem;">The candidate has been shortlisted. You can now assign
+      an assessment.</p>
+    <div class="d-flex flex-column gap-3 mt-4">
+      @if (!showAssessmentForm) {
+      <div class="d-flex gap-3">
+        <button class="btn btn-info text-white fw-bold d-flex align-items-center gap-2 px-4"
+          (click)="assignAssessment()">
+          <i class="bi bi-file-earmark-text"></i> Assign Assessment
+        </button>
+      </div>
+      } @else {
+      <div class="card border-0 bg-light p-3 rounded-4 shadow-sm">
+        <h5 class="fw-bold fs-6 mb-3">Assign Assessment</h5>
+        <div class="mb-3">
+          <label class="form-label small text-muted mb-1">Assessment Title</label>
+          <input type="text" class="form-control form-control-sm" placeholder="e.g. Frontend Coding Challenge"
+            [(ngModel)]="assessmentDetails.title">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small text-muted mb-1">Description / Link</label>
+          <textarea class="form-control form-control-sm" rows="3"
+            placeholder="Provide instructions or link to the test..."
+            [(ngModel)]="assessmentDetails.description"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small text-muted mb-1">Due Date</label>
+          <input type="date" class="form-control form-control-sm" [(ngModel)]="assessmentDetails.date">
+        </div>
+        <div class="d-flex gap-2 justify-content-end mt-3">
+          <button class="btn btn-sm btn-outline-secondary" (click)="showAssessmentForm = false">Cancel</button>
+          <button class="btn btn-sm btn-info text-white" (click)="assignAssessment()">Send Assessment</button>
+        </div>
+      </div>
+      }
+    </div>
+
+    } @else if (applicationDetails?.applicationStatus === 'assessment assigned') {
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <h2 class="fw-bold fs-5 mb-0 text-dark">Assessment Assigned</h2>
+      <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 rounded px-2 py-1"
+        style="font-size: 0.65rem;">Current</span>
+    </div>
+    <p class="text-muted small mb-4" style="font-size: 0.85rem;">The assessment has been assigned. Waiting for the
+      freelancer to complete and submit it.</p>
+    <div class="card bg-light border-0 p-3 rounded-3 mt-4">
+      <div class="d-flex align-items-center gap-2 text-muted">
+        <div class="spinner-border spinner-border-sm" role="status"></div>
+        <span class="small fw-semibold">Waiting for freelancer submission...</span>
+      </div>
+    </div>
+
+    } @else if (applicationDetails?.applicationStatus === 'assessment completed') {
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <h2 class="fw-bold fs-5 mb-0 text-dark">Evaluate Assessment</h2>
+      <span
+        class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1"
+        style="font-size: 0.65rem;">Current</span>
+    </div>
+    <p class="text-muted small mb-4" style="font-size: 0.85rem;">The candidate has completed the assessment. Evaluate
+      the results or schedule an interview.</p>
+    <div class="d-flex flex-column gap-3 mt-4">
+      @if (applicationDetails?.assessment?.status !== 'passed') {
+      @if (!showAssessmentEvaluationForm) {
+      <div class="d-flex gap-3">
+        <button class="btn btn-info text-white fw-bold d-flex align-items-center gap-2 px-4"
+          (click)="showAssessmentEvaluationForm = true">
+          <i class="bi bi-clipboard-check"></i> Evaluate Assessment
+        </button>
+      </div>
+      } @else {
+      <div class="card border-0 bg-light p-3 rounded-4 shadow-sm">
+        <h5 class="fw-bold fs-6 mb-3">Evaluate Assessment</h5>
+        <div class="mb-3">
+          <label class="form-label small text-muted mb-1">Score / Feedback Note</label>
+          <textarea class="form-control form-control-sm" rows="2" placeholder="Great job..."
+            [(ngModel)]="assessmentResult.notes"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small text-muted mb-1">Result</label>
+          <select class="form-select form-select-sm" [(ngModel)]="assessmentResult.result">
+            <option value="passed">Pass (Proceed to Interview)</option>
+            <option value="failed">Fail (Reject Candidate)</option>
+          </select>
+        </div>
+        <div class="d-flex gap-2 justify-content-end mt-3">
+          <button class="btn btn-sm btn-outline-secondary"
+            (click)="showAssessmentEvaluationForm = false">Cancel</button>
+          <button class="btn btn-sm btn-info text-white" (click)="evaluateAssessment()">Submit Evaluation</button>
+        </div>
+      </div>
+      }
+      } @else {
+      @if (!showInterviewForm) {
+      <div class="d-flex gap-3">
+        <button class="btn btn-primary fw-bold d-flex align-items-center gap-2 px-4" (click)="showInterviewForm = true">
+          <i class="bi bi-calendar-plus"></i> Schedule Interview
+        </button>
+        <button class="btn btn-outline-danger bg-white fw-bold d-flex align-items-center gap-2 px-4"
+          (click)="rejectCandidate()">
+          <i class="bi bi-x-circle"></i> Reject
+        </button>
+      </div>
+      } @else {
+      <div class="card border-0 bg-light p-3 rounded-4 shadow-sm">
+        <h5 class="fw-bold fs-6 mb-3">Schedule Interview</h5>
+        <div class="mb-3">
+          <label class="form-label small text-muted mb-1">Date</label>
+          <input type="date" class="form-control form-control-sm" [(ngModel)]="interviewDetails.date">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small text-muted mb-1">Time</label>
+          <input type="time" class="form-control form-control-sm" [(ngModel)]="interviewDetails.time">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small text-muted mb-1">Meeting Link</label>
+          <input type="url" class="form-control form-control-sm" placeholder="https://zoom.us/j/..."
+            [(ngModel)]="interviewDetails.link">
+        </div>
+        <div class="d-flex gap-2 justify-content-end mt-3">
+          <button class="btn btn-sm btn-outline-secondary" (click)="showInterviewForm = false">Cancel</button>
+          <button class="btn btn-sm btn-primary" (click)="scheduleInterview()">Send Invite</button>
+        </div>
+      </div>
+      }
+      }
+    </div>
+
+    } @else if (applicationDetails?.applicationStatus === 'interview scheduled' || applicationDetails?.applicationStatus
+    === 'interviewing') {
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <h2 class="fw-bold fs-5 mb-0 text-dark">Interview Scheduled</h2>
+      <span
+        class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1"
+        style="font-size: 0.65rem;">Current</span>
+    </div>
+    <p class="text-muted small mb-4" style="font-size: 0.85rem;">The interview has been scheduled. Waiting for the
+      interview process to be completed.</p>
+    <div class="d-flex flex-column gap-3 mt-4">
+      <div class="card bg-light border-0 p-3 rounded-3">
+        <div class="d-flex align-items-center gap-2 text-muted">
+          <i class="bi bi-calendar-check fs-5"></i>
+          <span class="small fw-semibold">Pending Interview</span>
+        </div>
+      </div>
+      <div class="d-flex gap-3">
+        <button class="btn btn-primary text-white fw-bold d-flex align-items-center gap-2 px-4"
+          (click)="markInterviewDone()">
+          <i class="bi bi-check2-circle"></i> Mark Interview Done
+        </button>
+      </div>
+    </div>
+
+    } @else if (applicationDetails?.applicationStatus === 'interview completed' || applicationDetails?.applicationStatus
+    === 'offer sent' || applicationDetails?.applicationStatus === 'offer accepted') {
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <h2 class="fw-bold fs-5 mb-0 text-dark">Evaluate Interview</h2>
+      <span
+        class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1"
+        style="font-size: 0.65rem;">Current</span>
+    </div>
+    <p class="text-muted small mb-4" style="font-size: 0.85rem;">The interview is complete. Please evaluate the
+      candidate and make your final decision.</p>
+
+    <div class="card bg-info bg-opacity-10 border-info border-opacity-25 p-3 rounded-3 mb-4">
+      <div class="d-flex gap-2">
+        <i class="bi bi-robot text-info mt-1"></i>
+        <p class="text-info fw-semibold small mb-0" style="font-size: 0.85rem;">
+          AI is evaluating user video for report. Please wait, notes will be available when the report is generated.
+        </p>
+      </div>
+    </div>
+    <div class="d-flex gap-3 mt-4">
+      @if (!showInterviewEvaluationForm) {
+      <button class="btn btn-success fw-bold d-flex align-items-center gap-2 px-4"
+        (click)="showInterviewEvaluationForm = true">
+        <i class="bi bi-person-check"></i> Evaluate Interview & Decide
+      </button>
+      <button class="btn btn-outline-danger bg-white fw-bold d-flex align-items-center gap-2 px-4"
+        (click)="rejectCandidate()">
+        <i class="bi bi-x-circle"></i> Reject
+      </button>
+      } @else {
+      <div class="card border-0 bg-light p-3 rounded-4 shadow-sm w-100">
+        <h5 class="fw-bold fs-6 mb-3">Evaluate Interview</h5>
+        <div class="mb-3">
+          <label class="form-label small text-muted mb-1">Interview Feedback</label>
+          <textarea class="form-control form-control-sm" rows="3" placeholder="Candidate showed excellent skills..."
+            [(ngModel)]="interviewResult.feedback"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small text-muted mb-1">Final Decision</label>
+          <select class="form-select form-select-sm" [(ngModel)]="interviewResult.result">
+            <option value="hired">Hire Candidate</option>
+            <option value="rejected">Reject Candidate</option>
+          </select>
+        </div>
+        <div class="d-flex gap-2 justify-content-end mt-3">
+          <button class="btn btn-sm btn-outline-secondary" (click)="showInterviewEvaluationForm = false">Cancel</button>
+          <button class="btn btn-sm btn-primary" (click)="evaluateInterview()">Submit Decision</button>
+        </div>
+      </div>
+      }
+    </div>
+    }
+  </div>
+
+  <!-- Right Column: Candidate Profile summary -->
+  <div class="col-md-3 p-4 bg-white">
+    <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-4">
+      <div class="rounded-circle bg-primary flex-shrink-0" style="width: 60px; height: 60px; overflow: hidden;">
+        @if (applicationDetails?.freelancerId?.registrationDetails?.profilePhoto) {
+        <img [src]="applicationDetails.freelancerId.registrationDetails.profilePhoto" alt="Profile"
+          class="w-100 h-100 object-fit-cover">
+        } @else {
+        <div class="w-100 h-100 d-flex align-items-center justify-content-center text-white fw-bold fs-4">
+          {{ applicationDetails?.freelancerId?.registrationDetails?.fullName?.charAt(0) | uppercase }}
+        </div>
+        }
+      </div>
+      <div>
+        <h4 class="fw-bold text-dark mb-1 fs-6">{{ applicationDetails?.freelancerId?.registrationDetails?.fullName ||
+          'Loading...' }}</h4>
+        <span class="text-muted d-block" style="font-size: 0.7rem;">{{
+          applicationDetails?.freelancerId?.registrationDetails?.title || 'Freelancer' }}<br>Hyderabad, India</span>
+        <span class="text-muted d-flex align-items-center gap-1 mt-2" style="font-size: 0.65rem;">
+          <i class="bi bi-calendar3"></i> Applied on<br>{{ applicationDetails?.createdAt | date:'mediumDate' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="d-flex flex-column gap-3" style="font-size: 0.8rem;">
+      <div>
+        <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Application ID</span>
+        <span class="fw-bold text-dark">{{ applicationDetails?._id || 'N/A' }}</span>
+      </div>
+
+      <div>
+        <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Email</span>
+        <a href="mailto:{{ applicationDetails?.freelancerId?.registrationDetails?.email }}"
+          class="text-primary text-decoration-none fw-semibold">{{
+          applicationDetails?.freelancerId?.registrationDetails?.email || 'N/A' }}</a>
+      </div>
+
+      <div>
+        <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Gender</span>
+        <span class="fw-bold text-dark text-capitalize">{{ applicationDetails?.freelancerId?.registrationDetails?.gender
+          || 'N/A' }}</span>
+      </div>
+
+      <div>
+        <span class="text-muted d-block mb-2" style="font-size: 0.7rem;">Skills</span>
+        <div class="d-flex flex-wrap gap-2">
+          @for (skill of applicationDetails?.freelancerId?.registrationDetails?.skills?.slice(0,4) || ['Angular',
+          'TypeScript']; track skill) {
+          <span
+            class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1 fw-normal">{{
+            skill }}</span>
+          }
+        </div>
+      </div>
+
+      <div>
+        <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Availability</span>
+        <span class="fw-bold text-dark text-capitalize">{{
+          applicationDetails?.freelancerId?.registrationDetails?.availability || 'Full-Time' }}</span>
+      </div>
+    </div>
+  </div>
+</div>

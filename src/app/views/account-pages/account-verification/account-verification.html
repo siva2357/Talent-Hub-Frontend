@@ -1,0 +1,61 @@
+<div class="otp-layout position-relative d-flex flex-column align-items-center justify-content-center bg-light-purple w-100">
+    <!-- Decorative background elements -->
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-left"></div>
+    <div class="bg-shape right-shape"></div>
+    
+    <div class="concentric-circles z-0">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+    <div class="concentric-circles-right z-0">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
+    @if (isVerified) {
+        <!-- Success State Viewport -->
+        <div class="form-container z-1 text-center w-100 px-3" style="max-width: 480px;">
+            <img src="/logo 2.png" alt="Talent Hub" class="logo mb-5" />
+            
+            <div class="icon-circle mx-auto bg-white d-flex align-items-center justify-content-center position-relative shadow-sm mb-4">
+                <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+                <div class="badge-icon bg-white text-success rounded-circle shadow-sm">
+                    <i class="bi bi-shield-check-fill"></i>
+                </div>
+            </div>
+            
+            <h2 class="fw-bold fs-3 text-dark mb-3">Account Confirmed!</h2>
+            <p class="text-muted small mb-4">Your email has been successfully verified.<br>You're one step closer to getting started.</p>
+            
+            <button type="button" class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow-sm d-flex align-items-center justify-content-center" (click)="continueToLogin()">
+                Continue to Login <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+        </div>
+    } @else {
+        <!-- Failure State Viewport -->
+        <div class="form-container z-1 text-center w-100 px-3" style="max-width: 480px;">
+            <img src="/logo 2.png" alt="Talent Hub" class="logo mb-5" />
+            
+            <div class="icon-circle mx-auto bg-white d-flex align-items-center justify-content-center position-relative shadow-sm mb-4">
+                <i class="bi bi-x-circle-fill text-danger" style="font-size: 3rem;"></i>
+                <div class="badge-icon bg-white text-danger rounded-circle shadow-sm">
+                    <i class="bi bi-shield-x-fill"></i>
+                </div>
+            </div>
+            
+            <h2 class="fw-bold fs-3 text-dark mb-3">Account Not Verified</h2>
+            <p class="text-muted small mb-4">We couldn't verify your email address.<br>The verification code might have expired or is invalid.</p>
+            
+            <button type="button" class="btn btn-danger w-100 py-3 rounded-3 fw-bold shadow-sm d-flex align-items-center justify-content-center mb-4">
+                Resend verification code <i class="bi bi-arrow-repeat ms-2"></i>
+            </button>
+            
+            <a routerLink="/register" class="text-primary text-decoration-none fw-bold small">
+                <i class="bi bi-arrow-left me-1"></i> Back to Register
+            </a>
+        </div>
+    }
+</div>

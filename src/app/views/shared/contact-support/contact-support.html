@@ -1,0 +1,432 @@
+<div class="dashboard-container position-relative p-3 p-md-4">
+  <!-- Decorative background wrapper to prevent overflow -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </div>
+
+  <div class="position-relative z-1 mx-auto" style="max-width: 1400px; margin-top: 1rem;">
+  
+  <div class="mb-4">
+    <a routerLink="/dashboard" class="text-muted fw-semibold text-decoration-none d-inline-flex align-items-center gap-2 mb-3 hover-text-primary" style="font-size: 0.85rem;">
+      <i class="bi bi-arrow-left"></i> Back to Dashboard
+    </a>
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h1 class="fw-bold fs-3 text-dark mb-1 d-flex align-items-center gap-2">
+          My Support Tickets 
+          <span class="badge bg-light text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.75rem;">Clear View</span>
+        </h1>
+        <p class="text-muted mb-0" style="font-size: 0.85rem;">Track and manage all your support requests in one place.</p>
+      </div>
+      <button routerLink="/create-ticket" class="btn btn-primary px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm">
+        <i class="bi bi-plus-lg"></i> Create New Ticket
+      </button>
+    </div>
+  </div>
+
+  <!-- Top Metrics Row -->
+  <div class="d-flex flex-wrap gap-3 mb-4">
+    <div class="glass-card border-0 rounded-4 flex-grow-1 p-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px;">
+          <i class="bi bi-person fs-5"></i>
+        </div>
+        <div>
+          <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.75rem;">All Tickets</span>
+          <span class="fw-bold text-dark fs-4 lh-1">{{ totalTickets }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="glass-card border-0 rounded-4 flex-grow-1 p-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="bg-warning bg-opacity-10 text-warning-dark rounded-circle d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px;">
+          <i class="bi bi-arrow-clockwise fs-5"></i>
+        </div>
+        <div>
+          <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.75rem;">Open</span>
+          <span class="fw-bold text-dark fs-4 lh-1">{{ openTickets }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="glass-card border-0 rounded-4 flex-grow-1 p-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px;">
+          <i class="bi bi-file-earmark-text fs-5"></i>
+        </div>
+        <div>
+          <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.75rem;">Resolved</span>
+          <span class="fw-bold text-dark fs-4 lh-1">{{ resolvedTickets }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="glass-card border-0 rounded-4 flex-grow-1 p-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="bg-purple-soft text-purple rounded-circle d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px;">
+          <i class="bi bi-geo-alt fs-5"></i>
+        </div>
+        <div>
+          <span class="d-block text-muted fw-semibold mb-1" style="font-size: 0.75rem;">Closed</span>
+          <span class="fw-bold text-dark fs-4 lh-1">{{ closedTickets }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Empty State -->
+  @if (!isLoading && tickets.length === 0) {
+  <div class="glass-card border-0 rounded-4 p-5 text-center my-4">
+    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center mx-auto mb-3" style="width: 80px; height: 80px;">
+      <i class="bi bi-headset fs-1"></i>
+    </div>
+    <h2 class="fs-4 fw-bold text-dark mb-2">No Support Tickets Yet</h2>
+    <p class="text-muted mb-4 max-w-md mx-auto">You haven't opened any support tickets. If you need help with your account, billing, or any technical issues, we are here for you.</p>
+    <button routerLink="/create-ticket" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm">
+      <i class="bi bi-plus-lg me-1"></i> Create Your First Ticket
+    </button>
+  </div>
+  }
+
+  @if (!isLoading && tickets.length > 0) {
+  <div class="row g-4">
+    <!-- Left Column (Ticket List) -->
+    <div class="col-lg-3 d-flex flex-column gap-3">
+      
+      <!-- Search & Sort -->
+      <div class="glass-card border-0 rounded-4 p-3">
+        <div class="input-group input-group-sm bg-light border rounded-3 mb-3">
+          <span class="input-group-text bg-transparent border-0 text-muted"><i class="bi bi-search"></i></span>
+          <input type="text" class="form-control border-0 bg-transparent shadow-none" placeholder="Search tickets...">
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="text-muted fw-semibold" style="font-size: 0.75rem;">Sort:</span>
+          <select class="form-select form-select-sm border-0 bg-light w-auto shadow-none fw-semibold text-dark" style="font-size: 0.75rem;">
+            <option>Latest</option>
+            <option>Oldest</option>
+            <option>Status</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Ticket Items -->
+      @for (t of tickets; track t.ticketId) {
+      <div class="glass-card border-0 shadow-sm rounded-4 p-3 cursor-pointer position-relative overflow-hidden hover-card mb-2"
+           [class.border-primary]="selectedTicket?.ticketId === t.ticketId"
+           (click)="selectTicket(t)">
+        <!-- Active indicator line -->
+        @if (selectedTicket?.ticketId === t.ticketId) {
+        <div class="position-absolute start-0 top-0 bottom-0 bg-primary" style="width: 4px;"></div>
+        }
+        
+        <div class="d-flex justify-content-between align-items-start mb-2 ms-1">
+          <span class="fw-semibold text-muted" style="font-size: 0.7rem;">{{ t.ticketId }}</span>
+          <span class="badge rounded px-2 py-1" style="font-size: 0.65rem;" [ngClass]="getStatusBadgeClass(t.status)">{{ t.status }}</span>
+        </div>
+        <div class="d-flex gap-2 align-items-start mb-2 ms-1">
+          <div class="rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" [ngClass]="getCategoryBg(t.category)" style="width: 24px; height: 24px;">
+            <i class="bi" [ngClass]="getCategoryIcon(t.category)" style="font-size: 0.7rem;"></i>
+          </div>
+          <h3 class="fw-bold text-dark fs-6 mb-0 lh-sm">{{ t.subject }}</h3>
+        </div>
+        <div class="ms-1 mb-2">
+          <span class="d-flex align-items-center gap-1 text-muted" style="font-size: 0.7rem;"><i class="bi bi-clock"></i> Created on {{ t.createdAt | date:'mediumDate' }}</span>
+        </div>
+        <div class="d-flex gap-3 ms-1 text-muted fw-semibold" style="font-size: 0.7rem;">
+          <span class="d-flex align-items-center gap-1"><i class="bi bi-chat-dots"></i> {{ t.replies?.length || 0 }} replies</span>
+          @if (t.attachments?.length > 0) {
+          <span class="d-flex align-items-center gap-1"><i class="bi bi-paperclip"></i> {{ t.attachments.length }} Attachment(s)</span>
+          }
+        </div>
+      </div>
+      }
+
+      <!-- Pagination -->
+      <nav class="mt-2 d-flex justify-content-center">
+        <ul class="pagination pagination-sm mb-0">
+          <li class="page-item disabled"><a class="page-link border-0 text-muted bg-transparent" href="#"><i class="bi bi-chevron-left"></i></a></li>
+          <li class="page-item active"><a class="page-link rounded bg-primary border-primary text-white" href="#">1</a></li>
+          <li class="page-item"><a class="page-link border-0 text-dark bg-transparent" href="#">2</a></li>
+          <li class="page-item"><a class="page-link border-0 text-dark bg-transparent" href="#">3</a></li>
+          <li class="page-item"><a class="page-link border-0 text-dark bg-transparent" href="#"><i class="bi bi-chevron-right"></i></a></li>
+        </ul>
+      </nav>
+
+    </div>
+
+    <!-- Middle Column (Ticket Thread) -->
+    @if (selectedTicket) {
+    <div class="col-lg-6">
+      <div class="glass-card border-0 rounded-4 h-100 d-flex flex-column overflow-hidden">
+        
+        <!-- Header -->
+        <div class="p-4 border-bottom bg-white flex-shrink-0 z-1">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex gap-3 align-items-center">
+              <div class="rounded-3 d-flex justify-content-center align-items-center flex-shrink-0" [ngClass]="getCategoryBg(selectedTicket.category)" style="width: 48px; height: 48px;">
+                <i class="bi fs-4" [ngClass]="getCategoryIcon(selectedTicket.category)"></i>
+              </div>
+              <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <span class="fw-semibold text-muted" style="font-size: 0.75rem;">{{ selectedTicket.ticketId }}</span>
+                  <span class="badge rounded px-2 py-1" style="font-size: 0.65rem;" [ngClass]="getStatusBadgeClass(selectedTicket.status)">{{ selectedTicket.status }}</span>
+                </div>
+                <h2 class="fs-5 fw-bold text-dark mb-0 lh-sm">{{ selectedTicket.subject }}</h2>
+              </div>
+            </div>
+            @if (selectedTicket.status !== 'Resolved' && selectedTicket.status !== 'Closed') {
+            <button class="btn btn-outline-success btn-sm rounded-pill fw-semibold shadow-sm px-3" (click)="resolveTicket()">
+              <i class="bi bi-check2-circle"></i> Mark Resolved
+            </button>
+            }
+          </div>
+          <div class="d-flex flex-wrap gap-4 text-muted" style="font-size: 0.75rem;">
+            <span class="d-flex align-items-center gap-1"><i class="bi bi-folder text-primary"></i> {{ selectedTicket.category }}</span>
+            <span class="d-flex align-items-center gap-1"><i class="bi bi-clock text-primary"></i> Opened {{ selectedTicket.createdAt | date:'mediumDate' }}</span>
+          </div>
+        </div>
+
+        <!-- Message Thread -->
+        <div class="p-4 overflow-y-auto flex-grow-1 bg-light bg-opacity-50" style="max-height: 500px;">
+          
+          <!-- Original Message -->
+          <div class="d-flex gap-3 mb-4">
+            <div class="bg-white rounded-circle shadow-sm border border-light d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
+              <i class="bi bi-person-fill text-muted fs-5"></i>
+            </div>
+            <div class="flex-grow-1 max-w-75">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="fw-bold text-dark" style="font-size: 0.85rem;">{{ selectedTicket.userName }}</span>
+                <span class="text-muted" style="font-size: 0.7rem;">{{ selectedTicket.createdAt | date:'short' }}</span>
+              </div>
+              <div class="bg-white p-3 rounded-3 shadow-sm border border-light position-relative">
+                <div class="position-absolute top-0 start-0 translate-middle" style="width: 12px; height: 12px; background-color: white; transform: rotate(45deg); margin-left: -5px; margin-top: 20px; border-left: 1px solid var(--bs-border-color-translucent); border-bottom: 1px solid var(--bs-border-color-translucent);"></div>
+                <p class="text-muted mb-0" style="font-size: 0.85rem; line-height: 1.5; white-space: pre-line;">
+                  {{ selectedTicket.message }}
+                </p>
+                @if (selectedTicket.attachments?.length > 0) {
+                <div class="mt-3 d-flex flex-wrap gap-2">
+                  @for (att of selectedTicket.attachments; track att.name) {
+                  <a [href]="att.url" target="_blank" class="btn btn-sm btn-light border d-flex align-items-center gap-2 text-decoration-none">
+                    <i class="bi bi-file-earmark-image text-primary"></i>
+                    <span class="text-dark" style="font-size: 0.75rem;">{{ att.name }}</span>
+                  </a>
+                  }
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Replies -->
+          @for (reply of selectedTicket.replies; track $index) {
+          <div class="d-flex gap-3 mb-4" [class.flex-row-reverse]="reply.isAdmin">
+            <div class="bg-white rounded-circle shadow-sm border border-light d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
+              <i class="bi" [class.bi-person-fill]="!reply.isAdmin" [class.bi-headset]="reply.isAdmin" class="text-muted fs-5"></i>
+            </div>
+            <div class="flex-grow-1 max-w-75" [class.text-end]="reply.isAdmin">
+              <div class="d-flex align-items-center gap-2 mb-1" [class.justify-content-end]="reply.isAdmin">
+                <span class="fw-bold text-dark" style="font-size: 0.85rem;">{{ reply.isAdmin ? 'Support Team' : selectedTicket.userName }}</span>
+                <span class="text-muted" style="font-size: 0.7rem;">{{ reply.createdAt | date:'short' }}</span>
+              </div>
+              <div class="p-3 rounded-3 shadow-sm border border-light position-relative d-inline-block text-start" [class.bg-primary]="reply.isAdmin" [class.text-white]="reply.isAdmin" [class.bg-white]="!reply.isAdmin">
+                <p class="mb-0" style="font-size: 0.85rem; line-height: 1.5; white-space: pre-line;">
+                  {{ reply.message }}
+                </p>
+              </div>
+            </div>
+          </div>
+          }
+
+        </div>
+
+        <!-- Reply Input -->
+        @if (selectedTicket.status !== 'Closed') {
+        <div class="p-3 border-top bg-white mt-auto z-1">
+          <div class="border rounded-4 overflow-hidden bg-light focus-within-shadow">
+            <textarea class="form-control border-0 bg-transparent shadow-none p-3 pb-0" rows="3" placeholder="Type your reply here..." style="font-size: 0.85rem; resize: none;" [(ngModel)]="replyMessage"></textarea>
+            <div class="d-flex justify-content-between align-items-center p-2 bg-light">
+              <div class="d-flex gap-1"></div>
+              <button class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm d-flex align-items-center gap-2" (click)="submitReply()" [disabled]="isReplying || !replyMessage.trim()">
+                @if (!isReplying) {
+                <i class="bi bi-send-fill"></i>
+                } @else {
+                <span class="spinner-border spinner-border-sm"></span>
+                }
+                {{ isReplying ? 'Sending...' : 'Send Reply' }}
+              </button>
+            </div>
+          </div>
+        </div>
+        }
+        
+        @if (selectedTicket.status === 'Closed') {
+        <div class="p-3 border-top bg-light mt-auto text-center">
+          <p class="text-muted mb-0 small"><i class="bi bi-lock-fill text-muted me-1"></i> This ticket has been closed. You can no longer reply.</p>
+        </div>
+        }
+
+      </div>
+    </div>
+    }
+
+    <!-- Right Column (Ticket Information) -->
+    <div class="col-lg-3 d-flex flex-column gap-4">
+      
+      <!-- Ticket Information -->
+      <div class="glass-card border-0 rounded-4 p-4">
+        <h2 class="fs-6 fw-bold text-dark mb-4 d-flex align-items-center gap-2"><i class="bi bi-info-square text-primary"></i> Ticket Information</h2>
+        
+        <div class="d-flex flex-column gap-3" style="font-size: 0.8rem;">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted fw-semibold">Ticket ID</span>
+            <span class="text-dark fw-bold">TKT-2024-0120</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted fw-semibold">Status</span>
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded px-2 py-1" style="font-size: 0.65rem;">Closed</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted fw-semibold">Priority</span>
+            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded px-2 py-1" style="font-size: 0.65rem;">High</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted fw-semibold">Category</span>
+            <span class="text-dark fw-bold">Interviews</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted fw-semibold">Created</span>
+            <span class="text-dark">24 Jul, 02:15 PM</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted fw-semibold">Updated</span>
+            <span class="text-dark">27 Jul, 02:15 PM</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted fw-semibold">Created By</span>
+            <span class="text-dark fw-bold">Siva Prasad</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted fw-semibold">Assigned To</span>
+            <span class="text-dark"><i class="bi bi-shield-check text-primary"></i> Support Team</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Items -->
+      <div class="glass-card border-0 rounded-4 p-4">
+        <h2 class="fs-6 fw-bold text-dark mb-4">Related Items</h2>
+        
+        <div class="bg-light border rounded-3 p-3 d-flex align-items-center gap-3">
+          <div class="bg-purple-soft text-purple rounded d-flex justify-content-center align-items-center flex-shrink-0" style="width: 40px; height: 40px;">
+            <i class="bi bi-briefcase fs-5"></i>
+          </div>
+          <div>
+            <span class="d-block text-muted" style="font-size: 0.7rem;">Process</span>
+            <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.8rem;">E-commerce Website</span>
+            <a href="#" class="text-primary text-decoration-none fw-semibold" style="font-size: 0.75rem;">View Project <i class="bi bi-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="glass-card border-0 rounded-4 p-4">
+        <h2 class="fs-6 fw-bold text-dark mb-4">Timeline</h2>
+        
+        <div class="position-relative ms-2">
+          <!-- Vertical Line -->
+          <div class="position-absolute start-0 top-0 bottom-0 bg-light ms-1 mt-2 mb-2" style="width: 2px;"></div>
+          
+          <div class="d-flex gap-3 align-items-start mb-4 position-relative">
+            <div class="bg-success text-white rounded-circle d-flex justify-content-center align-items-center flex-shrink-0 z-1 mt-1" style="width: 12px; height: 12px;"></div>
+            <div class="flex-grow-1">
+              <span class="d-block fw-bold text-dark" style="font-size: 0.8rem;">Ticket Created</span>
+            </div>
+            <span class="text-muted flex-shrink-0" style="font-size: 0.7rem;">24 Jul, 02:15 PM</span>
+          </div>
+          
+          <div class="d-flex gap-3 align-items-start mb-4 position-relative">
+            <div class="bg-success text-white rounded-circle d-flex justify-content-center align-items-center flex-shrink-0 z-1 mt-1" style="width: 12px; height: 12px;"></div>
+            <div class="flex-grow-1">
+              <span class="d-block fw-bold text-dark" style="font-size: 0.8rem;">Assigned to Team</span>
+            </div>
+            <span class="text-muted flex-shrink-0" style="font-size: 0.7rem;">24 Jul, 02:17 PM</span>
+          </div>
+          
+          <div class="d-flex gap-3 align-items-start mb-4 position-relative">
+            <div class="bg-success text-white rounded-circle d-flex justify-content-center align-items-center flex-shrink-0 z-1 mt-1" style="width: 12px; height: 12px;"></div>
+            <div class="flex-grow-1">
+              <span class="d-block fw-bold text-dark" style="font-size: 0.8rem;">In Progress</span>
+            </div>
+            <span class="text-muted flex-shrink-0" style="font-size: 0.7rem;">25 Jul, 11:20 AM</span>
+          </div>
+          
+          <div class="d-flex gap-3 align-items-start mb-4 position-relative">
+            <div class="bg-success text-white rounded-circle d-flex justify-content-center align-items-center flex-shrink-0 z-1 mt-1" style="width: 12px; height: 12px;"></div>
+            <div class="flex-grow-1">
+              <span class="d-block fw-bold text-dark" style="font-size: 0.8rem;">Resolved</span>
+            </div>
+            <span class="text-muted flex-shrink-0" style="font-size: 0.7rem;">27 Jul, 02:10 PM</span>
+          </div>
+
+          <div class="d-flex gap-3 align-items-start position-relative">
+            <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center flex-shrink-0 z-1 mt-1 border border-3 border-primary border-opacity-25 box-sizing-content" style="width: 16px; height: 16px; margin-left: -2px;"></div>
+            <div class="flex-grow-1">
+              <span class="d-block fw-bold text-primary" style="font-size: 0.8rem;">Closed</span>
+            </div>
+            <span class="text-muted flex-shrink-0" style="font-size: 0.7rem;">27 Jul, 02:15 PM</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Helpful Resources -->
+      <div class="glass-card border-0 rounded-4 p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="fs-6 fw-bold text-dark mb-0">Helpful Resources</h2>
+          <a href="#" class="text-primary text-decoration-none fw-semibold" style="font-size: 0.75rem;">View All</a>
+        </div>
+        
+        <div class="d-flex flex-column gap-3">
+          <a href="#" class="d-flex gap-3 align-items-center text-decoration-none group">
+            <div class="bg-light text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0" style="width: 32px; height: 32px;">
+              <i class="bi bi-file-earmark-text"></i>
+            </div>
+            <span class="fw-bold text-dark" style="font-size: 0.8rem;">Interview Guide</span>
+          </a>
+
+          <a href="#" class="d-flex gap-3 align-items-center text-decoration-none group">
+            <div class="bg-light text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0" style="width: 32px; height: 32px;">
+              <i class="bi bi-youtube"></i>
+            </div>
+            <span class="fw-bold text-dark" style="font-size: 0.8rem;">How to Join Interview Room</span>
+          </a>
+
+          <a href="#" class="d-flex gap-3 align-items-center text-decoration-none group">
+            <div class="bg-light text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0" style="width: 32px; height: 32px;">
+              <i class="bi bi-file-earmark-text"></i>
+            </div>
+            <span class="fw-bold text-dark" style="font-size: 0.8rem;">Application Process</span>
+          </a>
+
+          <a href="#" class="d-flex gap-3 align-items-center text-decoration-none group">
+            <div class="bg-light text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0" style="width: 32px; height: 32px;">
+              <i class="bi bi-file-earmark-text"></i>
+            </div>
+            <span class="fw-bold text-dark" style="font-size: 0.8rem;">Payment Release Guide</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  }
+
+  </div>
+</div>

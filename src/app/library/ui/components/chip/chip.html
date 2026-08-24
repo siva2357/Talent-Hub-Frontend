@@ -1,0 +1,23 @@
+<button type="button" class="chip" [class]="'chip ' +
+    (mode === 'outline'
+      ? 'chip-outline'
+      : 'chip-' + variant + '-subtle') +
+    (dashed ? ' chip-dashed' : '')" [disabled]="disabled" (click)="onClick($event)">
+
+    @if (icon) {
+    <span class="chip-icon">
+        <i [class]="icon"></i>
+    </span>
+    }
+
+    @if (label) {
+    <span>{{ label }}</span>
+    }
+
+    @if (showClose) {
+    <span class="chip-close" role="button" tabindex="0" (click)="onRemove($event)">
+        <i class="bi bi-x"></i>
+    </span>
+    }
+
+</button>

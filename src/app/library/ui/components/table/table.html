@@ -1,0 +1,20 @@
+<div class="table-component-wrapper">
+
+    <ngx-datatable class="bootstrap" [rows]="data" [columnMode]="columnModeEnum.force" [headerHeight]="50"
+        [footerHeight]="50" rowHeight="auto" [limit]="10">
+
+        @for (column of columns; track column.field) {
+        <ngx-datatable-column name="{{column.headerName}}" prop="{{column.field}}">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                @if (column.cellTemplate) {
+                <ng-container
+                    *ngTemplateOutlet="column.cellTemplate; context: { $implicit: value, row: row }"></ng-container>
+                } @else {
+                {{ value }}
+                }
+            </ng-template>
+        </ngx-datatable-column>
+        }
+    </ngx-datatable>
+
+</div>

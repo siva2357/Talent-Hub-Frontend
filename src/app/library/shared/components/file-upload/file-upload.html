@@ -1,0 +1,59 @@
+<!-- FILE UPLOAD MODE -->
+@if (mode === 'file') {
+
+<label class="upload-box" [class.dragging]="isDragging">
+
+    <input type="file" hidden />
+
+    <div class="upload-icon-wrapper">
+        <i class="bi bi-cloud-arrow-up"></i>
+    </div>
+
+    <h3 class="upload-title">
+        {{ title }}<br>
+        <span>{{ browseText }}</span>
+    </h3>
+
+    <p class="upload-text">
+        Supported formats: {{ acceptedFormats }}
+        <br>
+        (Max size: {{ maxSize }})
+    </p>
+
+</label>
+
+}
+
+
+<!-- AVATAR UPLOAD MODE -->
+@if (mode === 'avatar') {
+
+<label class="avatar-upload-box">
+
+    <input type="file" hidden accept="image/png,image/jpeg" />
+
+    <div class="avatar-circle">
+
+        @if (previewUrl) {
+        <img [src]="previewUrl" alt="Profile preview" class="avatar-preview" />
+        } @else {
+        <i class="bi bi-person-fill main-icon"></i>
+        }
+
+        <div class="avatar-camera-btn">
+            <i class="bi bi-camera-fill"></i>
+        </div>
+
+    </div>
+
+    <h3 class="upload-title avatar-title">
+        {{ avatarTitle }}
+    </h3>
+
+    <p class="upload-text">
+        {{ avatarFormats }} up to {{ avatarMaxSize }}
+    </p>
+
+</label>
+
+}

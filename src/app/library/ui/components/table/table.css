@@ -1,0 +1,49 @@
+.table-component-wrapper {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 8px;
+}
+
+/* ngx-datatable */
+
+:host ::ng-deep .ngx-datatable.bootstrap {
+  box-shadow: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-header {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-header-cell {
+  color: #111827;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 14px 16px;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body-row {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body-cell {
+  color: #4b5563;
+  font-size: 13px;
+  padding: 14px 16px;
+}
+
+/* Override overflow to prevent dropdown clipping */
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body,
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-row-wrapper,
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body-row,
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body-cell {
+  overflow: visible !important;
+}
+
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body-row:hover {
+  background-color: #f9fafb;
+}
+
+

@@ -1,0 +1,406 @@
+<div class="dashboard-container position-relative p-4">
+  <!-- Decorative background wrapper -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper (Glassmorphism) -->
+  <form [formGroup]="contractForm" (ngSubmit)="submitContract()" class="position-relative z-1 p-4 mx-auto"
+    style="max-width: 1400px;">
+
+    <div class="step-container bg-white rounded-4 shadow-sm mb-5 border p-0 overflow-hidden">
+
+      <!-- ==========================================
+         CONSTANT HEADER & STEPPER
+      =========================================== -->
+      <div class="p-4 border-bottom bg-light bg-opacity-50">
+        <div class="d-flex align-items-start gap-3 mb-4">
+          <button type="button" routerLink="/manage-contract" class="btn btn-link text-dark p-0 mt-1"><i
+              class="bi bi-arrow-left fs-5"></i></button>
+          <div>
+            <h1 class="fw-bold fs-4 mb-1 text-dark">{{ editContractId ? 'Edit Contract' : 'Create New Contract' }}</h1>
+            <p class="text-muted small mb-0">{{ editContractId ? 'Update the details below to edit your contract' : 'Fill in the details below to create a new contract' }}</p>
+          </div>
+        </div>
+
+        <!-- Dynamic Stepper -->
+        <div class="d-flex align-items-center w-75 mx-auto mt-2">
+
+          <!-- Step 1 Indicator -->
+          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
+            <div
+              class="rounded-circle d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
+              [ngClass]="currentStep > 1 ? 'bg-success text-white' : 'bg-primary text-white'"
+              style="width: 32px; height: 32px; font-size: 0.8rem;">
+              @if (currentStep > 1) { <i class="bi bi-check fs-5"></i> } @else { 1 }
+            </div>
+            <span class="small mt-2 fw-bold" [ngClass]="currentStep >= 1 ? 'text-primary' : 'text-muted'"
+              style="font-size: 0.7rem;">Basic Details</span>
+            <div class="position-absolute top-0 start-50 w-100"
+              [ngClass]="currentStep > 1 ? 'bg-success' : 'bg-secondary bg-opacity-25'"
+              style="height: 3px; margin-top: 15px; z-index: 1;"></div>
+          </div>
+
+          <!-- Step 2 Indicator -->
+          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
+            <div
+              class="rounded-circle d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
+              [ngClass]="currentStep > 2 ? 'bg-success text-white' : (currentStep === 2 ? 'bg-primary text-white' : 'bg-white border-secondary text-muted bg-opacity-50')"
+              style="width: 32px; height: 32px; font-size: 0.8rem;">
+              @if (currentStep > 2) { <i class="bi bi-check fs-5"></i> } @else { 2 }
+            </div>
+            <span class="small mt-2 fw-bold" [ngClass]="currentStep >= 2 ? 'text-primary' : 'text-muted'"
+              style="font-size: 0.7rem;">Terms & Conditions</span>
+            <div class="position-absolute top-0 start-50 w-100"
+              [ngClass]="currentStep > 2 ? 'bg-success' : 'bg-secondary bg-opacity-25'"
+              style="height: 3px; margin-top: 15px; z-index: 1;"></div>
+          </div>
+
+          <!-- Step 3 Indicator -->
+          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
+            <div
+              class="rounded-circle d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
+              [ngClass]="currentStep === 3 ? 'bg-primary text-white' : 'bg-white border-secondary text-muted bg-opacity-50'"
+              style="width: 32px; height: 32px; font-size: 0.8rem;">3</div>
+            <span class="small mt-2 text-center fw-bold" [ngClass]="currentStep === 3 ? 'text-primary' : 'text-muted'"
+              style="font-size: 0.7rem;">Review & Create</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+         STEP 1: BASIC DETAILS & BUDGET
+      =========================================== -->
+      @if (currentStep === 1) {
+      <div class="p-4">
+        <div class="row g-5">
+          <!-- Left Column -->
+          <div class="col-lg-8 mx-auto">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <div
+                class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
+                <i class="bi bi-file-earmark-text fs-5"></i>
+              </div>
+              <h2 class="fs-5 fw-bold mb-0 text-dark">Basic Details</h2>
+            </div>
+            <p class="text-muted small mb-4">Provide the fundamental information about this contract.</p>
+
+            <div class="row g-4 mb-4">
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Title <span
+                    class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="contractTitle"
+                  placeholder="Enter a clear contract title">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Type <span
+                    class="text-danger">*</span></label>
+                <select class="form-select text-dark" formControlName="contractType">
+                  <option value="" disabled>Select contract type</option>
+                  <option value="Fixed Price">Fixed Price</option>
+                  <option value="Hourly">Hourly</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Category <span
+                    class="text-danger">*</span></label>
+                <select class="form-select text-dark" formControlName="contractCategory">
+                  <option value="" disabled>Select category</option>
+                  <option value="Web Development">Web Development</option>
+                  <option value="Mobile Development">Mobile Development</option>
+                  <option value="Design">Design</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Subject <span
+                    class="text-danger">*</span></label>
+                <select class="form-select text-dark" formControlName="contractSubject">
+                  <option value="" disabled>Select subject</option>
+                  <option value="Frontend">Frontend</option>
+                  <option value="Backend">Backend</option>
+                  <option value="Full Stack">Full Stack</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Description <span
+                  class="text-danger">*</span></label>
+              <div class="border rounded-3 p-2 bg-white">
+                <textarea class="form-control border-0 shadow-none text-dark" rows="4"
+                  formControlName="contractDescription" style="font-size: 0.85rem; resize: none;"
+                  placeholder="Describe the work, objectives, deliverables, and any important details..."></textarea>
+              </div>
+            </div>
+
+            <div class="row g-4 mb-5">
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Start Date <span
+                    class="text-danger">*</span></label>
+                <div class="input-group">
+                  <input type="date" class="form-control border-end-0 text-dark" formControlName="contractStartDate">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract End Date <span
+                    class="text-danger">*</span></label>
+                <div class="input-group">
+                  <input type="date" class="form-control border-end-0 text-dark" formControlName="contractEndDate">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Estimated Budget (₹) <span
+                    class="text-danger">*</span></label>
+                <input type="number" class="form-control text-dark" formControlName="estimatedBudget"
+                  placeholder="Enter total budget">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Status</label>
+                <select class="form-select text-dark fw-semibold" formControlName="status">
+                  <option value="draft">Draft</option>
+                  <option value="open">Open</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between pt-4 border-top">
+              <button type="button" routerLink="/manage-contract"
+                class="btn btn-outline-secondary px-4 fw-bold">Cancel</button>
+              <button type="button" (click)="nextStep()"
+                class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold">Save & Continue <i
+                  class="bi bi-arrow-right ms-1"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+
+
+      <!-- ==========================================
+         STEP 2: TERMS & CONDITIONS
+      =========================================== -->
+      @if (currentStep === 2) {
+      <div class="p-4">
+        <div class="row g-5">
+          <!-- Left Column -->
+          <div class="col-lg-8 mx-auto">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <div
+                class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
+                <i class="bi bi-journal-text fs-5"></i>
+              </div>
+              <h2 class="fs-5 fw-bold mb-0 text-dark">Terms & Conditions</h2>
+            </div>
+            <p class="text-muted small mb-4">Please read and accept the platform terms before posting the contract.</p>
+
+            <div class="d-flex flex-column gap-4 mb-5 border rounded-3 p-4 bg-white">
+              <div class="d-flex gap-3">
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">1</div>
+                <div>
+                  <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Platform Agreement</h4>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I confirm that I am authorized to create this contract and agree to comply with Talent Hub's platform policies.</p>
+                </div>
+              </div>
+              <div class="d-flex gap-3">
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">2</div>
+                <div>
+                  <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Accurate Project Information</h4>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I confirm that the project details, requirements, budget, and timeline provided are accurate and complete.</p>
+                </div>
+              </div>
+              <div class="d-flex gap-3">
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">3</div>
+                <div>
+                  <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Contract Budget</h4>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I understand that the total contract budget must represent the agreed project value and may be processed according to Talent Hub's payment policies.</p>
+                </div>
+              </div>
+              <div class="d-flex gap-3">
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">4</div>
+                <div>
+                  <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Milestone-Based Work</h4>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I understand that work progress will be managed through contract phases and milestone submissions within the Contract Diary.</p>
+                </div>
+              </div>
+              <div class="d-flex gap-3">
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">5</div>
+                <div>
+                  <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Payment Processing</h4>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I understand that all payments will be processed only through Talent Hub's supported payment system. Off-platform payments are not allowed and may violate platform policies.</p>
+                </div>
+              </div>
+              <div class="d-flex gap-3">
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">6</div>
+                <div>
+                  <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Review & Approval</h4>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I agree to review submitted work within the expected review period and provide approval or revision requests promptly.</p>
+                </div>
+              </div>
+              <div class="d-flex gap-3">
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">7</div>
+                <div>
+                  <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Revision Management</h4>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I understand that revision requests should remain within the agreed project scope. Additional work outside the agreed scope may require a new contract or additional agreement.</p>
+                </div>
+              </div>
+              <div class="d-flex gap-3">
+                <div class="rounded-circle bg-light border text-muted d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 24px; height: 24px; font-size: 0.7rem;">8</div>
+                <div>
+                  <h4 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;">Communication Policy</h4>
+                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">I agree to communicate professionally through Talent Hub's messaging and meeting features to maintain project history.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <h3 class="fs-6 fw-bold text-dark mb-3">Client Acceptance</h3>
+              <div class="d-flex flex-column gap-3" style="font-size: 0.8rem;">
+                <div class="form-check">
+                  <input class="form-check-input border-secondary" type="checkbox" id="c1"
+                    formControlName="agreeToTerms1">
+                  <label class="form-check-label text-muted" for="c1">I have read and understood all the above Terms &
+                    Conditions.</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input border-secondary" type="checkbox" id="c2"
+                    formControlName="agreeToTerms2">
+                  <label class="form-check-label text-muted" for="c2">I agree to comply with Talent Hub's platform
+                    policies.</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input border-secondary" type="checkbox" id="c3"
+                    formControlName="agreeToTerms3">
+                  <label class="form-check-label text-muted" for="c3">I understand that once the contract is created, it
+                    becomes the official project agreement on the Talent Hub platform.</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between pt-4 border-top">
+              <button type="button" (click)="previousStep()"
+                class="btn btn-outline-secondary px-4 fw-bold d-flex align-items-center gap-2"><i
+                  class="bi bi-arrow-left"></i> Back</button>
+              <button type="button" (click)="nextStep()"
+                [disabled]="contractForm.get('agreeToTerms1')?.invalid || contractForm.get('agreeToTerms2')?.invalid || contractForm.get('agreeToTerms3')?.invalid"
+                class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold">Continue to Review <i
+                  class="bi bi-arrow-right ms-1"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+
+
+      <!-- ==========================================
+         STEP 3: REVIEW & CREATE
+      =========================================== -->
+      @if (currentStep === 3) {
+      <div class="p-4">
+        <div class="row g-5">
+          <!-- Left Column -->
+          <div class="col-lg-8 mx-auto">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <div
+                class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
+                <i class="bi bi-eye fs-5"></i>
+              </div>
+              <h2 class="fs-5 fw-bold mb-0 text-dark">Review Your Contract</h2>
+            </div>
+            <p class="text-muted small mb-4">Please review all contract details carefully. You can go back and edit if
+              needed.</p>
+
+            <div class="d-flex flex-column gap-5 mb-5">
+
+              <!-- Basic Details Review -->
+              <div>
+                <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                  <h3 class="fs-6 fw-bold text-dark mb-0">Basic Details & Budget</h3>
+                  <button type="button" (click)="currentStep = 1"
+                    class="btn btn-link text-primary text-decoration-none fw-semibold d-flex align-items-center gap-1 p-0"
+                    style="font-size: 0.75rem;"><i class="bi bi-pencil"></i> Edit</button>
+                </div>
+                <div class="row g-4" style="font-size: 0.8rem;">
+                  <div class="col-md-6">
+                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Contract Title</span>
+                    <span class="fw-bold text-dark">{{ contractForm.get('contractTitle')?.value || '-' }}</span>
+                  </div>
+                  <div class="col-md-6">
+                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Contract Type</span>
+                    <span class="fw-bold text-dark">{{ contractForm.get('contractType')?.value || '-' }}</span>
+                  </div>
+                  <div class="col-md-6">
+                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Category</span>
+                    <span class="fw-bold text-dark">{{ contractForm.get('contractCategory')?.value || '-' }}</span>
+                  </div>
+                  <div class="col-md-6">
+                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Subject</span>
+                    <span class="fw-bold text-dark">{{ contractForm.get('contractSubject')?.value || '-' }}</span>
+                  </div>
+                  <div class="col-md-12">
+                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Description</span>
+                    <span class="fw-semibold text-muted d-block" style="line-height: 1.5;">{{
+                      contractForm.get('contractDescription')?.value || '-' }}</span>
+                  </div>
+                  <div class="col-md-6">
+                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Budget</span>
+                    <span class="fw-bold text-dark fs-6">₹{{ contractForm.get('estimatedBudget')?.value || 0 }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Duration Details Review -->
+              <div>
+                <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                  <h3 class="fs-6 fw-bold text-dark mb-0">Duration Details</h3>
+                </div>
+                <div class="row g-4" style="font-size: 0.8rem;">
+                  <div class="col-md-6">
+                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Contract Start Date</span>
+                    <span class="fw-bold text-dark">{{ contractForm.get('contractStartDate')?.value | date:'mediumDate'
+                      }}</span>
+                  </div>
+                  <div class="col-md-6">
+                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Contract End Date</span>
+                    <span class="fw-bold text-dark">{{ contractForm.get('contractEndDate')?.value | date:'mediumDate'
+                      }}</span>
+                  </div>
+                  <div class="col-md-6">
+                    <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Total Duration</span>
+                    <span class="fw-bold text-dark">{{ durationDetails.totalDays }} Days</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="d-flex justify-content-between pt-4 border-top">
+              <button type="button" (click)="previousStep()"
+                class="btn btn-outline-secondary px-4 fw-bold d-flex align-items-center gap-2"><i
+                  class="bi bi-arrow-left"></i> Back</button>
+              <button type="submit" [disabled]="isSubmitting"
+                class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold">
+                @if(isSubmitting) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Submitting...
+                } @else {
+                {{ editContractId ? 'Update Contract & Continue' : 'Create Contract & Continue' }} <i class="bi bi-arrow-right ms-1"></i>
+                }
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+
+    </div>
+  </form>
+
+</div>

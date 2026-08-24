@@ -1,0 +1,96 @@
+/* Custom Spinner Variations */
+.spinner-dotted {
+  border-style: dotted;
+  border-width: 3px;
+}
+
+.spinner-thick {
+  border-width: 4px;
+}
+
+.spinner-track {
+  border: 3px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  animation: spinner-border .75s linear infinite;
+}
+
+/* Custom Progress Bar Overrides */
+.progress {
+  height: 6px;
+  background-color: #f3f4f6;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.progress-bar {
+  background-color: #2563eb;
+  border-radius: 10px;
+}
+
+/* Progress bar with a handle/dot */
+.progress-with-handle {
+  overflow: visible; /* so the handle can overflow */
+}
+
+.progress-with-handle .progress-bar {
+  position: relative;
+}
+
+.progress-with-handle .progress-bar::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background-color: #2563eb;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #ffffff;
+}
+
+/* Circular Progress Rings via Conic Gradients */
+.circular-progress {
+  position: relative;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.circular-progress::before {
+  content: "";
+  position: absolute;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.circular-progress span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Sizes & Thicknesses */
+.circle-size {
+  width: 64px;
+  height: 64px;
+}
+
+.ring-thin::before {
+  top: 4px; left: 4px; right: 4px; bottom: 4px;
+}
+
+.ring-md::before {
+  top: 6px; left: 6px; right: 6px; bottom: 6px;
+}
+
+.ring-thick::before {
+  top: 8px; left: 8px; right: 8px; bottom: 8px;
+}

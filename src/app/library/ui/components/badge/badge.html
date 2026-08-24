@@ -1,0 +1,23 @@
+<span class="badge" [class]="'badge ' +
+    (style === 'outline'
+      ? 'badge-outline-' + variant
+      : style === 'subtle'
+        ? 'bg-' + variant + '-subtle'
+        : 'bg-' + variant) +
+    (rounded ? ' rounded-pill' : '')">
+
+    @if (icon) {
+    <i [class]="icon"></i>
+    }
+
+    @if (label) {
+    <span>{{ label }}</span>
+    }
+
+    @if (count !== null) {
+    <span class="badge-count">
+        {{ count }}
+    </span>
+    }
+
+</span>

@@ -1,0 +1,22 @@
+<aside class="modern-sidebar" [class.open]="isOpen">
+  <div class="sidebar-nav">
+    <div class="nav-section">
+      @for (link of navLinks; track link.path) {
+        <a [routerLink]="link.path" routerLinkActive="active" class="nav-item" (mouseenter)="showTooltip($event, link.label)" (mouseleave)="hideTooltip()">
+          <i class="nav-icon" [ngClass]="link.icon"></i>
+          <span class="nav-text">{{ link.label }}</span>
+        </a>
+      }
+    </div>
+  </div>
+
+  @if (tooltipText) {
+    <div class="custom-tooltip" [style.top.px]="tooltipTop">
+      {{ tooltipText }}
+    </div>
+  }
+</aside>
+
+@if (isOpen) {
+  <div class="sidebar-overlay" (click)="toggleSidebar()"></div>
+}

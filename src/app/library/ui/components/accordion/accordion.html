@@ -1,0 +1,40 @@
+<div class="accordion">
+
+    @for (item of items; track $index) {
+
+    <div class="accordion-item">
+
+        <h2 class="accordion-header">
+
+            <button class="accordion-button" [class.collapsed]="!item.expanded" type="button"
+                [attr.aria-expanded]="item.expanded" (click)="toggle($index)">
+
+                @if (item.icon) {
+                <span class="accordion-icon-container">
+                    <i [class]="item.icon"></i>
+                </span>
+                }
+
+                {{ item.title }}
+
+            </button>
+
+        </h2>
+
+        @if (item.expanded) {
+
+        <div class="accordion-collapse collapse show">
+
+            <div class="accordion-body" [style.padding-left]="item.icon ? '64px' : null">
+                {{ item.content }}
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+
+    }
+
+</div>

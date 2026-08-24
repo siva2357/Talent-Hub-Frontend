@@ -1,0 +1,179 @@
+/* Custom Input Field Styles */
+
+.form-control,
+.form-select {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  color: #111827;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  padding: 10px 14px;
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.form-control::placeholder {
+  color: #9ca3af;
+}
+
+.form-control:hover,
+.form-select:hover {
+  border-color: #9ca3af;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #2563eb;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+
+/* =========================================
+   INPUT WITH ICON
+   ========================================= */
+
+.input-group {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  position: relative;
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 48px;
+
+  padding: 10px 12px;
+
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+
+  color: #374151;
+  background-color: #ffffff;
+
+  border: 1px solid #d1d5db;
+  border-right: 0;
+
+  border-radius: 6px 0 0 6px;
+}
+
+.input-group-text i {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.input-group .form-control {
+  flex: 1;
+  width: auto;
+
+  border-radius: 0 6px 6px 0;
+}
+
+
+/* Icon + Input Hover */
+
+.input-group:hover .input-group-text {
+  border-color: #9ca3af;
+}
+
+.input-group:hover .form-control {
+  border-color: #9ca3af;
+}
+
+
+/* Icon + Input Focus */
+
+.input-group:focus-within .input-group-text {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.input-group:focus-within .form-control {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+
+/* Select chevron override */
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px 12px;
+  padding-right: 32px;
+}
+
+
+/* Multi-select fix for background image */
+
+.form-select[multiple] {
+  background-image: none;
+  padding-right: 14px;
+}
+
+
+/* =========================================
+   DISABLED
+   ========================================= */
+
+.form-control:disabled,
+.form-select:disabled,
+.input-group .form-control:disabled {
+  background-color: #f9fafb;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+}
+
+.input-group:has(.form-control:disabled) .input-group-text {
+  background-color: #f9fafb;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+}
+
+
+/* =========================================
+   READ ONLY
+   ========================================= */
+
+.form-control[readonly] {
+  background-color: #f9fafb;
+  color: #6b7280;
+}
+
+
+/* =========================================
+   VALIDATION
+   ========================================= */
+
+.input-validation-message {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.input-validation-message.text-success {
+  color: #059669;
+}
+
+.input-validation-message.text-danger {
+  color: #dc2626;
+}
