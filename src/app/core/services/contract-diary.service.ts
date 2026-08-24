@@ -32,6 +32,11 @@ export class ContractDiaryService {
     return this.http.post(`${this.apiUrl}/${diaryId}/phases`, payload, { headers: this.getAuthHeaders() });
   }
 
+  // Update an existing phase
+  updatePhase(diaryId: string, phaseId: string, payload: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${diaryId}/phases/${phaseId}`, payload, { headers: this.getAuthHeaders() });
+  }
+
   // Review a phase (approve/reject/request changes)
   reviewPhase(diaryId: string, phaseId: string, payload: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/${diaryId}/phases/${phaseId}/review`, payload, { headers: this.getAuthHeaders() });

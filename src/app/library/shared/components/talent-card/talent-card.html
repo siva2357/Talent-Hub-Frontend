@@ -1,0 +1,253 @@
+@if (talent) {
+
+<div class="talent-card">
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+
+    <div class="talent-card-header">
+
+        <div class="talent-profile">
+
+            <!-- Profile Image -->
+
+            <div class="talent-avatar">
+
+                @if (talent.profilePhoto) {
+
+                <img [src]="talent.profilePhoto" [alt]="talent.fullName" />
+
+                } @else {
+
+                <div class="talent-avatar-placeholder">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+                }
+
+            </div>
+
+
+            <!-- Profile Information -->
+
+            <div class="talent-info">
+
+                <h6 class="talent-name">
+                    {{ talent.fullName }}
+                </h6>
+
+
+                @if (location) {
+
+                <div class="talent-location">
+
+                    <i class="bi bi-geo-alt-fill"></i>
+
+                    <span>
+                        {{ location }}
+                    </span>
+
+                </div>
+
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- Profile Status -->
+
+        <span class="talent-status" [class.status-active]="isActive" [class.status-inactive]="!isActive">
+
+            <span class="status-dot"></span>
+
+            {{ talent.status }}
+
+        </span>
+
+    </div>
+
+
+    <!-- =========================================
+         SKILLS
+         ========================================= -->
+
+    @if (talent.skills.length) {
+
+    <div class="talent-section">
+
+        <span class="talent-section-label">
+            TOP SKILLS
+        </span>
+
+
+        <div class="talent-skills">
+
+            @for (skill of visibleSkills; track skill) {
+
+            <span class="talent-skill">
+                {{ skill }}
+            </span>
+
+            }
+
+
+            @if (remainingSkills > 0) {
+
+            <span class="talent-skill talent-skill-more">
+                +{{ remainingSkills }} More
+            </span>
+
+            }
+
+        </div>
+
+    </div>
+
+    }
+
+
+    <!-- =========================================
+         CONTRACT STATISTICS
+         ========================================= -->
+
+    <!-- =========================================
+     CONTRACT STATISTICS
+     ========================================= -->
+
+    <div class="talent-statistics">
+
+        <!-- Active Contracts -->
+
+        <div class="talent-stat">
+
+            <div class="talent-stat-icon talent-stat-icon-active">
+                <i class="bi bi-rocket-takeoff-fill"></i>
+            </div>
+
+            <div class="talent-stat-content">
+
+                <strong>
+                    {{ talent.activeContracts ||0 }}
+                </strong>
+
+                <span>
+                    Active Contracts
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Completed Contracts -->
+
+        <div class="talent-stat">
+
+            <div class="talent-stat-icon talent-stat-icon-completed">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+
+            <div class="talent-stat-content">
+
+                <strong>
+                    {{ talent.completedContracts ||0}}
+                </strong>
+
+                <span>
+                    Completed
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Job Success -->
+
+        <div class="talent-stat">
+
+            <div class="talent-stat-icon talent-stat-icon-success">
+                <i class="bi bi-graph-up-arrow"></i>
+            </div>
+
+            <div class="talent-stat-content">
+
+                <strong>
+                    @if (talent.jobSuccessRate !== undefined) {
+                    {{ talent.jobSuccessRate }}%
+                    } @else {
+                    N/A
+                    }
+                </strong>
+
+                <span>
+                    Job Success
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Risk Status -->
+
+        <div class="talent-stat">
+
+            <div class="talent-stat-icon talent-stat-icon-risk">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div class="talent-stat-content">
+
+                <strong>
+                    {{ talent.riskStatus || 'N/A' }}
+                </strong>
+
+                <span>
+                    Risk Status
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         FOOTER
+         ========================================= -->
+
+    <div class="talent-card-footer">
+
+        <!-- Save -->
+
+        <button type="button" class="talent-save-button" [class.saved]="talent.isSaved" aria-label="Save Talent"
+            (click)="onSave()">
+
+            <i class="bi" [class.bi-bookmark-fill]="talent.isSaved" [class.bi-bookmark]="!talent.isSaved">
+            </i>
+
+        </button>
+
+
+        <!-- View Profile -->
+
+        <button type="button" class="talent-profile-button" (click)="onViewProfile()">
+
+            View Profile
+
+            <i class="bi bi-arrow-right"></i>
+
+        </button>
+
+    </div>
+
+</div>
+
+}

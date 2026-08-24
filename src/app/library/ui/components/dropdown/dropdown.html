@@ -1,50 +1,27 @@
-<div class="dropdown-showcase border border-dark border-1 rounded-3"
-    style="padding: 60px; font-family: 'Inter', sans-serif; background: #fff; max-width: 800px; margin: 0 auto; color: #000000; display: flex; gap: 80px; align-items: flex-start;">
+<ul class="dropdown-menu custom-dropdown shadow show" [class.dropdown-icon-mode]="mode === 'icon'"
+    [class.dropdown-text-mode]="mode === 'text'">
 
-    <!-- Left Section: Description (Mirroring the image) -->
-    <div style="flex: 1; padding-top: 16px;">
-        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
-            <div
-                style="width: 32px; height: 32px; background: #2563eb; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; flex-shrink: 0;">
-                2
-            </div>
-            <h1 style="font-size: 18px; font-weight: 700; color: #111827; margin: 0;">Dropdown List</h1>
-        </div>
-        <p style="color: #4b5563; font-size: 14px; line-height: 1.6; padding-left: 48px; max-width: 250px;">
-            The list container that appears below the trigger with selectable items.
-        </p>
-    </div>
+    @for (item of items; track item.value) {
 
-    <!-- Right Section: The Dropdown UI -->
-    <div style="flex: 1;">
-        <!-- Static display of the dropdown menu -->
-        <ul class="dropdown-menu custom-dropdown shadow" style="display: block; position: static;">
-            <li>
-                <a class="dropdown-item" href="#">
-                    <i class="bi bi-person me-3"></i> Profile
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item" href="#">
-                    <i class="bi bi-envelope me-3"></i> Messages
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item" href="#">
-                    <i class="bi bi-gear me-3"></i> Settings
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item" href="#">
-                    <i class="bi bi-question-circle me-3"></i> Help
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item" href="#">
-                    <i class="bi bi-box-arrow-right me-3"></i> Logout
-                </a>
-            </li>
-        </ul>
-    </div>
+    <li>
 
-</div>
+        <button type="button" class="dropdown-item" [disabled]="item.disabled" (click)="onItemClick(item)">
+
+            @if (mode === 'icon' && item.icon) {
+
+            <i [class]="item.icon" aria-hidden="true">
+            </i>
+
+            }
+
+            <span>
+                {{ item.label }}
+            </span>
+
+        </button>
+
+    </li>
+
+    }
+
+</ul>

@@ -15,6 +15,8 @@ export class CreatePhase implements OnInit {
   contractId: string = '';
   contract: any = null;
   diaryId: string = '';
+  phaseId: string | null = null;
+  isEditMode: boolean = false;
 
   phaseForm!: FormGroup;
 
@@ -30,9 +32,16 @@ export class CreatePhase implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.contractId = params.get('id') || '';
-      if (this.contractId) {
-        this.fetchContractDetails();
-      }
+      
+      // Check query params for phaseId
+      this.route.queryParamMap.subscribe(queryParams => {
+        this.phaseId = queryParams.get('phaseId');
+        this.isEditMode = !!this.phaseId;
+        
+        if (this.contractId) {
+          this.fetchContractDetails();
+        }
+      });
     });
   }
 
@@ -92,10 +101,38 @@ export class CreatePhase implements OnInit {
         if(res.success && res.diary) {
           this.diaryId = res.diary._id;
           this.contract = res.diary.contractId; 
+          
+          if (this.isEditMode && this.phaseId) {
+            const phase = res.diary.phases.find((p: any) => p._id === this.phaseId);
+            if (phase) {
+              this.patchForm(phase);
+            }
+          }
         }
       },
       error: (err) => console.error(err)
     });
+  }
+
+  patchForm(phase: any): void {
+    const deadline = phase.deadline ? new Date(phase.deadline).toISOString().split('T')[0] : '';
+    this.phaseForm.patchValue({
+      phaseName: phase.name,
+      deadline: deadline,
+      budget: phase.amount
+    });
+
+    // Clear initial arrays
+    this.deliverables.clear();
+    this.acceptanceCriteria.clear();
+
+    // In a real implementation we would patch the deliverables/criteria, 
+    // but the backend only stores description right now for phase updates.
+    // However, if the backend stored arrays, we'd loop and push controls here.
+    // We'll just put placeholder if empty or just 1 item since we modified backend 
+    // to just take name, deadline, amount.
+    this.addDeliverable();
+    this.addCriteria();
   }
 
   createPhase(): void {
@@ -115,16 +152,29 @@ export class CreatePhase implements OnInit {
       acceptanceCriteria: formVal.acceptanceCriteria.filter((c: string) => c?.trim() !== '')
     };
 
-    this.diaryService.addPhase(this.diaryId, payload).subscribe({
-      next: (res) => {
-        if(res.success) {
-          this.router.navigate(['/contract-progress', this.contractId]);
-        } else {
-          alert('Failed to create phase.');
-        }
-      },
-      error: (err) => console.error(err)
-    });
+    if (this.isEditMode && this.phaseId) {
+      this.diaryService.updatePhase(this.diaryId, this.phaseId, payload).subscribe({
+        next: (res) => {
+          if(res.success) {
+            this.router.navigate(['/contract-progress', this.contractId]);
+          } else {
+            alert('Failed to update phase.');
+          }
+        },
+        error: (err) => console.error(err)
+      });
+    } else {
+      this.diaryService.addPhase(this.diaryId, payload).subscribe({
+        next: (res) => {
+          if(res.success) {
+            this.router.navigate(['/contract-progress', this.contractId]);
+          } else {
+            alert('Failed to create phase.');
+          }
+        },
+        error: (err) => console.error(err)
+      });
+    }
   }
 }
 

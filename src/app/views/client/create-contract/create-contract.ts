@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ContractService } from '../../../core/services/contract.service';
-import { CreateContractDto } from '../../../core/dtos/contract.dto';
+import { CreateContractDto, UpdateContractDto } from '../../../core/dtos/contract.dto';
 
 
 
@@ -19,15 +19,53 @@ export class CreateContract implements OnInit {
   contractForm!: FormGroup;
   currentStep = 1;
   isSubmitting = false;
+  editContractId: string | null = null;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private contractService: ContractService
   ) { }
 
   ngOnInit(): void {
     this.initForm();
+    this.route.queryParams.subscribe(params => {
+      if (params['id']) {
+        this.editContractId = params['id'];
+        this.loadContractData(this.editContractId!);
+      }
+    });
+  }
+
+  loadContractData(id: string): void {
+    this.isLoading = true;
+    this.contractService.getClientContractById(id).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        if (res.success && res.contract) {
+          const c = res.contract;
+          this.contractForm.patchValue({
+            contractTitle: c.contractTitle,
+            contractType: c.contractType,
+            contractCategory: c.contractCategory || '',
+            contractSubject: c.contractSubject,
+            contractDescription: c.contractDescription,
+            contractStartDate: c.contractStartDate ? new Date(c.contractStartDate).toISOString().split('T')[0] : '',
+            contractEndDate: c.contractEndDate ? new Date(c.contractEndDate).toISOString().split('T')[0] : '',
+            status: c.status,
+            estimatedBudget: c.estimatedBudget,
+            currency: c.currency || 'INR'
+          });
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Error fetching contract', err);
+        alert('Failed to load contract data');
+      }
+    });
   }
 
   initForm(): void {
@@ -104,25 +142,40 @@ export class CreateContract implements OnInit {
     // }
 
     this.isSubmitting = true;
-    const payload: CreateContractDto = { ...this.contractForm.value };
+    const payload: any = { ...this.contractForm.value };
     payload.contractStartDate = new Date(payload.contractStartDate).toISOString();
     payload.contractEndDate = new Date(payload.contractEndDate).toISOString();
-    delete (payload as any).agreeToTerms1;
-    delete (payload as any).agreeToTerms2;
-    delete (payload as any).agreeToTerms3;
+    delete payload.agreeToTerms1;
+    delete payload.agreeToTerms2;
+    delete payload.agreeToTerms3;
 
-    this.contractService.createContract(payload).subscribe({
-      next: (response) => {
-        this.isSubmitting = false;
-        alert('Contract created successfully!');
-        this.router.navigate(['/manage-contract']);
-      },
-      error: (error) => {
-        this.isSubmitting = false;
-        console.error('Error creating contract:', error);
-        alert(error.error?.message || 'Failed to create contract');
-      }
-    });
+    if (this.editContractId) {
+      this.contractService.updateContract(this.editContractId, payload).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          alert('Contract updated successfully!');
+          this.router.navigate(['/manage-contract']);
+        },
+        error: (error) => {
+          this.isSubmitting = false;
+          console.error('Error updating contract:', error);
+          alert(error.error?.message || 'Failed to update contract');
+        }
+      });
+    } else {
+      this.contractService.createContract(payload as CreateContractDto).subscribe({
+        next: (response) => {
+          this.isSubmitting = false;
+          alert('Contract created successfully!');
+          this.router.navigate(['/manage-contract']);
+        },
+        error: (error) => {
+          this.isSubmitting = false;
+          console.error('Error creating contract:', error);
+          alert(error.error?.message || 'Failed to create contract');
+        }
+      });
+    }
   }
 }
 

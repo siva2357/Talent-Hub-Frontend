@@ -1,0 +1,169 @@
+@if (ticket) {
+
+<div class="ticket-card">
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+
+    <div class="ticket-card-header">
+
+        <div class="ticket-id">
+            <i class="bi bi-hash"></i>
+            {{ ticket.ticketId }}
+        </div>
+
+        <span class="ticket-status" [class.status-open]="ticket.status === 'Open'"
+            [class.status-pending]="ticket.status === 'Pending'" [class.status-closed]="ticket.status === 'Closed'">
+
+            <span class="status-dot"></span>
+
+            {{ ticket.status }}
+
+        </span>
+
+    </div>
+
+
+    <!-- =========================================
+         SUBJECT
+         ========================================= -->
+
+    <div class="ticket-subject-section">
+
+        <div class="ticket-subject-icon">
+            <i class="bi bi-ticket-detailed"></i>
+        </div>
+
+        <div class="ticket-subject-content">
+
+            <h5>
+                {{ ticket.subject }}
+            </h5>
+
+            <div class="ticket-meta-tags">
+
+                @if (ticket.category) {
+                <span class="ticket-tag ticket-tag-category">
+                    {{ ticket.category }}
+                </span>
+                }
+
+                @if (ticket.priority) {
+                <span class="ticket-tag" [class.priority-high]="ticket.priority === 'High'"
+                    [class.priority-medium]="ticket.priority === 'Medium'"
+                    [class.priority-low]="ticket.priority === 'Low'">
+
+                    {{ ticket.priority }}
+
+                </span>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         DATES
+         ========================================= -->
+
+    <div class="ticket-dates">
+
+        <div class="ticket-date">
+
+            <div class="ticket-date-icon">
+                <i class="bi bi-calendar3"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    CREATED ON
+                </span>
+
+                <strong>
+                    {{ formattedCreatedDate }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        @if (ticket.status === 'Closed') {
+
+        <div class="ticket-date">
+
+            <div class="ticket-date-icon">
+                <i class="bi bi-calendar-check"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    CLOSED ON
+                </span>
+
+                <strong>
+                    {{ formattedClosedDate }}
+                </strong>
+
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+
+
+    <!-- =========================================
+         FOOTER / COUNTS
+         ========================================= -->
+
+    <div class="ticket-card-footer">
+
+        <div class="ticket-counts">
+
+            <div class="ticket-count">
+
+                <i class="bi bi-chat-dots-fill"></i>
+
+                <span>
+                    {{ ticket.replies.length }}
+                    {{ (ticket.replies.length) === 1 ? 'Reply' : 'Replies' }}
+                </span>
+
+            </div>
+
+
+            <div class="ticket-count">
+
+                <i class="bi bi-paperclip"></i>
+
+                <span>
+                    {{ ticket.attachments.length }}
+                    {{ (ticket.attachments.length) === 1 ? 'Attachment' : 'Attachments' }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button type="button" class="ticket-details-button" (click)="onViewDetails()">
+
+            View Details
+
+            <i class="bi bi-arrow-right"></i>
+
+        </button>
+
+    </div>
+
+</div>
+
+}

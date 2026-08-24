@@ -1,0 +1,222 @@
+@if (interview) {
+
+<div class="meet-card">
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+
+    <div class="meet-card-header">
+
+        <div class="meet-card-title">
+
+            <h6>
+                {{ interview.interview.title }}
+            </h6>
+
+            <div class="meet-card-meta">
+
+                @if (interview.contractTitle) {
+
+                <span class="meet-tag meet-tag-primary">
+                    {{ interview.contractTitle }}
+                </span>
+
+                }
+
+                @if (interview.applicationStatus) {
+
+                <span class="meet-tag">
+                    {{ interview.applicationStatus }}
+                </span>
+
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- STATUS — TOP RIGHT ONLY -->
+
+        <span class="meet-status" [class.status-completed]="interview.interview.status === 'completed'"
+            [class.status-upcoming]="interview.interview.status === 'upcoming'"
+            [class.status-scheduled]="interview.interview.status === 'scheduled'"
+            [class.status-cancelled]="interview.interview.status === 'cancelled'"
+            [class.status-pending]="interview.interview.status === 'pending'">
+
+            <span class="status-dot"></span>
+
+            {{ interview.interview.status }}
+
+        </span>
+
+    </div>
+
+
+    <!-- =========================================
+         PERSON
+         ========================================= -->
+
+    @if (interview.otherUser.name) {
+
+    <div class="meet-person">
+
+        <div class="meet-person-avatar">
+
+            {{ getInitials(interview.otherUser.name) }}
+
+        </div>
+
+        <div class="meet-person-info">
+
+            <span class="meet-person-label">
+                INTERVIEW WITH
+            </span>
+
+            <strong>
+                {{ interview.otherUser.name }}
+            </strong>
+
+        </div>
+
+    </div>
+
+    }
+
+
+    <!-- =========================================
+         DESCRIPTION
+         ========================================= -->
+
+    @if (cleanDescription) {
+
+    <p class="meet-description">
+        {{ cleanDescription }}
+    </p>
+
+    }
+
+
+    <!-- =========================================
+         DATE / TIME
+         ========================================= -->
+
+    <div class="meet-details">
+
+        <div class="meet-detail">
+
+            <div class="meet-detail-icon">
+
+                <i class="bi bi-calendar3"></i>
+
+            </div>
+
+            <div>
+
+                <span class="meet-detail-label">
+                    DATE
+                </span>
+
+                <strong>
+                    {{ formattedDate }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="meet-detail-divider"></div>
+
+
+        <div class="meet-detail">
+
+            <div class="meet-detail-icon">
+
+                <i class="bi bi-clock"></i>
+
+            </div>
+
+            <div>
+
+                <span class="meet-detail-label">
+                    TIME
+                </span>
+
+                <strong>
+                    {{ formattedTime }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         MEETING LINK
+         ========================================= -->
+
+    @if (meetingLink) {
+
+    <div class="meet-link-section">
+
+        <div class="meet-link-content">
+
+            <span class="meet-link-label">
+
+                <i class="bi bi-link-45deg"></i>
+
+                Meeting Link
+
+            </span>
+
+            <span class="meet-link">
+                {{ meetingLink }}
+            </span>
+
+        </div>
+
+        <button type="button" class="meet-join-button" (click)="onJoin()">
+
+            Join
+
+            <i class="bi bi-arrow-up-right"></i>
+
+        </button>
+
+    </div>
+
+    }
+
+
+    <!-- =========================================
+         FOOTER
+         ========================================= -->
+
+    <div class="meet-card-footer">
+
+        <span class="meet-contract">
+
+            <i class="bi bi-file-earmark-text"></i>
+
+            {{ interview.contractTitle }}
+
+        </span>
+
+
+        <button type="button" class="meet-view-button" (click)="onViewDetails()">
+
+            View Details
+
+            <i class="bi bi-arrow-right"></i>
+
+        </button>
+
+    </div>
+
+</div>
+
+}

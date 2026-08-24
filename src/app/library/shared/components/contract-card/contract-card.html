@@ -1,0 +1,186 @@
+@if (contract) {
+
+<div class="contract-card">
+
+    <!-- HEADER -->
+    <div class="contract-card-header">
+
+        <div class="contract-card-title">
+
+            <h6>
+                {{ contract.contractTitle }}
+            </h6>
+
+            <div class="contract-tags">
+
+                <!-- Contract Subject -->
+                @if (contract.contractSubject) {
+                <span class="contract-tag contract-tag-primary">
+                    {{ contract.contractSubject }}
+                </span>
+                }
+
+                <!-- Contract Type -->
+                @if (contract.contractType) {
+                <span class="contract-tag">
+                    {{ contract.contractType }}
+                </span>
+                }
+
+                <!-- Contract Status -->
+                @if (contract.status) {
+                <span class="contract-tag" [class.contract-status-completed]="contract.status === 'completed'"
+                    [class.contract-status-active]="contract.status === 'active'"
+                    [class.contract-status-pending]="contract.status === 'pending'"
+                    [class.contract-status-cancelled]="contract.status === 'cancelled'">
+
+                    {{ contract.status }}
+
+                </span>
+                }
+
+            </div>
+
+        </div>
+
+        <!-- APPLICATION STATUS -->
+        <span class="application-status" [class.status-applied]="contract.hasApplied"
+            [class.status-not-applied]="!contract.hasApplied">
+
+            <span class="status-dot"></span>
+
+            {{ contract.hasApplied ? 'Applied' : 'Not Applied' }}
+
+        </span>
+
+    </div>
+
+
+    <!-- DESCRIPTION -->
+
+    @if (contract.contractDescription) {
+
+    <p class="contract-description">
+        {{ contract.contractDescription }}
+    </p>
+
+    }
+
+
+    <!-- BUDGET / DURATION -->
+
+    <div class="contract-details">
+
+        <div class="contract-detail-item">
+
+            <span class="contract-detail-label">
+                EST. BUDGET
+            </span>
+
+            <span class="contract-detail-value">
+                {{ formattedBudget }}
+            </span>
+
+        </div>
+
+        <div class="contract-detail-divider"></div>
+
+        <div class="contract-detail-item">
+
+            <span class="contract-detail-label">
+                DURATION
+            </span>
+
+            <span class="contract-detail-value">
+                {{ contract.totalDuration }}
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- INDUSTRY -->
+
+    @if (contract.industry) {
+
+    <div class="contract-section">
+
+        <span class="contract-section-label">
+            INDUSTRY
+        </span>
+
+        <div class="contract-tags">
+
+            <span class="contract-info-tag">
+                {{ contract.industry }}
+            </span>
+
+        </div>
+
+    </div>
+
+    }
+
+
+    <!-- DATES -->
+
+    <div class="contract-dates">
+
+        <div class="contract-date">
+
+            <span>
+                Start Date
+            </span>
+
+            <strong>
+                {{ formattedStartDate }}
+            </strong>
+
+        </div>
+
+        <div class="contract-date">
+
+            <span>
+                End Date
+            </span>
+
+            <strong>
+                {{ formattedEndDate }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="contract-card-footer">
+
+        <!-- SAVE -->
+
+        <button type="button" class="contract-save-button" [class.saved]="contract.hasSaved" aria-label="Save Contract"
+            (click)="onSave()">
+
+            <i class="bi" [class.bi-bookmark-fill]="contract.hasSaved" [class.bi-bookmark]="!contract.hasSaved">
+            </i>
+
+        </button>
+
+
+        <!-- VIEW DETAILS -->
+
+        <button type="button" class="contract-details-button" (click)="onViewDetails()">
+
+            View Details
+
+            <i class="bi bi-arrow-right"></i>
+
+        </button>
+
+    </div>
+
+</div>
+
+}

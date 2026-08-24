@@ -19,6 +19,10 @@ export class ApplicationService {
     return this.http.get(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
+  getInterviews(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/interviews`, { headers: this.getAuthHeaders() });
+  }
+
   shortlistApplication(id: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}/shortlist`, {}, { headers: this.getAuthHeaders() });
   }

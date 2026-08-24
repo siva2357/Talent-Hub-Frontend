@@ -23,6 +23,10 @@ export class ContractService {
     return this.http.get<{ success: boolean; contracts: Contract[] }>(`${this.apiUrl}/my-contracts`, { headers: this.getAuthHeaders() });
   }
 
+  getClientContractById(id: string): Observable<{ success: boolean; contract: Contract }> {
+    return this.http.get<{ success: boolean; contract: Contract }>(`${this.apiUrl}/my-contracts/${id}`, { headers: this.getAuthHeaders() });
+  }
+
   createContract(payload: CreateContractDto): Observable<{ success: boolean; data: Contract }> {
     return this.http.post<{ success: boolean; data: Contract }>(`${this.apiUrl}`, payload, { headers: this.getAuthHeaders() });
   }

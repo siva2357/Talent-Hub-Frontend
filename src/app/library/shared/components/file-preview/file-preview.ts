@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
+export type FilePreviewMode = 'image' | 'profile' | 'document';
 
 @Component({
   selector: 'app-file-preview',
@@ -7,4 +9,7 @@ import { Component } from '@angular/core';
   styleUrl: './file-preview.css'
 })
 export class FilePreview {
+
+  @Input() mode: FilePreviewMode = 'image';
+
 }
