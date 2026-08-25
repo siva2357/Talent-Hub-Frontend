@@ -97,17 +97,17 @@ export class ProfileForm implements OnInit {
 
     if (this.role === 'client') {
       professionalDetails = this.fb.group({
-        companyType: [''],
-        website: [''],
-        industry: [''],
-        companyDescription: ['']
+        companyType: ['', Validators.required],
+        website: ['', [Validators.required, Validators.pattern('https?://.+')]],
+        industry: ['', Validators.required],
+        companyDescription: ['', [Validators.required, Validators.minLength(10)]]
       });
     } else {
       professionalDetails = this.fb.group({
-        professionalHeadline: [''],
-        skills: [[]],
-        technologies: [[]],
-        availability: ['']
+        professionalHeadline: ['', [Validators.required, Validators.minLength(5)]],
+        skills: [[], Validators.required],
+        technologies: [[], Validators.required],
+        availability: ['', Validators.required]
       });
     }
 
@@ -122,10 +122,9 @@ export class ProfileForm implements OnInit {
       }),
       professionalDetails: professionalDetails,
       location: this.fb.group({
-        country: [''],
-        state: [''],
-        city: [''],
-        timezone: ['']
+        country: ['', Validators.required],
+        state: ['', Validators.required],
+        city: ['', Validators.required],
       }),
       socialLinks: this.fb.array([]),
       languages: this.fb.array([])
@@ -148,7 +147,10 @@ export class ProfileForm implements OnInit {
     if (control.errors['email']) return 'Please enter a valid email address';
     if (control.errors['minlength']) return `Minimum ${control.errors['minlength'].requiredLength} characters required`;
     if (control.errors['maxlength']) return `Maximum ${control.errors['maxlength'].requiredLength} characters allowed`;
-    if (control.errors['pattern'] && controlName === 'phoneNumber') return 'Please enter a valid phone number';
+    if (control.errors['pattern']) {
+      if (controlName === 'phoneNumber') return 'Please enter a valid phone number';
+      if (controlName === 'website') return 'Please enter a valid URL (e.g., https://example.com)';
+    }
     return 'Invalid input';
   }
 

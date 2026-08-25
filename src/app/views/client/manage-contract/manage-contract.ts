@@ -1,22 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ContractService } from '../../../core/services/contract.service';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { Contract } from '../../../core/models/contract.model';
+import { Table, TableColumn } from '../../../library/ui/components/table/table';
+import { InputField } from '../../../library/ui/components/input-field/input-field';
+import { Chip } from '../../../library/ui/components/chip/chip';
+import { Button } from '../../../library/ui/components/button/button';
+
 
 declare var window: any;
 
 @Component({
   selector: 'app-manage-contract',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Table, InputField, Chip, Button],
   templateUrl: './manage-contract.html',
   styleUrl: './manage-contract.css'
 })
 export class ManageContract implements OnInit {
   allContracts: Contract[] = [];
   isLoading: boolean = true;
+  activeFilters: string[] = ['Design', 'Active'];
+
+  @ViewChild('snoTemplate', { static: true }) snoTemplate!: TemplateRef<any>;
+  @ViewChild('budgetTemplate', { static: true }) budgetTemplate!: TemplateRef<any>;
+  @ViewChild('startDateTemplate', { static: true }) startDateTemplate!: TemplateRef<any>;
+  @ViewChild('endDateTemplate', { static: true }) endDateTemplate!: TemplateRef<any>;
+  @ViewChild('fundsTemplate', { static: true }) fundsTemplate!: TemplateRef<any>;
+  @ViewChild('statusTemplate', { static: true }) statusTemplate!: TemplateRef<any>;
+  @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
+
+  columns: TableColumn[] = [];
 
   constructor(
     private contractService: ContractService,
@@ -25,6 +41,18 @@ export class ManageContract implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.columns = [
+      { field: 'id', headerName: 'S.NO', cellTemplate: this.snoTemplate },
+      { field: 'contractTitle', headerName: 'Contract title' },
+      { field: 'contractSubject', headerName: 'Subject' },
+      { field: 'contractType', headerName: 'Contract Type' },
+      { field: 'estimatedBudget', headerName: 'Budget', cellTemplate: this.budgetTemplate },
+      { field: 'contractStartDate', headerName: 'Start Date', cellTemplate: this.startDateTemplate },
+      { field: 'contractEndDate', headerName: 'End Date', cellTemplate: this.endDateTemplate },
+      { field: 'funded', headerName: 'Funds Status', cellTemplate: this.fundsTemplate },
+      { field: 'status', headerName: 'Status', cellTemplate: this.statusTemplate },
+      { field: 'actions', headerName: 'Actions', cellTemplate: this.actionsTemplate }
+    ];
     this.fetchContracts();
     this.loadRazorpayScript();
   }
@@ -33,6 +61,10 @@ export class ManageContract implements OnInit {
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     document.body.appendChild(script);
+  }
+
+  removeFilter(filterToRemove: string): void {
+    this.activeFilters = this.activeFilters.filter(f => f !== filterToRemove);
   }
 
   fetchContracts(): void {

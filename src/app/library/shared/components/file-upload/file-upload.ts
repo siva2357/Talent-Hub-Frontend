@@ -21,7 +21,7 @@ export class FileUpload {
   // File upload UI
   @Input() title = 'Drag & drop your file here';
   @Input() browseText = 'or click to browse';
-  @Input() acceptedFormats = ['PDF, DOC, DOCX, XLS, XLSX, PPT, ZIP, RAR, PNG, JPG, JPEG'];
+  @Input() acceptedFormats = 'PDF, DOC, DOCX, XLS, XLSX, PPT, ZIP, RAR, PNG, JPG, JPEG';
   @Input() maxSize = '10MB';
 
   // Avatar upload UI

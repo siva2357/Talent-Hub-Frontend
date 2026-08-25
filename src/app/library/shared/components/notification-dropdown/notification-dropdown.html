@@ -1,70 +1,63 @@
-<div class="border border-dark border-1 rounded-3"
-    style="padding: 40px; font-family: 'Inter', sans-serif; background: #fff; max-width: 500px;">
-    <h1 style="font-size: 14px; font-weight: 700; color: #2563eb; margin-bottom: 8px; text-transform: uppercase;">2.
-        Notification Dropdown</h1>
-    <p style="color: #6b7280; font-size: 12px; margin-bottom: 32px;">Displays recent notifications and updates.</p>
+<div class="dropdown">
+    <button class="btn btn-light position-relative p-0 border-0" type="button" data-bs-toggle="dropdown"
+        aria-expanded="false" id="notifDropdown"
+        style="box-shadow: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <i class="bi bi-bell text-secondary fs-4"></i>
+        @if (unreadCount > 0) {
+        <span class="position-absolute top-0 start-100 translate-middle" style="margin-top: 6px; margin-left: -6px;">
+            <app-badge size="small" [count]="unreadCount" variant="danger" appearance="solid"
+                [rounded]="true"></app-badge>
+        </span>
+        }
+    </button>
 
-    <!-- Dropdown -->
-    <div class="notification-dropdown shadow-sm">
-        <div class="dropdown-caret"></div>
-
+    <div class="dropdown-menu dropdown-menu-end p-0 border-0 shadow-sm mt-2 notification-dropdown"
+        aria-labelledby="notifDropdown">
         <div class="notif-header">
             <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">Notifications</h3>
-            <a href="#" style="font-size: 12px; font-weight: 500; color: #2563eb; text-decoration: none;">Mark all as
-                read</a>
+            <a href="#" (click)="markAllAsRead($event)"
+                style="font-size: 12px; font-weight: 500; color: #2563eb; text-decoration: none;">Mark all as read</a>
         </div>
 
+        @if (visibleNotifications.length > 0) {
         <div class="notif-subheader">New</div>
+        }
 
         <div class="notif-list">
-            <!-- Item 1 -->
-            <div class="notif-item">
-                <img src="https://i.pravatar.cc/150?img=11" alt="Justin" class="notif-avatar">
-                <div class="notif-content">
-                    <div class="notif-title-row">
-                        <span class="notif-title">Justin Vendoza</span>
-                        <span class="notif-time-short">1m ago</span>
-                    </div>
-                    <p class="notif-text">Your task "Design landing page" has been updated to <span
-                            class="badge bg-success-subtle text-success"
-                            style="font-size: 10px; margin-left: 4px;">Review</span></p>
-                    <div class="notif-time-long"><i class="bi bi-clock"></i> 1 minute ago</div>
+            @for (notif of visibleNotifications; track notif._id) {
+            <div class="notif-item cursor-pointer" [class.bg-light]="!notif.read" (click)="markAsRead(notif._id!)">
+                <div class="notif-icon-box" style="background-color: #f3f4f6; color: #4b5563;">
+                    <i class="bi bi-bell"></i>
                 </div>
-            </div>
 
-            <!-- Item 2 -->
-            <div class="notif-item">
-                <div class="notif-icon-box" style="background-color: #3b82f6; color: #fff;">
-                    <i class="bi bi-box-seam"></i>
-                </div>
                 <div class="notif-content">
                     <div class="notif-title-row">
-                        <span class="notif-title">New order has been placed</span>
-                        <span class="notif-time-short">3h ago</span>
+                        <span class="notif-title" [class.fw-bold]="!notif.read">{{ notif.title }}</span>
+                        <span class="notif-time-short">{{ notif.createdAt | date:'shortTime' }}</span>
                     </div>
-                    <p class="notif-text">Open the order confirmation or shipment confirmation.</p>
-                    <div class="notif-time-long"><i class="bi bi-clock"></i> 3 hours ago</div>
+                    <p class="notif-text">{{ notif.message }}</p>
+                    <div class="notif-time-long"><i class="bi bi-clock"></i> {{ notif.createdAt | date:'medium' }}</div>
                 </div>
             </div>
-
-            <!-- Item 3 -->
-            <div class="notif-item">
-                <div class="notif-icon-box" style="background-color: #fce7f3; color: #e11d48;">
-                    <i class="bi bi-credit-card"></i>
-                </div>
-                <div class="notif-content">
-                    <div class="notif-title-row">
-                        <span class="notif-title">Payment received</span>
-                        <span class="notif-time-short">5h ago</span>
-                    </div>
-                    <p class="notif-text">You have received a payment of $250.00 from Brian.</p>
-                    <div class="notif-time-long"><i class="bi bi-clock"></i> 5 hours ago</div>
-                </div>
+            } @empty {
+            <div class="p-4 text-center text-muted">
+                <i class="bi bi-bell-slash fs-3 mb-2 d-block text-secondary opacity-50"></i>
+                <p class="mb-0" style="font-size: 13px;">No new notifications</p>
             </div>
+            }
         </div>
 
-        <div class="notif-footer">
-            <a href="#"><i class="bi bi-eye"></i> View All Notifications</a>
+        @if (notifications.length > 0) {
+        <div class="notif-footer d-flex justify-content-between px-3 py-2 border-top">
+            @if (visibleLimit > 3) {
+                <a href="#" (click)="viewLess($event)" style="font-size: 13px; color: #6b7280; text-decoration: none;">View Less</a>
+            } @else {
+                <span></span>
+            }
+            @if (visibleLimit < notifications.length) {
+                <a href="#" (click)="viewMore($event)" style="font-size: 13px; color: #2563eb; font-weight: 500; text-decoration: none;">View More</a>
+            }
         </div>
+        }
     </div>
 </div>

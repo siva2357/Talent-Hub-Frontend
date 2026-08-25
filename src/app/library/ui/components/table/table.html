@@ -1,7 +1,7 @@
-<div class="table-component-wrapper">
+<div class="table-component-wrapper position-relative">
 
     <ngx-datatable class="bootstrap" [rows]="data" [columnMode]="columnModeEnum.force" [headerHeight]="50"
-        [footerHeight]="0" rowHeight="auto" [limit]="10">
+        [footerHeight]="0" [rowHeight]="'auto'" [limit]="10" [messages]="{ emptyMessage: emptyMessage }">
 
         @for (column of columns; track column.field) {
 
@@ -33,5 +33,13 @@
         }
 
     </ngx-datatable>
+
+    @if (loading) {
+    <div class="position-absolute w-100 start-0 d-flex flex-column align-items-center justify-content-center bg-white bg-opacity-75"
+        style="top: 50px; height: calc(100% - 50px); z-index: 10;">
+        <app-loader></app-loader>
+        <span class="mt-2 text-muted ">Loading data...</span>
+    </div>
+    }
 
 </div>

@@ -2,16 +2,15 @@ import { Component, AfterViewInit, ViewChild, ElementRef, PLATFORM_ID, Inject, O
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import Chart from 'chart.js/auto';
 import { TokenService } from '../../../core/services/token.service';
-import { ProfileService } from '../../../core/services/profile.service';
-import { ContractService } from '../../../core/services/contract.service';
-import { TransactionService } from '../../../core/services/transaction.service';
 import { AdminService } from '../../../core/services/admin.service';
 import { DashboardService } from '../../../core/services/dashboard.service';
+import { StatCard, StatCardData } from '../../../library/shared/components/stat-card/stat-card';
 
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, StatCard],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
@@ -21,17 +20,45 @@ export class Dashboard implements AfterViewInit, OnInit {
 
   // Dynamic Data
   userName: string = 'User';
-  activeContracts: number = 0;
-  totalSpent: number = 0;
-  vaultBalance: number = 0;
-  pendingProposals: number = 0;
-  totalEarnings: number = 0;
+  activeContracts: string | number = 0;
+  totalSpent: string | number = 0;
+  vaultBalance: string | number = 0;
+  pendingProposals: string | number = 0;
+  totalEarnings: string | number = 0;
   activities: any[] = [];
 
   // Admin Stats
   totalClients: number = 0;
   totalFreelancers: number = 0;
   totalCommissions: number = 0;
+
+  get adminStats(): StatCardData[] {
+    return [
+      { title: 'Total Clients', value: this.totalClients, icon: 'bi-people-fill' },
+      { title: 'Total Freelancers', value: this.totalFreelancers, icon: 'bi-person-workspace' },
+      { title: 'Total Contracts', value: this.activeContracts, icon: 'bi-file-earmark-check-fill' },
+      { title: 'Total Payouts', value: '₹' + this.totalCommissions, icon: 'bi-wallet-fill' },
+      { title: 'Platform Revenue', value: '₹' + this.totalCommissions, icon: 'bi-graph-up-arrow' }
+    ];
+  }
+
+  get clientStats(): StatCardData[] {
+    return [
+      { title: 'Active Contracts', value: this.activeContracts, icon: 'bi-briefcase-fill' },
+      { title: 'Total Spent', value: this.totalSpent, icon: 'bi-currency-dollar' },
+      { title: 'Escrow Balance', value: this.vaultBalance, icon: 'bi-wallet2' },
+      { title: 'Pending Proposals', value: this.pendingProposals, icon: 'bi-file-earmark-text-fill' }
+    ];
+  }
+
+  get freelancerStats(): StatCardData[] {
+    return [
+      { title: 'Active Contracts', value: this.activeContracts, icon: 'bi-briefcase' },
+      { title: 'Total Earnings', value: this.totalEarnings, icon: 'bi-cash-stack' },
+      { title: 'Available Balance', value: this.vaultBalance, icon: 'bi-wallet2' },
+      { title: 'Pending Proposals', value: this.pendingProposals, icon: 'bi-file-earmark-check' }
+    ];
+  }
 
   @ViewChild('clientsChart') clientsChart!: ElementRef;
   @ViewChild('freelancersChart') freelancersChart!: ElementRef;
@@ -41,9 +68,6 @@ export class Dashboard implements AfterViewInit, OnInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private tokenService: TokenService,
-    private profileService: ProfileService,
-    private contractService: ContractService,
-    private transactionService: TransactionService,
     private adminService: AdminService,
     private dashboardService: DashboardService
   ) {
@@ -93,10 +117,10 @@ export class Dashboard implements AfterViewInit, OnInit {
           this.userName = res.fullName || 'User';
 
           res.stats?.forEach((stat: any) => {
-            if (stat.label === 'Active Contracts') this.activeContracts = parseInt(stat.value, 10);
-            if (stat.label === 'Total Spent') this.totalSpent = parseFloat(stat.value.replace(/[^0-9.-]+/g, ''));
-            if (stat.label === 'Escrow Balance') this.vaultBalance = parseFloat(stat.value.replace(/[^0-9.-]+/g, ''));
-            if (stat.label === 'Pending Proposals') this.pendingProposals = parseInt(stat.value, 10);
+            if (stat.label === 'Active Contracts') this.activeContracts = stat.value;
+            if (stat.label === 'Total Spent') this.totalSpent = stat.value;
+            if (stat.label === 'Escrow Balance') this.vaultBalance = stat.value;
+            if (stat.label === 'Pending Proposals') this.pendingProposals = stat.value;
           });
 
           this.activities = res.activities || [];
@@ -113,10 +137,10 @@ export class Dashboard implements AfterViewInit, OnInit {
           this.userName = res.fullName || 'User';
 
           res.stats?.forEach((stat: any) => {
-            if (stat.label === 'Active Contracts') this.activeContracts = parseInt(stat.value, 10);
-            if (stat.label === 'Total Earnings') this.totalEarnings = parseFloat(stat.value.replace(/[^0-9.-]+/g, ''));
-            if (stat.label === 'Available Balance') this.vaultBalance = parseFloat(stat.value.replace(/[^0-9.-]+/g, ''));
-            if (stat.label === 'Pending Proposals') this.pendingProposals = parseInt(stat.value, 10);
+            if (stat.label === 'Active Contracts') this.activeContracts = stat.value;
+            if (stat.label === 'Total Earnings') this.totalEarnings = stat.value;
+            if (stat.label === 'Available Balance') this.vaultBalance = stat.value;
+            if (stat.label === 'Pending Proposals') this.pendingProposals = stat.value;
           });
 
           this.activities = res.activities || [];

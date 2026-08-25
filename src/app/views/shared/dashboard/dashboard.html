@@ -25,61 +25,11 @@
 
     <!-- Top Stats Row -->
     <section class="row g-3 mb-4">
+      @for (stat of adminStats; track stat.title) {
       <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
-        <div class="glass-card stat-card border-0 h-100">
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="stat-icon flex-shrink-0"><i class="bi bi-people-fill"></i></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Total Clients</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ totalClients }}</span>
-            </div>
-          </div>
-        </div>
+        <app-stat-card [stat]="stat"></app-stat-card>
       </div>
-      <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
-        <div class="glass-card stat-card border-0 h-100">
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="stat-icon flex-shrink-0"><i class="bi bi-person-workspace"></i></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Total Freelancers</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ totalFreelancers }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
-        <div class="glass-card stat-card border-0 h-100">
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="stat-icon flex-shrink-0"><i class="bi bi-file-earmark-check-fill"></i></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Total Contracts</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ activeContracts }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
-        <div class="glass-card stat-card border-0 h-100">
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="stat-icon flex-shrink-0"><i class="bi bi-wallet-fill"></i></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Total Payouts</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹{{ totalCommissions }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-2 flex-grow-1">
-        <div class="glass-card stat-card border-0 h-100">
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="stat-icon flex-shrink-0"><i class="bi bi-graph-up-arrow"></i></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Platform Revenue</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹{{ totalCommissions }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      }
     </section>
 
     <!-- Line Charts Section -->
@@ -276,6 +226,7 @@
     </section>
 
     }
+
     @else if (role === 'client') {
     <!-- Header Section -->
 
@@ -292,50 +243,11 @@
 
     <!-- Top Stats Row -->
     <section class="row g-3 mb-5">
+      @for (stat of clientStats; track stat.title) {
       <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="glass-card stat-card border-0 h-100">
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="stat-icon flex-shrink-0"><i class="bi bi-briefcase-fill"></i></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Active Contracts</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ activeContracts }}</span>
-            </div>
-          </div>
-        </div>
+        <app-stat-card [stat]="stat"></app-stat-card>
       </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="glass-card stat-card border-0 h-100">
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="stat-icon flex-shrink-0"><i class="bi bi-currency-dollar"></i></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Total Spent</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹{{ totalSpent }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="glass-card stat-card border-0 h-100">
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="stat-icon flex-shrink-0"><i class="bi bi-wallet2"></i></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Pay Vaulta Balance</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹{{ vaultBalance }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="glass-card stat-card border-0 h-100">
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="stat-icon flex-shrink-0"><i class="bi bi-file-earmark-text-fill"></i></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Pending Proposals</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ pendingProposals }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      }
     </section>
 
     <!-- Bottom Section (Feed & Controls) -->
@@ -483,50 +395,11 @@
 
     <!-- Top Stats Row -->
     <section class="row g-3 mb-5">
+      @for (stat of freelancerStats; track stat.title) {
       <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="glass-card stat-card border-0 h-100">
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="stat-icon flex-shrink-0"><i class="bi bi-briefcase"></i></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Active Contracts</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ activeContracts }}</span>
-            </div>
-          </div>
-        </div>
+        <app-stat-card [stat]="stat"></app-stat-card>
       </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="glass-card stat-card border-0 h-100">
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="stat-icon flex-shrink-0"><i class="bi bi-cash-stack"></i></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Total Earnings</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹{{ totalEarnings }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="glass-card stat-card border-0 h-100">
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="stat-icon flex-shrink-0"><i class="bi bi-wallet2"></i></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Available Balance</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹{{ vaultBalance }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="glass-card stat-card border-0 h-100">
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="stat-icon flex-shrink-0"><i class="bi bi-file-earmark-check"></i></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Pending Proposals</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ pendingProposals }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      }
     </section>
 
     <!-- Bottom Section (Feed & Controls) -->
@@ -643,6 +516,7 @@
       </div>
     </section>
     }
+
   </div>
 
 </div>

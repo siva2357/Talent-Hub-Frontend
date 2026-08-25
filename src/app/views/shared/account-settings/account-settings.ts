@@ -39,7 +39,7 @@ export const passwordMatchValidator = (control: AbstractControl): ValidationErro
   styleUrl: './account-settings.css'
 })
 export class AccountSettings implements OnInit {
-  role: string = ''
+  role!: string;
   activeTab: string = 'profile';
 
   accountSettingsForm!: FormGroup;
@@ -157,7 +157,7 @@ export class AccountSettings implements OnInit {
     this.changePasswordForm = this.fb.group({
       oldPassword: ['', [Validators.required]],
       newPassword: ['', [
-        Validators.required, 
+        Validators.required,
         Validators.minLength(8),
         Validators.pattern('^(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};\':"\\\\|,.<>\\/?]).*$')
       ]],
@@ -206,7 +206,7 @@ export class AccountSettings implements OnInit {
         if (res.success) {
           this.userData = res.user;
           this.profileData = res.profile;
-          this.role = this.userData.role.toLowerCase();
+          this.role = this.tokenService.getRole()?.toLowerCase() || '';
 
           // Patch form
           this.accountSettingsForm.patchValue({

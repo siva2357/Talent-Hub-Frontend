@@ -42,7 +42,7 @@
                 <app-file-preview mode="profile" [previewUrl]="profileForm.get('basicInformation.profilePhoto')?.value"
                   (editClicked)="onEditPhoto()"></app-file-preview>
                 } @else {
-                <app-file-upload mode="avatar" [uploadBucket]="UploadBucket.FreelancerData"
+                <app-file-upload mode="avatar" [uploadBucket]="role === 'client' ? UploadBucket.ClientData : UploadBucket.FreelancerData"
                   [uploadSection]="UploadSection.ProfilePhoto" [replaceExisting]="true" [previewUrl]="previewUrl"
                   (fileSelected)="onPhotoSelected($event)" (uploadComplete)="onUploadComplete($event)"
                   (uploadError)="onUploadError($event)">
@@ -112,25 +112,29 @@
           <div class="col-md-4">
             <app-input-field label="Company Type *" type="text" placeholder="e.g. LLC, Corporation"
               [value]="profileForm.get('professionalDetails.companyType')?.value || ''"
-              (valueChange)="profileForm.get('professionalDetails.companyType')?.setValue($event)">
+              (valueChange)="profileForm.get('professionalDetails.companyType')?.setValue($event); profileForm.get('professionalDetails.companyType')?.markAsTouched()"
+              [validation]="getValidationState('companyType', 'professionalDetails')" [errorMessage]="getErrorMessage('companyType', 'professionalDetails')">
             </app-input-field>
           </div>
           <div class="col-md-4">
             <app-input-field label="Website *" type="text" placeholder="https://"
               [value]="profileForm.get('professionalDetails.website')?.value || ''"
-              (valueChange)="profileForm.get('professionalDetails.website')?.setValue($event)">
+              (valueChange)="profileForm.get('professionalDetails.website')?.setValue($event); profileForm.get('professionalDetails.website')?.markAsTouched()"
+              [validation]="getValidationState('website', 'professionalDetails')" [errorMessage]="getErrorMessage('website', 'professionalDetails')">
             </app-input-field>
           </div>
           <div class="col-md-4">
             <app-input-field label="Industry *" type="text" placeholder="e.g. Technology"
               [value]="profileForm.get('professionalDetails.industry')?.value || ''"
-              (valueChange)="profileForm.get('professionalDetails.industry')?.setValue($event)">
+              (valueChange)="profileForm.get('professionalDetails.industry')?.setValue($event); profileForm.get('professionalDetails.industry')?.markAsTouched()"
+              [validation]="getValidationState('industry', 'professionalDetails')" [errorMessage]="getErrorMessage('industry', 'professionalDetails')">
             </app-input-field>
           </div>
           <div class="col-12">
             <app-input-field label="Company Description *" type="textarea" placeholder="Describe your company"
               [value]="profileForm.get('professionalDetails.companyDescription')?.value || ''"
-              (valueChange)="profileForm.get('professionalDetails.companyDescription')?.setValue($event)">
+              (valueChange)="profileForm.get('professionalDetails.companyDescription')?.setValue($event); profileForm.get('professionalDetails.companyDescription')?.markAsTouched()"
+              [validation]="getValidationState('companyDescription', 'professionalDetails')" [errorMessage]="getErrorMessage('companyDescription', 'professionalDetails')">
             </app-input-field>
           </div>
         </div>
@@ -140,19 +144,22 @@
           <div class="col-md-4">
             <app-input-field label="City *" type="text" placeholder="Enter city"
               [value]="profileForm.get('location.city')?.value || ''"
-              (valueChange)="profileForm.get('location.city')?.setValue($event)">
+              (valueChange)="profileForm.get('location.city')?.setValue($event); profileForm.get('location.city')?.markAsTouched()"
+              [validation]="getValidationState('city', 'location')" [errorMessage]="getErrorMessage('city', 'location')">
             </app-input-field>
           </div>
           <div class="col-md-4">
             <app-input-field label="State *" type="text" placeholder="Enter state"
               [value]="profileForm.get('location.state')?.value || ''"
-              (valueChange)="profileForm.get('location.state')?.setValue($event)">
+              (valueChange)="profileForm.get('location.state')?.setValue($event); profileForm.get('location.state')?.markAsTouched()"
+              [validation]="getValidationState('state', 'location')" [errorMessage]="getErrorMessage('state', 'location')">
             </app-input-field>
           </div>
           <div class="col-md-4">
             <app-input-field label="Country *" type="text" placeholder="Enter country"
               [value]="profileForm.get('location.country')?.value || ''"
-              (valueChange)="profileForm.get('location.country')?.setValue($event)">
+              (valueChange)="profileForm.get('location.country')?.setValue($event); profileForm.get('location.country')?.markAsTouched()"
+              [validation]="getValidationState('country', 'location')" [errorMessage]="getErrorMessage('country', 'location')">
             </app-input-field>
           </div>
         </div>
@@ -164,20 +171,23 @@
           <div class="col-12">
             <app-input-field label="Professional Headline *" type="text" placeholder="e.g. Senior Frontend Developer"
               [value]="profileForm.get('professionalDetails.professionalHeadline')?.value || ''"
-              (valueChange)="profileForm.get('professionalDetails.professionalHeadline')?.setValue($event)">
+              (valueChange)="profileForm.get('professionalDetails.professionalHeadline')?.setValue($event); profileForm.get('professionalDetails.professionalHeadline')?.markAsTouched()"
+              [validation]="getValidationState('professionalHeadline', 'professionalDetails')" [errorMessage]="getErrorMessage('professionalHeadline', 'professionalDetails')">
             </app-input-field>
           </div>
           <div class="col-12">
             <app-input-field label="Skills (Comma separated) *" type="text" placeholder="Comma separated skills"
               [value]="profileForm.get('professionalDetails.skills')?.value?.join(', ') || ''"
-              (valueChange)="updateSkills($event)">
+              (valueChange)="updateSkills($event); profileForm.get('professionalDetails.skills')?.markAsTouched()"
+              [validation]="getValidationState('skills', 'professionalDetails')" [errorMessage]="getErrorMessage('skills', 'professionalDetails')">
             </app-input-field>
           </div>
           <div class="col-12">
             <app-input-field label="Technologies (Comma separated) *" type="text"
               placeholder="Comma separated technologies"
               [value]="profileForm.get('professionalDetails.technologies')?.value?.join(', ') || ''"
-              (valueChange)="updateTechnologies($event)">
+              (valueChange)="updateTechnologies($event); profileForm.get('professionalDetails.technologies')?.markAsTouched()"
+              [validation]="getValidationState('technologies', 'professionalDetails')" [errorMessage]="getErrorMessage('technologies', 'professionalDetails')">
             </app-input-field>
           </div>
           <div class="col-12">
@@ -186,7 +196,8 @@
                 { label: 'Part Time', value: 'Part Time' },
                 { label: 'As needed', value: 'As needed' }
               ]" [value]="profileForm.get('professionalDetails.availability')?.value || ''"
-              (valueChange)="profileForm.get('professionalDetails.availability')?.setValue($event)">
+              (valueChange)="profileForm.get('professionalDetails.availability')?.setValue($event); profileForm.get('professionalDetails.availability')?.markAsTouched()"
+              [validation]="getValidationState('availability', 'professionalDetails')" [errorMessage]="getErrorMessage('availability', 'professionalDetails')">
             </app-input-field>
           </div>
         </div>
@@ -196,19 +207,22 @@
           <div class="col-md-4">
             <app-input-field label="City *" type="text" placeholder="Enter city"
               [value]="profileForm.get('location.city')?.value || ''"
-              (valueChange)="profileForm.get('location.city')?.setValue($event)">
+              (valueChange)="profileForm.get('location.city')?.setValue($event); profileForm.get('location.city')?.markAsTouched()"
+              [validation]="getValidationState('city', 'location')" [errorMessage]="getErrorMessage('city', 'location')">
             </app-input-field>
           </div>
           <div class="col-md-4">
             <app-input-field label="State *" type="text" placeholder="Enter state"
               [value]="profileForm.get('location.state')?.value || ''"
-              (valueChange)="profileForm.get('location.state')?.setValue($event)">
+              (valueChange)="profileForm.get('location.state')?.setValue($event); profileForm.get('location.state')?.markAsTouched()"
+              [validation]="getValidationState('state', 'location')" [errorMessage]="getErrorMessage('state', 'location')">
             </app-input-field>
           </div>
           <div class="col-md-4">
             <app-input-field label="Country *" type="text" placeholder="Enter country"
               [value]="profileForm.get('location.country')?.value || ''"
-              (valueChange)="profileForm.get('location.country')?.setValue($event)">
+              (valueChange)="profileForm.get('location.country')?.setValue($event); profileForm.get('location.country')?.markAsTouched()"
+              [validation]="getValidationState('country', 'location')" [errorMessage]="getErrorMessage('country', 'location')">
             </app-input-field>
           </div>
         </div>
@@ -256,7 +270,7 @@
               <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">{{ social.value.platform }}: {{
                 social.value.profileUrl }}</span>
               <app-button type="button" variant="link" class="text-danger p-0 border-0 text-decoration-none"
-                (clicked)="removeSocial($index)"><i class="bi bi-x-circle"></i></app-button>
+                (clicked)="removeSocial($index)" label=""><i class="bi bi-x-circle"></i></app-button>
             </div>
             }
           </div>
@@ -290,7 +304,7 @@
               <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">{{ lang.value.language }} -
                 <span class="text-muted fw-normal">{{ lang.value.proficiency }}</span></span>
               <app-button type="button" variant="link" class="text-danger p-0 border-0 text-decoration-none"
-                (clicked)="removeLanguage($index)"><i class="bi bi-x-circle"></i></app-button>
+                (clicked)="removeLanguage($index)" label=""><i class="bi bi-x-circle"></i></app-button>
             </div>
             }
           </div>
@@ -475,7 +489,7 @@
 
         <div class="d-flex justify-content-between mt-4 pt-3 border-top">
           <app-button type="button" variant="outline-primary" class="px-4" (clicked)="prevStep()" label="Back"></app-button>
-          <app-button type="button" variant="success" class="px-4 text-white" (clicked)="submitProfile()" [loading]="isLoading" [disabled]="isLoading">
+          <app-button type="button" variant="success" class="px-4 text-white" (clicked)="submitProfile()" [loading]="isLoading" [disabled]="isLoading" label="">
             @if (isLoading) {
             <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             }
@@ -516,7 +530,7 @@
           </p>
 
           <app-button type="button" variant="primary" class="px-5 py-3 mx-auto rounded-3 d-flex align-items-center justify-content-center"
-            (clicked)="goToDashboard()">
+            (clicked)="goToDashboard()" label="">
             <span class="fw-bold" style="font-size: 1rem;">Go to Dashboard</span> <i class="bi bi-arrow-right ms-2" style="font-size: 1rem;"></i>
           </app-button>
         </div>

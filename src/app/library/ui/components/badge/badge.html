@@ -1,4 +1,5 @@
 <span [class]="'badge ' +
+    (size === 'small' ? 'badge-sm ' : '') +
     (appearance === 'outline'
       ? 'badge-outline-' + variant
       : appearance === 'subtle'
@@ -15,7 +16,7 @@
     }
 
     @if (count !== null) {
-    <span class="badge-count">
+    <span class="badge-count" [ngStyle]="size === 'small' ? {'font-size': '10px'} : {}">
         {{ count }}
     </span>
     }

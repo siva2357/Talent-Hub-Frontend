@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 type BadgeVariant =
   | 'primary'
@@ -17,10 +18,12 @@ type BadgeStyle =
 @Component({
   selector: 'app-badge',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './badge.html',
   styleUrl: './badge.css'
 })
 export class Badge {
+  @Input() size: 'normal' | 'small' = 'normal';
 
   @Input() label!: string;
 
