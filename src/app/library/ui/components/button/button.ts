@@ -40,6 +40,8 @@ export class Button {
 
   @Input() iconOnly: boolean = false;
 
+  @Input() block: boolean = false;
+
   @Input() type: 'button' | 'submit' | 'reset' = 'button';
 
   @Output() clicked = new EventEmitter<Event>();

@@ -51,11 +51,6 @@
               (click)="setTab('security')">Security and Password</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" [class.active]="activeTab === 'notifications'"
-              [class.text-primary]="activeTab === 'notifications'" [class.text-muted]="activeTab !== 'notifications'"
-              (click)="setTab('notifications')">Notifications</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" [class.active]="activeTab === 'manage'"
               [class.text-danger]="activeTab === 'manage'" [class.text-muted]="activeTab !== 'manage'"
               (click)="setTab('manage')"
@@ -69,67 +64,75 @@
 
         <!-- PROFILE DETAILS TAB -->
         @if (activeTab === 'profile') {
-        <form>
+        <form [formGroup]="accountSettingsForm" (ngSubmit)="saveProfileChanges()">
           <!-- Basic Details -->
-          <div class="mb-5">
+          <div class="mb-5" formGroupName="basicInformation">
             <h2 class="fs-5 fw-bold text-dark mb-4">Basic Details</h2>
 
             <div class="row g-4 mb-4">
               <div class="col-md-3">
                 <div class="d-flex flex-column align-items-center gap-3">
-                  <div class="position-relative">
-                    <img
-                      [src]="profileData?.basicInformation?.profilePhoto || 'https://i.pravatar.cc/150?u=a042581f4e29026704a'"
-                      class="rounded-circle object-fit-cover border border-4 border-light shadow-sm" width="100"
-                      height="100" alt="Avatar">
-                    <button type="button"
-                      class="btn btn-primary btn-sm rounded-circle position-absolute bottom-0 end-0 d-flex justify-content-center align-items-center shadow"
-                      style="width: 32px; height: 32px;"><i class="bi bi-pencil-fill"
-                        style="font-size: 0.75rem;"></i></button>
-                  </div>
-                  <span class="text-muted fw-semibold" style="font-size: 0.75rem;">Max 5MB (JPG, PNG)</span>
+                  @if (!accountSettingsForm.get('basicInformation.profilePhoto')?.value) {
+                  <app-file-upload mode="avatar" 
+                    (fileSelected)="onFileSelected($event)">
+                  </app-file-upload>
+                  } @else {
+                  <app-file-preview mode="profile"
+                    [previewUrl]="accountSettingsForm.get('basicInformation.profilePhoto')?.value"
+                    (editClicked)="onFileRemoved()">
+                  </app-file-preview>
+                  }
+                  <span class="text-muted fw-semibold text-center" style="font-size: 0.75rem;">Max 5MB (JPG, PNG)</span>
                 </div>
               </div>
               <div class="col-md-9">
                 <div class="row g-4">
                   <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Full Name *</label>
-                    <input type="text" class="form-control" [(ngModel)]="profileData.basicInformation.fullName"
-                      name="fullName" style="font-size: 0.85rem;">
+                    <app-input-field label="Full Name" type="text"
+                      [value]="accountSettingsForm.get('basicInformation.fullName')?.value || ''"
+                      (valueChange)="accountSettingsForm.get('basicInformation.fullName')?.setValue($event); accountSettingsForm.get('basicInformation.fullName')?.markAsTouched()"
+                      [required]="true" [validation]="getValidationState('basicInformation', 'fullName')"
+                      [errorMessage]="getErrorMessage('basicInformation', 'fullName')">
+                    </app-input-field>
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Email Address *</label>
-                    <input type="email" class="form-control" [(ngModel)]="profileData.basicInformation.email"
-                      name="email" disabled style="font-size: 0.85rem;">
+                    <app-input-field label="Email Address *" type="email" [disabled]="true"
+                      [value]="accountSettingsForm.get('basicInformation.email')?.value || ''"
+                      (valueChange)="accountSettingsForm.get('basicInformation.email')?.setValue($event)">
+                    </app-input-field>
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Phone Number *</label>
-                    <input type="tel" class="form-control" [(ngModel)]="profileData.basicInformation.phoneNumber"
-                      name="phoneNumber" style="font-size: 0.85rem;">
+                    <app-input-field label="Phone Number *" type="text"
+                      [value]="accountSettingsForm.get('basicInformation.phoneNumber')?.value || ''"
+                      (valueChange)="accountSettingsForm.get('basicInformation.phoneNumber')?.setValue($event); accountSettingsForm.get('basicInformation.phoneNumber')?.markAsTouched()"
+                      [required]="true" [validation]="getValidationState('basicInformation', 'phoneNumber')"
+                      [errorMessage]="getErrorMessage('basicInformation', 'phoneNumber')">
+                    </app-input-field>
                   </div>
                   <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Gender *</label>
-                    <select class="form-select" [(ngModel)]="profileData.basicInformation.gender" name="gender"
-                      style="font-size: 0.85rem;">
-                      <option disabled>Select gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
-                    </select>
+                    <app-input-field label="Gender *" type="select" [options]="genderOptions"
+                      [value]="accountSettingsForm.get('basicInformation.gender')?.value || ''"
+                      (valueChange)="accountSettingsForm.get('basicInformation.gender')?.setValue($event); accountSettingsForm.get('basicInformation.gender')?.markAsTouched()"
+                      [required]="true" [validation]="getValidationState('basicInformation', 'gender')"
+                      [errorMessage]="getErrorMessage('basicInformation', 'gender')">
+                    </app-input-field>
                   </div>
                 </div>
               </div>
             </div>
 
             <div class="mb-4">
-              <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Short Bio *</label>
-              <textarea class="form-control" [(ngModel)]="profileData.basicInformation.shortBio" name="shortBio"
-                rows="4" style="font-size: 0.85rem; resize: none;"></textarea>
+              <app-input-field label="Short Bio *" type="textarea"
+                [value]="accountSettingsForm.get('basicInformation.shortBio')?.value || ''"
+                (valueChange)="accountSettingsForm.get('basicInformation.shortBio')?.setValue($event); accountSettingsForm.get('basicInformation.shortBio')?.markAsTouched()"
+                [required]="true" [validation]="getValidationState('basicInformation', 'shortBio')"
+                [errorMessage]="getErrorMessage('basicInformation', 'shortBio')">
+              </app-input-field>
             </div>
           </div>
 
           <!-- Professional Details / Company Information -->
-          <div class="mb-5 border-top pt-5">
+          <div class="mb-5 border-top pt-5" formGroupName="professionalDetails">
             <h2 class="fs-5 fw-bold text-dark mb-4">
               @if (role === 'client') { Company Information } @else { Professional Information }
             </h2>
@@ -137,82 +140,106 @@
             <div class="row g-4">
               @if (role === 'client') {
               <div class="col-md-4">
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Company Type *</label>
-                <input type="text" class="form-control" [(ngModel)]="profileData.professionalDetails.companyType"
-                  name="companyType" style="font-size: 0.85rem;">
+                <app-input-field label="Company Type *" type="text"
+                  [value]="accountSettingsForm.get('professionalDetails.companyType')?.value || ''"
+                  (valueChange)="accountSettingsForm.get('professionalDetails.companyType')?.setValue($event); accountSettingsForm.get('professionalDetails.companyType')?.markAsTouched()"
+                  [required]="true" [validation]="getValidationState('professionalDetails', 'companyType')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'companyType')">
+                </app-input-field>
               </div>
               <div class="col-md-4">
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Website *</label>
-                <input type="url" class="form-control" [(ngModel)]="profileData.professionalDetails.website"
-                  name="website" style="font-size: 0.85rem;">
+                <app-input-field label="Website *" type="text" placeholder="https://"
+                  [value]="accountSettingsForm.get('professionalDetails.website')?.value || ''"
+                  (valueChange)="accountSettingsForm.get('professionalDetails.website')?.setValue($event); accountSettingsForm.get('professionalDetails.website')?.markAsTouched()"
+                  [required]="true" [validation]="getValidationState('professionalDetails', 'website')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'website')">
+                </app-input-field>
               </div>
               <div class="col-md-4">
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Industry *</label>
-                <input type="text" class="form-control" [(ngModel)]="profileData.professionalDetails.industry"
-                  name="industry" style="font-size: 0.85rem;">
+                <app-input-field label="Industry *" type="text"
+                  [value]="accountSettingsForm.get('professionalDetails.industry')?.value || ''"
+                  (valueChange)="accountSettingsForm.get('professionalDetails.industry')?.setValue($event); accountSettingsForm.get('professionalDetails.industry')?.markAsTouched()"
+                  [required]="true" [validation]="getValidationState('professionalDetails', 'industry')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'industry')">
+                </app-input-field>
               </div>
               <div class="col-12">
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Company Description *</label>
-                <textarea class="form-control" [(ngModel)]="profileData.professionalDetails.companyDescription"
-                  name="companyDescription" rows="4" style="font-size: 0.85rem; resize: none;"></textarea>
+                <app-input-field label="Company Description *" type="textarea"
+                  [value]="accountSettingsForm.get('professionalDetails.companyDescription')?.value || ''"
+                  (valueChange)="accountSettingsForm.get('professionalDetails.companyDescription')?.setValue($event); accountSettingsForm.get('professionalDetails.companyDescription')?.markAsTouched()"
+                  [required]="true" [validation]="getValidationState('professionalDetails', 'companyDescription')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'companyDescription')">
+                </app-input-field>
               </div>
               } @else {
               <div class="col-12">
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Professional Headline
-                  *</label>
-                <input type="text" class="form-control"
-                  [(ngModel)]="profileData.professionalDetails.professionalHeadline" name="professionalHeadline"
-                  style="font-size: 0.85rem;">
+                <app-input-field label="Professional Headline *" type="text"
+                  [value]="accountSettingsForm.get('professionalDetails.professionalHeadline')?.value || ''"
+                  (valueChange)="accountSettingsForm.get('professionalDetails.professionalHeadline')?.setValue($event); accountSettingsForm.get('professionalDetails.professionalHeadline')?.markAsTouched()"
+                  [required]="true" [validation]="getValidationState('professionalDetails', 'professionalHeadline')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'professionalHeadline')">
+                </app-input-field>
               </div>
               <div class="col-12">
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Skills *</label>
-                <input type="text" class="form-control" [(ngModel)]="profileData.professionalDetails.skills"
-                  name="skills" style="font-size: 0.85rem;">
+                <app-input-field label="Skills *" type="text"
+                  [value]="accountSettingsForm.get('professionalDetails.skills')?.value || ''"
+                  (valueChange)="accountSettingsForm.get('professionalDetails.skills')?.setValue($event); accountSettingsForm.get('professionalDetails.skills')?.markAsTouched()"
+                  [required]="true" [validation]="getValidationState('professionalDetails', 'skills')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'skills')">
+                </app-input-field>
               </div>
               <div class="col-12">
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Technologies *</label>
-                <input type="text" class="form-control" [(ngModel)]="profileData.professionalDetails.technologies"
-                  name="technologies" style="font-size: 0.85rem;">
+                <app-input-field label="Technologies *" type="text"
+                  [value]="accountSettingsForm.get('professionalDetails.technologies')?.value || ''"
+                  (valueChange)="accountSettingsForm.get('professionalDetails.technologies')?.setValue($event); accountSettingsForm.get('professionalDetails.technologies')?.markAsTouched()"
+                  [required]="true" [validation]="getValidationState('professionalDetails', 'technologies')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'technologies')">
+                </app-input-field>
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Availability *</label>
-                <select class="form-select" [(ngModel)]="profileData.professionalDetails.availability"
-                  name="availability" style="font-size: 0.85rem;">
-                  <option disabled value="">Select availability</option>
-                  <option value="Full Time (40hrs/wk)">Full Time (40hrs/wk)</option>
-                  <option value="Part Time (20hrs/wk)">Part Time (20hrs/wk)</option>
-                  <option value="As needed">As needed</option>
-                </select>
+                <app-input-field label="Availability *" type="select" [options]="availabilityOptions"
+                  [value]="accountSettingsForm.get('professionalDetails.availability')?.value || ''"
+                  (valueChange)="accountSettingsForm.get('professionalDetails.availability')?.setValue($event); accountSettingsForm.get('professionalDetails.availability')?.markAsTouched()"
+                  [required]="true" [validation]="getValidationState('professionalDetails', 'availability')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'availability')">
+                </app-input-field>
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Preferred Job Type *</label>
-                <select class="form-select" [(ngModel)]="profileData.professionalDetails.preferredJobType"
-                  name="preferredJobType" style="font-size: 0.85rem;">
-                  <option disabled value="">Select preferred type</option>
-                  <option value="Long-term contract">Long-term contract</option>
-                  <option value="Short-term project">Short-term project</option>
-                  <option value="Hourly work">Hourly work</option>
-                </select>
+                <app-input-field label="Preferred Job Type *" type="select" [options]="preferredJobTypeOptions"
+                  [value]="accountSettingsForm.get('professionalDetails.preferredJobType')?.value || ''"
+                  (valueChange)="accountSettingsForm.get('professionalDetails.preferredJobType')?.setValue($event); accountSettingsForm.get('professionalDetails.preferredJobType')?.markAsTouched()"
+                  [required]="true" [validation]="getValidationState('professionalDetails', 'preferredJobType')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'preferredJobType')">
+                </app-input-field>
               </div>
               }
 
-              <div class="col-12 mt-4">
+              <div class="col-12 mt-4" formGroupName="../location">
                 <h4 class="fs-6 fw-bold text-dark mb-3">Location</h4>
                 <div class="row g-4">
                   <div class="col-md-4">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">City *</label>
-                    <input type="text" class="form-control" [(ngModel)]="profileData.location.city" name="city"
-                      style="font-size: 0.85rem;">
+                    <app-input-field label="City *" type="text"
+                      [value]="accountSettingsForm.get('location.city')?.value || ''"
+                      (valueChange)="accountSettingsForm.get('location.city')?.setValue($event); accountSettingsForm.get('location.city')?.markAsTouched()"
+                      [required]="true" [validation]="getValidationState('location', 'city')"
+                      [errorMessage]="getErrorMessage('location', 'city')">
+                    </app-input-field>
                   </div>
                   <div class="col-md-4">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">State *</label>
-                    <input type="text" class="form-control" [(ngModel)]="profileData.location.state" name="state"
-                      style="font-size: 0.85rem;">
+                    <app-input-field label="State *" type="text"
+                      [value]="accountSettingsForm.get('location.state')?.value || ''"
+                      (valueChange)="accountSettingsForm.get('location.state')?.setValue($event); accountSettingsForm.get('location.state')?.markAsTouched()"
+                      [required]="true" [validation]="getValidationState('location', 'state')"
+                      [errorMessage]="getErrorMessage('location', 'state')">
+                    </app-input-field>
                   </div>
                   <div class="col-md-4">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Country *</label>
-                    <input type="text" class="form-control" [(ngModel)]="profileData.location.country" name="country"
-                      style="font-size: 0.85rem;">
+                    <app-input-field label="Country *" type="text"
+                      [value]="accountSettingsForm.get('location.country')?.value || ''"
+                      (valueChange)="accountSettingsForm.get('location.country')?.setValue($event); accountSettingsForm.get('location.country')?.markAsTouched()"
+                      [required]="true" [validation]="getValidationState('location', 'country')"
+                      [errorMessage]="getErrorMessage('location', 'country')">
+                    </app-input-field>
                   </div>
                 </div>
               </div>
@@ -223,82 +250,97 @@
           <div class="mb-5 border-top pt-5">
             <h2 class="fs-5 fw-bold text-dark mb-4">Social media and languages</h2>
 
-            <div class="mb-4">
-              <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Social Media profile</h4>
-              <div class="d-flex align-items-end gap-3 mb-3">
-                <div class="flex-grow-1">
-                  <label class="form-label text-muted" style="font-size: 0.7rem;">Select media *</label>
-                  <select class="form-select" style="font-size: 0.8rem;">
-                    <option>LinkedIn</option>
-                    <option>GitHub</option>
-                    <option>Twitter</option>
-                    <option>Portfolio Website</option>
-                  </select>
-                </div>
-                <div class="flex-grow-1" style="flex: 2;">
-                  <label class="form-label text-muted" style="font-size: 0.7rem;">Platform link *</label>
-                  <input type="url" class="form-control" placeholder="https://" style="font-size: 0.8rem;">
-                </div>
-                <button class="btn btn-primary px-4 fw-semibold shadow-sm" style="font-size: 0.8rem;">Add</button>
+            <!-- Social Media FormArray -->
+            <div class="mb-5">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-semibold text-dark mb-0" style="font-size: 0.9rem;">Social Media profiles</h4>
+                <app-button type="button" variant="outline-primary" size="sm" (clicked)="addSocialLink()">
+                  <i class="bi bi-plus-circle me-1"></i> Add Profile
+                </app-button>
               </div>
 
-              <!-- Added media items list -->
-              <div class="d-flex flex-column gap-2 mb-4">
-                <div class="d-flex align-items-center gap-3 p-2 border rounded-3 bg-light bg-opacity-50">
-                  <div
-                    class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center"
-                    style="width: 32px; height: 32px;"><i class="bi bi-linkedin"></i></div>
-                  <span class="fw-semibold text-dark flex-grow-1"
-                    style="font-size: 0.8rem;">https://linkedin.com/in/username</span>
-                  <button class="btn btn-link text-danger p-0 border-0 text-decoration-none"><i
-                      class="bi bi-x-circle"></i></button>
+              <div formArrayName="socialLinks" class="d-flex flex-column gap-3">
+                @for (socialCtrl of socialLinks.controls; track $index) {
+                <div [formGroupName]="$index"
+                  class="d-flex align-items-start gap-3 p-3 border rounded-3 bg-light bg-opacity-25">
+                  <div class="flex-grow-1">
+                    <app-input-field label="Select media *" type="select" [options]="socialMediaPlatformOptions"
+                      [value]="socialCtrl.get('platform')?.value || ''"
+                      (valueChange)="socialCtrl.get('platform')?.setValue($event); socialCtrl.get('platform')?.markAsTouched()"
+                      [required]="true" [validation]="getArrayValidationState('socialLinks', $index, 'platform')"
+                      [errorMessage]="getArrayErrorMessage('socialLinks', $index, 'platform')">
+                    </app-input-field>
+                  </div>
+                  <div class="flex-grow-1" style="flex: 2;">
+                    <app-input-field label="Platform link *" type="text" placeholder="https://"
+                      [value]="socialCtrl.get('profileUrl')?.value || ''"
+                      (valueChange)="socialCtrl.get('profileUrl')?.setValue($event); socialCtrl.get('profileUrl')?.markAsTouched()"
+                      [required]="true" [validation]="getArrayValidationState('socialLinks', $index, 'profileUrl')"
+                      [errorMessage]="getArrayErrorMessage('socialLinks', $index, 'profileUrl')">
+                    </app-input-field>
+                  </div>
+                  <div class="pt-4 mt-2">
+                    <app-button type="button" variant="outline-danger" [iconOnly]="true"
+                      (clicked)="removeSocialLink($index)">
+                      <i class="bi bi-trash"></i>
+                    </app-button>
+                  </div>
                 </div>
+                }
+                @if (socialLinks.controls.length === 0) {
+                <p class="text-muted small text-center my-2">No social media profiles added.</p>
+                }
               </div>
             </div>
 
+            <!-- Languages FormArray -->
             <div class="mb-4">
-              <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Languages</h4>
-              <div class="d-flex align-items-end gap-3 mb-3">
-                <div class="flex-grow-1">
-                  <label class="form-label text-muted" style="font-size: 0.7rem;">Select language *</label>
-                  <select class="form-select" style="font-size: 0.8rem;">
-                    <option>English</option>
-                    <option>Spanish</option>
-                    <option>French</option>
-                    <option>German</option>
-                    <option>Hindi</option>
-                  </select>
-                </div>
-                <div class="flex-grow-1">
-                  <label class="form-label text-muted" style="font-size: 0.7rem;">Select proficiency *</label>
-                  <select class="form-select" style="font-size: 0.8rem;">
-                    <option>Basic</option>
-                    <option>Conversational</option>
-                    <option>Fluent</option>
-                    <option>Native or Bilingual</option>
-                  </select>
-                </div>
-                <button class="btn btn-primary px-4 fw-semibold shadow-sm" style="font-size: 0.8rem;">Add</button>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-semibold text-dark mb-0" style="font-size: 0.9rem;">Languages</h4>
+                <app-button type="button" variant="outline-primary" size="sm" (clicked)="addLanguage()">
+                  <i class="bi bi-plus-circle me-1"></i> Add Language
+                </app-button>
               </div>
 
-              <!-- Added language items list -->
-              <div class="d-flex flex-column gap-2">
-                <div class="d-flex align-items-center gap-3 p-2 border rounded-3 bg-light bg-opacity-50">
-                  <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">English - <span
-                      class="text-muted fw-normal">Fluent</span></span>
-                  <button class="btn btn-link text-danger p-0 border-0 text-decoration-none"><i
-                      class="bi bi-x-circle"></i></button>
+              <div formArrayName="languages" class="d-flex flex-column gap-3">
+                @for (langCtrl of languages.controls; track $index) {
+                <div [formGroupName]="$index"
+                  class="d-flex align-items-start gap-3 p-3 border rounded-3 bg-light bg-opacity-25">
+                  <div class="flex-grow-1">
+                    <app-input-field label="Select language *" type="select" [options]="languageOptions"
+                      [value]="langCtrl.get('language')?.value || ''"
+                      (valueChange)="langCtrl.get('language')?.setValue($event); langCtrl.get('language')?.markAsTouched()"
+                      [required]="true" [validation]="getArrayValidationState('languages', $index, 'language')"
+                      [errorMessage]="getArrayErrorMessage('languages', $index, 'language')">
+                    </app-input-field>
+                  </div>
+                  <div class="flex-grow-1">
+                    <app-input-field label="Select proficiency *" type="select" [options]="proficiencyOptions"
+                      [value]="langCtrl.get('proficiency')?.value || ''"
+                      (valueChange)="langCtrl.get('proficiency')?.setValue($event); langCtrl.get('proficiency')?.markAsTouched()"
+                      [required]="true" [validation]="getArrayValidationState('languages', $index, 'proficiency')"
+                      [errorMessage]="getArrayErrorMessage('languages', $index, 'proficiency')">
+                    </app-input-field>
+                  </div>
+                  <div class="pt-4 mt-2">
+                    <app-button type="button" variant="outline-danger" [iconOnly]="true"
+                      (clicked)="removeLanguage($index)">
+                      <i class="bi bi-trash"></i>
+                    </app-button>
+                  </div>
                 </div>
+                }
+                @if (languages.controls.length === 0) {
+                <p class="text-muted small text-center my-2">No languages added.</p>
+                }
               </div>
             </div>
           </div>
 
           <!-- Actions -->
           <div class="d-flex justify-content-end gap-3 pt-4 border-top">
-            <button type="button" class="btn btn-light fw-semibold px-4" style="font-size: 0.85rem;">Cancel</button>
-            <button type="button" class="btn btn-primary fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;"
-              (click)="saveProfileChanges()">Save
-              Changes</button>
+            <app-button type="button" variant="light" (clicked)="loadProfileData()" label="Cancel"></app-button>
+            <app-button type="submit" variant="primary" [loading]="isSaving" label="Save Changes"></app-button>
           </div>
         </form>
         }
@@ -311,142 +353,41 @@
             <p class="text-center text-muted mb-5" style="font-size: 0.85rem;">Ensure your account is using a long,
               random password to stay secure.</p>
 
-            <form class="d-flex flex-column gap-4">
+            <form [formGroup]="changePasswordForm" (ngSubmit)="updatePassword()" class="d-flex flex-column gap-4">
               <div>
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Current Password <span
-                    class="text-danger">*</span></label>
-                <div class="input-group">
-                  <input type="password" class="form-control bg-light border-end-0" placeholder="Enter current password"
-                    style="font-size: 0.85rem;">
-                  <span class="input-group-text bg-light bg-transparent cursor-pointer"><i
-                      class="bi bi-eye-slash text-muted"></i></span>
-                </div>
+                <app-input-field label="Current Password *" type="password" placeholder="Enter current password"
+                  [showPasswordToggle]="true" [value]="changePasswordForm.get('oldPassword')?.value || ''"
+                  (valueChange)="changePasswordForm.get('oldPassword')?.setValue($event); changePasswordForm.get('oldPassword')?.markAsTouched()"
+                  [required]="true" [validation]="getPasswordValidationState('oldPassword')"
+                  [errorMessage]="getPasswordErrorMessage('oldPassword')">
+                </app-input-field>
               </div>
+
               <div>
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">New Password <span
-                    class="text-danger">*</span></label>
-                <div class="input-group">
-                  <input type="password" class="form-control bg-light border-end-0" placeholder="Enter new password"
-                    style="font-size: 0.85rem;">
-                  <span class="input-group-text bg-light bg-transparent cursor-pointer"><i
-                      class="bi bi-eye-slash text-muted"></i></span>
-                </div>
+                <app-input-field label="New Password *" type="password" placeholder="Enter new password"
+                  [showPasswordToggle]="true" [value]="changePasswordForm.get('newPassword')?.value || ''"
+                  (valueChange)="changePasswordForm.get('newPassword')?.setValue($event); changePasswordForm.get('newPassword')?.markAsTouched()"
+                  [required]="true" [validation]="getPasswordValidationState('newPassword')"
+                  [errorMessage]="getPasswordErrorMessage('newPassword')">
+                </app-input-field>
                 <div class="form-text mt-2" style="font-size: 0.7rem;"><i class="bi bi-info-circle text-primary"></i>
                   Password must be at least 8 characters long and include a number and a symbol.</div>
               </div>
+
               <div>
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Confirm New Password <span
-                    class="text-danger">*</span></label>
-                <div class="input-group">
-                  <input type="password" class="form-control bg-light border-end-0" placeholder="Confirm new password"
-                    style="font-size: 0.85rem;">
-                  <span class="input-group-text bg-light bg-transparent cursor-pointer"><i
-                      class="bi bi-eye-slash text-muted"></i></span>
-                </div>
+                <app-input-field label="Confirm New Password *" type="password" placeholder="Confirm new password"
+                  [showPasswordToggle]="true" [value]="changePasswordForm.get('confirmPassword')?.value || ''"
+                  (valueChange)="changePasswordForm.get('confirmPassword')?.setValue($event); changePasswordForm.get('confirmPassword')?.markAsTouched()"
+                  [required]="true" [validation]="getPasswordValidationState('confirmPassword')"
+                  [errorMessage]="getPasswordErrorMessage('confirmPassword')">
+                </app-input-field>
               </div>
 
-              <div class="d-flex justify-content-between align-items-center mt-3 pt-4 border-top">
-                <a href="#" class="text-primary text-decoration-none fw-semibold" style="font-size: 0.8rem;">Forgot
-                  Password?</a>
-                <button type="button" class="btn btn-primary fw-semibold px-4 shadow-sm"
-                  style="font-size: 0.85rem;">Update Password</button>
+              <div class="d-flex justify-content-end align-items-center mt-3 pt-4 border-top">
+                <app-button type="submit" variant="primary" [loading]="isSavingPassword"
+                  label="Update Password"></app-button>
               </div>
             </form>
-          </div>
-        </div>
-        }
-
-        <!-- NOTIFICATIONS TAB -->
-        @if (activeTab === 'notifications') {
-        <div class="row justify-content-center">
-          <div class="col-md-10 col-lg-8">
-            <h2 class="fs-5 fw-bold text-dark mb-2">Notification Preferences</h2>
-            <p class="text-muted mb-4 pb-3 border-bottom" style="font-size: 0.85rem;">Choose how and when you want to be
-              notified about activity on your account.</p>
-
-            <div class="d-flex flex-column gap-4">
-              <!-- Item 1 -->
-              <div class="d-flex justify-content-between align-items-start gap-4">
-                <div class="d-flex gap-3">
-                  <div
-                    class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1"
-                    style="width: 40px; height: 40px;">
-                    <i class="bi bi-envelope fs-5"></i>
-                  </div>
-                  <div>
-                    <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Email Notifications</span>
-                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Receive an email for important updates,
-                      contract offers, and messages.</p>
-                  </div>
-                </div>
-                <div class="form-check form-switch fs-4 mt-1">
-                  <input class="form-check-input" type="checkbox" role="switch" checked>
-                </div>
-              </div>
-
-              <!-- Item 2 -->
-              <div class="d-flex justify-content-between align-items-start gap-4">
-                <div class="d-flex gap-3">
-                  <div
-                    class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1"
-                    style="width: 40px; height: 40px;">
-                    <i class="bi bi-phone fs-5"></i>
-                  </div>
-                  <div>
-                    <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Push Notifications</span>
-                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Get real-time push notifications on your
-                      device for immediate alerts.</p>
-                  </div>
-                </div>
-                <div class="form-check form-switch fs-4 mt-1">
-                  <input class="form-check-input" type="checkbox" role="switch" checked>
-                </div>
-              </div>
-
-              <!-- Item 3 -->
-              <div class="d-flex justify-content-between align-items-start gap-4">
-                <div class="d-flex gap-3">
-                  <div
-                    class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1"
-                    style="width: 40px; height: 40px;">
-                    <i class="bi bi-chat-dots fs-5"></i>
-                  </div>
-                  <div>
-                    <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Messages & Chat</span>
-                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Notify me when I receive a new direct message
-                      or chat reply.</p>
-                  </div>
-                </div>
-                <div class="form-check form-switch fs-4 mt-1">
-                  <input class="form-check-input" type="checkbox" role="switch" checked>
-                </div>
-              </div>
-
-              <!-- Item 4 -->
-              <div class="d-flex justify-content-between align-items-start gap-4">
-                <div class="d-flex gap-3">
-                  <div
-                    class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1"
-                    style="width: 40px; height: 40px;">
-                    <i class="bi bi-megaphone fs-5"></i>
-                  </div>
-                  <div>
-                    <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Marketing &
-                      Promotions</span>
-                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Receive occasional emails about new features,
-                      tips, and special offers.</p>
-                  </div>
-                </div>
-                <div class="form-check form-switch fs-4 mt-1">
-                  <input class="form-check-input" type="checkbox" role="switch">
-                </div>
-              </div>
-            </div>
-
-            <div class="d-flex justify-content-end mt-5 pt-4 border-top">
-              <button type="button" class="btn btn-primary fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;">Save
-                Preferences</button>
-            </div>
           </div>
         </div>
         }
@@ -457,7 +398,6 @@
           <div class="col-md-10 col-lg-8">
             <h2 class="fs-5 fw-bold text-dark mb-4">Account Management</h2>
 
-
             <div class="card border border-danger border-opacity-25 bg-danger bg-opacity-10 shadow-none">
               <div class="card-body p-4">
                 <h3 class="fs-6 fw-bold text-danger mb-2 d-flex align-items-center gap-2"><i
@@ -466,14 +406,10 @@
                   Once you delete your account, there is no going back. All your data, including profile details,
                   messages, and contract history will be permanently wiped out. Please be certain.
                 </p>
-                <div class="form-check mb-4">
-                  <input class="form-check-input border-danger" type="checkbox" id="confirmDelete">
-                  <label class="form-check-label text-dark fw-semibold" for="confirmDelete" style="font-size: 0.8rem;">
-                    I confirm that I want to permanently delete my account.
-                  </label>
+                <div class="d-flex justify-content-end mt-4">
+                  <app-button type="button" variant="danger" (clicked)="deleteAccount()"
+                    label="Permanently Delete Account"></app-button>
                 </div>
-                <button class="btn btn-danger fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;"
-                  disabled>Permanently Delete Account</button>
               </div>
             </div>
 

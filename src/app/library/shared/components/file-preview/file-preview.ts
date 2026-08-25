@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 export type FilePreviewMode = 'image' | 'profile' | 'document';
 
@@ -10,6 +10,8 @@ export type FilePreviewMode = 'image' | 'profile' | 'document';
 })
 export class FilePreview {
 
-  @Input() mode: FilePreviewMode = 'image';
+  @Input() mode: FilePreviewMode | null = null;
+  @Input() previewUrl: string | null = null;
+  @Output() editClicked = new EventEmitter<void>();
 
 }

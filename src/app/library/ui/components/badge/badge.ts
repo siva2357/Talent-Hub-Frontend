@@ -22,13 +22,13 @@ type BadgeStyle =
 })
 export class Badge {
 
-  @Input() label: string = 'badge';
+  @Input() label!: string;
 
-  @Input() variant: BadgeVariant = 'primary';
+  @Input() variant!: BadgeVariant;
 
-  @Input() style: BadgeStyle = 'solid';
+  @Input() appearance!: BadgeStyle;
 
-  @Input() icon: string = '';
+  @Input() icon!: string;
 
   @Input() count: number | string | null = null;
 

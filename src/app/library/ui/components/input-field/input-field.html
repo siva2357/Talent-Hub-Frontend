@@ -14,7 +14,8 @@
     type === 'text' ||
     type === 'email' ||
     type === 'password' ||
-    type === 'date'
+    type === 'date' ||
+    type === 'tel'
     ) {
 
     <div class="input-group">
@@ -25,8 +26,14 @@
         </span>
         }
 
-        <input [type]="type" class="form-control" [placeholder]="placeholder" [value]="value" [disabled]="disabled"
+        <input [type]="type === 'password' && isPasswordVisible ? 'text' : type" class="form-control" [class.is-invalid]="validation === 'error'" [placeholder]="placeholder" [value]="value" [disabled]="disabled"
             [readonly]="readonly" [required]="required" (input)="onValueChange($event)">
+
+        @if (type === 'password' && showPasswordToggle) {
+        <span class="input-group-text" (click)="togglePasswordVisibility()" style="cursor: pointer;">
+            <i [class]="isPasswordVisible ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+        </span>
+        }
 
     </div>
 
@@ -34,24 +41,24 @@
 
     @if (type === 'textarea') {
 
-    <textarea class="form-control rounded-3" [placeholder]="placeholder" [value]="value" [disabled]="disabled"
+    <textarea class="form-control rounded-3" [class.is-invalid]="validation === 'error'" [placeholder]="placeholder" [value]="value" [disabled]="disabled"
         [readonly]="readonly" [required]="required" (input)="onValueChange($event)"></textarea>
 
     }
 
     @if (type === 'select') {
 
-    <select class="form-select rounded-3" [value]="value" [disabled]="disabled" [required]="required"
+    <select class="form-select rounded-3" [class.is-invalid]="validation === 'error'" [disabled]="disabled" [required]="required"
         (change)="onSelectChange($event)">
 
         @if (placeholder) {
-        <option value="" disabled>
+        <option value="" disabled [selected]="!value || value === ''">
             {{ placeholder }}
         </option>
         }
 
         @for (option of options; track option.value) {
-        <option [value]="option.value" [disabled]="option.disabled">
+        <option [value]="option.value" [disabled]="option.disabled" [selected]="value === option.value">
             {{ option.label }}
         </option>
         }
@@ -66,6 +73,7 @@
 
         <button type="button"
             class="form-control rounded-3 text-start d-flex justify-content-between align-items-center bg-white"
+            [class.is-invalid]="validation === 'error'"
             [disabled]="disabled" (click)="toggleDropdown()">
 
             <span>

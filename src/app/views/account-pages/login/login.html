@@ -8,54 +8,73 @@
                 <div class="bg-shape bottom-left"></div>
             </div>
 
-            <div class="form-container mx-auto px-4 w-100 z-1" style="max-width: 420px; margin-top: auto; margin-bottom: auto;">
+            <div class="form-container mx-auto px-4 w-100 z-1"
+                style="max-width: 420px; margin-top: auto; margin-bottom: auto;">
                 <div class="text-center mb-5">
                     <img src="/logo 2.png" alt="Talent Hub" class="logo mb-3" />
                     <h2 class="fw-bold fs-3 text-dark">Welcome Back</h2>
                     <p class="text-muted small">Login to continue to your account.</p>
                 </div>
 
-                <div class="static-form">
+                <form [formGroup]="loginForm" (ngSubmit)="login()" class="static-form">
                     <div class="mb-4">
-                        <label class="form-label small fw-semibold text-dark mb-1">Email Address</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
-                            <input type="email" class="form-control border-start-0 ps-0 py-2" placeholder="Enter your email address" [(ngModel)]="loginData.email" name="email" required>
-                        </div>
+                        <app-input-field
+                            label="Email Address"
+                            type="email"
+                            placeholder="Enter your email address"
+                            icon="bi bi-envelope"
+                            [showIcon]="true"
+                            [value]="loginForm.get('email')?.value || ''"
+                            (valueChange)="loginForm.get('email')?.setValue($event); loginForm.get('email')?.markAsTouched()"
+                            [validation]="getValidationState('email')"
+                            [errorMessage]="getErrorMessage('email')">
+                        </app-input-field>
                     </div>
 
                     <div class="mb-2">
-                        <label class="form-label small fw-semibold text-dark mb-1">Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-lock"></i></span>
-                            <input type="password" class="form-control border-start-0 border-end-0 ps-0 py-2" placeholder="Enter your password" [(ngModel)]="loginData.password" name="password" required>
-                            <span class="input-group-text bg-white border-start-0 text-muted cursor-pointer"><i class="bi bi-eye"></i></span>
-                        </div>
+                        <app-input-field
+                            label="Password"
+                            type="password"
+                            placeholder="Enter your password"
+                            icon="bi bi-lock"
+                            [showIcon]="true"
+                            [showPasswordToggle]="true"
+                            [value]="loginForm.get('password')?.value || ''"
+                            (valueChange)="loginForm.get('password')?.setValue($event); loginForm.get('password')?.markAsTouched()"
+                            [validation]="getValidationState('password')"
+                            [errorMessage]="getErrorMessage('password')">
+                        </app-input-field>
                     </div>
 
                     <div class="d-flex justify-content-end mb-4">
-                        <a routerLink="/forgot-password" class="text-primary text-decoration-none small fw-semibold">Forgot password?</a>
+                        <a routerLink="/forgot-password"
+                            class="text-primary text-decoration-none small fw-semibold">Forgot password?</a>
                     </div>
 
-                    <div *ngIf="errorMessage" class="alert alert-danger py-2 small mb-3">
+                    @if (errorMessage) {
+                    <div class="alert alert-danger py-2 small mb-3">
                         {{ errorMessage }}
                     </div>
+                    }
 
-                    <button type="button" class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow-sm" (click)="login()" [disabled]="isLoading">
-                        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                        <i *ngIf="!isLoading" class="bi bi-box-arrow-in-right me-2"></i> {{ isLoading ? 'Logging in...' : 'Log In' }}
-                    </button>
-                    
+                    <app-button type="submit" [loading]="isLoading" label="Log In" variant="primary" [block]="true" class="w-100 d-block">
+                        @if (!isLoading) {
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        }
+                    </app-button>
+
                     <div class="text-center mt-5 pb-4">
-                        <span class="text-muted small">Don't have an account?</span> <a routerLink="/register" class="text-primary text-decoration-none fw-bold small">Sign up</a>
+                        <span class="text-muted small">Don't have an account?</span> <a routerLink="/register"
+                            class="text-primary text-decoration-none fw-bold small">Sign up</a>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
         <!-- Right Panel with Banner -->
         <div class="col-lg-6 d-none d-lg-flex p-4">
-            <div class="right-panel-inner w-100 h-100 position-relative d-flex flex-column px-5 py-4 rounded-4 shadow-lg">
+            <div
+                class="right-panel-inner w-100 h-100 position-relative d-flex flex-column px-5 py-4 rounded-4 shadow-lg">
                 <div class="m-auto w-100 max-w-lg z-1 mt-5">
                     <div class="text-center mb-5">
                         <div class="graphic-placeholder mx-auto mb-4">
@@ -68,17 +87,20 @@
 
                     <div class="features-list text-white pe-lg-5 ps-lg-4">
                         <div class="d-flex align-items-center mb-4">
-                            <div class="icon-circle bg-white text-primary rounded-circle d-flex align-items-center justify-content-center me-4 flex-shrink-0">
+                            <div
+                                class="icon-circle bg-white text-primary rounded-circle d-flex align-items-center justify-content-center me-4 flex-shrink-0">
                                 <i class="bi bi-people-fill fs-5"></i>
                             </div>
                             <div>
                                 <h5 class="fw-bold mb-1 fs-6">Connect</h5>
-                                <p class="text-white-50 small mb-0">Connect with the right people and build meaningful relationships.</p>
+                                <p class="text-white-50 small mb-0">Connect with the right people and build meaningful
+                                    relationships.</p>
                             </div>
                         </div>
 
                         <div class="d-flex align-items-center mb-4">
-                            <div class="icon-circle bg-white text-primary rounded-circle d-flex align-items-center justify-content-center me-4 flex-shrink-0">
+                            <div
+                                class="icon-circle bg-white text-primary rounded-circle d-flex align-items-center justify-content-center me-4 flex-shrink-0">
                                 <i class="bi bi-briefcase-fill fs-5"></i>
                             </div>
                             <div>
@@ -88,17 +110,19 @@
                         </div>
 
                         <div class="d-flex align-items-center">
-                            <div class="icon-circle bg-white text-primary rounded-circle d-flex align-items-center justify-content-center me-4 flex-shrink-0">
+                            <div
+                                class="icon-circle bg-white text-primary rounded-circle d-flex align-items-center justify-content-center me-4 flex-shrink-0">
                                 <i class="bi bi-graph-up-arrow fs-5"></i>
                             </div>
                             <div>
                                 <h5 class="fw-bold mb-1 fs-6">Grow</h5>
-                                <p class="text-white-50 small mb-0">Learn, grow and achieve your goals with Talent Hub.</p>
+                                <p class="text-white-50 small mb-0">Learn, grow and achieve your goals with Talent Hub.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Concentric Circles Background -->
                 <div class="concentric-circles z-0">
                     <div class="circle circle-1"></div>

@@ -30,9 +30,9 @@
             <h2 class="fw-bold fs-3 text-dark mb-3">Account Confirmed!</h2>
             <p class="text-muted small mb-4">Your email has been successfully verified.<br>You're one step closer to getting started.</p>
             
-            <button type="button" class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow-sm d-flex align-items-center justify-content-center" (click)="continueToLogin()">
-                Continue to Login <i class="bi bi-arrow-right ms-2"></i>
-            </button>
+            <app-button type="button" variant="primary" size="lg" [block]="true" class="w-100 d-block mb-4" (clicked)="continueToLogin()" label="Continue to Login">
+                <i class="bi bi-arrow-right me-2"></i>
+            </app-button>
         </div>
     } @else {
         <!-- Failure State Viewport -->
@@ -47,11 +47,13 @@
             </div>
             
             <h2 class="fw-bold fs-3 text-dark mb-3">Account Not Verified</h2>
-            <p class="text-muted small mb-4">We couldn't verify your email address.<br>The verification code might have expired or is invalid.</p>
+            <p class="text-muted small mb-4">{{ errorMessage }}<br>The verification code might have expired or is invalid.</p>
             
-            <button type="button" class="btn btn-danger w-100 py-3 rounded-3 fw-bold shadow-sm d-flex align-items-center justify-content-center mb-4">
-                Resend verification code <i class="bi bi-arrow-repeat ms-2"></i>
-            </button>
+            <app-button type="button" variant="danger" size="lg" [block]="true" class="w-100 d-block mb-4" (clicked)="resendOtp()" [loading]="isLoading" label="Resend verification code">
+                @if (!isLoading) {
+                <i class="bi bi-arrow-repeat me-2"></i>
+                }
+            </app-button>
             
             <a routerLink="/register" class="text-primary text-decoration-none fw-bold small">
                 <i class="bi bi-arrow-left me-1"></i> Back to Register

@@ -6,11 +6,16 @@ import { CommonModule } from '@angular/common';
 import { FileService } from '../../../core/services/file.service';
 import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
 import { Router } from '@angular/router';
+import { InputField } from '../../../library/ui/components/input-field/input-field';
+import { Button } from '../../../library/ui/components/button/button';
+import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
+import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
+import { Timeline, TimelineStep } from '../../../library/shared/components/timeline/timeline';
 
 @Component({
   selector: 'app-profile-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, InputField, Button, FileUpload, FilePreview, Timeline],
   templateUrl: './profile-form.html',
   styleUrl: './profile-form.css'
 })
@@ -19,8 +24,11 @@ export class ProfileForm implements OnInit {
   currentStep: number = 1; // 1: Basic, 2: Professional, 3: Social, 4: Review, 5: Success
   isLoading = false;
   isUploadingPhoto = false;
-  previewUrl: string | ArrayBuffer | null = null;
+  previewUrl: string | null = null;
   errorMessage = '';
+
+  UploadBucket = UploadBucket;
+  UploadSection = UploadSection;
 
   profileForm!: FormGroup;
 
@@ -32,12 +40,37 @@ export class ProfileForm implements OnInit {
     private fb: FormBuilder
   ) { }
 
+  get timelineSteps(): TimelineStep[] {
+    return [
+      {
+        title: 'Basic information',
+        status: this.currentStep > 1 ? 'completed' : this.currentStep === 1 ? 'active' : 'upcoming'
+      },
+      {
+        title: this.role === 'client' ? 'Company Information' : 'Professional information',
+        status: this.currentStep > 2 ? 'completed' : this.currentStep === 2 ? 'active' : 'upcoming'
+      },
+      {
+        title: 'Social profile',
+        status: this.currentStep > 3 ? 'completed' : this.currentStep === 3 ? 'active' : 'upcoming'
+      },
+      {
+        title: 'Review',
+        status: this.currentStep > 4 ? 'completed' : this.currentStep === 4 ? 'active' : 'upcoming'
+      }
+    ];
+  }
+
+  onTimelineStepClicked(index: number): void {
+    this.currentStep = index + 1;
+  }
+
   ngOnInit(): void {
     const userRole = this.tokenService.getRole();
     if (userRole) {
       this.role = userRole.toLowerCase(); // 'client' or 'freelancer'
       this.initForm();
-      
+
       this.isLoading = true;
       this.profileService.getMyProfile().subscribe({
         next: (res) => {
@@ -74,19 +107,18 @@ export class ProfileForm implements OnInit {
         professionalHeadline: [''],
         skills: [[]],
         technologies: [[]],
-        availability: [''],
-        preferredJobType: ['']
+        availability: ['']
       });
     }
 
     this.profileForm = this.fb.group({
       basicInformation: this.fb.group({
         profilePhoto: [''],
-        fullName: ['', Validators.required],
+        fullName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
         email: ['', [Validators.required, Validators.email]],
-        phoneNumber: [''],
-        gender: [''],
-        shortBio: ['']
+        phoneNumber: ['', [Validators.required, Validators.pattern('^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$')]],
+        gender: ['', Validators.required],
+        shortBio: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]]
       }),
       professionalDetails: professionalDetails,
       location: this.fb.group({
@@ -98,6 +130,26 @@ export class ProfileForm implements OnInit {
       socialLinks: this.fb.array([]),
       languages: this.fb.array([])
     });
+  }
+
+  getValidationState(controlName: string, groupName: string = 'basicInformation'): 'success' | 'error' | 'none' {
+    const group = this.profileForm.get(groupName);
+    const control = group?.get(controlName);
+    if (!control || !control.touched) return 'none';
+    return control.valid ? 'success' : 'error';
+  }
+
+  getErrorMessage(controlName: string, groupName: string = 'basicInformation'): string {
+    const group = this.profileForm.get(groupName);
+    const control = group?.get(controlName);
+    if (!control || !control.errors || !control.touched) return '';
+
+    if (control.errors['required']) return `${controlName.charAt(0).toUpperCase() + controlName.slice(1).replace(/([A-Z])/g, ' $1').trim()} is required`;
+    if (control.errors['email']) return 'Please enter a valid email address';
+    if (control.errors['minlength']) return `Minimum ${control.errors['minlength'].requiredLength} characters required`;
+    if (control.errors['maxlength']) return `Maximum ${control.errors['maxlength'].requiredLength} characters allowed`;
+    if (control.errors['pattern'] && controlName === 'phoneNumber') return 'Please enter a valid phone number';
+    return 'Invalid input';
   }
 
   get socialLinks() {
@@ -116,46 +168,49 @@ export class ProfileForm implements OnInit {
     if (this.currentStep > 1) this.currentStep--;
   }
 
-  onPhotoSelected(event: any): void {
-    const file = event.target.files[0];
+  onPhotoSelected(file: File): void {
     if (file) {
-      // Show local preview immediately
+      // Show local preview immediately before upload finishes
       const reader = new FileReader();
       reader.onload = e => {
-        if (reader.result) {
+        if (typeof reader.result === 'string') {
           this.previewUrl = reader.result;
         }
       };
       reader.readAsDataURL(file);
-
-      this.isUploadingPhoto = true;
       this.errorMessage = '';
-
-      const bucket = this.role === 'client' ? UploadBucket.ClientData : UploadBucket.FreelancerData;
-
-      this.fileService.uploadFile(file, bucket, UploadSection.ProfilePhoto, '', true).subscribe({
-        next: (res) => {
-          this.isUploadingPhoto = false;
-          if (res.success) {
-            this.profileForm.get('basicInformation.profilePhoto')?.setValue(res.url);
-          }
-        },
-        error: (err) => {
-          this.isUploadingPhoto = false;
-          this.errorMessage = err.error?.message || 'Failed to upload photo';
-        }
-      });
     }
   }
 
-  addSocial(platformInput: HTMLSelectElement, urlInput: HTMLInputElement): void {
-    if (platformInput.value && urlInput.value) {
+  onUploadComplete(url: string): void {
+    this.profileForm.get('basicInformation.profilePhoto')?.setValue(url);
+    this.previewUrl = null;
+  }
+
+  onUploadError(error: string): void {
+    this.errorMessage = error;
+    // reset preview since upload failed
+    this.previewUrl = null;
+  }
+
+  onEditPhoto(): void {
+    this.previewUrl = null;
+    this.profileForm.get('basicInformation.profilePhoto')?.setValue('');
+  }
+
+  newSocialPlatform = '';
+  newSocialUrl = '';
+  newLanguage = '';
+  newProficiency = '';
+
+  addSocial(): void {
+    if (this.newSocialPlatform && this.newSocialUrl) {
       this.socialLinks.push(this.fb.group({
-        platform: [platformInput.value],
-        profileUrl: [urlInput.value]
+        platform: [this.newSocialPlatform],
+        profileUrl: [this.newSocialUrl]
       }));
-      platformInput.value = '';
-      urlInput.value = '';
+      this.newSocialPlatform = '';
+      this.newSocialUrl = '';
     }
   }
 
@@ -163,14 +218,14 @@ export class ProfileForm implements OnInit {
     this.socialLinks.removeAt(index);
   }
 
-  addLanguage(langInput: HTMLSelectElement, profInput: HTMLSelectElement): void {
-    if (langInput.value && profInput.value) {
+  addLanguage(): void {
+    if (this.newLanguage && this.newProficiency) {
       this.languages.push(this.fb.group({
-        language: [langInput.value],
-        proficiency: [profInput.value]
+        language: [this.newLanguage],
+        proficiency: [this.newProficiency]
       }));
-      langInput.value = '';
-      profInput.value = '';
+      this.newLanguage = '';
+      this.newProficiency = '';
     }
   }
 
@@ -179,13 +234,13 @@ export class ProfileForm implements OnInit {
   }
 
   updateSkills(event: any): void {
-    const value = event.target.value;
+    const value = typeof event === 'string' ? event : event.target.value;
     const skillsArray = value.split(',').map((s: string) => s.trim()).filter((s: string) => s);
     this.profileForm.get('professionalDetails.skills')?.setValue(skillsArray);
   }
 
   updateTechnologies(event: any): void {
-    const value = event.target.value;
+    const value = typeof event === 'string' ? event : event.target.value;
     const techArray = value.split(',').map((s: string) => s.trim()).filter((s: string) => s);
     this.profileForm.get('professionalDetails.technologies')?.setValue(techArray);
   }

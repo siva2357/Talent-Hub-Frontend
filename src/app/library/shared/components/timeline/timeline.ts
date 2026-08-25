@@ -1,6 +1,8 @@
 import {
   Component,
-  Input
+  Input,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import {
   TitleCasePipe
@@ -58,9 +60,11 @@ export class Timeline {
   @Input()
   steps: TimelineStep[] = [];
 
-
   @Input()
   showStatusLabel = false;
+
+  @Output()
+  stepClicked = new EventEmitter<number>();
 
 
   get modeClass(): string {

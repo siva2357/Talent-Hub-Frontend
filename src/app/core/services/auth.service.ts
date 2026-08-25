@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { 
-  RegisterRequest, 
-  LoginRequest, 
-  VerifyOtpRequest, 
-  ForgotPasswordRequest, 
-  ResetPasswordRequest 
+import {
+  RegisterRequest,
+  LoginRequest,
+  VerifyOtpRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest
 } from '../dtos/auth.dto';
 import { AuthResponse } from '../models/user.model';
 import { TokenService } from './token.service';
@@ -50,12 +50,24 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.API_URL}/verify-otp`, data);
   }
 
+  verifyResetOtp(data: VerifyOtpRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.API_URL}/verify-reset-otp`, data);
+  }
+
+  resendOtp(data: { email: string }): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.API_URL}/resend-otp`, data);
+  }
+
   forgotPassword(data: ForgotPasswordRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.API_URL}/forgot-password`, data);
   }
 
   resetPassword(data: ResetPasswordRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.API_URL}/reset-password`, data);
+  }
+
+  changePassword(data: any): Observable<any> {
+    return this.http.post<any>(`${this.API_URL}/change-password`, data);
   }
 
   logout(): void {

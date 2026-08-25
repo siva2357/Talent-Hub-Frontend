@@ -40,4 +40,8 @@ export class ProfileService {
   getProfileById(id: string): Observable<any> {
     return this.http.get<any>(`${this.API_URL}/user/${id}`);
   }
+
+  deleteProfile(): Observable<any> {
+    return this.http.delete<any>(`${this.API_URL}/delete`);
+  }
 }

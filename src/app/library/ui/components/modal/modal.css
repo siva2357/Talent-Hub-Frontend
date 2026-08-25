@@ -1,31 +1,53 @@
-/* Modal Showcase - Bootstrap Overrides */
+/* =========================================================
+   MODAL CONTENT
+   ========================================================= */
 
-/* Override Bootstrap Modal Content to match premium design */
 .modal-content {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.05),
+    0 4px 6px -2px rgba(0, 0, 0, 0.025);
+
   font-family: 'Inter', sans-serif;
+
+  background-color: #ffffff;
 }
 
-/* Custom styling inside the modal-body to match the layout */
+
+/* =========================================================
+   MODAL BODY
+   ========================================================= */
+
 .modal-body.custom-p {
   padding: 24px;
 }
 
-/* Close button positioning */
+
+/* =========================================================
+   CLOSE BUTTON
+   ========================================================= */
+
 .custom-close {
   position: absolute;
   top: 16px;
   right: 16px;
+
+  padding: 4px;
+
   background: none;
   border: none;
+
   font-size: 16px;
-  color: #9ca3af;
-  cursor: pointer;
-  padding: 4px;
   line-height: 1;
-  transition: color 0.2s;
+
+  color: #9ca3af;
+
+  cursor: pointer;
+
+  transition: color 0.2s ease;
+
   z-index: 10;
 }
 
@@ -33,36 +55,62 @@
   color: #111827;
 }
 
-/* Text Styles */
+
+/* =========================================================
+   MODAL TEXT
+   ========================================================= */
+
 .modal-custom-title {
+  margin-bottom: 8px;
+
   font-size: 16px;
   font-weight: 700;
+
   color: #111827;
-  margin-bottom: 8px;
 }
 
 .modal-custom-text {
-  font-size: 13px;
-  color: #6b7280;
   margin-bottom: 24px;
+
+  font-size: 13px;
   line-height: 1.5;
+
+  color: #6b7280;
 }
 
-/* Icon Variations (Centered Modals) */
+
+/* =========================================================
+   CENTERED / ICON MODAL
+   ========================================================= */
+
 .modal-centered {
   text-align: center;
 }
+
+
+/* =========================================================
+   ICON CONTAINER
+   ========================================================= */
 
 .modal-icon-container {
   display: flex;
   align-items: center;
   justify-content: center;
+
   width: 56px;
   height: 56px;
+
+  margin: 0 auto 16px;
+
   border-radius: 50%;
-  margin: 0 auto 16px auto;
+
   font-size: 24px;
 }
+
+
+/* =========================================================
+   ICON VARIANTS
+   ========================================================= */
 
 .icon-warning {
   background-color: #fef3c7;
@@ -89,30 +137,47 @@
   color: #7e22ce;
 }
 
-/* Grid Layout container for static showcase */
-.modal-grid-wrapper .modal-dialog {
-  margin: 0;
-  width: 100%;
-  max-width: 100%;
-}
 
-
+/* =========================================================
+   MODAL CONTAINER
+   No backdrop color
+   No blur
+   No overlay
+   ========================================================= */
 
 .modal-backdrop-custom {
   position: fixed;
   inset: 0;
+
   z-index: 1050;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 20px;
-  background: rgba(17, 24, 39, 0.45);
+
+  background: transparent;
+
+  pointer-events: none;
 }
 
+
+/* =========================================================
+   MODAL DIALOG
+   ========================================================= */
+
 .modal-backdrop-custom .modal-dialog {
-  margin: 0;
   width: 100%;
+  margin: 0;
+
+  pointer-events: auto;
 }
+
+
+/* =========================================================
+   MODAL SIZES
+   ========================================================= */
 
 .modal-backdrop-custom .modal-dialog.modal-sm {
   max-width: 400px;
@@ -124,4 +189,23 @@
 
 .modal-backdrop-custom .modal-dialog.modal-lg {
   max-width: 800px;
+}
+
+
+/* =========================================================
+   MODAL ACTIONS
+   ========================================================= */
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.modal-actions-centered {
+  width: 100%;
+}
+
+.modal-actions-centered>button {
+  flex: 1 1 0;
 }

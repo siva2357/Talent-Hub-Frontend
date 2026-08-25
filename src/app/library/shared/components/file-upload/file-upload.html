@@ -3,7 +3,7 @@
 
 <label class="upload-box" [class.dragging]="isDragging">
 
-    <input type="file" hidden />
+    <input type="file" hidden (change)="onFileSelected($event)" />
 
     <div class="upload-icon-wrapper">
         <i class="bi bi-cloud-arrow-up"></i>
@@ -30,9 +30,9 @@
 
 <label class="avatar-upload-box">
 
-    <input type="file" hidden accept="image/png,image/jpeg" />
+    <input type="file" hidden accept="image/png,image/jpeg" (change)="onFileSelected($event)" />
 
-    <div class="avatar-circle">
+    <div class="avatar-circle position-relative">
 
         @if (previewUrl) {
         <img [src]="previewUrl" alt="Profile preview" class="avatar-preview" />
@@ -43,6 +43,12 @@
         <div class="avatar-camera-btn">
             <i class="bi bi-camera-fill"></i>
         </div>
+        
+        @if (isUploading) {
+        <div class="position-absolute top-0 start-0 w-100 h-100 rounded-circle d-flex justify-content-center align-items-center" style="background: rgba(255,255,255,0.7); z-index: 10;">
+            <span class="spinner-border text-primary" role="status" aria-hidden="true"></span>
+        </div>
+        }
 
     </div>
 

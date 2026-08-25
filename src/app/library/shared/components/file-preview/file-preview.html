@@ -65,9 +65,9 @@
 
     <div class="profile-preview-avatar">
 
-        <img src="https://i.pravatar.cc/150?img=11" alt="Profile">
+        <img [src]="previewUrl || 'https://i.pravatar.cc/150?img=11'" alt="Profile">
 
-        <div class="profile-preview-camera">
+        <div class="profile-preview-camera" style="cursor: pointer;" (click)="editClicked.emit()">
             <i class="bi bi-pencil-fill"></i>
         </div>
 

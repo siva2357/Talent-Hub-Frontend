@@ -2,7 +2,8 @@
     <div class="row g-0 h-100">
         <!-- Left Panel with Form -->
         <div class="col-lg-6 d-flex flex-column bg-white position-relative left-panel">
-            <a routerLink="/signup" class="text-primary text-decoration-none position-absolute top-0 start-0 m-4 fw-semibold small">
+            <a routerLink="/signup"
+                class="text-primary text-decoration-none position-absolute top-0 start-0 m-4 fw-semibold small">
                 <i class="bi bi-arrow-left me-1"></i> Back to Role Selection
             </a>
 
@@ -13,59 +14,59 @@
                     <p class="text-muted small">Join Talent Hub and start your journey today.</p>
                 </div>
 
-                <div class="static-form">
+                <form [formGroup]="registerForm" (ngSubmit)="createAccount()" class="static-form">
                     <div class="mb-3">
-                        <label class="form-label small fw-semibold text-dark mb-1">Full Name</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-person"></i></span>
-                            <input type="text" class="form-control border-start-0 ps-0" placeholder="Enter your full name" [(ngModel)]="registerData.fullName" name="fullName" required>
-                        </div>
+                        <app-input-field label="Full Name" type="text" placeholder="Enter your full name"
+                            icon="bi bi-person" [showIcon]="true" [value]="registerForm.get('fullName')?.value || ''"
+                            (valueChange)="registerForm.get('fullName')?.setValue($event); registerForm.get('fullName')?.markAsTouched()"
+                            [validation]="getValidationState('fullName')" [errorMessage]="getErrorMessage('fullName')">
+                        </app-input-field>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-semibold text-dark mb-1">Email Address</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
-                            <input type="email" class="form-control border-start-0 ps-0" placeholder="Enter your email address" [(ngModel)]="registerData.email" name="email" required>
-                        </div>
+                        <app-input-field label="Email Address" type="email" placeholder="Enter your email address"
+                            icon="bi bi-envelope" [showIcon]="true" [value]="registerForm.get('email')?.value || ''"
+                            (valueChange)="registerForm.get('email')?.setValue($event); registerForm.get('email')?.markAsTouched()"
+                            [validation]="getValidationState('email')" [errorMessage]="getErrorMessage('email')">
+                        </app-input-field>
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label small fw-semibold text-dark mb-1">Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-lock"></i></span>
-                            <input type="password" class="form-control border-start-0 border-end-0 ps-0" placeholder="Create a strong password" [(ngModel)]="registerData.password" name="password" required>
-                            <span class="input-group-text bg-white border-start-0 text-muted cursor-pointer"><i class="bi bi-eye"></i></span>
-                        </div>
-                        <div class="form-text" style="font-size: 0.7rem;">Minimum 8 characters with a mix of letters, numbers & symbols</div>
+                        <app-input-field label="Password" type="password" placeholder="Create a strong password"
+                            icon="bi bi-lock" [showIcon]="true" [showPasswordToggle]="true"
+                            [value]="registerForm.get('password')?.value || ''"
+                            (valueChange)="registerForm.get('password')?.setValue($event); registerForm.get('password')?.markAsTouched()"
+                            [validation]="getValidationState('password')" [errorMessage]="getErrorMessage('password')">
+                        </app-input-field>
                     </div>
 
-                    <div class="form-check mb-4">
-                        <input class="form-check-input" type="checkbox" id="termsCheck">
-                        <label class="form-check-label small text-muted" for="termsCheck">
-                            I agree to the <a href="#" class="text-primary text-decoration-none fw-semibold">Terms of Service</a> and <a href="#" class="text-primary text-decoration-none fw-semibold">Privacy Policy</a>
-                        </label>
-                    </div>
 
-                    <div *ngIf="errorMessage" class="alert alert-danger py-2 small mb-3">
+
+                    @if (errorMessage) {
+                    <div class="alert alert-danger py-2 small mb-3">
                         {{ errorMessage }}
                     </div>
+                    }
 
-                    <button type="button" class="btn btn-primary w-100 py-2 rounded-3 fw-bold shadow-sm" (click)="createAccount()" [disabled]="isLoading">
-                        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                        <i *ngIf="!isLoading" class="bi bi-person-plus-fill me-2"></i> {{ isLoading ? 'Creating Account...' : 'Create Account' }}
-                    </button>
-                    
+                    <app-button type="submit" [loading]="isLoading" label="Create Account" variant="primary"
+                        [block]="true" class="w-100 d-block">
+                        @if (!isLoading) {
+                        <i class="bi bi-person-plus-fill me-2"></i>
+                        }
+                    </app-button>
+
                     <div class="d-block d-lg-none text-center mt-4 pb-4">
-                        <span class="text-muted small">Already have an account?</span> <a routerLink="/login" class="text-primary text-decoration-none fw-bold small">Log in</a>
+                        <span class="text-muted small">Already have an account?</span> <a routerLink="/login"
+                            class="text-primary text-decoration-none fw-bold small">Log in</a>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
         <!-- Right Panel with Banner -->
         <div class="col-lg-6 d-none d-lg-flex p-4">
-            <div class="right-panel-inner w-100 h-100 position-relative d-flex flex-column px-5 py-4 rounded-4 shadow-lg">
+            <div
+                class="right-panel-inner w-100 h-100 position-relative d-flex flex-column px-5 py-4 rounded-4 shadow-lg">
                 <div class="m-auto w-100 max-w-lg z-1 mt-5">
                     <div class="text-center mb-5">
                         <div class="graphic-placeholder mx-auto mb-4">
@@ -78,17 +79,20 @@
 
                     <div class="features-list text-white pe-lg-5 ps-lg-4">
                         <div class="d-flex align-items-center mb-4">
-                            <div class="icon-circle bg-white text-primary rounded-circle d-flex align-items-center justify-content-center me-4 flex-shrink-0">
+                            <div
+                                class="icon-circle bg-white text-primary rounded-circle d-flex align-items-center justify-content-center me-4 flex-shrink-0">
                                 <i class="bi bi-people-fill fs-5"></i>
                             </div>
                             <div>
                                 <h5 class="fw-bold mb-1 fs-6">Connect</h5>
-                                <p class="text-white-50 small mb-0">Connect with the right people and build meaningful relationships.</p>
+                                <p class="text-white-50 small mb-0">Connect with the right people and build meaningful
+                                    relationships.</p>
                             </div>
                         </div>
 
                         <div class="d-flex align-items-center mb-4">
-                            <div class="icon-circle bg-white text-primary rounded-circle d-flex align-items-center justify-content-center me-4 flex-shrink-0">
+                            <div
+                                class="icon-circle bg-white text-primary rounded-circle d-flex align-items-center justify-content-center me-4 flex-shrink-0">
                                 <i class="bi bi-briefcase-fill fs-5"></i>
                             </div>
                             <div>
@@ -98,17 +102,19 @@
                         </div>
 
                         <div class="d-flex align-items-center">
-                            <div class="icon-circle bg-white text-primary rounded-circle d-flex align-items-center justify-content-center me-4 flex-shrink-0">
+                            <div
+                                class="icon-circle bg-white text-primary rounded-circle d-flex align-items-center justify-content-center me-4 flex-shrink-0">
                                 <i class="bi bi-graph-up-arrow fs-5"></i>
                             </div>
                             <div>
                                 <h5 class="fw-bold mb-1 fs-6">Grow</h5>
-                                <p class="text-white-50 small mb-0">Learn, grow and achieve your goals with Talent Hub.</p>
+                                <p class="text-white-50 small mb-0">Learn, grow and achieve your goals with Talent Hub.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Concentric Circles Background -->
                 <div class="concentric-circles z-0">
                     <div class="circle circle-1"></div>

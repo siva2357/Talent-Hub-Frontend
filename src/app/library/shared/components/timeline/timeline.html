@@ -4,9 +4,10 @@
 
     @for (step of steps; track $index) {
 
-    <div class="timeline-step" [class]="modeClass" [class.completed]="step.status === 'completed'"
+    <div class="timeline-step cursor-pointer" [class]="modeClass" [class.completed]="step.status === 'completed'"
         [class.active]="step.status === 'active'" [class.disabled]="step.status === 'disabled'"
-        [class.error]="step.status === 'error'" [class.skipped]="step.status === 'skipped'">
+        [class.error]="step.status === 'error'" [class.skipped]="step.status === 'skipped'"
+        (click)="stepClicked.emit($index)">
 
 
         <!-- Optional Status Label -->

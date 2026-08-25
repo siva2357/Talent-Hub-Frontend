@@ -1,7 +1,7 @@
-<span class="badge" [class]="'badge ' +
-    (style === 'outline'
+<span [class]="'badge ' +
+    (appearance === 'outline'
       ? 'badge-outline-' + variant
-      : style === 'subtle'
+      : appearance === 'subtle'
         ? 'bg-' + variant + '-subtle'
         : 'bg-' + variant) +
     (rounded ? ' rounded-pill' : '')">

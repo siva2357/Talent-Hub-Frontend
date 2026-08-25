@@ -26,31 +26,43 @@
             </div>
         </div>
         
-        <h2 class="fw-bold fs-3 text-dark mb-3">Verify Your Email</h2>
+        <h2 class="fw-bold fs-3 text-dark mb-3">
+            {{ verificationType === 'forgot-password' ? 'Verify Reset Code' : 'Verify Your Email' }}
+        </h2>
         <p class="text-muted small mb-1">We've sent a 6-digit verification code to</p>
         <p class="fw-bold text-primary mb-4" style="font-size: 0.95rem;">{{ email }} <i class="bi bi-pencil-fill ms-1 cursor-pointer"></i></p>
         
         <p class="text-muted small mb-3">Enter the 6-digit code below</p>
         
         <div class="otp-inputs-wrapper d-flex justify-content-center gap-2 mb-4">
-            <input type="text" class="form-control otp-input text-primary" maxlength="1" [(ngModel)]="otpDigits[0]" (input)="onOtpInput($event, 0)" (keydown)="onOtpKeyDown($event, 0)">
-            <input type="text" class="form-control otp-input" maxlength="1" [(ngModel)]="otpDigits[1]" (input)="onOtpInput($event, 1)" (keydown)="onOtpKeyDown($event, 1)">
-            <input type="text" class="form-control otp-input" maxlength="1" [(ngModel)]="otpDigits[2]" (input)="onOtpInput($event, 2)" (keydown)="onOtpKeyDown($event, 2)">
-            <input type="text" class="form-control otp-input" maxlength="1" [(ngModel)]="otpDigits[3]" (input)="onOtpInput($event, 3)" (keydown)="onOtpKeyDown($event, 3)">
-            <input type="text" class="form-control otp-input" maxlength="1" [(ngModel)]="otpDigits[4]" (input)="onOtpInput($event, 4)" (keydown)="onOtpKeyDown($event, 4)">
-            <input type="text" class="form-control otp-input" maxlength="1" [(ngModel)]="otpDigits[5]" (input)="onOtpInput($event, 5)" (keydown)="onOtpKeyDown($event, 5)">
+            <input type="text" class="form-control otp-input text-primary" [class.is-invalid]="errorMessage" maxlength="1" [(ngModel)]="otpDigits[0]" (input)="onOtpInput($event, 0)" (keydown)="onOtpKeyDown($event, 0)">
+            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1" [(ngModel)]="otpDigits[1]" (input)="onOtpInput($event, 1)" (keydown)="onOtpKeyDown($event, 1)">
+            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1" [(ngModel)]="otpDigits[2]" (input)="onOtpInput($event, 2)" (keydown)="onOtpKeyDown($event, 2)">
+            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1" [(ngModel)]="otpDigits[3]" (input)="onOtpInput($event, 3)" (keydown)="onOtpKeyDown($event, 3)">
+            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1" [(ngModel)]="otpDigits[4]" (input)="onOtpInput($event, 4)" (keydown)="onOtpKeyDown($event, 4)">
+            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1" [(ngModel)]="otpDigits[5]" (input)="onOtpInput($event, 5)" (keydown)="onOtpKeyDown($event, 5)">
         </div>
         
-        <div *ngIf="errorMessage" class="alert alert-danger py-2 small mb-3">
+        @if (errorMessage) {
+        <div class="alert alert-danger py-2 small mb-3">
             {{ errorMessage }}
         </div>
+        }
         
-        <p class="text-muted small mb-4">Didn't receive the code? <a href="#" class="text-primary fw-bold text-decoration-none">Resend OTP</a> in <span class="text-primary fw-bold">00:45</span></p>
+        <p class="text-muted small mb-4">
+            Didn't receive the code? 
+            @if (countdown > 0) {
+            <span>Resend OTP in <span class="text-primary fw-bold">{{ formatTime(countdown) }}</span></span>
+            } @else {
+            <a href="#" (click)="resendOtp($event)" class="fw-bold text-primary text-decoration-none" [class.text-muted]="isResending" [style.pointer-events]="isResending ? 'none' : 'auto'">Resend OTP</a> 
+            }
+        </p>
         
-        <button type="button" class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow-sm d-flex align-items-center justify-content-center mb-4" (click)="verify()" [disabled]="isLoading">
-            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            <span *ngIf="!isLoading">Verify & Continue</span> <i *ngIf="!isLoading" class="bi bi-arrow-right ms-2"></i>
-        </button>
+        <app-button type="button" variant="primary" size="lg" [block]="true" class="w-100 d-block mb-4" (clicked)="verify()" [loading]="isLoading || isResending" label="Verify & Continue">
+            @if (!isLoading && !isResending) {
+            <i class="bi bi-arrow-right me-2"></i>
+            }
+        </app-button>
         
         <a routerLink="/login" class="text-primary text-decoration-none fw-bold small">
             <i class="bi bi-arrow-left me-1"></i> Back to Login

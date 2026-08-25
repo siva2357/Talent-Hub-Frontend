@@ -1,5 +1,5 @@
 <button [type]="type" class="btn" [class]="'btn-' + variant + ' btn-' + size" [class.btn-icon-only]="iconOnly"
-    [class.disabled]="disabled" [class.loading]="loading" [disabled]="disabled || loading" (click)="onClick($event)">
+    [class.w-100]="block" [class.disabled]="disabled" [class.loading]="loading" [disabled]="disabled || loading" (click)="onClick($event)">
     <ng-content></ng-content>
 
     @if (!iconOnly && label) {

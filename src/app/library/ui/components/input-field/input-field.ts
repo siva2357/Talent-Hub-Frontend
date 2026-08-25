@@ -5,6 +5,7 @@ export type InputFieldType =
   | 'email'
   | 'password'
   | 'date'
+  | 'tel'
   | 'textarea'
   | 'select'
   | 'multiselect';
@@ -67,6 +68,13 @@ export class InputField {
   @Output() selectedValuesChange = new EventEmitter<string[]>();
 
   @Output() changed = new EventEmitter<string>();
+
+  @Input() showPasswordToggle: boolean = false;
+  isPasswordVisible: boolean = false;
+
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
+  }
 
   isDropdownOpen: boolean = false;
 

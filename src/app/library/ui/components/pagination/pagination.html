@@ -90,18 +90,33 @@
             }
 
 
-            @for (page of pages; track page.number) {
+            @for (page of pages; track $index) {
+
+            @if (page.ellipsis) {
+
+            <li class="page-item ellipsis">
+
+                <span class="page-link">
+                    ...
+                </span>
+
+            </li>
+
+            } @else {
 
             <li class="page-item" [class.active]="page.number === currentPage">
 
                 <button type="button" class="page-link" (click)="goToPage(page.number)">
+
                     {{ page.number }}
+
                 </button>
 
             </li>
 
             }
 
+            }
 
             @if (showPreviousNext) {
 

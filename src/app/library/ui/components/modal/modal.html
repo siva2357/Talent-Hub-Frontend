@@ -2,21 +2,25 @@
 
 <div class="modal-backdrop-custom">
 
-    <div class="modal-dialog" [class]="'modal-dialog modal-' + size">
+    <div class="modal-dialog" [class.modal-sm]="size === 'sm'" [class.modal-md]="size === 'md'"
+        [class.modal-lg]="size === 'lg'">
 
         <div class="modal-content">
 
             <div class="modal-body custom-p position-relative" [class.modal-centered]="variant === 'icon'">
 
+                <!-- Close -->
                 @if (showClose) {
+
                 <button type="button" class="custom-close" aria-label="Close" (click)="onClose()">
 
                     <i class="bi bi-x-lg"></i>
 
                 </button>
+
                 }
 
-
+                <!-- Icon -->
                 @if (variant === 'icon') {
 
                 <div class="modal-icon-container" [class]="'modal-icon-container icon-' + iconVariant">
@@ -27,36 +31,39 @@
 
                 }
 
-
+                <!-- Title -->
                 @if (title) {
+
                 <h3 class="modal-custom-title">
                     {{ title }}
                 </h3>
+
                 }
 
-
+                <!-- Message -->
                 @if (message) {
+
                 <p class="modal-custom-text">
                     {{ message }}
                 </p>
+
                 }
 
-
+                <!-- Actions -->
                 @if (showActions) {
 
-                <div [class]="variant === 'icon'
-                        ? 'd-flex gap-2 w-100'
-                        : 'd-flex justify-content-end gap-2'">
+                <div class="modal-actions" [class.modal-actions-centered]="variant === 'icon'">
 
                     @if (showCancel) {
+
                     <button type="button" class="btn btn-outline-secondary btn-sm"
                         [class.flex-fill]="variant === 'icon'" (click)="onCancel()">
 
                         {{ cancelLabel }}
 
                     </button>
-                    }
 
+                    }
 
                     <button type="button" class="btn btn-sm" [class]="'btn-' + confirmVariant"
                         [class.flex-fill]="variant === 'icon'" (click)="onConfirm()">
