@@ -11,6 +11,7 @@ type ButtonVariant =
   | 'dark'
   | 'link'
   | 'outline-primary'
+  | 'outline-secondary'
   | 'outline-success'
   | 'outline-danger'
   | 'outline-warning'
@@ -28,7 +29,7 @@ type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 })
 export class Button {
 
-  @Input() label: string = 'Button';
+  @Input() label: string = '';
 
   @Input() variant: ButtonVariant = 'primary';
 

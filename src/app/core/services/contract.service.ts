@@ -60,6 +60,18 @@ export class ContractService {
     return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/withdraw/${id}`, { headers: this.getAuthHeaders() });
   }
 
+  saveContract(id: string): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/save/${id}`, {}, { headers: this.getAuthHeaders() });
+  }
+
+  unsaveContract(id: string): Observable<{ success: boolean; message: string }> {
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/unsave/${id}`, { headers: this.getAuthHeaders() });
+  }
+
+  getSavedContracts(): Observable<{ success: boolean; contracts: Contract[] }> {
+    return this.http.get<{ success: boolean; contracts: Contract[] }>(`${this.apiUrl}/saved-contracts`, { headers: this.getAuthHeaders() });
+  }
+
   getAppliedContracts(): Observable<any> {
     return this.http.get(`${this.apiUrl}/applied-contracts`, { headers: this.getAuthHeaders() });
   }

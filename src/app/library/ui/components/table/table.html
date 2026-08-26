@@ -5,7 +5,13 @@
 
         @for (column of columns; track column.field) {
 
-        <ngx-datatable-column [name]="column.headerName" [prop]="column.field">
+        <ngx-datatable-column 
+            [name]="column.headerName" 
+            [prop]="column.field" 
+            [width]="$any(column.width)" 
+            [minWidth]="$any(column.minWidth)" 
+            [maxWidth]="$any(column.maxWidth)" 
+            [flexGrow]="$any(column.flexGrow)">
 
             <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
 

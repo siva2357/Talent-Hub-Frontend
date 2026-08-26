@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ContractService } from '../../../core/services/contract.service';
 import { CreateContractDto, UpdateContractDto } from '../../../core/dtos/contract.dto';
-
+import { InputField, InputOption } from '../../../library/ui/components/input-field/input-field';
+import { Button } from '../../../library/ui/components/button/button';
+import { Timeline, TimelineStep } from '../../../library/shared/components/timeline/timeline';
 
 
 @Component({
   selector: 'app-create-contract',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, InputField, Button, Timeline],
   templateUrl: './create-contract.html',
   styleUrl: './create-contract.css'
 })
@@ -21,6 +23,37 @@ export class CreateContract implements OnInit {
   isSubmitting = false;
   editContractId: string | null = null;
   isLoading = false;
+
+  contractTypeOptions: InputOption[] = [
+    { label: 'Fixed Price', value: 'Fixed Price' },
+    { label: 'Hourly', value: 'Hourly' }
+  ];
+
+  contractCategoryOptions: InputOption[] = [
+    { label: 'Web Development', value: 'Web Development' },
+    { label: 'Mobile Development', value: 'Mobile Development' },
+    { label: 'Design', value: 'Design' }
+  ];
+
+  contractSubjectOptions: InputOption[] = [
+    { label: 'Frontend', value: 'Frontend' },
+    { label: 'Backend', value: 'Backend' },
+    { label: 'Full Stack', value: 'Full Stack' }
+  ];
+
+  contractStatusOptions: InputOption[] = [
+    { label: 'Draft', value: 'draft' },
+    { label: 'Open', value: 'open' },
+    { label: 'In Progress', value: 'in progress' },
+    { label: 'Completed', value: 'completed' },
+    { label: 'Closed', value: 'closed' }
+  ];
+
+  timelineSteps: TimelineStep[] = [
+    { title: 'Basic Details', status: 'active' },
+    { title: 'Terms & Conditions', status: 'upcoming' },
+    { title: 'Review & Create', status: 'upcoming' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -123,16 +156,46 @@ export class CreateContract implements OnInit {
 
   nextStep(): void {
     if (this.currentStep === 1) {
+      if (this.contractForm.get('contractTitle')?.invalid || this.contractForm.get('contractType')?.invalid || this.contractForm.get('contractCategory')?.invalid || this.contractForm.get('contractSubject')?.invalid || this.contractForm.get('contractDescription')?.invalid || this.contractForm.get('contractStartDate')?.invalid || this.contractForm.get('contractEndDate')?.invalid || this.contractForm.get('estimatedBudget')?.invalid) {
+        this.contractForm.markAllAsTouched();
+        return;
+      }
       this.currentStep = 2;
     } else if (this.currentStep === 2) {
+      if (this.contractForm.get('agreeToTerms1')?.invalid || this.contractForm.get('agreeToTerms2')?.invalid || this.contractForm.get('agreeToTerms3')?.invalid) {
+        return;
+      }
       this.currentStep = 3;
     }
+    this.updateTimeline();
   }
 
   previousStep(): void {
     if (this.currentStep > 1) {
       this.currentStep--;
+      this.updateTimeline();
     }
+  }
+
+  onStepClicked(stepIndex: number): void {
+    const targetStep = stepIndex + 1;
+    if (targetStep < this.currentStep) {
+      this.currentStep = targetStep;
+      this.updateTimeline();
+    }
+  }
+
+  private updateTimeline(): void {
+    this.timelineSteps = this.timelineSteps.map((step, index) => {
+      const stepNumber = index + 1;
+      if (stepNumber < this.currentStep) {
+        return { ...step, status: 'completed' };
+      } else if (stepNumber === this.currentStep) {
+        return { ...step, status: 'active' };
+      } else {
+        return { ...step, status: 'upcoming' };
+      }
+    });
   }
 
   submitContract(): void {

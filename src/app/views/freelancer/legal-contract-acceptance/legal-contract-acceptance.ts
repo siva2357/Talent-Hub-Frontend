@@ -6,15 +6,21 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { OfferService } from '../../../core/services/offer.service';
 import { FileService } from '../../../core/services/file.service';
 import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
+import { Button } from '../../../library/ui/components/button/button';
+import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
+import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
 
 @Component({
   selector: 'app-legal-contract-acceptance',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, Button, FileUpload, FilePreview],
   templateUrl: './legal-contract-acceptance.html',
   styleUrl: './legal-contract-acceptance.css'
 })
 export class LegalContractAcceptance implements OnInit {
+  UploadBucket = UploadBucket;
+  UploadSection = UploadSection;
+
   offerId: string = '';
   offer: any = null;
   isLoading = true;
@@ -35,7 +41,7 @@ export class LegalContractAcceptance implements OnInit {
     private offerService: OfferService,
     private fileService: FileService,
     private sanitizer: DomSanitizer
-  ) {}
+  ) { }
 
   getSafePdfUrl(): SafeResourceUrl {
     const url = `http://localhost:5000/api/offers/${this.offerId}/pdf`;
@@ -65,41 +71,23 @@ export class LegalContractAcceptance implements OnInit {
     });
   }
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
+  onFileSelected(file: File): void {
     if (file) {
       this.signatureFile = file;
-      
+      this.isUploading = true;
+
       // Local preview
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.signaturePreview = e.target.result;
       };
       reader.readAsDataURL(file);
-
-      // Upload immediately
-      this.isUploading = true;
-      this.fileService.uploadFile(
-        file,
-        UploadBucket.FreelancerData,
-        UploadSection.DigitalSignature,
-        this.offerId
-      ).subscribe({
-        next: (uploadRes) => {
-          this.isUploading = false;
-          if (uploadRes.success) {
-            this.uploadedSignatureUrl = uploadRes.url;
-          } else {
-            alert('Failed to upload signature. Please try again.');
-          }
-        },
-        error: (err) => {
-          this.isUploading = false;
-          console.error('Error uploading signature:', err);
-          alert('An error occurred during signature upload. Please try again.');
-        }
-      });
     }
+  }
+
+  onUploadComplete(url: string): void {
+    this.isUploading = false;
+    this.uploadedSignatureUrl = url;
   }
 
   acceptContract(): void {

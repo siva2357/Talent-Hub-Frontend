@@ -15,28 +15,14 @@
 
                 <!-- Contract Subject -->
                 @if (contract.contractSubject) {
-                <span class="contract-tag contract-tag-primary">
-                    {{ contract.contractSubject }}
-                </span>
+                <app-badge [label]="contract.contractSubject" variant="primary" appearance="outline">
+                </app-badge>
                 }
 
                 <!-- Contract Type -->
                 @if (contract.contractType) {
-                <span class="contract-tag">
-                    {{ contract.contractType }}
-                </span>
-                }
-
-                <!-- Contract Status -->
-                @if (contract.status) {
-                <span class="contract-tag" [class.contract-status-completed]="contract.status === 'completed'"
-                    [class.contract-status-active]="contract.status === 'active'"
-                    [class.contract-status-pending]="contract.status === 'pending'"
-                    [class.contract-status-cancelled]="contract.status === 'cancelled'">
-
-                    {{ contract.status }}
-
-                </span>
+                <app-badge [label]="contract.contractType" variant="secondary" appearance="outline">
+                </app-badge>
                 }
 
             </div>
@@ -44,14 +30,9 @@
         </div>
 
         <!-- APPLICATION STATUS -->
-        <span class="application-status" [class.status-applied]="contract.hasApplied"
-            [class.status-not-applied]="!contract.hasApplied">
-
-            <span class="status-dot"></span>
-
-            {{ contract.hasApplied ? 'Applied' : 'Not Applied' }}
-
-        </span>
+        <app-badge [label]="contract.hasApplied ? 'Applied' : 'Not Applied'"
+            [variant]="contract.hasApplied ? 'success' : 'secondary'" appearance="subtle" [rounded]="true">
+        </app-badge>
 
     </div>
 
@@ -159,25 +140,14 @@
     <div class="contract-card-footer">
 
         <!-- SAVE -->
-
-        <button type="button" class="contract-save-button" [class.saved]="contract.hasSaved" aria-label="Save Contract"
-            (click)="onSave()">
-
-            <i class="bi" [class.bi-bookmark-fill]="contract.hasSaved" [class.bi-bookmark]="!contract.hasSaved">
-            </i>
-
-        </button>
-
+        <app-button variant="light" size="md" [iconOnly]="true" (clicked)="onSave()" class="rounded-circle">
+            <i class="bi fs-5" [class.text-primary]="contract.hasSaved" [class.bi-bookmark-fill]="contract.hasSaved" [class.bi-bookmark]="!contract.hasSaved"></i>
+        </app-button>
 
         <!-- VIEW DETAILS -->
-
-        <button type="button" class="contract-details-button" (click)="onViewDetails()">
-
+        <app-button variant="info" size="md" (clicked)="onViewDetails()">
             View Details
-
-            <i class="bi bi-arrow-right"></i>
-
-        </button>
+        </app-button>
 
     </div>
 

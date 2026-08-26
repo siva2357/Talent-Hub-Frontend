@@ -1,59 +1,16 @@
 @if (mode === 'image') {
 
-<div class="image-gallery">
-
-    <div class="image-gallery-card">
-        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b" alt="Mountain">
-
-        <button class="image-gallery-close">
-            <i class="bi bi-x"></i>
-        </button>
-
-        <div class="image-gallery-meta">
-            <div class="image-gallery-name">mountain.jpg</div>
-            <div class="image-gallery-size">1.2 MB</div>
-        </div>
+<div class="w-100 h-100">
+    @if (previewUrl) {
+    <div class="image-gallery-card h-100">
+        <img [src]="previewUrl" alt="Image Preview" style="width: 100%; height: 100%; object-fit: cover; max-height: 216px;">
     </div>
-
-    <div class="image-gallery-card">
-        <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f" alt="Interior">
-
-        <button class="image-gallery-close">
-            <i class="bi bi-x"></i>
-        </button>
-
-        <div class="image-gallery-meta">
-            <div class="image-gallery-name">interior.png</div>
-            <div class="image-gallery-size">2.4 MB</div>
-        </div>
+    } @else {
+    <div class="text-muted small p-4 border rounded text-center w-100 h-100 d-flex flex-column justify-content-center align-items-center" style="min-height: 216px; border: 2px dashed #e5e7eb !important; background-color: #f8fafc;">
+        <i class="bi bi-image text-secondary mb-2" style="font-size: 24px;"></i>
+        No preview available
     </div>
-
-    <div class="image-gallery-card">
-        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df" alt="Cityscape">
-
-        <button class="image-gallery-close">
-            <i class="bi bi-x"></i>
-        </button>
-
-        <div class="image-gallery-meta">
-            <div class="image-gallery-name">cityscape.jpeg</div>
-            <div class="image-gallery-size">1.6 MB</div>
-        </div>
-    </div>
-
-    <div class="image-gallery-card">
-        <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853" alt="Abstract">
-
-        <button class="image-gallery-close">
-            <i class="bi bi-x"></i>
-        </button>
-
-        <div class="image-gallery-meta">
-            <div class="image-gallery-name">abstract.png</div>
-            <div class="image-gallery-size">950 KB</div>
-        </div>
-    </div>
-
+    }
 </div>
 
 }

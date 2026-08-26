@@ -26,18 +26,19 @@
         <button class="nav-link px-3 py-2 d-flex align-items-center gap-2"
           [ngClass]="activeTab === 'proposals' ? 'active fw-bold text-primary border-0 border-bottom border-2 border-primary bg-transparent' : 'text-muted border-0 bg-transparent fw-semibold hover-text-primary'"
           (click)="activeTab = 'proposals'" type="button" role="tab">
-          <i class="bi bi-file-earmark-text"></i> Proposals <span class="badge rounded-pill ms-1"
-            [ngClass]="activeTab === 'proposals' ? 'bg-primary' : 'bg-secondary bg-opacity-25 text-secondary'">{{
-            totalApplications }}</span>
+          <i class="bi bi-file-earmark-text"></i> Proposals
+          <app-badge [label]="totalApplications.toString()"
+            [variant]="activeTab === 'proposals' ? 'primary' : 'secondary'" [rounded]="true"
+            appearance="subtle"></app-badge>
         </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link px-3 py-2 d-flex align-items-center gap-2"
           [ngClass]="activeTab === 'offers' ? 'active fw-bold text-primary border-0 border-bottom border-2 border-primary bg-transparent' : 'text-muted border-0 bg-transparent fw-semibold hover-text-primary'"
           (click)="activeTab = 'offers'" type="button" role="tab">
-          <i class="bi bi-gift"></i> Offers <span class="badge rounded-pill ms-1"
-            [ngClass]="activeTab === 'offers' ? 'bg-primary' : 'bg-secondary bg-opacity-25 text-secondary'">{{
-            totalOffers }}</span>
+          <i class="bi bi-gift"></i> Offers
+          <app-badge [label]="totalOffers.toString()" [variant]="activeTab === 'offers' ? 'primary' : 'secondary'"
+            [rounded]="true" appearance="subtle"></app-badge>
         </button>
       </li>
     </ul>
@@ -50,37 +51,34 @@
       @if (activeTab === 'proposals') {
       <div class="tab-pane fade show active" id="proposals-pane" role="tabpanel" tabindex="0">
 
-        <!-- Filters -->
         <div class="bg-white p-3 rounded-4 shadow-sm border mb-4">
           <div class="row g-3">
-            <div class="col-lg-5">
-              <div class="input-group">
-                <span class="input-group-text bg-white border-end-0 text-muted ps-3"><i class="bi bi-search"></i></span>
-                <input type="text" class="form-control border-start-0 ps-0 text-dark" placeholder="Search contracts..."
-                  style="font-size: 0.85rem;">
-              </div>
+            <div class="col-lg-4">
+              <app-input-field type="text" placeholder="Search contracts..." [showIcon]="true" icon="bi bi-search"
+                label=""></app-input-field>
             </div>
             <div class="col-lg-3">
-              <div class="input-group">
-                <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-calendar3"></i></span>
-                <select class="form-select text-muted border-start-0 ps-0" style="font-size: 0.85rem;">
-                  <option>Date Range</option>
-                  <option>All Time</option>
-                </select>
-              </div>
+              <app-input-field type="select" placeholder="Date Range" [options]="dateRangeOptions"
+                label=""></app-input-field>
             </div>
             <div class="col-lg-2">
-              <select class="form-select text-muted" style="font-size: 0.85rem;">
-                <option>Status: All Status</option>
-              </select>
+              <app-input-field type="select" placeholder="Status: All Status" [options]="proposalStatusOptions"
+                label=""></app-input-field>
             </div>
-            <div class="col-lg-2 text-end">
-              <button
-                class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2 text-muted fw-semibold bg-light border-light"
-                style="font-size: 0.85rem;">
-                <i class="bi bi-arrow-clockwise"></i> Reset
-              </button>
+            <div class="col-lg-3 d-flex gap-2 align-items-start">
+              <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply"></app-button>
+              <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset"
+                icon="bi bi-arrow-clockwise"></app-button>
             </div>
+          </div>
+          <div class="d-flex align-items-center flex-wrap gap-2 mt-3">
+            <span class="text-dark small fw-semibold me-2">Active Filters :</span>
+            @for (filter of activeFilters; track filter.value) {
+            <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)"></app-chip>
+            }
+            @if (activeFilters.length === 0) {
+            <span class="text-muted small">None</span>
+            }
           </div>
         </div>
 
@@ -98,159 +96,107 @@
           </div>
           } @else {
           @for (app of applications; track app.applicationId) {
-          <div class="card border rounded-4 shadow-sm bg-white hover-card overflow-hidden cursor-pointer p-0">
-            <div class="card-body p-4 row align-items-center g-4">
-              <!-- Details -->
-              <div class="col-lg-3 border-end">
-                <div class="d-flex gap-3 mb-3">
+          <div class="card border-0 rounded-4 shadow-sm bg-white hover-card overflow-hidden cursor-pointer p-0 mb-3"
+            style="transition: transform 0.2s, box-shadow 0.2s;">
+            <div class="card-body p-4 position-relative">
+
+              <!-- Top Row: Details & Status -->
+              <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-4 mb-4">
+
+                <!-- Left: Title & Info -->
+                <div class="d-flex gap-3 w-100">
                   <div
-                    class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0"
-                    style="width: 48px; height: 48px;">
-                    <i class="bi bi-file-earmark-text fs-4"></i>
+                    class="rounded-4 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="width: 60px; height: 60px;">
+                    <i class="bi bi-file-earmark-text fs-3"></i>
                   </div>
-                  <div>
-                    <h3 class="fs-6 fw-bold text-dark mb-1 text-truncate" style="max-width: 150px;"
-                      [title]="app.contract.contractTitle">{{ app.contract.contractTitle }}</h3>
-                    <div class="d-flex gap-2">
-                      <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-semibold text-truncate"
-                        style="font-size: 0.6rem; max-width: 80px;">{{ app.contract.contractSubject }}</span>
-                      <span class="text-muted fw-semibold" style="font-size: 0.7rem;">{{ app.contract.contractType
-                        }}</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="row g-2">
-                  <div class="col-6">
-                    <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                      style="font-size: 0.6rem; letter-spacing: 0.5px;">BUDGET</span>
-                    <span class="fw-bold text-dark" style="font-size: 0.8rem;">₹{{ app.contract.estimatedBudget | number
-                      }}</span>
-                  </div>
-                  <div class="col-6">
-                    <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                      style="font-size: 0.6rem; letter-spacing: 0.5px;">DURATION</span>
-                    <span class="fw-bold text-dark" style="font-size: 0.8rem;">
-                      {{ app.contract.contractStartDate | date:'MMM d' }} - {{ app.contract.contractEndDate | date:'MMM
-                      d' }}
-                    </span>
-                  </div>
-                  <div class="col-12 mt-2">
-                    <span class="text-muted d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i
-                        class="bi bi-calendar-check"></i> {{ app.appliedAt | date:'mediumDate' }} <span
-                        class="text-uppercase ms-1" style="font-size: 0.6rem;">APPLIED ON</span></span>
-                  </div>
-                </div>
-              </div>
+                  <div class="flex-grow-1 overflow-hidden">
+                    <div class="d-flex justify-content-between align-items-start w-100">
+                      <div>
+                        <h3 class="fs-5 fw-bold text-dark mb-2 text-truncate" [title]="app.contract.contractTitle">{{
+                          app.contract.contractTitle }}</h3>
+                        <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+                          <app-badge [label]="app.contract.contractSubject" variant="primary" appearance="subtle"
+                            [rounded]="true"></app-badge>
+                          <app-badge [label]="app.contract.contractType" variant="secondary" appearance="subtle"
+                            [rounded]="true"></app-badge>
+                        </div>
+                      </div>
 
-              <!-- Progress Timeline -->
-              <div class="col-lg-6 px-lg-5">
-                <h4 class="text-dark fw-bold mb-4" style="font-size: 0.75rem;">Application Progress</h4>
-                <div class="d-flex justify-content-between position-relative">
-                  <div class="position-absolute top-50 start-0 w-100"
-                    style="height: 2px; background-color: #e9ecef; z-index: 1; transform: translateY(-50%);"></div>
-                  <div class="position-absolute top-50 start-0" [style.width]="getProgressWidth(app.applicationStatus)"
-                    style="height: 2px; background-color: #20c997; z-index: 2; transform: translateY(-50%); transition: width 0.3s ease;">
-                  </div>
+                      <!-- Right: Status Badge -->
+                      <div class="text-end flex-shrink-0 d-flex flex-column align-items-end">
+                        <span class="fw-bold text-uppercase d-block mb-2 text-muted"
+                          style="font-size: 0.65rem; letter-spacing: 0.5px;">Current Status</span>
+                        <app-badge [label]="app.applicationStatus"
+                          [variant]="getStatusBadgeVariant(app.applicationStatus)" appearance="subtle" [rounded]="false"
+                          class="fs-6 px-3 py-2 text-capitalize shadow-sm fw-bold border"
+                          [ngClass]="'border-' + getStatusBadgeVariant(app.applicationStatus) + ' border-opacity-25'">
+                        </app-badge>
+                      </div>
+                    </div>
 
-                  <!-- Applied Step -->
-                  <div class="d-flex flex-column align-items-center position-relative z-3">
-                    <div
-                      class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center shadow-sm"
-                      style="width: 24px; height: 24px;"><i class="bi bi-check" style="font-size: 1rem;"></i></div>
-                    <span class="text-dark fw-bold mt-2" style="font-size: 0.65rem;">Applied</span>
-                    <span class="text-muted" style="font-size: 0.6rem;">{{ app.appliedAt | date:'d MMM yyyy' }}</span>
-                  </div>
-                  <!-- Assessment Step -->
-                  <div class="d-flex flex-column align-items-center position-relative z-3">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-                      [ngClass]="isAssessmentDone(app.applicationStatus) ? 'bg-success text-white' : (isAssessmentActive(app.applicationStatus) ? 'bg-primary text-white' : 'bg-light border text-muted')"
-                      style="width: 24px; height: 24px;">
-                      @if (isAssessmentDone(app.applicationStatus)) {
-                      <i class="bi bi-check" style="font-size: 1rem;"></i>
-                      } @else {
-                      2
-                      }
+                    <div class="d-flex align-items-center gap-4 text-muted flex-wrap" style="font-size: 0.85rem;">
+                      <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-cash text-success"></i>
+                        <span class="fw-bold text-dark">₹{{ app.contract.estimatedBudget | number }}</span>
+                      </div>
+                      <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-calendar-range text-primary"></i>
+                        <span class="fw-medium">{{ app.contract.contractStartDate | date:'MMM d' }} - {{
+                          app.contract.contractEndDate | date:'MMM d' }}</span>
+                      </div>
+                      <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-clock-history text-secondary"></i>
+                        <span>Applied {{ app.appliedAt | date:'mediumDate' }}</span>
+                      </div>
                     </div>
-                    <span class="text-dark fw-bold mt-2" style="font-size: 0.65rem;">Assessment</span>
-                  </div>
-                  <!-- Interview Step -->
-                  <div class="d-flex flex-column align-items-center position-relative z-3">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-                      [ngClass]="isInterviewDone(app.applicationStatus) ? 'bg-success text-white' : (isInterviewActive(app.applicationStatus) ? 'bg-primary text-white' : 'bg-light border text-muted')"
-                      style="width: 24px; height: 24px; font-size: 0.75rem; font-weight: bold;">
-                      @if (isInterviewDone(app.applicationStatus)) {
-                      <i class="bi bi-check" style="font-size: 1rem;"></i>
-                      } @else {
-                      3
-                      }
-                    </div>
-                    <span class="text-muted fw-semibold mt-2" style="font-size: 0.65rem;">Interview</span>
-                  </div>
-                  <!-- Decision Step -->
-                  <div class="d-flex flex-column align-items-center position-relative z-3">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-                      [ngClass]="app.applicationStatus === 'hired' ? 'bg-success text-white' : (app.applicationStatus === 'rejected' ? 'bg-danger text-white' : 'bg-light border text-muted')"
-                      style="width: 24px; height: 24px; font-size: 0.75rem; font-weight: bold;">
-                      @if (app.applicationStatus === 'hired' || app.applicationStatus === 'rejected') {
-                      <i class="bi bi-check" style="font-size: 1rem;"></i>
-                      } @else {
-                      4
-                      }
-                    </div>
-                    <span class="text-muted fw-semibold mt-2" style="font-size: 0.65rem;">Decision</span>
                   </div>
                 </div>
               </div>
 
-              <!-- Status -->
-              <div class="col-lg-3 border-start d-flex flex-column justify-content-center">
-                <div>
-                  <span class="fw-bold text-uppercase d-block mb-1"
-                    [ngClass]="{'text-success': app.applicationStatus === 'hired', 'text-warning': app.applicationStatus === 'application submitted' || app.applicationStatus === 'shortlisted', 'text-primary': app.applicationStatus.includes('interview'), 'text-info': app.applicationStatus.includes('assessment'), 'text-danger': app.applicationStatus === 'rejected'}"
-                    style="font-size: 0.6rem; letter-spacing: 0.5px;">{{ app.applicationStatus }}</span>
-                  <h4 class="fw-bold fs-6 mb-1 text-capitalize"
-                    [ngClass]="{'text-success': app.applicationStatus === 'hired', 'text-warning-dark': app.applicationStatus === 'application submitted' || app.applicationStatus === 'shortlisted', 'text-primary': app.applicationStatus.includes('interview'), 'text-info': app.applicationStatus.includes('assessment'), 'text-danger': app.applicationStatus === 'rejected'}">
-                    {{ app.applicationStatus }}!
-                  </h4>
-                  <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.4;">
-                    @if(app.applicationStatus === 'hired') { The client has awarded you the contract. }
-                    @if(app.applicationStatus.includes('interview')) { You are in the interview stage. }
-                    @if(app.applicationStatus.includes('assessment')) { Please complete the assessment. }
-                    @if(app.applicationStatus === 'application submitted' || app.applicationStatus === 'shortlisted') {
-                    Waiting for the client's decision. }
-                    @if(app.applicationStatus === 'rejected') { Application was declined. }
-                  </p>
+              <!-- Bottom Row: Timeline & Actions -->
+              <div class="p-4 bg-primary bg-opacity-10 rounded-4 border-0">
+                <div class="row align-items-center g-4">
+                  <div class="col-lg-8">
+                    <app-timeline class="w-100" [steps]="getTimelineSteps(app)"></app-timeline>
+                  </div>
+                  <div class="col-lg-4 d-flex flex-column justify-content-center border-start ps-lg-4">
+                    <p class="text-muted mb-3" style="font-size: 0.8rem; line-height: 1.4;">
+                      @if(app.applicationStatus === 'hired') { The client has awarded you the contract. }
+                      @if(app.applicationStatus.includes('interview')) { You are in the interview stage. }
+                      @if(app.applicationStatus.includes('assessment')) { Please complete the assessment. }
+                      @if(app.applicationStatus === 'application submitted' || app.applicationStatus === 'shortlisted')
+                      { Waiting for the client's decision. }
+                      @if(app.applicationStatus === 'rejected') { Application was declined. }
+                    </p>
 
-                  <div class="mt-3">
-                    @if(app.applicationStatus === 'interview scheduled') {
-                    <div class="bg-light p-2 rounded-3 mb-2 border border-primary border-opacity-25">
-                      <span class="d-block fw-bold text-primary" style="font-size: 0.75rem;">Interview Details</span>
-                      <span class="d-block text-muted" style="font-size: 0.7rem;"><i class="bi bi-calendar me-1"></i> {{
-                        app.interview?.date | date:'mediumDate' }} at {{ app.interview?.time }}</span>
+                    <div class="mt-1">
+                      @if(app.applicationStatus === 'interview scheduled') {
+                      <div class="bg-white p-2 rounded-3 mb-2 border border-primary border-opacity-25 shadow-sm">
+                        <span class="d-block fw-bold text-primary" style="font-size: 0.75rem;">Interview Details</span>
+                        <span class="d-block text-muted" style="font-size: 0.7rem;"><i class="bi bi-calendar me-1"></i>
+                          {{
+                          app.interview?.date | date:'mediumDate' }} at {{ app.interview?.time }}</span>
+                      </div>
+                      <app-button variant="primary" class="w-100" [block]="true" label="Join Interview"
+                        icon="bi bi-camera-video" (clicked)="joinInterview(app.applicationId)"></app-button>
+                      }
+                      @if(app.applicationStatus === 'assessment assigned') {
+                      <div class="bg-white p-2 rounded-3 mb-2 border border-info border-opacity-25 shadow-sm">
+                        <span class="d-block fw-bold text-info" style="font-size: 0.75rem;">{{ app.assessment?.title ||
+                          'Assessment Task' }}</span>
+                        <span class="d-block text-muted text-truncate" style="font-size: 0.7rem;"><i
+                            class="bi bi-calendar me-1"></i> Due: {{ app.assessment?.date | date:'mediumDate' }}</span>
+                      </div>
+                      <div class="d-flex gap-2">
+                        <app-button variant="info" class="flex-grow-1" [block]="true" label="Open"
+                          icon="bi bi-box-arrow-up-right" (clicked)="startAssessment(app.applicationId)"></app-button>
+                        <app-button variant="outline-success" class="flex-grow-1" [block]="true" label="Done"
+                          icon="bi bi-check2-circle"
+                          (clicked)="markAssessmentCompleted(app.applicationId)"></app-button>
+                      </div>
+                      }
                     </div>
-                    <button class="btn btn-sm btn-primary rounded-pill fw-semibold shadow-sm px-3 w-100"
-                      (click)="joinInterview(app.applicationId)">
-                      <i class="bi bi-camera-video me-1"></i> Join Interview
-                    </button>
-                    }
-                    @if(app.applicationStatus === 'assessment assigned') {
-                    <div class="bg-light p-2 rounded-3 mb-2 border border-info border-opacity-25">
-                      <span class="d-block fw-bold text-info" style="font-size: 0.75rem;">{{ app.assessment?.title ||
-                        'Assessment Task' }}</span>
-                      <span class="d-block text-muted text-truncate" style="font-size: 0.7rem;"><i
-                          class="bi bi-calendar me-1"></i> Due: {{ app.assessment?.date | date:'mediumDate' }}</span>
-                    </div>
-                    <div class="d-flex gap-2">
-                      <button class="btn btn-sm btn-info text-white rounded-pill fw-semibold shadow-sm flex-grow-1"
-                        (click)="startAssessment(app.applicationId)" title="Open Assessment Link">
-                        <i class="bi bi-box-arrow-up-right me-1"></i> Open
-                      </button>
-                      <button class="btn btn-sm btn-outline-success rounded-pill fw-semibold shadow-sm flex-grow-1"
-                        (click)="markAssessmentCompleted(app.applicationId)" title="Mark as Completed">
-                        <i class="bi bi-check2-circle me-1"></i> Done
-                      </button>
-                    </div>
-                    }
                   </div>
                 </div>
               </div>
@@ -258,30 +204,6 @@
           </div>
           }
           }
-        </div>
-
-        <!-- Pagination -->
-        <div class="d-flex justify-content-between align-items-center flex-wrap pt-2">
-          <span class="text-muted small mb-3 mb-md-0">Showing 1 to 5 of 5 proposals</span>
-          <div class="d-flex align-items-center gap-4">
-            <nav aria-label="Page navigation">
-              <ul class="pagination pagination-sm mb-0">
-                <li class="page-item disabled"><a class="page-link border-0 text-muted bg-transparent" href="#"><i
-                      class="bi bi-chevron-left"></i></a></li>
-                <li class="page-item active"><a
-                    class="page-link rounded-circle d-flex align-items-center justify-content-center bg-primary border-primary text-white mx-1"
-                    href="#" style="width: 30px; height: 30px;">1</a></li>
-                <li class="page-item disabled"><a class="page-link border-0 text-dark bg-transparent" href="#"><i
-                      class="bi bi-chevron-right"></i></a></li>
-              </ul>
-            </nav>
-            <div class="d-flex align-items-center gap-2">
-              <span class="text-muted small">Items per page:</span>
-              <select class="form-select form-select-sm text-dark border-light shadow-sm" style="width: 70px;">
-                <option>10</option>
-              </select>
-            </div>
-          </div>
         </div>
       </div>
       }
@@ -292,149 +214,135 @@
       @if (activeTab === 'offers') {
       <div class="tab-pane fade show active" id="offers-pane" role="tabpanel" tabindex="0">
 
-        <!-- Filters for Offers -->
         <div class="bg-white p-3 rounded-4 shadow-sm border mb-4">
           <div class="row g-3">
             <div class="col-lg-4">
-              <span class="text-uppercase text-muted fw-semibold mb-2 d-block" style="font-size: 0.65rem;">SEARCH</span>
-              <div class="input-group">
-                <span class="input-group-text bg-white border-end-0 text-muted ps-3"><i class="bi bi-search"></i></span>
-                <input type="text" class="form-control border-start-0 ps-0 text-dark"
-                  placeholder="Search offers or contracts..." style="font-size: 0.85rem;">
-              </div>
+              <app-input-field type="text" placeholder="Search contracts..." [showIcon]="true" icon="bi bi-search"
+                label=""></app-input-field>
             </div>
             <div class="col-lg-3">
-              <span class="text-uppercase text-muted fw-semibold mb-2 d-block" style="font-size: 0.65rem;">DATE
-                RANGE</span>
-              <div class="input-group">
-                <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-calendar3"></i></span>
-                <select class="form-select text-muted border-start-0 ps-0" style="font-size: 0.85rem;">
-                  <option>All Time</option>
-                </select>
-              </div>
+              <app-input-field type="select" placeholder="Date Range" [options]="dateRangeOptions"
+                label=""></app-input-field>
             </div>
             <div class="col-lg-2">
-              <span class="text-uppercase text-muted fw-semibold mb-2 d-block" style="font-size: 0.65rem;">STATUS</span>
-              <select class="form-select text-muted" style="font-size: 0.85rem;">
-                <option>All Status</option>
-              </select>
+              <app-input-field type="select" placeholder="Status: All Status" [options]="proposalStatusOptions"
+                label=""></app-input-field>
             </div>
-            <div class="col-lg-2">
-              <span class="text-uppercase text-muted fw-semibold mb-2 d-block" style="font-size: 0.65rem;">SORT
-                BY</span>
-              <select class="form-select text-muted" style="font-size: 0.85rem;">
-                <option>Most Recent</option>
-              </select>
-            </div>
-            <div class="col-lg-1 d-flex align-items-end">
-              <button
-                class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2 fw-semibold bg-primary bg-opacity-10"
-                style="font-size: 0.85rem;">
-                Reset
-              </button>
+            <div class="col-lg-3 d-flex gap-2 align-items-start">
+              <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply"></app-button>
+              <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset"
+                icon="bi bi-arrow-clockwise"></app-button>
             </div>
           </div>
+          <div class="d-flex align-items-center flex-wrap gap-2 mt-3">
+            <span class="text-dark small fw-semibold me-2">Active Filters :</span>
+            @for (filter of activeFilters; track filter.value) {
+            <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)"></app-chip>
+            }
+            @if (activeFilters.length === 0) {
+            <span class="text-muted small">None</span>
+            }
+          </div>
         </div>
-
         <!-- Offers List -->
-        <div class="d-flex flex-column gap-3 mb-4">
+        <div class="row g-4 mb-4">
           @if (isLoadingOffers) {
-          <div class="text-center py-5">
+          <div class="col-12 text-center py-5">
             <div class="spinner-border text-primary" role="status">
               <span class="visually-hidden">Loading offers...</span>
             </div>
           </div>
           } @else if (offers.length === 0) {
-          <div class="text-center py-5">
+          <div class="col-12 text-center py-5">
             <p class="text-muted mb-0">No offers found.</p>
           </div>
-          } @else {          @for (offer of offers; track offer.id) {
-          <div class="card border rounded-4 shadow-sm bg-white p-4 position-relative overflow-hidden"
-            [ngClass]="{'opacity-75': offer.status?.toLowerCase() === 'declined' || offer.status?.toLowerCase() === 'rejected'}">
-            @if (offer.status?.toLowerCase() === 'sent' || offer.status?.toLowerCase() === 'pending') {
-            <div class="position-absolute top-0 start-0 w-100 bg-warning" style="height: 3px;"></div>
-            } @else if (offer.status?.toLowerCase() === 'accepted' || offer.status?.toLowerCase() === 'hired') {
-            <div class="position-absolute top-0 start-0 w-100 bg-success" style="height: 3px;"></div>
-            } @else if (offer.status?.toLowerCase() === 'declined' || offer.status?.toLowerCase() === 'rejected') {
-            <div class="position-absolute top-0 start-0 w-100 bg-danger" style="height: 3px;"></div>
-            }
+          } @else {
+          @for (offer of offers; track offer.id) {
+          <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border rounded-4 shadow-sm bg-white position-relative overflow-hidden hover-card"
+              [ngClass]="{'opacity-75': offer.status?.toLowerCase() === 'declined' || offer.status?.toLowerCase() === 'rejected'}"
+              style="transition: transform 0.2s, box-shadow 0.2s;">
 
-            <div class="row align-items-center g-4">
-              <!-- Details -->
-              <div class="col-lg-4">
-                <div class="d-flex gap-3 mb-3">
-                  <div
-                    class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0"
-                    style="width: 56px; height: 56px;">
-                    <i class="bi bi-file-earmark-text fs-3"></i>
+              <div class="card-body p-4 d-flex flex-column h-100">
+                <!-- Header: Title & Status -->
+                <div class="d-flex justify-content-between align-items-start mb-2 gap-2">
+                  <div class="min-w-0" style="min-width: 0;">
+                    <h3 class="fs-5 fw-bold text-dark mb-1 text-truncate" [title]="offer.contractTitle">{{
+                      offer.contractTitle || 'Contract Title' }}</h3>
+                    <p class="text-muted small mb-0 text-truncate">Client: <span class="fw-semibold text-dark">{{
+                        offer.client || 'Client Name' }}</span></p>
                   </div>
-                  <div>
-                    <h3 class="fs-5 fw-bold text-dark mb-1">{{ offer.contractTitle || 'Contract Title' }}
-                    </h3>
-                    <p class="text-muted small mb-0">Client: <span class="fw-semibold text-dark">{{ offer.client || 'Client Name' }}</span></p>
-                  </div>
-                </div>
-                <div class="d-flex flex-wrap gap-2">
-                  @if (offer.techStack && offer.techStack.length > 0) {
-                    @for (tech of offer.techStack; track tech) {
-                      <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-semibold"
-                        style="font-size: 0.65rem;">{{ tech }}</span>
+                  <div class="flex-shrink-0">
+                    @if (offer.status?.toLowerCase() === 'accepted' || offer.status?.toLowerCase() === 'hired') {
+                    <app-badge [label]="offer.status" variant="success" appearance="subtle"
+                      [rounded]="true"></app-badge>
+                    } @else if (offer.status?.toLowerCase() === 'declined' || offer.status?.toLowerCase() ===
+                    'rejected') {
+                    <app-badge [label]="offer.status" variant="danger" appearance="subtle" [rounded]="true"></app-badge>
+                    } @else {
+                    <app-badge [label]="offer.status" variant="warning" appearance="subtle"
+                      [rounded]="true"></app-badge>
                     }
+                  </div>
+                </div>
+
+                <!-- Tech Stack Tags -->
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                  @if (offer.techStack && offer.techStack.length > 0) {
+                  @for (tech of offer.techStack.slice(0,3); track tech) {
+                  <app-badge [label]="tech" variant="primary" appearance="outline" [rounded]="true"></app-badge>
+                  }
+                  @if (offer.techStack.length > 3) {
+                  <app-badge [label]="'+' + (offer.techStack.length - 3)" variant="secondary" appearance="outline"
+                    [rounded]="true"></app-badge>
+                  }
                   } @else {
-                    <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-semibold"
-                      style="font-size: 0.65rem;">General</span>
+                  <app-badge label="General" variant="primary" appearance="outline" [rounded]="true"></app-badge>
                   }
                 </div>
-              </div>
 
-              <!-- Specs -->
-              <div class="col-lg-5 row g-3 text-center">
-                <div class="col-3">
-                  <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                    style="font-size: 0.6rem; letter-spacing: 0.5px;">OFFER AMOUNT</span>
-                  <span class="fw-bold text-dark fs-6 d-block">{{ offer.budget || 'N/A' }}</span>
-                  <span class="text-success fw-semibold" style="font-size: 0.7rem;">{{ offer.contractType || 'Fixed Price' }}</span>
+                <!-- Budget Details -->
+                <div class="d-flex align-items-stretch mb-3 p-3 bg-light rounded-3 border">
+                  <div class="flex-grow-1 d-flex flex-column justify-content-center px-2">
+                    <span class="text-muted fw-bold text-uppercase mb-1"
+                      style="font-size: 0.65rem; letter-spacing: 0.5px;">EST. BUDGET</span>
+                    <span class="fw-bold text-dark fs-5 text-truncate d-block">{{ offer.budget || 'N/A' }}</span>
+                    <span class="text-success fw-semibold text-truncate d-block" style="font-size: 0.7rem;">{{
+                      offer.contractType || 'Fixed Price' }}</span>
+                  </div>
                 </div>
-                <div class="col-3 border-start">
-                  <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                    style="font-size: 0.6rem; letter-spacing: 0.5px;">START DATE</span>
-                  <span class="fw-bold text-dark fs-6 d-block">{{ offer.startDate }}</span>
+
+                <!-- Dates Grid -->
+                <div class="row g-2 mb-4 flex-grow-1">
+                  <div class="col-6">
+                    <div class="p-3 bg-light rounded-3 h-100 d-flex flex-column border">
+                      <span class="text-muted fw-bold text-uppercase mb-1"
+                        style="font-size: 0.65rem; letter-spacing: 0.5px;">START DATE</span>
+                      <span class="fw-bold text-dark text-truncate d-block" style="font-size: 0.85rem;">{{
+                        offer.startDate }}</span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-3 bg-light rounded-3 h-100 d-flex flex-column border">
+                      <span class="text-muted fw-bold text-uppercase mb-1"
+                        style="font-size: 0.65rem; letter-spacing: 0.5px;">RECEIVED</span>
+                      <span class="fw-bold text-dark text-truncate d-block" style="font-size: 0.85rem;">{{ offer.date
+                        }}</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="col-3 border-start">
-                  <span class="d-block text-muted text-uppercase fw-semibold mb-1"
-                    style="font-size: 0.6rem; letter-spacing: 0.5px;">OFFER RECEIVED</span>
-                  <span class="fw-bold text-dark fs-6 d-block mt-2">{{ offer.date }}</span>
-                </div>
-                <div class="col-3 border-start">
-                  <span class="d-block text-muted text-uppercase fw-semibold mb-2"
-                    style="font-size: 0.6rem; letter-spacing: 0.5px;">STATUS</span>
-                  
-                  @if (offer.status?.toLowerCase() === 'accepted' || offer.status?.toLowerCase() === 'hired') {
-                  <span
-                    class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1 fw-bold text-capitalize"
-                    style="font-size: 0.7rem;">{{ offer.status }}</span>
-                  } @else if (offer.status?.toLowerCase() === 'declined' || offer.status?.toLowerCase() === 'rejected') {
-                  <span
-                    class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-1 fw-bold text-capitalize"
-                    style="font-size: 0.7rem;">{{ offer.status }}</span>
-                  } @else {
-                  <span
-                    class="badge bg-warning bg-opacity-25 text-warning-dark rounded-pill px-3 py-1 fw-bold text-capitalize"
-                    style="font-size: 0.7rem;">{{ offer.status }}</span>
+
+                <!-- Actions Footer -->
+                <div class="d-flex gap-3 mt-auto pt-3 border-top align-items-center justify-content-between">
+                  @if (offer.status?.toLowerCase() === 'sent' || offer.status?.toLowerCase() === 'pending') {
+                  <app-button variant="outline-danger" [block]="false" label="Reject"
+                    (clicked)="rejectOffer(offer.id)"></app-button>
                   }
+                  <div class="ms-auto">
+                    <app-button variant="primary" [block]="false" label="View Offer"
+                      [routerLink]="['/view-contract-offer', offer.id]"></app-button>
+                  </div>
                 </div>
-              </div>
-
-              <!-- Actions -->
-              <div class="col-lg-3 d-flex flex-column gap-2 border-start ps-4">
-                <button [routerLink]="['/view-contract-offer', offer.id]"
-                  class="btn btn-primary rounded-pill fw-semibold shadow-sm fw-bold shadow-sm d-flex justify-content-center align-items-center gap-2"
-                  style="font-size: 0.85rem;"><i class="bi bi-eye"></i> View Details</button>
-                
-                @if (offer.status?.toLowerCase() === 'sent' || offer.status?.toLowerCase() === 'pending') {
-                  <button (click)="rejectOffer(offer.id)" class="btn btn-outline-danger rounded-pill fw-semibold shadow-sm fw-bold d-flex justify-content-center align-items-center gap-2" style="font-size: 0.85rem;"><i class="bi bi-x-lg"></i> Reject Offer</button>
-                }
-
               </div>
             </div>
           </div>
@@ -442,29 +350,6 @@
           }
         </div>
 
-        <!-- Pagination Offers -->
-        <div class="d-flex justify-content-between align-items-center flex-wrap pt-2">
-          <span class="text-muted small mb-3 mb-md-0">Showing 1 to 4 of 4 offers</span>
-          <div class="d-flex align-items-center gap-4">
-            <nav aria-label="Page navigation">
-              <ul class="pagination pagination-sm mb-0">
-                <li class="page-item disabled"><a class="page-link border-0 text-muted bg-transparent" href="#"><i
-                      class="bi bi-chevron-left"></i></a></li>
-                <li class="page-item active"><a
-                    class="page-link rounded-circle d-flex align-items-center justify-content-center bg-primary border-primary text-white mx-1"
-                    href="#" style="width: 30px; height: 30px;">1</a></li>
-                <li class="page-item disabled"><a class="page-link border-0 text-dark bg-transparent" href="#"><i
-                      class="bi bi-chevron-right"></i></a></li>
-              </ul>
-            </nav>
-            <div class="d-flex align-items-center gap-2">
-              <span class="text-muted small">Items per page:</span>
-              <select class="form-select form-select-sm text-dark border-light shadow-sm" style="width: 70px;">
-                <option>10</option>
-              </select>
-            </div>
-          </div>
-        </div>
       </div>
       }
 

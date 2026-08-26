@@ -9,6 +9,7 @@ export interface DropdownItem {
   value: string;
   icon?: string;
   disabled?: boolean;
+  className?: string;
 }
 
 @Component({

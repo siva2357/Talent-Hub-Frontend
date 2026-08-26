@@ -58,96 +58,11 @@
       <!-- Contract Summary Grid -->
       <h2 class="fs-6 fw-bold text-dark mb-3">Contract Summary</h2>
       <div class="row g-3 mb-4">
-        <!-- Client -->
-        <div class="col-md-4">
-          <div class="p-3 border rounded-3 bg-white h-100">
-            <span class="text-muted d-block mb-2" style="font-size: 0.7rem;">Client</span>
-            <div class="d-flex align-items-center gap-2">
-              <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center fw-bold text-uppercase" style="width: 32px; height: 32px; font-size: 0.7rem;">{{ offer.clientId?.registrationDetails?.fullName ? offer.clientId.registrationDetails.fullName.substring(0, 3) : 'CLI' }}</div>
-              <span class="fw-bold text-dark" style="font-size: 0.8rem;">{{ offer.clientId?.registrationDetails?.fullName || 'Client Name' }}</span>
-            </div>
-          </div>
+        @for(stat of stats; track stat.title) {
+        <div class="col-md-4 col-sm-6">
+          <app-stat-card [stat]="stat"></app-stat-card>
         </div>
-        <!-- Contractor -->
-        <div class="col-md-4">
-          <div class="p-3 border rounded-3 bg-white h-100">
-            <span class="text-muted d-block mb-2" style="font-size: 0.7rem;">Contractor</span>
-            <div class="d-flex align-items-center gap-2">
-              <div class="rounded-circle overflow-hidden bg-primary text-white d-flex justify-content-center align-items-center fw-bold text-uppercase" style="width: 32px; height: 32px; font-size: 0.7rem;">
-                {{ offer.freelancerId?.registrationDetails?.fullName ? offer.freelancerId.registrationDetails.fullName.substring(0, 3) : 'FRE' }}
-              </div>
-              <span class="fw-bold text-dark" style="font-size: 0.8rem;">{{ offer.freelancerId?.registrationDetails?.fullName || 'Freelancer Name' }}</span>
-            </div>
-          </div>
-        </div>
-        <!-- Contract Title -->
-        <div class="col-md-4">
-          <div class="p-3 border rounded-3 bg-white h-100">
-            <span class="text-muted d-block mb-2" style="font-size: 0.7rem;">Contract Title</span>
-            <div class="d-flex align-items-center gap-2">
-              <i class="bi bi-file-earmark-text text-primary"></i>
-              <span class="fw-bold text-dark" style="font-size: 0.8rem;" [title]="offer.contractId?.contractTitle">{{ offer.contractId?.contractTitle || 'Contract Title' }}</span>
-            </div>
-          </div>
-        </div>
-        <!-- Contract Type -->
-        <div class="col-md-3">
-          <div class="p-3 border rounded-3 bg-white h-100 text-center">
-            <i class="bi bi-cash-stack text-success mb-1 d-block fs-5"></i>
-            <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Contract Type</span>
-            <span class="fw-bold text-dark" style="font-size: 0.8rem;">{{ offer.contractId?.contractType || 'Fixed Price' }}</span>
-          </div>
-        </div>
-        <!-- Budget -->
-        <div class="col-md-3">
-          <div class="p-3 border rounded-3 bg-white h-100 text-center">
-            <i class="bi bi-currency-rupee text-success mb-1 d-block fs-5"></i>
-            <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Budget</span>
-            <span class="fw-bold text-dark" style="font-size: 0.8rem;">₹{{ offer.contractId?.estimatedBudget || 'N/A' }}</span>
-          </div>
-        </div>
-        <!-- Timeline -->
-        <div class="col-md-3">
-          <div class="p-3 border rounded-3 bg-white h-100 text-center">
-            <i class="bi bi-clock-history text-primary mb-1 d-block fs-5"></i>
-            <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Timeline</span>
-            <span class="fw-bold text-dark" style="font-size: 0.75rem;">{{ (offer.contractId?.contractStartDate | date:'MMM yyyy') }} - {{ (offer.contractId?.contractEndDate | date:'MMM yyyy') }}</span>
-          </div>
-        </div>
-        <!-- Offer Date -->
-        <div class="col-md-3">
-          <div class="p-3 border rounded-3 bg-white h-100 text-center">
-            <i class="bi bi-calendar-check text-purple mb-1 d-block fs-5"></i>
-            <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Offer Date</span>
-            <span class="fw-bold text-dark" style="font-size: 0.8rem;">{{ offer.createdAt | date:'MMM d, yyyy' }}</span>
-          </div>
-        </div>
-        <!-- Start Date -->
-        <div class="col-md-3">
-          <div class="p-3 border rounded-3 bg-white h-100 text-center">
-            <i class="bi bi-calendar-event text-primary mb-1 d-block fs-5"></i>
-            <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Start Date</span>
-            <span class="fw-bold text-dark" style="font-size: 0.8rem;">{{ offer.contractId?.contractStartDate | date:'MMM d, yyyy' }}</span>
-          </div>
-        </div>
-        <!-- End Date -->
-        <div class="col-md-3">
-          <div class="p-3 border rounded-3 bg-white h-100 text-center">
-            <i class="bi bi-calendar-x text-danger mb-1 d-block fs-5"></i>
-            <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">End Date</span>
-            <span class="fw-bold text-dark" style="font-size: 0.8rem;">{{ offer.contractId?.contractEndDate | date:'MMM d, yyyy' }}</span>
-          </div>
-        </div>
-        <!-- Category -->
-        <div class="col-md-6">
-          <div class="p-3 border rounded-3 bg-white h-100 d-flex align-items-center gap-3">
-            <i class="bi bi-folder2-open text-primary fs-4"></i>
-            <div>
-              <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">Category</span>
-              <span class="fw-bold text-dark" style="font-size: 0.8rem;">{{ offer.contractId?.contractSubject || 'Web Development' }}</span>
-            </div>
-          </div>
-        </div>
+        }
       </div>
 
       <!-- Scope & Payment Schedule -->
@@ -212,9 +127,9 @@
       </div>
 
       <!-- Action Buttons -->
-      <div class="d-flex flex-wrap align-items-center justify-content-end gap-3 pt-3 border-top">
-        <button class="btn btn-outline-danger fw-bold px-4 d-flex align-items-center gap-2 bg-danger bg-opacity-10 border-0 text-danger rounded-pill"><i class="bi bi-x-lg"></i> Decline Offer</button>
-        <button [routerLink]="['/legal-contract-acceptance', offerId]" class="btn btn-primary rounded-pill fw-semibold shadow-sm fw-bold px-4 d-flex align-items-center gap-2">Accept & Continue <i class="bi bi-arrow-right"></i></button>
+      <div class="d-flex flex-wrap align-items-center justify-content-end gap-3 pt-4 border-top mt-4">
+        <app-button variant="outline-danger" size="md" icon="bi bi-x-lg" label="Decline Offer" [block]="false"></app-button>
+        <app-button variant="primary" size="md" icon="bi bi-arrow-right" label="Accept & Continue" [routerLink]="['/legal-contract-acceptance', offerId]" [block]="false"></app-button>
       </div>
       <p class="text-center text-muted mt-3 mb-0" style="font-size: 0.7rem;"><i class="bi bi-lock-fill"></i> By accepting this offer, you agree to all the terms and conditions outlined in the contract.</p>
 

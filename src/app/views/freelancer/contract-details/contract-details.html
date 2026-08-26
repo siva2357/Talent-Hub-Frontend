@@ -13,14 +13,14 @@
 
   <!-- Main Content Wrapper (Glassmorphism) -->
   <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-3">
-      <ol class="breadcrumb" style="font-size: 0.8rem;">
-        <li class="breadcrumb-item"><a routerLink="/find-contracts"
-            class="text-decoration-none text-muted cursor-pointer">Find Contracts</a></li>
-        <li class="breadcrumb-item active fw-bold text-dark" aria-current="page">Contract Details</li>
-      </ol>
-    </nav>
+    <!-- Back Navigation -->
+    <div class="mb-3">
+      <a routerLink="/find-contracts"
+        class="text-decoration-none text-muted cursor-pointer d-inline-flex align-items-center gap-2 hover-text-primary"
+        style="font-size: 0.85rem; font-weight: 500;">
+        <i class="bi bi-arrow-left"></i> Back to Contracts
+      </a>
+    </div>
 
     @if (isLoading) {
     <div class="text-center py-5">
@@ -42,31 +42,21 @@
             <div>
               <h1 class="fw-bold fs-4 mb-2 text-dark">{{ contract.contractTitle }}</h1>
               <div class="d-flex flex-wrap align-items-center gap-2">
-                <span class="text-muted small fw-semibold" style="font-size: 0.75rem;">{{ contract._id | slice:0:10
-                  }}</span>
-                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-semibold text-uppercase"
-                  style="font-size: 0.65rem;">{{ contract.contractType }}</span>
-                <span class="badge bg-success bg-opacity-10 text-success rounded-pill fw-semibold text-uppercase"
-                  style="font-size: 0.65rem;">{{ contract.status }}</span>
+                <app-badge [label]="contract.contractType" variant="primary" appearance="subtle"
+                  [rounded]="true"></app-badge>
                 <span class="text-muted d-flex align-items-center gap-1 ms-2" style="font-size: 0.7rem;"><i
                     class="bi bi-clock"></i> Posted on {{ contract.createdAt | date:'mediumDate' }}</span>
               </div>
             </div>
           </div>
-          <button
-            class="btn btn-outline-secondary border-light bg-light rounded-3 text-muted px-3 py-2 hover-text-primary shadow-sm"><i
-              class="bi bi-bookmark fs-5"></i></button>
+          <app-button [variant]="isSaved ? 'light' : 'outline-secondary'" [iconOnly]="true" size="md"
+            (clicked)="toggleSave()" [disabled]="isSaving">
+            <i class="bi fs-5" [class.text-primary]="isSaved" [class.bi-bookmark-fill]="isSaved"
+              [class.bi-bookmark]="!isSaved"></i>
+          </app-button>
         </div>
 
-        <!-- Tabs -->
-        <ul class="nav nav-tabs border-bottom-0" style="font-size: 0.85rem;">
-          <li class="nav-item">
-            <a class="nav-link active fw-bold text-primary border-0 border-bottom border-2 border-primary bg-transparent px-3 py-2 d-flex align-items-center gap-2"
-              href="#">
-              <i class="bi bi-grid"></i> Overview
-            </a>
-          </li>
-        </ul>
+
       </div>
     </div>
 
@@ -79,54 +69,11 @@
           <div class="card-body p-4">
             <h2 class="fs-6 fw-bold mb-4 text-dark">Project & Budget Details</h2>
             <div class="row g-3">
+              @for(stat of projectStats; track $index) {
               <div class="col-md-4">
-                <div class="d-flex align-items-center gap-3 p-3 border rounded-3 bg-light bg-opacity-50 h-100">
-                  <div
-                    class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0"
-                    style="width: 40px; height: 40px;"><i class="bi bi-file-earmark-text"></i></div>
-                  <div><span class="d-block text-muted small" style="font-size: 0.7rem;">Contract Type</span><span
-                      class="d-block fw-bold text-dark fs-6 text-capitalize">{{ contract.contractType }}</span></div>
-                </div>
+                <app-stat-card [stat]="stat"></app-stat-card>
               </div>
-              <div class="col-md-4">
-                <div class="d-flex align-items-center gap-3 p-3 border rounded-3 bg-light bg-opacity-50 h-100">
-                  <div
-                    class="rounded-3 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0"
-                    style="width: 40px; height: 40px;"><i class="bi bi-wallet2"></i></div>
-                  <div><span class="d-block text-muted small" style="font-size: 0.7rem;">Estimated Budget</span><span
-                      class="d-block fw-bold text-dark fs-6">{{ contract.currency }} {{ contract.estimatedBudget
-                      }}</span></div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="d-flex align-items-center gap-3 p-3 border rounded-3 bg-light bg-opacity-50 h-100">
-                  <div
-                    class="rounded-3 bg-purple-soft text-purple d-flex align-items-center justify-content-center flex-shrink-0"
-                    style="width: 40px; height: 40px;"><i class="bi bi-folder"></i></div>
-                  <div><span class="d-block text-muted small" style="font-size: 0.7rem;">Category</span><span
-                      class="d-block fw-bold text-dark fs-6">{{ contract.contractCategory || 'General' }}</span></div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="d-flex align-items-center gap-3 p-3 border rounded-3 bg-light bg-opacity-50 h-100">
-                  <div
-                    class="rounded-3 bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center flex-shrink-0"
-                    style="width: 40px; height: 40px;"><i class="bi bi-calendar-event"></i></div>
-                  <div><span class="d-block text-muted small" style="font-size: 0.7rem;">Start Date</span><span
-                      class="d-block fw-bold text-dark fs-6">{{ contract.contractStartDate | date:'mediumDate' }}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="d-flex align-items-center gap-3 p-3 border rounded-3 bg-light bg-opacity-50 h-100">
-                  <div
-                    class="rounded-3 bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center flex-shrink-0"
-                    style="width: 40px; height: 40px;"><i class="bi bi-calendar-x"></i></div>
-                  <div><span class="d-block text-muted small" style="font-size: 0.7rem;">End Date</span><span
-                      class="d-block fw-bold text-dark fs-6">{{ contract.contractEndDate | date:'mediumDate' }}</span>
-                  </div>
-                </div>
-              </div>
+              }
             </div>
           </div>
         </div>
@@ -149,11 +96,6 @@
       <div class="col-lg-4">
         <div class="d-flex flex-column gap-4">
 
-          @if (actionMessage) {
-          <div class="alert alert-info py-2" role="alert" style="font-size: 0.85rem;">
-            {{ actionMessage }}
-          </div>
-          }
 
           <!-- Action Banner -->
           @if (isApplied) {
@@ -169,84 +111,85 @@
             <h3 class="fs-5 fw-bold text-dark mb-3">Applied</h3>
             <p class="text-muted mb-4" style="font-size: 0.8rem; line-height: 1.5;">You have already applied to this
               contract. You can withdraw your application if you no longer wish to be considered.</p>
-            <button (click)="withdrawApplication()" [disabled]="isApplying"
-              class="btn btn-danger w-100 fw-bold py-2 shadow-sm rounded-3">
-              @if(isApplying) {
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Withdrawing...
-              } @else { Withdraw Application }
-            </button>
+            <app-button variant="danger" [block]="true" class="w-100 d-block" (clicked)="withdrawApplication()"
+              [loading]="isApplying" [label]="isApplying ? 'Withdrawing...' : 'Withdraw Application'">
+            </app-button>
           </div>
           } @else {
           <div class="glass-card rounded-4 bg-white text-center p-4">
             <h3 class="fs-5 fw-bold text-dark mb-3">Ready to Apply?</h3>
             <p class="text-muted mb-4" style="font-size: 0.8rem; line-height: 1.5;">Submit your proposal to the client
               and show why you are the best fit for this project.</p>
-            <button (click)="applyForContract()" [disabled]="isApplying"
-              class="btn btn-primary w-100 fw-bold py-2 shadow-sm rounded-3">
-              @if(isApplying) {
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Applying...
-              } @else { Apply Now }
-            </button>
+            <app-button variant="primary" [block]="true" class="w-100 d-block" (clicked)="applyForContract()"
+              [loading]="isApplying" [label]="isApplying ? 'Applying...' : 'Apply Now'">
+            </app-button>
           </div>
           }
 
-        </div>
-        
-        <!-- About the Client -->
-        <div class="glass-card rounded-4 bg-white p-4">
-          <h3 class="fs-6 fw-bold text-dark mb-4 d-flex align-items-center gap-2"><i class="bi bi-person text-primary"></i> About the Client</h3>
-          
-          <div class="d-flex align-items-center gap-3 mb-4">
-            <div class="rounded-circle overflow-hidden flex-shrink-0" style="width: 50px; height: 50px;">
-              <img [src]="'https://ui-avatars.com/api/?name=' + (contract.clientName || 'Client') + '&background=random'" class="w-100 h-100" alt="Client Avatar">
+
+          <!-- About the Client -->
+          <div class="glass-card rounded-4 bg-white p-4">
+            <h3 class="fs-6 fw-bold text-dark mb-4 d-flex align-items-center gap-2"><i
+                class="bi bi-person text-primary"></i> About the Client</h3>
+
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <div class="rounded-circle overflow-hidden flex-shrink-0" style="width: 50px; height: 50px;">
+                <img
+                  [src]="'https://ui-avatars.com/api/?name=' + (contract.clientName || 'Client') + '&background=random'"
+                  class="w-100 h-100" alt="Client Avatar">
+              </div>
+              <div>
+                <h4 class="fs-6 fw-bold text-dark mb-1">{{ contract.clientName }}</h4>
+                <app-badge [label]="contract.clientRole || 'Client'" variant="primary" appearance="subtle"
+                  [rounded]="true"></app-badge>
+              </div>
             </div>
-            <div>
-              <h4 class="fs-6 fw-bold text-dark mb-1">{{ contract.clientName }}</h4>
-              <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill fw-semibold text-uppercase" style="font-size: 0.65rem;">{{ contract.clientRole || 'Client' }}</span>
+
+            <div class="d-flex flex-column gap-3 mb-4" style="font-size: 0.8rem;">
+              @if(contract.clientEmail) {
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-muted d-flex align-items-center gap-2"><i class="bi bi-envelope"></i> Email</span>
+                <span class="text-dark fw-semibold text-truncate" style="max-width: 150px;">{{ contract.clientEmail
+                  }}</span>
+              </div>
+              }
+              @if(contract.industry) {
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-muted d-flex align-items-center gap-2"><i class="bi bi-building"></i> Industry</span>
+                <span class="text-dark fw-semibold">{{ contract.industry }}</span>
+              </div>
+              }
+              @if(contract.website) {
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-muted d-flex align-items-center gap-2"><i class="bi bi-globe"></i> Website</span>
+                <a [href]="contract.website" target="_blank"
+                  class="text-primary fw-semibold text-truncate text-decoration-none" style="max-width: 150px;">Visit
+                  Site</a>
+              </div>
+              }
             </div>
           </div>
 
-          <div class="d-flex flex-column gap-3 mb-4" style="font-size: 0.8rem;">
-            @if(contract.clientEmail) {
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-muted d-flex align-items-center gap-2"><i class="bi bi-envelope"></i> Email</span>
-              <span class="text-dark fw-semibold text-truncate" style="max-width: 150px;">{{ contract.clientEmail }}</span>
-            </div>
-            }
-            @if(contract.industry) {
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-muted d-flex align-items-center gap-2"><i class="bi bi-building"></i> Industry</span>
-              <span class="text-dark fw-semibold">{{ contract.industry }}</span>
-            </div>
-            }
-            @if(contract.website) {
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-muted d-flex align-items-center gap-2"><i class="bi bi-globe"></i> Website</span>
-              <a [href]="contract.website" target="_blank" class="text-primary fw-semibold text-truncate text-decoration-none" style="max-width: 150px;">Visit Site</a>
-            </div>
-            }
-          </div>
-        </div>
-
-        <!-- Quick Overview -->
-        <div class="glass-card rounded-4 bg-white p-4">
-          <h3 class="fs-6 fw-bold text-dark mb-4">Quick Overview</h3>
-          <div class="d-flex flex-column gap-3" style="font-size: 0.8rem;">
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-muted">Total Duration</span>
-              <span class="text-dark fw-semibold">{{ contract.totalDuration || 'Not Specified' }}</span>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-muted">Expected Start</span>
-              <span class="text-dark fw-semibold">{{ contract.contractStartDate | date:'mediumDate' }}</span>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-muted">Expected End</span>
-              <span class="text-dark fw-semibold">{{ contract.contractEndDate | date:'mediumDate' }}</span>
+          <!-- Quick Overview -->
+          <div class="glass-card rounded-4 bg-white p-4">
+            <h3 class="fs-6 fw-bold text-dark mb-4">Quick Overview</h3>
+            <div class="d-flex flex-column gap-3" style="font-size: 0.8rem;">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-muted">Total Duration</span>
+                <span class="text-dark fw-semibold">{{ contract.totalDuration || 'Not Specified' }}</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-muted">Expected Start</span>
+                <span class="text-dark fw-semibold">{{ contract.contractStartDate | date:'mediumDate' }}</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-muted">Expected End</span>
+                <span class="text-dark fw-semibold">{{ contract.contractEndDate | date:'mediumDate' }}</span>
+              </div>
             </div>
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
     } @else {

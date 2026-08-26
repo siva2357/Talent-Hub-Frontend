@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ChangeDetectorRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ContractService } from '../../../core/services/contract.service';
@@ -8,6 +8,8 @@ import { Table, TableColumn } from '../../../library/ui/components/table/table';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from '../../../library/ui/components/chip/chip';
 import { Button } from '../../../library/ui/components/button/button';
+import { Badge } from '../../../library/ui/components/badge/badge';
+import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
 
 
 declare var window: any;
@@ -15,14 +17,20 @@ declare var window: any;
 @Component({
   selector: 'app-manage-contract',
   standalone: true,
-  imports: [CommonModule, Table, InputField, Chip, Button],
+  imports: [CommonModule, Table, InputField, Chip, Button, Badge, Dropdown],
   templateUrl: './manage-contract.html',
   styleUrl: './manage-contract.css'
 })
-export class ManageContract implements OnInit {
+export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
   allContracts: Contract[] = [];
   isLoading: boolean = true;
   activeFilters: string[] = ['Design', 'Active'];
+
+
+  dropdownTop: number = 0;
+  dropdownLeft: number = 0;
+
+  private scrollListener: any;
 
   @ViewChild('snoTemplate', { static: true }) snoTemplate!: TemplateRef<any>;
   @ViewChild('budgetTemplate', { static: true }) budgetTemplate!: TemplateRef<any>;
@@ -30,37 +38,94 @@ export class ManageContract implements OnInit {
   @ViewChild('endDateTemplate', { static: true }) endDateTemplate!: TemplateRef<any>;
   @ViewChild('fundsTemplate', { static: true }) fundsTemplate!: TemplateRef<any>;
   @ViewChild('statusTemplate', { static: true }) statusTemplate!: TemplateRef<any>;
+  @ViewChild('createdAtTemplate', { static: true }) createdAtTemplate!: TemplateRef<any>;
+  @ViewChild('spentTemplate', { static: true }) spentTemplate!: TemplateRef<any>;
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
 
-  columns: TableColumn[] = [];
+  columns: TableColumn[] = [
+    { field: 'sno', headerName: 'S.NO' },
+    { field: 'contractTitle', headerName: 'Contract title' },
+    { field: 'contractSubject', headerName: 'Subject' },
+    { field: 'contractType', headerName: 'Contract Type' },
+    { field: 'estimatedBudget', headerName: 'Budget' },
+    { field: 'contractStartDate', headerName: 'Start Date' },
+    { field: 'contractEndDate', headerName: 'End Date' },
+    { field: 'createdAt', headerName: 'Created On' },
+    { field: 'spent', headerName: 'Spent' },
+    { field: 'funded', headerName: 'Funds Status' },
+    { field: 'status', headerName: 'Status' },
+    { field: 'actions', headerName: 'Actions' }
+  ];
 
   constructor(
     private contractService: ContractService,
     private transactionService: TransactionService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
-    this.columns = [
-      { field: 'id', headerName: 'S.NO', cellTemplate: this.snoTemplate },
-      { field: 'contractTitle', headerName: 'Contract title' },
-      { field: 'contractSubject', headerName: 'Subject' },
-      { field: 'contractType', headerName: 'Contract Type' },
-      { field: 'estimatedBudget', headerName: 'Budget', cellTemplate: this.budgetTemplate },
-      { field: 'contractStartDate', headerName: 'Start Date', cellTemplate: this.startDateTemplate },
-      { field: 'contractEndDate', headerName: 'End Date', cellTemplate: this.endDateTemplate },
-      { field: 'funded', headerName: 'Funds Status', cellTemplate: this.fundsTemplate },
-      { field: 'status', headerName: 'Status', cellTemplate: this.statusTemplate },
-      { field: 'actions', headerName: 'Actions', cellTemplate: this.actionsTemplate }
-    ];
     this.fetchContracts();
     this.loadRazorpayScript();
+
   }
 
-  loadRazorpayScript(): void {
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    document.body.appendChild(script);
+  ngOnDestroy(): void {
+    if (this.scrollListener) {
+      window.removeEventListener('scroll', this.scrollListener, true);
+    }
+  }
+
+
+  getDropdownItems(row: Contract): DropdownItem[] {
+    const items: DropdownItem[] = [
+      { label: 'Applicants', value: 'applicants', icon: 'bi bi-people' },
+      { label: 'Contract Progress', value: 'progress', icon: 'bi bi-graph-up' },
+      { label: 'Edit', value: 'edit', icon: 'bi bi-pencil' }
+    ];
+
+    if (!this.isFullyFunded(row)) {
+      items.push({ label: 'Fund Contract', value: 'fund', icon: 'bi bi-credit-card' });
+    }
+
+    items.push({ label: 'Delete', value: 'delete', icon: 'bi bi-trash', className: 'dropdown-item-danger' });
+
+    return items;
+  }
+
+  onDropdownAction(item: DropdownItem, row: Contract): void {
+
+    switch (item.value) {
+      case 'applicants':
+        this.viewApplicants(row._id);
+        break;
+      case 'progress':
+        this.viewContractProgress(row._id);
+        break;
+      case 'edit':
+        this.editContract(row._id);
+        break;
+      case 'fund':
+        this.fundContract(row);
+        break;
+      case 'delete':
+        this.deleteContract(row._id);
+        break;
+    }
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.columns[0].cellTemplate = this.snoTemplate;
+      this.columns[4].cellTemplate = this.budgetTemplate;
+      this.columns[5].cellTemplate = this.startDateTemplate;
+      this.columns[6].cellTemplate = this.endDateTemplate;
+      this.columns[7].cellTemplate = this.createdAtTemplate;
+      this.columns[8].cellTemplate = this.spentTemplate;
+      this.columns[9].cellTemplate = this.fundsTemplate;
+      this.columns[10].cellTemplate = this.statusTemplate;
+      this.columns[11].cellTemplate = this.actionsTemplate;
+    });
   }
 
   removeFilter(filterToRemove: string): void {
@@ -84,6 +149,57 @@ export class ManageContract implements OnInit {
   isFullyFunded(contract: Contract): boolean {
     return !!(contract.funded && contract.funded > 0);
   }
+
+  getBadgeVariant(status: string): 'success' | 'primary' | 'secondary' | 'warning' | 'danger' | 'info' | 'purple' {
+    const s = status?.toLowerCase() || '';
+    if (s === 'completed' || s === 'closed') return 'success';
+    if (s === 'open' || s === 'in progress' || s === 'active') return 'primary';
+    if (s === 'draft') return 'secondary';
+    return 'primary';
+  }
+
+
+
+
+  viewApplicants(id: string): void {
+    this.router.navigate(['/applicants', id]);
+  }
+
+  viewContractProgress(id: string): void {
+    this.router.navigate(['/contract-progress', id]);
+  }
+
+  editContract(id: string): void {
+    this.router.navigate(['/create-contract'], { queryParams: { id } });
+  }
+
+  navigateToCreateContract(): void {
+    this.router.navigate(['/create-contract']);
+  }
+
+
+  deleteContract(id: string): void {
+    if (confirm('Are you sure you want to delete this contract?')) {
+      this.contractService.deleteContract(id).subscribe({
+        next: () => {
+          this.allContracts = this.allContracts.filter(c => c._id !== id);
+        },
+        error: (err) => console.error('Delete error', err)
+      });
+    }
+  }
+
+
+
+
+
+  loadRazorpayScript(): void {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    document.body.appendChild(script);
+  }
+
+
 
   fundContract(contract: Contract): void {
     if (this.isFullyFunded(contract)) {
@@ -152,30 +268,4 @@ export class ManageContract implements OnInit {
   }
 
 
-  deleteContract(id: string): void {
-    if (confirm('Are you sure you want to delete this contract?')) {
-      this.contractService.deleteContract(id).subscribe({
-        next: () => {
-          this.allContracts = this.allContracts.filter(c => c._id !== id);
-        },
-        error: (err) => console.error('Delete error', err)
-      });
-    }
-  }
-
-  viewApplicants(id: string): void {
-    this.router.navigate(['/applicants', id]);
-  }
-
-  viewContractProgress(id: string): void {
-    this.router.navigate(['/contract-progress', id]);
-  }
-
-  editContract(id: string): void {
-    this.router.navigate(['/create-contract'], { queryParams: { id } });
-  }
-
-  navigateToCreateContract(): void {
-    this.router.navigate(['/create-contract']);
-  }
 }

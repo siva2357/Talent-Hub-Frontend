@@ -15,6 +15,7 @@
     type === 'email' ||
     type === 'password' ||
     type === 'date' ||
+    type === 'time' ||
     type === 'tel'
     ) {
 
@@ -27,7 +28,7 @@
         }
 
         <input [type]="type === 'password' && isPasswordVisible ? 'text' : type" class="form-control" [class.is-invalid]="validation === 'error'" [placeholder]="placeholder" [value]="value" [disabled]="disabled"
-            [readonly]="readonly" [required]="required" (input)="onValueChange($event)">
+            [readonly]="readonly" [required]="required" (input)="onValueChange($event)" (blur)="onBlur()">
 
         @if (type === 'password' && showPasswordToggle) {
         <span class="input-group-text" (click)="togglePasswordVisibility()" style="cursor: pointer;">
@@ -42,14 +43,14 @@
     @if (type === 'textarea') {
 
     <textarea class="form-control rounded-3" [class.is-invalid]="validation === 'error'" [placeholder]="placeholder" [value]="value" [disabled]="disabled"
-        [readonly]="readonly" [required]="required" (input)="onValueChange($event)"></textarea>
+        [readonly]="readonly" [required]="required" (input)="onValueChange($event)" (blur)="onBlur()"></textarea>
 
     }
 
     @if (type === 'select') {
 
     <select class="form-select rounded-3" [class.is-invalid]="validation === 'error'" [disabled]="disabled" [required]="required"
-        (change)="onSelectChange($event)">
+        (change)="onSelectChange($event)" (blur)="onBlur()">
 
         @if (placeholder) {
         <option value="" disabled [selected]="!value || value === ''">
@@ -74,7 +75,7 @@
         <button type="button"
             class="form-control rounded-3 text-start d-flex justify-content-between align-items-center bg-white"
             [class.is-invalid]="validation === 'error'"
-            [disabled]="disabled" (click)="toggleDropdown()">
+            [disabled]="disabled" (click)="toggleDropdown()" (blur)="onBlur()">
 
             <span>
                 @if (selectedLabels) {

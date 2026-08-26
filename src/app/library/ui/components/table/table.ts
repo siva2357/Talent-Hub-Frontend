@@ -10,6 +10,10 @@ export interface TableColumn {
   field: string;
   headerName: string;
   cellTemplate?: TemplateRef<any>;
+  width?: number;
+  minWidth?: number;
+  maxWidth?: number;
+  flexGrow?: number;
 }
 
 @Component({

@@ -25,234 +25,121 @@
 
     <!-- Stats Row -->
     <section class="row g-3 mb-4">
+      @for (card of statCards; track card.title) {
       <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="card stat-glass-card rounded-3 h-100">
-          <div class="card-body d-flex align-items-center gap-3">
-            <div class="stat-icon border border-primary border-opacity-25 rounded-3 flex-shrink-0"
-              style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Total Applicants</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ totalApplicants }}</span>
-            </div>
-          </div>
-        </div>
+        <app-stat-card [stat]="card"></app-stat-card>
       </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="card stat-glass-card rounded-3 h-100">
-          <div class="card-body d-flex align-items-center gap-3">
-            <div class="stat-icon border border-primary border-opacity-25 rounded-3 flex-shrink-0"
-              style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Interviews</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹100,000</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="card stat-glass-card rounded-3 h-100">
-          <div class="card-body d-flex align-items-center gap-3">
-            <div class="stat-icon border border-primary border-opacity-25 rounded-3 flex-shrink-0"
-              style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Hired Applicants</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="card stat-glass-card rounded-3 h-100">
-          <div class="card-body d-flex align-items-center gap-3">
-            <div class="stat-icon border border-primary border-opacity-25 rounded-3 flex-shrink-0"
-              style="width: 48px; height: 48px; background-color: #e0f0ff;"></div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Rejected Applicants</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹100,000</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      }
     </section>
 
     <!-- Filter Section -->
-    <section class="glass-card rounded-3 mb-4">
-      <div class="card-body p-4">
-        <div class="row g-3 align-items-center mb-3">
-          <div class="col-md-4 col-lg-4">
-            <div class="input-group">
-              <span class="input-group-text bg-white border-end-0 text-primary"><i
-                  class="bi bi-search"></i>&#128269;</span>
-              <input type="text" class="form-control border-start-0 ps-0" placeholder="Search by Ticket .....">
-            </div>
-          </div>
-          <div class="col-md-2 col-lg-2">
-            <select class="form-select text-muted">
-              <option selected>Select All</option>
-            </select>
-          </div>
-          <div class="col-md-2 col-lg-2">
-            <select class="form-select text-muted">
-              <option selected>Select All</option>
-            </select>
-          </div>
-          <div class="col-md-2 col-lg-2">
-            <select class="form-select text-muted">
-              <option selected>Select All</option>
-            </select>
-          </div>
-          <div class="col-md-2 col-lg-2 d-flex gap-2">
-            <button class="btn btn-primary rounded-pill fw-semibold shadow-sm flex-grow-1">Apply</button>
-            <button class="btn btn-outline-primary flex-grow-1 bg-white">Reset</button>
-          </div>
+    <section class="bg-white p-3 rounded-4 shadow-sm border mb-4">
+      <div class="row g-3">
+        <div class="col-lg-4">
+          <app-input-field type="text" placeholder="Search by Ticket ....." [showIcon]="true" icon="bi bi-search"
+            label=""></app-input-field>
         </div>
-
-        <div class="d-flex align-items-center flex-wrap gap-2">
-          <span class="text-dark small fw-semibold me-2">Active Filters :</span>
-          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-            Tag <span class="badge-close">&times;</span>
-          </span>
-          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-            Tag <span class="badge-close">&times;</span>
-          </span>
-          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-            Tag <span class="badge-close">&times;</span>
-          </span>
+        <div class="col-lg-2">
+          <app-input-field type="select" placeholder="Status: Select All" [options]="tagOptions"
+            label=""></app-input-field>
         </div>
+        <div class="col-lg-2">
+          <app-input-field type="select" placeholder="Gender: Select All" [options]="tagOptions"
+            label=""></app-input-field>
+        </div>
+        <div class="col-lg-2">
+          <app-input-field type="select" placeholder="Offer: Select All" [options]="tagOptions"
+            label=""></app-input-field>
+        </div>
+        <div class="col-lg-2 d-flex gap-2 align-items-start">
+          <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply"></app-button>
+          <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset"></app-button>
+        </div>
+      </div>
+      <div class="d-flex align-items-center flex-wrap gap-2 mt-3">
+        <span class="text-dark small fw-semibold me-2">Active Filters :</span>
+        @for (filter of activeFilters; track filter.value) {
+        <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)"></app-chip>
+        }
+        @if (activeFilters.length === 0) {
+        <span class="text-muted small">None</span>
+        }
       </div>
     </section>
 
     <!-- Data Table Section -->
-    <section class="glass-card rounded-3 mb-4">
-      <div class="card-body p-0">
-        <div class="table-responsive overflow-visible">
-          <table class="table table-hover align-middle text-center mb-0">
-            <thead class="table-light text-dark font-monospace small" style="font-family: serif !important;">
-              <tr>
-                <th scope="col" class="ps-4 fw-bold">S.NO</th>
-                <th scope="col" class="fw-bold">Profile Image</th>
-                <th scope="col" class="fw-bold">Full Name</th>
-                <th scope="col" class="fw-bold">Email Address</th>
-                <th scope="col" class="fw-bold">Gender</th>
-                <th scope="col" class="fw-bold">Availability</th>
-                <th scope="col" class="fw-bold">Applications Status</th>
-                <th scope="col" class="fw-bold">Offer Status</th>
-                <th scope="col" class="pe-4 fw-bold">Actions</th>
-              </tr>
-            </thead>
-            <tbody style="font-family: serif;">
-              @for (applicant of applicants; track applicant.applicationId; let i = $index) {
-              <tr>
-                <td class="ps-4">{{ i + 1 }}</td>
-                <td>
-                  <div class="rounded-circle bg-dark mx-auto position-relative overflow-hidden"
-                    [style.background-color]="applicant.avatarColor"
-                    style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
-                    @if (applicant.freelancer.profilePhoto) {
-                    <img [src]="applicant.freelancer.profilePhoto" alt="Avatar" class="w-100 h-100 object-fit-cover">
-                    } @else {
-                    <span class="text-white fw-bold" style="font-size: 0.8rem;">{{
-                      applicant.freelancer.fullName.charAt(0) | uppercase }}</span>
-                    }
-                  </div>
-                </td>
-                <td>{{ applicant.freelancer.fullName }}</td>
-                <td>{{ applicant.freelancer.email }}</td>
-                <td class="text-capitalize">{{ applicant.freelancer.gender }}</td>
-                <td class="text-capitalize">{{ getAvailabilityString(applicant.freelancer.availability) }}</td>
-                <td class="text-capitalize">
-                  <span class="badge rounded-pill px-3 border border-opacity-25 bg-opacity-25"
-                    [class.bg-success]="applicant.applicationStatus === 'hired'"
-                    [class.text-success]="applicant.applicationStatus === 'hired'"
-                    [class.border-success]="applicant.applicationStatus === 'hired'"
-                    [class.bg-primary]="applicant.applicationStatus === 'interviewing'"
-                    [class.text-primary]="applicant.applicationStatus === 'interviewing'"
-                    [class.border-primary]="applicant.applicationStatus === 'interviewing'"
-                    [class.bg-warning]="applicant.applicationStatus === 'pending'"
-                    [class.text-warning]="applicant.applicationStatus === 'pending'"
-                    [class.border-warning]="applicant.applicationStatus === 'pending'"
-                    [class.bg-danger]="applicant.applicationStatus === 'rejected'"
-                    [class.text-danger]="applicant.applicationStatus === 'rejected'"
-                    [class.border-danger]="applicant.applicationStatus === 'rejected'">
-                    {{ applicant.applicationStatus }}
-                  </span>
-                </td>
-                <td class="text-capitalize">
-                  <span class="badge rounded-pill px-3 border border-opacity-25 bg-opacity-25"
-                    [class.bg-success]="applicant.offerStatus === 'accepted'"
-                    [class.text-success]="applicant.offerStatus === 'accepted'"
-                    [class.border-success]="applicant.offerStatus === 'accepted'"
-                    [class.bg-primary]="applicant.offerStatus === 'sent'"
-                    [class.text-primary]="applicant.offerStatus === 'sent'"
-                    [class.border-primary]="applicant.offerStatus === 'sent'"
-                    [class.bg-secondary]="applicant.offerStatus === 'none'"
-                    [class.text-secondary]="applicant.offerStatus === 'none'"
-                    [class.border-secondary]="applicant.offerStatus === 'none'"
-                    [class.bg-danger]="applicant.offerStatus === 'declined'"
-                    [class.text-danger]="applicant.offerStatus === 'declined'"
-                    [class.border-danger]="applicant.offerStatus === 'declined'">
-                    {{ applicant.offerStatus }}
-                  </span>
-                </td>
-                <td class="pe-4">
-                  <div class="dropdown">
-                    <button class="btn btn-sm btn-light rounded-circle shadow-sm" type="button"
-                      data-bs-toggle="dropdown" aria-expanded="false"
-                      style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                      <li><a class="dropdown-item cursor-pointer" routerLink="/profile"><i
-                            class="bi bi-eye me-2 text-primary"></i> View Profile</a></li>
-                      <li><a class="dropdown-item cursor-pointer"
-                          (click)="openRecruitmentWorkflow(applicant.applicationId)" data-bs-toggle="modal"
-                          data-bs-target="#recruitmentWorkflowModal"><i class="bi bi-diagram-3 me-2 text-info"></i>
-                          Recruitment Workflow</a></li>
-                      <li><a class="dropdown-item cursor-pointer" [routerLink]="['/legal-contract-page', applicant.applicationId]"><i
-                            class="bi bi-check-circle me-2 text-success"></i> Send Offer</a></li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-              } @empty {
-              <tr>
-                <td colspan="9" class="py-5 text-center text-muted">
-                  <p class="mb-0">No data available</p>
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
+    <app-table [columns]="columns" [data]="applicants" [loading]="isLoading"
+      emptyMessage="No applicants found."></app-table>
+
+    <!-- Templates for Table Columns -->
+    <ng-template #snoTpl let-row="row">
+      <span class="ps-3 fw-medium">{{ row.index + 1 }}</span>
+    </ng-template>
+
+    <ng-template #avatarTpl let-row="row">
+      <div class="rounded-circle bg-dark position-relative overflow-hidden" [style.background-color]="row.avatarColor"
+        style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+        @if (row.freelancer.profilePhoto) {
+        <img [src]="row.freelancer.profilePhoto" alt="Avatar" class="w-100 h-100 object-fit-cover">
+        } @else {
+        <span class="text-white fw-bold" style="font-size: 0.8rem;">{{ row.freelancer.fullName.charAt(0) | uppercase
+          }}</span>
+        }
+      </div>
+    </ng-template>
+
+    <ng-template #nameTpl let-row="row">
+      <span class="fw-semibold">{{ row.freelancer.fullName }}</span>
+    </ng-template>
+
+    <ng-template #headlineTpl let-row="row">
+      <span class="text-muted small text-truncate d-inline-block" style="max-width: 150px;"
+        [title]="row.freelancer.professionalHeadline">{{ row.freelancer.professionalHeadline }}</span>
+    </ng-template>
+
+    <ng-template #emailTpl let-row="row">
+      <span class="text-muted">{{ row.freelancer.email }}</span>
+    </ng-template>
+
+    <ng-template #genderTpl let-row="row">
+      <span class="text-capitalize">{{ row.freelancer.gender }}</span>
+    </ng-template>
+
+    <ng-template #cityTpl let-row="row">
+      <span class="text-capitalize">{{ row.freelancer.city }}</span>
+    </ng-template>
+
+    <ng-template #availabilityTpl let-row="row">
+      <span class="text-capitalize">{{ getAvailabilityString(row.freelancer.availability) }}</span>
+    </ng-template>
+
+    <ng-template #appStatusTpl let-row="row">
+      <app-badge [label]="row.applicationStatus" [variant]="getStatusBadgeVariant(row.applicationStatus)"
+        appearance="outline" [rounded]="true" class="text-capitalize"></app-badge>
+    </ng-template>
+
+    <ng-template #offerStatusTpl let-row="row">
+      <app-badge [label]="row.offerStatus" [variant]="getStatusBadgeVariant(row.offerStatus)" appearance="outline"
+        [rounded]="true" class="text-capitalize"></app-badge>
+    </ng-template>
+
+    <ng-template #actionsTemplate let-row="row">
+      <div class="dropdown">
+        <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown"
+          aria-expanded="false" data-bs-boundary="window">
+          <i class="bi bi-three-dots-vertical"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-center p-0 border-0 bg-transparent shadow-none"
+          style="min-width: auto;">
+          <app-dropdown [items]="getDropdownItems(row)" (itemSelected)="onDropdownAction($event, row)" class="d-block"
+            style="position: relative;">
+          </app-dropdown>
         </div>
       </div>
-    </section>
+    </ng-template>
 
-    <!-- Pagination -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-      <div class="d-flex align-items-center gap-2">
-        <span class="small text-dark">Show</span>
-        <select class="form-select form-select-sm" style="width: 70px;">
-          <option selected>10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-        </select>
-        <span class="small text-dark">Entries</span>
-      </div>
-
-      <span class="small text-dark">Showing {{ applicants.length > 0 ? 1 : 0 }}-{{ applicants.length }} of {{
-        totalApplicants }}</span>
-
-      <nav aria-label="Table pagination">
-        <ul class="pagination pagination-sm mb-0 gap-1">
-          <li class="page-item"><a class="page-link text-primary rounded" href="#">&lsaquo;</a></li>
-          <li class="page-item"><a class="page-link text-primary rounded" href="#">&laquo;</a></li>
-          <li class="page-item active"><a class="page-link rounded" href="#">1</a></li>
-          <li class="page-item"><a class="page-link text-primary rounded" href="#">&rsaquo;</a></li>
-          <li class="page-item"><a class="page-link text-primary rounded" href="#">&raquo;</a></li>
-        </ul>
-      </nav>
-    </div>
-
+    <button id="hiddenWorkflowBtn" class="d-none" data-bs-toggle="modal"
+      data-bs-target="#recruitmentWorkflowModal"></button>
 
   </div>
 </div>
@@ -260,9 +147,10 @@
 <!-- Recruitment Workflow Modal -->
 <div class="modal fade" id="recruitmentWorkflowModal" tabindex="-1" aria-labelledby="recruitmentWorkflowModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content border-0 shadow-lg">
-      <div class="modal-header border-bottom-0 pb-0">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg overflow-hidden">
+      <div class="modal-header bg-light border-bottom px-4 py-3">
+        <h5 class="fw-bold mb-0 text-dark">Recruitment Workflow</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body p-0">

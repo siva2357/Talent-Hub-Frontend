@@ -5,7 +5,7 @@
 
     <li>
 
-        <button type="button" class="dropdown-item" [disabled]="item.disabled" (click)="onItemClick(item)">
+        <button type="button" class="dropdown-item {{ item.className || '' }}" [disabled]="item.disabled" (click)="onItemClick(item)">
 
             @if (mode === 'icon' && item.icon) {
 

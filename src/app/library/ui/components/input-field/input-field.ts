@@ -5,6 +5,7 @@ export type InputFieldType =
   | 'email'
   | 'password'
   | 'date'
+  | 'time'
   | 'tel'
   | 'textarea'
   | 'select'
@@ -69,6 +70,8 @@ export class InputField {
 
   @Output() changed = new EventEmitter<string>();
 
+  @Output() blurred = new EventEmitter<void>();
+
   @Input() showPasswordToggle: boolean = false;
   isPasswordVisible: boolean = false;
 
@@ -86,6 +89,10 @@ export class InputField {
 
     this.valueChange.emit(this.value);
     this.changed.emit(this.value);
+  }
+
+  onBlur(): void {
+    this.blurred.emit();
   }
 
   onSelectChange(event: Event): void {

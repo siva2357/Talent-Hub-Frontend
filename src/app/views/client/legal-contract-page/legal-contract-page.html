@@ -16,9 +16,9 @@
     <!-- Top Navigation & Stepper -->
     <div class="d-flex justify-content-between align-items-start mb-4">
       <div>
-        <a routerLink="/applicants"
+        <a routerLink="/applicants/{{ contractId }}"
           class="text-primary text-decoration-none fw-semibold small d-flex align-items-center gap-1 mb-3 cursor-pointer">
-          <i class="bi bi-arrow-left"></i> Back to Proposals
+          <i class="bi bi-arrow-left"></i> back to applicants
         </a>
         <h1 class="fw-bold fs-3 mb-1 text-dark">Legal Contract Agreement</h1>
         <p class="text-muted small mb-0">Review the terms below and send a legally binding offer to your freelancer.</p>
@@ -85,33 +85,11 @@
           <p class="text-muted small mb-3">Define the exact deliverables, responsibilities and expectations.</p>
 
           <div class="border rounded-3 p-2 bg-white">
-            <div class="border-bottom pb-2 mb-2 d-flex gap-3 text-muted">
-              <select class="form-select form-select-sm border-0 w-auto fw-semibold text-dark shadow-none"
-                style="font-size: 0.75rem;">
-                <option>Normal</option>
-              </select>
-              <div class="d-flex gap-2 align-items-center fs-6">
-                <i class="bi bi-type-bold cursor-pointer text-dark"></i>
-                <i class="bi bi-type-italic cursor-pointer"></i>
-                <i class="bi bi-type-underline cursor-pointer"></i>
-                <i class="bi bi-type-strikethrough cursor-pointer me-2"></i>
 
-                <i class="bi bi-list-ul cursor-pointer"></i>
-                <i class="bi bi-quote cursor-pointer me-2"></i>
-
-                <i class="bi bi-code cursor-pointer"></i>
-                <i class="bi bi-link cursor-pointer"></i>
-                <i class="bi bi-image cursor-pointer"></i>
-                <i class="bi bi-play-btn cursor-pointer"></i>
-                <i class="bi bi-table cursor-pointer me-2"></i>
-
-                <i class="bi bi-arrow-counterclockwise cursor-pointer"></i>
-                <i class="bi bi-arrow-clockwise cursor-pointer text-light"></i>
-              </div>
-            </div>
-            <textarea formControlName="scopeOfWork" class="form-control border-0 shadow-none text-muted" rows="6"
-              style="font-size: 0.8rem; resize: none;"
-              placeholder="Describe the scope of work in detail. Be clear about deliverables, milestones and responsibilities..."></textarea>
+            <app-input-field type="textarea" label="" [value]="offerForm.get('scopeOfWork')?.value"
+              (valueChange)="offerForm.get('scopeOfWork')?.setValue($event)"
+              placeholder="Describe the scope of work in detail. Be clear about deliverables, milestones and responsibilities...">
+            </app-input-field>
             <div class="text-end text-muted mt-2" style="font-size: 0.65rem;">0 / 2500</div>
           </div>
         </div>
@@ -127,30 +105,11 @@
           <p class="text-muted small mb-3">Add any legal clauses, NDA, IP ownership, confidentiality or other terms.</p>
 
           <div class="border rounded-3 p-2 bg-white">
-            <div class="border-bottom pb-2 mb-2 d-flex gap-3 text-muted">
-              <select class="form-select form-select-sm border-0 w-auto fw-semibold text-dark shadow-none"
-                style="font-size: 0.75rem;">
-                <option>Normal</option>
-              </select>
-              <div class="d-flex gap-2 align-items-center fs-6">
-                <i class="bi bi-type-bold cursor-pointer text-dark"></i>
-                <i class="bi bi-type-italic cursor-pointer"></i>
-                <i class="bi bi-type-underline cursor-pointer"></i>
-                <i class="bi bi-type-strikethrough cursor-pointer me-2"></i>
-                <i class="bi bi-list-ul cursor-pointer"></i>
-                <i class="bi bi-quote cursor-pointer me-2"></i>
-                <i class="bi bi-code cursor-pointer"></i>
-                <i class="bi bi-link cursor-pointer"></i>
-                <i class="bi bi-image cursor-pointer"></i>
-                <i class="bi bi-play-btn cursor-pointer"></i>
-                <i class="bi bi-table cursor-pointer me-2"></i>
-                <i class="bi bi-arrow-counterclockwise cursor-pointer"></i>
-                <i class="bi bi-arrow-clockwise cursor-pointer text-light"></i>
-              </div>
-            </div>
-            <textarea formControlName="additionalTerms" class="form-control border-0 shadow-none text-muted" rows="4"
-              style="font-size: 0.8rem; resize: none;"
-              placeholder="Add additional legal terms, conditions or clauses here..."></textarea>
+
+            <app-input-field type="textarea" label="" [value]="offerForm.get('additionalTerms')?.value"
+              (valueChange)="offerForm.get('additionalTerms')?.setValue($event)"
+              placeholder="Add additional legal terms, conditions or clauses here...">
+            </app-input-field>
             <div class="text-end text-muted mt-2" style="font-size: 0.65rem;">0 / 2000</div>
           </div>
         </div>
@@ -192,56 +151,16 @@
           <p class="text-muted small mb-3">Upload your digital signature. This will be used on the official contract.
           </p>
 
-          <div class="row g-4">
+          <div class="row g-4 align-items-stretch">
             <div class="col-md-6">
-              <div
-                class="border border-2 border-dashed rounded-3 p-4 d-flex flex-column align-items-center justify-content-center text-center h-100 bg-white"
-                style="cursor: pointer;" (click)="fileInput.click()">
-                <input type="file" #fileInput (change)="onFileSelected($event)"
-                  accept="image/png, image/jpeg, image/webp" class="d-none">
-                <i class="bi bi-cloud-upload text-primary fs-2 mb-2"></i>
-                <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.75rem;">Drag & drop your signature
-                  here</span>
-                <span class="text-muted small d-block mb-3" style="font-size: 0.7rem;">or</span>
-                <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-semibold mb-3">Browse
-                  Files</button>
-                <span class="text-muted" style="font-size: 0.65rem;">PNG, JPG, WEBP (Max. 5MB)</span>
-              </div>
+              <app-file-upload class="d-block h-100" title="Drag & drop your signature here" browseText="Browse Files"
+                acceptedFormats="PNG, JPG, WEBP (Max. 5MB)" [uploadBucket]="UploadBucket.ClientData"
+                [uploadSection]="UploadSection.DigitalSignature" (uploadComplete)="onUploadComplete($event)">
+              </app-file-upload>
             </div>
             <div class="col-md-6">
-              <div class="border rounded-3 p-3 bg-white h-100 position-relative">
-                @if (signaturePreview) {
-                <div class="position-absolute top-0 end-0 p-3">
-                  <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center"
-                    style="width: 20px; height: 20px;"><i class="bi bi-check" style="font-size: 0.8rem;"></i></div>
-                </div>
-                }
-                <span class="fw-bold text-dark d-block mb-3" style="font-size: 0.75rem;">Signature Preview</span>
-
-                @if (signaturePreview) {
-                <div class="d-flex justify-content-center py-3 mb-3">
-                  <img [src]="signaturePreview" alt="Signature Preview"
-                    style="max-height: 100px; max-width: 100%; object-fit: contain;">
-                </div>
-                } @else {
-                <div class="d-flex justify-content-center align-items-center py-3 mb-3 text-muted"
-                  style="height: 100px; background-color: #f8f9fa; border-radius: 8px;">
-                  No signature uploaded yet
-                </div>
-                }
-
-                <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">{{ fileName || 'No file selected'
-                  }}</span>
-                <span class="text-muted d-block mb-2" style="font-size: 0.65rem;">Status: {{ signaturePreview ? 'Ready
-                  for submission' : 'Pending upload' }}</span>
-                @if (signaturePreview) {
-                <a href="javascript:void(0)" (click)="fileInput.click()"
-                  class="text-primary text-decoration-none fw-semibold d-flex align-items-center gap-1"
-                  style="font-size: 0.7rem;">
-                  <i class="bi bi-arrow-repeat"></i> Replace Signature
-                </a>
-                }
-              </div>
+              <app-file-preview class="d-block h-100" mode="image" [previewUrl]="signaturePreview">
+              </app-file-preview>
             </div>
           </div>
         </div>
@@ -282,17 +201,12 @@
 
         <!-- Action Buttons at the bottom of the form -->
         <div class="d-flex justify-content-between align-items-center pt-4 border-top mt-5">
-          <button type="button" routerLink="/applicants"
-            class="btn btn-outline-secondary bg-white text-dark px-4 fw-semibold shadow-sm cursor-pointer">Cancel</button>
-          <button type="submit" [disabled]="isSubmitting"
-            class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
-            <i class="bi bi-send"></i> Generate & Send Legal Offer
-            @if (isSubmitting) {
-            <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
-            } @else {
-            <i class="bi bi-arrow-right ms-1"></i>
-            }
-          </button>
+          <app-button variant="secondary" size="md" routerLink="/applicants">
+            Cancel
+          </app-button>
+          <app-button variant="primary" size="md" type="submit" [disabled]="isSubmitting" [loading]="isSubmitting">
+            <span class="text-white">Generate & Send Legal Offer</span>
+          </app-button>
         </div>
 
       </div>

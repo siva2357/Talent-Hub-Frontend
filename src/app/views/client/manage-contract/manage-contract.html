@@ -64,80 +64,65 @@
 
 
     <!-- Data Table Section -->
-    <section class="glass-card rounded-3 mb-4">
-      <div class="card-body p-0">
-
-        <ng-template #snoTemplate let-row="row" let-value="value">
-          <span class="ps-4">{{ allContracts.indexOf(row) + 1 }}</span>
-        </ng-template>
-
-        <ng-template #budgetTemplate let-row="row">
-          {{ row.estimatedBudget }} {{ row.currency }}
-        </ng-template>
-
-        <ng-template #startDateTemplate let-value="value">
-          {{ value | date:'mediumDate' }}
-        </ng-template>
-
-        <ng-template #endDateTemplate let-value="value">
-          {{ value | date:'mediumDate' }}
-        </ng-template>
-
-        <ng-template #fundsTemplate let-row="row">
-          @if (row.funded && row.funded > 0) {
-          <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2">Fully Paid</span>
-          } @else {
-          <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-2">Pending</span>
-          }
-        </ng-template>
-
-        <ng-template #statusTemplate let-value="value">
-          <span class="badge rounded-pill px-3 border border-opacity-25 bg-opacity-25"
-            [class.bg-success]="value === 'completed' || value === 'closed'"
-            [class.text-success]="value === 'completed' || value === 'closed'"
-            [class.border-success]="value === 'completed' || value === 'closed'"
-            [class.bg-primary]="value === 'open' || value === 'in progress'"
-            [class.text-primary]="value === 'open' || value === 'in progress'"
-            [class.border-primary]="value === 'open' || value === 'in progress'"
-            [class.bg-secondary]="value === 'draft'" [class.text-secondary]="value === 'draft'"
-            [class.border-secondary]="value === 'draft'" style="text-transform: capitalize;">
-            {{ value }}
-          </span>
-        </ng-template>
-
-        <ng-template #actionsTemplate let-row="row">
-          <div class="dropdown pe-4">
-            <button class="btn btn-link text-dark p-0 border-0" type="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              <i class="bi bi-three-dots-vertical"></i>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-              <li><a class="dropdown-item cursor-pointer" (click)="viewApplicants(row._id)"><i
-                    class="bi bi-people me-2 text-primary"></i> Applicants</a></li>
-              <li><a class="dropdown-item cursor-pointer" (click)="viewContractProgress(row._id)"><i
-                    class="bi bi-graph-up me-2 text-secondary"></i> Contract Progress</a></li>
-              <li><a class="dropdown-item cursor-pointer" (click)="editContract(row._id)"><i
-                    class="bi bi-pencil me-2 text-warning"></i> Edit</a></li>
-
-              @if (!isFullyFunded(row)) {
-              <li><a class="dropdown-item cursor-pointer fw-bold text-success" (click)="fundContract(row)"><i
-                    class="bi bi-credit-card me-2 text-success"></i> Fund Contract</a></li>
-              }
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item text-danger cursor-pointer" (click)="deleteContract(row._id)"><i
-                    class="bi bi-trash me-2"></i> Delete</a></li>
-            </ul>
-          </div>
-        </ng-template>
-
-        <app-table [columns]="columns" [data]="allContracts" [loading]="isLoading"></app-table>
-
-      </div>
-    </section>
-
-
+    <app-table [columns]="columns" [data]="allContracts" [loading]="isLoading"></app-table>
   </div>
 
 </div>
+
+
+
+
+
+
+<ng-template #snoTemplate let-row="row" let-value="value">
+  <span class="ps-4">{{ allContracts.indexOf(row) + 1 }}</span>
+</ng-template>
+
+<ng-template #budgetTemplate let-row="row">
+  {{ row.currency || '₹' }} {{ row.estimatedBudget }}
+</ng-template>
+
+<ng-template #startDateTemplate let-row="row">
+  {{ row.contractStartDate | date:'mediumDate' }}
+</ng-template>
+
+<ng-template #endDateTemplate let-row="row">
+  {{ row.contractEndDate | date:'mediumDate' }}
+</ng-template>
+
+<ng-template #createdAtTemplate let-row="row">
+  {{ row.createdAt | date:'mediumDate' }}
+</ng-template>
+
+<ng-template #spentTemplate let-row="row">
+  {{ row.currency || '₹' }} {{ row.spent || 0 }}
+</ng-template>
+
+<ng-template #fundsTemplate let-row="row">
+  @if (row.funded && row.funded > 0) {
+  <app-badge [label]="'Fully Paid'" variant="success" appearance="outline" [rounded]="true"></app-badge>
+  } @else {
+  <app-badge [label]="'Pending'" variant="secondary" appearance="outline" [rounded]="true"></app-badge>
+  }
+</ng-template>
+
+
+<ng-template #statusTemplate let-row="row">
+  <div style="text-transform: capitalize;">
+    <app-badge [label]="row.status" [variant]="getBadgeVariant(row.status)" appearance="outline"
+      [rounded]="true"></app-badge>
+  </div>
+</ng-template>
+
+
+<ng-template #actionsTemplate let-row="row">
+  <div class="dropdown">
+    <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+      <i class="bi bi-three-dots-vertical"></i>
+    </button>
+    <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none" style="min-width: auto;">
+      <app-dropdown [items]="getDropdownItems(row)" (itemSelected)="onDropdownAction($event, row)" class="d-block" style="position: relative;">
+      </app-dropdown>
+    </div>
+  </div>
+</ng-template>

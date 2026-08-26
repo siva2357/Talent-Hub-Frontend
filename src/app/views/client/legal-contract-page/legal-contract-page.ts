@@ -5,21 +5,29 @@ import { OfferService } from '../../../core/services/offer.service';
 import { ApplicationService } from '../../../core/services/application.service';
 import { FileService } from '../../../core/services/file.service';
 import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
+import { InputField } from '../../../library/ui/components/input-field/input-field';
+import { Button } from '../../../library/ui/components/button/button';
+import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
+import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
 
 @Component({
   selector: 'app-legal-contract-page',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [RouterLink, ReactiveFormsModule, InputField, Button, FileUpload, FilePreview],
   templateUrl: './legal-contract-page.html',
   styleUrl: './legal-contract-page.css'
 })
 export class LegalContractPage implements OnInit {
+  UploadBucket = UploadBucket;
+  UploadSection = UploadSection;
+  
   offerForm!: FormGroup;
   applicationId: string | null = null;
+  contractId: string | null = null;
   applicationData: any = null;
   isSubmitting = false;
   fileName: string = '';
-  signaturePreview: string | ArrayBuffer | null = null;
+  signaturePreview: string | null = null;
   isLoading = true;
   selectedFile: File | null = null;
 
@@ -57,6 +65,7 @@ export class LegalContractPage implements OnInit {
       next: (res) => {
         // Based on the actual response structure, use res.application
         this.applicationData = res.application || res.data || res;
+        this.contractId = this.applicationData?.contractId?._id || this.applicationData?.contractId;
         this.isLoading = false;
       },
       error: (err) => {
@@ -66,23 +75,11 @@ export class LegalContractPage implements OnInit {
     });
   }
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.fileName = file.name;
-      this.selectedFile = file;
-      
-      // Upload the signature immediately to get the URL
-      this.fileService.uploadFile(file, UploadBucket.ClientData, UploadSection.DigitalSignature).subscribe({
-        next: (res: any) => {
-          if (res.success) {
-            this.signaturePreview = res.url;
-            this.offerForm.patchValue({
-              clientSignature: res.url
-            });
-          }
-        },
-        error: (err) => console.error('Error uploading signature', err)
+  onUploadComplete(url: string): void {
+    if (url) {
+      this.signaturePreview = url;
+      this.offerForm.patchValue({
+        clientSignature: url
       });
     }
   }
@@ -102,8 +99,7 @@ export class LegalContractPage implements OnInit {
       this.offerService.createOffer(this.applicationId, payload).subscribe({
         next: (res: any) => {
           console.log('Offer sent successfully', res);
-          const contractId = this.applicationData.contractId._id || this.applicationData.contractId;
-          this.router.navigate(['/applicants', contractId]);
+          this.router.navigate(['/applicants', this.contractId]);
         },
         error: (err) => {
           console.error('Error sending offer', err);

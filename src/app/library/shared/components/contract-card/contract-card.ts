@@ -18,11 +18,18 @@ export interface ContractCardData {
   status: string;
   hasApplied: boolean;
   hasSaved: boolean;
+  _id?: string;
 }
+
+
+import { CommonModule } from '@angular/common';
+import { Badge } from '../../../ui/components/badge/badge';
+import { Button } from '../../../ui/components/button/button';
 
 @Component({
   selector: 'app-contract-card',
   standalone: true,
+  imports: [Button, Badge, CommonModule],
   templateUrl: './contract-card.html',
   styleUrl: './contract-card.css'
 })
@@ -110,5 +117,24 @@ export class ContractCard {
         year: 'numeric'
       }
     );
+  }
+
+  getStatusVariant(status: string): 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'purple' {
+    switch (status?.toLowerCase()) {
+      case 'completed':
+        return 'success';
+      case 'active':
+      case 'open':
+        return 'info';
+      case 'in progress':
+        return 'primary';
+      case 'pending':
+        return 'warning';
+      case 'cancelled':
+      case 'closed':
+        return 'danger';
+      default:
+        return 'secondary';
+    }
   }
 }

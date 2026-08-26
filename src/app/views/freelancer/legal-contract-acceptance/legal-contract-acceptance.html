@@ -59,7 +59,7 @@
                   <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">You have reviewed the complete legal contract shared by the client.</p>
                 </div>
               </div>
-              <button class="btn btn-outline-primary bg-white w-100 fw-semibold" style="font-size: 0.8rem;">View Contract Again <i class="bi bi-arrow-right"></i></button>
+              <app-button variant="outline-primary" [block]="true" label="View Contract Again" icon="bi bi-arrow-right"></app-button>
             </div>
           </div>
           
@@ -76,7 +76,7 @@
                   <p class="text-muted mb-0" style="font-size: 0.75rem; line-height: 1.5;">Please review and accept the Talent Hub platform terms & conditions.</p>
                 </div>
               </div>
-              <button class="btn btn-outline-primary bg-white w-100 fw-semibold" style="font-size: 0.8rem;">View Platform Terms <i class="bi bi-arrow-right"></i></button>
+              <app-button variant="outline-primary" [block]="true" label="View Platform Terms" icon="bi bi-arrow-right"></app-button>
             </div>
           </div>
         </div>
@@ -115,37 +115,24 @@
         <h2 class="fs-5 fw-bold text-dark mb-2">Your Digital Signature <span class="text-danger">*</span></h2>
         <p class="text-muted small mb-3">Upload your signature to accept and finalize this contract.</p>
         
-        <div class="row g-4 mb-5">
-          <div class="col-md-5">
-            <ul class="nav nav-tabs border-bottom-0 mb-3" style="font-size: 0.85rem;">
-              <li class="nav-item">
-                <a class="nav-link active fw-bold text-primary border-0 border-bottom border-2 border-primary px-0 py-2 me-4 bg-transparent d-flex align-items-center gap-2" href="#"><i class="bi bi-upload"></i> Upload Signature</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-muted fw-semibold border-0 px-0 py-2 bg-transparent d-flex align-items-center gap-2" href="#"><i class="bi bi-pen"></i> Draw Signature</a>
-              </li>
-            </ul>
-            <div class="border border-2 border-dashed border-primary border-opacity-25 rounded-4 bg-primary bg-opacity-10 d-flex flex-column align-items-center justify-content-center p-4 text-center cursor-pointer position-relative" style="height: 140px;">
-              <input type="file" class="position-absolute w-100 h-100 opacity-0 cursor-pointer" accept="image/*" (change)="onFileSelected($event)" style="z-index: 10;">
-              <i class="bi bi-cloud-upload text-primary fs-2 mb-2"></i>
-              <span class="text-dark fw-semibold" style="font-size: 0.8rem;">Drag & drop your signature here or click to browse</span>
-              <span class="text-muted mt-1" style="font-size: 0.65rem;">Supported formats: PNG, JPG, WEBP (Max size: 5MB)</span>
-            </div>
+        <div class="row g-4 mb-5 align-items-stretch">
+          <div class="col-md-6">
+            <app-file-upload class="d-block h-100"
+              title="Drag & drop your signature here" 
+              browseText="Browse Files"
+              acceptedFormats="PNG, JPG, WEBP (Max. 5MB)"
+              [uploadBucket]="UploadBucket.FreelancerData"
+              [uploadSection]="UploadSection.DigitalSignature"
+              (fileSelected)="onFileSelected($event)"
+              (uploadComplete)="onUploadComplete($event)">
+            </app-file-upload>
           </div>
           
-          <div class="col-md-7">
-            <span class="text-muted fw-semibold d-block mb-3" style="font-size: 0.75rem;">Signature Preview</span>
-            <div class="border rounded-4 bg-white p-3 position-relative d-flex justify-content-center align-items-center" style="height: 140px;">
-              @if (signaturePreview) {
-              <div class="position-absolute top-0 end-0 mt-2 me-2 rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 20px; height: 20px;"><i class="bi bi-check" style="font-size: 0.8rem;"></i></div>
-              <img [src]="signaturePreview" alt="Signature" style="max-width: 100%; max-height: 100%; object-fit: contain;">
-              <div class="position-absolute bottom-0 end-0 mb-2 me-3">
-                <span class="text-success fw-bold" style="font-size: 0.75rem;">Ready to Sign</span>
-              </div>
-              } @else {
-              <span class="text-muted fst-italic" style="font-size: 0.8rem;">No signature uploaded yet.</span>
-              }
-            </div>
+          <div class="col-md-6">
+            <app-file-preview class="d-block h-100"
+              mode="image"
+              [previewUrl]="signaturePreview">
+            </app-file-preview>
           </div>
         </div>
 
@@ -159,14 +146,13 @@
             </div>
           </div>
           <div class="d-flex gap-2">
-            <button class="btn btn-outline-secondary fw-bold px-4">Cancel</button>
-            <button (click)="acceptContract()" [disabled]="isSubmitting || isUploading || !consent1 || !consent2 || !consent3 || !consent4" class="btn btn-primary rounded-pill fw-semibold shadow-sm fw-bold px-4 d-flex align-items-center gap-2">
-              @if(isSubmitting) {
-                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Processing...
-              } @else {
-                <i class="bi bi-rocket-takeoff"></i> Accept & Sign Contract <i class="bi bi-arrow-right"></i>
-              }
-            </button>
+            <app-button variant="outline-secondary" label="Cancel"></app-button>
+            <app-button variant="primary" label="Accept & Sign Contract" 
+              icon="bi bi-rocket-takeoff"
+              [disabled]="isSubmitting || isUploading || !consent1 || !consent2 || !consent3 || !consent4"
+              [loading]="isSubmitting"
+              (clicked)="acceptContract()">
+            </app-button>
           </div>
         </div>
 

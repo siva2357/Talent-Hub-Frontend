@@ -31,47 +31,13 @@
         </div>
 
         <!-- Dynamic Stepper -->
-        <div class="d-flex align-items-center w-75 mx-auto mt-2">
-
-          <!-- Step 1 Indicator -->
-          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-            <div
-              class="rounded-circle d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
-              [ngClass]="currentStep > 1 ? 'bg-success text-white' : 'bg-primary text-white'"
-              style="width: 32px; height: 32px; font-size: 0.8rem;">
-              @if (currentStep > 1) { <i class="bi bi-check fs-5"></i> } @else { 1 }
-            </div>
-            <span class="small mt-2 fw-bold" [ngClass]="currentStep >= 1 ? 'text-primary' : 'text-muted'"
-              style="font-size: 0.7rem;">Basic Details</span>
-            <div class="position-absolute top-0 start-50 w-100"
-              [ngClass]="currentStep > 1 ? 'bg-success' : 'bg-secondary bg-opacity-25'"
-              style="height: 3px; margin-top: 15px; z-index: 1;"></div>
-          </div>
-
-          <!-- Step 2 Indicator -->
-          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-            <div
-              class="rounded-circle d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
-              [ngClass]="currentStep > 2 ? 'bg-success text-white' : (currentStep === 2 ? 'bg-primary text-white' : 'bg-white border-secondary text-muted bg-opacity-50')"
-              style="width: 32px; height: 32px; font-size: 0.8rem;">
-              @if (currentStep > 2) { <i class="bi bi-check fs-5"></i> } @else { 2 }
-            </div>
-            <span class="small mt-2 fw-bold" [ngClass]="currentStep >= 2 ? 'text-primary' : 'text-muted'"
-              style="font-size: 0.7rem;">Terms & Conditions</span>
-            <div class="position-absolute top-0 start-50 w-100"
-              [ngClass]="currentStep > 2 ? 'bg-success' : 'bg-secondary bg-opacity-25'"
-              style="height: 3px; margin-top: 15px; z-index: 1;"></div>
-          </div>
-
-          <!-- Step 3 Indicator -->
-          <div class="d-flex flex-column align-items-center position-relative flex-grow-1">
-            <div
-              class="rounded-circle d-flex align-items-center justify-content-center z-2 fw-bold shadow-sm border border-2 border-white"
-              [ngClass]="currentStep === 3 ? 'bg-primary text-white' : 'bg-white border-secondary text-muted bg-opacity-50'"
-              style="width: 32px; height: 32px; font-size: 0.8rem;">3</div>
-            <span class="small mt-2 text-center fw-bold" [ngClass]="currentStep === 3 ? 'text-primary' : 'text-muted'"
-              style="font-size: 0.7rem;">Review & Create</span>
-          </div>
+        <div class="d-flex align-items-center w-75 mx-auto mt-2 mb-2">
+          <app-timeline
+            class="w-100"
+            mode="numbered"
+            [steps]="timelineSteps"
+            (stepClicked)="onStepClicked($event)">
+          </app-timeline>
         </div>
       </div>
 
@@ -94,89 +60,134 @@
 
             <div class="row g-4 mb-4">
               <div class="col-md-6">
-                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Title <span
-                    class="text-danger">*</span></label>
-                <input type="text" class="form-control" formControlName="contractTitle"
-                  placeholder="Enter a clear contract title">
+                <app-input-field
+                  label="Contract Title *"
+                  type="text"
+                  placeholder="Enter a clear contract title"
+                  [value]="contractForm.get('contractTitle')?.value"
+                  (valueChange)="contractForm.get('contractTitle')?.setValue($event); contractForm.get('contractTitle')?.markAsTouched(); contractForm.get('contractTitle')?.markAsDirty()"
+                  (blurred)="contractForm.get('contractTitle')?.markAsTouched()"
+                  [validation]="(contractForm.get('contractTitle')?.touched || contractForm.get('contractTitle')?.dirty) ? (contractForm.get('contractTitle')?.invalid ? 'error' : 'success') : 'none'"
+                  errorMessage="Contract Title is required (min 5 chars)"
+                ></app-input-field>
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Type <span
-                    class="text-danger">*</span></label>
-                <select class="form-select text-dark" formControlName="contractType">
-                  <option value="" disabled>Select contract type</option>
-                  <option value="Fixed Price">Fixed Price</option>
-                  <option value="Hourly">Hourly</option>
-                </select>
+                <app-input-field
+                  label="Contract Type *"
+                  type="select"
+                  placeholder="Select contract type"
+                  [options]="contractTypeOptions"
+                  [value]="contractForm.get('contractType')?.value"
+                  (valueChange)="contractForm.get('contractType')?.setValue($event); contractForm.get('contractType')?.markAsTouched(); contractForm.get('contractType')?.markAsDirty()"
+                  (blurred)="contractForm.get('contractType')?.markAsTouched()"
+                  [validation]="(contractForm.get('contractType')?.touched || contractForm.get('contractType')?.dirty) ? (contractForm.get('contractType')?.invalid ? 'error' : 'success') : 'none'"
+                  errorMessage="Contract Type is required"
+                ></app-input-field>
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Category <span
-                    class="text-danger">*</span></label>
-                <select class="form-select text-dark" formControlName="contractCategory">
-                  <option value="" disabled>Select category</option>
-                  <option value="Web Development">Web Development</option>
-                  <option value="Mobile Development">Mobile Development</option>
-                  <option value="Design">Design</option>
-                </select>
+                <app-input-field
+                  label="Contract Category *"
+                  type="select"
+                  placeholder="Select category"
+                  [options]="contractCategoryOptions"
+                  [value]="contractForm.get('contractCategory')?.value"
+                  (valueChange)="contractForm.get('contractCategory')?.setValue($event); contractForm.get('contractCategory')?.markAsTouched(); contractForm.get('contractCategory')?.markAsDirty()"
+                  (blurred)="contractForm.get('contractCategory')?.markAsTouched()"
+                  [validation]="(contractForm.get('contractCategory')?.touched || contractForm.get('contractCategory')?.dirty) ? (contractForm.get('contractCategory')?.invalid ? 'error' : 'success') : 'none'"
+                  errorMessage="Contract Category is required"
+                ></app-input-field>
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Subject <span
-                    class="text-danger">*</span></label>
-                <select class="form-select text-dark" formControlName="contractSubject">
-                  <option value="" disabled>Select subject</option>
-                  <option value="Frontend">Frontend</option>
-                  <option value="Backend">Backend</option>
-                  <option value="Full Stack">Full Stack</option>
-                </select>
+                <app-input-field
+                  label="Contract Subject *"
+                  type="select"
+                  placeholder="Select subject"
+                  [options]="contractSubjectOptions"
+                  [value]="contractForm.get('contractSubject')?.value"
+                  (valueChange)="contractForm.get('contractSubject')?.setValue($event); contractForm.get('contractSubject')?.markAsTouched(); contractForm.get('contractSubject')?.markAsDirty()"
+                  (blurred)="contractForm.get('contractSubject')?.markAsTouched()"
+                  [validation]="(contractForm.get('contractSubject')?.touched || contractForm.get('contractSubject')?.dirty) ? (contractForm.get('contractSubject')?.invalid ? 'error' : 'success') : 'none'"
+                  errorMessage="Contract Subject is required"
+                ></app-input-field>
               </div>
             </div>
 
             <div class="mb-4">
-              <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Description <span
-                  class="text-danger">*</span></label>
-              <div class="border rounded-3 p-2 bg-white">
-                <textarea class="form-control border-0 shadow-none text-dark" rows="4"
-                  formControlName="contractDescription" style="font-size: 0.85rem; resize: none;"
-                  placeholder="Describe the work, objectives, deliverables, and any important details..."></textarea>
-              </div>
+              <app-input-field
+                label="Contract Description *"
+                type="textarea"
+                placeholder="Describe the work, objectives, deliverables, and any important details..."
+                [value]="contractForm.get('contractDescription')?.value"
+                (valueChange)="contractForm.get('contractDescription')?.setValue($event); contractForm.get('contractDescription')?.markAsTouched(); contractForm.get('contractDescription')?.markAsDirty()"
+                (blurred)="contractForm.get('contractDescription')?.markAsTouched()"
+                [validation]="(contractForm.get('contractDescription')?.touched || contractForm.get('contractDescription')?.dirty) ? (contractForm.get('contractDescription')?.invalid ? 'error' : 'success') : 'none'"
+                errorMessage="Contract Description is required"
+              ></app-input-field>
             </div>
 
             <div class="row g-4 mb-5">
               <div class="col-md-6">
-                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Start Date <span
-                    class="text-danger">*</span></label>
-                <div class="input-group">
-                  <input type="date" class="form-control border-end-0 text-dark" formControlName="contractStartDate">
-                </div>
+                <app-input-field
+                  label="Contract Start Date *"
+                  type="date"
+                  placeholder="Select start date"
+                  [value]="contractForm.get('contractStartDate')?.value"
+                  (valueChange)="contractForm.get('contractStartDate')?.setValue($event); contractForm.get('contractStartDate')?.markAsTouched(); contractForm.get('contractStartDate')?.markAsDirty()"
+                  (blurred)="contractForm.get('contractStartDate')?.markAsTouched()"
+                  [validation]="(contractForm.get('contractStartDate')?.touched || contractForm.get('contractStartDate')?.dirty) ? (contractForm.get('contractStartDate')?.invalid ? 'error' : 'success') : 'none'"
+                  errorMessage="Start Date is required"
+                ></app-input-field>
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract End Date <span
-                    class="text-danger">*</span></label>
-                <div class="input-group">
-                  <input type="date" class="form-control border-end-0 text-dark" formControlName="contractEndDate">
-                </div>
+                <app-input-field
+                  label="Contract End Date *"
+                  type="date"
+                  placeholder="Select end date"
+                  [value]="contractForm.get('contractEndDate')?.value"
+                  (valueChange)="contractForm.get('contractEndDate')?.setValue($event); contractForm.get('contractEndDate')?.markAsTouched(); contractForm.get('contractEndDate')?.markAsDirty()"
+                  (blurred)="contractForm.get('contractEndDate')?.markAsTouched()"
+                  [validation]="(contractForm.get('contractEndDate')?.touched || contractForm.get('contractEndDate')?.dirty) ? (contractForm.get('contractEndDate')?.invalid ? 'error' : 'success') : 'none'"
+                  errorMessage="End Date is required"
+                ></app-input-field>
               </div>
 
               <div class="col-md-6">
-                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Estimated Budget (₹) <span
-                    class="text-danger">*</span></label>
-                <input type="number" class="form-control text-dark" formControlName="estimatedBudget"
-                  placeholder="Enter total budget">
+                <app-input-field
+                  label="Estimated Budget (₹) *"
+                  type="text"
+                  placeholder="Enter total budget"
+                  [value]="contractForm.get('estimatedBudget')?.value"
+                  (valueChange)="contractForm.get('estimatedBudget')?.setValue($event); contractForm.get('estimatedBudget')?.markAsTouched(); contractForm.get('estimatedBudget')?.markAsDirty()"
+                  (blurred)="contractForm.get('estimatedBudget')?.markAsTouched()"
+                  [validation]="(contractForm.get('estimatedBudget')?.touched || contractForm.get('estimatedBudget')?.dirty) ? (contractForm.get('estimatedBudget')?.invalid ? 'error' : 'success') : 'none'"
+                  errorMessage="Budget is required (min 30000, max 75000)"
+                ></app-input-field>
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold text-dark" style="font-size: 0.8rem;">Contract Status</label>
-                <select class="form-select text-dark fw-semibold" formControlName="status">
-                  <option value="draft">Draft</option>
-                  <option value="open">Open</option>
-                </select>
+                <app-input-field
+                  label="Contract Status"
+                  type="select"
+                  placeholder="Select status"
+                  [options]="contractStatusOptions"
+                  [value]="contractForm.get('status')?.value"
+                  (valueChange)="contractForm.get('status')?.setValue($event); contractForm.get('status')?.markAsTouched(); contractForm.get('status')?.markAsDirty()"
+                  (blurred)="contractForm.get('status')?.markAsTouched()"
+                  [validation]="(contractForm.get('status')?.touched || contractForm.get('status')?.dirty) ? (contractForm.get('status')?.invalid ? 'error' : 'success') : 'none'"
+                ></app-input-field>
               </div>
             </div>
 
             <div class="d-flex justify-content-between pt-4 border-top">
-              <button type="button" routerLink="/manage-contract"
-                class="btn btn-outline-secondary px-4 fw-bold">Cancel</button>
-              <button type="button" (click)="nextStep()"
-                class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold">Save & Continue <i
-                  class="bi bi-arrow-right ms-1"></i></button>
+              <app-button
+                label="Cancel"
+                variant="secondary"
+                routerLink="/manage-contract">
+              </app-button>
+              <app-button
+                label="Save & Continue"
+                variant="primary"
+                (clicked)="nextStep()">
+              </app-button>
             </div>
           </div>
         </div>
@@ -285,13 +296,17 @@
             </div>
 
             <div class="d-flex justify-content-between pt-4 border-top">
-              <button type="button" (click)="previousStep()"
-                class="btn btn-outline-secondary px-4 fw-bold d-flex align-items-center gap-2"><i
-                  class="bi bi-arrow-left"></i> Back</button>
-              <button type="button" (click)="nextStep()"
-                [disabled]="contractForm.get('agreeToTerms1')?.invalid || contractForm.get('agreeToTerms2')?.invalid || contractForm.get('agreeToTerms3')?.invalid"
-                class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold">Continue to Review <i
-                  class="bi bi-arrow-right ms-1"></i></button>
+              <app-button
+                label="Back"
+                variant="secondary"
+                (clicked)="previousStep()">
+              </app-button>
+              <app-button
+                label="Continue to Review"
+                variant="primary"
+                [disabled]="(contractForm.get('agreeToTerms1')?.invalid || contractForm.get('agreeToTerms2')?.invalid || contractForm.get('agreeToTerms3')?.invalid) ?? false"
+                (clicked)="nextStep()">
+              </app-button>
             </div>
           </div>
         </div>
@@ -382,18 +397,18 @@
             </div>
 
             <div class="d-flex justify-content-between pt-4 border-top">
-              <button type="button" (click)="previousStep()"
-                class="btn btn-outline-secondary px-4 fw-bold d-flex align-items-center gap-2"><i
-                  class="bi bi-arrow-left"></i> Back</button>
-              <button type="submit" [disabled]="isSubmitting"
-                class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4 fw-bold">
-                @if(isSubmitting) {
-                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                Submitting...
-                } @else {
-                {{ editContractId ? 'Update Contract & Continue' : 'Create Contract & Continue' }} <i class="bi bi-arrow-right ms-1"></i>
-                }
-              </button>
+              <app-button
+                label="Back"
+                variant="secondary"
+                (clicked)="previousStep()">
+              </app-button>
+              <app-button
+                [label]="editContractId ? 'Update Contract & Continue' : 'Create Contract & Continue'"
+                variant="primary"
+                type="submit"
+                [loading]="isSubmitting"
+                [disabled]="isSubmitting">
+              </app-button>
             </div>
           </div>
         </div>
