@@ -52,12 +52,12 @@
 *Focus: Integrating Generative AI, building Multi-Agent systems, and establishing AI orchestration.*
 
 ### AI Focus Areas:
-- [ ] Gen AI integration in the frontend platform
-- [ ] Python LangServe REST APIs for AI services
-- [ ] Gemini model integration
+- [x] Gen AI integration in the frontend platform
+- [x] Python REST APIs for AI services
+- [x] Gemini model integration
 - [ ] Multi AI agents implementation
 - [ ] AI Orchestrator setup
-- [ ] RAG Chatbot development (complete implementation)
+- [x] RAG Chatbot development (complete implementation)
 - [ ] Testing for AI agents, RAG pipeline, and AI generated text
 
 
