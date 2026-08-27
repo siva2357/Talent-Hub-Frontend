@@ -3,11 +3,18 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ContractDiaryService } from '../../../core/services/contract-diary.service';
+import { FileService } from '../../../core/services/file.service';
+import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
+
+import { InputField } from '../../../library/ui/components/input-field/input-field';
+import { Button } from '../../../library/ui/components/button/button';
+import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
+import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
 
 @Component({
   selector: 'app-create-phase',
   standalone: true,
-  imports: [RouterLink, CommonModule, ReactiveFormsModule],
+  imports: [RouterLink, CommonModule, ReactiveFormsModule, InputField, Button, FileUpload, FilePreview],
   templateUrl: './create-phase.html',
   styleUrl: './create-phase.css'
 })
@@ -24,6 +31,7 @@ export class CreatePhase implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private diaryService: ContractDiaryService,
+    private fileService: FileService,
     private fb: FormBuilder
   ) {
     this.initForm();
@@ -32,12 +40,12 @@ export class CreatePhase implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.contractId = params.get('id') || '';
-      
+
       // Check query params for phaseId
       this.route.queryParamMap.subscribe(queryParams => {
         this.phaseId = queryParams.get('phaseId');
         this.isEditMode = !!this.phaseId;
-        
+
         if (this.contractId) {
           this.fetchContractDetails();
         }
@@ -51,7 +59,8 @@ export class CreatePhase implements OnInit {
       deadline: ['', Validators.required],
       budget: [null, [Validators.required, Validators.min(1)]],
       deliverables: this.fb.array([]),
-      acceptanceCriteria: this.fb.array([])
+      acceptanceCriteria: this.fb.array([]),
+      clientAttachments: this.fb.array([])
     });
     this.addDeliverable();
     this.addCriteria();
@@ -63,6 +72,10 @@ export class CreatePhase implements OnInit {
 
   get acceptanceCriteria(): FormArray {
     return this.phaseForm.get('acceptanceCriteria') as FormArray;
+  }
+
+  get clientAttachments(): FormArray {
+    return this.phaseForm.get('clientAttachments') as FormArray;
   }
 
   addDeliverable(): void {
@@ -91,17 +104,50 @@ export class CreatePhase implements OnInit {
     this.phaseForm.reset();
     this.deliverables.clear();
     this.acceptanceCriteria.clear();
+    this.clientAttachments.clear();
     this.addDeliverable();
     this.addCriteria();
+  }
+
+  currentFile: File | null = null;
+  UploadBucket = UploadBucket;
+  UploadSection = UploadSection;
+
+  onFileSelected(file: File): void {
+    this.currentFile = file;
+  }
+
+  onUploadSuccess(url: string): void {
+    if (this.currentFile) {
+      this.clientAttachments.push(this.fb.group({
+        fileName: [this.currentFile.name],
+        fileUrl: [url],
+        fileType: [this.currentFile.type],
+        fileSize: [(this.currentFile.size / 1024 / 1024).toFixed(2) + ' MB']
+      }));
+      this.currentFile = null;
+    }
+  }
+
+  onUploadError(err: string): void {
+    console.error('File upload failed', err);
+    alert('Failed to upload file: ' + err);
+    this.currentFile = null;
+  }
+
+
+
+  removeAttachment(index: number): void {
+    this.clientAttachments.removeAt(index);
   }
 
   fetchContractDetails(): void {
     this.diaryService.getDiaryByContractId(this.contractId).subscribe({
       next: (res) => {
-        if(res.success && res.diary) {
+        if (res.success && res.diary) {
           this.diaryId = res.diary._id;
-          this.contract = res.diary.contractId; 
-          
+          this.contract = res.diary.contractId;
+
           if (this.isEditMode && this.phaseId) {
             const phase = res.diary.phases.find((p: any) => p._id === this.phaseId);
             if (phase) {
@@ -125,6 +171,18 @@ export class CreatePhase implements OnInit {
     // Clear initial arrays
     this.deliverables.clear();
     this.acceptanceCriteria.clear();
+    this.clientAttachments.clear();
+
+    if (phase.clientAttachments && phase.clientAttachments.length > 0) {
+      phase.clientAttachments.forEach((att: any) => {
+        this.clientAttachments.push(this.fb.group({
+          fileName: [att.fileName],
+          fileUrl: [att.fileUrl],
+          fileType: [att.fileType],
+          fileSize: [att.fileSize]
+        }));
+      });
+    }
 
     // In a real implementation we would patch the deliverables/criteria, 
     // but the backend only stores description right now for phase updates.
@@ -145,17 +203,18 @@ export class CreatePhase implements OnInit {
     const formVal = this.phaseForm.value;
     const payload = {
       name: formVal.phaseName,
-      description: "Phase details setup by client", 
+      description: "Phase details setup by client",
       amount: formVal.budget,
       deadline: formVal.deadline,
       deliverables: formVal.deliverables.filter((d: string) => d?.trim() !== ''),
-      acceptanceCriteria: formVal.acceptanceCriteria.filter((c: string) => c?.trim() !== '')
+      acceptanceCriteria: formVal.acceptanceCriteria.filter((c: string) => c?.trim() !== ''),
+      clientAttachments: formVal.clientAttachments
     };
 
     if (this.isEditMode && this.phaseId) {
       this.diaryService.updatePhase(this.diaryId, this.phaseId, payload).subscribe({
         next: (res) => {
-          if(res.success) {
+          if (res.success) {
             this.router.navigate(['/contract-progress', this.contractId]);
           } else {
             alert('Failed to update phase.');
@@ -166,7 +225,7 @@ export class CreatePhase implements OnInit {
     } else {
       this.diaryService.addPhase(this.diaryId, payload).subscribe({
         next: (res) => {
-          if(res.success) {
+          if (res.success) {
             this.router.navigate(['/contract-progress', this.contractId]);
           } else {
             alert('Failed to create phase.');

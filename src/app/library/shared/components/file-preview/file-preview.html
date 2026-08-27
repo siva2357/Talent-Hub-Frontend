@@ -36,188 +36,30 @@
 
 
 @if (mode === 'document') {
-
 <div class="document-preview">
-
+    @for (file of files; track $index) {
     <div class="file-list-item">
-
-        <div class="file-icon-box bg-pdf">
-            <i class="bi bi-file-earmark-pdf"></i>
-        </div>
-
-        <div class="file-info">
-            <div class="file-name">
-                Contract_Agreement.pdf
-            </div>
-
-            <div class="file-meta">
-                PDF Document &bull; 245 KB
-                <a href="#">View File</a>
-            </div>
-        </div>
-
-        <div class="file-actions">
-            <button class="btn-icon-light">
-                <i class="bi bi-download"></i>
-            </button>
-
-            <button class="btn-icon-light">
-                <i class="bi bi-x"></i>
-            </button>
-        </div>
-
-    </div>
-
-
-    <div class="file-list-item">
-
-        <div class="file-icon-box bg-word">
-            <i class="bi bi-file-earmark-word"></i>
-        </div>
-
-        <div class="file-info">
-            <div class="file-name">
-                Project_Proposal.docx
-            </div>
-
-            <div class="file-meta">
-                Word Document &bull; 1.2 MB
-                <a href="#">View File</a>
-            </div>
-        </div>
-
-        <div class="file-actions">
-            <button class="btn-icon-light">
-                <i class="bi bi-download"></i>
-            </button>
-
-            <button class="btn-icon-light">
-                <i class="bi bi-x"></i>
-            </button>
-        </div>
-
-    </div>
-
-
-    <div class="file-list-item">
-
-        <div class="file-icon-box bg-excel">
-            <i class="bi bi-file-earmark-excel"></i>
-        </div>
-
-        <div class="file-info">
-            <div class="file-name">
-                Budget_Plan.xlsx
-            </div>
-
-            <div class="file-meta">
-                Excel Spreadsheet &bull; 820 KB
-                <a href="#">View File</a>
-            </div>
-        </div>
-
-        <div class="file-actions">
-            <button class="btn-icon-light">
-                <i class="bi bi-download"></i>
-            </button>
-
-            <button class="btn-icon-light">
-                <i class="bi bi-x"></i>
-            </button>
-        </div>
-
-    </div>
-
-
-    <div class="file-list-item">
-
-        <div class="file-icon-box bg-ppt">
-            <i class="bi bi-file-earmark-ppt"></i>
-        </div>
-
-        <div class="file-info">
-            <div class="file-name">
-                Presentation.pptx
-            </div>
-
-            <div class="file-meta">
-                PowerPoint Presentation &bull; 3.4 MB
-                <a href="#">View File</a>
-            </div>
-        </div>
-
-        <div class="file-actions">
-            <button class="btn-icon-light">
-                <i class="bi bi-download"></i>
-            </button>
-
-            <button class="btn-icon-light">
-                <i class="bi bi-x"></i>
-            </button>
-        </div>
-
-    </div>
-
-
-    <div class="file-list-item">
-
-        <div class="file-icon-box bg-zip">
-            <i class="bi bi-file-earmark-zip"></i>
-        </div>
-
-        <div class="file-info">
-            <div class="file-name">
-                Resources.zip
-            </div>
-
-            <div class="file-meta">
-                ZIP Archive &bull; 12.5 MB
-                <a href="#">View File</a>
-            </div>
-        </div>
-
-        <div class="file-actions">
-            <button class="btn-icon-light">
-                <i class="bi bi-download"></i>
-            </button>
-
-            <button class="btn-icon-light">
-                <i class="bi bi-x"></i>
-            </button>
-        </div>
-
-    </div>
-
-
-    <div class="file-list-item">
-
         <div class="file-icon-box bg-generic">
             <i class="bi bi-file-earmark"></i>
         </div>
-
         <div class="file-info">
             <div class="file-name">
-                Document.pdf
+                {{ file.fileName || file.name || 'Document' }}
             </div>
-
             <div class="file-meta">
-                PDF Document &bull; 1.1 MB
-                <a href="#">View File</a>
+                {{ file.fileSize || file.size || '' }} &bull; 
+                <a [href]="file.fileUrl || file.url || '#'" target="_blank">View File</a>
             </div>
         </div>
-
         <div class="file-actions">
-            <button class="btn-icon-light">
-                <i class="bi bi-eye"></i>
+            <button class="btn-icon-light" (click)="downloadClicked.emit(file)" *ngIf="file.fileUrl || file.url">
+                <i class="bi bi-download"></i>
             </button>
-
-            <button class="btn-icon-light">
+            <button class="btn-icon-light" (click)="removeClicked.emit($index)">
                 <i class="bi bi-x"></i>
             </button>
         </div>
-
     </div>
-
+    }
 </div>
-
 }

@@ -1,4 +1,5 @@
-<div class="dashboard-container position-relative p-4">
+<div class="dashboard-container position-relative p-4"
+  [ngStyle]="{'min-height': (!isLoading && diary && !isFunded() && userRole === 'freelancer') ? '100vh' : 'auto'}">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -11,316 +12,240 @@
     </div>
   </div>
 
+  @if (!isLoading && diary && !isFunded() && userRole === 'freelancer') {
+  <!-- Separate Fund Blocker Screen -->
+  <div class="position-relative z-1 d-flex flex-column align-items-center justify-content-center"
+    style="min-height: 80vh;">
+    <div class="text-center p-5 bg-white rounded-4 shadow-lg border" style="max-width: 500px;">
+      <div class="mb-4">
+        <i class="bi bi-clock-history text-primary" style="font-size: 4rem;"></i>
+      </div>
+      <h3 class="fw-bold text-dark mb-3">Waiting for Client Funding</h3>
+      <p class="text-muted mb-4">The client is currently processing the escrow payment for this contract. Once the funds are secured, the project phases will be created and you can begin your work.</p>
+      <app-button label="Return to My Contracts" variant="primary" (clicked)="goToManageContracts()"></app-button>
+    </div>
+  </div>
+  } @else {
   <!-- Main Content Wrapper (Glassmorphism) -->
   <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
-    <!-- Header / Breadcrumbs -->
-    <div class="d-flex justify-content-between align-items-start mb-4">
-      <div>
-        <a routerLink="/my-contracts"
-          class="text-dark fw-bold text-decoration-none d-flex align-items-center gap-2 mb-2 fs-5">
-          <i class="bi bi-arrow-left"></i> Contract Diary
-        </a>
-        <div class="text-muted" style="font-size: 0.75rem;">
-          <span class="hover-text-primary cursor-pointer" routerLink="/my-contracts">My Contracts</span> <i
-            class="bi bi-chevron-right mx-1" style="font-size: 0.6rem;"></i>
-          <span class="text-dark fw-semibold">Contract Diary</span>
+
+    <!-- Header Section -->
+    <div class="mb-4">
+      <div class="d-flex align-items-center gap-3 mb-4">
+        <h1 class="fw-bold fs-3 mb-0 text-dark">{{ diary?.contractId?.contractTitle || 'Loading...' }}</h1>
+        <div style="text-transform: capitalize;">
+          <app-badge [label]="diary?.overallStatus || 'Active'" [variant]="getBadgeVariant(diary?.overallStatus)"
+            appearance="solid" [rounded]="true"></app-badge>
+        </div>
+      </div>
+
+      <!-- Metadata Row -->
+      <div class="d-flex flex-wrap gap-4 align-items-center mb-4">
+        <div class="d-flex flex-column pe-4 border-end">
+          <span class="text-muted d-block mb-1" style="font-size: 0.65rem;">Client</span>
+          <span class="fw-bold text-dark d-block" style="font-size: 0.8rem;">{{
+            diary?.clientId?.registrationDetails?.fullName || 'Client Name' }}</span>
+        </div>
+
+        <div class="d-flex flex-column pe-4 border-end">
+          <span class="text-muted d-block mb-1" style="font-size: 0.65rem;">Start Date</span>
+          <span class="fw-bold text-dark d-flex align-items-center gap-2" style="font-size: 0.8rem;">
+            <i class="bi bi-calendar3 text-muted"></i> {{ diary?.contractId?.contractStartDate | date:'MMM dd, yyyy' }}
+          </span>
+        </div>
+
+        <div class="d-flex flex-column">
+          <span class="text-muted d-block mb-1" style="font-size: 0.65rem;">End Date</span>
+          <span class="fw-bold text-dark d-flex align-items-center gap-2" style="font-size: 0.8rem;">
+            <i class="bi bi-calendar3 text-muted"></i> {{ diary?.contractId?.contractEndDate | date:'MMM dd, yyyy' }}
+          </span>
         </div>
       </div>
     </div>
 
-    <!-- Contract Overview Header -->
-    <div class="glass-card rounded-4 bg-white p-4 mb-4">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-          <span class="text-muted d-block fw-semibold mb-1" style="font-size: 0.75rem;">Contract</span>
-          <div class="d-flex align-items-center gap-3">
-            <h2 class="fs-5 fw-bold text-dark mb-0">{{ diary?.contractId?.contractTitle || 'Loading...' }}</h2>
-            <span class="badge bg-success bg-opacity-10 text-success rounded-pill fw-semibold px-3">Active</span>
-          </div>
-        </div>
-        <button class="btn btn-outline-primary fw-semibold bg-white border-primary border-opacity-50">View Contract
-          Details</button>
-      </div>
-
-      <div class="row g-4 border-top pt-4">
-        <div class="col-md-2 border-end border-light">
-          <div class="d-flex gap-2">
-            <div
-              class="rounded-circle bg-purple-soft text-purple d-flex justify-content-center align-items-center mt-1 flex-shrink-0"
-              style="width: 24px; height: 24px;"><i class="bi bi-person"></i></div>
-            <div>
-              <span class="d-block text-muted" style="font-size: 0.7rem;">Client</span>
-              <span class="fw-bold text-dark fs-6">{{ diary?.clientId?.registrationDetails?.fullName || 'N/A' }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-2 border-end border-light">
-          <div class="d-flex gap-2">
-            <div class="text-muted mt-1 flex-shrink-0"><i class="bi bi-calendar-event"></i></div>
-            <div>
-              <span class="d-block text-muted" style="font-size: 0.7rem;">Start Date</span>
-              <span class="fw-bold text-dark fs-6">{{ diary?.contractId?.contractStartDate | date:'MMM dd, yyyy'
-                }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-2 border-end border-light">
-          <div class="d-flex gap-2">
-            <div class="text-muted mt-1 flex-shrink-0"><i class="bi bi-calendar-x"></i></div>
-            <div>
-              <span class="d-block text-muted" style="font-size: 0.7rem;">End Date</span>
-              <span class="fw-bold text-dark fs-6">{{ diary?.contractId?.contractEndDate | date:'MMM dd, yyyy' }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 border-end border-light">
-          <div class="d-flex flex-column">
-            <span class="d-block text-muted mb-1" style="font-size: 0.7rem;">Contract Amount</span>
-            <span class="fw-bold text-dark fs-5">₹ {{ diary?.contractId?.estimatedBudget | number }}</span>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="d-flex flex-column">
-            <span class="d-block text-muted mb-1" style="font-size: 0.7rem;">Earned So Far</span>
-            <span class="fw-bold text-success fs-5">₹ {{ diary?.contractId?.spent | number }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Phase Summary Cards -->
+    <!-- Top Stat Cards -->
     <div class="row g-3 mb-4">
-      <!-- Total Phases -->
-      <div class="col">
-        <div class="card border border-light shadow-sm rounded-4 bg-white p-3 h-100">
-          <div class="d-flex gap-3 align-items-start mb-3">
-            <div
-              class="rounded-3 bg-purple-soft text-purple d-flex justify-content-center align-items-center flex-shrink-0"
-              style="width: 40px; height: 40px;"><i class="bi bi-journal-text fs-5"></i></div>
-            <div>
-              <span class="d-block text-muted fw-semibold" style="font-size: 0.7rem;">Total Phases</span>
-              <span class="fw-bold text-dark fs-4">{{ totalPhases }}</span>
-            </div>
-          </div>
-        </div>
+      @for (stat of stats; track stat.title) {
+      <div class="col-md-3">
+        <app-stat-card [stat]="stat"></app-stat-card>
       </div>
-      <!-- Completed -->
-      <div class="col">
-        <div
-          class="card shadow-sm rounded-4 bg-white p-3 h-100 border-0 border-bottom border-4 border-success position-relative overflow-hidden">
-          <div class="d-flex gap-3 align-items-start">
-            <div
-              class="rounded-3 bg-success bg-opacity-10 text-success d-flex justify-content-center align-items-center flex-shrink-0"
-              style="width: 40px; height: 40px;"><i class="bi bi-check-circle fs-5"></i></div>
-            <div>
-              <span class="d-block text-muted fw-semibold" style="font-size: 0.7rem;">Completed</span>
-              <span class="fw-bold text-dark fs-4">{{ completedPhases }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- In Progress -->
-      <div class="col">
-        <div
-          class="card shadow-sm rounded-4 bg-white p-3 h-100 border-0 border-bottom border-4 border-primary position-relative overflow-hidden">
-          <div class="d-flex gap-3 align-items-start">
-            <div
-              class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex justify-content-center align-items-center flex-shrink-0"
-              style="width: 40px; height: 40px;"><i class="bi bi-arrow-repeat fs-5"></i></div>
-            <div>
-              <span class="d-block text-muted fw-semibold" style="font-size: 0.7rem;">In Progress</span>
-              <span class="fw-bold text-dark fs-4">{{ inProgressPhases }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Not Started -->
-      <div class="col">
-        <div
-          class="card shadow-sm rounded-4 bg-white p-3 h-100 border-0 border-bottom border-4 border-secondary position-relative overflow-hidden">
-          <div class="d-flex gap-3 align-items-start">
-            <div
-              class="rounded-3 bg-secondary bg-opacity-10 text-secondary d-flex justify-content-center align-items-center flex-shrink-0"
-              style="width: 40px; height: 40px;"><i class="bi bi-clock fs-5"></i></div>
-            <div>
-              <span class="d-block text-muted fw-semibold" style="font-size: 0.7rem;">Not Started</span>
-              <span class="fw-bold text-dark fs-4">{{ notStartedPhases }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Pending Submissions -->
-      <div class="col">
-        <div
-          class="card shadow-sm rounded-4 bg-white p-3 h-100 border-0 border-bottom border-4 border-warning position-relative overflow-hidden bg-warning bg-opacity-10">
-          <div class="d-flex gap-3 align-items-start">
-            <div class="rounded-3 bg-warning text-white d-flex justify-content-center align-items-center flex-shrink-0"
-              style="width: 40px; height: 40px;"><i class="bi bi-upload fs-5"></i></div>
-            <div>
-              <span class="d-block text-warning-dark fw-semibold" style="font-size: 0.7rem;">Pending Submissions</span>
-              <span class="fw-bold text-dark fs-4">{{ pendingSubmissions }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      }
     </div>
 
-    <!-- Phases List Area -->
-    <div class="glass-card rounded-4 bg-white mb-4">
+    <!-- Main Content Split -->
+    <div class="row g-4">
+      <!-- Left Column (Tabs & Main Content) -->
+      <div class="col-lg-8">
 
-      <!-- Tab & Sort Header -->
-      <div class="d-flex justify-content-between align-items-center px-4 pt-3 border-bottom border-light">
-        <ul class="nav nav-tabs border-bottom-0" style="font-size: 0.85rem;">
-          <li class="nav-item">
-            <a class="nav-link active fw-bold text-primary border-0 border-bottom border-2 border-primary bg-transparent px-3 py-3"
-              href="#">All Phases</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-muted border-0 bg-transparent px-3 py-3 hover-text-primary" href="#">In Progress</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-muted border-0 bg-transparent px-3 py-3 hover-text-primary" href="#">Pending
-              Submission</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-muted border-0 bg-transparent px-3 py-3 hover-text-primary" href="#">Completed</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-muted border-0 bg-transparent px-3 py-3 hover-text-primary" href="#">Not Started</a>
-          </li>
-        </ul>
-        <div class="pb-2">
-          <select class="form-select form-select-sm text-muted border-light shadow-sm" style="font-size: 0.75rem;">
-            <option>Sort by: Deadline (Soonest)</option>
-          </select>
+        <!-- Project Phases -->
+        <div class="glass-card rounded-3 p-4 bg-white mb-4">
+          <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-1">Project Phases</h3>
+              <p class="text-muted small mb-0">Track progress of all contract phases</p>
+            </div>
+          </div>
+
+          <app-table [columns]="columns" [data]="diary?.phases" [loading]="isLoading"></app-table>
+
         </div>
+
       </div>
 
-      <!-- Table -->
-      <div class="table-responsive">
-        <table class="table align-middle mb-0" style="font-size: 0.8rem;">
-          <thead class="text-muted" style="font-size: 0.75rem; background-color: #fafbfc;">
-            <tr>
-              <th class="fw-semibold py-3 ps-4 border-bottom-0 w-25">Phase Details</th>
-              <th class="fw-semibold py-3 border-bottom-0">Deadline</th>
-              <th class="fw-semibold py-3 border-bottom-0">Budget</th>
-              <th class="fw-semibold py-3 border-bottom-0">Status</th>
-              <th class="fw-semibold py-3 border-bottom-0">Progress</th>
-              <th class="fw-semibold py-3 border-bottom-0">Next Milestone</th>
-              <th class="fw-semibold py-3 border-bottom-0 pe-4">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (phase of diary?.phases; track phase._id; let i = $index) {
-            <tr class="border-top border-light"
-              [class.opacity-75]="phase.status === 'pending' || phase.status === 'created'">
-              <td class="py-4 ps-4">
-                <div class="d-flex gap-3 align-items-start">
+      <!-- Right Column (Sidebar) -->
+      <div class="col-lg-4">
+        <div class="d-flex flex-column gap-4 h-100">
+
+          <!-- AI Contract Insights -->
+          <div class="glass-card rounded-3 p-4 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3 class="fs-6 fw-bold text-dark mb-0 d-flex align-items-center gap-2"
+                style="color: #4338ca !important;">
+                <i class="bi bi-stars"></i> AI Contract Insights
+              </h3>
+              <i class="bi bi-arrow-clockwise text-muted cursor-pointer"></i>
+            </div>
+
+            <div class="rounded-3 p-3 mb-3 d-flex gap-3 align-items-center"
+              style="background-color: #f0fdf4; border: 1px solid #bbf7d0;">
+              <div
+                class="rounded-circle bg-success bg-opacity-25 d-flex align-items-center justify-content-center text-success flex-shrink-0"
+                style="width: 40px; height: 40px;">
+                <i class="bi bi-shield-check fs-5"></i>
+              </div>
+              <div>
+                <span class="fw-bold text-success d-block fs-6 mb-0">Healthy</span>
+                <span class="text-muted small" style="font-size: 0.7rem;">This contract is on track</span>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between text-center px-2">
+              <div>
+                <span class="d-block fw-bold text-dark fs-6 d-flex justify-content-center gap-1"><i
+                    class="bi bi-clock text-warning"></i> 12</span>
+                <span class="text-muted" style="font-size: 0.65rem;">Days Remaining</span>
+              </div>
+              <div>
+                <span class="d-block fw-bold text-dark fs-6 d-flex justify-content-center gap-1"><i
+                    class="bi bi-pie-chart text-success"></i> 10%</span>
+                <span class="text-muted" style="font-size: 0.65rem;">Budget Left</span>
+              </div>
+              <div>
+                <span class="d-block fw-bold text-dark fs-6 d-flex justify-content-center gap-1"
+                  style="color: #a855f7 !important;"><i class="bi bi-list-task"></i> 2</span>
+                <span class="text-muted" style="font-size: 0.65rem;">Phases Pending</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upcoming Milestones -->
+          <div class="glass-card rounded-3 p-4 bg-white">
+            <h3 class="fs-6 fw-bold text-dark mb-4">Upcoming Milestones</h3>
+            <div class="text-center p-4 text-muted small">No milestones found.</div>
+          </div>
+
+          <!-- Recent Payments -->
+          <div class="glass-card rounded-3 p-4 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h3 class="fs-6 fw-bold text-dark mb-0">Recent Payments</h3>
+              <a href="#" class="text-primary text-decoration-none fw-bold" style="font-size: 0.75rem;">View All</a>
+            </div>
+
+            <div class="text-center p-4 text-muted small">No payments yet.</div>
+          </div>
+
+          <!-- Contract Participants -->
+          <div class="glass-card rounded-3 p-4 bg-white flex-grow-1">
+            <h3 class="fs-6 fw-bold text-dark mb-4">Contract Participants</h3>
+            <div class="d-flex flex-column gap-4 mb-4">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex gap-3 align-items-center">
                   <div
-                    class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0 mt-1"
-                    style="width: 40px; height: 40px;"><i class="bi bi-display fs-5"></i></div>
+                    class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="width: 36px; height: 36px;">{{ diary?.freelancerId?.registrationDetails?.fullName?.charAt(0)
+                    || 'F' }}</div>
                   <div>
-                    <h3 class="fs-6 fw-bold text-dark mb-1">{{ i + 1 }}. {{ phase.name }}</h3>
-                    <p class="text-muted mb-0" style="font-size: 0.7rem; line-height: 1.4;">{{ phase.description || 'No
-                      description provided.' }}</p>
+                    <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">{{
+                      diary?.freelancerId?.registrationDetails?.fullName || 'Freelancer' }}</span>
+                    <span class="text-muted" style="font-size: 0.65rem;">Freelancer</span>
                   </div>
                 </div>
-              </td>
-              <td class="py-4">
-                <div class="d-flex align-items-center gap-2 mb-1">
-                  <i class="bi bi-calendar-event text-muted"></i>
-                  <span class="fw-bold text-dark">{{ phase.deadline | date:'MMM dd, yyyy' }}</span>
-                </div>
-              </td>
-              <td class="py-4 fw-bold text-dark fs-6">₹{{ phase.amount | number }}</td>
-              <td class="py-4"><span class="badge bg-primary bg-opacity-10 text-primary rounded px-2 py-1">{{
-                  phase.status | titlecase }}</span></td>
-              <td class="py-4">
-                <div class="d-flex align-items-center gap-2">
-                  <span class="fw-bold text-dark" style="font-size: 0.7rem;">{{ getPhaseProgress(phase.status)
-                    }}%</span>
-                  <div class="progress flex-grow-1" style="height: 6px;">
-                    <div class="progress-bar bg-primary" role="progressbar"
-                      [style.width]="getPhaseProgress(phase.status) + '%'"></div>
+                <span *ngIf="userRole === 'freelancer'"
+                  class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-2 py-1"
+                  style="font-size: 0.65rem;">You</span>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex gap-3 align-items-center">
+                  <div
+                    class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+                    style="width: 36px; height: 36px;">{{ diary?.clientId?.registrationDetails?.fullName?.charAt(0) ||
+                    'C' }}</div>
+                  <div>
+                    <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">{{
+                      diary?.clientId?.registrationDetails?.fullName || 'Client' }}</span>
+                    <span class="text-muted" style="font-size: 0.65rem;">Client</span>
                   </div>
                 </div>
-              </td>
-              <td class="py-4 text-muted" style="font-size: 0.7rem;">
-                {{ phase.status === 'approved' ? 'Completed' : 'Pending Action' }}
-              </td>
-              <td class="py-4 pe-4">
-                <div class="d-flex justify-content-end">
-                  <a [routerLink]="['/contract-phase-details', phase._id]" [queryParams]="{contractId: contractId}"
-                    class="btn btn-primary btn-sm text-white rounded d-flex align-items-center gap-2 px-3 fw-bold">
-                    <i class="bi bi-eye"></i> View details
-                  </a>
-                </div>
-              </td>
-            </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
+                <span *ngIf="userRole === 'client'"
+                  class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-2 py-1"
+                  style="font-size: 0.65rem;">You</span>
+              </div>
+            </div>
+            <app-button label="Send Message" variant="outline-primary" [block]="true" class="mt-auto">
+              <i class="bi bi-send me-2"></i>
+            </app-button>
+          </div>
 
-    <!-- Recent Activity -->
-    <div class="glass-card rounded-4 bg-white p-4">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fs-6 fw-bold text-dark mb-0">Recent Activity</h3>
-        <a href="#" class="text-primary fw-semibold text-decoration-none" style="font-size: 0.75rem;">View All Activity
-          <i class="bi bi-arrow-right"></i></a>
-      </div>
-
-      <div class="row g-4 border-top pt-3">
-        <div class="col-md-3 border-end border-light">
-          <div class="d-flex gap-3 align-items-center">
-            <div
-              class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 32px; height: 32px;"><i class="bi bi-upload"></i></div>
-            <div style="font-size: 0.75rem;">
-              <span class="text-muted d-block">You submitted work for</span>
-              <span class="fw-bold text-dark d-block">Frontend - Product Listing Page</span>
-              <span class="text-muted" style="font-size: 0.65rem;">2 hours ago</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 border-end border-light">
-          <div class="d-flex gap-3 align-items-center">
-            <div
-              class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 32px; height: 32px;"><i class="bi bi-chat-square-text"></i></div>
-            <div style="font-size: 0.75rem;">
-              <span class="text-muted d-block">Client commented on your<br>submission</span>
-              <span class="text-muted" style="font-size: 0.65rem;">5 hours ago</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 border-end border-light">
-          <div class="d-flex gap-3 align-items-center">
-            <div
-              class="rounded-circle bg-warning bg-opacity-10 text-warning-dark d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 32px; height: 32px;"><i class="bi bi-journal-plus"></i></div>
-            <div style="font-size: 0.75rem;">
-              <span class="text-muted d-block">Phase "User Authentication Module"<br>was created</span>
-              <span class="text-muted" style="font-size: 0.65rem;">1 day ago</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="d-flex gap-3 align-items-center">
-            <div
-              class="rounded-circle bg-purple-soft text-purple d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 32px; height: 32px;"><i class="bi bi-currency-rupee"></i></div>
-            <div style="font-size: 0.75rem;">
-              <span class="text-muted d-block">Received payment of</span>
-              <span class="fw-bold text-dark d-block fs-6">₹ 25,000</span>
-              <span class="text-muted" style="font-size: 0.65rem;">3 days ago</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>
-
   </div>
-
+  }
 </div>
+
+
+
+<!-- Table Cell Templates -->
+<ng-template #noTemplate let-row="row" let-i="index">
+  <div class="ps-4">
+    <div
+      class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center fw-bold shadow-sm"
+      style="width: 32px; height: 32px; font-size: 0.8rem;">
+      {{ (diary?.phases?.indexOf(row) || 0) + 1 }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #phaseDetailsTemplate let-row="row">
+  <h6 class="fw-bold mb-1 small text-dark">{{ row.name }}</h6>
+</ng-template>
+
+<ng-template #statusTemplate let-row="row">
+  <div class="text-center" style="text-transform: capitalize;">
+    <app-badge [label]="row.status" [variant]="getBadgeVariant(row.status)" appearance="outline"
+      [rounded]="true"></app-badge>
+  </div>
+</ng-template>
+
+<ng-template #budgetTemplate let-row="row">
+  <span class="fw-bold text-dark" style="font-size: 0.8rem;">₹{{ row.amount | number }}</span>
+</ng-template>
+
+<ng-template #dueDateTemplate let-row="row">
+  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">{{ row.deadline | date:'MMM dd, yyyy' }}</span>
+</ng-template>
+
+<ng-template #actionTemplate let-row="row">
+  <div class="dropdown text-center">
+    <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown"
+      aria-expanded="false" data-bs-display="static">
+      <i class="bi bi-three-dots"></i>
+    </button>
+    <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none" style="min-width: auto;">
+      <app-dropdown [items]="getDropdownItems(row)" (itemSelected)="onDropdownAction($event, row)" class="d-block"
+        style="position: relative;">
+      </app-dropdown>
+    </div>
+  </div>
+</ng-template>

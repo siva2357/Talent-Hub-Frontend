@@ -3,38 +3,44 @@ import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PortfolioService } from '../../../core/services/portfolio.service';
-import { FileService } from '../../../core/services/file.service';
 import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
 import { ProjectTypeEnum } from '../../../core/enums/portfolio.enum';
+import { InputField, InputOption } from '../../../library/ui/components/input-field/input-field';
+import { Button } from '../../../library/ui/components/button/button';
+import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
+import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
 
 @Component({
   selector: 'app-create-portfolio',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule, CommonModule],
+  imports: [RouterModule, ReactiveFormsModule, CommonModule, InputField, Button, FilePreview, FileUpload],
   templateUrl: './create-portfolio.html',
   styleUrl: './create-portfolio.css'
 })
 export class CreatePortfolio implements OnInit {
   portfolioForm!: FormGroup;
   projectTypes = Object.values(ProjectTypeEnum);
+  projectTypeOptions: InputOption[] = [];
 
-  selectedFiles: File[] = [];
   previews: string[] = [];
 
   isSubmitting = false;
-  uploadProgress = 0;
   portfolioId: string | null = null;
   isEditMode = false;
+
+  UploadBucket = UploadBucket;
+  UploadSection = UploadSection;
 
   constructor(
     private fb: FormBuilder,
     private portfolioService: PortfolioService,
-    private fileService: FileService,
     private router: Router,
     private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
+    this.projectTypeOptions = this.projectTypes.map(pt => ({ label: pt, value: pt }));
+
     this.portfolioForm = this.fb.group({
       title: ['', [Validators.required]],
       projectType: ['', [Validators.required]],
@@ -43,7 +49,7 @@ export class CreatePortfolio implements OnInit {
       endDate: [''],
       description: ['', [Validators.required]],
       projectUrl: [''],
-      tags: ['']
+      tags: ['', [Validators.required]]
     });
 
     this.route.paramMap.subscribe(params => {
@@ -55,6 +61,11 @@ export class CreatePortfolio implements OnInit {
     });
   }
 
+  isInvalid(controlName: string): boolean {
+    const control = this.portfolioForm.get(controlName);
+    return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+
   loadPortfolioData(id: string) {
     this.portfolioService.getPortfolioById(id).subscribe({
       next: (res) => {
@@ -64,63 +75,30 @@ export class CreatePortfolio implements OnInit {
             title: p.title,
             projectType: p.projectType,
             role: p.role,
-            startDate: p.startDate ? new Date(p.startDate).toISOString().split('T')[0] : '',
-            endDate: p.endDate ? new Date(p.endDate).toISOString().split('T')[0] : '',
+            startDate: p.startDate ? new Date(p.startDate).toISOString().substring(0, 10) : '',
+            endDate: p.endDate ? new Date(p.endDate).toISOString().substring(0, 10) : '',
             description: p.description,
             projectUrl: p.projectUrl,
-            tags: p.tags ? p.tags.join(', ') : ''
+            tags: p.tags.join(', ')
           });
-          if (p.media && p.media.length > 0) {
-            this.previews = p.media.map((m: any) => m.url);
-            // We aren't fully re-constructing File objects for existing media 
-            // since they are already uploaded. We might need logic to handle mixed 
-            // existing and new media, but for now we skip re-uploading existing.
-          }
+
+          this.previews = p.media.map((m: any) => m.url);
         }
       },
       error: (err) => console.error('Error fetching portfolio for edit', err)
     });
   }
 
-  onFileSelected(event: any) {
-    const files = Array.from(event.target.files) as File[];
-    this.addFiles(files);
+  onUploadComplete(url: string) {
+    this.previews = [url];
   }
 
-  onDragOver(event: any) {
-    event.preventDefault();
-  }
-
-  onDrop(event: any) {
-    event.preventDefault();
-    const files = Array.from(event.dataTransfer.files) as File[];
-    this.addFiles(files);
-  }
-
-  addFiles(files: File[]) {
-    if (this.selectedFiles.length + files.length > 6) {
-      alert('You can only upload up to 6 files.');
-      return;
-    }
-
-    files.forEach(file => {
-      // Allow only image or video
-      if (!file.type.match(/image\/*|video\/*/)) {
-        return;
-      }
-      this.selectedFiles.push(file);
-
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.previews.push(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    });
+  onUploadError(err: string) {
+    alert('Upload failed: ' + err);
   }
 
   removeFile(index: number) {
-    this.selectedFiles.splice(index, 1);
-    this.previews.splice(index, 1);
+    this.previews = [];
   }
 
   async onSubmit() {
@@ -132,22 +110,11 @@ export class CreatePortfolio implements OnInit {
     this.isSubmitting = true;
 
     try {
-      // 1. Upload files
-      const media = [];
-      for (const file of this.selectedFiles) {
-        const response = await this.fileService.uploadFile(
-          file,
-          UploadBucket.FreelancerData,
-          UploadSection.Portfolio
-        ).toPromise();
-
-        if (response && response.success) {
-          media.push({
-            mediaType: file.type.startsWith('video') ? 'video' : 'image',
-            url: response.url
-          });
-        }
-      }
+      // 1. Gather media from previews
+      const media = this.previews.map(url => ({
+        mediaType: url.match(/\.(mp4|webm|mov)$/i) ? 'video' : 'image',
+        url: url
+      }));
 
       // 2. Prepare payload
       const formValue = this.portfolioForm.value;
@@ -174,7 +141,7 @@ export class CreatePortfolio implements OnInit {
         await this.portfolioService.createPortfolio(payload).toPromise();
       }
 
-      this.router.navigate(['/freelancer/portfolio']);
+      this.router.navigate(['/portfolio']);
 
     } catch (error) {
       console.error('Error creating portfolio', error);
@@ -183,5 +150,7 @@ export class CreatePortfolio implements OnInit {
       this.isSubmitting = false;
     }
   }
+
 }
+
 

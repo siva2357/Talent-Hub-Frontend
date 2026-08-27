@@ -40,6 +40,7 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('statusTemplate', { static: true }) statusTemplate!: TemplateRef<any>;
   @ViewChild('createdAtTemplate', { static: true }) createdAtTemplate!: TemplateRef<any>;
   @ViewChild('spentTemplate', { static: true }) spentTemplate!: TemplateRef<any>;
+  @ViewChild('feedbackStatusTemplate', { static: true }) feedbackStatusTemplate!: TemplateRef<any>;
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
 
   columns: TableColumn[] = [
@@ -54,6 +55,7 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
     { field: 'spent', headerName: 'Spent' },
     { field: 'funded', headerName: 'Funds Status' },
     { field: 'status', headerName: 'Status' },
+    { field: 'feedbackStatus', headerName: 'Feedback Status' },
     { field: 'actions', headerName: 'Actions' }
   ];
 
@@ -84,6 +86,10 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
       { label: 'Edit', value: 'edit', icon: 'bi bi-pencil' }
     ];
 
+    if (row.status?.toLowerCase() === 'completed' && !(row as any).feedbackSubmitted) {
+      items.push({ label: 'Submit Feedback', value: 'feedback', icon: 'bi bi-star' });
+    }
+
     if (!this.isFullyFunded(row)) {
       items.push({ label: 'Fund Contract', value: 'fund', icon: 'bi bi-credit-card' });
     }
@@ -108,6 +114,9 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
       case 'fund':
         this.fundContract(row);
         break;
+      case 'feedback':
+        this.router.navigate(['/submit-feedback', row._id]);
+        break;
       case 'delete':
         this.deleteContract(row._id);
         break;
@@ -124,7 +133,9 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
       this.columns[8].cellTemplate = this.spentTemplate;
       this.columns[9].cellTemplate = this.fundsTemplate;
       this.columns[10].cellTemplate = this.statusTemplate;
-      this.columns[11].cellTemplate = this.actionsTemplate;
+      // feedbackStatus template needs to be created in HTML and referenced
+      this.columns[11].cellTemplate = (this as any).feedbackStatusTemplate;
+      this.columns[12].cellTemplate = this.actionsTemplate;
     });
   }
 

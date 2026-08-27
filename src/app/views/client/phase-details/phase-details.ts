@@ -4,11 +4,16 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ContractDiaryService } from '../../../core/services/contract-diary.service';
 
 import { FormsModule } from '@angular/forms';
+import { Button } from '../../../library/ui/components/button/button';
+import { Badge } from '../../../library/ui/components/badge/badge';
+import { InputField } from '../../../library/ui/components/input-field/input-field';
+import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
+import { Timeline, TimelineStep } from '../../../library/shared/components/timeline/timeline';
 
 @Component({
   selector: 'app-phase-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, Button, Badge, InputField, FilePreview, Timeline],
   templateUrl: './phase-details.html',
   styleUrl: './phase-details.css'
 })
@@ -28,7 +33,7 @@ export class PhaseDetails implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private diaryService: ContractDiaryService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -51,7 +56,7 @@ export class PhaseDetails implements OnInit {
           this.diaryId = this.diary._id;
           this.phase = this.diary.phases.find((p: any) => p._id === this.phaseId);
           if (!this.phase) {
-             this.error = 'Phase not found.';
+            this.error = 'Phase not found.';
           }
         } else {
           this.error = res.message || 'Failed to load details.';
@@ -96,7 +101,7 @@ export class PhaseDetails implements OnInit {
 
   onReviewPhase(action: 'approve' | 'request-changes') {
     if (!this.diaryId || !this.phase?._id) return;
-    
+
     this.isReviewing = true;
     const payload = {
       action: action,
@@ -120,90 +125,67 @@ export class PhaseDetails implements OnInit {
     });
   }
 
-  get timelineEvents() {
+  get mappedTimelineSteps(): TimelineStep[] {
     if (!this.phase) return [];
-    
-    // We construct a dynamic timeline based on the phase status
-    // The typical flow: created -> in-progress -> submitted -> under-review -> approved
-    const events = [];
-    
-    // Created
-    events.push({
-      title: 'Phase Created',
-      date: this.phase.createdAt || new Date(),
-      status: 'completed',
-      by: 'System'
-    });
+
+    const events: TimelineStep[] = [];
 
     const statusMap: Record<string, number> = {
+      'pending': 0,
       'created': 0,
       'in-progress': 1,
+      'overdue': 1,
       'submitted': 2,
-      'under-review': 3,
-      'revision-requested': 4,
-      'approved': 5,
-      'completed': 5
+      'changes-requested': 3,
+      'revision-requested': 3,
+      'approved': 4,
+      'completed': 4
     };
-    
+
     const currentStatusLevel = statusMap[this.phase.status?.toLowerCase()] || 0;
 
-    // Started
-    if (currentStatusLevel >= 1) {
-      events.push({
-        title: 'Phase Started',
-        date: this.phase.updatedAt || new Date(),
-        status: currentStatusLevel > 1 ? 'completed' : 'current',
-        by: 'Freelancer'
-      });
-    }
+    // 1. Created
+    events.push({
+      title: 'Phase Created',
+      description: 'by System',
+      status: 'completed'
+    });
 
-    // Submitted
-    if (currentStatusLevel >= 2) {
-      events.push({
-        title: 'Phase Submitted',
-        date: this.phase.updatedAt || new Date(),
-        status: currentStatusLevel > 2 ? 'completed' : 'current',
-        by: 'Freelancer'
-      });
-    }
+    // 2. Started (In Progress)
+    events.push({
+      title: 'Phase Started',
+      description: 'by Freelancer',
+      status: currentStatusLevel > 1 ? 'completed' : (currentStatusLevel === 1 ? 'active' : 'upcoming')
+    });
 
-    // Under Review
-    if (currentStatusLevel >= 3 && currentStatusLevel !== 4) {
-      events.push({
-        title: 'Under Review',
-        date: this.phase.updatedAt || new Date(),
-        status: currentStatusLevel > 3 ? 'completed' : 'current',
-        by: 'Client'
-      });
-    }
-    
-    // Revision
-    if (currentStatusLevel === 4) {
-      events.push({
-        title: 'Revision Requested',
-        date: this.phase.updatedAt || new Date(),
-        status: 'current',
-        by: 'Client'
-      });
-    }
+    // 3. Submitted
+    events.push({
+      title: 'Phase Submitted',
+      description: 'by Freelancer',
+      status: currentStatusLevel > 2 ? 'completed' : (currentStatusLevel === 2 ? 'completed' : 'upcoming')
+    });
 
-    // Approved
-    if (currentStatusLevel >= 5) {
+    // 4. Under Review / Changes Requested
+    if (currentStatusLevel === 3) {
       events.push({
-        title: 'Approved',
-        date: this.phase.updatedAt || new Date(),
-        status: 'completed',
-        by: 'Client'
+        title: 'Changes Requested',
+        description: 'by Client',
+        status: 'active'
       });
     } else {
-       // Add pending approved
-       events.push({
-        title: 'Approved',
-        date: null,
-        status: 'pending',
-        by: 'Client'
+      events.push({
+        title: 'Under Review',
+        description: 'by Client',
+        status: currentStatusLevel >= 4 ? 'completed' : (currentStatusLevel === 2 ? 'active' : 'upcoming')
       });
     }
+
+    // 5. Approved
+    events.push({
+      title: 'Approved',
+      description: currentStatusLevel >= 4 ? 'by Client' : 'Pending',
+      status: currentStatusLevel >= 4 ? 'completed' : 'upcoming'
+    });
 
     return events;
   }

@@ -2,14 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ContractDiaryService } from '../../../core/services/contract-diary.service';
-import { FileService } from '../../../core/services/file.service';
-import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
+
 import { FormsModule } from '@angular/forms';
+import { Button } from '../../../library/ui/components/button/button';
+import { Badge } from '../../../library/ui/components/badge/badge';
+import { InputField } from '../../../library/ui/components/input-field/input-field';
+import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
+import { Timeline, TimelineStep } from '../../../library/shared/components/timeline/timeline';
+import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
+import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
 
 @Component({
   selector: 'app-contract-phase-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, Button, Badge, InputField, FilePreview, Timeline, FileUpload],
   templateUrl: './contract-phase-details.html',
   styleUrl: './contract-phase-details.css'
 })
@@ -21,17 +27,18 @@ export class ContractPhaseDetails implements OnInit {
   phase: any = null;
   isLoading: boolean = true;
   error: string | null = null;
-  isSubmitting: boolean = false;
 
-  // Form
+  // Freelancer specific properties
   freelancerNote: string = '';
-  attachments: { fileUrl: string; fileName: string; fileSize: string }[] = [];
+  submissionAttachments: any[] = [];
+  isSubmitting: boolean = false;
+  UploadBucket = UploadBucket;
+  UploadSection = UploadSection;
 
   constructor(
     private route: ActivatedRoute,
-    private diaryService: ContractDiaryService,
-    private fileService: FileService
-  ) {}
+    private diaryService: ContractDiaryService
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -54,7 +61,7 @@ export class ContractPhaseDetails implements OnInit {
           this.diaryId = this.diary._id;
           this.phase = this.diary.phases.find((p: any) => p._id === this.phaseId);
           if (!this.phase) {
-             this.error = 'Phase not found.';
+            this.error = 'Phase not found.';
           }
         } else {
           this.error = res.message || 'Failed to load details.';
@@ -69,190 +76,115 @@ export class ContractPhaseDetails implements OnInit {
     });
   }
 
-  onFileSelected(event: any): void {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      this.isSubmitting = true; // Use submitting flag to show activity
-      let uploadedCount = 0;
-      
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        
-        this.fileService.uploadFile(
-          file, 
-          UploadBucket.FreelancerData, 
-          UploadSection.ContractFiles
-        ).subscribe({
-          next: (res) => {
-            if (res.success) {
-              const sizeInMb = (file.size / (1024 * 1024)).toFixed(2);
-              this.attachments.push({
-                fileUrl: res.url,
-                fileName: file.name,
-                fileSize: `${sizeInMb} MB`
-              });
-            }
-            uploadedCount++;
-            if (uploadedCount === files.length) {
-               this.isSubmitting = false;
-               event.target.value = ''; // Reset input
-            }
-          },
-          error: (err) => {
-            console.error('File upload error:', err);
-            uploadedCount++;
-            if (uploadedCount === files.length) {
-               this.isSubmitting = false;
-               event.target.value = '';
-            }
-          }
-        });
-      }
-    }
-  }
-
-  removeAttachment(index: number) {
-    this.attachments.splice(index, 1);
-  }
-
-  startPhase() {
-    if (!this.diaryId || !this.phaseId) return;
-    this.isSubmitting = true;
-    this.diaryService.startPhase(this.diaryId, this.phaseId).subscribe({
-      next: (res) => {
-        this.isSubmitting = false;
-        if (res.success) {
-          this.phase = res.phase;
-        }
-      },
-      error: (err) => {
-        this.isSubmitting = false;
-        console.error('Error starting phase', err);
-      }
-    });
-  }
-
-  submitPhase() {
-    if (!this.diaryId || !this.phaseId) return;
-    this.isSubmitting = true;
-    const payload = {
-      freelancerNote: this.freelancerNote,
-      attachments: this.attachments
-    };
-    this.diaryService.submitPhase(this.diaryId, this.phaseId, payload).subscribe({
-      next: (res) => {
-        this.isSubmitting = false;
-        if (res.success) {
-          this.phase = res.phase;
-          this.freelancerNote = '';
-          this.attachments = [];
-        }
-      },
-      error: (err) => {
-        this.isSubmitting = false;
-        console.error('Error submitting phase', err);
-      }
-    });
-  }
-
   get latestRevision() {
     if (!this.phase || !this.phase.revisions || this.phase.revisions.length === 0) return null;
     return this.phase.revisions[this.phase.revisions.length - 1];
   }
 
-  get phaseProgress() {
-    if (!this.phase) return 0;
-    const statusMap: Record<string, number> = {
-      'created': 10,
-      'pending': 10,
-      'in-progress': 40,
-      'submitted': 70,
-      'under-review': 75,
-      'revision-requested': 60,
-      'changes-requested': 60,
-      'approved': 100,
-      'completed': 100
-    };
-    return statusMap[this.phase.status?.toLowerCase()] || 0;
+  get amountReleased() {
+    return this.phase?.status === 'approved' ? (this.phase.amount || 0) : 0;
   }
 
-  get timelineEvents() {
-    if (!this.phase) return [];
-    
-    const events = [];
-    
-    events.push({
-      title: 'Phase Created',
-      date: this.phase.createdAt || new Date(),
-      status: 'completed',
-      by: 'System'
+  get remainingAmount() {
+    return (this.phase?.amount || 0) - this.amountReleased;
+  }
+
+  onFileUpload(url: string) {
+    this.submissionAttachments.push({ fileUrl: url, fileName: url.split('/').pop() || 'attachment' });
+  }
+
+  removeAttachment(index: number) {
+    this.submissionAttachments.splice(index, 1);
+  }
+
+  getFileName(file: any) {
+    return file.fileName || file.name || file.fileUrl?.split('/').pop() || file.url?.split('/').pop() || 'attachment';
+  }
+
+  submitPhaseWork(): void {
+    if (!this.diaryId || !this.phase?._id) return;
+    this.isSubmitting = true;
+    const payload = {
+      freelancerNote: this.freelancerNote,
+      attachments: this.submissionAttachments
+    };
+
+    this.diaryService.submitPhase(this.diaryId, this.phase._id, payload).subscribe({
+      next: (res) => {
+        this.isSubmitting = false;
+        if (res.success) {
+          this.phase = res.phase;
+          this.freelancerNote = '';
+        }
+      },
+      error: (err) => {
+        this.isSubmitting = false;
+        console.error('Error submitting phase:', err);
+      }
     });
+  }
+
+  get mappedTimelineSteps(): TimelineStep[] {
+    if (!this.phase) return [];
+
+    const events: TimelineStep[] = [];
 
     const statusMap: Record<string, number> = {
-      'created': 0,
       'pending': 0,
+      'created': 0,
       'in-progress': 1,
+      'overdue': 1,
       'submitted': 2,
-      'under-review': 3,
-      'revision-requested': 4,
-      'changes-requested': 4,
-      'approved': 5,
-      'completed': 5
+      'changes-requested': 3,
+      'revision-requested': 3,
+      'approved': 4,
+      'completed': 4
     };
-    
+
     const currentStatusLevel = statusMap[this.phase.status?.toLowerCase()] || 0;
 
-    if (currentStatusLevel >= 1) {
-      events.push({
-        title: 'Work Started',
-        date: this.phase.updatedAt || new Date(),
-        status: currentStatusLevel > 1 ? 'completed' : 'current',
-        by: 'You'
-      });
-    }
+    // 1. Created
+    events.push({
+      title: 'Phase Created',
+      description: 'by System',
+      status: 'completed'
+    });
 
-    if (currentStatusLevel >= 2) {
-      events.push({
-        title: 'Work Submitted',
-        date: this.phase.updatedAt || new Date(),
-        status: currentStatusLevel > 2 ? 'completed' : 'current',
-        by: 'You'
-      });
-    }
+    // 2. Started (In Progress)
+    events.push({
+      title: 'Phase Started',
+      description: 'by Freelancer',
+      status: currentStatusLevel > 1 ? 'completed' : (currentStatusLevel === 1 ? 'active' : 'upcoming')
+    });
 
-    if (currentStatusLevel >= 3 && currentStatusLevel !== 4) {
-      events.push({
-        title: 'Under Review',
-        date: this.phase.updatedAt || new Date(),
-        status: currentStatusLevel > 3 ? 'completed' : 'current',
-        by: 'Client'
-      });
-    }
-    
-    if (currentStatusLevel === 4) {
-      events.push({
-        title: 'Revision Requested',
-        date: this.phase.updatedAt || new Date(),
-        status: 'current',
-        by: 'Client'
-      });
-    }
+    // 3. Submitted
+    events.push({
+      title: 'Phase Submitted',
+      description: 'by Freelancer',
+      status: currentStatusLevel > 2 ? 'completed' : (currentStatusLevel === 2 ? 'completed' : 'upcoming')
+    });
 
-    if (currentStatusLevel >= 5) {
+    // 4. Under Review / Changes Requested
+    if (currentStatusLevel === 3) {
       events.push({
-        title: 'Approved',
-        date: this.phase.updatedAt || new Date(),
-        status: 'completed',
-        by: 'Client'
+        title: 'Changes Requested',
+        description: 'by Client',
+        status: 'active'
       });
     } else {
-       events.push({
-        title: 'Approved',
-        date: null,
-        status: 'pending',
-        by: 'Client'
+      events.push({
+        title: 'Under Review',
+        description: 'by Client',
+        status: currentStatusLevel >= 4 ? 'completed' : (currentStatusLevel === 2 ? 'active' : 'upcoming')
       });
     }
+
+    // 5. Approved
+    events.push({
+      title: 'Approved',
+      description: currentStatusLevel >= 4 ? 'by Client' : 'Pending',
+      status: currentStatusLevel >= 4 ? 'completed' : 'upcoming'
+    });
 
     return events;
   }

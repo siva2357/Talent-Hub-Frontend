@@ -1,4 +1,4 @@
-<div class="dashboard-container position-relative p-4">
+<div class="dashboard-container position-relative px-5">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -13,210 +13,83 @@
 
   <!-- Main Content Wrapper (Glassmorphism) -->
   <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
-  
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h1 class="fw-bold fs-3 mb-1 text-dark d-flex align-items-center gap-2">My Professional Portfolio <i class="bi bi-star-fill text-primary" style="font-size: 1rem; padding: 4px; border-radius: 50%; background-color: rgba(13, 110, 253, 0.1);"></i></h1>
-      <p class="text-muted small mb-0">Showcase your best work, projects, and achievements to potential clients & recruiters.</p>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="fw-bold fs-3 mb-1 text-dark d-flex align-items-center gap-2">My Professional Portfolio <i
+            class="bi bi-star-fill text-danger"
+            style="font-size: 1rem; padding: 4px; border-radius: 50%; background-color: rgba(220, 53, 69, 0.1);"></i>
+        </h1>
+        <p class="text-muted small mb-0">Showcase your best work, projects, and achievements to potential clients &
+          recruiters.</p>
+      </div>
+      <app-button variant="outline-primary" label="Add New Project" (clicked)="navigateToAdd()">
+        <i class="bi bi-plus me-1"></i>
+      </app-button>
     </div>
-    <button routerLink="/create-portfolio" class="btn btn-primary rounded-pill fw-semibold shadow-sm fw-bold d-flex align-items-center gap-2 px-3 shadow-sm" style="font-size: 0.85rem;"><i class="bi bi-plus"></i> Add New Project</button>
+
+
+    <app-table [data]="portfolios" [columns]="columns" [loading]="isLoading"
+      emptyMessage="You haven't added any projects to your portfolio yet."></app-table>
+
+
   </div>
 
-  <!-- Top Metric Cards -->
-  <div class="row g-3 mb-4">
-    <div class="col">
-      <div class="card border border-light shadow-sm rounded-4 bg-white p-3 h-100 d-flex flex-row align-items-center gap-3">
-        <div class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px;"><i class="bi bi-briefcase fs-4"></i></div>
-        <div>
-          <span class="d-block text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">TOTAL PROJECTS</span>
-          <span class="fw-bold text-dark fs-4 d-block lh-1 mb-1">12</span>
-          <span class="text-muted" style="font-size: 0.7rem;">All projects</span>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card border border-light shadow-sm rounded-4 bg-white p-3 h-100 d-flex flex-row align-items-center gap-3">
-        <div class="rounded-3 bg-success bg-opacity-10 text-success d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px;"><i class="bi bi-check-circle fs-4"></i></div>
-        <div>
-          <span class="d-block text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">COMPLETED PROJECTS</span>
-          <span class="fw-bold text-dark fs-4 d-block lh-1 mb-1">8</span>
-          <span class="text-muted" style="font-size: 0.7rem;">66% completed</span>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card border border-light shadow-sm rounded-4 bg-white p-3 h-100 d-flex flex-row align-items-center gap-3">
-        <div class="rounded-3 bg-purple-soft text-purple d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px;"><i class="bi bi-eye fs-4"></i></div>
-        <div>
-          <span class="d-block text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">TOTAL VIEWS</span>
-          <span class="fw-bold text-dark fs-4 d-block lh-1 mb-1">1,245</span>
-          <span class="text-success fw-semibold" style="font-size: 0.7rem;"><i class="bi bi-arrow-up-right"></i> 12.5% this month</span>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card border border-light shadow-sm rounded-4 bg-white p-3 h-100 d-flex flex-row align-items-center gap-3">
-        <div class="rounded-3 bg-warning bg-opacity-10 text-warning-dark d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px;"><i class="bi bi-hand-thumbs-up fs-4"></i></div>
-        <div>
-          <span class="d-block text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">LIKES</span>
-          <span class="fw-bold text-dark fs-4 d-block lh-1 mb-1">324</span>
-          <span class="text-success fw-semibold" style="font-size: 0.7rem;"><i class="bi bi-arrow-up-right"></i> 8.4% this month</span>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card border border-light shadow-sm rounded-4 bg-white p-3 h-100 d-flex flex-row align-items-center gap-3">
-        <div class="rounded-3 bg-info bg-opacity-10 text-info d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px;"><i class="bi bi-download fs-4"></i></div>
-        <div>
-          <span class="d-block text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">DOWNLOADS</span>
-          <span class="fw-bold text-dark fs-4 d-block lh-1 mb-1">153</span>
-          <span class="text-success fw-semibold" style="font-size: 0.7rem;"><i class="bi bi-arrow-up-right"></i> 15.3% this month</span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <ng-template #snoTemplate let-row="row">
+    <span class="fw-bold text-dark">{{ portfolios.indexOf(row) + 1 }}</span>
+  </ng-template>
 
-  <!-- Filters -->
-  <div class="bg-white p-3 rounded-4 shadow-sm border mb-4">
-    <div class="row g-3">
-      <div class="col-lg-3">
-        <div class="input-group">
-          <span class="input-group-text bg-white border-end-0 text-muted ps-3"><i class="bi bi-search"></i></span>
-          <input type="text" class="form-control border-start-0 ps-0 text-dark" placeholder="Search projects..." style="font-size: 0.85rem;">
-        </div>
-      </div>
-      <div class="col-lg-2">
-        <select class="form-select text-muted" style="font-size: 0.85rem;">
-          <option>All Clients</option>
-        </select>
-      </div>
-      <div class="col-lg-2">
-        <select class="form-select text-muted" style="font-size: 0.85rem;">
-          <option>All Status</option>
-        </select>
-      </div>
-      <div class="col-lg-3">
-        <select class="form-select text-muted" style="font-size: 0.85rem;">
-          <option>All Tags</option>
-        </select>
-      </div>
-      <div class="col-lg-2 text-end">
-        <button class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2 fw-semibold bg-primary bg-opacity-10 border-0 text-primary" style="font-size: 0.85rem;">
-           <i class="bi bi-arrow-repeat"></i> Reset
-        </button>
+  <ng-template #mediaTemplate let-row="row">
+    <div class="rounded-3 bg-light border overflow-hidden d-flex align-items-center justify-content-center"
+      style="width: 80px; height: 50px;">
+      @if (row.media && row.media.length > 0) {
+      <img [src]="row.media[0].url" class="w-100 h-100 object-fit-cover" alt="Project image">
+      } @else {
+      <i class="bi bi-image text-muted fs-4"></i>
+      }
+    </div>
+  </ng-template>
+
+  <ng-template #titleTemplate let-row="row">
+    <h3 class="fs-6 fw-bold text-dark mb-1">{{ row.title }}</h3>
+
+  </ng-template>
+
+  <ng-template #projectTypeTemplate let-row="row">
+    <app-badge [label]="row.projectType || 'Project'" variant="primary" appearance="subtle"
+      [rounded]="true"></app-badge>
+  </ng-template>
+
+  <ng-template #tagsTemplate let-row="row">
+    <div class="d-flex flex-wrap gap-1">
+      @for (tag of (row.tags || []).slice(0, 3); track tag) {
+      <app-badge [label]="tag" variant="secondary" appearance="outline" size="small"></app-badge>
+      }
+      @if ((row.tags || []).length > 3) {
+      <app-badge [label]="'+' + (row.tags.length - 3)" variant="secondary" appearance="outline"
+        size="small"></app-badge>
+      }
+    </div>
+  </ng-template>
+
+  <ng-template #statusTemplate let-row="row">
+    @if (row.status === 'Published') {
+    <app-badge label="Published" variant="success" appearance="subtle" [rounded]="true"></app-badge>
+    } @else {
+    <app-badge label="Draft" variant="warning" appearance="subtle" [rounded]="true"></app-badge>
+    }
+  </ng-template>
+
+  <ng-template #actionsTemplate let-row="row">
+    <div class="dropdown">
+      <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown"
+        aria-expanded="false" data-bs-display="static">
+        <i class="bi bi-three-dots-vertical"></i>
+      </button>
+      <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none" style="min-width: auto;">
+        <app-dropdown [items]="getDropdownItems(row)" (itemSelected)="  onDropdownAction($event, row)" class="d-block"
+          style="position: relative;">
+        </app-dropdown>
       </div>
     </div>
-  </div>
-
-  <!-- Table -->
-  <div class="glass-card rounded-4 bg-white overflow-hidden mb-4">
-    <div class="table-responsive">
-      <table class="table align-middle mb-0" style="font-size: 0.8rem;">
-        <thead class="text-muted text-uppercase bg-light" style="font-size: 0.65rem; letter-spacing: 0.5px;">
-          <tr>
-            <th class="fw-semibold py-3 ps-4 border-bottom-0" style="width: 60px;">S.NO</th>
-            <th class="fw-semibold py-3 border-bottom-0" style="width: 100px;">MEDIA</th>
-            <th class="fw-semibold py-3 border-bottom-0 w-25">TITLE</th>
-            <th class="fw-semibold py-3 border-bottom-0">PROJECT TYPE</th>
-            <th class="fw-semibold py-3 border-bottom-0">ROLE</th>
-            <th class="fw-semibold py-3 border-bottom-0 w-25">TAGS</th>
-            <th class="fw-semibold py-3 border-bottom-0">STATUS</th>
-            <th class="fw-semibold py-3 border-bottom-0 pe-4">ACTIONS</th>
-          </tr>
-        </thead>
-        <tbody>
-          @if (isLoading) {
-            <tr>
-              <td colspan="8" class="text-center py-5">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </td>
-            </tr>
-          } @else if (portfolios.length === 0) {
-            <tr>
-              <td colspan="8" class="text-center py-5">
-                <div class="d-flex flex-column align-items-center">
-                  <i class="bi bi-folder-x fs-1 text-muted mb-2"></i>
-                  <h3 class="fs-5 fw-bold text-dark mb-1">No Projects Found</h3>
-                  <p class="text-muted mb-3">You haven't added any projects to your portfolio yet.</p>
-                  <button routerLink="/create-portfolio" class="btn btn-primary rounded-pill px-4"><i class="bi bi-plus"></i> Add New Project</button>
-                </div>
-              </td>
-            </tr>
-          } @else {
-            @for (p of portfolios; track p._id; let i = $index) {
-              <tr class="border-top border-light" [class.opacity-75]="p.status === 'Draft'">
-                <td class="py-3 ps-4 fw-bold text-dark">{{ i + 1 }}</td>
-                <td class="py-3">
-                  <div class="rounded-3 bg-light border overflow-hidden d-flex align-items-center justify-content-center" style="width: 80px; height: 50px;">
-                    @if (p.media && p.media.length > 0) {
-                      <img [src]="p.media[0].url" class="w-100 h-100 object-fit-cover" alt="Project image">
-                    } @else {
-                      <i class="bi bi-image text-muted fs-4"></i>
-                    }
-                  </div>
-                </td>
-                <td class="py-3">
-                  <h3 class="fs-6 fw-bold text-dark mb-1">{{ p.title }}</h3>
-                  <p class="text-muted mb-0 text-truncate" style="font-size: 0.7rem; line-height: 1.4; max-width: 200px;">{{ p.description }}</p>
-                </td>
-                <td class="py-3"><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1">{{ p.projectType || 'Project' }}</span></td>
-                <td class="py-3 text-dark fw-semibold">{{ p.role }}</td>
-                <td class="py-3">
-                  <div class="d-flex flex-wrap gap-1">
-                    @for (tag of (p.tags || []).slice(0, 3); track tag) {
-                      <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">{{ tag }}</span>
-                    }
-                    @if ((p.tags || []).length > 3) {
-                      <span class="badge bg-light text-muted border fw-normal" style="font-size: 0.65rem;">+{{ p.tags.length - 3 }}</span>
-                    }
-                  </div>
-                </td>
-                <td class="py-3">
-                  @if (p.status === 'Published') {
-                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2 py-1">Published</span>
-                  } @else {
-                    <span class="badge bg-warning bg-opacity-10 text-warning-dark border border-warning border-opacity-25 rounded-pill px-2 py-1">Draft</span>
-                  }
-                </td>
-                <td class="py-3 pe-4">
-                  <div class="d-flex justify-content-end">
-                    <div class="dropdown">
-                      <button class="btn btn-light btn-sm text-muted rounded-circle border d-flex align-items-center justify-content-center" data-bs-toggle="dropdown" style="width: 28px; height: 28px;"><i class="bi bi-three-dots-vertical"></i></button>
-                      <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                        <li><a class="dropdown-item text-primary" [routerLink]="['/create-portfolio', p._id]"><i class="bi bi-pencil me-2"></i> Edit</a></li>
-                        <li><a class="dropdown-item text-danger" href="javascript:void(0)" (click)="deletePortfolio(p._id)"><i class="bi bi-trash me-2"></i> Delete</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            }
-          }
-        </tbody>
-      </table>
-    </div>
-    
-    <!-- Pagination -->
-    <div class="p-3 border-top border-light d-flex justify-content-between align-items-center">
-      <span class="text-muted" style="font-size: 0.75rem;">Showing 1 to 5 of 12 projects</span>
-      <ul class="pagination pagination-sm mb-0">
-        <li class="page-item disabled"><a class="page-link text-muted border-0 bg-transparent" href="#"><i class="bi bi-chevron-left"></i></a></li>
-        <li class="page-item active"><a class="page-link rounded bg-primary border-primary" href="#">1</a></li>
-        <li class="page-item"><a class="page-link text-muted border-0 bg-transparent" href="#">2</a></li>
-        <li class="page-item"><a class="page-link text-muted border-0 bg-transparent" href="#">3</a></li>
-        <li class="page-item"><a class="page-link text-muted border-0 bg-transparent" href="#"><i class="bi bi-chevron-right"></i></a></li>
-      </ul>
-      <div class="d-flex align-items-center gap-2">
-        <span class="text-muted" style="font-size: 0.75rem;">Rows per page:</span>
-        <select class="form-select form-select-sm text-muted border-light" style="width: 60px; font-size: 0.75rem;">
-          <option>10</option>
-        </select>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-</div>
+  </ng-template>

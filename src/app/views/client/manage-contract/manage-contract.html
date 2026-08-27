@@ -114,6 +114,16 @@
   </div>
 </ng-template>
 
+<ng-template #feedbackStatusTemplate let-row="row">
+  @if (row.feedbackSubmitted) {
+    <app-badge [label]="'Submitted'" variant="success" appearance="outline" [rounded]="true"></app-badge>
+  } @else if (row.status?.toLowerCase() === 'completed') {
+    <app-badge [label]="'Pending'" variant="warning" appearance="outline" [rounded]="true"></app-badge>
+  } @else {
+    <span class="text-muted small">-</span>
+  }
+</ng-template>
+
 
 <ng-template #actionsTemplate let-row="row">
   <div class="dropdown">

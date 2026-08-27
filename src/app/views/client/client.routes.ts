@@ -15,11 +15,11 @@ import { ChatPage } from '../shared/chat-page/chat-page';
 
 import { CreateContract } from './create-contract/create-contract';
 import { LegalContractPage } from './legal-contract-page/legal-contract-page';
-import { RecruitmentWorkflow } from './recruitment-workflow/recruitment-workflow';
 import { CreatePhase } from './create-phase/create-phase';
 import { PhaseDetails } from './phase-details/phase-details';
 import { TransactionHistory } from './transaction-history/transaction-history';
 import { CreateTicket } from '../shared/create-ticket/create-ticket';
+import { SubmitFeedback } from './submit-feedback/submit-feedback';
 
 export const CLIENT_ROUTES: Routes = [
   { path: 'dashboard', component: Dashboard },
@@ -38,5 +38,6 @@ export const CLIENT_ROUTES: Routes = [
   { path: 'phase-details/:id', component: PhaseDetails },
   { path: 'transaction-history', component: TransactionHistory },
   { path: 'meet-page', component: MeetPage },
-  { path: 'chat-page', component: ChatPage }
+  { path: 'chat-page', component: ChatPage },
+  { path: 'submit-feedback/:id', component: SubmitFeedback }
 ];

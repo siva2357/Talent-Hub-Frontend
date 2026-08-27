@@ -301,7 +301,7 @@
                           <li><a class="dropdown-item" [routerLink]="['/contract-diary']"
                               [queryParams]="{ contractId: contract._id }"><i class="bi bi-journal-bookmark me-2"></i>
                               Contract Diary</a></li>
-                          <li><a class="dropdown-item" routerLink="/feedback-reports"><i
+                          <li><a class="dropdown-item" [routerLink]="['/feedback-reports', contract._id]"><i
                                 class="bi bi-chat-square-text me-2"></i> View Feedback</a></li>
                         </ul>
                       </div>
