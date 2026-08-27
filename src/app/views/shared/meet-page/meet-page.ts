@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApplicationService } from '../../../core/services/application.service';
+import { MeetCard, MeetCardData } from '../../../library/shared/components/meet-card/meet-card';
 
 @Component({
   selector: 'app-meet-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MeetCard],
   templateUrl: './meet-page.html',
   styleUrl: './meet-page.css'
 })
@@ -42,5 +43,9 @@ export class MeetPage implements OnInit {
       month: d.toLocaleString('default', { month: 'short' }),
       time: d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
+  }
+
+  onJoin(meeting: MeetCardData): void {
+    console.log('Join meeting:', meeting);
   }
 }

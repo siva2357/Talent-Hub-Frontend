@@ -25,52 +25,17 @@
         </div>
       </div>
 
-      <!-- No Interviews -->
-      <div *ngIf="!isLoading && interviews.length === 0" class="col-12 text-center py-5 text-muted">
-        <i class="bi bi-calendar-x fs-1 d-block mb-3"></i>
-        <p>No meetings or interviews scheduled at this time.</p>
-      </div>
-
       <!-- Dynamic Meeting Cards -->
-      <div class="col-md-6 col-lg-4" *ngFor="let meeting of interviews">
-        <div class="glass-card rounded-3 p-4 bg-white h-100 d-flex flex-column" [ngClass]="{'opacity-75': !isUpcoming(meeting.interview.date) || meeting.applicationStatus === 'interview completed'}">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div>
-              <span class="badge rounded-pill px-2 mb-2 border border-opacity-25"
-                [ngClass]="(isUpcoming(meeting.interview.date) && meeting.applicationStatus !== 'interview completed') ? 'bg-primary bg-opacity-10 text-primary border-primary' : 'bg-secondary bg-opacity-10 text-secondary border-secondary'">
-                {{ (isUpcoming(meeting.interview.date) && meeting.applicationStatus !== 'interview completed') ? 'Upcoming' : 'Completed' }}
-              </span>
-              <h3 class="fs-6 fw-bold text-dark mb-1">{{ meeting.interview.title || 'Interview' }}</h3>
-              <p class="text-muted mb-0" style="font-size: 0.75rem;">{{ meeting.contractTitle }} - {{ meeting.otherUser.name }}</p>
-            </div>
-            <div class="bg-light rounded p-2 text-center" style="min-width: 60px;">
-              <span class="d-block fw-bold text-dark" style="font-size: 1rem;">{{ formatDate(meeting.interview.date).day }}</span>
-              <span class="d-block text-muted text-uppercase" style="font-size: 0.65rem;">{{ formatDate(meeting.interview.date).month }}</span>
-            </div>
-          </div>
-          
-          <div class="mb-4 text-muted" style="font-size: 0.8rem;">
-            <div class="d-flex align-items-center gap-2 mb-2">
-              <i class="bi bi-clock" [ngClass]="(isUpcoming(meeting.interview.date) && meeting.applicationStatus !== 'interview completed') ? 'text-primary' : 'text-secondary'"></i> {{ formatDate(meeting.interview.date).time }}
-            </div>
-            <div class="d-flex align-items-center gap-2" *ngIf="meeting.interview.description">
-              <i class="bi bi-info-circle" [ngClass]="(isUpcoming(meeting.interview.date) && meeting.applicationStatus !== 'interview completed') ? 'text-primary' : 'text-secondary'"></i> 
-              <span class="text-truncate">{{ meeting.interview.description }}</span>
-            </div>
-          </div>
-          
-          <div class="mt-auto d-flex gap-2" *ngIf="(isUpcoming(meeting.interview.date) && meeting.applicationStatus !== 'interview completed')">
-            <a href="https://meet.google.com" target="_blank" class="btn btn-primary btn-sm flex-grow-1 py-2 fw-semibold">
-              <i class="bi bi-box-arrow-up-right me-1"></i> Join Meeting
-            </a>
-          </div>
-          <div class="mt-auto" *ngIf="(!isUpcoming(meeting.interview.date) || meeting.applicationStatus === 'interview completed')">
-            <button class="btn btn-light btn-sm w-100 py-2 text-muted fw-semibold border" disabled>
-              Completed
-            </button>
-          </div>
+      @for (meeting of interviews; track meeting._id) {
+        <div class="col-md-6 col-lg-4">
+          <app-meet-card [interview]="meeting" (join)="onJoin($event)"></app-meet-card>
         </div>
-      </div>
+      } @empty {
+        <div *ngIf="!isLoading" class="col-12 text-center py-5 text-muted">
+          <i class="bi bi-calendar-x fs-1 d-block mb-3"></i>
+          <p>No meetings or interviews scheduled at this time.</p>
+        </div>
+      }
       
     </div>
   </div>

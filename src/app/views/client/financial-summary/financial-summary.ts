@@ -1,18 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { Chart, registerables } from 'chart.js';
+import { StatCard, StatCardData } from '../../../library/shared/components/stat-card/stat-card';
+import { Table, TableColumn } from '../../../library/ui/components/table/table';
+import { Badge } from '../../../library/ui/components/badge/badge';
+import { Button } from '../../../library/ui/components/button/button';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-financial-summary',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, StatCard, Table, Badge, Button],
   templateUrl: './financial-summary.html',
   styleUrl: './financial-summary.css'
 })
-export class FinancialSummary implements OnInit {
+export class FinancialSummary implements OnInit, AfterViewInit {
   stats: any = {
     totalSpent: 0,
     escrowBalance: 0,
@@ -25,6 +29,16 @@ export class FinancialSummary implements OnInit {
   transactions: any[] = [];
   loading: boolean = true;
 
+  statCards: StatCardData[] = [];
+  columns: TableColumn[] = [];
+
+  @ViewChild('invoiceIdTpl') invoiceIdTpl!: TemplateRef<any>;
+  @ViewChild('contractTpl') contractTpl!: TemplateRef<any>;
+  @ViewChild('amountTpl') amountTpl!: TemplateRef<any>;
+  @ViewChild('feeTpl') feeTpl!: TemplateRef<any>;
+  @ViewChild('statusTpl') statusTpl!: TemplateRef<any>;
+  @ViewChild('actionTpl') actionTpl!: TemplateRef<any>;
+
   distributionChart: any[] = [];
   chartInstance: any = null;
 
@@ -32,6 +46,19 @@ export class FinancialSummary implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.columns = [
+        { field: '_id', headerName: 'Invoice ID', cellTemplate: this.invoiceIdTpl },
+        { field: 'contractTitle', headerName: 'Contract', cellTemplate: this.contractTpl },
+        { field: 'amount', headerName: 'Amount', cellTemplate: this.amountTpl },
+        { field: 'platformFee', headerName: 'Platform Fee', cellTemplate: this.feeTpl },
+        { field: 'status', headerName: 'Status', cellTemplate: this.statusTpl },
+        { field: 'action', headerName: 'Action', cellTemplate: this.actionTpl }
+      ];
+    });
   }
 
   loadData(): void {
@@ -44,6 +71,29 @@ export class FinancialSummary implements OnInit {
           this.stats.escrowBalance = res.stats.upcomingPayments || 0;
           this.stats.platformFees = res.stats.platformFeesPaid || 0;
           this.stats.pendingPayments = res.stats.pendingPayments || 0;
+
+          this.statCards = [
+            {
+              title: 'TOTAL SPENT',
+              value: `₹${(this.stats.totalSpent).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+              icon: 'bi-graph-up-arrow'
+            },
+            {
+              title: 'ESCROW BALANCE',
+              value: `₹${(this.stats.escrowBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+              icon: 'bi-shield-check'
+            },
+            {
+              title: 'PLATFORM FEES',
+              value: `₹${(this.stats.platformFees).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+              icon: 'bi-percent'
+            },
+            {
+              title: 'UNFUNDED CONTRACTS',
+              value: `₹${(this.stats.pendingPayments).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+              icon: 'bi-credit-card'
+            }
+          ];
 
           this.generateDistributionChart();
         }

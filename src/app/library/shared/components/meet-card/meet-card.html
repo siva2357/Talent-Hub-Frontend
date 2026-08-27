@@ -9,47 +9,19 @@
     <div class="meet-card-header">
 
         <div class="meet-card-title">
-
-            <h6>
+            <h5>
+                {{ interview.contractTitle }}
+            </h5>
+            <h6 class="text-muted mb-0 mt-1" style="font-size: 0.9rem;">
                 {{ interview.interview.title }}
             </h6>
-
-            <div class="meet-card-meta">
-
-                @if (interview.contractTitle) {
-
-                <span class="meet-tag meet-tag-primary">
-                    {{ interview.contractTitle }}
-                </span>
-
-                }
-
-                @if (interview.applicationStatus) {
-
-                <span class="meet-tag">
-                    {{ interview.applicationStatus }}
-                </span>
-
-                }
-
-            </div>
-
         </div>
 
 
         <!-- STATUS — TOP RIGHT ONLY -->
 
-        <span class="meet-status" [class.status-completed]="interview.interview.status === 'completed'"
-            [class.status-upcoming]="interview.interview.status === 'upcoming'"
-            [class.status-scheduled]="interview.interview.status === 'scheduled'"
-            [class.status-cancelled]="interview.interview.status === 'cancelled'"
-            [class.status-pending]="interview.interview.status === 'pending'">
-
-            <span class="status-dot"></span>
-
-            {{ interview.interview.status }}
-
-        </span>
+        <app-badge [label]="interview.interview.status"
+            [variant]="getStatusVariant(interview.interview.status)"></app-badge>
 
     </div>
 
@@ -179,13 +151,7 @@
 
         </div>
 
-        <button type="button" class="meet-join-button" (click)="onJoin()">
-
-            Join
-
-            <i class="bi bi-arrow-up-right"></i>
-
-        </button>
+        <app-button variant="primary" label="Join Meeting" size="sm" (clicked)="onJoin()"></app-button>
 
     </div>
 
@@ -196,24 +162,9 @@
          FOOTER
          ========================================= -->
 
-    <div class="meet-card-footer">
+    <div class="meet-card-footer ">
 
-        <span class="meet-contract">
-
-            <i class="bi bi-file-earmark-text"></i>
-
-            {{ interview.contractTitle }}
-
-        </span>
-
-
-        <button type="button" class="meet-view-button" (click)="onViewDetails()">
-
-            View Details
-
-            <i class="bi bi-arrow-right"></i>
-
-        </button>
+        <app-button variant="outline-primary" label="Join Meeting" size="sm" (clicked)="onJoin()"></app-button>
 
     </div>
 

@@ -19,69 +19,7 @@
       <p class="text-muted small mb-0">Audit freelancer activities, spent volumes, and configure access settings.</p>
     </header>
 
-    <!-- Stats Row -->
-    <section class="row g-3 mb-4">
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
-          <div class="card-body d-flex align-items-center gap-3">
-            <div
-              class="stat-icon client-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center"
-              style="width: 48px; height: 48px; background-color: #e0f0ff;">
-              <i class="bi bi-people-fill text-primary fs-4"></i>
-            </div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Total Clients</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">100</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
-          <div class="card-body d-flex align-items-center gap-3">
-            <div
-              class="stat-icon freelancer-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center"
-              style="width: 48px; height: 48px; background-color: #e0f0ff;">
-              <i class="bi bi-person-workspace text-primary fs-4"></i>
-            </div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Total Freelancers</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ freelancers.length }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
-          <div class="card-body d-flex align-items-center gap-3">
-            <div
-              class="stat-icon contract-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center"
-              style="width: 48px; height: 48px; background-color: #e0f0ff;">
-              <i class="bi bi-file-earmark-text-fill text-primary fs-4"></i>
-            </div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Total Contracts</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ totalContracts }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
-          <div class="card-body d-flex align-items-center gap-3">
-            <div
-              class="stat-icon payout-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center"
-              style="width: 48px; height: 48px; background-color: #e0f0ff;">
-              <i class="bi bi-wallet2 text-primary fs-4"></i>
-            </div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Total Payouts</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹100,000</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+
 
     <!-- Filter Section -->
     <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
@@ -130,100 +68,51 @@
     <!-- Data Table Section -->
     <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
       <div class="card-body p-0">
-        <div class="table-responsive-xl overflow-visible" style="min-height: 300px;">
-          <table class="table table-hover align-middle mb-0 border-light">
-            <thead class="bg-light bg-opacity-50 text-dark small text-uppercase fw-bold" style="font-size: 0.75rem;">
-              <tr>
-                <th scope="col" class="ps-4 py-3 text-muted">#</th>
-                <th scope="col" class="py-3"><i class="bi bi-image text-primary me-1"></i> Profile</th>
-                <th scope="col" class="py-3"><i class="bi bi-person-vcard text-primary me-1"></i> Full Name</th>
-                <th scope="col" class="py-3"><i class="bi bi-envelope text-primary me-1"></i> Email</th>
-                <th scope="col" class="py-3"><i class="bi bi-telephone text-primary me-1"></i> Phone</th>
-                <th scope="col" class="py-3"><i class="bi bi-award text-primary me-1"></i> Job Title</th>
-                <th scope="col" class="py-3"><i class="bi bi-activity text-primary me-1"></i> Status</th>
-                <th scope="col" class="pe-4 py-3 text-center"><i class="bi bi-gear text-primary me-1"></i> Actions</th>
-              </tr>
-            </thead>
-            <tbody class="border-top-0">
-              @for (freelancer of freelancers; track freelancer.id; let i = $index) {
-              <tr>
-                <td class="ps-4 fw-semibold text-muted">{{ i + 1 }}</td>
-                <td>
-                  <img [src]="freelancer.profileImage || 'https://i.pravatar.cc/150?u=' + freelancer.id"
-                    class="rounded-circle border border-2 border-white shadow-sm object-fit-cover" width="40"
-                    height="40" alt="Avatar">
-                </td>
-                <td>
-                  <div class="fw-bold text-dark">{{ freelancer.name }}</div>
-                </td>
-                <td class="text-secondary small">{{ freelancer.email }}</td>
-                <td class="text-secondary small">{{ freelancer.phoneNumber || 'N/A' }}</td>
-                <td class="text-secondary small">{{ freelancer.title }}</td>
-                <td>
-                  <span class="badge rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"
-                    [ngClass]="{
-                        'bg-success bg-opacity-10 text-success border border-success': freelancer.status === 'Active',
-                        'bg-danger bg-opacity-10 text-danger border border-danger': freelancer.status === 'Suspended',
-                        'bg-warning bg-opacity-10 text-warning border border-warning': freelancer.status !== 'Active' && freelancer.status !== 'Suspended'
-                      }">
-                    <i class="bi bi-circle-fill" style="font-size: 0.4rem;"></i> {{ freelancer.status }}
-                  </span>
-                </td>
-                <td class="pe-4 text-center">
-                  <div class="dropdown">
-                    <button
-                      class="btn btn-sm btn-light text-secondary rounded-circle shadow-sm border border-light d-inline-flex justify-content-center align-items-center hover-bg-light"
-                      style="width: 32px; height: 32px;" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                      data-bs-boundary="window">
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                      <li><button class="dropdown-item py-2" type="button"><i class="bi bi-eye text-primary me-2"></i>
-                          View</button></li>
-                      @if (freelancer.status === 'Pending Approval') {
-                      <li><button class="dropdown-item py-2" type="button" (click)="approveFreelancer(freelancer.id)"><i
-                            class="bi bi-person-check text-primary me-2"></i> Approve</button></li>
-                      }
-                      @if (freelancer.status !== 'Active' && freelancer.status !== 'Pending Approval') {
-                      <li><button class="dropdown-item py-2" type="button"
-                          (click)="updateStatus(freelancer.id, 'Active')"><i
-                            class="bi bi-check-circle text-success me-2"></i> Activate</button></li>
-                      }
-                      @if (freelancer.status === 'Active') {
-                      <li><button class="dropdown-item py-2" type="button"
-                          (click)="updateStatus(freelancer.id, 'Suspended')"><i
-                            class="bi bi-pause-circle text-warning me-2"></i> Suspend</button></li>
-                      }
-                      @if (freelancer.status !== 'Blocked' && freelancer.status !== 'Deactivated') {
-                      <li><button class="dropdown-item py-2" type="button"
-                          (click)="updateStatus(freelancer.id, 'Blocked')"><i
-                            class="bi bi-slash-circle text-danger me-2"></i> Block</button></li>
-                      }
-                      @if (freelancer.status !== 'Deactivated') {
-                      <li>
-                        <hr class="dropdown-divider">
-                      </li>
-                      <li><button class="dropdown-item py-2 text-danger" type="button"
-                          (click)="updateStatus(freelancer.id, 'Deactivated')"><i
-                            class="bi bi-trash text-danger me-2"></i> Deactivate</button></li>
-                      }
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-              } @empty {
-              <tr>
-                <td colspan="8">
-                  <div class="py-5 text-center text-muted" style="font-family: serif;">
-                    <p class="mb-0">No data available</p>
-                  </div>
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-        <!-- Empty State handled by @empty -->
+        <app-table [columns]="columns" [data]="freelancers"></app-table>
+
+        <ng-template #indexTpl let-row="row" let-index="index">
+          <span class="ps-4 fw-semibold text-muted">{{ index + 1 }}</span>
+        </ng-template>
+
+        <ng-template #profileTpl let-row="row">
+          <img [src]="row.profileImage || 'https://i.pravatar.cc/150?u=' + row.id"
+            class="rounded-circle border border-2 border-white shadow-sm object-fit-cover" width="40" height="40" alt="Avatar">
+        </ng-template>
+
+        <ng-template #fullNameTpl let-row="row">
+          <div class="fw-bold text-dark">{{ row.name }}</div>
+        </ng-template>
+
+        <ng-template #emailTpl let-row="row">
+          <span class="text-secondary small">{{ row.email }}</span>
+        </ng-template>
+
+        <ng-template #phoneTpl let-row="row">
+          <span class="text-secondary small">{{ row.phoneNumber || 'N/A' }}</span>
+        </ng-template>
+
+        <ng-template #jobTitleTpl let-row="row">
+          <span class="text-secondary small">{{ row.title }}</span>
+        </ng-template>
+
+        <ng-template #statusTpl let-row="row">
+          <app-badge [label]="row.status" apperance="subtle" [variant]="getBadgeVariant(row.status)"></app-badge>
+        </ng-template>
+
+        <ng-template #actionsTpl let-row="row">
+          <div class="dropdown">
+            <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown"
+              aria-expanded="false" data-bs-display="static">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none"
+              style="min-width: auto;">
+              <app-dropdown [items]="getActionItems(row)" (itemSelected)="onActionSelected($event, row)" class="d-block"
+                style="position: relative;">
+              </app-dropdown>
+            </div>
+          </div>
+        </ng-template>
       </div>
     </section>
 

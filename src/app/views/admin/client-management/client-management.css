@@ -12,15 +12,70 @@
 }
 
 /* Background decorations */
-.bg-shape { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
-.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
-.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
-.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.05); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
-.concentric-circles { position: absolute; pointer-events: none; z-index: 0; top: 15%; left: 0; }
-.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.15); }
-.circle-1 { width: 300px; height: 300px; }
-.circle-2 { width: 500px; height: 500px; }
-.circle-3 { width: 700px; height: 700px; }
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.top-left {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  top: -150px;
+  left: -150px;
+}
+
+.bottom-right {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  bottom: -200px;
+  right: -200px;
+}
+
+.right-shape {
+  width: 400px;
+  height: 400px;
+  background: rgba(37, 99, 235, 0.05);
+  filter: blur(80px);
+  top: 30%;
+  right: -100px;
+  transform: translateY(-50%);
+}
+
+.concentric-circles {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  top: 15%;
+  left: 0;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(168, 85, 247, 0.15);
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+}
+
+.circle-2 {
+  width: 500px;
+  height: 500px;
+}
+
+.circle-3 {
+  width: 700px;
+  height: 700px;
+}
 
 /* Premium Card (Glassmorphism) */
 .glass-card {
@@ -40,24 +95,6 @@
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
 }
 
-.filter-badge {
-  background-color: var(--primary-light);
-  color: var(--primary-color);
-  font-weight: 500;
-  padding: 0.4rem 0.75rem;
-  font-size: 0.75rem;
-}
-
-.badge-close {
-  cursor: pointer;
-  font-size: 1rem;
-  line-height: 0.5;
-  margin-left: 0.25rem;
-}
-
-.badge-close:hover {
-  color: #000;
-}
 
 .avatar-circle {
   width: 40px;
@@ -79,12 +116,11 @@
   background-color: #212529;
 }
 
-/* Pagination overrides */
-.pagination .page-link {
-  border-color: #dee2e6;
-}
 
-.pagination .page-item.active .page-link {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
+
+/* Fix nested app-dropdown alignment inside bootstrap dropdown wrapper */
+:host ::ng-deep app-dropdown .dropdown-menu {
+  position: static !important;
+  display: block !important;
+  margin-top: 0 !important;
 }

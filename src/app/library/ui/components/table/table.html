@@ -5,15 +5,10 @@
 
         @for (column of columns; track column.field) {
 
-        <ngx-datatable-column 
-            [name]="column.headerName" 
-            [prop]="column.field" 
-            [width]="$any(column.width)" 
-            [minWidth]="$any(column.minWidth)" 
-            [maxWidth]="$any(column.maxWidth)" 
-            [flexGrow]="$any(column.flexGrow)">
+        <ngx-datatable-column [name]="column.headerName" [prop]="column.field" [width]="$any(column.width)"
+            [minWidth]="$any(column.minWidth)" [maxWidth]="$any(column.maxWidth)" [flexGrow]="$any(column.flexGrow)">
 
-            <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+            <ng-template ngx-datatable-cell-template let-row="row" let-value="value" let-rowIndex="rowIndex">
 
                 @if (column.cellTemplate) {
 
@@ -21,7 +16,8 @@
                         column.cellTemplate;
                         context: {
                             $implicit: value,
-                            row: row
+                            row: row,
+                            index: rowIndex
                         }
                     ">
                 </ng-container>

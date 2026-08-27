@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ProfileService } from '../../../core/services/profile.service';
+import { TalentCard, TalentCardData } from '../../../library/shared/components/talent-card/talent-card';
 
 @Component({
   selector: 'app-search-talent',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TalentCard],
   templateUrl: './search-talent.html',
   styleUrl: './search-talent.css'
 })

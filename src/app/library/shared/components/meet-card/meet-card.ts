@@ -4,6 +4,9 @@ import {
   Input,
   Output
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Badge } from '../../../ui/components/badge/badge';
+import { Button } from '../../../ui/components/button/button';
 
 
 export interface MeetCardData {
@@ -43,6 +46,7 @@ export interface MeetCardData {
   selector: 'app-meet-card',
 
   standalone: true,
+  imports: [CommonModule, Button, Badge],
 
   templateUrl: './meet-card.html',
 
@@ -53,12 +57,6 @@ export class MeetCard {
   @Input()
   interview!: MeetCardData;
 
-
-  @Output()
-  viewDetails =
-    new EventEmitter<MeetCardData>();
-
-
   @Output()
   join =
     new EventEmitter<MeetCardData>();
@@ -66,9 +64,21 @@ export class MeetCard {
 
   /*
    * =========================================
+   * =========================================
    * DESCRIPTION
    * =========================================
    */
+
+  getStatusVariant(status: string): any {
+    switch (status?.toLowerCase()) {
+      case 'completed': return 'success';
+      case 'upcoming': return 'primary';
+      case 'scheduled': return 'info';
+      case 'cancelled': return 'danger';
+      case 'pending': return 'warning';
+      default: return 'secondary';
+    }
+  }
 
   get cleanDescription(): string {
 
@@ -180,19 +190,7 @@ export class MeetCard {
   }
 
 
-  /*
-   * =========================================
-   * VIEW DETAILS
-   * =========================================
-   */
 
-  onViewDetails(): void {
-
-    this.viewDetails.emit(
-      this.interview
-    );
-
-  }
 
 
   /*

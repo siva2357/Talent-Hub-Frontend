@@ -22,58 +22,11 @@
 
     <!-- Stats Row -->
     <section class="row g-3 mb-4">
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
-          <div class="card-body d-flex align-items-center gap-3">
-          <div class="stat-icon volume-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background-color: #e0f0ff;">
-            <i class="bi bi-graph-up-arrow text-primary fs-4"></i>
-          </div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Platform Fees Collected</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹{{ stats?.platformCommissions | number:'1.0-0' }}</span>
-            </div>
-          </div>
+      @for (stat of statCards; track stat.title) {
+        <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+          <app-stat-card [stat]="stat"></app-stat-card>
         </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
-          <div class="card-body d-flex align-items-center gap-3">
-          <div class="stat-icon commission-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background-color: #e0f0ff;">
-            <i class="bi bi-clock-history text-primary fs-4"></i>
-          </div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Pending Withdrawals</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">₹{{ stats?.pendingWithdrawals | number:'1.0-0' }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
-          <div class="card-body d-flex align-items-center gap-3">
-          <div class="stat-icon escrow-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background-color: #e0f0ff;">
-            <i class="bi bi-check-circle-fill text-primary fs-4"></i>
-          </div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Successful Payouts</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ stats?.successfulPayouts | number:'1.0-0' }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
-        <div class="card stat-card shadow-sm border border-light rounded-4 h-100 bg-white bg-opacity-50">
-          <div class="card-body d-flex align-items-center gap-3">
-          <div class="stat-icon growth-icon flex-shrink-0 border border-primary border-opacity-25 rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background-color: #e0f0ff;">
-            <i class="bi bi-pie-chart text-primary fs-4"></i>
-          </div>
-            <div>
-              <span class="d-block text-muted small fw-semibold">Audited Growth</span>
-              <span class="d-block fs-5 fw-bold text-dark mt-1">{{ stats?.growthPercent }}%</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      }
     </section>
 
     <!-- Filter Section -->
@@ -123,56 +76,47 @@
     <!-- Data Table Section -->
     <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
       <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0 border-light">
-            <thead class="bg-light bg-opacity-50 text-dark small text-uppercase fw-bold" style="font-size: 0.75rem;">
-              <tr>
-                <th scope="col" class="ps-4 py-3 text-muted">#</th>
-                <th scope="col" class="py-3"><i class="bi bi-file-earmark-text text-primary me-1"></i> Contract Title
-                </th>
-                <th scope="col" class="py-3"><i class="bi bi-person text-primary me-1"></i> Client</th>
-                <th scope="col" class="py-3"><i class="bi bi-person-workspace text-primary me-1"></i> Freelancer</th>
-                <th scope="col" class="py-3"><i class="bi bi-credit-card text-primary me-1"></i> Client Payment</th>
-                <th scope="col" class="py-3"><i class="bi bi-wallet2 text-primary me-1"></i> Freelancer Payout</th>
-                <th scope="col" class="py-3"><i class="bi bi-currency-dollar text-primary me-1"></i> Platform Fee</th>
-                <th scope="col" class="pe-4 py-3"><i class="bi bi-activity text-primary me-1"></i> Status</th>
-              </tr>
-            </thead>
-            <tbody class="border-top-0">
-              <tr *ngFor="let txn of transactions; let i = index">
-                <td class="ps-4 fw-semibold text-muted">{{ i + 1 }}</td>
-                <td><span class="d-block fw-bold text-dark">{{ txn.contractTitle }}</span></td>
-                <td>
-                  <span class="d-block text-dark fw-semibold" style="font-size: 0.85rem;">{{ txn.clientName }}</span>
-                </td>
-                <td>
-                  <span class="d-block text-dark fw-semibold" style="font-size: 0.85rem;">{{ txn.freelancerName }}</span>
-                </td>
-                <td><span class="text-muted fw-semibold">₹{{ txn.budget }}</span></td>
-                <td><span class="text-muted fw-semibold">₹{{ txn.freelancerPayment }}</span></td>
-                <td><span
-                    class="badge bg-purple-soft text-purple border border-purple border-opacity-25 rounded-pill px-3 py-1">₹{{ txn.platformFee }}</span>
-                </td>
-                <td class="pe-4 d-flex align-items-center gap-2">
-                  <span *ngIf="txn.status === 'Completed'"
-                    class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"><i
-                      class="bi bi-check-circle-fill" style="font-size: 0.5rem;"></i> Completed</span>
-                  <span *ngIf="txn.status === 'Pending' && txn.type === 'Payout'"
-                    class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1"><i
-                      class="bi bi-clock-history" style="font-size: 0.5rem;"></i> Pending Payout</span>
-                  
-                  <button *ngIf="txn.status === 'Pending' && txn.type === 'Payout'" 
-                    class="btn btn-sm btn-primary rounded-pill shadow-sm" 
-                    (click)="openPayoutModal(txn.id, txn.freelancerPayment)">Process Payout</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- Empty State / No Data Placeholder -->
-        <div *ngIf="!transactions || transactions.length === 0" class="py-5 text-center text-muted" style="font-family: serif;">
-          <p class="mb-0">No data available</p>
-        </div>
+        <app-table [columns]="columns" [data]="transactions"></app-table>
+
+        <ng-template #indexTpl let-row="row" let-index="index">
+          <span class="ps-4 fw-semibold text-muted">{{ index + 1 }}</span>
+        </ng-template>
+
+        <ng-template #contractTpl let-row="row">
+          <span class="d-block fw-bold text-dark">{{ row.contractTitle }}</span>
+        </ng-template>
+
+        <ng-template #clientTpl let-row="row">
+          <span class="d-block text-dark fw-semibold" style="font-size: 0.85rem;">{{ row.clientName }}</span>
+        </ng-template>
+
+        <ng-template #freelancerTpl let-row="row">
+          <span class="d-block text-dark fw-semibold" style="font-size: 0.85rem;">{{ row.freelancerName }}</span>
+        </ng-template>
+
+        <ng-template #clientPaymentTpl let-row="row">
+          <span class="text-muted fw-semibold">₹{{ row.budget }}</span>
+        </ng-template>
+
+        <ng-template #freelancerPayoutTpl let-row="row">
+          <span class="text-muted fw-semibold">₹{{ row.freelancerPayment }}</span>
+        </ng-template>
+
+        <ng-template #platformFeeTpl let-row="row">
+          <app-badge [label]="'₹' + row.platformFee" variant="primary" apperance="subtle"></app-badge>
+        </ng-template>
+
+        <ng-template #statusTpl let-row="row">
+          <div class="d-flex align-items-center gap-2">
+            @if (row.status === 'Completed') {
+              <app-badge label="Completed" variant="success" apperance="subtle"></app-badge>
+            }
+            @if (row.status === 'Pending' && row.type === 'Payout') {
+              <app-badge label="Pending Payout" variant="warning" apperance="subtle"></app-badge>
+              <app-button variant="primary" size="sm" label="Process Payout" (clicked)="openPayoutModal(row.id, row.freelancerPayment)"></app-button>
+            }
+          </div>
+        </ng-template>
       </div>
     </section>
 
