@@ -36,12 +36,20 @@ export interface TalentCardData {
 
   isSaved: boolean;
   status: string;
+
+  // AI Match Properties
+  matchPercentage?: number;
+  matchCategory?: string;
+  matchReasoning?: string;
 }
 
+
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-talent-card',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './talent-card.html',
   styleUrl: './talent-card.css'
 })

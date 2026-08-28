@@ -19,6 +19,20 @@
         <h1 class="fw-bold fs-3 mb-1 text-dark">Contract Hub</h1>
         <p class="text-muted small mb-0">Discover and explore contract opportunities that match your skills.</p>
       </div>
+      <div class="d-flex gap-2">
+        @if (isAIApplied) {
+          <app-button label="Clear AI Match" variant="secondary" icon="bi bi-x-circle" [size]="'md'" (clicked)="clearAIMatch()">
+          </app-button>
+        } @else {
+          <app-button label="AI Smart Match" variant="info" icon="bi bi-magic" [size]="'md'" (clicked)="matchWithAI()"
+            [disabled]="isLoading || isAIMatching || contracts.length === 0">
+            @if (isAIMatching) {
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Matching...
+            }
+          </app-button>
+        }
+      </div>
     </div>
 
     <!-- Tabs -->
@@ -86,6 +100,7 @@
       </div>
       } @else {
       @if (activeTab === 'discover') {
+      
       @if (contracts.length === 0) {
       <div class="col-12 text-center py-5">
         <p class="text-muted">No contracts found.</p>

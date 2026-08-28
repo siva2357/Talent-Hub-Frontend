@@ -220,6 +220,21 @@
 
 
     <!-- =========================================
+         AI MATCH RESULTS
+         ========================================= -->
+         
+    @if (talent.matchPercentage !== undefined) {
+      <div class="px-4 py-3 bg-light border-top border-light mt-auto">
+        <div class="d-flex justify-content-start align-items-center">
+          <span class="badge fw-bold px-4 py-2 rounded-pill shadow-sm d-flex align-items-center" style="font-size: 14px;"
+            [ngClass]="talent.matchPercentage >= 80 ? 'bg-success bg-opacity-10 text-success border border-success border-opacity-25' : (talent.matchPercentage >= 65 ? 'bg-warning bg-opacity-10 text-warning-dark border border-warning border-opacity-25' : 'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25')">
+            {{ talent.matchPercentage }}% Match ({{ talent.matchCategory }})
+          </span>
+        </div>
+      </div>
+    }
+
+    <!-- =========================================
          FOOTER
          ========================================= -->
 

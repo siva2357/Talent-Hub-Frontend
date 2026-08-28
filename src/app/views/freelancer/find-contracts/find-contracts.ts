@@ -2,12 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ContractService } from '../../../core/services/contract.service';
+import { AIService } from '../../../core/services/ai.service';
+import { ProfileService } from '../../../core/services/profile.service';
 import { Contract } from '../../../core/models/contract.model';
 import { InputField, InputOption } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from '../../../library/ui/components/chip/chip';
 import { Button } from '../../../library/ui/components/button/button';
 import { Loader } from '../../../library/ui/components/loader/loader';
 import { ContractCard, ContractCardData } from '../../../library/shared/components/contract-card/contract-card';
+
+export interface AIContractCardData extends ContractCardData {
+  matchPercentage?: number;
+  matchCategory?: string;
+  matchReasoning?: string;
+}
 
 @Component({
   selector: 'app-find-contracts',
@@ -18,9 +26,12 @@ import { ContractCard, ContractCardData } from '../../../library/shared/componen
 })
 export class FindContracts implements OnInit {
   activeTab: 'discover' | 'saved' = 'discover';
-  contracts: ContractCardData[] = [];
-  savedContracts: ContractCardData[] = [];
+  rawContracts: Contract[] = [];
+  contracts: AIContractCardData[] = [];
+  savedContracts: AIContractCardData[] = [];
   isLoading: boolean = true;
+  isAIMatching: boolean = false;
+  isAIApplied: boolean = false;
   
   setTab(tab: 'discover' | 'saved'): void {
     if (this.activeTab === tab) return;
@@ -58,6 +69,8 @@ export class FindContracts implements OnInit {
 
   constructor(
     private contractService: ContractService,
+    private aiService: AIService,
+    private profileService: ProfileService,
     private router: Router
   ) {}
 
@@ -88,7 +101,8 @@ export class FindContracts implements OnInit {
     this.contractService.getAllContracts().subscribe({
       next: (res) => {
         if (res.success) {
-          this.contracts = res.contracts.map(c => this.mapToCardData(c));
+          this.rawContracts = res.contracts;
+          this.contracts = res.contracts.map((c: any) => this.mapToCardData(c));
         }
         this.isLoading = false;
       },
@@ -162,5 +176,68 @@ export class FindContracts implements OnInit {
 
   viewDetails(cardData: ContractCardData): void {
     this.router.navigate(['/contract-details', cardData._id]);
+  }
+
+  matchWithAI(): void {
+    if (this.rawContracts.length === 0) return;
+    
+    this.isAIMatching = true;
+    
+    // First, fetch the freelancer profile
+    this.profileService.getMyProfile().subscribe({
+      next: (profileRes) => {
+        if (profileRes.success && profileRes.profile) {
+          // Then call the AI Matcher with RAW backend contracts
+          this.aiService.matchContracts(profileRes.profile, this.rawContracts).subscribe({
+            next: (aiRes: any) => {
+              if (aiRes && aiRes.matches) {
+                const matchResults = aiRes.matches;
+                
+                // Map the original contracts to include AI data
+                let mappedContracts = this.contracts.map(contract => {
+                  const match = matchResults.find((m: any) => m.contract_id === contract._id);
+                  if (match) {
+                    return {
+                      ...contract,
+                      matchPercentage: match.match_percentage,
+                      matchCategory: match.match_category,
+                      matchReasoning: match.reasoning
+                    };
+                  }
+                  return contract;
+                });
+                
+                // Sort by match percentage descending so High matches are at the top
+                mappedContracts.sort((a, b) => {
+                  const scoreA = a.matchPercentage !== undefined ? a.matchPercentage : -1;
+                  const scoreB = b.matchPercentage !== undefined ? b.matchPercentage : -1;
+                  return scoreB - scoreA;
+                });
+                
+                this.contracts = mappedContracts;
+                this.isAIApplied = true;
+              }
+              this.isAIMatching = false;
+            },
+            error: (err) => {
+              console.error('AI Matching failed:', err);
+              this.isAIMatching = false;
+            }
+          });
+        } else {
+          this.isAIMatching = false;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to fetch profile for AI matching:', err);
+        this.isAIMatching = false;
+      }
+    });
+  }
+
+  clearAIMatch(): void {
+    this.isAIApplied = false;
+    // Restore the contracts array from the original raw contracts
+    this.contracts = this.rawContracts.map((c: any) => this.mapToCardData(c));
   }
 }
