@@ -29,10 +29,21 @@
 
         </div>
 
-        <!-- APPLICATION STATUS -->
-        <app-badge [label]="contract.hasApplied ? 'Applied' : 'Not Applied'"
-            [variant]="contract.hasApplied ? 'success' : 'secondary'" appearance="subtle" [rounded]="true">
-        </app-badge>
+        <!-- APPLICATION STATUS & AI BADGE -->
+        <div class="d-flex flex-column align-items-end gap-2">
+            <app-badge [label]="contract.hasApplied ? 'Applied' : 'Not Applied'"
+                [variant]="contract.hasApplied ? 'success' : 'secondary'" appearance="subtle" [rounded]="true">
+            </app-badge>
+
+            @if (contract.matchPercentage !== undefined) {
+                <app-badge 
+                    [label]="contract.matchPercentage + '% Match (' + contract.matchCategory + ')'"
+                    [variant]="contract.matchCategory === 'High' ? 'success' : (contract.matchCategory === 'Average' ? 'warning' : 'danger')" 
+                    appearance="subtle" 
+                    [rounded]="true">
+                </app-badge>
+            }
+        </div>
 
     </div>
 

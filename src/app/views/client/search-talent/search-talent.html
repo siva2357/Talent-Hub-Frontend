@@ -14,93 +14,177 @@
   <!-- Main Content Wrapper (Glassmorphism) -->
   <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
     <!-- Header -->
-    <header class="mb-4">
-      <h1 class="fw-bold fs-3 mb-1 text-dark">Get to know your Talents</h1>
-      <p class="text-muted small mb-0">Discover skilled professionals and find the perfect match for your projects.</p>
+    <header class="mb-4 d-flex justify-content-between align-items-center">
+      <div>
+        <h1 class="fw-bold fs-3 mb-1 text-dark">Get to know your Talents</h1>
+        <p class="text-muted small mb-0">Discover skilled professionals and find the perfect match for your projects.</p>
+      </div>
+      <div>
+        @if (showAIFilter) {
+          <button class="btn btn-outline-secondary fw-semibold shadow-sm d-flex align-items-center gap-2" (click)="toggleAIFilter()">
+            <i class="bi bi-funnel"></i> Use Manual Filters
+          </button>
+        } @else {
+          <button class="btn btn-info text-white fw-bold shadow-sm d-flex align-items-center gap-2" (click)="toggleAIFilter()" style="background: linear-gradient(45deg, #0dcaf0, #0b5ed7); border: none;">
+            <i class="bi bi-magic"></i> Use AI Intelligence for Smart Match
+          </button>
+        }
+      </div>
     </header>
 
-    <!-- Filter Card -->
-    <div class="glass-card rounded-3 mb-4 p-4 bg-white">
-      <div class="row g-3 mb-3">
-        <!-- Row 1 -->
-        <div class="col-md-3">
-          <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Skills</label>
-          <select class="form-select text-dark" style="font-size: 0.8rem;">
-            <option>All Skills</option>
-          </select>
+    @if (showAIFilter) {
+      <!-- AI Talent Matcher Card -->
+      <div class="glass-card rounded-4 mb-4 p-4 p-md-5 border border-primary border-opacity-25 shadow-sm position-relative overflow-hidden" style="background: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.95) 100%);">
+        <div class="position-absolute top-0 end-0 p-4 opacity-10">
+          <i class="bi bi-robot display-1 text-primary"></i>
         </div>
-        <div class="col-md-3">
-          <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Experience Level</label>
-          <select class="form-select text-dark" style="font-size: 0.8rem;">
-            <option>All Levels</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Availability</label>
-          <select class="form-select text-dark" style="font-size: 0.8rem;">
-            <option>All Availability</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Hourly Rate</label>
-          <select class="form-select text-dark" style="font-size: 0.8rem;">
-            <option>All Rates</option>
-          </select>
-        </div>
+        
+        <h5 class="fw-bold text-primary mb-3 d-flex align-items-center gap-2">
+          <i class="bi bi-magic"></i> AI Smart Talent Match
+        </h5>
+        <p class="text-muted small mb-4" style="max-width: 600px;">
+          Tell our AI exactly what you're looking for. Select a category and list specific skills, and we'll instantly evaluate and score all available talents to find your perfect match.
+        </p>
 
-        <!-- Row 2 -->
-        <div class="col-md-3">
-          <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Location</label>
-          <select class="form-select text-dark" style="font-size: 0.8rem;">
-            <option>All Locations</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Languages</label>
-          <select class="form-select text-dark" style="font-size: 0.8rem;">
-            <option>All Languages</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Job Success</label>
-          <select class="form-select text-dark" style="font-size: 0.8rem;">
-            <option>All Ratings</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Sort By</label>
-          <select class="form-select text-dark" style="font-size: 0.8rem;">
-            <option>Best Match</option>
-          </select>
+        <div class="row g-4 mb-4 align-items-start">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold text-dark small mb-2">Required Category</label>
+            <select class="form-select border-primary border-opacity-25 shadow-sm" [(ngModel)]="searchCategory" [disabled]="isAIApplied || isAIMatching">
+              @for (opt of categoryOptions; track opt.value) {
+                <option [value]="opt.value">{{ opt.label }}</option>
+              }
+            </select>
+          </div>
+          
+          <div class="col-md-6">
+            <label class="form-label fw-semibold text-dark small mb-2">Required Skills (Press Enter to add)</label>
+            <div class="input-group shadow-sm">
+              <span class="input-group-text bg-white border-primary border-opacity-25 text-primary">
+                <i class="bi bi-code-square"></i>
+              </span>
+              <input type="text" class="form-control border-primary border-opacity-25" 
+                     placeholder="e.g. Angular, Node.js, Python..." 
+                     [(ngModel)]="searchSkillInput"
+                     (keyup.enter)="addSkill()"
+                     [disabled]="isAIApplied || isAIMatching">
+              <button class="btn btn-primary px-3" type="button" (click)="addSkill()" [disabled]="!searchSkillInput || isAIApplied || isAIMatching">Add</button>
+            </div>
+            
+            @if (searchSkills.length > 0) {
+              <div class="d-flex flex-wrap gap-2 mt-3 p-3 bg-white rounded-3 border border-light">
+                <span class="text-muted small fw-semibold align-self-center me-2">Selected Skills:</span>
+                @for (skill of searchSkills; track skill) {
+                  <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 d-flex align-items-center gap-2">
+                    {{ skill }}
+                    <i class="bi bi-x-circle-fill cursor-pointer" style="cursor:pointer" (click)="!isAIApplied && !isAIMatching ? removeSkill(skill) : null"></i>
+                  </span>
+                }
+              </div>
+            }
+          </div>
+          
+          <div class="col-md-2 d-flex align-items-end h-100" style="padding-top: 30px;">
+            @if (isAIApplied) {
+              <button class="btn btn-outline-danger w-100 fw-semibold shadow-sm d-flex justify-content-center align-items-center gap-2 py-2" (click)="clearAIMatch()">
+                <i class="bi bi-x-circle"></i> Clear Match
+              </button>
+            } @else {
+              <button class="btn btn-primary w-100 fw-bold shadow-sm d-flex justify-content-center align-items-center gap-2 py-2" 
+                      (click)="matchWithAI()"
+                      [disabled]="isLoading || isAIMatching || freelancers.length === 0 || !searchCategory">
+                @if (isAIMatching) {
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Matching...
+                } @else {
+                  <i class="bi bi-robot"></i> Find Match
+                }
+              </button>
+            }
+          </div>
         </div>
       </div>
+    } @else {
+      <!-- Manual Filter Card -->
+      <div class="glass-card rounded-3 mb-4 p-4 bg-white shadow-sm border border-light">
+        <div class="row g-3 mb-3">
+          <!-- Row 1 -->
+          <div class="col-md-3">
+            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Skills</label>
+            <select class="form-select text-dark" style="font-size: 0.8rem;">
+              <option>All Skills</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Experience Level</label>
+            <select class="form-select text-dark" style="font-size: 0.8rem;">
+              <option>All Levels</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Availability</label>
+            <select class="form-select text-dark" style="font-size: 0.8rem;">
+              <option>All Availability</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Hourly Rate</label>
+            <select class="form-select text-dark" style="font-size: 0.8rem;">
+              <option>All Rates</option>
+            </select>
+          </div>
 
-      <div class="d-flex gap-2">
-        <button class="btn btn-primary rounded-pill fw-semibold shadow-sm btn-sm px-4 fw-semibold">Apply
-          Filters</button>
-        <button class="btn btn-outline-secondary bg-white btn-sm px-4 fw-semibold">Clear All</button>
+          <!-- Row 2 -->
+          <div class="col-md-3">
+            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Location</label>
+            <select class="form-select text-dark" style="font-size: 0.8rem;">
+              <option>All Locations</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Languages</label>
+            <select class="form-select text-dark" style="font-size: 0.8rem;">
+              <option>All Languages</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Job Success</label>
+            <select class="form-select text-dark" style="font-size: 0.8rem;">
+              <option>All Ratings</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Sort By</label>
+            <select class="form-select text-dark" style="font-size: 0.8rem;">
+              <option>Best Match</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary rounded-pill fw-semibold shadow-sm btn-sm px-4">Apply Filters</button>
+          <button class="btn btn-outline-secondary bg-white btn-sm px-4 fw-semibold">Clear All</button>
+        </div>
       </div>
-    </div>
+    }
 
     <!-- Talent Grid -->
     <div class="row g-4">
-
       @if(isLoading) {
-      <div class="col-12 text-center py-5">
-        <span class="spinner-border text-primary" role="status"></span>
-        <p class="mt-2 text-muted">Loading talents...</p>
-      </div>
+        <div class="col-12 text-center py-5">
+          <span class="spinner-border text-primary" role="status"></span>
+          <p class="mt-2 text-muted">Loading talents...</p>
+        </div>
       } @else {
-      @for(freelancer of freelancers; track freelancer._id) {
-      <!-- Talent Card -->
-      <div class="col-md-4">
-        <app-talent-card [talent]="freelancer" (viewProfile)="viewProfile($event.userId)"></app-talent-card>
-      </div>
-      } @empty {
-      <div class="col-12 text-center py-5">
-        <p class="text-muted mb-0">No talents found matching your criteria.</p>
-      </div>
-      }
+        @for(freelancer of freelancers; track freelancer._id) {
+          <!-- Talent Card -->
+          <div class="col-md-4">
+            <app-talent-card [talent]="freelancer" (viewProfile)="viewProfile($event.userId)"></app-talent-card>
+          </div>
+        } @empty {
+          <div class="col-12 text-center py-5">
+            <p class="text-muted mb-0">No talents found matching your criteria.</p>
+          </div>
+        }
       }
     </div>
   </div>

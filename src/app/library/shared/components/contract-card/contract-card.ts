@@ -19,6 +19,8 @@ export interface ContractCardData {
   hasApplied: boolean;
   hasSaved: boolean;
   _id?: string;
+  matchPercentage?: number;
+  matchCategory?: string;
 }
 
 
