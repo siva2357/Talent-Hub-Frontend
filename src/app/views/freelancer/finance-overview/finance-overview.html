@@ -101,67 +101,91 @@
 
 <!-- Withdraw Request Modal -->
 @if (selectedContractForWithdrawal) {
-<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.6); z-index: 1050;">
-  <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 1050;">
+  <div class="modal-dialog modal-dialog-centered modal-md">
     <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-      <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
-        <h5 class="modal-title fw-bold fs-5 text-dark"><i class="bi bi-bank text-primary me-2"></i>Withdrawal Request
-        </h5>
-        <button type="button" class="btn-close" (click)="closeWithdrawModal()"></button>
+      <!-- Gradient Header -->
+      <div class="modal-header border-bottom-0 pb-4 pt-4 px-4" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px;">
+            <i class="bi bi-bank2 text-primary fs-4"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bold fs-5 text-dark mb-0">Withdrawal Request</h5>
+            <span class="text-muted small">Transfer funds to your bank account</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close bg-white rounded-circle shadow-sm p-2" (click)="closeWithdrawModal()" aria-label="Close" style="opacity: 1; top: -10px; position: relative;"></button>
       </div>
-      <div class="modal-body p-4">
-        <div class="alert alert-info border-0 bg-info bg-opacity-10 d-flex gap-3 align-items-center rounded-3 mb-4 p-3">
-          <i class="bi bi-info-circle-fill text-info fs-4 flex-shrink-0"></i>
-          <div class="text-info-dark" style="font-size: 0.8rem; line-height: 1.4;">
-            Your withdrawal request will be sent to the admin for approval. Approved transfers typically take
-            <strong>2-4 hours</strong> to reflect in your bank account.
+      
+      <div class="modal-body p-4 bg-white">
+        <!-- Info Alert -->
+        <div class="alert alert-primary border-0 bg-primary bg-opacity-10 d-flex gap-3 align-items-start rounded-4 mb-4 p-3 shadow-sm">
+          <i class="bi bi-info-circle-fill text-primary fs-5 flex-shrink-0 mt-1"></i>
+          <div class="text-primary-emphasis" style="font-size: 0.85rem; line-height: 1.5;">
+            Your request will be sent to the admin for approval. Approved transfers typically take
+            <strong class="fw-bold">2-4 hours</strong> to reflect in your bank account.
           </div>
         </div>
 
-        <div class="mb-4 bg-light rounded-3 p-3 border border-light shadow-sm">
-          <div class="d-flex justify-content-between mb-2">
-            <span class="text-muted small fw-semibold">Available Balance</span>
-            <span class="fw-bold text-dark">{{ withdrawalAmount | currency:'INR' }}</span>
-          </div>
-          <div class="d-flex justify-content-between mb-2">
-            <span class="text-muted small fw-semibold">Platform Fee (7.5%)</span>
-            <span class="text-danger fw-semibold">-{{ platformFee | currency:'INR' }}</span>
-          </div>
-          <hr class="my-2 border-secondary border-opacity-25">
-          <div class="d-flex justify-content-between align-items-center mt-2">
-            <span class="fw-bold text-dark" style="font-size: 0.9rem;">Net Amount to Receive</span>
-            <span class="fs-4 fw-bold text-success">{{ netAmount | currency:'INR' }}</span>
+        <!-- Balance Summary Card -->
+        <div class="mb-4 bg-white rounded-4 p-4 border border-light shadow-sm position-relative overflow-hidden">
+          <!-- decorative element -->
+          <div class="position-absolute bg-light rounded-circle" style="width: 100px; height: 100px; top: -20px; right: -20px; opacity: 0.5;"></div>
+          
+          <div class="position-relative z-1">
+            <div class="d-flex justify-content-between mb-3 align-items-center">
+              <span class="text-muted small fw-semibold text-uppercase tracking-wide">Available Balance</span>
+              <span class="fw-bold text-dark fs-5">{{ withdrawalAmount | currency:'INR' }}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-3 align-items-center">
+              <span class="text-muted small fw-semibold text-uppercase tracking-wide">Platform Fee <span class="badge bg-light text-secondary border border-secondary border-opacity-25 ms-1">7.5%</span></span>
+              <span class="text-danger fw-bold">-{{ platformFee | currency:'INR' }}</span>
+            </div>
+            
+            <div class="bg-light rounded-3 p-3 mt-3 d-flex justify-content-between align-items-center border border-light">
+              <span class="fw-bold text-dark" style="font-size: 0.95rem;">Net Amount</span>
+              <span class="fs-3 fw-bold text-success" style="letter-spacing: -0.5px;">{{ netAmount | currency:'INR' }}</span>
+            </div>
           </div>
         </div>
 
-        <h6 class="fw-bold mb-3 fs-6 text-dark border-bottom pb-2">Bank Account Details</h6>
+        <h6 class="fw-bold mb-3 fs-6 text-dark d-flex align-items-center gap-2"><i class="bi bi-credit-card-2-front text-primary"></i> Bank Account Details</h6>
 
-        <div class="mb-3">
-          <label class="form-label text-muted small fw-bold mb-1">Bank Name</label>
-          <input type="text" class="form-control" [(ngModel)]="withdrawForm.bankName"
-            placeholder="e.g., HDFC Bank, ICICI Bank">
-        </div>
-        <div class="mb-3">
-          <label class="form-label text-muted small fw-bold mb-1">Account Number</label>
-          <input type="text" class="form-control" [(ngModel)]="withdrawForm.accountNumber"
-            placeholder="Enter your 9-18 digit account number">
-        </div>
-        <div class="mb-4">
-          <label class="form-label text-muted small fw-bold mb-1">IFSC Code</label>
-          <input type="text" class="form-control text-uppercase" [(ngModel)]="withdrawForm.ifscCode"
-            placeholder="e.g., HDFC0001234">
+        <!-- Form Inputs -->
+        <div class="row g-3">
+          <div class="col-12">
+            <div class="form-floating">
+              <input type="text" class="form-control bg-light border-0 shadow-none fw-semibold text-dark" id="bankName" [(ngModel)]="withdrawForm.bankName" placeholder="e.g., HDFC Bank">
+              <label for="bankName" class="text-muted">Bank Name</label>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-floating">
+              <input type="text" class="form-control bg-light border-0 shadow-none fw-semibold text-dark" id="accountNumber" [(ngModel)]="withdrawForm.accountNumber" placeholder="Account Number">
+              <label for="accountNumber" class="text-muted">Account Number</label>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-floating">
+              <input type="text" class="form-control bg-light border-0 shadow-none fw-bold text-dark text-uppercase" id="ifscCode" [(ngModel)]="withdrawForm.ifscCode" placeholder="IFSC Code">
+              <label for="ifscCode" class="text-muted">IFSC Code</label>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="modal-footer border-top-0 pt-0 pb-4 px-4 bg-white">
-        <button type="button" class="btn btn-light fw-semibold px-4" (click)="closeWithdrawModal()">Cancel</button>
-        <button type="button" class="btn btn-primary fw-semibold px-4 d-flex align-items-center gap-2 shadow-sm"
+      
+      <div class="modal-footer border-top-0 pt-2 pb-4 px-4 bg-white d-flex justify-content-between">
+        <button type="button" class="btn btn-light fw-semibold px-4 rounded-pill hover-bg-light text-secondary" (click)="closeWithdrawModal()">Cancel</button>
+        <button type="button" class="btn btn-primary fw-semibold px-4 rounded-pill d-flex align-items-center gap-2 shadow"
           (click)="submitWithdrawRequest()"
-          [disabled]="isWithdrawing || !withdrawForm.bankName || !withdrawForm.accountNumber || !withdrawForm.ifscCode">
+          [disabled]="isWithdrawing || !withdrawForm.bankName || !withdrawForm.accountNumber || !withdrawForm.ifscCode"
+          style="transition: all 0.2s;">
           @if (isWithdrawing) {
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Submitting...
+          Processing...
           } @else {
-          <i class="bi bi-send"></i> Submit Request
+          <i class="bi bi-arrow-right-circle-fill fs-6"></i> Submit Request
           }
         </button>
       </div>

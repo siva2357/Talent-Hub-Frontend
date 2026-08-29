@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,12 @@ import { Observable } from 'rxjs';
 export class AdminService {
   private readonly API_URL = 'http://localhost:5000/api/admin';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private tokenService: TokenService) { }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.tokenService.getToken();
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
 
   getAllClients(): Observable<any> {
     return this.http.get<any>(`${this.API_URL}/clients`);
@@ -32,5 +38,24 @@ export class AdminService {
 
   getAdminStats(): Observable<any> {
     return this.http.get<any>(`${this.API_URL}/dashboard/stats`);
+  }
+
+  getReports(): Observable<any> {
+    return this.http.get<any>(`${this.API_URL}/reports`);
+  }
+
+  generateReport(data: any): Observable<any> {
+    return this.http.post<any>(`${this.API_URL}/reports`, data);
+  }
+
+  getReportData(id: string): Observable<any> {
+    return this.http.get<any>(`${this.API_URL}/reports/${id}/data`);
+  }
+
+  downloadReportFile(id: string): Observable<Blob> {
+    return this.http.get(`${this.API_URL}/reports/${id}/download`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob'
+    });
   }
 }

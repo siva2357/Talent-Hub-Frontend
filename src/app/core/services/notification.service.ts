@@ -72,6 +72,21 @@ export class NotificationService implements OnDestroy {
     );
   }
 
+  clearAll(): Observable<any> {
+    return this.http.delete(`${environment.apiGatewayUrl}/notifications/notifications/clear`).pipe(
+      tap(() => {
+        this.notificationsSubject.next([]);
+        this.updateUnreadCount([]);
+      }),
+      catchError(err => {
+        // Fallback for UI if endpoint doesn't exist yet
+        this.notificationsSubject.next([]);
+        this.updateUnreadCount([]);
+        return [];
+      })
+    );
+  }
+
   private updateUnreadCount(notifications: Notification[]): void {
     const unread = notifications.filter(n => !n.read).length;
     this.unreadCountSubject.next(unread);

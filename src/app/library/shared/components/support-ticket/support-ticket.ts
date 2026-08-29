@@ -87,27 +87,22 @@ export class SupportTicket {
 
 
   get formattedClosedDate(): string {
-
-    if (
-      !this.ticket ||
-      this.ticket.status !== 'Closed'
-    ) {
+    if (!this.ticket || this.ticket.status !== 'Closed' || !this.ticket.updatedAt) {
       return '';
     }
-
     return this.formatDate(this.ticket.updatedAt);
-
   }
 
-
   private formatDate(date: string): string {
-
+    if (!date) return 'N/A';
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return 'N/A';
+    
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: '2-digit',
       year: 'numeric'
-    }).format(new Date(date));
-
+    }).format(d);
   }
 
 }

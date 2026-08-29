@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupportService } from '../../../core/services/support.service';
+import { SupportTicket } from '../../../library/shared/components/support-ticket/support-ticket';
 
 @Component({
   selector: 'app-support-request',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SupportTicket],
   providers: [DatePipe],
   templateUrl: './support-request.html',
   styleUrl: './support-request.css'
@@ -58,16 +59,9 @@ export class SupportRequest implements OnInit {
     });
   }
 
-  openTicketModal(ticket: any) {
+  selectTicket(ticket: any) {
     this.selectedTicket = ticket;
     this.replyMessage = '';
-    // Use bootstrap modal API to open modal
-    const modal = document.getElementById('ticketDetailsModal');
-    if (modal) {
-      // @ts-ignore
-      const bsModal = new bootstrap.Modal(modal);
-      bsModal.show();
-    }
   }
 
   submitReply() {

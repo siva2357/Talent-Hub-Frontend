@@ -7,18 +7,36 @@ import { FileService } from '../../../core/services/file.service';
 import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
 import { AuthService } from '../../../core/services/auth.service';
 import { TokenService } from '../../../core/services/token.service';
+import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
+import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
+import { Button } from '../../../library/ui/components/button/button';
+import { InputField } from '../../../library/ui/components/input-field/input-field';
 
 @Component({
   selector: 'app-create-ticket',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule, CommonModule],
+  imports: [RouterModule, ReactiveFormsModule, CommonModule, FileUpload, FilePreview, Button, InputField],
   templateUrl: './create-ticket.html',
   styleUrl: './create-ticket.css'
 })
 export class CreateTicket implements OnInit {
   ticketForm!: FormGroup;
-  attachments: File[] = [];
+  attachments: {name: string, url: string}[] = [];
   isSubmitting = false;
+
+  uploadBucket = UploadBucket;
+  uploadSection = UploadSection;
+
+  categoryOptions = [
+    { label: 'General Support', value: 'General Support' },
+    { label: 'Technical Issue', value: 'Technical Issue' },
+    { label: 'Billing & Payments', value: 'Billing & Payments' },
+    { label: 'Contract & Proposals', value: 'Contract & Proposals' },
+    { label: 'Account & Profile', value: 'Account & Profile' },
+    { label: 'Project & Delivery', value: 'Project & Delivery' },
+    { label: 'Disputes & Resolution', value: 'Disputes & Resolution' },
+    { label: 'Feature Request', value: 'Feature Request' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -41,26 +59,10 @@ export class CreateTicket implements OnInit {
     this.ticketForm.patchValue({ category });
   }
 
-  onFileSelected(event: any) {
-    const files: FileList = event.target.files;
-    this.handleFiles(files);
-  }
-
-  onDragOver(event: any) {
-    event.preventDefault();
-  }
-
-  onDrop(event: any) {
-    event.preventDefault();
-    const files: FileList = event.dataTransfer.files;
-    this.handleFiles(files);
-  }
-
-  handleFiles(files: FileList) {
-    for (let i = 0; i < files.length; i++) {
-      if (this.attachments.length < 5) { // max 5 files
-        this.attachments.push(files[i]);
-      }
+  onUploadComplete(url: string) {
+    if (this.attachments.length < 5) { // max 5 files
+      const filename = url.split('/').pop() || 'attachment';
+      this.attachments.push({ name: filename, url: url });
     }
   }
 
@@ -77,25 +79,12 @@ export class CreateTicket implements OnInit {
     this.isSubmitting = true;
     
     try {
-      const uploadedAttachments: {name: string, url: string}[] = [];
-      const userRole = this.tokenService.getRole();
-      // Determine correct bucket based on user role
-      const bucket = userRole === 'client' ? UploadBucket.ClientData : UploadBucket.FreelancerData;
-
-      // Upload files
-      for (const file of this.attachments) {
-        const res = await this.fileService.uploadFile(file, bucket, UploadSection.SupportRequest).toPromise();
-        if (res && res.success) {
-          uploadedAttachments.push({ name: file.name, url: res.url });
-        }
-      }
-
       const formValue = this.ticketForm.value;
       const payload = {
         subject: formValue.subject,
         category: formValue.category,
         description: formValue.description,
-        attachments: uploadedAttachments
+        attachments: this.attachments
       };
 
       await this.supportService.createTicket(payload).toPromise();

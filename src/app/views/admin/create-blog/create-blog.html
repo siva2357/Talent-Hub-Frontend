@@ -12,181 +12,153 @@
   </div>
 
   <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="position-relative z-1 glass-card p-4 mx-auto" style="max-width: 1400px;">
-  <!-- Back Link & Header -->
-  <div class="mb-4">
-    <a routerLink="/blog-manager" class="text-primary text-decoration-none small fw-semibold mb-3 d-inline-block cursor-pointer">&larr; Back to Blog Manager</a>
-    <h1 class="fw-bold fs-4 mb-1">Create New Blog Article</h1>
-    <p class="text-muted small mb-0">Share your knowledge and insights with the community.</p>
-  </div>
-
-  <!-- Main Content Card -->
-  <form [formGroup]="blogForm" (ngSubmit)="onSubmit(false)">
-    <div class="card shadow-sm border-light rounded-4 mb-4 bg-white bg-opacity-75">
-    <div class="card-body p-4">
-      <div class="mb-4">
-        <label class="form-label fw-bold text-dark small mb-2"><i class="bi bi-fonts text-muted me-2"></i>Article Title <span class="text-danger">*</span></label>
-        <input type="text" formControlName="title" class="form-control rounded-pill px-4 shadow-sm py-2" placeholder="Enter an engaging title for your article...">
-        <div class="text-end text-muted mt-1" style="font-size: 0.7rem;">{{ blogForm.get('title')?.value?.length || 0 }}/150</div>
-      </div>
-
-      <div>
-        <label class="form-label fw-bold text-dark small mb-2"><i class="bi bi-text-paragraph text-muted me-2"></i>Blog Content <span class="text-danger">*</span></label>
-        <div class="border border-light rounded-4 overflow-hidden bg-white shadow-sm">
-          <!-- Mock Toolbar -->
-          <div class="bg-light border-bottom p-2 d-flex flex-wrap gap-2 align-items-center">
-            <select class="form-select form-select-sm border-0 bg-transparent w-auto fw-semibold">
-              <option>Paragraph</option>
-            </select>
-            <div class="vr mx-1"></div>
-            <div class="btn-group btn-group-sm">
-              <button class="btn btn-light border-0 fw-bold">B</button>
-              <button class="btn btn-light border-0 fst-italic">I</button>
-              <button class="btn btn-light border-0 text-decoration-underline">U</button>
-              <button class="btn btn-light border-0 text-decoration-line-through">S</button>
-            </div>
-            <div class="vr mx-1"></div>
-            <div class="btn-group btn-group-sm fw-bold">
-              <button class="btn btn-light border-0">H1</button>
-              <button class="btn btn-light border-0">H2</button>
-              <button class="btn btn-light border-0">H3</button>
-            </div>
-            <div class="vr mx-1"></div>
-            <div class="btn-group btn-group-sm">
-              <button class="btn btn-light border-0">&#9776;</button>
-              <button class="btn btn-light border-0">&#8801;</button>
-            </div>
-            <div class="vr mx-1"></div>
-            <div class="btn-group btn-group-sm">
-              <button class="btn btn-light border-0">&#128279;</button>
-              <button class="btn btn-light border-0">&#128247;</button>
-              <button class="btn btn-light border-0">&#9654;</button>
-              <button class="btn btn-light border-0">&#10077;</button>
-              <button class="btn btn-light border-0">&lt;/&gt;</button>
-              <button class="btn btn-light border-0">&#8862;</button>
-            </div>
-            <div class="vr mx-1"></div>
-            <div class="btn-group btn-group-sm">
-              <button class="btn btn-light border-0">&#8617;</button>
-              <button class="btn btn-light border-0">&#8618;</button>
-            </div>
-            <div class="ms-auto">
-              <button class="btn btn-sm btn-light border shadow-sm">+ Add Block</button>
-            </div>
-          </div>
-          <!-- Editor Area -->
-          <textarea formControlName="content" class="form-control border-0 rounded-bottom" rows="10" placeholder="Write your blog content here..."></textarea>
-        </div>
-        <div class="d-flex justify-content-end gap-3 text-muted mt-2" style="font-size: 0.7rem;">
-          <span>Words: 0</span>
-          <span>Characters: 0</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Settings Row -->
-  <div class="row g-4 mb-4">
-    <div class="col-md-6">
-      <div class="card shadow-sm border-light rounded-4 h-100 bg-white bg-opacity-75">
-        <div class="card-body p-4">
-          <label class="form-label fw-bold text-dark small mb-3"><i class="bi bi-folder text-muted me-2"></i>Category <span class="text-danger">*</span></label>
-          <select formControlName="category" class="form-select text-muted rounded-pill px-4 shadow-sm py-2">
-            <option value="">Select a category</option>
-            <option value="Career">Career</option>
-            <option value="Technology">Technology</option>
-            <option value="Platform News">Platform News</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card shadow-sm border-light rounded-4 h-100 bg-white bg-opacity-75">
-        <div class="card-body p-4">
-          <label class="form-label fw-bold text-dark small mb-3"><i class="bi bi-gear text-muted me-2"></i>Status <span class="text-danger">*</span></label>
-          <select formControlName="status" class="form-select text-dark rounded-pill px-4 shadow-sm py-2">
-            <option value="Draft">&#9675; Draft</option>
-            <option value="Published">Published</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Media & Tags Row -->
-  <div class="row g-4 mb-4">
-    <!-- Featured Image -->
-    <div class="col-md-4">
-      <div class="card shadow-sm border-light rounded-4 h-100 bg-white bg-opacity-75">
-        <div class="card-body p-4">
-          <label class="form-label fw-bold text-dark small mb-3"><i class="bi bi-cloud-upload text-muted me-2"></i>Featured Image / Video</label>
-          <label 
-            class="border border-2 border-primary border-opacity-25 rounded-4 border-dashed p-4 text-center bg-primary bg-opacity-10 transition-all hover-bg-light cursor-pointer d-block"
-            (dragover)="onDragOver($event)"
-            (drop)="onDropFeaturedMedia($event)">
-            <input type="file" class="d-none" (change)="onFeaturedMediaSelected($event)" accept="image/*,video/*">
-            <h4 class="text-primary fs-3 mb-2"><i class="bi bi-cloud-arrow-up"></i></h4>
-            <p class="text-dark fw-bold small mb-1">Drag & drop your file here</p>
-            <p class="text-primary small mb-0">or click to browse</p>
-          </label>
-          <p class="text-muted mt-2 mb-0 text-center" style="font-size: 0.65rem;">Supports: Images, Videos, GIFs • Max size: 50MB</p>
-          <div *ngIf="featuredMediaPreview" class="mt-3 text-center">
-            <img [src]="featuredMediaPreview" class="img-fluid rounded shadow-sm" style="max-height: 150px;">
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Tags -->
-    <div class="col-md-4">
-      <div class="card shadow-sm border-light rounded-4 h-100 bg-white bg-opacity-75">
-        <div class="card-body p-4">
-          <label class="form-label fw-bold text-dark small mb-3"><i class="bi bi-tags text-muted me-2"></i>Tags (Optional)</label>
-          <input type="text" formControlName="tags" class="form-control rounded-pill px-4 shadow-sm py-2 mb-2" placeholder="Enter tags separated by commas">
-          <p class="text-muted mb-4" style="font-size: 0.7rem;">Example: JavaScript, Web Development, Tutorial, Angular</p>
-          <p class="text-muted small mb-0" style="font-size: 0.75rem;">Add relevant tags to help readers find your article.</p>
-        </div>
-      </div>
+  <div class="col-9 p-5 mx-auto ">
+    <!-- Back Link & Header -->
+    <div class="mb-5 border-bottom border-light pb-4">
+      <a routerLink="/blog-manager"
+        class="text-primary text-decoration-none fw-semibold mb-3 d-inline-flex align-items-center gap-2 cursor-pointer transition-all hover-opacity"><i
+          class="bi bi-arrow-left"></i> Back to Blog Manager</a>
+      <h1 class="fw-bold fs-3 mb-1 text-dark">Create New Blog Article</h1>
+      <p class="text-muted mb-0">Share your knowledge and insights with the community.</p>
     </div>
 
-    <!-- Blog Banner -->
-    <div class="col-md-4">
-      <div class="card shadow-sm border-light rounded-4 h-100 bg-white bg-opacity-75">
-        <div class="card-body p-4">
-          <label class="form-label fw-bold text-dark small mb-3"><i class="bi bi-image text-muted me-2"></i>Blog Banner</label>
-          <div class="d-flex gap-3">
-            <div class="rounded-4 flex-shrink-0 border border-light shadow-sm overflow-hidden" style="width: 120px; height: 80px; background: linear-gradient(135deg, #a78bfa 0%, #38bdf8 50%, #f472b6 100%);">
-              <img *ngIf="blogBannerPreview" [src]="blogBannerPreview" class="w-100 h-100 object-fit-cover">
+    <!-- Main Content Form -->
+    <form [formGroup]="blogForm" (ngSubmit)="onSubmit(false)">
+
+      <div class="row g-5 mb-5">
+
+        <!-- Blog Banner Row -->
+        <div>
+          <h6 class="fw-bold mb-3"><i class="bi bi-image text-primary me-2"></i> Blog Banner</h6>
+          <div class="row g-4 mb-2">
+            <!-- Upload Component (Left) -->
+            <div class="col-md-6">
+              <div class="p-4 bg-light bg-opacity-50 border border-light rounded-4 h-100">
+                <app-file-upload (uploadComplete)="onUploadComplete($event, 'banner')"
+                  [uploadBucket]="uploadBucket.AdminCollection" [uploadSection]="uploadSection.BlogMedia"
+                  title="Drop Banner Image" browseText="browse" acceptedFormats="Image"></app-file-upload>
+              </div>
             </div>
-            <div>
-              <p class="text-dark small fw-semibold mb-1" style="font-size: 0.75rem;">This will be used as the banner image for your blog post.</p>
-              <p class="text-muted mb-2" style="font-size: 0.65rem;">Recommended size: 1200x630px</p>
-              <div class="d-flex gap-2">
-                <label class="btn btn-outline-primary btn-sm rounded-pill px-3 bg-white shadow-sm mb-0">
-                  Upload
-                  <input type="file" class="d-none" (change)="onBannerSelected($event)" accept="image/*">
-                </label>
-                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 bg-white border-opacity-50 shadow-sm" (click)="clearBanner()">Clear</button>
+            
+            <!-- Preview Component (Right) -->
+            <div class="col-md-6">
+              <div class="p-4 bg-light bg-opacity-50 border border-light rounded-4 h-100 d-flex flex-column justify-content-center align-items-center">
+                @if (blogBannerUrl) {
+                <div class="w-100">
+                  <app-file-preview mode="image" [previewUrl]="blogBannerUrl"
+                    (removeClicked)="clearFile('banner')"></app-file-preview>
+                </div>
+                } @else {
+                <div class="text-muted text-center opacity-50">
+                  <i class="bi bi-image fs-1 mb-2 d-block"></i>
+                  <p class="mb-0 small fw-medium">Banner preview will appear here</p>
+                </div>
+                }
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Action Footer -->
-  <div class="d-flex justify-content-between align-items-center pt-3 border-top border-light mt-4 mb-2">
-    <button type="button" routerLink="/blog-manager" class="btn btn-outline-secondary rounded-pill bg-white text-dark shadow-sm px-4 fw-semibold cursor-pointer" [disabled]="isSubmitting"><i class="bi bi-x-lg me-1"></i> Cancel</button>
-    <div class="d-flex gap-3">
-      <button type="button" class="btn btn-outline-primary rounded-pill bg-white shadow-sm px-4 fw-semibold d-flex align-items-center gap-2" [disabled]="isSubmitting" (click)="onSubmit(true)"><i class="bi bi-save"></i> Save as Draft</button>
-      <button type="submit" class="btn btn-primary rounded-pill shadow-sm px-4 fw-semibold d-flex align-items-center gap-2" [disabled]="isSubmitting || blogForm.invalid">
-        <i class="bi bi-send" *ngIf="!isSubmitting"></i>
-        <span class="spinner-border spinner-border-sm" *ngIf="isSubmitting"></span>
-        {{ isSubmitting ? 'Publishing...' : 'Publish Blog' }}
-      </button>
-    </div>
+        <!-- Title & Content -->
+        <div class="mb-4">
+          <app-input-field type="text" [value]="blogForm.get('title')?.value || ''"
+            (valueChange)="blogForm.get('title')?.setValue($event)"
+            placeholder="Enter an engaging title for your article..." label="Article Title *" [showIcon]="true"
+            icon="bi bi-fonts"></app-input-field>
+          <div class="text-end text-muted mt-1" style="font-size: 0.75rem;">{{ blogForm.get('title')?.value?.length ||
+            0 }}/150</div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-bold text-dark small mb-2"><i
+              class="bi bi-text-paragraph text-muted me-2"></i>Blog Content <span class="text-danger">*</span></label>
+          <div class="border border-light rounded-4 overflow-hidden bg-white shadow-sm">
+            <!-- Mock Toolbar -->
+            <div class="bg-light border-bottom p-2 d-flex flex-wrap gap-2 align-items-center">
+              <select class="form-select form-select-sm border-0 bg-transparent w-auto fw-semibold">
+                <option>Paragraph</option>
+              </select>
+              <div class="vr mx-1"></div>
+              <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-light border-0 fw-bold">B</button>
+                <button type="button" class="btn btn-light border-0 fst-italic">I</button>
+                <button type="button" class="btn btn-light border-0 text-decoration-underline">U</button>
+                <button type="button" class="btn btn-light border-0 text-decoration-line-through">S</button>
+              </div>
+              <div class="vr mx-1"></div>
+              <div class="btn-group btn-group-sm fw-bold">
+                <button type="button" class="btn btn-light border-0">H1</button>
+                <button type="button" class="btn btn-light border-0">H2</button>
+                <button type="button" class="btn btn-light border-0">H3</button>
+              </div>
+              <div class="vr mx-1"></div>
+              <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-light border-0">&#128279;</button>
+                <button type="button" class="btn btn-light border-0">&#128247;</button>
+              </div>
+            </div>
+            <!-- Editor Area -->
+            <textarea class="form-control border-0 rounded-0 shadow-none p-4" rows="15"
+              placeholder="Write your blog content here..." formControlName="content"
+              style="resize: none; background: transparent;"></textarea>
+          </div>
+        </div>
+
+        <!-- Right Column: Settings, Media, Tags -->
+
+        <!-- Meta Fields Row -->
+        <div class="row g-4 mb-4">
+          <div class="col-md-6">
+            <app-input-field type="select" [options]="categoryOptions" [value]="blogForm.get('category')?.value || ''"
+              (valueChange)="blogForm.get('category')?.setValue($event)" label="Category *" [showIcon]="true"
+              icon="bi bi-folder"></app-input-field>
+          </div>
+          <div class="col-md-6">
+            <app-input-field type="text" [value]="blogForm.get('tags')?.value || ''"
+              (valueChange)="blogForm.get('tags')?.setValue($event)" placeholder="e.g., UI, Tech, Remote"
+              label="Tags"></app-input-field>
+          </div>
+        </div>
+
+        <!-- Uploads Row -->
+        <h6 class="fw-bold mb-3"><i class="bi bi-cloud-upload text-primary me-2"></i> Featured Media</h6>
+        <div class="row g-4">
+          <!-- Upload Component (Left) -->
+          <div class="col-md-6">
+            <div class="p-4 bg-light bg-opacity-50 border border-light rounded-4 h-100">
+              <app-file-upload (uploadComplete)="onUploadComplete($event, 'featured')"
+                [uploadBucket]="uploadBucket.AdminCollection" [uploadSection]="uploadSection.BlogMedia"
+                title="Drop Featured Media" browseText="browse" acceptedFormats="Image or Video"></app-file-upload>
+            </div>
+          </div>
+          
+          <!-- Preview Component (Right) -->
+          <div class="col-md-6">
+            <div class="p-4 bg-light bg-opacity-50 border border-light rounded-4 h-100 d-flex flex-column justify-content-center align-items-center">
+              @if (featuredMediaUrl) {
+              <div class="w-100">
+                <app-file-preview mode="image" [previewUrl]="featuredMediaUrl"
+                  (removeClicked)="clearFile('featured')"></app-file-preview>
+              </div>
+              } @else {
+              <div class="text-muted text-center opacity-50">
+                <i class="bi bi-image fs-1 mb-2 d-block"></i>
+                <p class="mb-0 small fw-medium">Image preview will appear here</p>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Footer -->
+      <div class="d-flex justify-content-between align-items-center pt-4 border-top border-light mt-4">
+        <app-button variant="light" label="Cancel" class="text-dark" [iconOnly]="false"
+          (clicked)="router.navigate(['/blog-manager'])"></app-button>
+        <app-button variant="primary" [label]="isSubmitting ? 'Publishing...' : 'Publish Blog'" [iconOnly]="false"
+          [disabled]="isSubmitting || blogForm.invalid" (clicked)="onSubmit(false)"></app-button>
+      </div>
+    </form>
   </div>
-  </form>
-</div>
 </div>

@@ -23,7 +23,7 @@ export const ADMIN_ROUTES: Routes = [
   { path: 'support-request', component: SupportRequest },
   { path: 'blog-manager', component: BlogManager },
   { path: 'create-blog', component: CreateBlog },
-  { path: 'view-report', component: ViewReport },
+  { path: 'view-report/:id', component: ViewReport },
   { path: 'meet-page', component: MeetPage },
   { path: 'chat-page', component: ChatPage }
 ];

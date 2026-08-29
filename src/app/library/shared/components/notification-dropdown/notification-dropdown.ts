@@ -14,7 +14,7 @@ import { Badge } from '../../../ui/components/badge/badge';
 export class NotificationDropdown implements OnInit, OnDestroy {
   notifications: Notification[] = [];
   unreadCount: number = 0;
-  visibleLimit: number = 3;
+  visibleLimit: number = 4;
   private subscriptions: Subscription = new Subscription();
 
   constructor(private notificationService: NotificationService) {}
@@ -42,12 +42,12 @@ export class NotificationDropdown implements OnInit, OnDestroy {
 
   viewMore(event: Event): void {
     event.preventDefault();
-    this.visibleLimit += 5;
+    this.visibleLimit = 6;
   }
 
   viewLess(event: Event): void {
     event.preventDefault();
-    this.visibleLimit = Math.max(3, this.visibleLimit - 5);
+    this.visibleLimit = 4;
   }
 
   markAllAsRead(event: Event): void {
@@ -57,9 +57,17 @@ export class NotificationDropdown implements OnInit, OnDestroy {
     );
   }
 
-  markAsRead(id: string): void {
+  markAsRead(event: Event, id: string): void {
+    event.preventDefault();
     this.subscriptions.add(
       this.notificationService.markAsRead(id).subscribe()
+    );
+  }
+
+  clearAll(event: Event): void {
+    event.preventDefault();
+    this.subscriptions.add(
+      this.notificationService.clearAll().subscribe()
     );
   }
 }

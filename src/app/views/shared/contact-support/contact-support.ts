@@ -4,11 +4,13 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupportService } from '../../../core/services/support.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { SupportTicket } from '../../../library/shared/components/support-ticket/support-ticket';
+import { StatCard } from '../../../library/shared/components/stat-card/stat-card';
 
 @Component({
   selector: 'app-contact-support',
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule],
+  imports: [RouterModule, CommonModule, FormsModule, SupportTicket, StatCard],
   providers: [DatePipe],
   templateUrl: './contact-support.html',
   styleUrl: './contact-support.css'
@@ -19,7 +21,7 @@ export class ContactSupport implements OnInit {
   isLoading = true;
   replyMessage: string = '';
   isReplying = false;
-  
+
   // Stats
   totalTickets = 0;
   openTickets = 0;
@@ -29,7 +31,7 @@ export class ContactSupport implements OnInit {
   constructor(
     private supportService: SupportService,
     public authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.fetchTickets();
@@ -42,9 +44,6 @@ export class ContactSupport implements OnInit {
         if (res.success) {
           this.tickets = res.tickets || [];
           this.calculateStats();
-          if (this.tickets.length > 0) {
-            this.selectedTicket = this.tickets[0];
-          }
         }
         this.isLoading = false;
       },
@@ -69,7 +68,7 @@ export class ContactSupport implements OnInit {
 
   submitReply() {
     if (!this.replyMessage.trim() || !this.selectedTicket) return;
-    
+
     this.isReplying = true;
     const payload = {
       message: this.replyMessage,
@@ -112,7 +111,7 @@ export class ContactSupport implements OnInit {
   }
 
   getCategoryIcon(category: string): string {
-    const map: {[key: string]: string} = {
+    const map: { [key: string]: string } = {
       'General Support': 'bi-headset',
       'Technical Issue': 'bi-wrench-adjustable',
       'Billing & Payments': 'bi-receipt',
@@ -126,7 +125,7 @@ export class ContactSupport implements OnInit {
   }
 
   getCategoryBg(category: string): string {
-    const map: {[key: string]: string} = {
+    const map: { [key: string]: string } = {
       'General Support': 'bg-purple-soft text-purple',
       'Technical Issue': 'bg-success bg-opacity-10 text-success',
       'Billing & Payments': 'bg-primary bg-opacity-10 text-primary',
@@ -140,7 +139,7 @@ export class ContactSupport implements OnInit {
   }
 
   getStatusBadgeClass(status: string): string {
-    const map: {[key: string]: string} = {
+    const map: { [key: string]: string } = {
       'Open': 'bg-primary bg-opacity-10 text-primary border-primary',
       'WaitingForAdmin': 'bg-warning bg-opacity-10 text-warning-dark border-warning',
       'WaitingForUser': 'bg-info bg-opacity-10 text-info border-info',
