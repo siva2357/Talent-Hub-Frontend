@@ -79,11 +79,27 @@
               <tbody class="border-top-0">
                 @for (row of data?.tableData; track row.col1) {
                 <tr>
+                  <!-- Generic Reusable Cell Rendering -->
                   <td class="px-4 fw-bold text-dark text-start">{{ row.col1 }}</td>
                   <td class="px-4 text-start text-muted">{{ row.col2 }}</td>
-                  <td class="px-4 text-start"><span class="badge bg-light text-dark border">{{ row.col3 }}</span></td>
+                  
+                  <td class="px-4 text-start">
+                    @if (row.col3 === 'draft' || row.col3 === 'open' || row.col3 === 'in progress' || row.col3 === 'completed' || row.col3 === 'closed' || row.col3 === 'client' || row.col3 === 'freelancer' || row.col3 === 'active' || row.col3 === 'inactive') {
+                      <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 text-capitalize">{{ row.col3 }}</span>
+                    } @else {
+                      <span class="text-muted">{{ row.col3 }}</span>
+                    }
+                  </td>
+                  
                   <td class="px-4 text-start text-muted">{{ row.col4 }}</td>
-                  <td class="px-4 text-start">{{ row.col5 }}</td>
+                  
+                  <td class="px-4 text-start">
+                    @if (row.col5 === 'draft' || row.col5 === 'open' || row.col5 === 'in progress' || row.col5 === 'completed' || row.col5 === 'closed' || row.col5 === 'client' || row.col5 === 'freelancer' || row.col5 === 'active' || row.col5 === 'inactive') {
+                      <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 text-capitalize">{{ row.col5 }}</span>
+                    } @else {
+                      <span class="text-muted">{{ row.col5 }}</span>
+                    }
+                  </td>
                 </tr>
                 } @empty {
                 <tr>
