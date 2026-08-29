@@ -13,23 +13,7 @@ import { StatCard, StatCardData } from '../../../library/shared/components/stat-
 import { Table, TableColumn } from '../../../library/ui/components/table/table';
 import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
 
-interface Applicant {
-  applicationId: string;
-  applicationStatus: string;
-  offerStatus: string;
-  freelancer: {
-    _id: string;
-    fullName: string;
-    email: string;
-    gender: string;
-    availability: string[] | string;
-    profilePhoto?: string;
-    city?: string;
-    professionalHeadline?: string;
-  };
-  avatarColor?: string;
-  index?: number;
-}
+import { Applicant } from '../../../core/models/application.model';
 
 @Component({
   selector: 'app-applicants',

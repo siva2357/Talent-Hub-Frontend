@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { BaseService } from './base.service';
 import { BehaviorSubject, Observable, timer, Subscription } from 'rxjs';
 import { switchMap, tap, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -16,12 +16,13 @@ export interface Notification {
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationService implements OnDestroy {
+export class NotificationService extends BaseService implements OnDestroy {
   private notificationsSubject = new BehaviorSubject<Notification[]>([]);
   private unreadCountSubject = new BehaviorSubject<number>(0);
   private pollingSubscription?: Subscription;
 
-  constructor(private http: HttpClient) {
+  constructor() {
+    super();
     this.startPolling();
   }
 
@@ -36,7 +37,7 @@ export class NotificationService implements OnDestroy {
   private startPolling(): void {
     // Poll every 30 seconds
     this.pollingSubscription = timer(0, 30000).pipe(
-      switchMap(() => this.http.get<{ notifications: Notification[] }>(`${environment.apiGatewayUrl}/notifications/notifications`)),
+      switchMap(() => this.get<{ notifications: Notification[] }>(`${environment.apiGatewayUrl}/notifications/notifications`)),
       catchError(err => {
         console.error('Failed to fetch notifications', err);
         return [];
@@ -49,7 +50,7 @@ export class NotificationService implements OnDestroy {
   }
 
   markAsRead(id: string): Observable<any> {
-    return this.http.patch(`${environment.apiGatewayUrl}/notifications/notifications/${id}/read`, {}).pipe(
+    return this.patch(`${environment.apiGatewayUrl}/notifications/notifications/${id}/read`, {}).pipe(
       tap(() => {
         const notifs = this.notificationsSubject.value;
         const index = notifs.findIndex(n => n._id === id);
@@ -63,7 +64,7 @@ export class NotificationService implements OnDestroy {
   }
 
   markAllAsRead(): Observable<any> {
-    return this.http.patch(`${environment.apiGatewayUrl}/notifications/notifications/read-all`, {}).pipe(
+    return this.patch(`${environment.apiGatewayUrl}/notifications/notifications/read-all`, {}).pipe(
       tap(() => {
         const notifs = this.notificationsSubject.value.map(n => ({ ...n, read: true }));
         this.notificationsSubject.next(notifs);
@@ -73,7 +74,7 @@ export class NotificationService implements OnDestroy {
   }
 
   clearAll(): Observable<any> {
-    return this.http.delete(`${environment.apiGatewayUrl}/notifications/notifications/clear`).pipe(
+    return this.delete(`${environment.apiGatewayUrl}/notifications/notifications/clear`).pipe(
       tap(() => {
         this.notificationsSubject.next([]);
         this.updateUnreadCount([]);

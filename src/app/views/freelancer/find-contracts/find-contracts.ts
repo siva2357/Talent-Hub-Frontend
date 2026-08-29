@@ -4,18 +4,13 @@ import { Router } from '@angular/router';
 import { ContractService } from '../../../core/services/contract.service';
 import { AIService } from '../../../core/services/ai.service';
 import { ProfileService } from '../../../core/services/profile.service';
-import { Contract } from '../../../core/models/contract.model';
-import { InputField, InputOption } from '../../../library/ui/components/input-field/input-field';
+import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from '../../../library/ui/components/chip/chip';
 import { Button } from '../../../library/ui/components/button/button';
 import { Loader } from '../../../library/ui/components/loader/loader';
-import { ContractCard, ContractCardData } from '../../../library/shared/components/contract-card/contract-card';
-
-export interface AIContractCardData extends ContractCardData {
-  matchPercentage?: number;
-  matchCategory?: string;
-  matchReasoning?: string;
-}
+import { ContractCard } from '../../../library/shared/components/contract-card/contract-card';
+import { Contract, ContractCardData, AIContractCardData } from '../../../core/models/contract.model';
+import { InputOption } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-find-contracts',
@@ -32,10 +27,10 @@ export class FindContracts implements OnInit {
   isLoading: boolean = true;
   isAIMatching: boolean = false;
   isAIApplied: boolean = false;
-  
+
   setTab(tab: 'discover' | 'saved'): void {
     if (this.activeTab === tab) return;
-    
+
     this.activeTab = tab;
     this.isLoading = true;
 
@@ -45,7 +40,7 @@ export class FindContracts implements OnInit {
       this.fetchSavedContracts();
     }
   }
-  
+
   categoryOptions: InputOption[] = [
     { label: 'All Categories', value: 'all' },
     { label: 'Web Development', value: 'web' },
@@ -72,7 +67,7 @@ export class FindContracts implements OnInit {
     private aiService: AIService,
     private profileService: ProfileService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.fetchContracts();
@@ -119,7 +114,7 @@ export class FindContracts implements OnInit {
         if (res.success) {
           this.savedContracts = res.contracts.map(c => this.mapToCardData(c));
           // Refresh discover tab cards to reflect saved state if we are tracking them
-          this.contracts = this.contracts.map(c => ({...c, hasSaved: this.isContractSaved(c._id || '')}));
+          this.contracts = this.contracts.map(c => ({ ...c, hasSaved: this.isContractSaved(c._id || '') }));
         }
         this.isLoading = false;
       },
@@ -132,16 +127,16 @@ export class FindContracts implements OnInit {
 
   toggleSave(cardData: ContractCardData): void {
     const isSaved = cardData.hasSaved;
-    
+
     // Optimistic UI update
     cardData.hasSaved = !isSaved;
-    
+
     if (isSaved) {
       this.contractService.unsaveContract(cardData._id as string).subscribe({
         next: (res) => {
           if (res.success) {
             if (this.activeTab === 'saved') {
-               this.savedContracts = this.savedContracts.filter(c => c._id !== cardData._id);
+              this.savedContracts = this.savedContracts.filter(c => c._id !== cardData._id);
             }
             this.fetchSavedContractsBackground();
           }
@@ -164,7 +159,7 @@ export class FindContracts implements OnInit {
         if (res.success) {
           this.savedContracts = res.contracts.map(c => this.mapToCardData(c));
           // Sync existing contracts list
-          this.contracts = this.contracts.map(c => ({...c, hasSaved: this.isContractSaved(c._id || '')}));
+          this.contracts = this.contracts.map(c => ({ ...c, hasSaved: this.isContractSaved(c._id || '') }));
         }
       }
     });
@@ -180,9 +175,9 @@ export class FindContracts implements OnInit {
 
   matchWithAI(): void {
     if (this.rawContracts.length === 0) return;
-    
+
     this.isAIMatching = true;
-    
+
     // First, fetch the freelancer profile
     this.profileService.getMyProfile().subscribe({
       next: (profileRes) => {
@@ -192,7 +187,7 @@ export class FindContracts implements OnInit {
             next: (aiRes: any) => {
               if (aiRes && aiRes.matches) {
                 const matchResults = aiRes.matches;
-                
+
                 // Map the original contracts to include AI data
                 let mappedContracts = this.contracts.map(contract => {
                   const match = matchResults.find((m: any) => m.contract_id === contract._id);
@@ -206,14 +201,14 @@ export class FindContracts implements OnInit {
                   }
                   return contract;
                 });
-                
+
                 // Sort by match percentage descending so High matches are at the top
                 mappedContracts.sort((a, b) => {
                   const scoreA = a.matchPercentage !== undefined ? a.matchPercentage : -1;
                   const scoreB = b.matchPercentage !== undefined ? b.matchPercentage : -1;
                   return scoreB - scoreA;
                 });
-                
+
                 this.contracts = mappedContracts;
                 this.isAIApplied = true;
               }

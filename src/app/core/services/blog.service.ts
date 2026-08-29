@@ -1,32 +1,32 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BlogService {
+export class BlogService extends BaseService {
   private apiUrl = 'http://localhost:5000/api/blogs/admin';
 
-  constructor(private http: HttpClient) { }
+  
 
   createBlog(data: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, data);
+    return this.post<any>(this.apiUrl, data);
   }
 
   getAllBlogsAdmin(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+    return this.get<any>(this.apiUrl);
   }
 
   getBlogByIdAdmin(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+    return this.get<any>(`${this.apiUrl}/${id}`);
   }
 
   updateBlog(id: string, data: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, data);
+    return this.put<any>(`${this.apiUrl}/${id}`, data);
   }
 
   deleteBlog(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+    return this.delete<any>(`${this.apiUrl}/${id}`);
   }
 }

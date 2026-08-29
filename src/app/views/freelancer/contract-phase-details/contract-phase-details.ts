@@ -8,9 +8,10 @@ import { Button } from '../../../library/ui/components/button/button';
 import { Badge } from '../../../library/ui/components/badge/badge';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
-import { Timeline, TimelineStep } from '../../../library/shared/components/timeline/timeline';
+import { Timeline } from '../../../library/shared/components/timeline/timeline';
 import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
 import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
+import { TimelineStep } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-contract-phase-details',

@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { NotificationService, Notification } from '../../../../core/services/notification.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import { Badge } from '../../../ui/components/badge/badge';
+import { Notification } from '../../../../core/models/notification.model';
 
 @Component({
   selector: 'app-notification-dropdown',
@@ -17,7 +18,7 @@ export class NotificationDropdown implements OnInit, OnDestroy {
   visibleLimit: number = 4;
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private notificationService: NotificationService) {}
+  constructor(private notificationService: NotificationService) { }
 
   get visibleNotifications(): Notification[] {
     return this.notifications.slice(0, this.visibleLimit);

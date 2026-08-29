@@ -25,3 +25,25 @@ export interface Contract {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface ContractCardData {
+  industry: string;
+  contractTitle: string;
+  estimatedBudget: number;
+  contractDescription: string;
+  contractStartDate: string;
+  contractEndDate: string;
+  contractType: string;
+  contractSubject: string;
+  totalDuration: string;
+  status: string;
+  hasApplied: boolean;
+  hasSaved: boolean;
+  _id?: string;
+  matchPercentage?: number;
+  matchCategory?: string;
+}
+
+export interface AIContractCardData extends ContractCardData {
+  matchReasoning?: string;
+}

@@ -4,7 +4,8 @@ import Chart from 'chart.js/auto';
 import { TokenService } from '../../../core/services/token.service';
 import { AdminService } from '../../../core/services/admin.service';
 import { DashboardService } from '../../../core/services/dashboard.service';
-import { StatCard, StatCardData } from '../../../library/shared/components/stat-card/stat-card';
+import { StatCard } from '../../../library/shared/components/stat-card/stat-card';
+import { StatCardData } from '../../../core/models/ui.model';
 
 
 @Component({

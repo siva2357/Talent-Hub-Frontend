@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { TransactionService } from '../../../core/services/transaction.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { StatCard, StatCardData } from '../../../library/shared/components/stat-card/stat-card';
-import { Table, TableColumn } from '../../../library/ui/components/table/table';
+import { StatCard } from '../../../library/shared/components/stat-card/stat-card';
+import { Table } from '../../../library/ui/components/table/table';
 import { Badge } from '../../../library/ui/components/badge/badge';
-import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
+import { Dropdown } from '../../../library/ui/components/dropdown/dropdown';
+import { DropdownItem, StatCardData, TableColumn } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-finance-overview',

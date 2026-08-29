@@ -5,21 +5,8 @@ import {
   Output
 } from '@angular/core';
 
-export type PaginationVariant =
-  | 'default'
-  | 'text'
-  | 'minimal';
-
-export type PaginationSize =
-  | 'sm'
-  | 'md'
-  | 'lg';
-
-export interface PaginationPage {
-  number: number;
-  disabled?: boolean;
-  ellipsis?: boolean;
-}
+import { PaginationVariant, PaginationSize, PaginationPage } from '../../../../core/models/ui.model';
+export type {  PaginationVariant, PaginationSize, PaginationPage  };
 
 @Component({
   selector: 'app-pagination',

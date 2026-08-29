@@ -2,10 +2,11 @@ import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angul
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PortfolioService } from '../../../core/services/portfolio.service';
-import { Table, TableColumn } from '../../../library/ui/components/table/table';
+import { Table } from '../../../library/ui/components/table/table';
 import { Button } from '../../../library/ui/components/button/button';
-import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
+import { Dropdown } from '../../../library/ui/components/dropdown/dropdown';
 import { Badge } from '../../../library/ui/components/badge/badge';
+import { TableColumn, DropdownItem } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-portfolio',

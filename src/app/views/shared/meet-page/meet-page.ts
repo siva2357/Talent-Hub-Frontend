@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApplicationService } from '../../../core/services/application.service';
-import { MeetCard, MeetCardData } from '../../../library/shared/components/meet-card/meet-card';
+import { MeetCard } from '../../../library/shared/components/meet-card/meet-card';
+import { MeetCardData } from '../../../core/models/meet.model';
 
 @Component({
   selector: 'app-meet-page',
@@ -15,7 +16,7 @@ export class MeetPage implements OnInit {
   interviews: any[] = [];
   isLoading = true;
 
-  constructor(private applicationService: ApplicationService) {}
+  constructor(private applicationService: ApplicationService) { }
 
   ngOnInit(): void {
     this.applicationService.getInterviews().subscribe({

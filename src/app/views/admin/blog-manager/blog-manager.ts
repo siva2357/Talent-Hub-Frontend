@@ -2,10 +2,11 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { BlogService } from '../../../core/services/blog.service';
-import { Table, TableColumn } from '../../../library/ui/components/table/table';
+import { Table } from '../../../library/ui/components/table/table';
 import { Pagination } from '../../../library/ui/components/pagination/pagination';
 import { Button } from '../../../library/ui/components/button/button';
-import { InputField, InputOption } from '../../../library/ui/components/input-field/input-field';
+import { InputField } from '../../../library/ui/components/input-field/input-field';
+import { InputOption, TableColumn } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-blog-manager',
@@ -45,7 +46,7 @@ export class BlogManager implements OnInit {
     { label: 'Draft', value: 'Draft' }
   ];
 
-  constructor(private blogService: BlogService) {}
+  constructor(private blogService: BlogService) { }
 
   ngOnInit() {
     this.columns = [

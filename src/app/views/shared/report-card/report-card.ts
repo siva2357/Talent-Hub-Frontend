@@ -4,16 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Button } from '../../../library/ui/components/button/button';
 import { AdminService } from '../../../core/services/admin.service';
 
-
-export interface Report {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  generatedDate: string;
-  downloadUrl?: string;
-  size?: string;
-}
+import { Report } from '../../../core/models/report.model';
 
 @Component({
   selector: 'app-report-card',

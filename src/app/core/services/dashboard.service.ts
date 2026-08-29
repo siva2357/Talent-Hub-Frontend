@@ -1,21 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardService {
+export class DashboardService extends BaseService {
   private apiUrl = 'http://localhost:5000/api/dashboard';
 
-  constructor(private http: HttpClient) { }
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  }
-
   getDashboardStats(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/stats`, { headers: this.getAuthHeaders() });
+    return this.get(`${this.apiUrl}/stats`);
   }
 }

@@ -1,9 +1,11 @@
 import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
-import { Table, TableColumn } from '../../../library/ui/components/table/table';
+import { Table } from '../../../library/ui/components/table/table';
 import { Badge } from '../../../library/ui/components/badge/badge';
 import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
+import { TableColumn } from '../../../core/models/ui.model';
+
 
 @Component({
   selector: 'app-client-management',

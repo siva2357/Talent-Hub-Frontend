@@ -1,16 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-export type DropdownMode =
-  | 'icon'
-  | 'text';
-
-export interface DropdownItem {
-  label: string;
-  value: string;
-  icon?: string;
-  disabled?: boolean;
-  className?: string;
-}
+import { DropdownItem, DropdownMode } from '../../../../core/models/ui.model';
+export type {  DropdownItem, DropdownMode  };
 
 @Component({
   selector: 'app-dropdown',

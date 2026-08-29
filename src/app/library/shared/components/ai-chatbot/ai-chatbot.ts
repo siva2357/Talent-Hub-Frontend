@@ -3,10 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AIService } from '../../../../core/services/ai.service';
 
-interface ChatMessage {
-  text: string;
-  isBot: boolean;
-}
+import { ChatMessage } from '../../../../core/models/ui.model';
 
 @Component({
   selector: 'app-ai-chatbot',

@@ -8,27 +8,10 @@ import { Button } from '../../../library/ui/components/button/button';
 import { Badge } from '../../../library/ui/components/badge/badge';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from '../../../library/ui/components/chip/chip';
-import { Timeline, TimelineStep } from '../../../library/shared/components/timeline/timeline';
+import { Timeline } from '../../../library/shared/components/timeline/timeline';
 
-interface AppliedContract {
-  applicationId: string;
-  applicationStatus: string;
-  appliedAt: string;
-  assessment?: any;
-  interview?: any;
-  contract: {
-    _id: string;
-    contractTitle: string;
-    budgetType?: string;
-    estimatedBudget: number;
-    contractDescription: string;
-    contractStartDate: string;
-    contractEndDate: string;
-    contractType: string;
-    contractSubject: string;
-    createdAt: string;
-  };
-}
+import { AppliedContract } from '../../../core/models/application.model';
+import { TimelineStep } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-proposal-offers',
@@ -96,7 +79,7 @@ export class ProposalOffers implements OnInit {
     private contractService: ContractService,
     private applicationService: ApplicationService,
     private offerService: OfferService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.fetchAppliedContracts();
@@ -148,7 +131,7 @@ export class ProposalOffers implements OnInit {
 
   getTimelineSteps(app: AppliedContract): TimelineStep[] {
     const s = app.applicationStatus;
-    
+
     // Step 1: Applied
     const step1: TimelineStep = {
       title: 'Applied',
@@ -226,7 +209,7 @@ export class ProposalOffers implements OnInit {
       score: null,
       notes: "Assessment completed by freelancer."
     };
-    
+
     console.log(`Submitting assessment for application: ${applicationId}`);
     this.applicationService.submitAssessment(applicationId, payload).subscribe({
       next: (res) => {

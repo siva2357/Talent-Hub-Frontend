@@ -5,24 +5,24 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractContro
 import { AuthService } from '../../../core/services/auth.service';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Button } from '../../../library/ui/components/button/button';
-import { InputValidation } from '../../../library/ui/components/input-field/input-field';
+import { InputValidation } from '../../../core/models/ui.model';
 
 export const passwordMatchValidator = (control: AbstractControl): ValidationErrors | null => {
   const newPassword = control.get('newPassword');
   const confirmPassword = control.get('confirmPassword');
-  
+
   if (newPassword && confirmPassword && newPassword.value !== confirmPassword.value) {
     confirmPassword.setErrors({ ...confirmPassword.errors, passwordMismatch: true });
     return { passwordMismatch: true };
   }
-  
+
   if (confirmPassword && confirmPassword.errors && confirmPassword.errors['passwordMismatch']) {
     delete confirmPassword.errors['passwordMismatch'];
     if (!Object.keys(confirmPassword.errors).length) {
       confirmPassword.setErrors(null);
     }
   }
-  
+
   return null;
 };
 
@@ -45,7 +45,7 @@ export class ResetPassword implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.resetPasswordForm = this.fb.group({
@@ -77,7 +77,7 @@ export class ResetPassword implements OnInit {
     if (control.errors['minlength']) return `Minimum length is ${control.errors['minlength'].requiredLength} characters.`;
     if (control.errors['maxlength']) return `Maximum length is ${control.errors['maxlength'].requiredLength} characters.`;
     if (control.errors['passwordMismatch']) return 'Passwords do not match.';
-    
+
     return 'Invalid input.';
   }
 

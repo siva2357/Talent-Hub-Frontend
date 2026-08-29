@@ -18,7 +18,7 @@ import { ProfileAvatar } from '../library/shared/components/profile-avatar/profi
 import { NotificationDropdown } from '../library/shared/components/notification-dropdown/notification-dropdown';
 import { FileUpload } from '../library/shared/components/file-upload/file-upload';
 import { FilePreview } from '../library/shared/components/file-preview/file-preview';
-import { TalentCard, TalentCardData } from '../library/shared/components/talent-card/talent-card';
+import { TalentCard } from '../library/shared/components/talent-card/talent-card';
 import { MeetCard, MeetCardData } from '../library/shared/components/meet-card/meet-card';
 import { SupportTicket, SupportTicketData } from '../library/shared/components/support-ticket/support-ticket';
 import { ContractCard, ContractCardData } from '../library/shared/components/contract-card/contract-card';
@@ -27,6 +27,7 @@ import { UserNavbar } from '../library/ui/layouts/user-navbar/user-navbar';
 
 import { Button } from '../library/ui/components/button/button';
 import { StatCard, StatCardData } from '../library/shared/components/stat-card/stat-card';
+import { TalentCardData } from '../core/models/talent.model';
 
 @Component({
   selector: 'app-ui-components',

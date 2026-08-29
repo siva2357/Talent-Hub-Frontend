@@ -5,7 +5,8 @@ import { Contract } from '../../../core/models/contract.model';
 import { CommonModule } from '@angular/common';
 import { Button } from '../../../library/ui/components/button/button';
 import { Badge } from '../../../library/ui/components/badge/badge';
-import { StatCard, StatCardData } from '../../../library/shared/components/stat-card/stat-card';
+import { StatCard } from '../../../library/shared/components/stat-card/stat-card';
+import { StatCardData } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-contract-details',

@@ -1,26 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-export type InputFieldType =
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'date'
-  | 'time'
-  | 'tel'
-  | 'textarea'
-  | 'select'
-  | 'multiselect';
-
-export type InputValidation =
-  | 'none'
-  | 'success'
-  | 'error';
-
-export interface InputOption {
-  label: string;
-  value: string;
-  disabled?: boolean;
-}
+import { InputFieldType, InputValidation, InputOption } from '../../../../core/models/ui.model';
+export type {  InputFieldType, InputValidation, InputOption  };
 
 @Component({
   selector: 'app-input-field',

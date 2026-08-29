@@ -3,8 +3,9 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { OfferService } from '../../../core/services/offer.service';
-import { StatCard, StatCardData } from '../../../library/shared/components/stat-card/stat-card';
+import { StatCard } from '../../../library/shared/components/stat-card/stat-card';
 import { Button } from '../../../library/ui/components/button/button';
+import { StatCardData } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-view-contract-offer',
