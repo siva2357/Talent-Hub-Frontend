@@ -27,26 +27,26 @@
         <div class="row g-3 align-items-center mb-3">
           <div class="col-md-5 col-lg-5">
             <app-input-field label="" placeholder="Search by Ticket ....." icon="bi bi-search"
-              [showIcon]="true"></app-input-field>
+              [showIcon]="true" [value]="searchQuery" (valueChange)="searchQuery = $event"></app-input-field>
           </div>
           <div class="col-md-2 col-lg-2">
             <app-input-field label="" placeholder="" type="select"
-              [options]="[{label: 'Select All', value: 'all'}, {label: 'Design', value: 'design'}, {label: 'Development', value: 'development'}]"></app-input-field>
+              [options]="categoryOptions" [value]="selectedCategory" (valueChange)="selectedCategory = $event"></app-input-field>
           </div>
           <div class="col-md-2 col-lg-2">
             <app-input-field label="" placeholder="" type="select"
-              [options]="[{label: 'Select All', value: 'all'}, {label: 'Active', value: 'active'}, {label: 'Completed', value: 'completed'}]"></app-input-field>
+              [options]="statusOptions" [value]="selectedStatus" (valueChange)="selectedStatus = $event"></app-input-field>
           </div>
           <div class="col-md-3 col-lg-3 d-flex gap-2">
-            <app-button label="Apply" variant="primary" [block]="true" class="flex-grow-1 w-100"></app-button>
-            <app-button label="Reset" variant="outline-primary" [block]="true" class="flex-grow-1 w-100"></app-button>
+            <app-button label="Apply" variant="primary" [block]="true" class="flex-grow-1 w-100" (clicked)="applyFilters()"></app-button>
+            <app-button label="Reset" variant="outline-primary" [block]="true" class="flex-grow-1 w-100" (clicked)="resetFilters()"></app-button>
           </div>
         </div>
 
         <div class="d-flex align-items-center flex-wrap gap-2 mt-3">
           <span class="text-dark small fw-semibold me-2">Active Filters :</span>
           @for (filter of activeFilters; track filter) {
-          <app-chip [label]="filter" [showClose]="true" (removed)="removeFilter(filter)"></app-chip>
+          <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)"></app-chip>
           }
           @if (activeFilters.length === 0) {
           <span class="text-muted small">None</span>
@@ -64,7 +64,7 @@
 
 
     <!-- Data Table Section -->
-    <app-table [columns]="columns" [data]="allContracts" [loading]="isLoading"></app-table>
+    <app-table [columns]="columns" [data]="filteredContracts" [loading]="isLoading"></app-table>
   </div>
 
 </div>
@@ -75,7 +75,7 @@
 
 
 <ng-template #snoTemplate let-row="row" let-value="value">
-  <span class="ps-4">{{ allContracts.indexOf(row) + 1 }}</span>
+  <span class="ps-4">{{ filteredContracts.indexOf(row) + 1 }}</span>
 </ng-template>
 
 <ng-template #budgetTemplate let-row="row">

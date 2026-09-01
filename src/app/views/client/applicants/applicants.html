@@ -37,23 +37,23 @@
       <div class="row g-3">
         <div class="col-lg-4">
           <app-input-field type="text" placeholder="Search by Ticket ....." [showIcon]="true" icon="bi bi-search"
-            label=""></app-input-field>
+            label="" [value]="searchQuery" (valueChange)="searchQuery = $event"></app-input-field>
         </div>
         <div class="col-lg-2">
-          <app-input-field type="select" placeholder="Status: Select All" [options]="tagOptions"
-            label=""></app-input-field>
+          <app-input-field type="select" placeholder="Status: Select All" [options]="statusOptions"
+            label="" [value]="selectedStatus" (valueChange)="selectedStatus = $event"></app-input-field>
         </div>
         <div class="col-lg-2">
-          <app-input-field type="select" placeholder="Gender: Select All" [options]="tagOptions"
-            label=""></app-input-field>
+          <app-input-field type="select" placeholder="Gender: Select All" [options]="genderOptions"
+            label="" [value]="selectedGender" (valueChange)="selectedGender = $event"></app-input-field>
         </div>
         <div class="col-lg-2">
-          <app-input-field type="select" placeholder="Offer: Select All" [options]="tagOptions"
-            label=""></app-input-field>
+          <app-input-field type="select" placeholder="Offer: Select All" [options]="offerStatusOptions"
+            label="" [value]="selectedOfferStatus" (valueChange)="selectedOfferStatus = $event"></app-input-field>
         </div>
         <div class="col-lg-2 d-flex gap-2 align-items-start">
-          <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply"></app-button>
-          <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset"></app-button>
+          <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply" (clicked)="applyFilters()"></app-button>
+          <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset" (clicked)="resetFilters()"></app-button>
         </div>
       </div>
       <div class="d-flex align-items-center flex-wrap gap-2 mt-3">
@@ -68,7 +68,7 @@
     </section>
 
     <!-- Data Table Section -->
-    <app-table [columns]="columns" [data]="applicants" [loading]="isLoading"
+    <app-table [columns]="columns" [data]="filteredApplicants" [loading]="isLoading"
       emptyMessage="No applicants found."></app-table>
 
     <!-- Templates for Table Columns -->

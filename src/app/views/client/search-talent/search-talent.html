@@ -21,13 +21,13 @@
       </div>
       <div>
         @if (showAIFilter) {
-          <button class="btn btn-outline-secondary fw-semibold shadow-sm d-flex align-items-center gap-2" (click)="toggleAIFilter()">
-            <i class="bi bi-funnel"></i> Use Manual Filters
-          </button>
+          <app-button label="Use Manual Filters" variant="outline-secondary" (clicked)="toggleAIFilter()">
+            <i class="bi bi-funnel me-2"></i>
+          </app-button>
         } @else {
-          <button class="btn btn-info text-white fw-bold shadow-sm d-flex align-items-center gap-2" (click)="toggleAIFilter()" style="background: linear-gradient(45deg, #0dcaf0, #0b5ed7); border: none;">
-            <i class="bi bi-magic"></i> Use AI Intelligence for Smart Match
-          </button>
+          <app-button label="Use AI Intelligence for Smart Match" variant="primary" (clicked)="toggleAIFilter()" [style]="'background: linear-gradient(45deg, #0dcaf0, #0b5ed7); border: none;'">
+            <i class="bi bi-magic me-2"></i>
+          </app-button>
         }
       </div>
     </header>
@@ -48,36 +48,28 @@
 
         <div class="row g-4 mb-4 align-items-start">
           <div class="col-md-4">
-            <label class="form-label fw-semibold text-dark small mb-2">Required Category</label>
-            <select class="form-select border-primary border-opacity-25 shadow-sm" [(ngModel)]="searchCategory" [disabled]="isAIApplied || isAIMatching">
-              @for (opt of categoryOptions; track opt.value) {
-                <option [value]="opt.value">{{ opt.label }}</option>
-              }
-            </select>
+            <app-input-field label="Required Category" type="select" [options]="categoryOptions"
+              [value]="searchCategory" (valueChange)="searchCategory = $event" [disabled]="isAIApplied || isAIMatching"></app-input-field>
           </div>
           
           <div class="col-md-6">
-            <label class="form-label fw-semibold text-dark small mb-2">Required Skills (Press Enter to add)</label>
-            <div class="input-group shadow-sm">
-              <span class="input-group-text bg-white border-primary border-opacity-25 text-primary">
-                <i class="bi bi-code-square"></i>
-              </span>
-              <input type="text" class="form-control border-primary border-opacity-25" 
-                     placeholder="e.g. Angular, Node.js, Python..." 
-                     [(ngModel)]="searchSkillInput"
-                     (keyup.enter)="addSkill()"
-                     [disabled]="isAIApplied || isAIMatching">
-              <button class="btn btn-primary px-3" type="button" (click)="addSkill()" [disabled]="!searchSkillInput || isAIApplied || isAIMatching">Add</button>
+            <div class="d-flex align-items-end gap-2">
+              <div class="flex-grow-1">
+                <app-input-field label="Required Skills (Press Enter to add)" type="text"
+                  placeholder="e.g. Angular, Node.js, Python..." icon="bi bi-code-square" [showIcon]="true"
+                  [value]="searchSkillInput" (valueChange)="searchSkillInput = $event" 
+                  (keyup.enter)="addSkill()" [disabled]="isAIApplied || isAIMatching"></app-input-field>
+              </div>
+              <div class="mb-3">
+                <app-button label="Add" variant="primary" (clicked)="addSkill()" [disabled]="!searchSkillInput || isAIApplied || isAIMatching"></app-button>
+              </div>
             </div>
             
             @if (searchSkills.length > 0) {
-              <div class="d-flex flex-wrap gap-2 mt-3 p-3 bg-white rounded-3 border border-light">
-                <span class="text-muted small fw-semibold align-self-center me-2">Selected Skills:</span>
+              <div class="d-flex flex-wrap gap-2 mt-2 p-3 bg-white rounded-3 border border-light align-items-center">
+                <span class="text-muted small fw-semibold me-2">Selected Skills:</span>
                 @for (skill of searchSkills; track skill) {
-                  <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 d-flex align-items-center gap-2">
-                    {{ skill }}
-                    <i class="bi bi-x-circle-fill cursor-pointer" style="cursor:pointer" (click)="!isAIApplied && !isAIMatching ? removeSkill(skill) : null"></i>
-                  </span>
+                  <app-chip [label]="skill" [showClose]="!isAIApplied && !isAIMatching" (removed)="removeSkill(skill)"></app-chip>
                 }
               </div>
             }
@@ -85,20 +77,16 @@
           
           <div class="col-md-2 d-flex align-items-end h-100" style="padding-top: 30px;">
             @if (isAIApplied) {
-              <button class="btn btn-outline-danger w-100 fw-semibold shadow-sm d-flex justify-content-center align-items-center gap-2 py-2" (click)="clearAIMatch()">
-                <i class="bi bi-x-circle"></i> Clear Match
-              </button>
+              <app-button label="Clear Match" variant="outline-danger" [block]="true" class="w-100 mb-3" (clicked)="clearAIMatch()">
+                <i class="bi bi-x-circle me-2"></i>
+              </app-button>
             } @else {
-              <button class="btn btn-primary w-100 fw-bold shadow-sm d-flex justify-content-center align-items-center gap-2 py-2" 
-                      (click)="matchWithAI()"
-                      [disabled]="isLoading || isAIMatching || freelancers.length === 0 || !searchCategory">
-                @if (isAIMatching) {
-                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                  Matching...
-                } @else {
-                  <i class="bi bi-robot"></i> Find Match
-                }
-              </button>
+              <app-button label="Find Match" variant="primary" [block]="true" class="w-100 mb-3"
+                      (clicked)="matchWithAI()"
+                      [disabled]="isLoading || isAIMatching || freelancers.length === 0 || !searchCategory"
+                      [loading]="isAIMatching">
+                <i class="bi bi-robot me-2"></i>
+              </app-button>
             }
           </div>
         </div>
@@ -109,60 +97,47 @@
         <div class="row g-3 mb-3">
           <!-- Row 1 -->
           <div class="col-md-3">
-            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Skills</label>
-            <select class="form-select text-dark" style="font-size: 0.8rem;">
-              <option>All Skills</option>
-            </select>
+            <app-input-field label="Skills" type="select" [options]="skillOptions" [value]="selectedSkill" (valueChange)="selectedSkill = $event"></app-input-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Experience Level</label>
-            <select class="form-select text-dark" style="font-size: 0.8rem;">
-              <option>All Levels</option>
-            </select>
+            <app-input-field label="Experience Level" type="select" [options]="experienceOptions" [value]="selectedExperience" (valueChange)="selectedExperience = $event"></app-input-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Availability</label>
-            <select class="form-select text-dark" style="font-size: 0.8rem;">
-              <option>All Availability</option>
-            </select>
+            <app-input-field label="Availability" type="select" [options]="availabilityOptions" [value]="selectedAvailability" (valueChange)="selectedAvailability = $event"></app-input-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Hourly Rate</label>
-            <select class="form-select text-dark" style="font-size: 0.8rem;">
-              <option>All Rates</option>
-            </select>
+            <app-input-field label="Hourly Rate" type="select" [options]="rateOptions" [value]="selectedRate" (valueChange)="selectedRate = $event"></app-input-field>
           </div>
 
           <!-- Row 2 -->
           <div class="col-md-3">
-            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Location</label>
-            <select class="form-select text-dark" style="font-size: 0.8rem;">
-              <option>All Locations</option>
-            </select>
+            <app-input-field label="Location" type="select" [options]="locationOptions" [value]="selectedLocation" (valueChange)="selectedLocation = $event"></app-input-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Languages</label>
-            <select class="form-select text-dark" style="font-size: 0.8rem;">
-              <option>All Languages</option>
-            </select>
+            <app-input-field label="Languages" type="select" [options]="languageOptions" [value]="selectedLanguage" (valueChange)="selectedLanguage = $event"></app-input-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Job Success</label>
-            <select class="form-select text-dark" style="font-size: 0.8rem;">
-              <option>All Ratings</option>
-            </select>
+            <app-input-field label="Job Success" type="select" [options]="successOptions" [value]="selectedSuccess" (valueChange)="selectedSuccess = $event"></app-input-field>
           </div>
           <div class="col-md-3">
-            <label class="form-label text-muted fw-bold mb-1" style="font-size: 0.75rem;">Sort By</label>
-            <select class="form-select text-dark" style="font-size: 0.8rem;">
-              <option>Best Match</option>
-            </select>
+            <app-input-field label="Sort By" type="select" [options]="sortOptions" [value]="selectedSort" (valueChange)="selectedSort = $event"></app-input-field>
           </div>
         </div>
 
-        <div class="d-flex gap-2">
-          <button class="btn btn-primary rounded-pill fw-semibold shadow-sm btn-sm px-4">Apply Filters</button>
-          <button class="btn btn-outline-secondary bg-white btn-sm px-4 fw-semibold">Clear All</button>
+        <div class="d-flex gap-2 mb-3">
+          <app-button label="Apply Filters" variant="primary" (clicked)="applyManualFilters()"></app-button>
+          <app-button label="Clear All" variant="outline-secondary" (clicked)="resetManualFilters()"></app-button>
+        </div>
+
+        <!-- Active Chips -->
+        <div class="d-flex align-items-center flex-wrap gap-2 pt-2 border-top">
+          <span class="text-dark small fw-semibold me-2">Active Filters :</span>
+          @for (filter of activeManualFilters; track filter.label) {
+            <app-chip [label]="filter.label" [showClose]="true" (removed)="removeManualFilter(filter)"></app-chip>
+          }
+          @if (activeManualFilters.length === 0) {
+            <span class="text-muted small">None</span>
+          }
         </div>
       </div>
     }

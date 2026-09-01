@@ -34,41 +34,28 @@
       <div class="card-body p-4">
         <div class="row g-3 align-items-center mb-3">
           <div class="col-md-6 col-lg-7">
-            <div
-              class="input-group shadow-sm rounded-pill overflow-hidden border border-primary border-opacity-25 bg-white">
-              <span class="input-group-text bg-transparent border-0 text-primary ps-4"><i
-                  class="bi bi-search"></i></span>
-              <input type="text" class="form-control border-0 shadow-none ps-2 py-2"
-                placeholder="Search by Client ID, Email...">
-            </div>
+            <app-input-field type="text" placeholder="Search by Client, Freelancer, Contract..." [showIcon]="true" icon="bi bi-search"
+              label="" [value]="searchQuery" (valueChange)="searchQuery = $event"></app-input-field>
           </div>
           <div class="col-md-3 col-lg-3">
-            <select class="form-select shadow-sm rounded-pill border-primary border-opacity-25 text-muted py-2">
-              <option selected>All Statuses</option>
-              <option value="1">Completed</option>
-              <option value="2">Pending</option>
-            </select>
+            <app-input-field type="select" placeholder="All Statuses" [options]="statusOptions"
+              label="" [value]="selectedStatus" (valueChange)="selectedStatus = $event"></app-input-field>
           </div>
           <div class="col-md-3 col-lg-2 d-flex gap-2">
-            <button class="btn btn-primary rounded-pill shadow-sm flex-grow-1"><i class="bi bi-funnel me-1"></i>
-              Apply</button>
-            <button
-              class="btn btn-light rounded-pill shadow-sm border border-light flex-grow-1 text-primary hover-bg-light"><i
-                class="bi bi-arrow-clockwise"></i></button>
+            <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply" (clicked)="applyFilters()"></app-button>
+            <app-button variant="light" class="flex-grow-1 text-primary hover-bg-light border border-light" [block]="true" label="Reset"
+              (clicked)="resetFilters()"></app-button>
           </div>
         </div>
 
         <div class="d-flex align-items-center flex-wrap gap-2">
           <span class="text-dark small fw-semibold me-2">Active Filters :</span>
-          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-            Tag <span class="badge-close">&times;</span>
-          </span>
-          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-            Tag <span class="badge-close">&times;</span>
-          </span>
-          <span class="badge rounded-pill filter-badge d-flex align-items-center gap-1">
-            Tag <span class="badge-close">&times;</span>
-          </span>
+          @for (filter of activeFilters; track filter.label) {
+            <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)"></app-chip>
+          }
+          @if (activeFilters.length === 0) {
+            <span class="text-muted small">None</span>
+          }
         </div>
       </div>
     </section>
@@ -103,17 +90,25 @@
         </ng-template>
 
         <ng-template #platformFeeTpl let-row="row">
-          <app-badge [label]="'₹' + row.platformFee" variant="primary" apperance="subtle"></app-badge>
+          <app-badge [label]="'₹' + row.platformFee" variant="primary" appearance="subtle"></app-badge>
         </ng-template>
 
         <ng-template #statusTpl let-row="row">
           <div class="d-flex align-items-center gap-2">
             @if (row.status === 'Completed') {
-              <app-badge label="Completed" variant="success" apperance="subtle"></app-badge>
+              <app-badge label="Completed" variant="success" appearance="subtle"></app-badge>
             }
             @if (row.status === 'Pending' && row.type === 'Payout') {
-              <app-badge label="Pending Payout" variant="warning" apperance="subtle"></app-badge>
-              <app-button variant="primary" size="sm" label="Process Payout" (clicked)="openPayoutModal(row.id, row.freelancerPayment)"></app-button>
+              <app-badge label="Pending Payout" variant="warning" appearance="subtle"></app-badge>
+            }
+          </div>
+        </ng-template>
+
+        <ng-template #actionsTpl let-row="row">
+          <div class="dropdown">
+  
+            @if (row.status === 'Pending' && row.type === 'Payout') {
+              <app-button variant="outline-primary" size="sm" label="Process Payout" (clicked)="openPayoutModal(row.id, row.freelancerPayment)"></app-button>
             }
           </div>
         </ng-template>

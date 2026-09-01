@@ -28,18 +28,11 @@ export class FindContracts implements OnInit {
   isAIMatching: boolean = false;
   isAIApplied: boolean = false;
 
-  setTab(tab: 'discover' | 'saved'): void {
-    if (this.activeTab === tab) return;
-
-    this.activeTab = tab;
-    this.isLoading = true;
-
-    if (tab === 'discover') {
-      this.fetchContracts();
-    } else {
-      this.fetchSavedContracts();
-    }
-  }
+  // Filter states
+  searchQuery = '';
+  searchCategory = 'all';
+  searchBudget = '';
+  activeFilters: { label: string, type: string, value: string }[] = [];
 
   categoryOptions: InputOption[] = [
     { label: 'All Categories', value: 'all' },
@@ -49,18 +42,6 @@ export class FindContracts implements OnInit {
     { label: 'Backend Development', value: 'backend' },
     { label: 'DevOps', value: 'devops' }
   ];
-
-  activeFilters = [
-    { label: 'Web Development', icon: 'bi bi-code-slash', value: 'web' },
-    { label: 'Mobile Development', icon: 'bi bi-phone', value: 'mobile' },
-    { label: 'UI/UX Design', icon: 'bi bi-vector-pen', value: 'design' },
-    { label: 'Backend Development', icon: 'bi bi-server', value: 'backend' },
-    { label: 'DevOps', icon: 'bi bi-cloud', value: 'devops' }
-  ];
-
-  removeFilter(filterToRemove: any): void {
-    this.activeFilters = this.activeFilters.filter(f => f.value !== filterToRemove.value);
-  }
 
   constructor(
     private contractService: ContractService,
@@ -72,6 +53,19 @@ export class FindContracts implements OnInit {
   ngOnInit(): void {
     this.fetchContracts();
     this.fetchSavedContractsBackground();
+  }
+
+  setTab(tab: 'discover' | 'saved'): void {
+    if (this.activeTab === tab) return;
+
+    this.activeTab = tab;
+    this.isLoading = true;
+
+    if (tab === 'discover') {
+      this.fetchContracts();
+    } else {
+      this.fetchSavedContracts();
+    }
   }
 
   mapToCardData(c: Contract): ContractCardData {
@@ -97,7 +91,7 @@ export class FindContracts implements OnInit {
       next: (res) => {
         if (res.success) {
           this.rawContracts = res.contracts;
-          this.contracts = res.contracts.map((c: any) => this.mapToCardData(c));
+          this.applyFilters(); // will populate this.contracts
         }
         this.isLoading = false;
       },
@@ -125,10 +119,79 @@ export class FindContracts implements OnInit {
     });
   }
 
+  fetchSavedContractsBackground(): void {
+    this.contractService.getSavedContracts().subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.savedContracts = res.contracts.map(c => this.mapToCardData(c));
+          // Sync existing contracts list
+          this.contracts = this.contracts.map(c => ({ ...c, hasSaved: this.isContractSaved(c._id || '') }));
+        }
+      }
+    });
+  }
+
+  isContractSaved(contractId: string): boolean {
+    return this.savedContracts.some(c => c._id === contractId);
+  }
+
+  // --- Filtering ---
+  applyFilters(): void {
+    if (this.isAIApplied) return; // Don't filter manually if AI match is active
+
+    this.activeFilters = [];
+    let filtered = [...this.rawContracts];
+
+    if (this.searchQuery) {
+      const q = this.searchQuery.toLowerCase();
+      this.activeFilters.push({ label: `Search: ${this.searchQuery}`, type: 'search', value: this.searchQuery });
+      filtered = filtered.filter(c => 
+        c.contractTitle.toLowerCase().includes(q) || 
+        c.contractDescription.toLowerCase().includes(q)
+      );
+    }
+
+    if (this.searchCategory !== 'all') {
+      const catLabel = this.categoryOptions.find(o => o.value === this.searchCategory)?.label || this.searchCategory;
+      this.activeFilters.push({ label: `Category: ${catLabel}`, type: 'category', value: this.searchCategory });
+      // In a real app we'd match exact category. Here we use basic inclusion.
+      // But assuming 'contractSubject' or 'contractCategory' holds this info.
+      filtered = filtered.filter(c => 
+        (c.contractCategory && c.contractCategory.toLowerCase().includes(this.searchCategory.toLowerCase())) ||
+        (c.contractSubject && c.contractSubject.toLowerCase().includes(this.searchCategory.toLowerCase()))
+      );
+    }
+
+    if (this.searchBudget) {
+      this.activeFilters.push({ label: `Budget: ${this.searchBudget}`, type: 'budget', value: this.searchBudget });
+      const budgetNum = parseFloat(this.searchBudget);
+      if (!isNaN(budgetNum)) {
+         filtered = filtered.filter(c => c.estimatedBudget >= budgetNum);
+      }
+    }
+
+    this.contracts = filtered.map(c => this.mapToCardData(c));
+  }
+
+  resetFilters(): void {
+    this.searchQuery = '';
+    this.searchCategory = 'all';
+    this.searchBudget = '';
+    this.applyFilters();
+  }
+
+  removeFilter(filterToRemove: { label: string, type: string, value: string }): void {
+    if (filterToRemove.type === 'search') this.searchQuery = '';
+    else if (filterToRemove.type === 'category') this.searchCategory = 'all';
+    else if (filterToRemove.type === 'budget') this.searchBudget = '';
+    
+    this.applyFilters();
+  }
+
+  // --- Actions ---
+
   toggleSave(cardData: ContractCardData): void {
     const isSaved = cardData.hasSaved;
-
-    // Optimistic UI update
     cardData.hasSaved = !isSaved;
 
     if (isSaved) {
@@ -153,56 +216,30 @@ export class FindContracts implements OnInit {
     }
   }
 
-  fetchSavedContractsBackground(): void {
-    this.contractService.getSavedContracts().subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.savedContracts = res.contracts.map(c => this.mapToCardData(c));
-          // Sync existing contracts list
-          this.contracts = this.contracts.map(c => ({ ...c, hasSaved: this.isContractSaved(c._id || '') }));
-        }
-      }
-    });
-  }
-
-  isContractSaved(contractId: string): boolean {
-    return this.savedContracts.some(c => c._id === contractId);
-  }
-
   viewDetails(cardData: ContractCardData): void {
     this.router.navigate(['/contract-details', cardData._id]);
   }
 
+  // --- AI ---
   matchWithAI(): void {
     if (this.rawContracts.length === 0) return;
-
     this.isAIMatching = true;
 
-    // First, fetch the freelancer profile
     this.profileService.getMyProfile().subscribe({
       next: (profileRes) => {
         if (profileRes.success && profileRes.profile) {
-          // Then call the AI Matcher with RAW backend contracts
           this.aiService.matchContracts(profileRes.profile, this.rawContracts).subscribe({
             next: (aiRes: any) => {
               if (aiRes && aiRes.matches) {
                 const matchResults = aiRes.matches;
-
-                // Map the original contracts to include AI data
                 let mappedContracts = this.contracts.map(contract => {
                   const match = matchResults.find((m: any) => m.contract_id === contract._id);
                   if (match) {
-                    return {
-                      ...contract,
-                      matchPercentage: match.match_percentage,
-                      matchCategory: match.match_category,
-                      matchReasoning: match.reasoning
-                    };
+                    return { ...contract, matchPercentage: match.match_percentage, matchCategory: match.match_category, matchReasoning: match.reasoning };
                   }
                   return contract;
                 });
 
-                // Sort by match percentage descending so High matches are at the top
                 mappedContracts.sort((a, b) => {
                   const scoreA = a.matchPercentage !== undefined ? a.matchPercentage : -1;
                   const scoreB = b.matchPercentage !== undefined ? b.matchPercentage : -1;
@@ -232,7 +269,6 @@ export class FindContracts implements OnInit {
 
   clearAIMatch(): void {
     this.isAIApplied = false;
-    // Restore the contracts array from the original raw contracts
-    this.contracts = this.rawContracts.map((c: any) => this.mapToCardData(c));
+    this.applyFilters();
   }
 }

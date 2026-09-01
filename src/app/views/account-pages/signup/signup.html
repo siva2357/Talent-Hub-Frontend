@@ -1,91 +1,184 @@
-<div class="signup-container d-flex flex-column align-items-center justify-content-center min-vh-100 position-relative">
-  <!-- Top Logo -->
-  <div class="text-center mb-4 mt-5 z-1">
-    <img src="/logo 2.png" alt="Talent Hub Logo" class="logo mb-3" />
-    <h1 class="fw-bold fs-2 text-dark">Choose your role</h1>
-    <p class="text-muted">Select the option that best describes you to get started with Talent Hub.</p>
-  </div>
+```html
+<main
+  class="signup-container d-flex flex-column align-items-center justify-content-center min-vh-100 position-relative">
 
-  <!-- Cards Container -->
-  <div class="container z-1">
+  <!-- Header -->
+  <header class="text-center mb-4 mt-5 z-1">
+    <img
+      src="/logo 2.png"
+      alt="Talent Hub"
+      class="logo mb-3">
+
+    <h1 class="fw-bold fs-2 text-dark mb-2">
+      Choose your role
+    </h1>
+
+    <p class="text-muted mb-0">
+      Select the option that best describes you to get started with Talent Hub.
+    </p>
+  </header>
+
+  <!-- Role Selection -->
+  <section
+    class="container z-1"
+    aria-labelledby="role-selection-heading">
+
+    <h2 id="role-selection-heading" class="visually-hidden">
+      Select your account role
+    </h2>
+
     <div class="row justify-content-center g-4 max-w-4xl mx-auto">
 
-      <!-- Client Card -->
+      <!-- Client -->
       <div class="col-md-6 col-lg-5">
-        <div class="card role-card h-100 p-4 border-0 shadow-sm" [class.selected]="selectedRole === 'client'"
+        <button
+          type="button"
+          class="card role-card h-100 w-100 p-4 border-0 shadow-sm"
+          [class.selected]="selectedRole === 'client'"
+          [attr.aria-pressed]="selectedRole === 'client'"
           (click)="selectRole('client')">
+
           @if (selectedRole === 'client') {
-          <div class="check-circle">
-            <i class="bi bi-check-circle-fill text-primary"></i>
-          </div>
+            <span class="check-circle" aria-hidden="true">
+              <i class="bi bi-check-circle-fill text-primary"></i>
+            </span>
           }
+
           <div class="card-body text-center d-flex flex-column align-items-center">
-            <div class="icon-wrapper mb-3 text-primary rounded-circle d-flex align-items-center justify-content-center">
+
+            <div
+              class="icon-wrapper mb-3 text-primary rounded-circle d-flex align-items-center justify-content-center"
+              aria-hidden="true">
               <i class="bi bi-person-fill fs-1"></i>
             </div>
-            <h3 class="fw-bold fs-4">Client</h3>
-            <p class="text-muted small mb-4">Hire talented professionals<br>and get work done</p>
 
-            <ul class="list-unstyled text-start w-100 small text-muted">
-              <li class="mb-3 d-flex align-items-start"><i class="bi bi-people-fill text-primary me-3 mt-1"></i>
+            <h3 class="fw-bold fs-4">
+              Client
+            </h3>
+
+            <p class="role-description text-muted small mb-4">
+              Hire talented professionals and get work done
+            </p>
+
+            <ul class="list-unstyled text-start w-100 small text-muted mb-0">
+
+              <li class="mb-3 d-flex align-items-start">
+                <i
+                  class="bi bi-people-fill text-primary me-3 mt-1"
+                  aria-hidden="true"></i>
                 <span>Post projects and find the right talent</span>
               </li>
-              <li class="mb-3 d-flex align-items-start"><i class="bi bi-shield-check text-primary me-3 mt-1"></i>
+
+              <li class="mb-3 d-flex align-items-start">
+                <i
+                  class="bi bi-shield-check text-primary me-3 mt-1"
+                  aria-hidden="true"></i>
                 <span>Manage contracts and track progress</span>
               </li>
-              <li class="d-flex align-items-start"><i class="bi bi-chat-dots text-primary me-3 mt-1"></i>
+
+              <li class="d-flex align-items-start">
+                <i
+                  class="bi bi-chat-dots text-primary me-3 mt-1"
+                  aria-hidden="true"></i>
                 <span>Collaborate and achieve goals</span>
               </li>
+
             </ul>
           </div>
-        </div>
+        </button>
       </div>
 
-      <!-- Freelancer Card -->
+      <!-- Freelancer -->
       <div class="col-md-6 col-lg-5">
-        <div class="card role-card h-100 p-4 border-0 shadow-sm" [class.selected]="selectedRole === 'freelancer'"
+        <button
+          type="button"
+          class="card role-card h-100 w-100 p-4 border-0 shadow-sm"
+          [class.selected]="selectedRole === 'freelancer'"
+          [attr.aria-pressed]="selectedRole === 'freelancer'"
           (click)="selectRole('freelancer')">
+
           @if (selectedRole === 'freelancer') {
-          <div class="check-circle">
-            <i class="bi bi-check-circle-fill text-primary"></i>
-          </div>
+            <span class="check-circle" aria-hidden="true">
+              <i class="bi bi-check-circle-fill text-primary"></i>
+            </span>
           }
+
           <div class="card-body text-center d-flex flex-column align-items-center">
-            <div class="icon-wrapper mb-3 text-primary rounded-circle d-flex align-items-center justify-content-center">
+
+            <div
+              class="icon-wrapper mb-3 text-primary rounded-circle d-flex align-items-center justify-content-center"
+              aria-hidden="true">
               <i class="bi bi-briefcase-fill fs-1"></i>
             </div>
-            <h3 class="fw-bold fs-4">Freelancer</h3>
-            <p class="text-muted small mb-4">Find exciting projects and<br>grow your career</p>
 
-            <ul class="list-unstyled text-start w-100 small text-muted">
-              <li class="mb-3 d-flex align-items-start"><i class="bi bi-search text-primary me-3 mt-1"></i> <span>Find
-                  projects that match your skills</span></li>
-              <li class="mb-3 d-flex align-items-start"><i class="bi bi-globe text-primary me-3 mt-1"></i> <span>Work
-                  with great clients worldwide</span></li>
-              <li class="d-flex align-items-start"><i class="bi bi-graph-up-arrow text-primary me-3 mt-1"></i>
+            <h3 class="fw-bold fs-4">
+              Freelancer
+            </h3>
+
+            <p class="role-description text-muted small mb-4">
+              Find exciting projects and grow your career
+            </p>
+
+            <ul class="list-unstyled text-start w-100 small text-muted mb-0">
+
+              <li class="mb-3 d-flex align-items-start">
+                <i
+                  class="bi bi-search text-primary me-3 mt-1"
+                  aria-hidden="true"></i>
+                <span>Find projects that match your skills</span>
+              </li>
+
+              <li class="mb-3 d-flex align-items-start">
+                <i
+                  class="bi bi-globe text-primary me-3 mt-1"
+                  aria-hidden="true"></i>
+                <span>Work with great clients worldwide</span>
+              </li>
+
+              <li class="d-flex align-items-start">
+                <i
+                  class="bi bi-graph-up-arrow text-primary me-3 mt-1"
+                  aria-hidden="true"></i>
                 <span>Build your profile and grow your career</span>
               </li>
+
             </ul>
           </div>
-        </div>
+        </button>
       </div>
 
     </div>
-  </div>
+  </section>
 
-  <div class="text-center mt-4 mb-4 z-1">
-    <p class="text-muted small">You can change your role anytime from your account settings.</p>
-  </div>
+  <!-- Supporting Information -->
+  <p class="text-center text-muted small mt-4 mb-4 z-1">
+    You can change your role anytime from your account settings.
+  </p>
 
+  <!-- Continue -->
   @if (selectedRole) {
-  <div class="text-center z-1 mb-4">
-    <app-button variant="primary" size="lg" label="Create Account" (clicked)="continue()"></app-button>
-  </div>
+    <div class="text-center z-1 mb-4">
+      <app-button
+        variant="primary"
+        size="lg"
+        label="Create Account"
+        (clicked)="continue()">
+      </app-button>
+    </div>
   }
 
+  <!-- Login -->
+  <p class="login-link text-center mt-4 mb-5 z-1">
+    <span class="text-muted small">
+      Already have an account?
+    </span>
 
-  <div class="login-link text-center mt-4 z-1 mb-5">
-    <span class="text-muted small">Already have an account?</span> <a routerLink="/login"
-      class="text-primary fw-bold text-decoration-none small">Log in</a>
-  </div>
-</div>
+    <a
+      routerLink="/login"
+      class="text-primary fw-bold text-decoration-none small">
+      Log in
+    </a>
+  </p>
+
+</main>
+```

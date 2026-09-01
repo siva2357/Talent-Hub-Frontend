@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { ContractService } from '../../../core/services/contract.service';
+import { ToastService } from '../../../core/services/ui/toast.service';
 import { Contract } from '../../../core/models/contract.model';
 import { CommonModule } from '@angular/common';
 import { Button } from '../../../library/ui/components/button/button';
@@ -19,20 +20,19 @@ export class ContractDetails implements OnInit {
   contract: Contract | null = null;
   isLoading = true;
   isApplying = false;
-  isApplied = false; // We can set this if the backend tells us they already applied
+  isApplied = false; 
   isSaved = false;
   isSaving = false;
-  actionMessage: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private toastService: ToastService
   ) { }
 
   get projectStats(): StatCardData[] {
     if (!this.contract) return [];
 
-    // Helper to format date
     const formatDate = (d: string | Date | undefined) => {
       if (!d) return 'Not Set';
       return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -40,7 +40,7 @@ export class ContractDetails implements OnInit {
 
     return [
       { title: 'Contract Type', value: this.contract.contractType || 'N/A', icon: 'bi-file-earmark-text' },
-      { title: 'Estimated Budget', value: `${this.contract.currency || '$'} ${this.contract.estimatedBudget || 0}`, icon: 'bi-wallet2' },
+      { title: 'Estimated Budget', value: `${this.contract.currency || '₹'} ${this.contract.estimatedBudget || 0}`, icon: 'bi-wallet2' },
       { title: 'Category', value: this.contract.contractCategory || 'General', icon: 'bi-folder' },
       { title: 'Start Date', value: formatDate(this.contract.contractStartDate), icon: 'bi-calendar-event' },
       { title: 'End Date', value: formatDate(this.contract.contractEndDate), icon: 'bi-calendar-x' }
@@ -61,7 +61,7 @@ export class ContractDetails implements OnInit {
     this.contractService.getContractById(this.contractId!).subscribe({
       next: (res) => {
         if (res.success) {
-          this.contract = res.data || (res as any).contract; // Handle different backend response formats
+          this.contract = res.data || (res as any).contract; 
           if (this.contract && (this.contract as any).hasApplied !== undefined) {
             this.isApplied = (this.contract as any).hasApplied;
           }
@@ -81,19 +81,18 @@ export class ContractDetails implements OnInit {
   applyForContract(): void {
     if (!this.contractId) return;
     this.isApplying = true;
-    this.actionMessage = null;
 
     this.contractService.applyForContract(this.contractId).subscribe({
       next: (res) => {
         if (res.success) {
           this.isApplied = true;
-          this.actionMessage = 'Successfully applied to the contract!';
+          this.toastService.show('Successfully applied to the contract!', 'success');
         }
         this.isApplying = false;
       },
       error: (err) => {
         console.error('Failed to apply', err);
-        this.actionMessage = err.error?.message || 'Failed to apply. You might have already applied.';
+        this.toastService.show(err.error?.message || 'Failed to apply. You might have already applied.', 'error');
         this.isApplying = false;
       }
     });
@@ -102,19 +101,18 @@ export class ContractDetails implements OnInit {
   withdrawApplication(): void {
     if (!this.contractId) return;
     this.isApplying = true;
-    this.actionMessage = null;
 
     this.contractService.withdrawFromContract(this.contractId).subscribe({
       next: (res) => {
         if (res.success) {
           this.isApplied = false;
-          this.actionMessage = 'Successfully withdrawn application.';
+          this.toastService.show('Successfully withdrawn application.', 'info');
         }
         this.isApplying = false;
       },
       error: (err) => {
         console.error('Failed to withdraw', err);
-        this.actionMessage = err.error?.message || 'Failed to withdraw application.';
+        this.toastService.show(err.error?.message || 'Failed to withdraw application.', 'error');
         this.isApplying = false;
       }
     });

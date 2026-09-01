@@ -60,28 +60,31 @@
         <div class="row g-3 align-items-center mb-3">
           <div class="col-lg-4">
             <app-input-field label="" icon="bi bi-search" [showIcon]="true"
-              placeholder="Search contracts, skills, or keywords...">
+              placeholder="Search contracts, skills, or keywords..."
+              [value]="searchQuery" (valueChange)="searchQuery = $event">
             </app-input-field>
           </div>
           <div class="col-lg-3">
-            <app-input-field label="" type="select" [options]="categoryOptions" placeholder="All Categories">
+            <app-input-field label="" type="select" [options]="categoryOptions" placeholder="All Categories"
+              [value]="searchCategory" (valueChange)="searchCategory = $event">
             </app-input-field>
           </div>
           <div class="col-lg-2">
-            <app-input-field label="" icon="bi bi-currency-rupee" [showIcon]="true" placeholder="Budget">
+            <app-input-field label="" icon="bi bi-currency-rupee" [showIcon]="true" placeholder="Budget" type="text"
+              [value]="searchBudget" (valueChange)="searchBudget = $event">
             </app-input-field>
           </div>
           <div class="col-lg-3 d-flex gap-2">
             <app-button label="Apply" variant="primary" [size]="'md'" [block]="true"
-              class="flex-grow-1 w-100"></app-button>
+              class="flex-grow-1 w-100" (clicked)="applyFilters()"></app-button>
             <app-button label="Reset" variant="secondary" [size]="'md'" [block]="true"
-              class="flex-grow-1 w-100"></app-button>
+              class="flex-grow-1 w-100" (clicked)="resetFilters()"></app-button>
           </div>
         </div>
 
         <div class="d-flex align-items-center flex-wrap gap-2 mt-3">
           <span class="text-dark small fw-semibold me-2">Active Filters :</span>
-          @for (filter of activeFilters; track filter.value) {
+          @for (filter of activeFilters; track filter.label) {
           <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)">
           </app-chip>
           }

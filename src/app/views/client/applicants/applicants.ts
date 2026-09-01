@@ -8,7 +8,7 @@ import { RecruitmentWorkflow } from '../recruitment-workflow/recruitment-workflo
 import { Button } from '../../../library/ui/components/button/button';
 import { Chip } from '../../../library/ui/components/chip/chip';
 import { Badge } from '../../../library/ui/components/badge/badge';
-import { InputField } from '../../../library/ui/components/input-field/input-field';
+import { InputField, InputOption } from '../../../library/ui/components/input-field/input-field';
 import { StatCard, StatCardData } from '../../../library/shared/components/stat-card/stat-card';
 import { Table, TableColumn } from '../../../library/ui/components/table/table';
 import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
@@ -17,12 +17,14 @@ import { Applicant } from '../../../core/models/application.model';
 
 @Component({
   selector: 'app-applicants',
+  standalone: true,
   imports: [RouterLink, CommonModule, RecruitmentWorkflow, Button, Chip, Badge, InputField, StatCard, Table, Dropdown],
   templateUrl: './applicants.html',
   styleUrl: './applicants.css'
 })
 export class Applicants implements OnInit, AfterViewInit {
   applicants: Applicant[] = [];
+  filteredApplicants: Applicant[] = [];
   isLoading = true;
   contractId: string | null = null;
   totalApplicants = 0;
@@ -31,14 +33,36 @@ export class Applicants implements OnInit, AfterViewInit {
   columns: TableColumn[] = [];
   statCards: StatCardData[] = [];
 
-  activeFilters: { label: string; value: string }[] = [
-    { label: 'Role: Frontend Developer', value: 'frontend' }
+  // Filter state
+  searchQuery: string = '';
+  selectedStatus: string = 'all';
+  selectedGender: string = 'all';
+  selectedOfferStatus: string = 'all';
+
+  activeFilters: { label: string; type: string; value: string }[] = [];
+
+  statusOptions: InputOption[] = [
+    { label: 'All Statuses', value: 'all' },
+    { label: 'Hired', value: 'Hired' },
+    { label: 'Shortlisted', value: 'Shortlisted' },
+    { label: 'Interviewing', value: 'Interviewing' },
+    { label: 'Pending', value: 'Pending' },
+    { label: 'Rejected', value: 'Rejected' }
   ];
 
-  tagOptions = [
-    { label: 'Select All', value: 'all' },
-    { label: 'Frontend', value: 'frontend' },
-    { label: 'Backend', value: 'backend' }
+  genderOptions: InputOption[] = [
+    { label: 'All Genders', value: 'all' },
+    { label: 'Male', value: 'Male' },
+    { label: 'Female', value: 'Female' },
+    { label: 'Other', value: 'Other' }
+  ];
+
+  offerStatusOptions: InputOption[] = [
+    { label: 'All Offers', value: 'all' },
+    { label: 'Not Sent', value: 'Not Sent' },
+    { label: 'Sent', value: 'Sent' },
+    { label: 'Accepted', value: 'Accepted' },
+    { label: 'Declined', value: 'Declined' }
   ];
 
   @ViewChild('snoTpl') snoTpl!: TemplateRef<any>;
@@ -82,6 +106,7 @@ export class Applicants implements OnInit, AfterViewInit {
             index: idx
           }));
           this.totalApplicants = res.totalApplicants;
+          this.filteredApplicants = [...this.applicants];
           this.updateStatCards();
         }
         this.isLoading = false;
@@ -118,6 +143,66 @@ export class Applicants implements OnInit, AfterViewInit {
     });
   }
 
+  applyFilters(): void {
+    this.activeFilters = [];
+    
+    if (this.searchQuery && this.searchQuery.trim() !== '') {
+      this.activeFilters.push({ label: `Search: ${this.searchQuery}`, type: 'search', value: this.searchQuery });
+    }
+    if (this.selectedStatus !== 'all') {
+      this.activeFilters.push({ label: `Status: ${this.selectedStatus}`, type: 'status', value: this.selectedStatus });
+    }
+    if (this.selectedGender !== 'all') {
+      this.activeFilters.push({ label: `Gender: ${this.selectedGender}`, type: 'gender', value: this.selectedGender });
+    }
+    if (this.selectedOfferStatus !== 'all') {
+      this.activeFilters.push({ label: `Offer: ${this.selectedOfferStatus}`, type: 'offer', value: this.selectedOfferStatus });
+    }
+
+    this.filteredApplicants = this.applicants.filter(app => {
+      let matchesSearch = true;
+      let matchesStatus = true;
+      let matchesGender = true;
+      let matchesOffer = true;
+
+      if (this.searchQuery) {
+        const query = this.searchQuery.toLowerCase();
+        matchesSearch = !!(
+          app.freelancer?.fullName?.toLowerCase().includes(query) ||
+          app.freelancer?.email?.toLowerCase().includes(query) ||
+          app.freelancer?.professionalHeadline?.toLowerCase().includes(query)
+        );
+      }
+      if (this.selectedStatus !== 'all') {
+        matchesStatus = app.applicationStatus?.toLowerCase() === this.selectedStatus.toLowerCase();
+      }
+      if (this.selectedGender !== 'all') {
+        matchesGender = app.freelancer?.gender?.toLowerCase() === this.selectedGender.toLowerCase();
+      }
+      if (this.selectedOfferStatus !== 'all') {
+        matchesOffer = app.offerStatus?.toLowerCase() === this.selectedOfferStatus.toLowerCase();
+      }
+
+      return matchesSearch && matchesStatus && matchesGender && matchesOffer;
+    });
+  }
+
+  resetFilters(): void {
+    this.searchQuery = '';
+    this.selectedStatus = 'all';
+    this.selectedGender = 'all';
+    this.selectedOfferStatus = 'all';
+    this.applyFilters();
+  }
+
+  removeFilter(filterToRemove: { label: string; type: string; value: string }): void {
+    if (filterToRemove.type === 'search') this.searchQuery = '';
+    else if (filterToRemove.type === 'status') this.selectedStatus = 'all';
+    else if (filterToRemove.type === 'gender') this.selectedGender = 'all';
+    else if (filterToRemove.type === 'offer') this.selectedOfferStatus = 'all';
+    this.applyFilters();
+  }
+
   updateStatCards(): void {
     this.statCards = [
       { title: 'Total Applicants', value: this.totalApplicants, icon: 'bi-people' },
@@ -125,10 +210,6 @@ export class Applicants implements OnInit, AfterViewInit {
       { title: 'Hired Applicants', value: '0', icon: 'bi-person-check' },
       { title: 'Rejected Applicants', value: '0', icon: 'bi-person-x' }
     ];
-  }
-
-  removeFilter(filterToRemove: { label: string; value: string }) {
-    this.activeFilters = this.activeFilters.filter(f => f.value !== filterToRemove.value);
   }
 
   getStatusBadgeVariant(status: string): 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' {

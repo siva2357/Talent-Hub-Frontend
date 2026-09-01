@@ -21,17 +21,29 @@ import { TimelineStep } from '../../../core/models/ui.model';
 })
 export class ProposalOffers implements OnInit {
   activeTab: 'proposals' | 'offers' = 'proposals';
+  
+  rawApplications: AppliedContract[] = [];
   applications: AppliedContract[] = [];
   totalApplications = 0;
+  
+  rawOffers: any[] = [];
   offers: any[] = [];
   totalOffers = 0;
+  
   isLoading = true;
   isLoadingOffers = true;
 
-  activeFilters: { label: string; value: string }[] = [
-    { label: 'Date: Last 30 Days', value: '30days' },
-    { label: 'Status: Application Submitted', value: 'application submitted' }
-  ];
+  // Filter States - Proposals
+  searchQueryProposals = '';
+  selectedDateRangeProposals = 'all';
+  selectedStatusProposals = 'all';
+  activeFiltersProposals: { label: string; type: string; value: string }[] = [];
+
+  // Filter States - Offers
+  searchQueryOffers = '';
+  selectedDateRangeOffers = 'all';
+  selectedStatusOffers = 'all';
+  activeFiltersOffers: { label: string; type: string; value: string }[] = [];
 
   dateRangeOptions = [
     { label: 'All Time', value: 'all' },
@@ -55,26 +67,6 @@ export class ProposalOffers implements OnInit {
     { label: 'Declined', value: 'declined' }
   ];
 
-  sortOptions = [
-    { label: 'Most Recent', value: 'recent' },
-    { label: 'Oldest', value: 'oldest' },
-    { label: 'Highest Budget', value: 'budget_desc' }
-  ];
-
-  removeFilter(filterToRemove: { label: string; value: string }) {
-    this.activeFilters = this.activeFilters.filter(f => f.value !== filterToRemove.value);
-  }
-
-  getStatusBadgeVariant(status: string): 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' {
-    const lowerStatus = status.toLowerCase();
-    if (lowerStatus === 'hired') return 'success';
-    if (lowerStatus === 'application submitted' || lowerStatus === 'shortlisted') return 'warning';
-    if (lowerStatus.includes('interview')) return 'primary';
-    if (lowerStatus.includes('assessment')) return 'info';
-    if (lowerStatus === 'rejected') return 'danger';
-    return 'secondary';
-  }
-
   constructor(
     private contractService: ContractService,
     private applicationService: ApplicationService,
@@ -86,13 +78,32 @@ export class ProposalOffers implements OnInit {
     this.fetchOffers();
   }
 
+  fetchAppliedContracts(): void {
+    this.isLoading = true;
+    this.contractService.getAppliedContracts().subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.rawApplications = res.applications;
+          this.totalApplications = res.totalApplications;
+          this.applyFiltersProposals();
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching applied contracts:', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
   fetchOffers(): void {
     this.isLoadingOffers = true;
     this.offerService.getFreelancerOffers().subscribe({
       next: (res) => {
         if (res.success) {
-          this.offers = res.offers || [];
-          this.totalOffers = this.offers.length;
+          this.rawOffers = res.offers || [];
+          this.totalOffers = this.rawOffers.length;
+          this.applyFiltersOffers();
         }
         this.isLoadingOffers = false;
       },
@@ -103,21 +114,107 @@ export class ProposalOffers implements OnInit {
     });
   }
 
-  fetchAppliedContracts(): void {
-    this.isLoading = true;
-    this.contractService.getAppliedContracts().subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.applications = res.applications;
-          this.totalApplications = res.totalApplications;
-        }
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error fetching applied contracts:', err);
-        this.isLoading = false;
-      }
-    });
+  // --- Proposal Filtering ---
+  applyFiltersProposals(): void {
+    this.activeFiltersProposals = [];
+    let filtered = [...this.rawApplications];
+
+    if (this.searchQueryProposals) {
+      const q = this.searchQueryProposals.toLowerCase();
+      this.activeFiltersProposals.push({ label: `Search: ${this.searchQueryProposals}`, type: 'search', value: this.searchQueryProposals });
+      filtered = filtered.filter(a => a.contract.contractTitle.toLowerCase().includes(q));
+    }
+
+    if (this.selectedStatusProposals !== 'all') {
+      const statusLabel = this.proposalStatusOptions.find(o => o.value === this.selectedStatusProposals)?.label || this.selectedStatusProposals;
+      this.activeFiltersProposals.push({ label: `Status: ${statusLabel}`, type: 'status', value: this.selectedStatusProposals });
+      filtered = filtered.filter(a => a.applicationStatus.toLowerCase() === this.selectedStatusProposals.toLowerCase());
+    }
+
+    if (this.selectedDateRangeProposals !== 'all') {
+      const dateLabel = this.dateRangeOptions.find(o => o.value === this.selectedDateRangeProposals)?.label || this.selectedDateRangeProposals;
+      this.activeFiltersProposals.push({ label: `Date: ${dateLabel}`, type: 'date', value: this.selectedDateRangeProposals });
+      
+      const now = new Date();
+      let threshold = new Date();
+      if (this.selectedDateRangeProposals === '7days') threshold.setDate(now.getDate() - 7);
+      if (this.selectedDateRangeProposals === '30days') threshold.setDate(now.getDate() - 30);
+      
+      filtered = filtered.filter(a => new Date(a.appliedAt) >= threshold);
+    }
+
+    this.applications = filtered;
+  }
+
+  resetFiltersProposals(): void {
+    this.searchQueryProposals = '';
+    this.selectedStatusProposals = 'all';
+    this.selectedDateRangeProposals = 'all';
+    this.applyFiltersProposals();
+  }
+
+  removeFilterProposals(filterToRemove: { label: string; type: string; value: string }): void {
+    if (filterToRemove.type === 'search') this.searchQueryProposals = '';
+    else if (filterToRemove.type === 'status') this.selectedStatusProposals = 'all';
+    else if (filterToRemove.type === 'date') this.selectedDateRangeProposals = 'all';
+    this.applyFiltersProposals();
+  }
+
+  // --- Offer Filtering ---
+  applyFiltersOffers(): void {
+    this.activeFiltersOffers = [];
+    let filtered = [...this.rawOffers];
+
+    if (this.searchQueryOffers) {
+      const q = this.searchQueryOffers.toLowerCase();
+      this.activeFiltersOffers.push({ label: `Search: ${this.searchQueryOffers}`, type: 'search', value: this.searchQueryOffers });
+      filtered = filtered.filter(o => o.contractTitle?.toLowerCase().includes(q) || o.client?.toLowerCase().includes(q));
+    }
+
+    if (this.selectedStatusOffers !== 'all') {
+      const statusLabel = this.offerStatusOptions.find(o => o.value === this.selectedStatusOffers)?.label || this.selectedStatusOffers;
+      this.activeFiltersOffers.push({ label: `Status: ${statusLabel}`, type: 'status', value: this.selectedStatusOffers });
+      filtered = filtered.filter(o => o.status?.toLowerCase() === this.selectedStatusOffers.toLowerCase());
+    }
+
+    if (this.selectedDateRangeOffers !== 'all') {
+      const dateLabel = this.dateRangeOptions.find(o => o.value === this.selectedDateRangeOffers)?.label || this.selectedDateRangeOffers;
+      this.activeFiltersOffers.push({ label: `Date: ${dateLabel}`, type: 'date', value: this.selectedDateRangeOffers });
+      
+      const now = new Date();
+      let threshold = new Date();
+      if (this.selectedDateRangeOffers === '7days') threshold.setDate(now.getDate() - 7);
+      if (this.selectedDateRangeOffers === '30days') threshold.setDate(now.getDate() - 30);
+      
+      filtered = filtered.filter(o => new Date(o.date) >= threshold);
+    }
+
+    this.offers = filtered;
+  }
+
+  resetFiltersOffers(): void {
+    this.searchQueryOffers = '';
+    this.selectedStatusOffers = 'all';
+    this.selectedDateRangeOffers = 'all';
+    this.applyFiltersOffers();
+  }
+
+  removeFilterOffers(filterToRemove: { label: string; type: string; value: string }): void {
+    if (filterToRemove.type === 'search') this.searchQueryOffers = '';
+    else if (filterToRemove.type === 'status') this.selectedStatusOffers = 'all';
+    else if (filterToRemove.type === 'date') this.selectedDateRangeOffers = 'all';
+    this.applyFiltersOffers();
+  }
+
+  // --- Utilities ---
+  getStatusBadgeVariant(status: string): 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' {
+    const lowerStatus = status.toLowerCase();
+    if (lowerStatus === 'hired') return 'success';
+    if (lowerStatus === 'application submitted' || lowerStatus === 'shortlisted') return 'warning';
+    if (lowerStatus.includes('interview')) return 'primary';
+    if (lowerStatus.includes('assessment')) return 'info';
+    if (lowerStatus === 'rejected') return 'danger';
+    return 'secondary';
   }
 
   getProgressWidth(status: string): string {
@@ -191,7 +288,6 @@ export class ProposalOffers implements OnInit {
   }
 
   joinInterview(applicationId: string): void {
-    // Add logic to join the interview (e.g., navigate to /meet-page)
     console.log(`Joining interview for application: ${applicationId}`);
   }
 
@@ -210,11 +306,9 @@ export class ProposalOffers implements OnInit {
       notes: "Assessment completed by freelancer."
     };
 
-    console.log(`Submitting assessment for application: ${applicationId}`);
     this.applicationService.submitAssessment(applicationId, payload).subscribe({
       next: (res) => {
         if (res.success) {
-          // Update status locally
           const app = this.applications.find(a => a.applicationId === applicationId);
           if (app) app.applicationStatus = 'assessment completed';
         }

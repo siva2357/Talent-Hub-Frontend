@@ -11,7 +11,6 @@ import { Button } from '../../../library/ui/components/button/button';
 import { Badge } from '../../../library/ui/components/badge/badge';
 import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
 
-
 declare var window: any;
 
 @Component({
@@ -23,9 +22,28 @@ declare var window: any;
 })
 export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
   allContracts: Contract[] = [];
+  filteredContracts: Contract[] = [];
   isLoading: boolean = true;
-  activeFilters: string[] = ['Design', 'Active'];
+  
+  // Filters
+  searchQuery: string = '';
+  selectedCategory: string = 'all';
+  selectedStatus: string = 'all';
+  activeFilters: { label: string; type: string; value: string }[] = [];
 
+  categoryOptions = [
+    { label: 'Select All', value: 'all' },
+    { label: 'Design', value: 'Design' },
+    { label: 'Web Development', value: 'Web Development' },
+    { label: 'Mobile Development', value: 'Mobile Development' }
+  ];
+
+  statusOptions = [
+    { label: 'Select All', value: 'all' },
+    { label: 'Active', value: 'active' },
+    { label: 'Completed', value: 'completed' },
+    { label: 'Draft', value: 'draft' }
+  ];
 
   dropdownTop: number = 0;
   dropdownLeft: number = 0;
@@ -69,7 +87,6 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.fetchContracts();
     this.loadRazorpayScript();
-
   }
 
   ngOnDestroy(): void {
@@ -77,7 +94,6 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
       window.removeEventListener('scroll', this.scrollListener, true);
     }
   }
-
 
   getDropdownItems(row: Contract): DropdownItem[] {
     const items: DropdownItem[] = [
@@ -100,7 +116,6 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDropdownAction(item: DropdownItem, row: Contract): void {
-
     switch (item.value) {
       case 'applicants':
         this.viewApplicants(row._id);
@@ -133,14 +148,72 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
       this.columns[8].cellTemplate = this.spentTemplate;
       this.columns[9].cellTemplate = this.fundsTemplate;
       this.columns[10].cellTemplate = this.statusTemplate;
-      // feedbackStatus template needs to be created in HTML and referenced
       this.columns[11].cellTemplate = (this as any).feedbackStatusTemplate;
       this.columns[12].cellTemplate = this.actionsTemplate;
     });
   }
 
-  removeFilter(filterToRemove: string): void {
-    this.activeFilters = this.activeFilters.filter(f => f !== filterToRemove);
+  applyFilters(): void {
+    this.activeFilters = [];
+    
+    if (this.searchQuery && this.searchQuery.trim() !== '') {
+      this.activeFilters.push({ label: `Search: ${this.searchQuery}`, type: 'search', value: this.searchQuery });
+    }
+    
+    if (this.selectedCategory !== 'all') {
+      const catLabel = this.categoryOptions.find(c => c.value === this.selectedCategory)?.label || this.selectedCategory;
+      this.activeFilters.push({ label: `Category: ${catLabel}`, type: 'category', value: this.selectedCategory });
+    }
+    
+    if (this.selectedStatus !== 'all') {
+      const statusLabel = this.statusOptions.find(s => s.value === this.selectedStatus)?.label || this.selectedStatus;
+      this.activeFilters.push({ label: `Status: ${statusLabel}`, type: 'status', value: this.selectedStatus });
+    }
+
+    this.filteredContracts = this.allContracts.filter(contract => {
+      let matchesSearch = true;
+      let matchesCategory = true;
+      let matchesStatus = true;
+
+      if (this.searchQuery && this.searchQuery.trim() !== '') {
+        const query = this.searchQuery.toLowerCase();
+        matchesSearch = !!(contract.contractTitle?.toLowerCase().includes(query) || contract.contractSubject?.toLowerCase().includes(query));
+      }
+
+      if (this.selectedCategory !== 'all') {
+        matchesCategory = contract.contractCategory === this.selectedCategory;
+      }
+
+      if (this.selectedStatus !== 'all') {
+        // Status mapping to match UI options (active maps to open/in progress)
+        const s = contract.status?.toLowerCase() || '';
+        if (this.selectedStatus === 'active') {
+          matchesStatus = (s === 'open' || s === 'in progress' || s === 'active');
+        } else {
+          matchesStatus = s === this.selectedStatus;
+        }
+      }
+
+      return matchesSearch && matchesCategory && matchesStatus;
+    });
+  }
+
+  resetFilters(): void {
+    this.searchQuery = '';
+    this.selectedCategory = 'all';
+    this.selectedStatus = 'all';
+    this.applyFilters();
+  }
+
+  removeFilter(filterToRemove: { label: string; type: string; value: string }): void {
+    if (filterToRemove.type === 'search') {
+      this.searchQuery = '';
+    } else if (filterToRemove.type === 'category') {
+      this.selectedCategory = 'all';
+    } else if (filterToRemove.type === 'status') {
+      this.selectedStatus = 'all';
+    }
+    this.applyFilters();
   }
 
   fetchContracts(): void {
@@ -148,6 +221,7 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
     this.contractService.getMyContracts().subscribe({
       next: (res) => {
         this.allContracts = res.contracts || [];
+        this.applyFilters(); // Initialize filtered array
         this.isLoading = false;
       },
       error: (err) => {
@@ -169,9 +243,6 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
     return 'primary';
   }
 
-
-
-
   viewApplicants(id: string): void {
     this.router.navigate(['/applicants', id]);
   }
@@ -188,29 +259,23 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/create-contract']);
   }
 
-
   deleteContract(id: string): void {
     if (confirm('Are you sure you want to delete this contract?')) {
       this.contractService.deleteContract(id).subscribe({
         next: () => {
           this.allContracts = this.allContracts.filter(c => c._id !== id);
+          this.applyFilters();
         },
         error: (err) => console.error('Delete error', err)
       });
     }
   }
 
-
-
-
-
   loadRazorpayScript(): void {
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     document.body.appendChild(script);
   }
-
-
 
   fundContract(contract: Contract): void {
     if (this.isFullyFunded(contract)) {
@@ -245,7 +310,6 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
       description: "Contract Escrow Funding",
       order_id: order.id,
       handler: (response: any) => {
-        // Verification phase
         const verifyPayload = {
           razorpay_payment_id: response.razorpay_payment_id,
           razorpay_order_id: response.razorpay_order_id,
@@ -277,6 +341,4 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
     const rzp = new window.Razorpay(options);
     rzp.open();
   }
-
-
 }

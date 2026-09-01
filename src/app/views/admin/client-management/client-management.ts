@@ -3,14 +3,17 @@ import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
 import { Table } from '../../../library/ui/components/table/table';
 import { Badge } from '../../../library/ui/components/badge/badge';
+import { Button } from '../../../library/ui/components/button/button';
+import { FormsModule } from '@angular/forms';
+import { InputField } from '../../../library/ui/components/input-field/input-field';
+import { Chip } from '../../../library/ui/components/chip/chip';
 import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
 import { TableColumn } from '../../../core/models/ui.model';
-
 
 @Component({
   selector: 'app-client-management',
   standalone: true,
-  imports: [CommonModule, Table, Badge, Dropdown],
+  imports: [CommonModule, Table, Badge, Button, FormsModule, InputField, Chip, Dropdown],
   templateUrl: './client-management.html',
   styleUrl: './client-management.css'
 })
@@ -50,14 +53,66 @@ export class ClientManagement implements OnInit, AfterViewInit {
     });
   }
 
+  rawClients: any[] = [];
+  searchQuery: string = '';
+  selectedStatus: string = 'All Statuses';
+  statusOptions: { label: string, value: string }[] = [
+    { label: 'All Statuses', value: 'All Statuses' },
+    { label: 'Active', value: 'Active' },
+    { label: 'Suspended', value: 'Suspended' },
+    { label: 'Blocked', value: 'Blocked' },
+    { label: 'Deactivated', value: 'Deactivated' }
+  ];
+  activeFilters: { key: string, label: string, value: any }[] = [];
+
   loadClients() {
     this.adminService.getAllClients().subscribe({
       next: (res) => {
-        this.clients = res || [];
-        this.totalContracts = this.clients.reduce((acc, client) => acc + (client.projectsCount || 0), 0);
+        this.rawClients = res || [];
+        this.totalContracts = this.rawClients.reduce((acc, client) => acc + (client.projectsCount || 0), 0);
+        this.applyFilters();
       },
       error: (err) => console.error('Error fetching clients', err)
     });
+  }
+
+  applyFilters(): void {
+    this.activeFilters = [];
+    if (this.searchQuery) {
+      this.activeFilters.push({ key: 'search', label: `Search: ${this.searchQuery}`, value: this.searchQuery });
+    }
+    if (this.selectedStatus && this.selectedStatus !== 'All Statuses') {
+      this.activeFilters.push({ key: 'status', label: `Status: ${this.selectedStatus}`, value: this.selectedStatus });
+    }
+
+    let filtered = [...this.rawClients];
+
+    if (this.searchQuery) {
+      const q = this.searchQuery.toLowerCase();
+      filtered = filtered.filter(c => 
+        (c.name && c.name.toLowerCase().includes(q)) ||
+        (c.email && c.email.toLowerCase().includes(q)) ||
+        (c.id && String(c.id).toLowerCase().includes(q))
+      );
+    }
+
+    if (this.selectedStatus && this.selectedStatus !== 'All Statuses') {
+      filtered = filtered.filter(c => c.status === this.selectedStatus);
+    }
+
+    this.clients = filtered;
+  }
+
+  resetFilters(): void {
+    this.searchQuery = '';
+    this.selectedStatus = 'All Statuses';
+    this.applyFilters();
+  }
+
+  removeFilter(filter: any): void {
+    if (filter.key === 'search') this.searchQuery = '';
+    if (filter.key === 'status') this.selectedStatus = 'All Statuses';
+    this.applyFilters();
   }
 
   updateStatus(clientId: string, newStatus: string) {

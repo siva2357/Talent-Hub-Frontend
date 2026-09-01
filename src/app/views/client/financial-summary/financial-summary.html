@@ -33,7 +33,7 @@
     <!-- Charts & Activity Row -->
     <div class="row g-4 mb-4">
       <!-- Financial Distribution Chart -->
-      <div class="col-lg-6">
+      <div class="col-lg-12">
         <div
           class="glass-card rounded-3 h-100 p-4 bg-white d-flex flex-column align-items-center justify-content-center">
           <h3 class="fs-6 fw-bold text-dark mb-1">Financial Distribution</h3>
@@ -58,46 +58,19 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Payment Activity -->
-      <div class="col-lg-6">
-        <div class="glass-card rounded-3 p-4 bg-white h-100">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fs-6 fw-bold text-dark mb-0">Recent Payment Activity</h3>
-          </div>
-
-          <div class="d-flex flex-column gap-4 position-relative ps-2">
-            <!-- Activity Line -->
-            <div class="position-absolute top-0 bottom-0 ms-1"
-              style="left: 0; width: 1px; background-color: #e9ecef; z-index: 1;"></div>
-
-            @for (txn of transactions; track txn._id || $index) {
-            <div class="d-flex justify-content-between position-relative z-2 w-100">
-              <div class="d-flex gap-3">
-                <div class="rounded-circle bg-success mt-1" style="width: 10px; height: 10px; margin-left: -4px;"></div>
-                <div>
-                  <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.75rem;">{{ txn.createdAt |
-                    date:'mediumDate' }}</span>
-                  <span class="text-muted" style="font-size: 0.7rem;">₹{{ txn.amount | number:'1.2-2' }} - {{ txn.type
-                    }}</span>
-                </div>
-              </div>
-              <app-badge [label]="txn.status" variant="success"></app-badge>
-            </div>
-            }
-
-            @if (transactions.length === 0 && !loading) {
-            <div class="text-center py-4 text-muted">
-              No activity found.
-            </div>
-            }
-          </div>
-        </div>
-      </div>
+    <!-- Recent Payment Activity Table -->
+    <div class="mb-4">
+      <h3 class="fs-6 fw-bold text-dark mb-3">Recent Payment Activity</h3>
+      <app-table [columns]="transactionColumns" [data]="transactions" [loading]="loading"></app-table>
     </div>
 
     <!-- Invoices Table -->
-    <app-table [columns]="columns" [data]="invoices" [loading]="loading"></app-table>
+    <div class="mb-4">
+      <h3 class="fs-6 fw-bold text-dark mb-3">Invoices</h3>
+      <app-table [columns]="columns" [data]="invoices" [loading]="loading"></app-table>
+    </div>
 
     <!-- Templates for Table Columns -->
     <ng-template #invoiceIdTpl let-row="row">
@@ -124,6 +97,23 @@
       <app-button variant="outline-primary" size="sm" label="Invoice" (clicked)="downloadInvoice(row._id)">
         <i class="bi bi-download me-1"></i>
       </app-button>
+    </ng-template>
+    
+    <!-- Transaction Templates -->
+    <ng-template #txnDateTpl let-row="row">
+      <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.8rem;">{{ row.createdAt | date:'mediumDate' }}</span>
+    </ng-template>
+    
+    <ng-template #txnTypeTpl let-row="row">
+      <span class="text-muted" style="font-size: 0.8rem;">{{ row.type }}</span>
+    </ng-template>
+    
+    <ng-template #txnAmountTpl let-row="row">
+      <span class="fw-bold text-dark" style="font-size: 0.8rem;">₹{{ row.amount | number:'1.2-2' }}</span>
+    </ng-template>
+    
+    <ng-template #txnStatusTpl let-row="row">
+      <app-badge [label]="row.status" variant="success"></app-badge>
     </ng-template>
 
   </div>

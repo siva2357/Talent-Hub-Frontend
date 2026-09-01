@@ -3,12 +3,16 @@ import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
 import { Table, TableColumn } from '../../../library/ui/components/table/table';
 import { Badge } from '../../../library/ui/components/badge/badge';
-import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
+import { Button } from '../../../library/ui/components/button/button';
+import { FormsModule } from '@angular/forms';
+import { InputField } from '../../../library/ui/components/input-field/input-field';
+import { Chip } from '../../../library/ui/components/chip/chip';
+import { Dropdown, DropdownItem } from "../../../library/ui/components/dropdown/dropdown";
 
 @Component({
   selector: 'app-freelancer-management',
   standalone: true,
-  imports: [CommonModule, Table, Badge, Dropdown],
+  imports: [CommonModule, Table, Badge, Button, FormsModule, InputField, Chip, Dropdown],
   templateUrl: './freelancer-management.html',
   styleUrl: './freelancer-management.css'
 })
@@ -36,7 +40,7 @@ export class FreelancerManagement implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.columns = [
-        { field: 'id', headerName: '#', cellTemplate: this.indexTpl },
+        { field: 'id', headerName: 'S.No', cellTemplate: this.indexTpl },
         { field: 'profile', headerName: 'Profile', cellTemplate: this.profileTpl },
         { field: 'name', headerName: 'Full Name', cellTemplate: this.fullNameTpl },
         { field: 'email', headerName: 'Email', cellTemplate: this.emailTpl },
@@ -48,14 +52,67 @@ export class FreelancerManagement implements OnInit, AfterViewInit {
     });
   }
 
+  rawFreelancers: any[] = [];
+  searchQuery: string = '';
+  selectedStatus: string = 'All Statuses';
+  statusOptions: { label: string, value: string }[] = [
+    { label: 'All Statuses', value: 'All Statuses' },
+    { label: 'Active', value: 'Active' },
+    { label: 'Pending Approval', value: 'Pending Approval' },
+    { label: 'Suspended', value: 'Suspended' },
+    { label: 'Blocked', value: 'Blocked' },
+    { label: 'Deactivated', value: 'Deactivated' }
+  ];
+  activeFilters: { key: string, label: string, value: any }[] = [];
+
   loadFreelancers() {
     this.adminService.getAllFreelancers().subscribe({
       next: (res) => {
-        this.freelancers = res || [];
-        this.totalContracts = this.freelancers.reduce((acc, freelancer) => acc + (freelancer.completedProjects || 0), 0);
+        this.rawFreelancers = res || [];
+        this.totalContracts = this.rawFreelancers.reduce((acc, freelancer) => acc + (freelancer.completedProjects || 0), 0);
+        this.applyFilters();
       },
       error: (err) => console.error('Error fetching freelancers', err)
     });
+  }
+
+  applyFilters(): void {
+    this.activeFilters = [];
+    if (this.searchQuery) {
+      this.activeFilters.push({ key: 'search', label: `Search: ${this.searchQuery}`, value: this.searchQuery });
+    }
+    if (this.selectedStatus && this.selectedStatus !== 'All Statuses') {
+      this.activeFilters.push({ key: 'status', label: `Status: ${this.selectedStatus}`, value: this.selectedStatus });
+    }
+
+    let filtered = [...this.rawFreelancers];
+
+    if (this.searchQuery) {
+      const q = this.searchQuery.toLowerCase();
+      filtered = filtered.filter(f => 
+        (f.name && f.name.toLowerCase().includes(q)) ||
+        (f.email && f.email.toLowerCase().includes(q)) ||
+        (f.id && String(f.id).toLowerCase().includes(q))
+      );
+    }
+
+    if (this.selectedStatus && this.selectedStatus !== 'All Statuses') {
+      filtered = filtered.filter(f => f.status === this.selectedStatus);
+    }
+
+    this.freelancers = filtered;
+  }
+
+  resetFilters(): void {
+    this.searchQuery = '';
+    this.selectedStatus = 'All Statuses';
+    this.applyFilters();
+  }
+
+  removeFilter(filter: any): void {
+    if (filter.key === 'search') this.searchQuery = '';
+    if (filter.key === 'status') this.selectedStatus = 'All Statuses';
+    this.applyFilters();
   }
 
   updateStatus(freelancerId: string, newStatus: string) {
