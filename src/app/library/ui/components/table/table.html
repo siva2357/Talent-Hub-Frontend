@@ -1,7 +1,8 @@
 <div class="table-component-wrapper position-relative">
 
     <ngx-datatable class="bootstrap" [rows]="data" [columnMode]="columnModeEnum.force" [headerHeight]="50"
-        [footerHeight]="0" [rowHeight]="'auto'" [limit]="10" [messages]="{ emptyMessage: emptyMessage }">
+        [footerHeight]="0" [rowHeight]="'auto'" [messages]="{ emptyMessage: emptyMessage, totalMessage: '' }"
+        [style.min-height.px]="minHeight">
 
         @for (column of columns; track column.field) {
 
@@ -17,7 +18,8 @@
                         context: {
                             $implicit: value,
                             row: row,
-                            index: rowIndex
+                            index: rowIndex,
+                            column: column
                         }
                     ">
                 </ng-container>

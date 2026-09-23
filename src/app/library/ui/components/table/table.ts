@@ -5,16 +5,8 @@ import {
   NgxDatatableModule
 } from '@swimlane/ngx-datatable';
 import { Loader } from '../loader/loader';
-
-export interface TableColumn {
-  field: string;
-  headerName: string;
-  cellTemplate?: TemplateRef<any>;
-  width?: number;
-  minWidth?: number;
-  maxWidth?: number;
-  flexGrow?: number;
-}
+import { TableColumn } from '../../../../core/models/ui.model';
+export type { TableColumn };
 
 @Component({
   selector: 'app-table',
@@ -35,6 +27,8 @@ export class Table<T extends Record<string, any>> {
   @Input() data: T[] = [];
 
   @Input() emptyMessage: string = 'No data to display';
+
+  @Input() minHeight: number = 300;
 
   @Input() loading: boolean = false;
 

@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import {
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
+
 import { AuthService } from '../../../core/services/auth.service';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Button } from '../../../library/ui/components/button/button';
@@ -9,63 +13,87 @@ import { Button } from '../../../library/ui/components/button/button';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink, CommonModule, ReactiveFormsModule, InputField, Button],
+  imports: [
+    RouterLink,
+    ReactiveFormsModule,
+    InputField,
+    Button
+  ],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
-export class Login implements OnInit {
-  loginForm!: FormGroup;
+export class Login {
+
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly fb = inject(FormBuilder);
+
+  readonly loginForm = this.fb.nonNullable.group({
+    email: [
+      '',
+      [
+        Validators.required,
+        Validators.email
+      ]
+    ],
+
+    password: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+        )
+      ]
+    ]
+  });
+
   errorMessage = '';
   isLoading = false;
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private fb: FormBuilder
-  ) {}
+  getValidationState(
+    field: 'email' | 'password'
+  ): 'none' | 'success' | 'error' {
 
-  ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      email: ['', [
-        Validators.required, 
-        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
-      ]],
-      password: ['', [
-        Validators.required, 
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
-      ]]
-    });
-  }
+    const control = this.loginForm.controls[field];
 
-  isFieldInvalid(field: string): boolean {
-    const control = this.loginForm.get(field);
-    return !!(control && control.invalid && (control.dirty || control.touched));
-  }
+    if (!control.dirty && !control.touched) {
+      return 'none';
+    }
 
-  getValidationState(field: string): 'none' | 'success' | 'error' {
-    const control = this.loginForm.get(field);
-    if (!control || (!control.dirty && !control.touched)) return 'none';
     return control.invalid ? 'error' : 'success';
   }
 
-  getErrorMessage(field: string): string {
-    const control = this.loginForm.get(field);
-    if (!control || !control.errors || (!control.dirty && !control.touched)) return '';
+  getErrorMessage(field: 'email' | 'password'): string {
 
-    if (control.errors['required']) {
-      return field === 'email' ? 'Email is required' : 'Password is required';
+    const control = this.loginForm.controls[field];
+
+    if (
+      !control.errors ||
+      (!control.dirty && !control.touched)
+    ) {
+      return '';
     }
 
-    if (control.errors['pattern']) {
-      return field === 'email' 
-        ? 'Please enter a valid email address' 
-        : 'Password must contain at least 8 chars, 1 uppercase, 1 lowercase, 1 number & 1 special character';
+    if (control.hasError('required')) {
+      return field === 'email'
+        ? 'Email is required'
+        : 'Password is required';
+    }
+
+    if (control.hasError('email')) {
+      return 'Please enter a valid email address';
+    }
+
+    if (control.hasError('pattern')) {
+      return 'Password must contain at least 8 chars, 1 uppercase, 1 lowercase, 1 number & 1 special character';
     }
 
     return 'Invalid input';
   }
 
   login(): void {
+
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -74,23 +102,49 @@ export class Login implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.authService.login(this.loginForm.value).subscribe({
-      next: (response) => {
-        this.isLoading = false;
-        if (response.success) {
-          const role = response.role?.toLowerCase();
-          
-          if (role !== 'admin' && !response.profileCompleted) {
-            this.router.navigate(['/profile-form']);
-          } else {
-            this.router.navigate(['/dashboard']);
-          }
+    this.authService
+      .login(this.loginForm.getRawValue())
+      .subscribe({
+        next: (response) => {
+          this.handleLoginSuccess(response);
+        },
+
+        error: (error) => {
+          this.handleLoginError(error);
         }
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.errorMessage = err.error?.message || 'Login failed. Please check your credentials.';
-      }
-    });
+      });
+  }
+
+  private handleLoginSuccess(response: any): void {
+
+    this.isLoading = false;
+
+    if (!response.success) {
+      this.errorMessage =
+        response.message || 'Login failed.';
+
+      return;
+    }
+
+    const role = response.role?.toLowerCase();
+
+    if (
+      role !== 'admin' &&
+      !response.profileCompleted
+    ) {
+      this.router.navigate(['/profile-form']);
+      return;
+    }
+
+    this.router.navigate(['/dashboard']);
+  }
+
+  private handleLoginError(error: any): void {
+
+    this.isLoading = false;
+
+    this.errorMessage =
+      error?.error?.message ??
+      'Login failed. Please check your credentials.';
   }
 }

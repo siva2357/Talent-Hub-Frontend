@@ -1,44 +1,32 @@
-import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { ContractService } from '../../../core/services/contract.service';
 import { ApplicationService } from '../../../core/services/application.service';
+import { MasterDataService } from '../../../core/services/master-data.service';
 import { RecruitmentWorkflow } from '../recruitment-workflow/recruitment-workflow';
 
 import { Button } from '../../../library/ui/components/button/button';
 import { Chip } from '../../../library/ui/components/chip/chip';
 import { Badge } from '../../../library/ui/components/badge/badge';
-import { InputField } from '../../../library/ui/components/input-field/input-field';
+import { InputField, InputOption } from '../../../library/ui/components/input-field/input-field';
 import { StatCard, StatCardData } from '../../../library/shared/components/stat-card/stat-card';
 import { Table, TableColumn } from '../../../library/ui/components/table/table';
 import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
 
-interface Applicant {
-  applicationId: string;
-  applicationStatus: string;
-  offerStatus: string;
-  freelancer: {
-    _id: string;
-    fullName: string;
-    email: string;
-    gender: string;
-    availability: string[] | string;
-    profilePhoto?: string;
-    city?: string;
-    professionalHeadline?: string;
-  };
-  avatarColor?: string;
-  index?: number;
-}
+import { Applicant } from '../../../core/models/application.model';
 
 @Component({
   selector: 'app-applicants',
+  standalone: true,
   imports: [RouterLink, CommonModule, RecruitmentWorkflow, Button, Chip, Badge, InputField, StatCard, Table, Dropdown],
   templateUrl: './applicants.html',
   styleUrl: './applicants.css'
 })
-export class Applicants implements OnInit, AfterViewInit {
+export class Applicants implements OnInit, AfterViewInit, OnDestroy {
   applicants: Applicant[] = [];
+  filteredApplicants: Applicant[] = [];
   isLoading = true;
   contractId: string | null = null;
   totalApplicants = 0;
@@ -47,15 +35,25 @@ export class Applicants implements OnInit, AfterViewInit {
   columns: TableColumn[] = [];
   statCards: StatCardData[] = [];
 
-  activeFilters: { label: string; value: string }[] = [
-    { label: 'Role: Frontend Developer', value: 'frontend' }
-  ];
+  // Filter state
+  searchQuery: string = '';
+  selectedStatus: string = 'all';
+  selectedGender: string = 'all';
+  selectedOfferStatus: string = 'all';
 
-  tagOptions = [
-    { label: 'Select All', value: 'all' },
-    { label: 'Frontend', value: 'frontend' },
-    { label: 'Backend', value: 'backend' }
-  ];
+  activeFilters: { label: string; type: string; value: string }[] = [];
+
+  // RxJS Subjects
+  applicantsSource$ = new BehaviorSubject<Applicant[]>([]);
+  searchFilter$ = new BehaviorSubject<string>('');
+  statusFilter$ = new BehaviorSubject<string>('all');
+  genderFilter$ = new BehaviorSubject<string>('all');
+  offerStatusFilter$ = new BehaviorSubject<string>('all');
+  private subscription: Subscription = new Subscription();
+
+  statusOptions: InputOption[] = [{ label: 'All Statuses', value: 'all' }];
+  genderOptions: InputOption[] = [{ label: 'All Genders', value: 'all' }];
+  offerStatusOptions: InputOption[] = [{ label: 'All Offers', value: 'all' }];
 
   @ViewChild('snoTpl') snoTpl!: TemplateRef<any>;
   @ViewChild('avatarTpl') avatarTpl!: TemplateRef<any>;
@@ -73,10 +71,13 @@ export class Applicants implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private contractService: ContractService,
     private applicationService: ApplicationService,
+    private masterDataService: MasterDataService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.fetchMasterData();
+    this.setupRxJSFilters();
     this.route.paramMap.subscribe(params => {
       this.contractId = params.get('id');
       if (this.contractId) {
@@ -84,6 +85,25 @@ export class Applicants implements OnInit, AfterViewInit {
       } else {
         this.isLoading = false;
       }
+    });
+  }
+
+  fetchMasterData(): void {
+    this.masterDataService.getAllMasterData().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          if (res.data['ApplicationStatus']) {
+            this.statusOptions = [{ label: 'All Statuses', value: 'all' }, ...res.data['ApplicationStatus'].map((o: any) => ({ label: o.value, value: o.key }))];
+          }
+          if (res.data['Gender']) {
+            this.genderOptions = [{ label: 'All Genders', value: 'all' }, ...res.data['Gender'].map((o: any) => ({ label: o.value, value: o.key }))];
+          }
+          if (res.data['OfferStatus']) {
+            this.offerStatusOptions = [{ label: 'All Offers', value: 'all' }, ...res.data['OfferStatus'].map((o: any) => ({ label: o.value, value: o.key }))];
+          }
+        }
+      },
+      error: (err) => console.error('Error fetching master data', err)
     });
   }
 
@@ -99,6 +119,7 @@ export class Applicants implements OnInit, AfterViewInit {
           }));
           this.totalApplicants = res.totalApplicants;
           this.updateStatCards();
+          this.applicantsSource$.next(this.applicants);
         }
         this.isLoading = false;
       },
@@ -134,6 +155,72 @@ export class Applicants implements OnInit, AfterViewInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  setupRxJSFilters(): void {
+    this.subscription.add(
+      combineLatest([
+        this.applicantsSource$,
+        this.searchFilter$,
+        this.statusFilter$,
+        this.genderFilter$,
+        this.offerStatusFilter$
+      ]).subscribe(([applicants, search, status, gender, offer]) => {
+        let filtered = [...applicants];
+        this.activeFilters = [];
+
+        if (search && search.trim() !== '') {
+          this.activeFilters.push({ label: `Search: ${search}`, type: 'search', value: search });
+          const query = search.toLowerCase();
+          filtered = filtered.filter(app => 
+            app.freelancer?.fullName?.toLowerCase().includes(query) ||
+            app.freelancer?.email?.toLowerCase().includes(query) ||
+            app.freelancer?.professionalHeadline?.toLowerCase().includes(query)
+          );
+        }
+        if (status !== 'all') {
+          this.activeFilters.push({ label: `Status: ${status}`, type: 'status', value: status });
+          filtered = filtered.filter(app => app.applicationStatus?.toLowerCase() === status.toLowerCase());
+        }
+        if (gender !== 'all') {
+          this.activeFilters.push({ label: `Gender: ${gender}`, type: 'gender', value: gender });
+          filtered = filtered.filter(app => app.freelancer?.gender?.toLowerCase() === gender.toLowerCase());
+        }
+        if (offer !== 'all') {
+          this.activeFilters.push({ label: `Offer: ${offer}`, type: 'offer', value: offer });
+          filtered = filtered.filter(app => app.offerStatus?.toLowerCase() === offer.toLowerCase());
+        }
+
+        this.filteredApplicants = filtered;
+      })
+    );
+  }
+
+  applyFilters(): void {
+    this.searchFilter$.next(this.searchQuery);
+    this.statusFilter$.next(this.selectedStatus);
+    this.genderFilter$.next(this.selectedGender);
+    this.offerStatusFilter$.next(this.selectedOfferStatus);
+  }
+
+  resetFilters(): void {
+    this.searchQuery = '';
+    this.selectedStatus = 'all';
+    this.selectedGender = 'all';
+    this.selectedOfferStatus = 'all';
+    this.applyFilters();
+  }
+
+  removeFilter(filterToRemove: { label: string; type: string; value: string }): void {
+    if (filterToRemove.type === 'search') this.searchQuery = '';
+    else if (filterToRemove.type === 'status') this.selectedStatus = 'all';
+    else if (filterToRemove.type === 'gender') this.selectedGender = 'all';
+    else if (filterToRemove.type === 'offer') this.selectedOfferStatus = 'all';
+    this.applyFilters();
+  }
+
   updateStatCards(): void {
     this.statCards = [
       { title: 'Total Applicants', value: this.totalApplicants, icon: 'bi-people' },
@@ -141,10 +228,6 @@ export class Applicants implements OnInit, AfterViewInit {
       { title: 'Hired Applicants', value: '0', icon: 'bi-person-check' },
       { title: 'Rejected Applicants', value: '0', icon: 'bi-person-x' }
     ];
-  }
-
-  removeFilter(filterToRemove: { label: string; value: string }) {
-    this.activeFilters = this.activeFilters.filter(f => f.value !== filterToRemove.value);
   }
 
   getStatusBadgeVariant(status: string): 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' {

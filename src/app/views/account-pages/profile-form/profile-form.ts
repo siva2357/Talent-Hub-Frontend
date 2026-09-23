@@ -10,7 +10,8 @@ import { InputField } from '../../../library/ui/components/input-field/input-fie
 import { Button } from '../../../library/ui/components/button/button';
 import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
-import { Timeline, TimelineStep } from '../../../library/shared/components/timeline/timeline';
+import { Timeline } from '../../../library/shared/components/timeline/timeline';
+import { TimelineStep } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-profile-form',

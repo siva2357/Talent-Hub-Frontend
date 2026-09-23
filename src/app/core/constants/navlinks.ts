@@ -3,7 +3,6 @@ import { NavLink } from '../models/sidebar.interface';
 export const NAV_LINKS: NavLink[] = [
   // Shared
   { label: 'Dashboard', path: '/dashboard', icon: 'bi bi-grid-1x2', roles: ['admin', 'client', 'freelancer'] },
-  { label: 'UI Components', path: '/ui-components', icon: 'bi bi-palette', roles: ['admin', 'client', 'freelancer'] },
   
   // Admin only
   { label: 'Client Management', path: '/client-management', icon: 'bi bi-people', roles: ['admin'] },

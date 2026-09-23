@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { PortfolioService } from '../../../core/services/portfolio.service';
 import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
 import { ProjectTypeEnum } from '../../../core/enums/portfolio.enum';
-import { InputField, InputOption } from '../../../library/ui/components/input-field/input-field';
+import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Button } from '../../../library/ui/components/button/button';
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
 import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
+import { InputOption } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-create-portfolio',

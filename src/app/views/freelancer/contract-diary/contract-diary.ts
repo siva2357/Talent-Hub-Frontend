@@ -4,11 +4,12 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ContractDiaryService } from '../../../core/services/contract-diary.service';
 import { TokenService } from '../../../core/services/token.service';
 
-import { Table, TableColumn } from '../../../library/ui/components/table/table';
+import { Table } from '../../../library/ui/components/table/table';
 import { Button } from '../../../library/ui/components/button/button';
 import { Badge } from '../../../library/ui/components/badge/badge';
-import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
-import { StatCard, StatCardData } from '../../../library/shared/components/stat-card/stat-card';
+import { Dropdown } from '../../../library/ui/components/dropdown/dropdown';
+import { StatCard } from '../../../library/shared/components/stat-card/stat-card';
+import { DropdownItem, StatCardData, TableColumn } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-contract-diary',
@@ -55,7 +56,7 @@ export class ContractDiary implements OnInit, AfterViewInit {
       this.route.queryParamMap.subscribe(queryParams => {
         const queryId = queryParams.get('contractId');
         this.contractId = idParam || queryId || '';
-        
+
         if (this.contractId) {
           this.loadDiary();
         } else {

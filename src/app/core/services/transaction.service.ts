@@ -1,40 +1,33 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TransactionService {
+export class TransactionService extends BaseService {
   private apiUrl = 'http://localhost:5000/api/finance'; // Base URL for finance routes
-
-  constructor(private http: HttpClient) {}
-
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  }
 
   // --- Reports & Stats ---
   getFinanceStats(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/stats`, { headers: this.getAuthHeaders() });
+    return this.get(`${this.apiUrl}/stats`);
   }
 
   getTransactions(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/transactions`, { headers: this.getAuthHeaders() });
+    return this.get(`${this.apiUrl}/transactions`);
   }
 
   getContractTransactions(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/contract-transactions`, { headers: this.getAuthHeaders() });
+    return this.get(`${this.apiUrl}/contract-transactions`);
   }
 
   getFreelancerFinanceReport(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/freelancer-report`, { headers: this.getAuthHeaders() });
+    return this.get(`${this.apiUrl}/freelancer-report`);
   }
 
   // --- Invoices & PDFs ---
   getInvoices(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/invoices`, { headers: this.getAuthHeaders() });
+    return this.get(`${this.apiUrl}/invoices`);
   }
 
   downloadInvoicePdf(invoiceId: string): Observable<Blob> {
@@ -53,15 +46,15 @@ export class TransactionService {
 
   // --- Razorpay & Payments ---
   createRazorpayOrder(payload: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/razorpay/order`, payload, { headers: this.getAuthHeaders() });
+    return this.post(`${this.apiUrl}/razorpay/order`, payload);
   }
 
   verifyRazorpayPayment(payload: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/razorpay/verify`, payload, { headers: this.getAuthHeaders() });
+    return this.post(`${this.apiUrl}/razorpay/verify`, payload);
   }
 
   // --- Withdrawals ---
   withdrawFunds(payload: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/withdraw`, payload, { headers: this.getAuthHeaders() });
+    return this.post(`${this.apiUrl}/withdraw`, payload);
   }
 }

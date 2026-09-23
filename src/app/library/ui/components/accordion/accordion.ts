@@ -1,11 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-export interface AccordionItem {
-  title: string;
-  content: string;
-  icon?: string;
-  expanded?: boolean;
-}
+import { AccordionItem } from '../../../../core/models/ui.model';
 
 @Component({
   selector: 'app-accordion',

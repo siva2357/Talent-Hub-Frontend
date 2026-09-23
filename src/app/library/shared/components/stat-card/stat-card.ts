@@ -2,12 +2,8 @@ import {
   Component,
   Input
 } from '@angular/core';
-
-export interface StatCardData {
-  title: string;
-  value: string | number;
-  icon: string;
-}
+import { StatCardData } from '../../../../core/models/ui.model';
+export type {  StatCardData  };
 
 @Component({
   selector: 'app-stat-card',

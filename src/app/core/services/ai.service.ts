@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
 
 export interface AIChatRequest {
@@ -34,7 +34,7 @@ export interface ContractMatchResponse {
 @Injectable({
   providedIn: 'root'
 })
-export class AIService {
+export class AIService extends BaseService {
   // Pointing to the Python FastAPI Server running locally on port 8000
   private readonly API_URL = 'http://127.0.0.1:8000';
   private readonly RAG_CHATBOT_URL = 'http://127.0.0.1:8000';
@@ -42,20 +42,20 @@ export class AIService {
   private readonly FEEDBACK_REVIEWER_URL = 'http://127.0.0.1:8000';
   private readonly TALENT_MATCHER_URL = 'http://127.0.0.1:8000';
   
-  constructor(private http: HttpClient) { }
+  
 
   /**
    * Check the health status of the AI RAG server
    */
   getAIStatus(): Observable<AIStatusResponse> {
-    return this.http.get<AIStatusResponse>(`${this.API_URL}/status`);
+    return this.get<AIStatusResponse>(`${this.API_URL}/status`);
   }
 
   /**
    * Send a query to the AI RAG Chatbot
    */
   askChatbot(request: AIChatRequest): Observable<AIChatResponse> {
-    return this.http.post<AIChatResponse>(`${this.API_URL}/chat`, request);
+    return this.post<AIChatResponse>(`${this.API_URL}/chat`, request);
   }
 
   /**
@@ -66,7 +66,7 @@ export class AIService {
       freelancer_profile: freelancerProfile,
       contracts: contracts
     };
-    return this.http.post<ContractMatchResponse>(`${this.CONTRACT_MATCHER_URL}/analyze-contracts`, payload);
+    return this.post<ContractMatchResponse>(`${this.CONTRACT_MATCHER_URL}/analyze-contracts`, payload);
   }
 
   /**
@@ -78,7 +78,7 @@ export class AIService {
       skills: skills,
       candidates: candidates
     };
-    return this.http.post<any>(`${this.TALENT_MATCHER_URL}/match-talent`, payload);
+    return this.post<any>(`${this.TALENT_MATCHER_URL}/match-talent`, payload);
   }
 
   /**
@@ -88,6 +88,6 @@ export class AIService {
     const payload = {
       feedback: feedbackData
     };
-    return this.http.post<any>(`${this.FEEDBACK_REVIEWER_URL}/analyze-feedback`, payload);
+    return this.post<any>(`${this.FEEDBACK_REVIEWER_URL}/analyze-feedback`, payload);
   }
 }

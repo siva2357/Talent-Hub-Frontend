@@ -4,53 +4,8 @@ import {
   Input,
   Output
 } from '@angular/core';
-
-
-export interface SupportTicketData {
-
-  _id: string;
-
-  ticketId: string;
-
-  userId: string;
-
-  userType: string;
-
-  userName: string;
-
-  userEmail: string;
-
-  subject: string;
-
-  category: string;
-
-  priority: string;
-
-  message: string;
-
-  attachments: {
-    name: string;
-    url: string;
-    _id: string;
-  }[];
-
-  status: string;
-
-  replies: {
-    sender: string;
-    message: string;
-    _id: string;
-    attachments: unknown[];
-    timestamp: string;
-  }[];
-
-  createdAt: string;
-
-  updatedAt: string;
-
-  __v?: number;
-
-}
+import { SupportTicketData } from '../../../../core/models/support-ticket.model';
+export type {  SupportTicketData  };
 
 
 @Component({
@@ -87,27 +42,22 @@ export class SupportTicket {
 
 
   get formattedClosedDate(): string {
-
-    if (
-      !this.ticket ||
-      this.ticket.status !== 'Closed'
-    ) {
+    if (!this.ticket || this.ticket.status !== 'Closed' || !this.ticket.updatedAt) {
       return '';
     }
-
     return this.formatDate(this.ticket.updatedAt);
-
   }
 
-
   private formatDate(date: string): string {
-
+    if (!date) return 'N/A';
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return 'N/A';
+    
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: '2-digit',
       year: 'numeric'
-    }).format(new Date(date));
-
+    }).format(d);
   }
 
 }

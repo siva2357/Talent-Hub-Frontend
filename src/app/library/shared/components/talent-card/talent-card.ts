@@ -4,44 +4,7 @@ import {
   Input,
   Output
 } from '@angular/core';
-
-export interface TalentCardData {
-
-  _id: string;
-  userId: string;
-
-  profilePhoto: string;
-  fullName: string;
-  email: string;
-  gender: string;
-
-  categories: string[];
-  skills: string[];
-
-  country: string;
-  city: string;
-  state: string;
-
-  availability: string[];
-
-  createdAt: string;
-  updatedAt: string;
-
-  activeContracts: number;
-  completedContracts: number;
-
-  // Optional future backend values
-  jobSuccessRate?: number;
-  riskStatus?: string;
-
-  isSaved: boolean;
-  status: string;
-
-  // AI Match Properties
-  matchPercentage?: number;
-  matchCategory?: string;
-  matchReasoning?: string;
-}
+import { TalentCardData } from '../../../../core/models/talent.model';
 
 
 import { CommonModule } from '@angular/common';

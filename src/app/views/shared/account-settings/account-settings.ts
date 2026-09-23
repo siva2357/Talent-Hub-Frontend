@@ -7,10 +7,11 @@ import { TokenService } from '../../../core/services/token.service';
 import { AuthService } from '../../../core/services/auth.service';
 
 // UI Components
-import { InputField, InputOption, InputValidation } from '../../../library/ui/components/input-field/input-field';
+import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Button } from '../../../library/ui/components/button/button';
 import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
+import { InputOption, InputValidation } from '../../../core/models/ui.model';
 
 export const passwordMatchValidator = (control: AbstractControl): ValidationErrors | null => {
   const newPassword = control.get('newPassword');

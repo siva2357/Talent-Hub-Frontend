@@ -25,8 +25,8 @@
                             icon="bi bi-envelope"
                             [showIcon]="true"
                             [value]="loginForm.get('email')?.value || ''"
-                            (valueChange)="loginForm.get('email')?.setValue($event); loginForm.get('email')?.markAsTouched()"
-                            [validation]="getValidationState('email')"
+                            (valueChange)="loginForm.get('email')?.setValue($event); loginForm.get('email')?.markAsDirty()"
+                            (blurred)="loginForm.get('email')?.markAsTouched()" [validation]="getValidationState('email')"
                             [errorMessage]="getErrorMessage('email')">
                         </app-input-field>
                     </div>
@@ -40,8 +40,8 @@
                             [showIcon]="true"
                             [showPasswordToggle]="true"
                             [value]="loginForm.get('password')?.value || ''"
-                            (valueChange)="loginForm.get('password')?.setValue($event); loginForm.get('password')?.markAsTouched()"
-                            [validation]="getValidationState('password')"
+                            (valueChange)="loginForm.get('password')?.setValue($event); loginForm.get('password')?.markAsDirty()"
+                            (blurred)="loginForm.get('password')?.markAsTouched()" [validation]="getValidationState('password')"
                             [errorMessage]="getErrorMessage('password')">
                         </app-input-field>
                     </div>

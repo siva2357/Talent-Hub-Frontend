@@ -88,3 +88,11 @@
   background-color: var(--primary-color);
   border-color: var(--primary-color);
 }
+
+
+/* Fix nested app-dropdown alignment inside bootstrap dropdown wrapper */
+:host ::ng-deep app-dropdown .dropdown-menu {
+  position: static !important;
+  display: block !important;
+  margin-top: 0 !important;
+}

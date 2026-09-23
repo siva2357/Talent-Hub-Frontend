@@ -4,7 +4,6 @@ import { AccountPages } from './views/account-pages/account-pages';
 import { Admin } from './views/admin/admin';
 import { Client } from './views/client/client';
 import { Freelancer } from './views/freelancer/freelancer';
-import { UiComponents } from './ui-components/ui-components';
 import { Profile } from './views/shared/profile/profile';
 import { AccountSettings } from './views/shared/account-settings/account-settings';
 import { ContactSupport } from './views/shared/contact-support/contact-support';
@@ -17,10 +16,6 @@ export const routes: Routes = [
     path: '',
     component: PublicLayout,
     loadChildren: () => import('./library/ui/layouts/public-layout/public.routes').then(m => m.PUBLIC_ROUTES)
-  },
-  {
-    path: 'ui-components',
-    component: UiComponents
   },
   {
     path: 'profile',

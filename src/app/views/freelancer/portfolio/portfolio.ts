@@ -2,10 +2,11 @@ import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angul
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PortfolioService } from '../../../core/services/portfolio.service';
-import { Table, TableColumn } from '../../../library/ui/components/table/table';
+import { Table } from '../../../library/ui/components/table/table';
 import { Button } from '../../../library/ui/components/button/button';
-import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
+import { Dropdown } from '../../../library/ui/components/dropdown/dropdown';
 import { Badge } from '../../../library/ui/components/badge/badge';
+import { TableColumn, DropdownItem } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-portfolio',
@@ -23,7 +24,6 @@ export class Portfolio implements OnInit, AfterViewInit {
   @ViewChild('titleTemplate', { static: true }) titleTemplate!: TemplateRef<any>;
   @ViewChild('projectTypeTemplate', { static: true }) projectTypeTemplate!: TemplateRef<any>;
   @ViewChild('tagsTemplate', { static: true }) tagsTemplate!: TemplateRef<any>;
-  @ViewChild('statusTemplate', { static: true }) statusTemplate!: TemplateRef<any>;
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
   @ViewChild('snoTemplate', { static: true }) snoTemplate!: TemplateRef<any>;
 
@@ -49,7 +49,6 @@ export class Portfolio implements OnInit, AfterViewInit {
         { field: 'title', headerName: 'TITLE', cellTemplate: this.titleTemplate, flexGrow: 1, minWidth: 250 },
         { field: 'projectType', headerName: 'PROJECT TYPE', cellTemplate: this.projectTypeTemplate, width: 150 },
         { field: 'tags', headerName: 'TAGS', cellTemplate: this.tagsTemplate, flexGrow: 1, minWidth: 200 },
-        { field: 'status', headerName: 'STATUS', cellTemplate: this.statusTemplate, width: 120 },
         { field: 'actions', headerName: 'ACTIONS', cellTemplate: this.actionsTemplate, width: 150 }
       ];
     });

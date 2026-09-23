@@ -7,34 +7,8 @@ import {
 import {
   TitleCasePipe
 } from '@angular/common';
-
-export type TimelineMode =
-  | 'default'
-  | 'with-icon'
-  | 'minimal'
-  | 'numbered';
-
-
-export type TimelineStatus =
-  | 'completed'
-  | 'active'
-  | 'upcoming'
-  | 'disabled'
-  | 'error'
-  | 'skipped';
-
-
-export interface TimelineStep {
-
-  title: string;
-
-  description?: string;
-
-  status: TimelineStatus;
-
-  icon?: string;
-
-}
+import { TimelineMode, TimelineStatus, TimelineStep } from '../../../../core/models/ui.model';
+export type {  TimelineMode, TimelineStatus, TimelineStep  };
 
 
 @Component({

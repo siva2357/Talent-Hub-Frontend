@@ -14,7 +14,7 @@
     <div class="dropdown-menu dropdown-menu-end p-0 border-0 shadow-sm mt-2 notification-dropdown"
         aria-labelledby="notifDropdown">
         <div class="notif-header">
-            <h3 style="font-size: 14px; font-weight: 600; color: #111827; margin: 0;">Notifications</h3>
+            <h3 style="font-size: 12px; font-weight: 600; color: #111827; margin: 0;">Notifications</h3>
             <a href="#" (click)="markAllAsRead($event)"
                 style="font-size: 12px; font-weight: 500; color: #2563eb; text-decoration: none;">Mark all as read</a>
         </div>
@@ -25,18 +25,19 @@
 
         <div class="notif-list">
             @for (notif of visibleNotifications; track notif._id) {
-            <div class="notif-item cursor-pointer" [class.bg-light]="!notif.read" (click)="markAsRead(notif._id!)">
-                <div class="notif-icon-box" style="background-color: #f3f4f6; color: #4b5563;">
-                    <i class="bi bi-bell"></i>
-                </div>
-
+            <div class="notif-item cursor-pointer" [class.bg-light]="!notif.read">
                 <div class="notif-content">
                     <div class="notif-title-row">
                         <span class="notif-title" [class.fw-bold]="!notif.read">{{ notif.title }}</span>
                         <span class="notif-time-short">{{ notif.createdAt | date:'shortTime' }}</span>
                     </div>
                     <p class="notif-text">{{ notif.message }}</p>
-                    <div class="notif-time-long"><i class="bi bi-clock"></i> {{ notif.createdAt | date:'medium' }}</div>
+                    <div class="notif-time-long d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-clock"></i> {{ notif.createdAt | date:'medium' }}</span>
+                        @if (!notif.read) {
+                            <a href="#" (click)="markAsRead($event, notif._id!)" style="font-size: 12px; color: #2563eb; text-decoration: none; font-weight: 500;">Mark as read</a>
+                        }
+                    </div>
                 </div>
             </div>
             } @empty {
@@ -49,14 +50,15 @@
 
         @if (notifications.length > 0) {
         <div class="notif-footer d-flex justify-content-between px-3 py-2 border-top">
-            @if (visibleLimit > 3) {
-                <a href="#" (click)="viewLess($event)" style="font-size: 13px; color: #6b7280; text-decoration: none;">View Less</a>
-            } @else {
-                <span></span>
-            }
-            @if (visibleLimit < notifications.length) {
-                <a href="#" (click)="viewMore($event)" style="font-size: 13px; color: #2563eb; font-weight: 500; text-decoration: none;">View More</a>
-            }
+            <a href="#" (click)="clearAll($event)" style="font-size: 12px; color: #dc3545; text-decoration: none;">Clear all</a>
+            <div class="d-flex gap-3">
+                @if (visibleLimit > 4) {
+                    <a href="#" (click)="viewLess($event)" style="font-size: 12px; color: #6b7280; text-decoration: none;">View Less</a>
+                }
+                @if (visibleLimit < notifications.length) {
+                    <a href="#" (click)="viewMore($event)" style="font-size: 12px; color: #2563eb; font-weight: 500; text-decoration: none;">View More</a>
+                }
+            </div>
         </div>
         }
     </div>

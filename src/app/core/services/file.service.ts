@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
 import { UploadBucket, UploadSection } from '../enums/upload.enum';
 
@@ -12,10 +12,10 @@ export interface UploadResponse {
 @Injectable({
   providedIn: 'root'
 })
-export class FileService {
+export class FileService extends BaseService {
   private readonly UPLOAD_API = 'http://localhost:5000/api/uploads/upload';
 
-  constructor(private http: HttpClient) { }
+  
 
   /**
    * Uploads a file to the specified bucket and section.
@@ -39,6 +39,6 @@ export class FileService {
     formData.append('subfolder', subfolder);
     formData.append('replace', replace.toString());
 
-    return this.http.post<UploadResponse>(this.UPLOAD_API, formData);
+    return this.post<UploadResponse>(this.UPLOAD_API, formData);
   }
 }

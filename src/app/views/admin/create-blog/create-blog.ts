@@ -5,30 +5,48 @@ import { CommonModule } from '@angular/common';
 import { BlogService } from '../../../core/services/blog.service';
 import { FileService } from '../../../core/services/file.service';
 import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
+import { InputField, InputOption } from '../../../library/ui/components/input-field/input-field';
+import { Button } from '../../../library/ui/components/button/button';
+import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
+import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
+import { RichTextEditor } from '../../../library/shared/components/rich-text-editor/rich-text-editor';
+import { MasterDataService } from '../../../core/services/master-data.service';
+import { ToastService } from '../../../core/services/ui/toast.service';
 
 @Component({
   selector: 'app-create-blog',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule, CommonModule],
+  imports: [RouterModule, ReactiveFormsModule, CommonModule, InputField, Button, FileUpload, FilePreview, RichTextEditor],
   templateUrl: './create-blog.html',
   styleUrl: './create-blog.css'
 })
 export class CreateBlog implements OnInit {
   blogForm!: FormGroup;
   
-  featuredMediaFile: File | null = null;
-  featuredMediaPreview: string | null = null;
+  featuredMediaUrl: string | null = null;
+  blogBannerUrl: string | null = null;
   
-  blogBannerFile: File | null = null;
-  blogBannerPreview: string | null = null;
+  uploadBucket = UploadBucket;
+  uploadSection = UploadSection;
   
   isSubmitting = false;
+
+  categoryOptions: InputOption[] = [
+    { label: 'Select a category', value: '' }
+  ];
+
+  statusOptions: InputOption[] = [
+    { label: 'Draft', value: 'Draft' },
+    { label: 'Published', value: 'Published' }
+  ];
 
   constructor(
     private fb: FormBuilder,
     private blogService: BlogService,
     private fileService: FileService,
-    private router: Router
+    private masterDataService: MasterDataService,
+    private toastService: ToastService,
+    public router: Router
   ) {}
 
   ngOnInit() {
@@ -39,47 +57,39 @@ export class CreateBlog implements OnInit {
       tags: [''],
       status: ['Draft', [Validators.required]]
     });
+
+    this.masterDataService.getMasterDataByCategory('BlogCategories').subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          const fetchedOptions = res.data.map((opt: any) => ({
+            label: opt.value,
+            value: opt.key
+          }));
+          this.categoryOptions = [
+            { label: 'Select a category', value: '' },
+            ...fetchedOptions
+          ];
+        }
+      },
+      error: (err) => console.error('Failed to load categories', err)
+    });
   }
 
-  // --- Featured Media ---
-  onFeaturedMediaSelected(event: any) {
-    const file = event.target.files[0];
-    this.setFeaturedMedia(file);
-  }
-  
-  onDragOver(event: any) {
-    event.preventDefault();
-  }
-  
-  onDropFeaturedMedia(event: any) {
-    event.preventDefault();
-    const file = event.dataTransfer.files[0];
-    this.setFeaturedMedia(file);
-  }
-
-  setFeaturedMedia(file: File) {
-    if (file && file.type.match(/image\/*|video\/*/)) {
-      this.featuredMediaFile = file;
-      const reader = new FileReader();
-      reader.onload = (e: any) => this.featuredMediaPreview = e.target.result;
-      reader.readAsDataURL(file);
+  // --- Media Uploads ---
+  onUploadComplete(url: string, type: 'featured' | 'banner') {
+    if (type === 'featured') {
+      this.featuredMediaUrl = url;
+    } else {
+      this.blogBannerUrl = url;
     }
   }
 
-  // --- Blog Banner ---
-  onBannerSelected(event: any) {
-    const file = event.target.files[0];
-    if (file && file.type.match(/image\/*/)) {
-      this.blogBannerFile = file;
-      const reader = new FileReader();
-      reader.onload = (e: any) => this.blogBannerPreview = e.target.result;
-      reader.readAsDataURL(file);
+  clearFile(type: 'featured' | 'banner') {
+    if (type === 'featured') {
+      this.featuredMediaUrl = null;
+    } else {
+      this.blogBannerUrl = null;
     }
-  }
-
-  clearBanner() {
-    this.blogBannerFile = null;
-    this.blogBannerPreview = null;
   }
 
   // --- Submit ---
@@ -98,27 +108,6 @@ export class CreateBlog implements OnInit {
     this.isSubmitting = true;
     
     try {
-      let featuredMediaUrl = null;
-      let blogBannerUrl = null;
-
-      if (this.featuredMediaFile) {
-        const res = await this.fileService.uploadFile(
-          this.featuredMediaFile, 
-          UploadBucket.AdminCollection, 
-          UploadSection.BlogMedia
-        ).toPromise();
-        if (res && res.success) featuredMediaUrl = res.url;
-      }
-
-      if (this.blogBannerFile) {
-        const res = await this.fileService.uploadFile(
-          this.blogBannerFile, 
-          UploadBucket.AdminCollection, 
-          UploadSection.BlogMedia
-        ).toPromise();
-        if (res && res.success) blogBannerUrl = res.url;
-      }
-
       const formValue = this.blogForm.value;
       const tags = formValue.tags ? formValue.tags.split(',').map((t: string) => t.trim()) : [];
       
@@ -128,17 +117,18 @@ export class CreateBlog implements OnInit {
         category: formValue.category,
         tags: tags,
         status: formValue.status,
-        featuredMedia: featuredMediaUrl,
-        blogBanner: blogBannerUrl
+        featuredMedia: this.featuredMediaUrl,
+        blogBanner: this.blogBannerUrl
       };
 
       await this.blogService.createBlog(payload).toPromise();
       
+      this.toastService.show('Blog created successfully!', 'success');
       this.router.navigate(['/blog-manager']);
       
     } catch (error) {
       console.error('Error creating blog', error);
-      alert('Failed to create blog. Please try again.');
+      this.toastService.show('Failed to create blog. Please try again.', 'error');
     } finally {
       this.isSubmitting = false;
     }
