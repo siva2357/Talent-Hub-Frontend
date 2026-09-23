@@ -28,6 +28,8 @@ export class Table<T extends Record<string, any>> {
 
   @Input() emptyMessage: string = 'No data to display';
 
+  @Input() minHeight: number = 300;
+
   @Input() loading: boolean = false;
 
   readonly columnModeEnum = ColumnMode;

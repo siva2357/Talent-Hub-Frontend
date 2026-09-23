@@ -29,30 +29,37 @@
     <!-- Support Tickets Table Card -->
     <div class="glass-card border-0 rounded-4 overflow-hidden mb-4 shadow-sm">
       <div class="card-header bg-transparent border-bottom p-4">
+
         <div class="row align-items-center g-3">
-          <div class="col-md-6 col-lg-4">
-            <div class="position-relative">
-              <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
-              <input type="text" class="form-control ps-5 bg-light border-0 shadow-none"
-                placeholder="Search tickets, names, or IDs..." [(ngModel)]="searchTerm"
-                (ngModelChange)="applyFilters()">
-            </div>
+          <div class="col-md-3 col-lg-4">
+            <app-input-field type="text" placeholder="Search tickets, names, or IDs..." [showIcon]="true"
+              icon="bi bi-search" label="" [value]="localSearchTerm"
+              (valueChange)="onSearchChange($event)"></app-input-field>
           </div>
-          <div class="col-md-6 col-lg-8 d-flex justify-content-md-end gap-3">
-            <select class="form-select w-auto bg-light border-0 shadow-none text-muted fw-semibold"
-              [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
-              <option value="">All Statuses</option>
-              <option value="Open">Open</option>
-              <option value="WaitingForAdmin">Waiting for Admin</option>
-              <option value="WaitingForUser">Waiting for User</option>
-              <option value="Resolved">Resolved</option>
-              <option value="Closed">Closed</option>
-            </select>
-            <select class="form-select w-auto bg-light border-0 shadow-none text-muted fw-semibold">
-              <option value="">All Categories</option>
-            </select>
+          <div class="col-md-3 col-lg-3">
+            <app-input-field type="select" [options]="statusOptions" label="" [value]="localStatusFilter"
+              (valueChange)="onStatusChange($event)"></app-input-field>
+          </div>
+          <div class="col-md-3 col-lg-3">
+            <app-input-field type="select" [options]="categoryOptions" label="" [value]="localCategoryFilter"
+              (valueChange)="onCategoryChange($event)"></app-input-field>
+          </div>
+          <div class="col-md-3 col-lg-2 d-flex gap-2">
+            <app-button variant="primary" label="Apply" [block]="true" (clicked)="applyFilters()"
+              class="grow"></app-button>
+            <app-button variant="light" label="Reset Filters" [block]="true" (clicked)="resetFilters()"
+              class="grow text-primary hover-bg-light border border-light"></app-button>
           </div>
         </div>
+
+        @if (activeFilters.length > 0) {
+        <div class="d-flex align-items-center flex-wrap gap-2 mt-3">
+          <span class="text-dark small fw-semibold me-2">Active Filters :</span>
+          @for (filter of activeFilters; track filter.label) {
+            <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)"></app-chip>
+          }
+        </div>
+        }
       </div>
 
       <div class="card-body p-4 bg-light bg-opacity-10">
@@ -68,7 +75,7 @@
           <div class="col-lg-4">
             <div class="d-flex flex-column gap-3 pe-2"
               style="max-height: calc(100vh - 300px); overflow-y: auto; overflow-x: hidden;">
-              @for (t of filteredTickets; track t.ticketId) {
+              @for (t of (filteredTickets$ | async) || []; track t.ticketId) {
               <div class="cursor-pointer position-relative hover-card rounded-4 overflow-hidden mb-1"
                 [class.border]="selectedTicket?.ticketId === t.ticketId"
                 [class.border-2]="selectedTicket?.ticketId === t.ticketId"
@@ -213,11 +220,9 @@
                     <select class="form-select form-select-sm shadow-none fw-semibold text-dark bg-light border-light"
                       style="width: 180px;" #statusSelect (change)="changeStatus(statusSelect.value)"
                       [value]="selectedTicket.status">
-                      <option value="Open">Status: Open</option>
-                      <option value="WaitingForUser">Status: Waiting for User</option>
-                      <option value="WaitingForAdmin">Status: Waiting for Admin</option>
-                      <option value="Resolved">Status: Resolved</option>
-                      <option value="Closed">Status: Closed</option>
+                      @for (status of ticketStatuses; track status.key) {
+                      <option [value]="status.key">Status: {{ status.value }}</option>
+                      }
                     </select>
                   </div>
                   <button type="button"

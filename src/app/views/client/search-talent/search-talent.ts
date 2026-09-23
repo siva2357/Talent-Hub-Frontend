@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { ProfileService } from '../../../core/services/profile.service';
 import { AIService } from '../../../core/services/ai.service';
+import { MasterDataService } from '../../../core/services/master-data.service';
 import { TalentCard } from '../../../library/shared/components/talent-card/talent-card';
 import { InputField, InputOption } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from '../../../library/ui/components/chip/chip';
@@ -16,10 +18,17 @@ import { Button } from '../../../library/ui/components/button/button';
   templateUrl: './search-talent.html',
   styleUrl: './search-talent.css'
 })
-export class SearchTalent implements OnInit {
+export class SearchTalent implements OnInit, OnDestroy {
   rawFreelancers: any[] = [];
   freelancers: any[] = [];
   isLoading = false;
+  
+  // RxJS Subjects
+  freelancersSource$ = new BehaviorSubject<any[]>([]);
+  skillFilter$ = new BehaviorSubject<string>('all');
+  experienceFilter$ = new BehaviorSubject<string>('all');
+  availabilityFilter$ = new BehaviorSubject<string>('all');
+  private subscription: Subscription = new Subscription();
   
   // UI State
   showAIFilter = false;
@@ -32,57 +41,14 @@ export class SearchTalent implements OnInit {
   searchSkills: string[] = [];
 
   // Manual Filter Options
-  skillOptions: InputOption[] = [
-    { label: 'All Skills', value: 'all' },
-    { label: 'Angular', value: 'Angular' },
-    { label: 'React', value: 'React' },
-    { label: 'Node.js', value: 'Node.js' }
-  ];
-  experienceOptions: InputOption[] = [
-    { label: 'All Levels', value: 'all' },
-    { label: 'Entry', value: 'Entry' },
-    { label: 'Intermediate', value: 'Intermediate' },
-    { label: 'Expert', value: 'Expert' }
-  ];
-  availabilityOptions: InputOption[] = [
-    { label: 'All Availability', value: 'all' },
-    { label: 'Full-time', value: 'Full-time' },
-    { label: 'Part-time', value: 'Part-time' }
-  ];
-  rateOptions: InputOption[] = [
-    { label: 'All Rates', value: 'all' },
-    { label: 'Below $20/hr', value: 'low' },
-    { label: '$20 - $50/hr', value: 'medium' },
-    { label: 'Above $50/hr', value: 'high' }
-  ];
-  locationOptions: InputOption[] = [
-    { label: 'All Locations', value: 'all' },
-    { label: 'Remote', value: 'Remote' },
-    { label: 'On-site', value: 'On-site' }
-  ];
-  languageOptions: InputOption[] = [
-    { label: 'All Languages', value: 'all' },
-    { label: 'English', value: 'English' }
-  ];
-  successOptions: InputOption[] = [
-    { label: 'All Ratings', value: 'all' },
-    { label: 'Top Rated', value: 'top' },
-    { label: 'Rising Talent', value: 'rising' }
-  ];
-  sortOptions: InputOption[] = [
-    { label: 'Best Match', value: 'best_match' },
-    { label: 'Newest', value: 'newest' }
-  ];
+  skillOptions: InputOption[] = [{ label: 'All Skills', value: 'all' }];
+  experienceOptions: InputOption[] = [{ label: 'All Levels', value: 'all' }];
+  availabilityOptions: InputOption[] = [{ label: 'All Availability', value: 'all' }];
 
   // Manual Filter state
   selectedSkill = 'all';
   selectedExperience = 'all';
   selectedAvailability = 'all';
-  selectedRate = 'all';
-  selectedLocation = 'all';
-  selectedLanguage = 'all';
-  selectedSuccess = 'all';
-  selectedSort = 'best_match';
 
   activeManualFilters: { label: string, type: string, value: string }[] = [];
 
@@ -98,11 +64,81 @@ export class SearchTalent implements OnInit {
   constructor(
     private profileService: ProfileService,
     private aiService: AIService,
+    private masterDataService: MasterDataService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.setupRxJSFilters();
+    this.fetchMasterData();
     this.fetchFreelancers();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  setupRxJSFilters(): void {
+    this.subscription.add(
+      combineLatest([
+        this.freelancersSource$,
+        this.skillFilter$,
+        this.experienceFilter$,
+        this.availabilityFilter$
+      ]).subscribe(([freelancers, skill, experience, availability]) => {
+        if (this.showAIFilter && this.isAIApplied) return;
+
+        let filtered = [...freelancers];
+        this.activeManualFilters = [];
+
+        if (skill !== 'all') {
+          const q = skill.toLowerCase();
+          this.activeManualFilters.push({ label: `Skill: ${skill}`, type: 'skill', value: skill });
+          filtered = filtered.filter(f => 
+            (f.skills && Array.isArray(f.skills) && f.skills.some((s: string) => s.toLowerCase() === q)) ||
+            (f.professionalHeadline && f.professionalHeadline.toLowerCase().includes(q))
+          );
+        }
+
+        if (experience !== 'all') {
+          const q = experience.toLowerCase();
+          this.activeManualFilters.push({ label: `Experience: ${experience}`, type: 'experience', value: experience });
+          filtered = filtered.filter(f => f.experienceLevel?.toLowerCase() === q);
+        }
+
+        if (availability !== 'all') {
+          const q = availability.toLowerCase();
+          this.activeManualFilters.push({ label: `Availability: ${availability}`, type: 'availability', value: availability });
+          filtered = filtered.filter(f => {
+            if (Array.isArray(f.availability)) {
+              return f.availability.some((a: string) => a.toLowerCase().includes(q));
+            }
+            return f.availability?.toLowerCase().includes(q);
+          });
+        }
+
+        this.freelancers = filtered;
+      })
+    );
+  }
+
+  fetchMasterData(): void {
+    this.masterDataService.getAllMasterData().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          if (res.data['Skills']) {
+            this.skillOptions = [{ label: 'All Skills', value: 'all' }, ...res.data['Skills'].map((o: any) => ({ label: o.value, value: o.key }))];
+          }
+          if (res.data['ExperienceLevel']) {
+            this.experienceOptions = [{ label: 'All Levels', value: 'all' }, ...res.data['ExperienceLevel'].map((o: any) => ({ label: o.value, value: o.key }))];
+          }
+          if (res.data['Availability']) {
+            this.availabilityOptions = [{ label: 'All Availability', value: 'all' }, ...res.data['Availability'].map((o: any) => ({ label: o.value, value: o.key }))];
+          }
+        }
+      },
+      error: (err) => console.error('Error fetching master data', err)
+    });
   }
 
   toggleAIFilter(): void {
@@ -116,8 +152,7 @@ export class SearchTalent implements OnInit {
         this.isLoading = false;
         if (res.success && (res.items || res.data)) {
           this.rawFreelancers = res.items || res.data;
-          this.freelancers = [...this.rawFreelancers];
-          this.applyManualFilters();
+          this.freelancersSource$.next(this.rawFreelancers);
         }
       },
       error: (err) => {
@@ -134,68 +169,15 @@ export class SearchTalent implements OnInit {
       return; // Skip manual filtering if AI match is active
     }
 
-    this.activeManualFilters = [];
-
-    let filtered = [...this.rawFreelancers];
-
-    if (this.selectedSkill !== 'all') {
-      const q = this.selectedSkill.toLowerCase();
-      this.activeManualFilters.push({ label: `Skill: ${this.selectedSkill}`, type: 'skill', value: this.selectedSkill });
-      filtered = filtered.filter(f => 
-        (f.skills && Array.isArray(f.skills) && f.skills.some((s: string) => s.toLowerCase() === q)) ||
-        (f.professionalHeadline && f.professionalHeadline.toLowerCase().includes(q))
-      );
-    }
-
-    if (this.selectedExperience !== 'all') {
-      const q = this.selectedExperience.toLowerCase();
-      this.activeManualFilters.push({ label: `Experience: ${this.selectedExperience}`, type: 'experience', value: this.selectedExperience });
-      filtered = filtered.filter(f => f.experienceLevel?.toLowerCase() === q);
-    }
-
-    if (this.selectedAvailability !== 'all') {
-      const q = this.selectedAvailability.toLowerCase();
-      this.activeManualFilters.push({ label: `Availability: ${this.selectedAvailability}`, type: 'availability', value: this.selectedAvailability });
-      filtered = filtered.filter(f => {
-        if (Array.isArray(f.availability)) {
-          return f.availability.some((a: string) => a.toLowerCase().includes(q));
-        }
-        return f.availability?.toLowerCase().includes(q);
-      });
-    }
-    
-    if (this.selectedRate !== 'all') {
-      const rateLabel = this.rateOptions.find(o => o.value === this.selectedRate)?.label || this.selectedRate;
-      this.activeManualFilters.push({ label: `Rate: ${rateLabel}`, type: 'rate', value: this.selectedRate });
-    }
-    if (this.selectedLocation !== 'all') {
-      this.activeManualFilters.push({ label: `Location: ${this.selectedLocation}`, type: 'location', value: this.selectedLocation });
-    }
-    if (this.selectedLanguage !== 'all') {
-      this.activeManualFilters.push({ label: `Language: ${this.selectedLanguage}`, type: 'language', value: this.selectedLanguage });
-    }
-    if (this.selectedSuccess !== 'all') {
-      const successLabel = this.successOptions.find(o => o.value === this.selectedSuccess)?.label || this.selectedSuccess;
-      this.activeManualFilters.push({ label: `Success: ${successLabel}`, type: 'success', value: this.selectedSuccess });
-    }
-
-    // Sort by best match could just leave as is for now, or sort by id etc.
-    if (this.selectedSort === 'newest') {
-      filtered.reverse(); // Mock reverse
-    }
-
-    this.freelancers = filtered;
+    this.skillFilter$.next(this.selectedSkill);
+    this.experienceFilter$.next(this.selectedExperience);
+    this.availabilityFilter$.next(this.selectedAvailability);
   }
 
   resetManualFilters(): void {
     this.selectedSkill = 'all';
     this.selectedExperience = 'all';
     this.selectedAvailability = 'all';
-    this.selectedRate = 'all';
-    this.selectedLocation = 'all';
-    this.selectedLanguage = 'all';
-    this.selectedSuccess = 'all';
-    this.selectedSort = 'best_match';
     this.applyManualFilters();
   }
 
@@ -203,10 +185,6 @@ export class SearchTalent implements OnInit {
     if (filterToRemove.type === 'skill') this.selectedSkill = 'all';
     else if (filterToRemove.type === 'experience') this.selectedExperience = 'all';
     else if (filterToRemove.type === 'availability') this.selectedAvailability = 'all';
-    else if (filterToRemove.type === 'rate') this.selectedRate = 'all';
-    else if (filterToRemove.type === 'location') this.selectedLocation = 'all';
-    else if (filterToRemove.type === 'language') this.selectedLanguage = 'all';
-    else if (filterToRemove.type === 'success') this.selectedSuccess = 'all';
     
     this.applyManualFilters();
   }

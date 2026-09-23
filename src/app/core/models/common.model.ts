@@ -16,3 +16,10 @@ export interface UploadResponse {
   message: string;
   url: string;
 }
+
+
+export interface UploadResponse {
+  success: boolean;
+  message: string;
+  url: string;
+}

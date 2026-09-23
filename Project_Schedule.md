@@ -45,7 +45,7 @@
 - [x] Testing for AI agents, RAG pipeline, and AI generated text
 
 
-## Phase 4: Comprehensive Testing Phase (August 24 - August 29) - PENDING
+## Phase 4: Comprehensive Testing Phase (August 24 - September 30) - PENDING
 
 *Focus: Complete testing of the application.*
 
@@ -61,7 +61,7 @@
 - [ ] Reusable UI components testing and code optimization
 
 
-## Phase 5: Production, Portfolio & Documentation (August 31 - End of Month) - PENDING
+## Phase 5: Production, Portfolio & Documentation (August 24 - September 30) - PENDING
 
 *Focus: Going live and documenting the journey.*
 

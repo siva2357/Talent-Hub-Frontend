@@ -82,16 +82,15 @@
           </div>
         </div>
 
+        @if (activeFilters.length > 0) {
         <div class="d-flex align-items-center flex-wrap gap-2 mt-3">
           <span class="text-dark small fw-semibold me-2">Active Filters :</span>
           @for (filter of activeFilters; track filter.label) {
           <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)">
           </app-chip>
           }
-          @if (activeFilters.length === 0) {
-          <span class="text-muted small">None</span>
-          }
         </div>
+        }
       </div>
     </div>
 

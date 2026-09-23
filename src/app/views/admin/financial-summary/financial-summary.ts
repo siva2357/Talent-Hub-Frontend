@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -11,20 +11,23 @@ import { Button } from '../../../library/ui/components/button/button';
 import { FormsModule } from '@angular/forms';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from '../../../library/ui/components/chip/chip';
+import { Pagination } from '../../../library/ui/components/pagination/pagination';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-financial-summary',
   standalone: true,
-  imports: [CommonModule, StatCard, Table, Badge, Button, FormsModule, InputField, Chip],
+  imports: [CommonModule, StatCard, Table, Badge, Button, FormsModule, InputField, Chip, Pagination],
   templateUrl: './financial-summary.html',
   styleUrl: './financial-summary.css'
 })
-export class FinancialSummary implements OnInit, AfterViewInit {
+export class FinancialSummary implements OnInit, AfterViewInit, OnDestroy {
   isPayoutModalOpen = false;
   isProcessing = false;
   selectedTransactionId: string | null = null;
   selectedTransactionAmount: number | null = null;
-  transactions: any[] = [];
+  
   stats: any = {
     totalVolume: 0,
     platformCommissions: 0,
@@ -46,9 +49,63 @@ export class FinancialSummary implements OnInit, AfterViewInit {
   @ViewChild('statusTpl') statusTpl!: TemplateRef<any>;
   @ViewChild('actionsTpl') actionsTpl!: TemplateRef<any>;
 
+  rawTransactions$ = new BehaviorSubject<any[]>([]);
+  searchQuery$ = new BehaviorSubject<string>('');
+  selectedStatus$ = new BehaviorSubject<string>('All Statuses');
+  
+  tempSearchQuery = '';
+  tempSelectedStatus = 'All Statuses';
+  
+  currentPage$ = new BehaviorSubject<number>(1);
+  pageSize$ = new BehaviorSubject<number>(10);
+
+  transactions$!: Observable<any[]>;
+  paginatedTransactions$!: Observable<any[]>;
+  activeFilters: { key: string, label: string, value: any }[] = [];
+
+  statusOptions: any[] = [];
+
   ngOnInit() {
+    this.transactions$ = combineLatest([
+      this.rawTransactions$,
+      this.searchQuery$.pipe(debounceTime(300)),
+      this.selectedStatus$
+    ]).pipe(
+      map(([rawTransactions, search, status]) => {
+        let filtered = [...rawTransactions];
+
+        if (search) {
+          const q = search.toLowerCase();
+          filtered = filtered.filter(t => 
+            (t.clientName && t.clientName.toLowerCase().includes(q)) ||
+            (t.freelancerName && t.freelancerName.toLowerCase().includes(q)) ||
+            (t.contractTitle && t.contractTitle.toLowerCase().includes(q))
+          );
+        }
+
+        if (status && status !== 'All Statuses') {
+          filtered = filtered.filter(t => t.status === status);
+        }
+
+        this.updateActiveFilters(search, status);
+        return filtered;
+      })
+    );
+
+    this.paginatedTransactions$ = combineLatest([
+      this.transactions$,
+      this.currentPage$,
+      this.pageSize$
+    ]).pipe(
+      map(([filtered, page, size]) => {
+        const start = (page - 1) * size;
+        return filtered.slice(start, start + size);
+      })
+    );
+
     this.fetchTransactions();
     this.fetchStats();
+    this.fetchStatusOptions();
   }
 
   ngAfterViewInit(): void {
@@ -66,6 +123,8 @@ export class FinancialSummary implements OnInit, AfterViewInit {
       ];
     });
   }
+
+  ngOnDestroy() {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -87,63 +146,63 @@ export class FinancialSummary implements OnInit, AfterViewInit {
     });
   }
 
-  searchQuery: string = '';
-  selectedStatus: string = 'All Statuses';
-  statusOptions: { label: string, value: string }[] = [
-    { label: 'All Statuses', value: 'All Statuses' },
-    { label: 'Completed', value: 'Completed' },
-    { label: 'Pending', value: 'Pending' }
-  ];
-  activeFilters: { key: string, label: string, value: any }[] = [];
-  rawTransactions: any[] = [];
-
   fetchTransactions() {
     this.http.get(`${environment.apiGatewayUrl}/admin/finances/transactions`, { headers: this.getAuthHeaders() }).subscribe({
       next: (data: any) => {
-        this.rawTransactions = data;
-        this.applyFilters();
+        this.rawTransactions$.next(data || []);
       },
       error: (err) => console.error('Failed to fetch transactions', err)
     });
   }
 
-  applyFilters(): void {
+  fetchStatusOptions() {
+    this.http.get(`${environment.apiGatewayUrl}/admin/finances/status-options`, { headers: this.getAuthHeaders() }).subscribe({
+      next: (options: any) => {
+        this.statusOptions = options;
+      },
+      error: (err) => console.error('Failed to fetch status options', err)
+    });
+  }
+
+  updateActiveFilters(search: string, status: string) {
     this.activeFilters = [];
-    if (this.searchQuery) {
-      this.activeFilters.push({ key: 'search', label: `Search: ${this.searchQuery}`, value: this.searchQuery });
-    }
-    if (this.selectedStatus && this.selectedStatus !== 'All Statuses') {
-      this.activeFilters.push({ key: 'status', label: `Status: ${this.selectedStatus}`, value: this.selectedStatus });
-    }
+    if (search) this.activeFilters.push({ key: 'search', label: `Search: ${search}`, value: search });
+    if (status && status !== 'All Statuses') this.activeFilters.push({ key: 'status', label: `Status: ${status}`, value: status });
+  }
 
-    let filtered = [...this.rawTransactions];
+  onSearchChange(val: string) { this.tempSearchQuery = val; }
+  onStatusChange(val: string) { this.tempSelectedStatus = val; }
 
-    if (this.searchQuery) {
-      const q = this.searchQuery.toLowerCase();
-      filtered = filtered.filter(t => 
-        (t.clientName && t.clientName.toLowerCase().includes(q)) ||
-        (t.freelancerName && t.freelancerName.toLowerCase().includes(q)) ||
-        (t.contractTitle && t.contractTitle.toLowerCase().includes(q))
-      );
-    }
-
-    if (this.selectedStatus && this.selectedStatus !== 'All Statuses') {
-      filtered = filtered.filter(t => t.status === this.selectedStatus);
-    }
-
-    this.transactions = filtered;
+  applyFilters() {
+    this.searchQuery$.next(this.tempSearchQuery);
+    this.selectedStatus$.next(this.tempSelectedStatus);
+    this.currentPage$.next(1);
   }
 
   resetFilters(): void {
-    this.searchQuery = '';
-    this.selectedStatus = 'All Statuses';
-    this.applyFilters();
+    this.tempSearchQuery = '';
+    this.tempSelectedStatus = 'All Statuses';
+    this.searchQuery$.next('');
+    this.selectedStatus$.next('All Statuses');
+    this.currentPage$.next(1);
   }
 
   removeFilter(filter: any): void {
-    if (filter.key === 'search') this.searchQuery = '';
-    if (filter.key === 'status') this.selectedStatus = 'All Statuses';
-    this.applyFilters();
+    if (filter.key === 'search') {
+      this.tempSearchQuery = '';
+      this.searchQuery$.next('');
+      this.currentPage$.next(1);
+    }
+    if (filter.key === 'status') {
+      this.tempSelectedStatus = 'All Statuses';
+      this.selectedStatus$.next('All Statuses');
+      this.currentPage$.next(1);
+    }
+  }
+
+  onPageSizeChange(size: number) {
+    this.pageSize$.next(size);
+    this.currentPage$.next(1);
   }
 
   openPayoutModal(transactionId: string, amount: number) {
@@ -160,6 +219,9 @@ export class FinancialSummary implements OnInit, AfterViewInit {
 
   confirmPayout() {
     if (!this.selectedTransactionId) return;
+
+    // Optional confirmation alert, though the modal serves as confirmation itself.
+    if (!confirm('Are you sure you want to process this payout?')) return;
 
     this.isProcessing = true;
 

@@ -102,6 +102,19 @@ export class ContractPhaseDetails implements OnInit {
     return file.fileName || file.name || file.fileUrl?.split('/').pop() || file.url?.split('/').pop() || 'attachment';
   }
 
+  downloadFile(file: any) {
+    const url = file.fileUrl || file.url;
+    if (url) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.download = this.getFileName(file);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  }
+
   submitPhaseWork(): void {
     if (!this.diaryId || !this.phase?._id) return;
     this.isSubmitting = true;
@@ -112,15 +125,20 @@ export class ContractPhaseDetails implements OnInit {
 
     this.diaryService.submitPhase(this.diaryId, this.phase._id, payload).subscribe({
       next: (res) => {
-        this.isSubmitting = false;
-        if (res.success) {
-          this.phase = res.phase;
-          this.freelancerNote = '';
-        }
+        setTimeout(() => {
+          this.isSubmitting = false;
+          if (res.success) {
+            this.phase = res.phase;
+            this.freelancerNote = '';
+            this.submissionAttachments = []; // Clear UI state
+          }
+        }, 500); // Add a small delay for smoother UX
       },
       error: (err) => {
-        this.isSubmitting = false;
-        console.error('Error submitting phase:', err);
+        setTimeout(() => {
+          this.isSubmitting = false;
+          console.error('Error submitting phase:', err);
+        }, 500);
       }
     });
   }

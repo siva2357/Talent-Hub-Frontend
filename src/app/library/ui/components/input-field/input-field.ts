@@ -17,7 +17,7 @@ export class InputField {
 
   @Input() placeholder: string = 'Enter email address';
 
-  @Input() value: string = '';
+  @Input() value: string | null = '';
 
   // Icon
   @Input() icon: string = 'bi bi-lock';

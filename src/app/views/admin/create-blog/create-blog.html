@@ -72,35 +72,12 @@
         <div class="mb-4">
           <label class="form-label fw-bold text-dark small mb-2"><i
               class="bi bi-text-paragraph text-muted me-2"></i>Blog Content <span class="text-danger">*</span></label>
-          <div class="border border-light rounded-4 overflow-hidden bg-white shadow-sm">
-            <!-- Mock Toolbar -->
-            <div class="bg-light border-bottom p-2 d-flex flex-wrap gap-2 align-items-center">
-              <select class="form-select form-select-sm border-0 bg-transparent w-auto fw-semibold">
-                <option>Paragraph</option>
-              </select>
-              <div class="vr mx-1"></div>
-              <div class="btn-group btn-group-sm">
-                <button type="button" class="btn btn-light border-0 fw-bold">B</button>
-                <button type="button" class="btn btn-light border-0 fst-italic">I</button>
-                <button type="button" class="btn btn-light border-0 text-decoration-underline">U</button>
-                <button type="button" class="btn btn-light border-0 text-decoration-line-through">S</button>
-              </div>
-              <div class="vr mx-1"></div>
-              <div class="btn-group btn-group-sm fw-bold">
-                <button type="button" class="btn btn-light border-0">H1</button>
-                <button type="button" class="btn btn-light border-0">H2</button>
-                <button type="button" class="btn btn-light border-0">H3</button>
-              </div>
-              <div class="vr mx-1"></div>
-              <div class="btn-group btn-group-sm">
-                <button type="button" class="btn btn-light border-0">&#128279;</button>
-                <button type="button" class="btn btn-light border-0">&#128247;</button>
-              </div>
-            </div>
-            <!-- Editor Area -->
-            <textarea class="form-control border-0 rounded-0 shadow-none p-4" rows="15"
-              placeholder="Write your blog content here..." formControlName="content"
-              style="resize: none; background: transparent;"></textarea>
+          <div class="border border-light rounded-4 bg-white shadow-sm">
+            <app-rich-text-editor
+              formControlName="content"
+              placeholder="Write your blog content here..."
+              height="300px">
+            </app-rich-text-editor>
           </div>
         </div>
 

@@ -27,19 +27,32 @@
       <div class="col-12">
         <!-- Filters Row -->
         <div class="row g-3 mb-4 align-items-center">
-          <div class="col-md-6">
-            <app-input-field placeholder="Search reports..." icon="bi bi-search">
+          <div class="col-md-3 col-lg-5">
+            <app-input-field type="text" placeholder="Search reports..." [showIcon]="true" icon="bi bi-search" label=""
+              [value]="localSearchTerm" (valueChange)="onSearchChange($event)">
             </app-input-field>
           </div>
-          <div class="col-md-3">
-            <app-button variant="outline-secondary" label="Date" icon="bi bi-calendar-range" [block]="true">
-            </app-button>
+          <div class="col-md-3 col-lg-4">
+            <app-input-field type="select" [options]="typeOptions" label="" [value]="localTypeFilter"
+              (valueChange)="onTypeChange($event)">
+            </app-input-field>
           </div>
-          <div class="col-md-3">
-            <app-button variant="outline-secondary" label="All Types" icon="bi bi-funnel" [block]="true">
-            </app-button>
+          <div class="col-md-3 col-lg-3 d-flex gap-2">
+            <app-button variant="primary" class="w-100" label="Apply" [block]="true"
+              (clicked)="applyFilters()"></app-button>
+            <app-button variant="secondary" class="w-100" label="Reset Filters" [block]="true"
+              (clicked)="resetFilters()"></app-button>
           </div>
         </div>
+
+        @if (activeFilters.length > 0) {
+        <div class="d-flex align-items-center flex-wrap gap-2 mb-4">
+          <span class="text-dark small fw-semibold me-2">Active Filters :</span>
+          @for (filter of activeFilters; track filter.label) {
+          <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)"></app-chip>
+          }
+        </div>
+        }
 
         <!-- Generated Report Items -->
         @if (isLoading) {
@@ -50,7 +63,7 @@
         </div>
         } @else {
         <div class="row g-4">
-          @for (report of reports; track report.id) {
+          @for (report of (filteredReports$ | async); track report.id) {
           <div class="col-12 col-md-6 col-xl-4">
             <app-report-card [report]="report"></app-report-card>
           </div>

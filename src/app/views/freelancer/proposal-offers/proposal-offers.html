@@ -71,15 +71,14 @@
                 icon="bi bi-arrow-clockwise" (clicked)="resetFiltersProposals()"></app-button>
             </div>
           </div>
+          @if (activeFiltersProposals.length > 0) {
           <div class="d-flex align-items-center flex-wrap gap-2 mt-3">
             <span class="text-dark small fw-semibold me-2">Active Filters :</span>
             @for (filter of activeFiltersProposals; track filter.label) {
             <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilterProposals(filter)"></app-chip>
             }
-            @if (activeFiltersProposals.length === 0) {
-            <span class="text-muted small">None</span>
-            }
           </div>
+          }
         </div>
 
         <!-- Proposals List -->
@@ -234,15 +233,14 @@
                 icon="bi bi-arrow-clockwise" (clicked)="resetFiltersOffers()"></app-button>
             </div>
           </div>
+          @if (activeFiltersOffers.length > 0) {
           <div class="d-flex align-items-center flex-wrap gap-2 mt-3">
             <span class="text-dark small fw-semibold me-2">Active Filters :</span>
             @for (filter of activeFiltersOffers; track filter.label) {
             <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilterOffers(filter)"></app-chip>
             }
-            @if (activeFiltersOffers.length === 0) {
-            <span class="text-muted small">None</span>
-            }
           </div>
+          }
         </div>
         <!-- Offers List -->
         <div class="row g-4 mb-4">

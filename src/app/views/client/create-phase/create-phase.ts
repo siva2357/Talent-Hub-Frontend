@@ -10,6 +10,7 @@ import { InputField } from '../../../library/ui/components/input-field/input-fie
 import { Button } from '../../../library/ui/components/button/button';
 import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
+import { ToastService } from '../../../core/services/ui/toast.service';
 
 @Component({
   selector: 'app-create-phase',
@@ -32,7 +33,8 @@ export class CreatePhase implements OnInit {
     private router: Router,
     private diaryService: ContractDiaryService,
     private fileService: FileService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private toastService: ToastService
   ) {
     this.initForm();
   }
@@ -131,7 +133,7 @@ export class CreatePhase implements OnInit {
 
   onUploadError(err: string): void {
     console.error('File upload failed', err);
-    alert('Failed to upload file: ' + err);
+    this.toastService.show('Failed to upload file: ' + err, 'error');
     this.currentFile = null;
   }
 
@@ -156,7 +158,10 @@ export class CreatePhase implements OnInit {
           }
         }
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        console.error(err);
+        this.toastService.show('Failed to fetch contract details', 'error');
+      }
     });
   }
 
@@ -196,7 +201,7 @@ export class CreatePhase implements OnInit {
   createPhase(): void {
     if (this.phaseForm.invalid) {
       this.phaseForm.markAllAsTouched();
-      alert("Please fill in all required fields (Name, Deadline, Budget).");
+      this.toastService.show("Please fill in all required fields (Name, Deadline, Budget).", "warning");
       return;
     }
 
@@ -215,23 +220,31 @@ export class CreatePhase implements OnInit {
       this.diaryService.updatePhase(this.diaryId, this.phaseId, payload).subscribe({
         next: (res) => {
           if (res.success) {
+            this.toastService.show('Phase updated successfully!', 'success');
             this.router.navigate(['/contract-progress', this.contractId]);
           } else {
-            alert('Failed to update phase.');
+            this.toastService.show('Failed to update phase.', 'error');
           }
         },
-        error: (err) => console.error(err)
+        error: (err) => {
+          console.error(err);
+          this.toastService.show('Failed to update phase.', 'error');
+        }
       });
     } else {
       this.diaryService.addPhase(this.diaryId, payload).subscribe({
         next: (res) => {
           if (res.success) {
+            this.toastService.show('Phase created successfully!', 'success');
             this.router.navigate(['/contract-progress', this.contractId]);
           } else {
-            alert('Failed to create phase.');
+            this.toastService.show('Failed to create phase.', 'error');
           }
         },
-        error: (err) => console.error(err)
+        error: (err) => {
+          console.error(err);
+          this.toastService.show('Failed to create phase.', 'error');
+        }
       });
     }
   }

@@ -12,7 +12,7 @@
   </div>
 
   <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="position-relative z-1 glass-card p-4 mx-auto" style="max-width: 1400px;">
+  <div class="position-relative  glass-card p-4 mx-auto" style="max-width: 1400px;">
     <!-- Header -->
     <header class="mb-4 d-flex justify-content-between align-items-center">
       <div>
@@ -29,37 +29,37 @@
       <div class="card-body p-4">
         <div class="row g-3 align-items-center mb-3">
           <div class="col-md-5 col-lg-5">
-            <app-input-field type="text" placeholder="Search blogs by title or content..." [showIcon]="true" icon="bi bi-search" label=""
-              [value]="searchQuery" (valueChange)="searchQuery = $event"></app-input-field>
+            <app-input-field type="text" placeholder="Search blogs by title or content..." [showIcon]="true"
+              icon="bi bi-search" label="" [value]="localSearchQuery"
+              (valueChange)="onSearchChange($event)"></app-input-field>
           </div>
           <div class="col-md-4 col-lg-4">
-            <app-input-field type="select" [options]="categoryOptions" label=""
-              [value]="selectedCategory" (valueChange)="selectedCategory = $event"></app-input-field>
+            <app-input-field type="select" [options]="categoryOptions" label="" [value]="localSelectedCategory"
+              (valueChange)="onCategoryChange($event)"></app-input-field>
           </div>
           <div class="col-md-3 col-lg-3 d-flex gap-2">
             <app-button variant="primary" label="Apply" [block]="true" (clicked)="applyFilters()"
-              class="flex-grow-1"></app-button>
-            <app-button variant="light" label="Reset" [block]="true" (clicked)="resetFilters()"
-              class="flex-grow-1 text-primary hover-bg-light border border-light"></app-button>
+              class="w-100"></app-button>
+            <app-button variant="secondary" label="Reset Filters" [block]="true" (clicked)="resetFilters()"
+              class="w-100 text-primary hover-bg-light border border-light"></app-button>
           </div>
         </div>
 
+        @if (activeFilters.length > 0) {
         <div class="d-flex align-items-center flex-wrap gap-2">
           <span class="text-dark small fw-semibold me-2">Active Filters :</span>
           @for (filter of activeFilters; track filter.label) {
-            <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)"></app-chip>
-          }
-          @if (activeFilters.length === 0) {
-            <span class="text-muted small">None</span>
+          <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)"></app-chip>
           }
         </div>
+        }
       </div>
     </section>
 
     <!-- Data Table Section -->
     <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
-      <div class="card-body p-0">
-        <app-table [columns]="columns" [data]="blogs" [loading]="isLoading"
+      <div class="card-body p-0" style="min-height: 300px;">
+        <app-table [columns]="columns" [data]="(paginatedBlogs$ | async) || []" [loading]="isLoading"
           emptyMessage="No blogs found. Create your first blog!">
 
           <ng-template #indexTpl let-value let-index="index">
@@ -98,8 +98,8 @@
               </button>
               <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none"
                 style="min-width: auto;">
-                <app-dropdown [items]="getActionItems(row)" (itemSelected)="onActionSelected($event, row)" class="d-block"
-                  style="position: relative;">
+                <app-dropdown [items]="getActionItems(row)" (itemSelected)="onActionSelected($event, row)"
+                  class="d-block" style="position: relative;">
                 </app-dropdown>
               </div>
             </div>
@@ -111,8 +111,9 @@
 
     <!-- Pagination -->
     <div class="mt-4">
-      <app-pagination [currentPage]="currentPage" [pageSize]="pageSize" [totalItems]="totalItems"
-        (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)"></app-pagination>
+      <app-pagination [currentPage]="(currentPage$ | async) || 1" [pageSize]="(pageSize$ | async) || 10"
+        [totalItems]="totalItems" (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)"></app-pagination>
     </div>
   </div>
 </div>

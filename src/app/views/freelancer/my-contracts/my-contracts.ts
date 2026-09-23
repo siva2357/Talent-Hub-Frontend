@@ -8,6 +8,8 @@ import { Badge } from '../../../library/ui/components/badge/badge';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from '../../../library/ui/components/chip/chip';
 import { TableColumn, DropdownItem } from '../../../core/models/ui.model';
+import { MasterDataService } from '../../../core/services/master-data.service';
+import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-my-contracts',
@@ -20,8 +22,8 @@ export class MyContracts implements OnInit, AfterViewInit {
   isLoading = true;
   currentTab: 'active' | 'completed' = 'active';
   
-  rawActiveContracts: any[] = [];
-  rawCompletedContracts: any[] = [];
+  rawActiveContracts$ = new BehaviorSubject<any[]>([]);
+  rawCompletedContracts$ = new BehaviorSubject<any[]>([]);
   
   activeContracts: any[] = [];
   completedContracts: any[] = [];
@@ -32,18 +34,19 @@ export class MyContracts implements OnInit, AfterViewInit {
   searchQueryActive = '';
   selectedCategoryActive = 'all';
   activeFiltersActive: { label: string; type: string; value: string }[] = [];
+  appliedFiltersActive$ = new BehaviorSubject<{ search: string, category: string }>({ search: '', category: 'all' });
 
   // Filter States - Completed
   searchQueryCompleted = '';
   selectedCategoryCompleted = 'all';
   activeFiltersCompleted: { label: string; type: string; value: string }[] = [];
+  appliedFiltersCompleted$ = new BehaviorSubject<{ search: string, category: string }>({ search: '', category: 'all' });
 
   categoryOptions = [
-    { label: 'All Categories', value: 'all' },
-    { label: 'Web Development', value: 'web' },
-    { label: 'Mobile Development', value: 'mobile' },
-    { label: 'Design', value: 'design' }
+    { label: 'All Categories', value: 'all' }
   ];
+
+  private subscriptions = new Subscription();
 
   @ViewChild('titleTemplate', { static: true }) titleTemplate!: TemplateRef<any>;
   @ViewChild('clientTemplate', { static: true }) clientTemplate!: TemplateRef<any>;
@@ -52,10 +55,27 @@ export class MyContracts implements OnInit, AfterViewInit {
   @ViewChild('statusTemplate', { static: true }) statusTemplate!: TemplateRef<any>;
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
 
-  constructor(private contractService: ContractService, private router: Router) {}
+  constructor(private contractService: ContractService, private router: Router, private masterDataService: MasterDataService) {}
 
   ngOnInit(): void {
+    this.fetchMasterData();
+    this.setupReactiveFilters();
     this.fetchMyContracts();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  fetchMasterData(): void {
+    this.masterDataService.getMasterDataByCategory('ContractCategories').subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          const fetchedOptions = res.data.map((item: any) => ({ label: item.value, value: item.key }));
+          this.categoryOptions = [{ label: 'All Categories', value: 'all' }, ...fetchedOptions];
+        }
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -80,11 +100,8 @@ export class MyContracts implements OnInit, AfterViewInit {
     this.contractService.getFreelancerMyContracts().subscribe({
       next: (res) => {
         if (res.success) {
-          this.rawActiveContracts = res.contracts.filter(c => c.status === 'in progress' || c.status === 'open' || c.status === 'draft');
-          this.rawCompletedContracts = res.contracts.filter(c => c.status === 'completed' || c.status === 'closed');
-          
-          this.applyFiltersActive();
-          this.applyFiltersCompleted();
+          this.rawActiveContracts$.next(res.contracts.filter((c: any) => c.status === 'in progress' || c.status === 'open' || c.status === 'draft'));
+          this.rawCompletedContracts$.next(res.contracts.filter((c: any) => c.status === 'completed' || c.status === 'closed'));
         }
         this.isLoading = false;
       },
@@ -95,24 +112,69 @@ export class MyContracts implements OnInit, AfterViewInit {
     });
   }
 
+  // --- Filters Setup ---
+  setupReactiveFilters(): void {
+    // Active Contracts Filter
+    this.subscriptions.add(
+      combineLatest([
+        this.rawActiveContracts$,
+        this.appliedFiltersActive$
+      ]).subscribe(([contracts, filters]) => {
+        this.activeFiltersActive = [];
+        let filtered = [...contracts];
+
+        const { search, category } = filters;
+
+        if (search) {
+          const q = search.toLowerCase();
+          this.activeFiltersActive.push({ label: `Search: ${search}`, type: 'search', value: search });
+          filtered = filtered.filter(c => c.contractTitle?.toLowerCase().includes(q) || c.clientName?.toLowerCase().includes(q));
+        }
+
+        if (category && category !== 'all') {
+          const catLabel = this.categoryOptions.find(o => o.value === category)?.label || category;
+          this.activeFiltersActive.push({ label: `Category: ${catLabel}`, type: 'category', value: category });
+          filtered = filtered.filter(c => c.contractCategory?.toLowerCase().includes(category.toLowerCase()));
+        }
+
+        this.activeContracts = filtered;
+      })
+    );
+
+    // Completed Contracts Filter
+    this.subscriptions.add(
+      combineLatest([
+        this.rawCompletedContracts$,
+        this.appliedFiltersCompleted$
+      ]).subscribe(([contracts, filters]) => {
+        this.activeFiltersCompleted = [];
+        let filtered = [...contracts];
+
+        const { search, category } = filters;
+
+        if (search) {
+          const q = search.toLowerCase();
+          this.activeFiltersCompleted.push({ label: `Search: ${search}`, type: 'search', value: search });
+          filtered = filtered.filter(c => c.contractTitle?.toLowerCase().includes(q) || c.clientName?.toLowerCase().includes(q));
+        }
+
+        if (category && category !== 'all') {
+          const catLabel = this.categoryOptions.find(o => o.value === category)?.label || category;
+          this.activeFiltersCompleted.push({ label: `Category: ${catLabel}`, type: 'category', value: category });
+          filtered = filtered.filter(c => c.contractCategory?.toLowerCase().includes(category.toLowerCase()));
+        }
+
+        this.completedContracts = filtered;
+      })
+    );
+  }
+
   // --- Active Contracts Filtering ---
   applyFiltersActive(): void {
-    this.activeFiltersActive = [];
-    let filtered = [...this.rawActiveContracts];
-
-    if (this.searchQueryActive) {
-      const q = this.searchQueryActive.toLowerCase();
-      this.activeFiltersActive.push({ label: `Search: ${this.searchQueryActive}`, type: 'search', value: this.searchQueryActive });
-      filtered = filtered.filter(c => c.contractTitle?.toLowerCase().includes(q) || c.clientName?.toLowerCase().includes(q));
-    }
-
-    if (this.selectedCategoryActive !== 'all') {
-      const catLabel = this.categoryOptions.find(o => o.value === this.selectedCategoryActive)?.label || this.selectedCategoryActive;
-      this.activeFiltersActive.push({ label: `Category: ${catLabel}`, type: 'category', value: this.selectedCategoryActive });
-      filtered = filtered.filter(c => c.contractCategory?.toLowerCase().includes(this.selectedCategoryActive.toLowerCase()));
-    }
-
-    this.activeContracts = filtered;
+    this.appliedFiltersActive$.next({
+      search: this.searchQueryActive,
+      category: this.selectedCategoryActive
+    });
   }
 
   resetFiltersActive(): void {
@@ -129,22 +191,10 @@ export class MyContracts implements OnInit, AfterViewInit {
 
   // --- Completed Contracts Filtering ---
   applyFiltersCompleted(): void {
-    this.activeFiltersCompleted = [];
-    let filtered = [...this.rawCompletedContracts];
-
-    if (this.searchQueryCompleted) {
-      const q = this.searchQueryCompleted.toLowerCase();
-      this.activeFiltersCompleted.push({ label: `Search: ${this.searchQueryCompleted}`, type: 'search', value: this.searchQueryCompleted });
-      filtered = filtered.filter(c => c.contractTitle?.toLowerCase().includes(q) || c.clientName?.toLowerCase().includes(q));
-    }
-
-    if (this.selectedCategoryCompleted !== 'all') {
-      const catLabel = this.categoryOptions.find(o => o.value === this.selectedCategoryCompleted)?.label || this.selectedCategoryCompleted;
-      this.activeFiltersCompleted.push({ label: `Category: ${catLabel}`, type: 'category', value: this.selectedCategoryCompleted });
-      filtered = filtered.filter(c => c.contractCategory?.toLowerCase().includes(this.selectedCategoryCompleted.toLowerCase()));
-    }
-
-    this.completedContracts = filtered;
+    this.appliedFiltersCompleted$.next({
+      search: this.searchQueryCompleted,
+      category: this.selectedCategoryCompleted
+    });
   }
 
   resetFiltersCompleted(): void {

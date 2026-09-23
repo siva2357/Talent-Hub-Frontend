@@ -12,6 +12,8 @@ import { Timeline } from '../../../library/shared/components/timeline/timeline';
 
 import { AppliedContract } from '../../../core/models/application.model';
 import { TimelineStep } from '../../../core/models/ui.model';
+import { MasterDataService } from '../../../core/services/master-data.service';
+import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-proposal-offers',
@@ -22,11 +24,11 @@ import { TimelineStep } from '../../../core/models/ui.model';
 export class ProposalOffers implements OnInit {
   activeTab: 'proposals' | 'offers' = 'proposals';
   
-  rawApplications: AppliedContract[] = [];
+  rawApplications$ = new BehaviorSubject<AppliedContract[]>([]);
   applications: AppliedContract[] = [];
   totalApplications = 0;
   
-  rawOffers: any[] = [];
+  rawOffers$ = new BehaviorSubject<any[]>([]);
   offers: any[] = [];
   totalOffers = 0;
   
@@ -38,12 +40,16 @@ export class ProposalOffers implements OnInit {
   selectedDateRangeProposals = 'all';
   selectedStatusProposals = 'all';
   activeFiltersProposals: { label: string; type: string; value: string }[] = [];
+  appliedFiltersProposals$ = new BehaviorSubject<{ search: string, date: string, status: string }>({ search: '', date: 'all', status: 'all' });
 
   // Filter States - Offers
   searchQueryOffers = '';
   selectedDateRangeOffers = 'all';
   selectedStatusOffers = 'all';
   activeFiltersOffers: { label: string; type: string; value: string }[] = [];
+  appliedFiltersOffers$ = new BehaviorSubject<{ search: string, date: string, status: string }>({ search: '', date: 'all', status: 'all' });
+
+  private subscriptions = new Subscription();
 
   dateRangeOptions = [
     { label: 'All Time', value: 'all' },
@@ -52,30 +58,49 @@ export class ProposalOffers implements OnInit {
   ];
 
   proposalStatusOptions = [
-    { label: 'All Status', value: 'all' },
-    { label: 'Application Submitted', value: 'application submitted' },
-    { label: 'Assessment Assigned', value: 'assessment assigned' },
-    { label: 'Interview Scheduled', value: 'interview scheduled' },
-    { label: 'Hired', value: 'hired' },
-    { label: 'Rejected', value: 'rejected' }
+    { label: 'All Status', value: 'all' }
   ];
 
   offerStatusOptions = [
-    { label: 'All Status', value: 'all' },
-    { label: 'Sent', value: 'sent' },
-    { label: 'Accepted', value: 'accepted' },
-    { label: 'Declined', value: 'declined' }
+    { label: 'All Status', value: 'all' }
   ];
 
   constructor(
     private contractService: ContractService,
     private applicationService: ApplicationService,
-    private offerService: OfferService
+    private offerService: OfferService,
+    private masterDataService: MasterDataService
   ) { }
 
   ngOnInit(): void {
+    this.fetchMasterData();
+    this.setupReactiveFilters();
     this.fetchAppliedContracts();
     this.fetchOffers();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  fetchMasterData(): void {
+    this.masterDataService.getMasterDataByCategory('ApplicationStatus').subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          const fetchedOptions = res.data.map((item: any) => ({ label: item.value, value: item.key }));
+          this.proposalStatusOptions = [{ label: 'All Status', value: 'all' }, ...fetchedOptions];
+        }
+      }
+    });
+
+    this.masterDataService.getMasterDataByCategory('OfferStatus').subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          const fetchedOptions = res.data.map((item: any) => ({ label: item.value, value: item.key }));
+          this.offerStatusOptions = [{ label: 'All Status', value: 'all' }, ...fetchedOptions];
+        }
+      }
+    });
   }
 
   fetchAppliedContracts(): void {
@@ -83,9 +108,8 @@ export class ProposalOffers implements OnInit {
     this.contractService.getAppliedContracts().subscribe({
       next: (res) => {
         if (res.success) {
-          this.rawApplications = res.applications;
+          this.rawApplications$.next(res.applications);
           this.totalApplications = res.totalApplications;
-          this.applyFiltersProposals();
         }
         this.isLoading = false;
       },
@@ -101,9 +125,9 @@ export class ProposalOffers implements OnInit {
     this.offerService.getFreelancerOffers().subscribe({
       next: (res) => {
         if (res.success) {
-          this.rawOffers = res.offers || [];
-          this.totalOffers = this.rawOffers.length;
-          this.applyFiltersOffers();
+          const fetchedOffers = res.offers || [];
+          this.rawOffers$.next(fetchedOffers);
+          this.totalOffers = fetchedOffers.length;
         }
         this.isLoadingOffers = false;
       },
@@ -114,36 +138,94 @@ export class ProposalOffers implements OnInit {
     });
   }
 
+  // --- Filters Setup ---
+  setupReactiveFilters(): void {
+    // Proposals Filter
+    this.subscriptions.add(
+      combineLatest([
+        this.rawApplications$,
+        this.appliedFiltersProposals$
+      ]).subscribe(([applications, filters]) => {
+        this.activeFiltersProposals = [];
+        let filtered = [...applications];
+
+        const { search, status, date } = filters;
+
+        if (search) {
+          const q = search.toLowerCase();
+          this.activeFiltersProposals.push({ label: `Search: ${search}`, type: 'search', value: search });
+          filtered = filtered.filter(a => a.contract.contractTitle.toLowerCase().includes(q));
+        }
+
+        if (status && status !== 'all') {
+          const statusLabel = this.proposalStatusOptions.find(o => o.value === status)?.label || status;
+          this.activeFiltersProposals.push({ label: `Status: ${statusLabel}`, type: 'status', value: status });
+          filtered = filtered.filter(a => a.applicationStatus.toLowerCase() === status.toLowerCase());
+        }
+
+        if (date && date !== 'all') {
+          const dateLabel = this.dateRangeOptions.find(o => o.value === date)?.label || date;
+          this.activeFiltersProposals.push({ label: `Date: ${dateLabel}`, type: 'date', value: date });
+          
+          const now = new Date();
+          let threshold = new Date();
+          if (date === '7days') threshold.setDate(now.getDate() - 7);
+          if (date === '30days') threshold.setDate(now.getDate() - 30);
+          
+          filtered = filtered.filter(a => new Date(a.appliedAt) >= threshold);
+        }
+
+        this.applications = filtered;
+      })
+    );
+
+    // Offers Filter
+    this.subscriptions.add(
+      combineLatest([
+        this.rawOffers$,
+        this.appliedFiltersOffers$
+      ]).subscribe(([offers, filters]) => {
+        this.activeFiltersOffers = [];
+        let filtered = [...offers];
+
+        const { search, status, date } = filters;
+
+        if (search) {
+          const q = search.toLowerCase();
+          this.activeFiltersOffers.push({ label: `Search: ${search}`, type: 'search', value: search });
+          filtered = filtered.filter(o => o.contractTitle?.toLowerCase().includes(q) || o.client?.toLowerCase().includes(q));
+        }
+
+        if (status && status !== 'all') {
+          const statusLabel = this.offerStatusOptions.find(o => o.value === status)?.label || status;
+          this.activeFiltersOffers.push({ label: `Status: ${statusLabel}`, type: 'status', value: status });
+          filtered = filtered.filter(o => o.status?.toLowerCase() === status.toLowerCase());
+        }
+
+        if (date && date !== 'all') {
+          const dateLabel = this.dateRangeOptions.find(o => o.value === date)?.label || date;
+          this.activeFiltersOffers.push({ label: `Date: ${dateLabel}`, type: 'date', value: date });
+          
+          const now = new Date();
+          let threshold = new Date();
+          if (date === '7days') threshold.setDate(now.getDate() - 7);
+          if (date === '30days') threshold.setDate(now.getDate() - 30);
+          
+          filtered = filtered.filter(o => new Date(o.date) >= threshold);
+        }
+
+        this.offers = filtered;
+      })
+    );
+  }
+
   // --- Proposal Filtering ---
   applyFiltersProposals(): void {
-    this.activeFiltersProposals = [];
-    let filtered = [...this.rawApplications];
-
-    if (this.searchQueryProposals) {
-      const q = this.searchQueryProposals.toLowerCase();
-      this.activeFiltersProposals.push({ label: `Search: ${this.searchQueryProposals}`, type: 'search', value: this.searchQueryProposals });
-      filtered = filtered.filter(a => a.contract.contractTitle.toLowerCase().includes(q));
-    }
-
-    if (this.selectedStatusProposals !== 'all') {
-      const statusLabel = this.proposalStatusOptions.find(o => o.value === this.selectedStatusProposals)?.label || this.selectedStatusProposals;
-      this.activeFiltersProposals.push({ label: `Status: ${statusLabel}`, type: 'status', value: this.selectedStatusProposals });
-      filtered = filtered.filter(a => a.applicationStatus.toLowerCase() === this.selectedStatusProposals.toLowerCase());
-    }
-
-    if (this.selectedDateRangeProposals !== 'all') {
-      const dateLabel = this.dateRangeOptions.find(o => o.value === this.selectedDateRangeProposals)?.label || this.selectedDateRangeProposals;
-      this.activeFiltersProposals.push({ label: `Date: ${dateLabel}`, type: 'date', value: this.selectedDateRangeProposals });
-      
-      const now = new Date();
-      let threshold = new Date();
-      if (this.selectedDateRangeProposals === '7days') threshold.setDate(now.getDate() - 7);
-      if (this.selectedDateRangeProposals === '30days') threshold.setDate(now.getDate() - 30);
-      
-      filtered = filtered.filter(a => new Date(a.appliedAt) >= threshold);
-    }
-
-    this.applications = filtered;
+    this.appliedFiltersProposals$.next({
+      search: this.searchQueryProposals,
+      date: this.selectedDateRangeProposals,
+      status: this.selectedStatusProposals
+    });
   }
 
   resetFiltersProposals(): void {
@@ -162,34 +244,11 @@ export class ProposalOffers implements OnInit {
 
   // --- Offer Filtering ---
   applyFiltersOffers(): void {
-    this.activeFiltersOffers = [];
-    let filtered = [...this.rawOffers];
-
-    if (this.searchQueryOffers) {
-      const q = this.searchQueryOffers.toLowerCase();
-      this.activeFiltersOffers.push({ label: `Search: ${this.searchQueryOffers}`, type: 'search', value: this.searchQueryOffers });
-      filtered = filtered.filter(o => o.contractTitle?.toLowerCase().includes(q) || o.client?.toLowerCase().includes(q));
-    }
-
-    if (this.selectedStatusOffers !== 'all') {
-      const statusLabel = this.offerStatusOptions.find(o => o.value === this.selectedStatusOffers)?.label || this.selectedStatusOffers;
-      this.activeFiltersOffers.push({ label: `Status: ${statusLabel}`, type: 'status', value: this.selectedStatusOffers });
-      filtered = filtered.filter(o => o.status?.toLowerCase() === this.selectedStatusOffers.toLowerCase());
-    }
-
-    if (this.selectedDateRangeOffers !== 'all') {
-      const dateLabel = this.dateRangeOptions.find(o => o.value === this.selectedDateRangeOffers)?.label || this.selectedDateRangeOffers;
-      this.activeFiltersOffers.push({ label: `Date: ${dateLabel}`, type: 'date', value: this.selectedDateRangeOffers });
-      
-      const now = new Date();
-      let threshold = new Date();
-      if (this.selectedDateRangeOffers === '7days') threshold.setDate(now.getDate() - 7);
-      if (this.selectedDateRangeOffers === '30days') threshold.setDate(now.getDate() - 30);
-      
-      filtered = filtered.filter(o => new Date(o.date) >= threshold);
-    }
-
-    this.offers = filtered;
+    this.appliedFiltersOffers$.next({
+      search: this.searchQueryOffers,
+      date: this.selectedDateRangeOffers,
+      status: this.selectedStatusOffers
+    });
   }
 
   resetFiltersOffers(): void {

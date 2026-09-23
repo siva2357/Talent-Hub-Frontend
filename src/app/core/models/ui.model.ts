@@ -62,3 +62,26 @@ export interface ChatMessage {
   text: string;
   isBot: boolean;
 }
+
+
+export interface AlertConfig {
+  type: 'success' | 'error' | 'warning' | 'info';
+  title?: string;
+  message: string;
+  autoClose?: boolean;
+  duration?: number;
+}
+
+export interface ModalConfig {
+  id: string;
+  title?: string;
+  content?: string;
+  data?: any;
+  showCloseBtn?: boolean;
+}
+
+export interface ToastConfig {
+  message: string;
+  type?: 'success' | 'error' | 'warning' | 'info';
+  duration?: number;
+}

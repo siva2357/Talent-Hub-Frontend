@@ -1,8 +1,10 @@
 import { Component, OnInit, TemplateRef, ViewChild, ChangeDetectorRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { ContractService } from '../../../core/services/contract.service';
 import { TransactionService } from '../../../core/services/transaction.service';
+import { MasterDataService } from '../../../core/services/master-data.service';
 import { Contract } from '../../../core/models/contract.model';
 import { Table, TableColumn } from '../../../library/ui/components/table/table';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
@@ -31,19 +33,15 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
   selectedStatus: string = 'all';
   activeFilters: { label: string; type: string; value: string }[] = [];
 
-  categoryOptions = [
-    { label: 'Select All', value: 'all' },
-    { label: 'Design', value: 'Design' },
-    { label: 'Web Development', value: 'Web Development' },
-    { label: 'Mobile Development', value: 'Mobile Development' }
-  ];
+  // RxJS Subjects
+  contractsSource$ = new BehaviorSubject<Contract[]>([]);
+  searchFilter$ = new BehaviorSubject<string>('');
+  categoryFilter$ = new BehaviorSubject<string>('all');
+  statusFilter$ = new BehaviorSubject<string>('all');
+  private subscription: Subscription = new Subscription();
 
-  statusOptions = [
-    { label: 'Select All', value: 'all' },
-    { label: 'Active', value: 'active' },
-    { label: 'Completed', value: 'completed' },
-    { label: 'Draft', value: 'draft' }
-  ];
+  categoryOptions = [{ label: 'Select All', value: 'all' }];
+  statusOptions = [{ label: 'Select All', value: 'all' }];
 
   dropdownTop: number = 0;
   dropdownLeft: number = 0;
@@ -80,19 +78,82 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private contractService: ContractService,
     private transactionService: TransactionService,
+    private masterDataService: MasterDataService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
+    this.fetchMasterData();
+    this.setupRxJSFilters();
     this.fetchContracts();
     this.loadRazorpayScript();
   }
 
+  fetchMasterData(): void {
+    this.masterDataService.getAllMasterData().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          if (res.data['ContractCategories']) {
+            this.categoryOptions = [{ label: 'Select All', value: 'all' }, ...res.data['ContractCategories'].map((o: any) => ({ label: o.value, value: o.key }))];
+          }
+          if (res.data['ContractStatus']) {
+            this.statusOptions = [{ label: 'Select All', value: 'all' }, ...res.data['ContractStatus'].map((o: any) => ({ label: o.value, value: o.key }))];
+          }
+        }
+      },
+      error: (err) => console.error('Error fetching master data', err)
+    });
+  }
+
   ngOnDestroy(): void {
+    this.subscription.unsubscribe();
     if (this.scrollListener) {
       window.removeEventListener('scroll', this.scrollListener, true);
     }
+  }
+
+  setupRxJSFilters(): void {
+    this.subscription.add(
+      combineLatest([
+        this.contractsSource$,
+        this.searchFilter$,
+        this.categoryFilter$,
+        this.statusFilter$
+      ]).subscribe(([contracts, search, category, status]) => {
+        let filtered = [...contracts];
+        this.activeFilters = [];
+
+        if (search && search.trim() !== '') {
+          this.activeFilters.push({ label: `Search: ${search}`, type: 'search', value: search });
+          const query = search.toLowerCase();
+          filtered = filtered.filter(c => 
+            c.contractTitle?.toLowerCase().includes(query) || 
+            c.contractSubject?.toLowerCase().includes(query)
+          );
+        }
+
+        if (category !== 'all') {
+          const catLabel = this.categoryOptions.find(c => c.value === category)?.label || category;
+          this.activeFilters.push({ label: `Category: ${catLabel}`, type: 'category', value: category });
+          filtered = filtered.filter(c => c.contractCategory === category);
+        }
+
+        if (status !== 'all') {
+          const statusLabel = this.statusOptions.find(s => s.value === status)?.label || status;
+          this.activeFilters.push({ label: `Status: ${statusLabel}`, type: 'status', value: status });
+          filtered = filtered.filter(c => {
+            const s = c.status?.toLowerCase() || '';
+            if (status === 'active') {
+              return s === 'open' || s === 'in progress' || s === 'active';
+            }
+            return s === status;
+          });
+        }
+
+        this.filteredContracts = filtered;
+      })
+    );
   }
 
   getDropdownItems(row: Contract): DropdownItem[] {
@@ -154,48 +215,9 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
   }
 
   applyFilters(): void {
-    this.activeFilters = [];
-    
-    if (this.searchQuery && this.searchQuery.trim() !== '') {
-      this.activeFilters.push({ label: `Search: ${this.searchQuery}`, type: 'search', value: this.searchQuery });
-    }
-    
-    if (this.selectedCategory !== 'all') {
-      const catLabel = this.categoryOptions.find(c => c.value === this.selectedCategory)?.label || this.selectedCategory;
-      this.activeFilters.push({ label: `Category: ${catLabel}`, type: 'category', value: this.selectedCategory });
-    }
-    
-    if (this.selectedStatus !== 'all') {
-      const statusLabel = this.statusOptions.find(s => s.value === this.selectedStatus)?.label || this.selectedStatus;
-      this.activeFilters.push({ label: `Status: ${statusLabel}`, type: 'status', value: this.selectedStatus });
-    }
-
-    this.filteredContracts = this.allContracts.filter(contract => {
-      let matchesSearch = true;
-      let matchesCategory = true;
-      let matchesStatus = true;
-
-      if (this.searchQuery && this.searchQuery.trim() !== '') {
-        const query = this.searchQuery.toLowerCase();
-        matchesSearch = !!(contract.contractTitle?.toLowerCase().includes(query) || contract.contractSubject?.toLowerCase().includes(query));
-      }
-
-      if (this.selectedCategory !== 'all') {
-        matchesCategory = contract.contractCategory === this.selectedCategory;
-      }
-
-      if (this.selectedStatus !== 'all') {
-        // Status mapping to match UI options (active maps to open/in progress)
-        const s = contract.status?.toLowerCase() || '';
-        if (this.selectedStatus === 'active') {
-          matchesStatus = (s === 'open' || s === 'in progress' || s === 'active');
-        } else {
-          matchesStatus = s === this.selectedStatus;
-        }
-      }
-
-      return matchesSearch && matchesCategory && matchesStatus;
-    });
+    this.searchFilter$.next(this.searchQuery);
+    this.categoryFilter$.next(this.selectedCategory);
+    this.statusFilter$.next(this.selectedStatus);
   }
 
   resetFilters(): void {
@@ -221,7 +243,7 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
     this.contractService.getMyContracts().subscribe({
       next: (res) => {
         this.allContracts = res.contracts || [];
-        this.applyFilters(); // Initialize filtered array
+        this.contractsSource$.next(this.allContracts);
         this.isLoading = false;
       },
       error: (err) => {

@@ -61,15 +61,14 @@
               <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset" (clicked)="resetFiltersActive()"></app-button>
             </div>
           </div>
+          @if (activeFiltersActive.length > 0) {
           <div class="d-flex align-items-center flex-wrap gap-2 mt-3 border-top pt-3">
             <span class="text-dark small fw-semibold me-2">Active Filters :</span>
             @for (filter of activeFiltersActive; track filter.label) {
             <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilterActive(filter)"></app-chip>
             }
-            @if (activeFiltersActive.length === 0) {
-            <span class="text-muted small">None</span>
-            }
           </div>
+          }
         </div>
 
         <app-table [data]="activeContracts" [columns]="columns" [loading]="isLoading"
@@ -98,15 +97,14 @@
               <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset" (clicked)="resetFiltersCompleted()"></app-button>
             </div>
           </div>
+          @if (activeFiltersCompleted.length > 0) {
           <div class="d-flex align-items-center flex-wrap gap-2 mt-3 border-top pt-3">
             <span class="text-dark small fw-semibold me-2">Active Filters :</span>
             @for (filter of activeFiltersCompleted; track filter.label) {
             <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilterCompleted(filter)"></app-chip>
             }
-            @if (activeFiltersCompleted.length === 0) {
-            <span class="text-muted small">None</span>
-            }
           </div>
+          }
         </div>
 
         <app-table [data]="completedContracts" [columns]="columns" [loading]="isLoading"

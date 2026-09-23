@@ -9,11 +9,14 @@ import { InputField, InputOption } from '../../../library/ui/components/input-fi
 import { Button } from '../../../library/ui/components/button/button';
 import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
+import { RichTextEditor } from '../../../library/shared/components/rich-text-editor/rich-text-editor';
+import { MasterDataService } from '../../../core/services/master-data.service';
+import { ToastService } from '../../../core/services/ui/toast.service';
 
 @Component({
   selector: 'app-create-blog',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule, CommonModule, InputField, Button, FileUpload, FilePreview],
+  imports: [RouterModule, ReactiveFormsModule, CommonModule, InputField, Button, FileUpload, FilePreview, RichTextEditor],
   templateUrl: './create-blog.html',
   styleUrl: './create-blog.css'
 })
@@ -29,10 +32,7 @@ export class CreateBlog implements OnInit {
   isSubmitting = false;
 
   categoryOptions: InputOption[] = [
-    { label: 'Select a category', value: '' },
-    { label: 'Career', value: 'Career' },
-    { label: 'Technology', value: 'Technology' },
-    { label: 'Platform News', value: 'Platform News' }
+    { label: 'Select a category', value: '' }
   ];
 
   statusOptions: InputOption[] = [
@@ -44,6 +44,8 @@ export class CreateBlog implements OnInit {
     private fb: FormBuilder,
     private blogService: BlogService,
     private fileService: FileService,
+    private masterDataService: MasterDataService,
+    private toastService: ToastService,
     public router: Router
   ) {}
 
@@ -54,6 +56,22 @@ export class CreateBlog implements OnInit {
       category: ['', [Validators.required]],
       tags: [''],
       status: ['Draft', [Validators.required]]
+    });
+
+    this.masterDataService.getMasterDataByCategory('BlogCategories').subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          const fetchedOptions = res.data.map((opt: any) => ({
+            label: opt.value,
+            value: opt.key
+          }));
+          this.categoryOptions = [
+            { label: 'Select a category', value: '' },
+            ...fetchedOptions
+          ];
+        }
+      },
+      error: (err) => console.error('Failed to load categories', err)
     });
   }
 
@@ -105,11 +123,12 @@ export class CreateBlog implements OnInit {
 
       await this.blogService.createBlog(payload).toPromise();
       
+      this.toastService.show('Blog created successfully!', 'success');
       this.router.navigate(['/blog-manager']);
       
     } catch (error) {
       console.error('Error creating blog', error);
-      alert('Failed to create blog. Please try again.');
+      this.toastService.show('Failed to create blog. Please try again.', 'error');
     } finally {
       this.isSubmitting = false;
     }

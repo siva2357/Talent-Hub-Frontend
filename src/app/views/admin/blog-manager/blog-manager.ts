@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, OnDestroy } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,6 +11,9 @@ import { InputOption, TableColumn } from '../../../core/models/ui.model';
 import { Chip } from "../../../library/ui/components/chip/chip";
 import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
 import { Badge } from '../../../library/ui/components/badge/badge';
+import { MasterDataService } from '../../../core/services/master-data.service';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { map, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-blog-manager',
@@ -20,9 +23,7 @@ import { Badge } from '../../../library/ui/components/badge/badge';
   templateUrl: './blog-manager.html',
   styleUrl: './blog-manager.css'
 })
-export class BlogManager implements OnInit {
-  blogs: any[] = [];
-  rawBlogs: any[] = [];
+export class BlogManager implements OnInit, OnDestroy {
   isLoading = true;
 
   @ViewChild('mediaTpl', { static: true }) mediaTpl!: TemplateRef<any>;
@@ -34,21 +35,32 @@ export class BlogManager implements OnInit {
 
   columns: TableColumn[] = [];
 
-  currentPage = 1;
-  pageSize = 10;
-  totalItems = 0;
+  // Reactive state
+  searchQuery$ = new BehaviorSubject<string>('');
+  selectedCategory$ = new BehaviorSubject<string>('All Categories');
+  rawBlogs$ = new BehaviorSubject<any[]>([]);
+  currentPage$ = new BehaviorSubject<number>(1);
+  pageSize$ = new BehaviorSubject<number>(10);
 
-  searchQuery: string = '';
-  selectedCategory: string = 'All Categories';
+  // Local state for Apply button
+  localSearchQuery = '';
+  localSelectedCategory = 'All Categories';
+
+  paginatedBlogs$!: Observable<any[]>;
+  totalItems = 0;
   activeFilters: { key: string, label: string, value: any }[] = [];
 
   categoryOptions: InputOption[] = [
-    { label: 'All Categories', value: 'All Categories' },
-    { label: 'Career', value: 'Career' },
-    { label: 'Technology', value: 'Technology' }
+    { label: 'All Categories', value: 'All Categories' }
   ];
 
-  constructor(private blogService: BlogService, private router: Router) { }
+  private sub!: Subscription;
+
+  constructor(
+    private blogService: BlogService, 
+    private masterDataService: MasterDataService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.columns = [
@@ -59,54 +71,104 @@ export class BlogManager implements OnInit {
       { field: 'createdAt', headerName: 'Created', cellTemplate: this.createdTpl, width: 150 },
       { field: 'actions', headerName: 'Actions', cellTemplate: this.actionsTpl, width: 100 }
     ];
+    
+    // Fetch categories dynamically
+    this.masterDataService.getMasterDataByCategory('BlogCategories').subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          const opts = res.data.map((opt: any) => ({
+            label: opt.value, value: opt.key
+          }));
+          this.categoryOptions = [{ label: 'All Categories', value: 'All Categories' }, ...opts];
+        }
+      }
+    });
+
+    // RxJS Filter pipeline
+    this.paginatedBlogs$ = combineLatest([
+      this.rawBlogs$,
+      this.searchQuery$.pipe(debounceTime(300)),
+      this.selectedCategory$,
+      this.currentPage$,
+      this.pageSize$
+    ]).pipe(
+      map(([rawBlogs, search, category, page, size]) => {
+        let filtered = [...rawBlogs];
+        
+        if (search) {
+          const q = search.toLowerCase();
+          filtered = filtered.filter(b => 
+            (b.title && b.title.toLowerCase().includes(q)) ||
+            (b.content && b.content.toLowerCase().includes(q))
+          );
+        }
+
+        if (category && category !== 'All Categories') {
+          filtered = filtered.filter(b => b.category === category);
+        }
+        
+        this.totalItems = filtered.length;
+        this.updateActiveFilters(search, category);
+
+        const start = (page - 1) * size;
+        return filtered.slice(start, start + size);
+      })
+    );
+
     this.fetchBlogs();
   }
 
-  applyFilters() {
+  ngOnDestroy() {
+    if (this.sub) this.sub.unsubscribe();
+  }
+
+  updateActiveFilters(search: string, category: string) {
     this.activeFilters = [];
-    if (this.searchQuery) {
-      this.activeFilters.push({ key: 'search', label: `Search: ${this.searchQuery}`, value: this.searchQuery });
-    }
-    if (this.selectedCategory && this.selectedCategory !== 'All Categories') {
-      this.activeFilters.push({ key: 'category', label: `Category: ${this.selectedCategory}`, value: this.selectedCategory });
-    }
+    if (search) this.activeFilters.push({ key: 'search', label: `Search: ${search}`, value: search });
+    if (category && category !== 'All Categories') this.activeFilters.push({ key: 'category', label: `Category: ${category}`, value: category });
+  }
 
-    let filtered = [...this.rawBlogs];
+  onSearchChange(val: string) {
+    this.localSearchQuery = val;
+  }
 
-    if (this.searchQuery) {
-      const q = this.searchQuery.toLowerCase();
-      filtered = filtered.filter(b => 
-        (b.title && b.title.toLowerCase().includes(q)) ||
-        (b.content && b.content.toLowerCase().includes(q))
-      );
-    }
+  onCategoryChange(val: string) {
+    this.localSelectedCategory = val;
+  }
 
-    if (this.selectedCategory && this.selectedCategory !== 'All Categories') {
-      filtered = filtered.filter(b => b.category === this.selectedCategory);
-    }
-
-    this.blogs = filtered;
-    this.totalItems = this.blogs.length;
+  applyFilters() {
+    this.searchQuery$.next(this.localSearchQuery);
+    this.selectedCategory$.next(this.localSelectedCategory);
+    this.currentPage$.next(1);
   }
 
   resetFilters() {
-    this.searchQuery = '';
-    this.selectedCategory = 'All Categories';
-    this.applyFilters();
+    this.localSearchQuery = '';
+    this.localSelectedCategory = 'All Categories';
+    this.searchQuery$.next('');
+    this.selectedCategory$.next('All Categories');
+    this.currentPage$.next(1);
   }
 
   removeFilter(filter: any) {
-    if (filter.key === 'search') this.searchQuery = '';
-    if (filter.key === 'category') this.selectedCategory = 'All Categories';
-    this.applyFilters();
+    if (filter.key === 'search') {
+      this.localSearchQuery = '';
+      this.searchQuery$.next('');
+    }
+    if (filter.key === 'category') {
+      this.localSelectedCategory = 'All Categories';
+      this.selectedCategory$.next('All Categories');
+    }
+    this.currentPage$.next(1);
   }
 
   onPageChange(page: number) {
-    this.currentPage = page;
+    this.currentPage$.next(page);
   }
 
   onPageSizeChange(size: number) {
-    this.pageSize = size;
+    this.pageSize$.next(size);
+    this.currentPage$.next(1);
   }
 
   fetchBlogs() {
@@ -114,8 +176,7 @@ export class BlogManager implements OnInit {
     this.blogService.getAllBlogsAdmin().subscribe({
       next: (res) => {
         if (res.success) {
-          this.rawBlogs = res.blogs || [];
-          this.applyFilters();
+          this.rawBlogs$.next(res.blogs || []);
         }
         this.isLoading = false;
       },
@@ -131,8 +192,8 @@ export class BlogManager implements OnInit {
       this.blogService.deleteBlog(id).subscribe({
         next: (res) => {
           if (res.success) {
-            this.rawBlogs = this.rawBlogs.filter(b => b._id !== id);
-            this.applyFilters();
+            const updated = this.rawBlogs$.value.filter((b: any) => b._id !== id);
+            this.rawBlogs$.next(updated);
           }
         },
         error: (err) => console.error('Error deleting blog', err)
@@ -155,4 +216,3 @@ export class BlogManager implements OnInit {
     }
   }
 }
-

@@ -9,6 +9,9 @@ import { TokenService } from './token.service';
 export class AdminService extends BaseService {
   private readonly API_URL = 'http://localhost:5000/api/admin';
 
+  getUserStatusOptions(): Observable<any> {
+    return this.get<any>(`${this.API_URL}/users/status-options`);
+  }
 
   getAllClients(): Observable<any> {
     return this.get<any>(`${this.API_URL}/clients`);
@@ -42,12 +45,14 @@ export class AdminService extends BaseService {
     return this.post<any>(`${this.API_URL}/reports`, data);
   }
 
-  getReportData(id: string): Observable<any> {
-    return this.get<any>(`${this.API_URL}/reports/${id}/data`);
+  getReportData(id: string, period?: string): Observable<any> {
+    const url = period ? `${this.API_URL}/reports/${id}/data?period=${period}` : `${this.API_URL}/reports/${id}/data`;
+    return this.get<any>(url);
   }
 
-  downloadReportFile(id: string): Observable<Blob> {
-    return this.http.get(`${this.API_URL}/reports/${id}/download`, {
+  downloadReportFile(id: string, period?: string): Observable<Blob> {
+    const url = period ? `${this.API_URL}/reports/${id}/download?period=${period}` : `${this.API_URL}/reports/${id}/download`;
+    return this.http.get(url, {
       headers: this.getAuthHeaders(),
       responseType: 'blob'
     });

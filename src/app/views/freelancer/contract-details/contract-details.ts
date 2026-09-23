@@ -84,16 +84,20 @@ export class ContractDetails implements OnInit {
 
     this.contractService.applyForContract(this.contractId).subscribe({
       next: (res) => {
-        if (res.success) {
-          this.isApplied = true;
-          this.toastService.show('Successfully applied to the contract!', 'success');
-        }
-        this.isApplying = false;
+        setTimeout(() => {
+          if (res.success) {
+            this.isApplied = true;
+            this.toastService.show('Successfully applied to the contract!', 'success');
+          }
+          this.isApplying = false;
+        }, 500);
       },
       error: (err) => {
-        console.error('Failed to apply', err);
-        this.toastService.show(err.error?.message || 'Failed to apply. You might have already applied.', 'error');
-        this.isApplying = false;
+        setTimeout(() => {
+          console.error('Failed to apply', err);
+          this.toastService.show(err.error?.message || 'Failed to apply. You might have already applied.', 'error');
+          this.isApplying = false;
+        }, 500);
       }
     });
   }
@@ -104,16 +108,20 @@ export class ContractDetails implements OnInit {
 
     this.contractService.withdrawFromContract(this.contractId).subscribe({
       next: (res) => {
-        if (res.success) {
-          this.isApplied = false;
-          this.toastService.show('Successfully withdrawn application.', 'info');
-        }
-        this.isApplying = false;
+        setTimeout(() => {
+          if (res.success) {
+            this.isApplied = false;
+            this.toastService.show('Successfully withdrawn application.', 'info');
+          }
+          this.isApplying = false;
+        }, 500);
       },
       error: (err) => {
-        console.error('Failed to withdraw', err);
-        this.toastService.show(err.error?.message || 'Failed to withdraw application.', 'error');
-        this.isApplying = false;
+        setTimeout(() => {
+          console.error('Failed to withdraw', err);
+          this.toastService.show(err.error?.message || 'Failed to withdraw application.', 'error');
+          this.isApplying = false;
+        }, 500);
       }
     });
   }

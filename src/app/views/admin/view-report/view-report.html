@@ -1,3 +1,11 @@
+<ng-template #cellTemplate let-value let-row="row" let-column="column">
+  @if (isBadge(value)) {
+  <app-badge [label]="value" appearance="subtle" variant="primary" class="text-capitalize"></app-badge>
+  } @else {
+  <span [ngClass]="{'fw-bold text-dark': tableColumns.length > 0 && tableColumns[0].field === column.field, 'text-muted': tableColumns.length === 0 || tableColumns[0].field !== column.field}">{{ value }}</span>
+  }
+</ng-template>
+
 <div class="dashboard-container position-relative p-4">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
@@ -13,107 +21,84 @@
 
   <!-- Main Content Wrapper (Glassmorphism) -->
   <div class="position-relative z-1 glass-card p-4 mx-auto" style="max-width: 1400px;">
-  <!-- Back Link & Header -->
-  <div class="mb-4 d-flex justify-content-between align-items-start">
-    <div>
-      <a routerLink="/reports" class="text-primary text-decoration-none small fw-semibold mb-3 d-inline-block cursor-pointer">&larr; Back to Reports</a>
-      <h1 class="fw-bold fs-4 mb-1">Report Preview: {{ report?.title }}</h1>
-      <div class="d-flex align-items-center gap-3 text-muted small mt-2">
-        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1">Category: {{ report?.category }}</span>
-        <span><i class="bi bi-calendar3 me-1"></i>Generated: {{ report?.generatedDate | date:'mediumDate' }}</span>
-        <span><i class="bi bi-person me-1"></i>By: System AI</span>
+    <!-- Back Link & Header -->
+    <div class="mb-4 d-flex justify-content-between align-items-start">
+      <div>
+        <a routerLink="/reports"
+          class="text-primary text-decoration-none small fw-semibold mb-3 d-inline-block cursor-pointer">&larr; Back to
+          Reports</a>
+        <h1 class="fw-bold fs-4 mb-1">Report Preview: {{ report?.title }}</h1>
+        <div class="d-flex align-items-center gap-3 text-muted small mt-2">
+          <app-badge [label]="'Category: ' + report?.category" appearance="subtle" variant="primary"
+            [rounded]="true"></app-badge>
+          <span><i class="bi bi-calendar3 me-1"></i>Generated: {{ report?.generatedDate | date:'mediumDate' }}</span>
+          <span><i class="bi bi-person me-1"></i>By: System AI</span>
+        </div>
+      </div>
+      <div class="d-flex gap-2 align-items-center">
+        <div style="width: 220px;">
+          <app-input-field type="select" label="" [options]="periodOptions" [value]="periodControl"
+            (valueChange)="onPeriodChange($event)"></app-input-field>
+        </div>
+
+        <app-button variant="primary" (clicked)="downloadReport()" [loading]="isDownloading" class="shadow-sm">
+          <i class="bi bi-download"></i> Download Excel
+        </app-button>
       </div>
     </div>
-    <div class="d-flex gap-2">
-      <button class="btn btn-outline-secondary rounded-pill bg-white text-dark shadow-sm px-4 fw-semibold d-flex align-items-center gap-2" (click)="printReport()">
-        <i class="bi bi-printer"></i> Print
-      </button>
-      <a [href]="'http://localhost:5000/api/admin/reports/' + report?.id + '/download'" target="_blank" class="btn btn-primary rounded-pill shadow-sm px-4 fw-semibold d-flex align-items-center gap-2 text-decoration-none">
-        <i class="bi bi-download"></i> Download Excel
-      </a>
-    </div>
-  </div>
 
-  <hr class="border-secondary border-opacity-25 mb-4">
+    <hr class="border-secondary border-opacity-25 mb-4">
 
-  @if (isLoading || !data) {
+    @if (isLoading || !data) {
     <div class="text-center py-5">
       <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
       <p class="text-muted mt-2">Generating analytics...</p>
     </div>
-  } @else {
-  <!-- Main Redesigned UI: Chart & Table -->
-  
-  <div class="row g-4 mb-5">
-    <!-- Chart Section -->
-    <div class="col-12">
-      <div class="card shadow-sm border-light rounded-4 bg-white bg-opacity-75 h-100">
-        <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
-          <h2 class="fs-5 fw-bold text-dark mb-0"><i class="bi bi-graph-up-arrow text-primary me-2"></i> Trend Analysis</h2>
-        </div>
-        <div class="card-body p-4" style="height: 400px;">
-          <canvas #chartCanvas></canvas>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Detailed Data Table Section -->
-    <div class="col-12">
-      <div class="card shadow-sm border-light rounded-4 bg-white bg-opacity-75">
-        <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4 d-flex justify-content-between align-items-center">
-          <h2 class="fs-5 fw-bold text-dark mb-0"><i class="bi bi-table text-primary me-2"></i> Detailed Records</h2>
-          <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-3">{{ data?.tableData?.length || 0 }} Records</span>
-        </div>
-        <div class="card-body p-0 mt-3">
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0 text-center border-light">
-              <thead class="bg-light bg-opacity-50 text-dark small text-uppercase fw-bold" style="font-size: 0.75rem;">
-                <tr>
-                  @for (header of data?.tableHeaders; track header) {
-                    <th scope="col" class="py-3 px-4 text-start">{{ header }}</th>
-                  }
-                </tr>
-              </thead>
-              <tbody class="border-top-0">
-                @for (row of data?.tableData; track row.col1) {
-                <tr>
-                  <!-- Generic Reusable Cell Rendering -->
-                  <td class="px-4 fw-bold text-dark text-start">{{ row.col1 }}</td>
-                  <td class="px-4 text-start text-muted">{{ row.col2 }}</td>
-                  
-                  <td class="px-4 text-start">
-                    @if (row.col3 === 'draft' || row.col3 === 'open' || row.col3 === 'in progress' || row.col3 === 'completed' || row.col3 === 'closed' || row.col3 === 'client' || row.col3 === 'freelancer' || row.col3 === 'active' || row.col3 === 'inactive') {
-                      <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 text-capitalize">{{ row.col3 }}</span>
-                    } @else {
-                      <span class="text-muted">{{ row.col3 }}</span>
-                    }
-                  </td>
-                  
-                  <td class="px-4 text-start text-muted">{{ row.col4 }}</td>
-                  
-                  <td class="px-4 text-start">
-                    @if (row.col5 === 'draft' || row.col5 === 'open' || row.col5 === 'in progress' || row.col5 === 'completed' || row.col5 === 'closed' || row.col5 === 'client' || row.col5 === 'freelancer' || row.col5 === 'active' || row.col5 === 'inactive') {
-                      <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 text-capitalize">{{ row.col5 }}</span>
-                    } @else {
-                      <span class="text-muted">{{ row.col5 }}</span>
-                    }
-                  </td>
-                </tr>
-                } @empty {
-                <tr>
-                  <td colspan="5" class="text-muted py-5">No records found for this report.</td>
-                </tr>
-                }
-              </tbody>
-            </table>
+    } @else {
+    <!-- Main Redesigned UI: Chart & Table -->
+
+    <div class="row g-4 mb-5">
+      <!-- Chart Section -->
+      <div class="col-12">
+        <div class="card shadow-sm border-light rounded-4 bg-white bg-opacity-75 h-100">
+          <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
+            <h2 class="fs-5 fw-bold text-dark mb-0"><i class="bi bi-graph-up-arrow text-primary me-2"></i> Trend
+              Analysis</h2>
+          </div>
+          <div class="card-body p-4" style="height: 400px;">
+            <canvas #chartCanvas></canvas>
           </div>
         </div>
       </div>
+
+      <!-- Detailed Data Table Section -->
+      <div class="col-12">
+        <div class="card shadow-sm border-light rounded-4 bg-white bg-opacity-75">
+          <div
+            class="card-header mb-5 bg-transparent border-0 pt-4 pb-0 px-4 d-flex justify-content-between align-items-center">
+            <h2 class="fs-5 fw-bold text-dark mb-0"><i class="bi bi-table text-primary me-2"></i> Detailed Records</h2>
+            <app-badge [label]="(data?.tableData?.length || 0) + ' Records'" appearance="subtle" variant="secondary"
+              [rounded]="true"></app-badge>
+          </div>
+          <app-table [columns]="tableColumns" [data]="paginatedData" [loading]="isLoading"></app-table>
+          
+          @if (data?.tableData?.length > 0) {
+            <div class="px-4 pb-4 mt-2">
+              <app-pagination 
+                [totalItems]="data?.tableData?.length || 0" 
+                [pageSize]="pageSize" 
+                [currentPage]="currentPage" 
+                (pageChange)="onPageChange($event)" 
+                (pageSizeChange)="onPageSizeChange($event)">
+              </app-pagination>
+            </div>
+          }
+        </div>
+      </div>
     </div>
+
+    }
   </div>
-  
-  }
-</div>
 </div>
