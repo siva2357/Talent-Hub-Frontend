@@ -8,14 +8,14 @@ import { CommonModule } from '@angular/common';
 import { Badge } from '../../../ui/components/badge/badge';
 import { Button } from '../../../ui/components/button/button';
 import { MeetCardData } from '../../../../core/models/meet.model';
-export type {  MeetCardData  };
+export type { MeetCardData };
 
 
 @Component({
   selector: 'app-meet-card',
 
   standalone: true,
-  imports: [CommonModule, Button, Badge],
+  imports: [CommonModule, Button,],
 
   templateUrl: './meet-card.html',
 

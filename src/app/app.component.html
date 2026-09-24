@@ -3,12 +3,8 @@
 
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
   @for (toast of toasts; track toast.id) {
-    <app-toast
-      [variant]="getVariant(toast.type)"
-      [message]="toast.message"
-      [icon]="getIcon(toast.type)"
-      [title]="getTitle(toast.type)"
-      (closed)="removeToast(toast.id)">
-    </app-toast>
+  <app-toast [variant]="getVariant(toast.type)" [message]="toast.message" [icon]="getIcon(toast.type)"
+    [title]="getTitle(toast.type)" (closed)="removeToast(toast.id)">
+  </app-toast>
   }
 </div>

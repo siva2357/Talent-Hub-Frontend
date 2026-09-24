@@ -1,48 +1,60 @@
 @if (interview) {
 
 <div class="meet-card">
+    <div class="meet-card-accent"></div>
 
-    <!-- =========================================
-         HEADER
-         ========================================= -->
+    <div class="meet-card-glow"></div>
 
     <div class="meet-card-header">
 
-        <div class="meet-card-title">
-            <h5>
-                {{ interview.contractTitle }}
-            </h5>
-            <h6 class="text-muted mb-0 mt-1" style="font-size: 0.9rem;">
-                {{ interview.interview.title }}
-            </h6>
+        <div class="meet-card-heading">
+
+            <div class="meet-icon">
+                <i class="bi bi-camera-video"></i>
+            </div>
+
+            <div class="meet-card-title">
+
+                <h5>
+                    {{ interview.contractTitle }}
+                </h5>
+
+                @if (interview.interview.title) {
+
+                <span>
+                    {{ interview.interview.title }}
+                </span>
+
+                }
+
+            </div>
+
         </div>
 
+        <div class="meet-status">
 
-        <!-- STATUS — TOP RIGHT ONLY -->
+            <span class="status-dot"></span>
 
-        <app-badge [label]="interview.interview.status"
-            [variant]="getStatusVariant(interview.interview.status)"></app-badge>
+            <span>
+                {{ interview.interview.status }}
+            </span>
+
+        </div>
 
     </div>
 
-
-    <!-- =========================================
-         PERSON
-         ========================================= -->
 
     @if (interview.otherUser.name) {
 
     <div class="meet-person">
 
         <div class="meet-person-avatar">
-
             {{ getInitials(interview.otherUser.name) }}
-
         </div>
 
         <div class="meet-person-info">
 
-            <span class="meet-person-label">
+            <span>
                 INTERVIEW WITH
             </span>
 
@@ -56,37 +68,32 @@
 
     }
 
-
-    <!-- =========================================
-         DESCRIPTION
-         ========================================= -->
-
     @if (cleanDescription) {
 
-    <p class="meet-description">
-        {{ cleanDescription }}
-    </p>
+    <div class="meet-description">
+
+        <i class="bi bi-chat-square-text"></i>
+
+        <p>
+            {{ cleanDescription }}
+        </p>
+
+    </div>
 
     }
 
-
-    <!-- =========================================
-         DATE / TIME
-         ========================================= -->
 
     <div class="meet-details">
 
         <div class="meet-detail">
 
-            <div class="meet-detail-icon">
-
+            <div class="meet-detail-icon date-icon">
                 <i class="bi bi-calendar3"></i>
-
             </div>
 
-            <div>
+            <div class="meet-detail-content">
 
-                <span class="meet-detail-label">
+                <span>
                     DATE
                 </span>
 
@@ -98,21 +105,18 @@
 
         </div>
 
-
         <div class="meet-detail-divider"></div>
 
 
         <div class="meet-detail">
 
-            <div class="meet-detail-icon">
-
+            <div class="meet-detail-icon time-icon">
                 <i class="bi bi-clock"></i>
-
             </div>
 
-            <div>
+            <div class="meet-detail-content">
 
-                <span class="meet-detail-label">
+                <span>
                     TIME
                 </span>
 
@@ -126,45 +130,54 @@
 
     </div>
 
+    <div class="meet-card-footer">
 
-    <!-- =========================================
-         MEETING LINK
-         ========================================= -->
+        <div class="meeting-status-info">
 
-    @if (meetingLink) {
+            @if (meetingLink) {
 
-    <div class="meet-link-section">
-
-        <div class="meet-link-content">
-
-            <span class="meet-link-label">
-
+            <div class="link-icon">
                 <i class="bi bi-link-45deg"></i>
+            </div>
 
-                Meeting Link
+            <div>
 
-            </span>
+                <span>
+                    MEETING LINK
+                </span>
 
-            <span class="meet-link">
-                {{ meetingLink }}
-            </span>
+                <strong>
+                    Available
+                </strong>
+
+            </div>
+
+            } @else {
+
+            <div class="link-icon disabled">
+                <i class="bi bi-link-45deg"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    MEETING LINK
+                </span>
+
+                <strong>
+                    Not available
+                </strong>
+
+            </div>
+
+            }
 
         </div>
 
-        <app-button variant="primary" label="Join Meeting" size="sm" (clicked)="onJoin()"></app-button>
 
-    </div>
-
-    }
-
-
-    <!-- =========================================
-         FOOTER
-         ========================================= -->
-
-    <div class="meet-card-footer ">
-
-        <app-button variant="outline-primary" label="Join Meeting" size="sm" (clicked)="onJoin()"></app-button>
+        <app-button variant="outline-primary" label="Join Meeting" size="sm" [disabled]="!meetingLink"
+            (clicked)="onJoin()">
+        </app-button>
 
     </div>
 

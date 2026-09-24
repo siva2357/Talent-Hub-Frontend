@@ -2,7 +2,7 @@
   <div class="sidebar-nav">
     <div class="nav-section">
       @for (link of navLinks; track link.path) {
-        <a [routerLink]="link.path" routerLinkActive="active" class="nav-item" (mouseenter)="showTooltip($event, link.label)" (mouseleave)="hideTooltip()">
+        <a [routerLink]="link.path" routerLinkActive="active" class="nav-item" (click)="closeOnMobile()" (mouseenter)="showTooltip($event, link.label)" (mouseleave)="hideTooltip()">
           <i class="nav-icon" [ngClass]="link.icon"></i>
           <span class="nav-text">{{ link.label }}</span>
         </a>

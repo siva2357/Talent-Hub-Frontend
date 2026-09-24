@@ -22,17 +22,17 @@ export class SearchTalent implements OnInit, OnDestroy {
   rawFreelancers: any[] = [];
   freelancers: any[] = [];
   isLoading = false;
-  
+
   // RxJS Subjects
   freelancersSource$ = new BehaviorSubject<any[]>([]);
   skillFilter$ = new BehaviorSubject<string>('all');
   experienceFilter$ = new BehaviorSubject<string>('all');
   availabilityFilter$ = new BehaviorSubject<string>('all');
   private subscription: Subscription = new Subscription();
-  
+
   // UI State
   showAIFilter = false;
-  
+
   // AI Matching properties
   isAIMatching = false;
   isAIApplied = false;
@@ -66,7 +66,7 @@ export class SearchTalent implements OnInit, OnDestroy {
     private aiService: AIService,
     private masterDataService: MasterDataService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.setupRxJSFilters();
@@ -94,7 +94,7 @@ export class SearchTalent implements OnInit, OnDestroy {
         if (skill !== 'all') {
           const q = skill.toLowerCase();
           this.activeManualFilters.push({ label: `Skill: ${skill}`, type: 'skill', value: skill });
-          filtered = filtered.filter(f => 
+          filtered = filtered.filter(f =>
             (f.skills && Array.isArray(f.skills) && f.skills.some((s: string) => s.toLowerCase() === q)) ||
             (f.professionalHeadline && f.professionalHeadline.toLowerCase().includes(q))
           );
@@ -185,7 +185,7 @@ export class SearchTalent implements OnInit, OnDestroy {
     if (filterToRemove.type === 'skill') this.selectedSkill = 'all';
     else if (filterToRemove.type === 'experience') this.selectedExperience = 'all';
     else if (filterToRemove.type === 'availability') this.selectedAvailability = 'all';
-    
+
     this.applyManualFilters();
   }
 
@@ -205,14 +205,14 @@ export class SearchTalent implements OnInit, OnDestroy {
 
   matchWithAI(): void {
     if (!this.searchCategory || this.freelancers.length === 0) return;
-    
+
     this.isAIMatching = true;
-    
+
     this.aiService.matchTalent(this.searchCategory, this.searchSkills, this.rawFreelancers).subscribe({
       next: (res) => {
         if (res && res.matches) {
           const matchResults = Array.isArray(res.matches) ? res.matches : (res.matches.results || []);
-          
+
           const mappedFreelancers = this.rawFreelancers.map(freelancer => {
             const match = matchResults.find((m: any) => m.candidate_id === freelancer.userId || m.candidate_id === freelancer._id);
             if (match) {
@@ -225,13 +225,13 @@ export class SearchTalent implements OnInit, OnDestroy {
             }
             return freelancer;
           });
-          
+
           mappedFreelancers.sort((a, b) => {
             const scoreA = a.matchPercentage !== undefined ? a.matchPercentage : -1;
             const scoreB = b.matchPercentage !== undefined ? b.matchPercentage : -1;
             return scoreB - scoreA;
           });
-          
+
           this.freelancers = mappedFreelancers;
           this.isAIApplied = true;
         }
@@ -254,5 +254,9 @@ export class SearchTalent implements OnInit, OnDestroy {
 
   viewProfile(id: string): void {
     this.router.navigate(['/profile'], { queryParams: { id } });
+  }
+
+  onTalentSave(talent: any): void {
+    talent.isSaved = !talent.isSaved;
   }
 }
