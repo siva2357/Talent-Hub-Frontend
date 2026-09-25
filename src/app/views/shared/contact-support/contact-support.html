@@ -20,7 +20,7 @@
         style="font-size: 0.85rem;">
         <i class="bi bi-arrow-left"></i> Back to Dashboard
       </a>
-      <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
         <div>
           <h1 class="fw-bold fs-3 text-dark mb-1 d-flex align-items-center gap-2">
             My Support Tickets
@@ -39,17 +39,17 @@
     </div>
 
     <!-- Top Metrics Row -->
-    <div class="d-flex flex-wrap gap-3 mb-4">
-      <div class="flex-grow-1">
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-sm-6 col-lg-3">
         <app-stat-card [stat]="{ title: 'All Tickets', value: totalTickets, icon: 'bi bi-person' }"></app-stat-card>
       </div>
-      <div class="flex-grow-1">
+      <div class="col-12 col-sm-6 col-lg-3">
         <app-stat-card [stat]="{ title: 'Open', value: openTickets, icon: 'bi bi-arrow-clockwise' }"></app-stat-card>
       </div>
-      <div class="flex-grow-1">
+      <div class="col-12 col-sm-6 col-lg-3">
         <app-stat-card [stat]="{ title: 'Resolved', value: resolvedTickets, icon: 'bi bi-file-earmark-text' }"></app-stat-card>
       </div>
-      <div class="flex-grow-1">
+      <div class="col-12 col-sm-6 col-lg-3">
         <app-stat-card [stat]="{ title: 'Closed', value: closedTickets, icon: 'bi bi-geo-alt' }"></app-stat-card>
       </div>
     </div>
@@ -99,7 +99,7 @@
 
           <!-- Header -->
           <div class="p-4 border-bottom bg-white flex-shrink-0 z-1">
-            <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start mb-3 gap-3">
               <div class="d-flex gap-3 align-items-center">
                 <div class="rounded-3 d-flex justify-content-center align-items-center flex-shrink-0"
                   [ngClass]="getCategoryBg(selectedTicket.category)" style="width: 48px; height: 48px;">
@@ -115,13 +115,15 @@
                   <h2 class="fs-5 fw-bold text-dark mb-0 lh-sm">{{ selectedTicket.subject }}</h2>
                 </div>
               </div>
-              @if (selectedTicket.status !== 'Resolved' && selectedTicket.status !== 'Closed') {
-              <button class="btn btn-outline-success btn-sm rounded-pill fw-semibold shadow-sm px-3"
-                (click)="resolveTicket()">
-                <i class="bi bi-check2-circle"></i> Mark Resolved
-              </button>
-              }
-              <button type="button" class="btn-close shadow-none ms-3" (click)="selectTicket(null)" aria-label="Close"></button>
+              <div class="d-flex flex-wrap gap-2 mt-3 mt-sm-0">
+                @if (selectedTicket.status !== 'Resolved' && selectedTicket.status !== 'Closed') {
+                <button class="btn btn-outline-success btn-sm rounded-pill fw-semibold shadow-sm px-3"
+                  (click)="resolveTicket()">
+                  <i class="bi bi-check2-circle"></i> Mark Resolved
+                </button>
+                }
+                <button type="button" class="btn-close shadow-none" (click)="selectTicket(null)" aria-label="Close"></button>
+              </div>
             </div>
             <div class="d-flex flex-wrap gap-4 text-muted" style="font-size: 0.75rem;">
               <span class="d-flex align-items-center gap-1"><i class="bi bi-folder text-primary"></i> {{
