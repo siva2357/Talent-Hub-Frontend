@@ -1,37 +1,595 @@
-.custom-navbar {
-  height: 60px;
-  /* Fixed height for the navbar */
+/* =========================================================
+   PUBLIC NAVBAR
+========================================================= */
+
+:host {
+  display: block;
 }
 
-.custom-navbar-wrapper {
+
+/* =========================================================
+   NAVBAR WRAPPER
+========================================================= */
+
+.public-navbar-wrapper {
   position: fixed;
+
   top: 0;
   left: 0;
-  width: 100%;
+
   z-index: 1050;
-  background: #fff;
+
+  width: 100%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.08);
 }
 
 
+/* =========================================================
+   NAVBAR CONTAINER
+========================================================= */
+
+.public-navbar {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  width: 100%;
+  min-height: 64px;
+
+  padding: 0 32px;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.navbar-logo {
+  display: inline-flex;
+
+  align-items: center;
+
+  flex: 0 0 auto;
+
+  text-decoration: none;
+}
+
 .logo {
-  height: 45px;
+  display: block;
+
   width: auto;
+  height: 45px;
+
   object-fit: contain;
+
   cursor: pointer;
 }
 
-.nav-link {
-  transition: color 0.2s ease-in-out;
-  font-size: 14px;
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.navbar-navigation {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  flex: 1;
+
+  min-width: 0;
+
+  margin-left: 40px;
 }
+
+
+/* =========================================================
+   NAVIGATION LINKS
+========================================================= */
+
+.navbar-links {
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.navbar-links li {
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  position: relative;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  min-height: 64px;
+
+  padding: 0 14px;
+
+  color: #212529 !important;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+
+/* =========================================================
+   LINK HOVER
+========================================================= */
 
 .nav-link:hover {
   color: #0d99fd !important;
-  /* Bootstrap primary color on hover */
 }
 
-/* Styling for the active link */
+
+/* =========================================================
+   ACTIVE LINK
+========================================================= */
+
 .nav-link.active {
   color: #0d99fd !important;
+
   font-weight: 700 !important;
+}
+
+.nav-link.active::after {
+  position: absolute;
+
+  right: 14px;
+  bottom: 0;
+  left: 14px;
+
+  height: 2px;
+
+  border-radius: 10px;
+
+  background: #0d99fd;
+
+  content: "";
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.navbar-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  flex: 0 0 auto;
+
+  margin-left: 20px;
+}
+
+.login-btn,
+.signup-btn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 36px;
+
+  padding: 7px 16px;
+
+  border-radius: 5px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-btn {
+  border: 1px solid #0d6efd;
+
+  background: #ffffff;
+
+  color: #0d6efd;
+}
+
+.login-btn:hover {
+  background: #0d6efd;
+
+  color: #ffffff;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   SIGN UP
+========================================================= */
+
+.signup-btn {
+  border: 1px solid #0d6efd;
+
+  background: #0d6efd;
+
+  color: #ffffff;
+}
+
+.signup-btn:hover {
+  border-color: #0b5ed7;
+
+  background: #0b5ed7;
+
+  color: #ffffff;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 4px 10px rgba(13, 110, 253, 0.2);
+}
+
+
+/* =========================================================
+   MOBILE MENU BUTTON
+========================================================= */
+
+.mobile-menu-toggle {
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  gap: 5px;
+
+  width: 42px;
+  height: 42px;
+
+  margin-left: auto;
+
+  padding: 0;
+
+  border: 1px solid #dee2e6;
+
+  border-radius: 6px;
+
+  background: #ffffff;
+
+  cursor: pointer;
+}
+
+.mobile-menu-toggle span {
+  display: block;
+
+  width: 20px;
+  height: 2px;
+
+  border-radius: 10px;
+
+  background: #212529;
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+
+/* =========================================================
+   HAMBURGER -> X
+========================================================= */
+
+.mobile-menu-toggle.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.mobile-menu-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-toggle.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width: 1400px) {
+
+  .public-navbar {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+
+  .navbar-navigation {
+    margin-left: 60px;
+  }
+
+  .navbar-links {
+    gap: 8px;
+  }
+
+  .nav-link {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+}
+
+
+/* =========================================================
+   DESKTOP / SMALL LAPTOP
+========================================================= */
+
+@media (max-width: 1199.98px) {
+
+  .public-navbar {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .navbar-navigation {
+    margin-left: 24px;
+  }
+
+  .nav-link {
+    padding-left: 10px;
+    padding-right: 10px;
+
+    font-size: 13px;
+  }
+
+  .navbar-actions {
+    gap: 7px;
+
+    margin-left: 12px;
+  }
+
+  .login-btn,
+  .signup-btn {
+    padding-left: 13px;
+    padding-right: 13px;
+
+    font-size: 13px;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+  .public-navbar {
+    min-height: 62px;
+
+    padding: 8px 20px;
+  }
+
+  .logo {
+    height: 42px;
+  }
+
+  /* Show hamburger */
+  .mobile-menu-toggle {
+    display: flex;
+  }
+
+
+  /* Mobile navigation panel */
+  .navbar-navigation {
+    position: absolute;
+
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    display: none;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    width: 100%;
+
+    margin: 0;
+
+    padding: 16px 20px 20px;
+
+    border-top: 1px solid #e9ecef;
+
+    background: #ffffff;
+
+    box-shadow:
+      0 10px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .navbar-navigation.mobile-open {
+    display: flex;
+  }
+
+
+  /* Mobile links */
+  .navbar-links {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    width: 100%;
+
+    gap: 2px;
+  }
+
+  .navbar-links li {
+    width: 100%;
+  }
+
+  .nav-link {
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+    min-height: 46px;
+
+    padding: 10px 14px;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+  }
+
+  .nav-link:hover {
+    background: #f8f9fa;
+  }
+
+  .nav-link.active {
+    background: rgba(13, 153, 253, 0.08);
+  }
+
+  .nav-link.active::after {
+    display: none;
+  }
+
+
+  /* Mobile actions */
+  .navbar-actions {
+    display: flex;
+
+    width: 100%;
+
+    margin: 14px 0 0;
+
+    padding-top: 14px;
+
+    border-top: 1px solid #e9ecef;
+  }
+
+  .login-btn,
+  .signup-btn {
+    flex: 1;
+
+    min-height: 40px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .public-navbar {
+    min-height: 58px;
+
+    padding: 7px 16px;
+  }
+
+  .logo {
+    height: 40px;
+    max-width: 170px;
+  }
+
+  .mobile-menu-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .navbar-navigation {
+    padding: 14px 16px 18px;
+  }
+
+  .nav-link {
+    min-height: 44px;
+
+    padding: 9px 12px;
+
+    font-size: 14px;
+  }
+
+  .navbar-actions {
+    gap: 8px;
+  }
+
+  .login-btn,
+  .signup-btn {
+    min-height: 40px;
+
+    padding: 8px 12px;
+
+    font-size: 13px;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 374.98px) {
+
+  .public-navbar {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .logo {
+    height: 36px;
+    max-width: 150px;
+  }
+
+  .navbar-navigation {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .navbar-actions {
+    flex-direction: column;
+  }
+
 }

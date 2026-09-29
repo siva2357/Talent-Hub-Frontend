@@ -1,26 +1,104 @@
-<div class="container-fluid shadow-lg custom-navbar-wrapper">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between custom-navbar">
-        <div class="col-md-3 mb-2 mb-md-0 d-flex align-items-centerms-3">
-            <a routerLink="/" class="d-inline-flex link-body-emphasis text-decoration-none">
-                <img src="/logo%202.png" alt="Talent Hub Logo" class="logo" />
-            </a>
+<nav class="public-navbar-wrapper">
+    <div class="public-navbar container-fluid">
+
+        <!-- =========================
+             LOGO
+        ========================== -->
+        <a routerLink="/" class="navbar-logo" aria-label="Talent Hub Home">
+
+            <img src="/logo%202.png" alt="Talent Hub Logo" class="logo">
+        </a>
+
+
+        <!-- =========================
+             MOBILE MENU TOGGLE
+        ========================== -->
+        <button type="button" class="mobile-menu-toggle" [class.open]="mobileMenuOpen" (click)="toggleMobileMenu()"
+            [attr.aria-expanded]="mobileMenuOpen" aria-label="Toggle navigation menu">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+
+        <!-- =========================
+             NAVIGATION
+        ========================== -->
+        <div class="navbar-navigation" [class.mobile-open]="mobileMenuOpen">
+
+            <ul class="navbar-links">
+
+                <li>
+                    <a routerLink="/find-work" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                        class="nav-link" (click)="closeMobileMenu()">
+
+                        Find work
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a routerLink="/hire-talent" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                        class="nav-link" (click)="closeMobileMenu()">
+
+                        Hire talent
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a routerLink="/why-talent-hub" routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }" class="nav-link" (click)="closeMobileMenu()">
+
+                        Why talent hub
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a routerLink="/about-us" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                        class="nav-link" (click)="closeMobileMenu()">
+
+                        About Us
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a routerLink="/blog" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                        class="nav-link" (click)="closeMobileMenu()">
+
+                        Blog
+
+                    </a>
+                </li>
+
+            </ul>
+
+
+            <!-- =========================
+                 AUTH BUTTONS
+            ========================== -->
+            <div class="navbar-actions">
+
+                <app-button label="Login" variant="outline-primary" size="sm" route="/login" target="_blank"
+                    (clicked)="closeMobileMenu()">
+                </app-button>
+
+
+                <app-button label="Sign Up" variant="primary" size="sm" route="/signup" target="_blank"
+                    (clicked)="closeMobileMenu()">
+                </app-button>
+
+            </div>
+
         </div>
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center align-items-center mb-md-0">
-            <li><a routerLink="/find-work" routerLinkActive="active" class="nav-link px-3 link-dark fw-medium">Find
-                    work</a></li>
-            <li><a routerLink="/hire-talent" routerLinkActive="active" class="nav-link px-3 link-dark fw-medium">Hire
-                    talent</a></li>
-            <li><a routerLink="/why-talent-hub" routerLinkActive="active" class="nav-link px-3 link-dark fw-medium">Why
-                    talent hub</a></li>
-            <li><a routerLink="/about-us" routerLinkActive="active" class="nav-link px-3 link-dark fw-medium">About
-                    Us</a></li>
-            <li><a routerLink="/blog" routerLinkActive="active" class="nav-link px-3 link-dark fw-medium">Blog</a></li>
-        </ul>
-        <div class="col-md-3 text-end d-flex align-items-center justify-content-end">
-            <a routerLink="/login" target="_blank" class="btn btn-outline-primary btn-sm me-2"
-                style="font-size: 14px;">Login</a>
-            <a routerLink="/signup" target="_blank" class="btn btn-primary btn-sm me-5" style="font-size: 14px;">Sign
-                Up</a>
-        </div>
-    </header>
-</div>
+
+    </div>
+</nav>

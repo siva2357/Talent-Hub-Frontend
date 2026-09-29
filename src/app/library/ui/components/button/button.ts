@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Router } from '@angular/router';
 
 type ButtonVariant =
   | 'primary'
@@ -45,14 +46,31 @@ export class Button {
 
   @Input() type: 'button' | 'submit' | 'reset' = 'button';
 
+  @Input() route: string | null = null;
+
+  @Input() target: string | null = null;
+
   @Output() clicked = new EventEmitter<Event>();
 
-  onClick(event: Event): void {
+  constructor(private router: Router) { }
+
+  async onClick(event: Event): Promise<void> {
+
     if (this.disabled || this.loading) {
       event.preventDefault();
       return;
     }
 
     this.clicked.emit(event);
+
+    if (this.route) {
+      if (this.target === '_blank') {
+        window.open(this.router.serializeUrl(
+          this.router.createUrlTree([this.route])
+        ), '_blank');
+      } else {
+        await this.router.navigateByUrl(this.route);
+      }
+    }
   }
 }
