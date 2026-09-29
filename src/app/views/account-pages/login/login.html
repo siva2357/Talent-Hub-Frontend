@@ -8,8 +8,7 @@
                 <div class="bg-shape bottom-left"></div>
             </div>
 
-            <div class="form-container mx-auto px-4 w-100 z-1"
-                style="max-width: 420px; margin-top: auto; margin-bottom: auto;">
+            <div class="form-container mx-auto w-100 z-1">
                 <div class="text-center mb-5">
                     <img src="/logo 2.png" alt="Talent Hub" class="logo mb-3" />
                     <h2 class="fw-bold fs-3 text-dark">Welcome Back</h2>
@@ -18,31 +17,21 @@
 
                 <form [formGroup]="loginForm" (ngSubmit)="login()" class="static-form">
                     <div class="mb-4">
-                        <app-input-field
-                            label="Email Address"
-                            type="email"
-                            placeholder="Enter your email address"
-                            icon="bi bi-envelope"
-                            [showIcon]="true"
-                            [value]="loginForm.get('email')?.value || ''"
+                        <app-input-field label="Email Address" type="email" placeholder="Enter your email address"
+                            icon="bi bi-envelope" [showIcon]="true" [value]="loginForm.get('email')?.value || ''"
                             (valueChange)="loginForm.get('email')?.setValue($event); loginForm.get('email')?.markAsDirty()"
-                            (blurred)="loginForm.get('email')?.markAsTouched()" [validation]="getValidationState('email')"
-                            [errorMessage]="getErrorMessage('email')">
+                            (blurred)="loginForm.get('email')?.markAsTouched()"
+                            [validation]="getValidationState('email')" [errorMessage]="getErrorMessage('email')">
                         </app-input-field>
                     </div>
 
                     <div class="mb-2">
-                        <app-input-field
-                            label="Password"
-                            type="password"
-                            placeholder="Enter your password"
-                            icon="bi bi-lock"
-                            [showIcon]="true"
-                            [showPasswordToggle]="true"
+                        <app-input-field label="Password" type="password" placeholder="Enter your password"
+                            icon="bi bi-lock" [showIcon]="true" [showPasswordToggle]="true"
                             [value]="loginForm.get('password')?.value || ''"
                             (valueChange)="loginForm.get('password')?.setValue($event); loginForm.get('password')?.markAsDirty()"
-                            (blurred)="loginForm.get('password')?.markAsTouched()" [validation]="getValidationState('password')"
-                            [errorMessage]="getErrorMessage('password')">
+                            (blurred)="loginForm.get('password')?.markAsTouched()"
+                            [validation]="getValidationState('password')" [errorMessage]="getErrorMessage('password')">
                         </app-input-field>
                     </div>
 
@@ -57,7 +46,8 @@
                     </div>
                     }
 
-                    <app-button type="submit" [loading]="isLoading" label="Log In" variant="primary" [block]="true" class="w-100 d-block">
+                    <app-button type="submit" [loading]="isLoading" label="Log In" variant="primary" [block]="true"
+                        class="w-100 d-block">
                         @if (!isLoading) {
                         <i class="bi bi-box-arrow-in-right me-2"></i>
                         }

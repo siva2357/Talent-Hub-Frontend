@@ -22,108 +22,413 @@
 
 
     <!-- Filter Section -->
-    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
+    <!-- =========================
+     FILTER SECTION
+========================= -->
+    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75 freelancer-filter-section">
+
       <div class="card-body p-4">
-        <div class="row g-3 align-items-center mb-3">
-          <div class="col-md-6 col-lg-6">
-            <app-input-field type="text" placeholder="Search by Freelancer ID, Email..." [showIcon]="true" icon="bi bi-search"
-              label="" [value]="tempSearchQuery" (valueChange)="onSearchChange($event)"></app-input-field>
+
+        <div class="freelancer-filter-row">
+
+          <!-- Search -->
+          <div class="freelancer-search-field">
+            <app-input-field type="text" placeholder="Search by Freelancer ID, Email..." [showIcon]="true"
+              icon="bi bi-search" label="" [value]="tempSearchQuery" (valueChange)="onSearchChange($event)">
+            </app-input-field>
           </div>
-          <div class="col-md-3 col-lg-3">
-            <app-input-field type="select" placeholder="All Statuses" [options]="statusOptions"
-              label="" [value]="tempSelectedStatus" (valueChange)="onStatusChange($event)"></app-input-field>
+
+          <!-- Status -->
+          <div class="freelancer-status-field">
+            <app-input-field type="select" placeholder="All Statuses" [options]="statusOptions" label=""
+              [value]="tempSelectedStatus" (valueChange)="onStatusChange($event)">
+            </app-input-field>
           </div>
-          <div class="col-md-3 col-lg-3 d-flex gap-2">
-            <app-button variant="primary" class="w-100" [block]="true" label="Apply"
-              (clicked)="applyFilters()"></app-button>
-            <app-button variant="secondary" class="w-100" [block]="true" label="Reset Filters"
-              (clicked)="resetFilters()"></app-button>
+
+          <!-- Actions -->
+          <div class="freelancer-filter-actions">
+
+            <app-button variant="primary" class="filter-action-button" [block]="true" label="Apply"
+              (clicked)="applyFilters()">
+            </app-button>
+
+            <app-button variant="secondary" class="filter-action-button" [block]="true" label="Reset Filters"
+              (clicked)="resetFilters()">
+            </app-button>
+
           </div>
+
         </div>
 
+
+        <!-- Active Filters -->
         @if (activeFilters.length > 0) {
-        <div class="d-flex align-items-center flex-wrap gap-2">
-          <span class="text-dark small fw-semibold me-2">Active Filters :</span>
-          @for (filter of activeFilters; track filter.label) {
-            <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)"></app-chip>
-          }
+
+        <div class="active-filters">
+
+          <span class="active-filter-title">
+            Active Filters:
+          </span>
+
+          <div class="active-filter-list">
+
+            @for (filter of activeFilters; track filter.label) {
+
+            <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)">
+            </app-chip>
+
+            }
+
+          </div>
+
         </div>
+
         }
+
       </div>
+
     </section>
 
     <!-- Data Table Section -->
-    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
-      <div class="card-body p-0">
-        <app-table [columns]="columns" [data]="(paginatedFreelancers$ | async) || []"></app-table>
+    <!-- =========================
+     FREELANCER DATA SECTION
+========================= -->
+    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75 freelancer-data-section">
 
-        @if (freelancers$ | async; as list) {
+      <div class="card-body p-0">
+
+
+        <!-- =====================================================
+         DESKTOP TABLE
+         1200px+
+    ====================================================== -->
+
+        <div class="desktop-table-view">
+
+          <app-table [columns]="columns" [data]="(paginatedFreelancers$ | async) || []">
+          </app-table>
+
+
+          @if (freelancers$ | async; as list) {
+
           @if (list.length > 0) {
-            <div class="px-4 pb-4 mt-2">
-              <app-pagination 
-                [totalItems]="list.length" 
-                [pageSize]="(pageSize$ | async)!" 
-                [currentPage]="(currentPage$ | async)!" 
-                (pageChange)="currentPage$.next($event)" 
-                (pageSizeChange)="onPageSizeChange($event)">
-              </app-pagination>
-            </div>
+
+          <div class="px-4 pb-4 mt-2">
+
+            <app-pagination [totalItems]="list.length" [pageSize]="(pageSize$ | async)!"
+              [currentPage]="(currentPage$ | async)!" (pageChange)="currentPage$.next($event)"
+              (pageSizeChange)="onPageSizeChange($event)">
+            </app-pagination>
+
+          </div>
+
           }
-        }
+
+          }
+
+        </div>
+
+
+        <!-- =====================================================
+         TABLE TEMPLATES
+    ====================================================== -->
 
         <ng-template #indexTpl let-row="row" let-index="index">
-          <span class="ps-4 fw-semibold text-muted">{{ index + 1 }}</span>
+
+          <span class="ps-4 fw-semibold text-muted">
+            {{ index + 1 }}
+          </span>
+
         </ng-template>
+
 
         <ng-template #profileTpl let-row="row">
+
           <img [src]="row.profileImage || 'https://i.pravatar.cc/150?u=' + row.id"
-            class="rounded-circle border border-2 border-white shadow-sm object-fit-cover" width="40" height="40" alt="Avatar">
+            class="rounded-circle border border-2 border-white shadow-sm object-fit-cover" width="40" height="40"
+            alt="Avatar">
+
         </ng-template>
+
 
         <ng-template #fullNameTpl let-row="row">
-          <div class="fw-bold text-dark">{{ row.name }}</div>
+
+          <div class="fw-bold text-dark">
+            {{ row.name }}
+          </div>
+
         </ng-template>
+
 
         <ng-template #emailTpl let-row="row">
-          <span class="text-secondary small">{{ row.email }}</span>
+
+          <span class="text-secondary small freelancer-email">
+            {{ row.email }}
+          </span>
+
         </ng-template>
+
 
         <ng-template #jobTitleTpl let-row="row">
-          <span class="text-secondary small">{{ row.title }}</span>
+
+          <span class="text-secondary small">
+            {{ row.title }}
+          </span>
+
         </ng-template>
+
 
         <ng-template #statusTpl let-row="row">
-          <app-badge [label]="row.status" appearance="subtle" [variant]="getBadgeVariant(row.status)"></app-badge>
+
+          <app-badge [label]="row.status" appearance="subtle" [variant]="getBadgeVariant(row.status)">
+          </app-badge>
+
         </ng-template>
 
+
         <ng-template #actionsTpl let-row="row">
+
           <div class="dropdown">
+
             <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown"
               aria-expanded="false" data-bs-display="static">
+
               <i class="bi bi-three-dots-vertical"></i>
+
             </button>
+
+
             <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none"
               style="min-width: auto;">
+
               <app-dropdown [items]="getActionItems(row)" (itemSelected)="onActionSelected($event, row)" class="d-block"
                 style="position: relative;">
               </app-dropdown>
-            </div>
-          </div>
-        </ng-template>
-      </div>
-    </section>
 
+            </div>
+
+          </div>
+
+        </ng-template>
+
+
+        <!-- =====================================================
+         RESPONSIVE CARD VIEW
+         < 1200px
+    ====================================================== -->
+
+        <div class="responsive-freelancer-list">
+
+          @if (paginatedFreelancers$ | async; as freelancers) {
+
+          @if (freelancers.length > 0) {
+
+          <div class="freelancer-card-grid">
+
+            @for (freelancer of freelancers; track freelancer.id) {
+
+            <article class="freelancer-card">
+
+
+              <!-- =========================
+                     CARD HEADER
+                ========================== -->
+
+              <div class="freelancer-card-header">
+
+                <div class="freelancer-identity">
+
+                  <img [src]="freelancer.profileImage || 'https://i.pravatar.cc/150?u=' + freelancer.id"
+                    class="freelancer-avatar" alt="Freelancer Avatar">
+
+
+                  <div class="freelancer-name-wrapper">
+
+                    <h3 class="freelancer-name">
+                      {{ freelancer.name }}
+                    </h3>
+
+                    <span class="freelancer-id">
+                      ID: {{ freelancer.id }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <!-- Action Menu -->
+                <div class="dropdown freelancer-action-dropdown">
+
+                  <button class="freelancer-action-button" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                    data-bs-display="static">
+
+                    <i class="bi bi-three-dots-vertical"></i>
+
+                  </button>
+
+
+                  <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none">
+
+                    <app-dropdown [items]="getActionItems(freelancer)"
+                      (itemSelected)="onActionSelected($event, freelancer)" class="d-block">
+                    </app-dropdown>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <!-- =========================
+                     CARD BODY
+                ========================== -->
+
+              <div class="freelancer-card-body">
+
+
+                <!-- Email -->
+                <div class="freelancer-info-item">
+
+                  <div class="freelancer-info-icon">
+                    <i class="bi bi-envelope"></i>
+                  </div>
+
+                  <div class="freelancer-info-content">
+
+                    <span class="freelancer-info-label">
+                      Email
+                    </span>
+
+                    <span class="freelancer-info-value freelancer-email">
+                      {{ freelancer.email }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <!-- Job Title -->
+                <div class="freelancer-info-item">
+
+                  <div class="freelancer-info-icon">
+                    <i class="bi bi-briefcase"></i>
+                  </div>
+
+                  <div class="freelancer-info-content">
+
+                    <span class="freelancer-info-label">
+                      Job Title
+                    </span>
+
+                    <span class="freelancer-info-value">
+                      {{ freelancer.title || 'Not specified' }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <!-- Status -->
+                <div class="freelancer-info-item">
+
+                  <div class="freelancer-info-icon">
+                    <i class="bi bi-activity"></i>
+                  </div>
+
+                  <div class="freelancer-info-content">
+
+                    <span class="freelancer-info-label">
+                      Status
+                    </span>
+
+                    <div class="freelancer-info-value">
+
+                      <app-badge [label]="freelancer.status" appearance="subtle"
+                        [variant]="getBadgeVariant(freelancer.status)">
+                      </app-badge>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <!-- =========================
+                     CARD FOOTER
+                ========================== -->
+
+              <div class="freelancer-card-footer">
+
+                <span class="freelancer-record-number">
+                  Freelancer #{{ freelancer.id }}
+                </span>
+
+                <button type="button" class="view-freelancer-button" (click)="viewFreelancer(freelancer)">
+
+                  View Details
+
+                  <i class="bi bi-arrow-right"></i>
+
+                </button>
+
+              </div>
+
+            </article>
+
+            }
+
+          </div>
+
+
+          <!-- Responsive Pagination -->
+
+          <div class="responsive-pagination">
+
+            <app-pagination [totalItems]="freelancers.length" [pageSize]="(pageSize$ | async)!"
+              [currentPage]="(currentPage$ | async)!" (pageChange)="currentPage$.next($event)"
+              (pageSizeChange)="onPageSizeChange($event)">
+            </app-pagination>
+
+          </div>
+
+          }
+
+          @else {
+
+          <div class="freelancer-empty-state">
+
+            <div class="empty-icon">
+              <i class="bi bi-person-workspace"></i>
+            </div>
+
+            <h4>No freelancers found</h4>
+
+            <p>
+              No freelancers match the current search or filter criteria.
+            </p>
+
+          </div>
+
+          }
+
+          }
+
+        </div>
+
+      </div>
+
+    </section>
   </div>
 </div>
 
-<app-modal
-  [open]="isConfirmModalOpen"
-  [title]="confirmModalTitle"
-  [message]="confirmModalMessage"
-  [confirmLabel]="confirmModalConfirmLabel"
-  [confirmVariant]="confirmModalConfirmVariant"
-  size="sm"
-  (confirmed)="onConfirmAction()"
-  (closed)="closeConfirmModal()"
-  (cancelled)="closeConfirmModal()">
+<app-modal [open]="isConfirmModalOpen" [title]="confirmModalTitle" [message]="confirmModalMessage"
+  [confirmLabel]="confirmModalConfirmLabel" [confirmVariant]="confirmModalConfirmVariant" size="sm"
+  (confirmed)="onConfirmAction()" (closed)="closeConfirmModal()" (cancelled)="closeConfirmModal()">
 </app-modal>

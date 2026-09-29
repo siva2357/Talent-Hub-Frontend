@@ -1,104 +1,297 @@
 <ng-template #cellTemplate let-value let-row="row" let-column="column">
   @if (isBadge(value)) {
-  <app-badge [label]="value" appearance="subtle" variant="primary" class="text-capitalize"></app-badge>
+  <app-badge [label]="value" appearance="subtle" variant="primary" class="text-capitalize">
+  </app-badge>
   } @else {
-  <span [ngClass]="{'fw-bold text-dark': tableColumns.length > 0 && tableColumns[0].field === column.field, 'text-muted': tableColumns.length === 0 || tableColumns[0].field !== column.field}">{{ value }}</span>
+  <span [ngClass]="{
+        'fw-bold text-dark': tableColumns.length > 0 && tableColumns[0].field === column.field,
+        'text-muted': tableColumns.length === 0 || tableColumns[0].field !== column.field
+      }">
+    {{ value }}
+  </span>
   }
 </ng-template>
 
-<div class="dashboard-container position-relative p-4">
-  <!-- Decorative background wrapper -->
-  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+
+<div class="dashboard-container">
+
+  <!-- =====================================================
+       DECORATIVE BACKGROUND
+       ===================================================== -->
+
+  <div class="report-background" aria-hidden="true">
+
     <div class="bg-shape top-left"></div>
     <div class="bg-shape bottom-right"></div>
     <div class="bg-shape right-shape"></div>
+
     <div class="concentric-circles">
       <div class="circle circle-1"></div>
       <div class="circle circle-2"></div>
       <div class="circle circle-3"></div>
     </div>
+
   </div>
 
-  <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="position-relative z-1 glass-card p-4 mx-auto" style="max-width: 1400px;">
-    <!-- Back Link & Header -->
-    <div class="mb-4 d-flex justify-content-between align-items-start">
-      <div>
-        <a routerLink="/reports"
-          class="text-primary text-decoration-none small fw-semibold mb-3 d-inline-block cursor-pointer">&larr; Back to
-          Reports</a>
-        <h1 class="fw-bold fs-4 mb-1">Report Preview: {{ report?.title }}</h1>
-        <div class="d-flex align-items-center gap-3 text-muted small mt-2">
-          <app-badge [label]="'Category: ' + report?.category" appearance="subtle" variant="primary"
-            [rounded]="true"></app-badge>
-          <span><i class="bi bi-calendar3 me-1"></i>Generated: {{ report?.generatedDate | date:'mediumDate' }}</span>
-          <span><i class="bi bi-person me-1"></i>By: System AI</span>
+
+  <!-- =====================================================
+       MAIN CONTENT
+       ===================================================== -->
+
+  <main class="report-container">
+
+    <!-- ===================================================
+         HEADER
+         =================================================== -->
+
+    <header class="report-header">
+
+      <div class="report-heading">
+
+        <a routerLink="/reports" class="back-link">
+          <i class="bi bi-arrow-left me-1"></i>
+          Back to Reports
+        </a>
+
+        <h1>
+          Report Preview: {{ report?.title }}
+        </h1>
+
+        <div class="report-meta">
+
+          <app-badge [label]="'Category: ' + report?.category" appearance="subtle" variant="primary" [rounded]="true">
+          </app-badge>
+
+          <span>
+            <i class="bi bi-calendar3 me-1"></i>
+            Generated: {{ report?.generatedDate | date:'mediumDate' }}
+          </span>
+
+          <span>
+            <i class="bi bi-person me-1"></i>
+            By: System AI
+          </span>
+
         </div>
+
       </div>
-      <div class="d-flex gap-2 align-items-center">
-        <div style="width: 220px;">
+
+
+      <!-- =================================================
+           HEADER ACTIONS
+           ================================================= -->
+
+      <div class="report-actions">
+
+        <div class="period-control">
+
           <app-input-field type="select" label="" [options]="periodOptions" [value]="periodControl"
-            (valueChange)="onPeriodChange($event)"></app-input-field>
+            (valueChange)="onPeriodChange($event)">
+          </app-input-field>
+
         </div>
 
-        <app-button variant="primary" (clicked)="downloadReport()" [loading]="isDownloading" class="shadow-sm">
-          <i class="bi bi-download"></i> Download Excel
-        </app-button>
-      </div>
-    </div>
+        <app-button variant="primary" (clicked)="downloadReport()" [loading]="isDownloading" class="download-button">
 
-    <hr class="border-secondary border-opacity-25 mb-4">
+          <i class="bi bi-download me-1"></i>
+          Download Excel
+
+        </app-button>
+
+      </div>
+
+    </header>
+
+
+    <hr class="report-divider">
+
+
+    <!-- ===================================================
+         LOADING STATE
+         =================================================== -->
 
     @if (isLoading || !data) {
-    <div class="text-center py-5">
+
+    <div class="loading-state">
+
       <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
+
+        <span class="visually-hidden">
+          Loading...
+        </span>
+
       </div>
-      <p class="text-muted mt-2">Generating analytics...</p>
+
+      <p>
+        Generating analytics...
+      </p>
+
     </div>
+
     } @else {
-    <!-- Main Redesigned UI: Chart & Table -->
 
-    <div class="row g-4 mb-5">
-      <!-- Chart Section -->
-      <div class="col-12">
-        <div class="card shadow-sm border-light rounded-4 bg-white bg-opacity-75 h-100">
-          <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
-            <h2 class="fs-5 fw-bold text-dark mb-0"><i class="bi bi-graph-up-arrow text-primary me-2"></i> Trend
-              Analysis</h2>
-          </div>
-          <div class="card-body p-4" style="height: 400px;">
-            <canvas #chartCanvas></canvas>
-          </div>
+    <!-- =================================================
+           CHART SECTION
+           ================================================= -->
+
+    <section class="report-section">
+
+      <div class="report-card chart-card">
+
+        <div class="report-card-header">
+
+          <h2>
+            <i class="bi bi-graph-up-arrow text-primary"></i>
+            Trend Analysis
+          </h2>
+
         </div>
+
+        <div class="chart-container">
+          <canvas #chartCanvas></canvas>
+        </div>
+
       </div>
 
-      <!-- Detailed Data Table Section -->
-      <div class="col-12">
-        <div class="card shadow-sm border-light rounded-4 bg-white bg-opacity-75">
-          <div
-            class="card-header mb-5 bg-transparent border-0 pt-4 pb-0 px-4 d-flex justify-content-between align-items-center">
-            <h2 class="fs-5 fw-bold text-dark mb-0"><i class="bi bi-table text-primary me-2"></i> Detailed Records</h2>
-            <app-badge [label]="(data?.tableData?.length || 0) + ' Records'" appearance="subtle" variant="secondary"
-              [rounded]="true"></app-badge>
+    </section>
+
+
+
+    <!-- =================================================
+     TABLE / MOBILE CARDS SECTION
+     ================================================= -->
+
+    <section class="report-section">
+
+      <div class="report-card table-card">
+
+        <!-- Section Header -->
+        <div class="report-card-header table-header">
+
+          <h2>
+            <i class="bi bi-table text-primary"></i>
+            Detailed Records
+          </h2>
+
+          <app-badge [label]="(data?.tableData?.length || 0) + ' Records'" appearance="subtle" variant="secondary"
+            [rounded]="true">
+          </app-badge>
+
+        </div>
+
+
+        <!-- =================================================
+         DESKTOP + TABLET TABLE
+         >= 768px
+         ================================================= -->
+
+        <div class="desktop-table-view">
+
+          <div class="table-responsive-wrapper">
+
+            <app-table [columns]="tableColumns" [data]="paginatedData" [loading]="isLoading">
+            </app-table>
+
           </div>
-          <app-table [columns]="tableColumns" [data]="paginatedData" [loading]="isLoading"></app-table>
-          
-          @if (data?.tableData?.length > 0) {
-            <div class="px-4 pb-4 mt-2">
-              <app-pagination 
-                [totalItems]="data?.tableData?.length || 0" 
-                [pageSize]="pageSize" 
-                [currentPage]="currentPage" 
-                (pageChange)="onPageChange($event)" 
-                (pageSizeChange)="onPageSizeChange($event)">
-              </app-pagination>
+
+        </div>
+
+
+        <!-- =================================================
+         MOBILE CARD VIEW
+         < 768px
+         ================================================= -->
+
+        <div class="mobile-records-view">
+
+          @if (paginatedData.length > 0) {
+
+          @for (row of paginatedData; track $index) {
+
+          <article class="record-card">
+
+            @for (column of tableColumns; track column.field) {
+
+            <div class="record-field">
+
+              <span class="record-label">
+                {{ column.headerName }}
+              </span>
+
+              <div class="record-value">
+
+                @if (isBadge(row[column.field])) {
+
+                <app-badge [label]="row[column.field]" appearance="subtle" variant="primary" class="text-capitalize">
+                </app-badge>
+
+                } @else {
+
+                <span [ngClass]="{
+                        'fw-bold text-dark':
+                          tableColumns.length > 0 &&
+                          tableColumns[0].field === column.field,
+
+                        'text-muted':
+                          tableColumns.length === 0 ||
+                          tableColumns[0].field !== column.field
+                      }">
+
+                  {{ row[column.field] }}
+
+                </span>
+
+                }
+
+              </div>
+
             </div>
+
+            }
+
+          </article>
+
           }
+
+          } @else {
+
+          <div class="mobile-empty-state">
+
+            <i class="bi bi-inbox"></i>
+
+            <p>No records available</p>
+
+          </div>
+
+          }
+
         </div>
+
+
+        <!-- =================================================
+         PAGINATION
+         ================================================= -->
+
+        @if (data?.tableData?.length > 0) {
+
+        <div class="pagination-wrapper">
+
+          <app-pagination [totalItems]="data?.tableData?.length || 0" [pageSize]="pageSize" [currentPage]="currentPage"
+            (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
+          </app-pagination>
+
+        </div>
+
+        }
+
       </div>
-    </div>
+
+    </section>
+
+
 
     }
-  </div>
+
+  </main>
+
 </div>

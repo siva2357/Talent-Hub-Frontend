@@ -1,85 +1,133 @@
+/* =========================================================
+   CREATE BLOG
+   Fully Responsive
+   Desktop → Tablet → Mobile
+   ========================================================= */
+
+
+/* =========================================================
+   HOST
+   ========================================================= */
+
 :host {
   --bg-color: #fafbfc;
   --primary-color: #0d6efd;
+
+  display: block;
+  width: 100%;
 }
+
+:host,
+:host * {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN PAGE
+   ========================================================= */
 
 .dashboard-container {
-  font-family: 'Inter', 'Outfit', sans-serif;
-  background-color: #fcfbfe;
   position: relative;
+
+  width: 100%;
   min-height: 100vh;
+
+  padding: 2rem;
+
+  font-family: 'Inter', 'Outfit', sans-serif;
+
+  background:
+    radial-gradient(circle at 10% 10%,
+      rgba(168, 85, 247, 0.035),
+      transparent 30%),
+    #fcfbfe;
+
+  overflow-x: hidden;
 }
 
 
+/* =========================================================
+   BACKGROUND DECORATIONS
+   ========================================================= */
 
-.form-control:focus,
-.form-select:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+.blog-background {
+  pointer-events: none;
+
+  z-index: 0;
 }
 
-.border-dashed {
-  border-style: dashed !important;
-}
-
-.btn-light:hover {
-  background-color: #e2e6ea;
-}
-
-/* Make text area resize only vertically */
-textarea {
-  resize: vertical;
-}
-
-
-/* Background decorations */
 .bg-shape {
   position: absolute;
+
   border-radius: 50%;
+
   pointer-events: none;
+
   z-index: 0;
 }
 
 .top-left {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+
   top: -150px;
   left: -150px;
+
+  background:
+    radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
 }
 
 .bottom-right {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
-  bottom: -200px;
+
   right: -200px;
+  bottom: -200px;
+
+  background:
+    radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
 }
 
 .right-shape {
   width: 400px;
   height: 400px;
-  background: rgba(37, 99, 235, 0.05);
-  filter: blur(80px);
+
   top: 30%;
   right: -100px;
+
+  background: rgba(37, 99, 235, 0.05);
+
+  filter: blur(80px);
+
   transform: translateY(-50%);
 }
 
 .concentric-circles {
   position: absolute;
-  pointer-events: none;
-  z-index: 0;
+
   top: 15%;
   left: 0;
+
+  pointer-events: none;
+
+  z-index: 0;
 }
 
 .circle {
   position: absolute;
+
   top: 50%;
   left: 50%;
+
   transform: translate(-50%, -50%);
+
   border-radius: 50%;
+
   border: 1px dashed rgba(168, 85, 247, 0.15);
 }
 
@@ -96,4 +144,724 @@ textarea {
 .circle-3 {
   width: 700px;
   height: 700px;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.create-blog-wrapper {
+  position: relative;
+
+  z-index: 1;
+
+  width: 75%;
+
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  padding: 3rem;
+
+  background: rgba(255, 255, 255, 0.7);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(168, 85, 247, 0.15);
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 15px 40px -10px rgba(74, 58, 255, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.create-blog-header {
+  margin-bottom: 2.5rem;
+
+  padding-bottom: 1.5rem;
+
+  border-bottom: 1px solid #edf0f2;
+}
+
+.back-link {
+  margin-bottom: 1rem;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.back-link:hover {
+  opacity: 0.75;
+
+  transform: translateX(-2px);
+}
+
+.create-blog-heading h1 {
+  margin: 0 0 0.35rem;
+
+  font-size: 1.65rem;
+
+  line-height: 1.25;
+}
+
+.create-blog-heading p {
+  font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.blog-form {
+  width: 100%;
+}
+
+.form-section {
+  width: 100%;
+
+  margin-bottom: 2.5rem;
+}
+
+.section-heading {
+  margin-bottom: 1rem;
+}
+
+.section-heading h6 {
+  color: #111827;
+
+  font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   FIELD WRAPPER
+   ========================================================= */
+
+.field-wrapper {
+  width: 100%;
+}
+
+.character-count {
+  margin-top: 0.35rem;
+
+  color: #6b7280;
+
+  font-size: 0.75rem;
+
+  text-align: right;
+}
+
+
+/* =========================================================
+   EDITOR
+   ========================================================= */
+
+.editor-wrapper {
+  width: 100%;
+
+  overflow: hidden;
+
+  background: #fff;
+
+  border: 1px solid #edf0f2;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.035);
+}
+
+
+/* =========================================================
+   MEDIA PANELS
+   ========================================================= */
+
+.media-panel {
+  width: 100%;
+  min-height: 240px;
+
+  padding: 1.5rem;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(248, 249, 250, 0.7);
+
+  border: 1px solid #edf0f2;
+
+  border-radius: 16px;
+}
+
+.media-panel app-file-upload {
+  width: 100%;
+}
+
+.preview-panel {
+  min-height: 240px;
+
+  overflow: hidden;
+}
+
+.preview-content {
+  width: 100%;
+
+  max-height: 300px;
+
+  overflow: hidden;
+}
+
+.preview-content app-file-preview {
+  display: block;
+
+  width: 100%;
+}
+
+.empty-preview {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  color: #9ca3af;
+
+  opacity: 0.65;
+}
+
+.empty-preview i {
+  display: block;
+
+  margin-bottom: 0.5rem;
+
+  font-size: 2.5rem;
+}
+
+.empty-preview p {
+  margin: 0;
+
+  font-size: 0.78rem;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   FORM CONTROLS
+   ========================================================= */
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary-color);
+
+  box-shadow:
+    0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.border-dashed {
+  border-style: dashed !important;
+}
+
+.btn-light:hover {
+  background-color: #e2e6ea;
+}
+
+textarea {
+  resize: vertical;
+}
+
+
+/* =========================================================
+   ACTION FOOTER
+   ========================================================= */
+
+.form-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  width: 100%;
+  min-width: 0;
+
+  gap: 1rem;
+
+  padding-top: 1.5rem;
+  margin-top: 1rem;
+
+  border-top: 1px solid #edf0f2;
+
+  /* Never allow wrapping */
+  flex-wrap: nowrap !important;
+}
+
+/* Cancel → LEFT */
+.form-actions .cancel-button {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+/* Publish → RIGHT */
+.form-actions app-button:last-child {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   STILL ONE HORIZONTAL LINE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .form-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+  }
+
+  .form-actions .cancel-button,
+  .form-actions app-button:last-child {
+    flex: 0 1 auto !important;
+    width: auto !important;
+    margin: 0 !important;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .form-actions {
+    gap: 0.5rem;
+    padding-top: 1rem;
+  }
+
+  .form-actions .cancel-button,
+  .form-actions app-button:last-child {
+    flex: 0 1 auto !important;
+    width: auto !important;
+    white-space: nowrap;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .form-actions {
+    gap: 0.35rem;
+  }
+
+  .form-actions .cancel-button,
+  .form-actions app-button:last-child {
+    font-size: 0.8rem;
+  }
+}
+
+/* =========================================================
+   LAPTOP
+   992px - 1399px
+   ========================================================= */
+
+@media (max-width: 1399.98px) {
+
+  .dashboard-container {
+    padding: 1.5rem;
+  }
+
+  .create-blog-wrapper {
+    width: 88%;
+
+    max-width: 1100px;
+
+    padding: 2.25rem;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   768px - 991px
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+
+  .dashboard-container {
+    padding: 1rem;
+  }
+
+  .create-blog-wrapper {
+    width: 100%;
+
+    max-width: none;
+
+    padding: 1.75rem;
+
+    border-radius: 16px;
+  }
+
+  .create-blog-header {
+    margin-bottom: 2rem;
+  }
+
+  .create-blog-heading h1 {
+    font-size: 1.45rem;
+  }
+
+  .form-section {
+    margin-bottom: 2rem;
+  }
+
+  .media-panel {
+    min-height: 220px;
+
+    padding: 1.25rem;
+  }
+
+  .preview-panel {
+    min-height: 220px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   576px - 767px
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .dashboard-container {
+    padding: 0.75rem;
+  }
+
+  .create-blog-wrapper {
+    width: 100%;
+
+    padding: 1.25rem;
+
+    border-radius: 14px;
+  }
+
+
+  /* Header */
+
+  .create-blog-header {
+    margin-bottom: 1.5rem;
+
+    padding-bottom: 1.15rem;
+  }
+
+  .back-link {
+    margin-bottom: 0.85rem;
+
+    font-size: 0.82rem;
+  }
+
+  .create-blog-heading h1 {
+    font-size: 1.25rem;
+  }
+
+  .create-blog-heading p {
+    font-size: 0.78rem;
+
+    line-height: 1.5;
+  }
+
+
+  /* Form */
+
+  .form-section {
+    margin-bottom: 1.75rem;
+  }
+
+  .section-heading {
+    margin-bottom: 0.8rem;
+  }
+
+
+  /* Media */
+
+  .media-panel {
+    min-height: 200px;
+
+    padding: 1rem;
+
+    border-radius: 12px;
+  }
+
+  .preview-panel {
+    min-height: 200px;
+  }
+
+
+  /* Editor */
+
+  .editor-wrapper {
+    border-radius: 12px;
+  }
+
+
+  /* Footer */
+
+  .form-actions {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 0.75rem;
+
+    padding-top: 1.25rem;
+  }
+
+  .form-actions app-button {
+    width: 100%;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   <= 575px
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .dashboard-container {
+    padding: 0.5rem;
+  }
+
+  .create-blog-wrapper {
+    padding: 1rem;
+
+    border-radius: 12px;
+
+    box-shadow:
+      0 8px 25px rgba(74, 58, 255, 0.07),
+      0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+
+  /* Decorations */
+
+  .top-left {
+    width: 280px;
+    height: 280px;
+
+    top: -100px;
+    left: -100px;
+  }
+
+  .bottom-right {
+    width: 350px;
+    height: 350px;
+
+    right: -150px;
+    bottom: -120px;
+  }
+
+  .right-shape {
+    width: 250px;
+    height: 250px;
+
+    right: -100px;
+
+    filter: blur(60px);
+  }
+
+  .concentric-circles {
+    opacity: 0.5;
+  }
+
+  .circle-1 {
+    width: 180px;
+    height: 180px;
+  }
+
+  .circle-2 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .circle-3 {
+    width: 420px;
+    height: 420px;
+  }
+
+
+  /* Header */
+
+  .create-blog-header {
+    margin-bottom: 1.25rem;
+
+    padding-bottom: 1rem;
+  }
+
+  .back-link {
+    font-size: 0.75rem;
+  }
+
+  .create-blog-heading h1 {
+    font-size: 1.1rem;
+  }
+
+  .create-blog-heading p {
+    font-size: 0.72rem;
+  }
+
+
+  /* Form */
+
+  .form-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-heading h6 {
+    font-size: 0.82rem;
+  }
+
+
+  /* Media */
+
+  .media-panel {
+    min-height: 180px;
+
+    padding: 0.85rem;
+
+    border-radius: 11px;
+  }
+
+  .preview-panel {
+    min-height: 180px;
+  }
+
+  .empty-preview i {
+    font-size: 2rem;
+  }
+
+  .empty-preview p {
+    font-size: 0.7rem;
+  }
+
+
+  /* Editor */
+
+  .editor-wrapper {
+    border-radius: 10px;
+  }
+
+
+  /* Footer */
+
+  .form-actions {
+    margin-top: 0.5rem;
+
+    padding-top: 1rem;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   <= 380px
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .dashboard-container {
+    padding: 0.35rem;
+  }
+
+  .create-blog-wrapper {
+    padding: 0.8rem;
+  }
+
+  .create-blog-heading h1 {
+    font-size: 1rem;
+  }
+
+  .create-blog-heading p {
+    font-size: 0.68rem;
+  }
+
+  .back-link {
+    font-size: 0.7rem;
+  }
+
+  .media-panel {
+    min-height: 165px;
+
+    padding: 0.7rem;
+  }
+
+  .preview-panel {
+    min-height: 165px;
+  }
+
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+  .back-link {
+    min-height: 38px;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .dashboard-container *,
+  .dashboard-container *::before,
+  .dashboard-container *::after {
+    transition: none !important;
+
+    animation: none !important;
+
+    scroll-behavior: auto !important;
+  }
+
 }

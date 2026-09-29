@@ -39,7 +39,7 @@ export class ClientManagement implements OnInit, AfterViewInit, OnDestroy {
 
   tempSearchQuery = '';
   tempSelectedStatus = 'All Statuses';
-  
+
   currentPage$ = new BehaviorSubject<number>(1);
   pageSize$ = new BehaviorSubject<number>(10);
 
@@ -69,7 +69,7 @@ export class ClientManagement implements OnInit, AfterViewInit, OnDestroy {
 
         if (search) {
           const q = search.toLowerCase();
-          filtered = filtered.filter(c => 
+          filtered = filtered.filter(c =>
             (c.name && c.name.toLowerCase().includes(q)) ||
             (c.email && c.email.toLowerCase().includes(q)) ||
             (c.id && String(c.id).toLowerCase().includes(q))
@@ -125,7 +125,7 @@ export class ClientManagement implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   loadClients() {
     this.adminService.getAllClients().subscribe({
@@ -241,5 +241,16 @@ export class ClientManagement implements OnInit, AfterViewInit, OnDestroy {
     if (status === 'Active') return 'success';
     if (status === 'Suspended') return 'danger';
     return 'warning';
+  }
+
+
+  viewClient(client: any): void {
+    const viewItem: DropdownItem = {
+      label: 'View',
+      value: 'view',
+      icon: 'bi-eye text-primary'
+    };
+
+    this.onActionSelected(viewItem, client);
   }
 }

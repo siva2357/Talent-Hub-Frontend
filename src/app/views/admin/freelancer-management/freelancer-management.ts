@@ -31,14 +31,14 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('jobTitleTpl') jobTitleTpl!: TemplateRef<any>;
   @ViewChild('statusTpl') statusTpl!: TemplateRef<any>;
   @ViewChild('actionsTpl') actionsTpl!: TemplateRef<any>;
-  
+
   rawFreelancers$ = new BehaviorSubject<any[]>([]);
   searchQuery$ = new BehaviorSubject<string>('');
   selectedStatus$ = new BehaviorSubject<string>('All Statuses');
-  
+
   tempSearchQuery = '';
   tempSelectedStatus = 'All Statuses';
-  
+
   currentPage$ = new BehaviorSubject<number>(1);
   pageSize$ = new BehaviorSubject<number>(10);
 
@@ -55,7 +55,7 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
   confirmModalConfirmVariant: 'primary' | 'danger' | 'warning' | 'success' | 'secondary' = 'primary';
   pendingAction: { type: 'status' | 'approve', id: string, newStatus?: string } | null = null;
 
-  constructor(private adminService: AdminService) {}
+  constructor(private adminService: AdminService) { }
 
   ngOnInit() {
     this.freelancers$ = combineLatest([
@@ -68,7 +68,7 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
 
         if (search) {
           const q = search.toLowerCase();
-          filtered = filtered.filter(f => 
+          filtered = filtered.filter(f =>
             (f.name && f.name.toLowerCase().includes(q)) ||
             (f.email && f.email.toLowerCase().includes(q)) ||
             (f.id && String(f.id).toLowerCase().includes(q))
@@ -83,7 +83,7 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
         return filtered;
       })
     );
-    
+
     this.paginatedFreelancers$ = combineLatest([
       this.freelancers$,
       this.currentPage$,
@@ -94,7 +94,7 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
         return filtered.slice(start, start + size);
       })
     );
-    
+
     this.fetchStatusOptions();
     this.loadFreelancers();
   }
@@ -124,7 +124,7 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   loadFreelancers() {
     this.adminService.getAllFreelancers().subscribe({
@@ -268,4 +268,14 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
     if (status === 'Suspended') return 'danger';
     return 'warning';
   }
+
+  viewFreelancer(freelancer: any): void {
+    const viewItem = this.getActionItems(freelancer)
+      .find(item => item.value === 'view');
+
+    if (viewItem) {
+      this.onActionSelected(viewItem, freelancer);
+    }
+  }
+
 }
