@@ -1,15 +1,42 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  Output
+} from '@angular/core';
 
-import { InputFieldType, InputValidation, InputOption } from '../../../../core/models/ui.model';
-export type {  InputFieldType, InputValidation, InputOption  };
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR
+} from '@angular/forms';
+
+import {
+  InputFieldType,
+  InputValidation,
+  InputOption
+} from '../../../../core/models/ui.model';
+
+export type {
+  InputFieldType,
+  InputValidation,
+  InputOption
+};
 
 @Component({
   selector: 'app-input-field',
   standalone: true,
   templateUrl: './input-field.html',
-  styleUrl: './input-field.css'
+  styleUrl: './input-field.css',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputField),
+      multi: true
+    }
+  ]
 })
-export class InputField {
+export class InputField implements ControlValueAccessor {
 
   @Input() label: string = 'Email address';
 
@@ -54,13 +81,46 @@ export class InputField {
   @Output() blurred = new EventEmitter<void>();
 
   @Input() showPasswordToggle: boolean = false;
+
   isPasswordVisible: boolean = false;
+
+  isDropdownOpen: boolean = false;
+
+  // =========================================================
+  // ControlValueAccessor
+  // =========================================================
+
+  private onChange: (value: string | null) => void = () => { };
+
+  private onTouched: () => void = () => { };
+
+  writeValue(value: string | null): void {
+    this.value = value ?? '';
+  }
+
+  registerOnChange(fn: (value: string | null) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
+  // =========================================================
+  // Password
+  // =========================================================
 
   togglePasswordVisibility(): void {
     this.isPasswordVisible = !this.isPasswordVisible;
   }
 
-  isDropdownOpen: boolean = false;
+  // =========================================================
+  // Normal input / textarea
+  // =========================================================
 
   onValueChange(event: Event): void {
     const target =
@@ -68,22 +128,46 @@ export class InputField {
 
     this.value = target.value;
 
+    // Reactive Forms
+    this.onChange(this.value);
+
+    // Existing custom events
     this.valueChange.emit(this.value);
     this.changed.emit(this.value);
   }
 
+  // =========================================================
+  // Blur
+  // =========================================================
+
   onBlur(): void {
+    // Reactive Forms
+    this.onTouched();
+
+    // Existing custom event
     this.blurred.emit();
   }
+
+  // =========================================================
+  // Select
+  // =========================================================
 
   onSelectChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
 
     this.value = target.value;
 
+    // Reactive Forms
+    this.onChange(this.value);
+
+    // Existing custom events
     this.valueChange.emit(this.value);
     this.changed.emit(this.value);
   }
+
+  // =========================================================
+  // Multi-select
+  // =========================================================
 
   toggleDropdown(): void {
     if (this.disabled || this.readonly) {
@@ -134,6 +218,10 @@ export class InputField {
       .map(option => option.label)
       .join(', ');
   }
+
+  // =========================================================
+  // Validation
+  // =========================================================
 
   get validationMessage(): string {
     if (this.validation === 'error') {

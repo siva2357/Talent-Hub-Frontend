@@ -42,7 +42,8 @@
                 <app-file-preview mode="profile" [previewUrl]="profileForm.get('basicInformation.profilePhoto')?.value"
                   (editClicked)="onEditPhoto()"></app-file-preview>
                 } @else {
-                <app-file-upload mode="avatar" [uploadBucket]="role === 'client' ? UploadBucket.ClientData : UploadBucket.FreelancerData"
+                <app-file-upload mode="avatar"
+                  [uploadBucket]="role === 'client' ? UploadBucket.ClientData : UploadBucket.FreelancerData"
                   [uploadSection]="UploadSection.ProfilePhoto" [replaceExisting]="true" [previewUrl]="previewUrl"
                   (fileSelected)="onPhotoSelected($event)" (uploadComplete)="onUploadComplete($event)"
                   (uploadError)="onUploadError($event)">
@@ -76,11 +77,8 @@
                 </app-input-field>
               </div>
               <div class="col-md-6">
-                <app-input-field label="Gender *" type="select" placeholder="Select gender" [options]="[
-                  { label: 'Male', value: 'Male' },
-                  { label: 'Female', value: 'Female' },
-                  { label: 'Other', value: 'Other' }
-                ]" [value]="profileForm.get('basicInformation.gender')?.value || ''"
+                <app-input-field label="Gender *" type="select" placeholder="Select gender" [options]="genderOptions"
+                  [value]="profileForm.get('basicInformation.gender')?.value || ''"
                   (valueChange)="profileForm.get('basicInformation.gender')?.setValue($event); profileForm.get('basicInformation.gender')?.markAsTouched()"
                   [validation]="getValidationState('gender')" [errorMessage]="getErrorMessage('gender')">
                 </app-input-field>
@@ -110,58 +108,69 @@
 
         <div class="row g-4">
           <div class="col-md-4">
-            <app-input-field label="Company Type *" type="text" placeholder="e.g. LLC, Corporation"
-              [value]="profileForm.get('professionalDetails.companyType')?.value || ''"
+            <app-input-field label="Company Type *" type="select" placeholder="Select company type"
+              [options]="companyTypeOptions" [value]="profileForm.get('professionalDetails.companyType')?.value || ''"
               (valueChange)="profileForm.get('professionalDetails.companyType')?.setValue($event); profileForm.get('professionalDetails.companyType')?.markAsTouched()"
-              [validation]="getValidationState('companyType', 'professionalDetails')" [errorMessage]="getErrorMessage('companyType', 'professionalDetails')">
+              [validation]="getValidationState('companyType', 'professionalDetails')"
+              [errorMessage]="getErrorMessage('companyType', 'professionalDetails')">
             </app-input-field>
           </div>
           <div class="col-md-4">
             <app-input-field label="Website *" type="text" placeholder="https://"
               [value]="profileForm.get('professionalDetails.website')?.value || ''"
               (valueChange)="profileForm.get('professionalDetails.website')?.setValue($event); profileForm.get('professionalDetails.website')?.markAsTouched()"
-              [validation]="getValidationState('website', 'professionalDetails')" [errorMessage]="getErrorMessage('website', 'professionalDetails')">
+              [validation]="getValidationState('website', 'professionalDetails')"
+              [errorMessage]="getErrorMessage('website', 'professionalDetails')">
             </app-input-field>
           </div>
           <div class="col-md-4">
-            <app-input-field label="Industry *" type="text" placeholder="e.g. Technology"
+            <app-input-field label="Industry *" type="select" placeholder="Select industry" [options]="industryOptions"
               [value]="profileForm.get('professionalDetails.industry')?.value || ''"
               (valueChange)="profileForm.get('professionalDetails.industry')?.setValue($event); profileForm.get('professionalDetails.industry')?.markAsTouched()"
-              [validation]="getValidationState('industry', 'professionalDetails')" [errorMessage]="getErrorMessage('industry', 'professionalDetails')">
+              [validation]="getValidationState('industry', 'professionalDetails')"
+              [errorMessage]="getErrorMessage('industry', 'professionalDetails')">
             </app-input-field>
           </div>
           <div class="col-12">
             <app-input-field label="Company Description *" type="textarea" placeholder="Describe your company"
               [value]="profileForm.get('professionalDetails.companyDescription')?.value || ''"
               (valueChange)="profileForm.get('professionalDetails.companyDescription')?.setValue($event); profileForm.get('professionalDetails.companyDescription')?.markAsTouched()"
-              [validation]="getValidationState('companyDescription', 'professionalDetails')" [errorMessage]="getErrorMessage('companyDescription', 'professionalDetails')">
+              [validation]="getValidationState('companyDescription', 'professionalDetails')"
+              [errorMessage]="getErrorMessage('companyDescription', 'professionalDetails')">
             </app-input-field>
           </div>
         </div>
 
-        <h4 class="fs-6 fw-bold text-dark mt-4 mb-2">Location</h4>
-        <div class="row g-4">
-          <div class="col-md-4">
-            <app-input-field label="City *" type="text" placeholder="Enter city"
-              [value]="profileForm.get('location.city')?.value || ''"
-              (valueChange)="profileForm.get('location.city')?.setValue($event); profileForm.get('location.city')?.markAsTouched()"
-              [validation]="getValidationState('city', 'location')" [errorMessage]="getErrorMessage('city', 'location')">
-            </app-input-field>
+        <!-- Location -->
+        <div class="form-section" formGroupName="location">
+
+          <h5 class="section-title">Location</h5>
+
+          <div class="row g-3">
+
+            <!-- Country -->
+            <div class="col-md-12">
+              <app-input-field label="Country" type="select" placeholder="Select country" formControlName="country"
+                [options]="countryOptions">
+              </app-input-field>
+            </div>
+
+            <!-- State -->
+            <div class="col-md-12">
+              <app-input-field label="State" type="select" placeholder="Select state" formControlName="state"
+                [options]="stateOptions">
+              </app-input-field>
+            </div>
+
+            <!-- City -->
+            <div class="col-md-12">
+              <app-input-field label="City" type="select" placeholder="Select city" formControlName="city"
+                [options]="cityOptions">
+              </app-input-field>
+            </div>
+
           </div>
-          <div class="col-md-4">
-            <app-input-field label="State *" type="text" placeholder="Enter state"
-              [value]="profileForm.get('location.state')?.value || ''"
-              (valueChange)="profileForm.get('location.state')?.setValue($event); profileForm.get('location.state')?.markAsTouched()"
-              [validation]="getValidationState('state', 'location')" [errorMessage]="getErrorMessage('state', 'location')">
-            </app-input-field>
-          </div>
-          <div class="col-md-4">
-            <app-input-field label="Country *" type="text" placeholder="Enter country"
-              [value]="profileForm.get('location.country')?.value || ''"
-              (valueChange)="profileForm.get('location.country')?.setValue($event); profileForm.get('location.country')?.markAsTouched()"
-              [validation]="getValidationState('country', 'location')" [errorMessage]="getErrorMessage('country', 'location')">
-            </app-input-field>
-          </div>
+
         </div>
         } @else {
         <h3 class="fs-6 fw-bold text-dark mb-1">Professional Information</h3>
@@ -172,14 +181,16 @@
             <app-input-field label="Professional Headline *" type="text" placeholder="e.g. Senior Frontend Developer"
               [value]="profileForm.get('professionalDetails.professionalHeadline')?.value || ''"
               (valueChange)="profileForm.get('professionalDetails.professionalHeadline')?.setValue($event); profileForm.get('professionalDetails.professionalHeadline')?.markAsTouched()"
-              [validation]="getValidationState('professionalHeadline', 'professionalDetails')" [errorMessage]="getErrorMessage('professionalHeadline', 'professionalDetails')">
+              [validation]="getValidationState('professionalHeadline', 'professionalDetails')"
+              [errorMessage]="getErrorMessage('professionalHeadline', 'professionalDetails')">
             </app-input-field>
           </div>
           <div class="col-12">
             <app-input-field label="Skills (Comma separated) *" type="text" placeholder="Comma separated skills"
               [value]="profileForm.get('professionalDetails.skills')?.value?.join(', ') || ''"
               (valueChange)="updateSkills($event); profileForm.get('professionalDetails.skills')?.markAsTouched()"
-              [validation]="getValidationState('skills', 'professionalDetails')" [errorMessage]="getErrorMessage('skills', 'professionalDetails')">
+              [validation]="getValidationState('skills', 'professionalDetails')"
+              [errorMessage]="getErrorMessage('skills', 'professionalDetails')">
             </app-input-field>
           </div>
           <div class="col-12">
@@ -187,49 +198,56 @@
               placeholder="Comma separated technologies"
               [value]="profileForm.get('professionalDetails.technologies')?.value?.join(', ') || ''"
               (valueChange)="updateTechnologies($event); profileForm.get('professionalDetails.technologies')?.markAsTouched()"
-              [validation]="getValidationState('technologies', 'professionalDetails')" [errorMessage]="getErrorMessage('technologies', 'professionalDetails')">
+              [validation]="getValidationState('technologies', 'professionalDetails')"
+              [errorMessage]="getErrorMessage('technologies', 'professionalDetails')">
             </app-input-field>
           </div>
           <div class="col-12">
-            <app-input-field label="Availability *" type="select" placeholder="Select availability" [options]="[
-                { label: 'Full Time', value: 'Full Time' },
-                { label: 'Part Time', value: 'Part Time' },
-                { label: 'As needed', value: 'As needed' }
-              ]" [value]="profileForm.get('professionalDetails.availability')?.value || ''"
+            <app-input-field label="Availability *" type="select" placeholder="Select availability"
+              [options]="availabilityOptions" [value]="profileForm.get('professionalDetails.availability')?.value || ''"
               (valueChange)="profileForm.get('professionalDetails.availability')?.setValue($event); profileForm.get('professionalDetails.availability')?.markAsTouched()"
-              [validation]="getValidationState('availability', 'professionalDetails')" [errorMessage]="getErrorMessage('availability', 'professionalDetails')">
+              [validation]="getValidationState('availability', 'professionalDetails')"
+              [errorMessage]="getErrorMessage('availability', 'professionalDetails')">
             </app-input-field>
           </div>
         </div>
 
-        <h4 class="fs-6 fw-bold text-dark mt-4 mb-2">Location</h4>
-        <div class="row g-4">
-          <div class="col-md-4">
-            <app-input-field label="City *" type="text" placeholder="Enter city"
-              [value]="profileForm.get('location.city')?.value || ''"
-              (valueChange)="profileForm.get('location.city')?.setValue($event); profileForm.get('location.city')?.markAsTouched()"
-              [validation]="getValidationState('city', 'location')" [errorMessage]="getErrorMessage('city', 'location')">
-            </app-input-field>
+        <!-- Location -->
+        <div class="form-section" formGroupName="location">
+
+          <h5 class="section-title">Location</h5>
+
+          <div class="row g-3">
+
+            <!-- Country -->
+            <div class="col-md-12">
+              <app-input-field label="Country" type="select" placeholder="Select country" formControlName="country"
+                [options]="countryOptions">
+              </app-input-field>
+            </div>
+
+            <!-- State -->
+            <div class="col-md-12">
+              <app-input-field label="State" type="select" placeholder="Select state" formControlName="state"
+                [options]="stateOptions">
+              </app-input-field>
+            </div>
+
+            <!-- City -->
+            <div class="col-md-12">
+              <app-input-field label="City" type="select" placeholder="Select city" formControlName="city"
+                [options]="cityOptions">
+              </app-input-field>
+            </div>
+
           </div>
-          <div class="col-md-4">
-            <app-input-field label="State *" type="text" placeholder="Enter state"
-              [value]="profileForm.get('location.state')?.value || ''"
-              (valueChange)="profileForm.get('location.state')?.setValue($event); profileForm.get('location.state')?.markAsTouched()"
-              [validation]="getValidationState('state', 'location')" [errorMessage]="getErrorMessage('state', 'location')">
-            </app-input-field>
-          </div>
-          <div class="col-md-4">
-            <app-input-field label="Country *" type="text" placeholder="Enter country"
-              [value]="profileForm.get('location.country')?.value || ''"
-              (valueChange)="profileForm.get('location.country')?.setValue($event); profileForm.get('location.country')?.markAsTouched()"
-              [validation]="getValidationState('country', 'location')" [errorMessage]="getErrorMessage('country', 'location')">
-            </app-input-field>
-          </div>
+
         </div>
         }
 
         <div class="d-flex justify-content-between mt-4 pt-3 border-top">
-          <app-button type="button" variant="outline-primary" class="px-4" (clicked)="prevStep()" label="Back"></app-button>
+          <app-button type="button" variant="outline-primary" class="px-4" (clicked)="prevStep()"
+            label="Back"></app-button>
           <app-button type="button" variant="primary" class="px-4" (clicked)="nextStep()" label="Next"></app-button>
         </div>
         }
@@ -243,12 +261,9 @@
           <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Social Media profile</h4>
           <div class="d-flex align-items-start gap-3 mb-3">
             <div class="flex-grow-1">
-              <app-input-field label="Select media *" type="select" placeholder="Select platform" [options]="[
-                  { label: 'LinkedIn', value: 'LinkedIn' },
-                  { label: 'GitHub', value: 'GitHub' },
-                  { label: 'Twitter', value: 'Twitter' },
-                  { label: 'Portfolio', value: 'Portfolio' }
-                ]" [value]="newSocialPlatform" (valueChange)="newSocialPlatform = $event">
+              <app-input-field label="Select media *" type="select" placeholder="Select platform"
+                [options]="socialPlatformOptions" [value]="newSocialPlatform"
+                (valueChange)="newSocialPlatform = $event">
               </app-input-field>
             </div>
             <div class="flex-grow-1">
@@ -280,21 +295,18 @@
           <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Languages</h4>
           <div class="d-flex align-items-start gap-3 mb-3">
             <div class="flex-grow-1">
-              <app-input-field label="Language *" type="text" placeholder="e.g. English" [value]="newLanguage"
-                (valueChange)="newLanguage = $event">
+              <app-input-field label="Language *" type="select" placeholder="Select language"
+                [options]="languageOptions" [value]="newLanguage" (valueChange)="newLanguage = $event">
               </app-input-field>
             </div>
             <div class="flex-grow-1">
-              <app-input-field label="Proficiency *" type="select" placeholder="Select proficiency" [options]="[
-                  { label: 'Basic', value: 'Basic' },
-                  { label: 'Conversational', value: 'Conversational' },
-                  { label: 'Fluent', value: 'Fluent' },
-                  { label: 'Native or Bilingual', value: 'Native or Bilingual' }
-                ]" [value]="newProficiency" (valueChange)="newProficiency = $event">
+              <app-input-field label="Proficiency *" type="select" placeholder="Select proficiency"
+                [options]="languageProficiencyOptions" [value]="newProficiency" (valueChange)="newProficiency = $event">
               </app-input-field>
             </div>
             <div style="margin-top: 30px;">
-              <app-button type="button" variant="primary" class="px-4" (clicked)="addLanguage()" label="Add"></app-button>
+              <app-button type="button" variant="primary" class="px-4" (clicked)="addLanguage()"
+                label="Add"></app-button>
             </div>
           </div>
 
@@ -311,7 +323,8 @@
         </div>
 
         <div class="d-flex justify-content-between mt-4 pt-3 border-top">
-          <app-button type="button" variant="outline-primary" class="px-4" (clicked)="prevStep()" label="Back"></app-button>
+          <app-button type="button" variant="outline-primary" class="px-4" (clicked)="prevStep()"
+            label="Back"></app-button>
           <app-button type="button" variant="primary" class="px-4" (clicked)="nextStep()" label="Next"></app-button>
         </div>
         }
@@ -488,8 +501,10 @@
         </div>
 
         <div class="d-flex justify-content-between mt-4 pt-3 border-top">
-          <app-button type="button" variant="outline-primary" class="px-4" (clicked)="prevStep()" label="Back"></app-button>
-          <app-button type="button" variant="success" class="px-4 text-white" (clicked)="submitProfile()" [loading]="isLoading" [disabled]="isLoading" label="">
+          <app-button type="button" variant="outline-primary" class="px-4" (clicked)="prevStep()"
+            label="Back"></app-button>
+          <app-button type="button" variant="success" class="px-4 text-white" (clicked)="submitProfile()"
+            [loading]="isLoading" [disabled]="isLoading" label="">
             @if (isLoading) {
             <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             }
@@ -529,9 +544,11 @@
             Clients }.
           </p>
 
-          <app-button type="button" variant="primary" class="px-5 py-3 mx-auto rounded-3 d-flex align-items-center justify-content-center"
+          <app-button type="button" variant="primary"
+            class="px-5 py-3 mx-auto rounded-3 d-flex align-items-center justify-content-center"
             (clicked)="goToDashboard()" label="">
-            <span class="fw-bold" style="font-size: 1rem;">Go to Dashboard</span> <i class="bi bi-arrow-right ms-2" style="font-size: 1rem;"></i>
+            <span class="fw-bold" style="font-size: 1rem;">Go to Dashboard</span> <i class="bi bi-arrow-right ms-2"
+              style="font-size: 1rem;"></i>
           </app-button>
         </div>
         }

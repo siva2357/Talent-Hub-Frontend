@@ -3,38 +3,85 @@
 ========================================================= */
 
 .login-layout {
-  min-height: 100vh;
   width: 100%;
-  font-family: 'Inter', 'Outfit', sans-serif;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  margin: 0;
+  padding: 0;
+
   background: #ffffff;
+
+  overflow-x: hidden;
+
+  font-family: 'Inter', 'Outfit', sans-serif;
 }
 
-.left-panel {
+
+/* =========================================================
+   ROW
+========================================================= */
+
+.login-layout>.row {
+  width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
+
+  margin: 0;
+}
+
+
+/* =========================================================
+   LEFT LOGIN PANEL
+========================================================= */
+
+.left-panel {
   position: relative;
+
+  min-height: 100vh;
+  min-height: 100dvh;
+
   display: flex;
-  justify-content: center;
+
   align-items: center;
+  justify-content: center;
+
+  background: #ffffff;
+
   overflow: hidden;
 }
 
+
 /* =========================================================
-   DECORATIVE BACKGROUND SHAPES
+   DECORATIVE BACKGROUND
 ========================================================= */
+
+.decorative-bg {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
 
 .bg-shape {
   position: absolute;
+
   border-radius: 50%;
-  background: radial-gradient(circle,
+
+  background:
+    radial-gradient(circle,
       rgba(168, 85, 247, 0.08) 0%,
       rgba(255, 255, 255, 0) 70%);
-  z-index: 0;
-  pointer-events: none;
 }
 
 .bg-shape.top-left {
   width: 500px;
   height: 500px;
+
   top: -200px;
   left: -200px;
 }
@@ -42,9 +89,11 @@
 .bg-shape.bottom-left {
   width: 400px;
   height: 400px;
+
   bottom: -150px;
   left: -150px;
 }
+
 
 /* =========================================================
    FORM CONTAINER
@@ -52,57 +101,109 @@
 
 .form-container {
   position: relative;
-  z-index: 1;
+
+  z-index: 2;
+
   width: 100%;
-  max-width: 420px;
-  padding: 40px 20px;
+  max-width: 430px;
+
+  margin: auto;
+
+  padding: 30px 24px;
 }
+
 
 /* =========================================================
    LOGO
 ========================================================= */
 
 .logo {
-  height: 70px;
+  display: block;
+
   width: auto;
+  height: 70px;
+
   max-width: 220px;
+
   object-fit: contain;
+
+  margin-left: auto;
+  margin-right: auto;
 }
+
 
 /* =========================================================
-   FORM ELEMENTS
+   FORM HEADER
 ========================================================= */
 
-.input-group-text {
-  transition: border-color 0.15s ease-in-out;
+.form-container>.text-center {
+  width: 100%;
 }
+
+.form-container h2 {
+  line-height: 1.3;
+
+  letter-spacing: -0.02em;
+}
+
+.form-container p {
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.static-form {
+  width: 100%;
+}
+
+.static-form app-input-field,
+.static-form app-button {
+  display: block;
+
+  width: 100%;
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
 
 .form-control:focus {
   border-color: #4a3aff;
+
   box-shadow: none;
 }
 
-.form-control:focus+.input-group-text,
 .input-group:focus-within .input-group-text,
 .input-group:focus-within .form-control {
   border-color: #4a3aff;
 }
 
+
+/* =========================================================
+   PRIMARY COLOR
+========================================================= */
+
 .text-primary {
   color: #4a3aff !important;
 }
 
-.cursor-pointer {
-  cursor: pointer;
-}
 
 /* =========================================================
    BUTTON
 ========================================================= */
 
 .btn-primary {
-  background: linear-gradient(135deg, #4a3aff, #2563eb);
+  background:
+    linear-gradient(135deg,
+      #4a3aff,
+      #2563eb);
+
   border: none;
+
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
@@ -110,322 +211,223 @@
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(74, 58, 255, 0.35);
-  background: linear-gradient(135deg, #3f31eb, #1d4ed8);
+
+  box-shadow:
+    0 8px 20px rgba(74, 58, 255, 0.35);
 }
 
+
 /* =========================================================
-   RIGHT PANEL
+   RIGHT IMAGE COLUMN
 ========================================================= */
 
-.right-panel-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: calc(100vh - 32px);
-  background: linear-gradient(135deg,
-      #a855f7 0%,
-      #2563eb 100%);
+.right-column {
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  padding: 16px !important;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   overflow: hidden;
-  border-radius: 28px !important;
 }
 
-.max-w-lg {
-  max-width: 550px;
-}
-
-.divider {
-  width: 40px;
-  height: 2px;
-}
-
-.icon-circle {
-  width: 52px;
-  height: 52px;
-  min-width: 52px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.icon-circle .text-primary {
-  color: #4a3aff !important;
-}
 
 /* =========================================================
-   GRAPHIC
+   IMAGE PLACEHOLDER
 ========================================================= */
 
-.graphic-placeholder {
+.image-placeholder {
   position: relative;
-  z-index: 2;
-  width: 180px;
-  height: 130px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-  transform: rotate(-3deg);
-  transition: transform 0.3s ease;
+
+  width: 100%;
+  height: calc(100dvh - 32px);
+
+  overflow: hidden;
+
+  border-radius: 24px;
+
+  background: #f5f6fa;
 }
 
-.graphic-placeholder:hover {
-  transform: rotate(0deg);
-}
 
 /* =========================================================
-   CONCENTRIC CIRCLES
+   BANNER IMAGE
 ========================================================= */
 
-.concentric-circles {
-  position: absolute;
-  top: 30%;
-  left: 50%;
+.banner-image {
   width: 100%;
   height: 100%;
-  pointer-events: none;
+
+  display: block;
+
+  object-fit: cover;
+
+  object-position: center;
 }
 
-.circle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.circle-1 {
-  width: 350px;
-  height: 350px;
-}
-
-.circle-2 {
-  width: 550px;
-  height: 550px;
-}
-
-.circle-3 {
-  width: 750px;
-  height: 750px;
-}
 
 /* =========================================================
-   FLOATING ITEMS
-========================================================= */
-
-.floating-item {
-  position: absolute;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  color: #fff;
-  transition: transform 0.3s ease;
-}
-
-.float-1,
-.float-2,
-.float-4 {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-}
-
-.float-3 {
-  padding: 8px 12px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  gap: 4px;
-}
-
-.float-1 {
-  top: 15%;
-  left: 20%;
-  transform: rotate(-10deg);
-}
-
-.float-2 {
-  top: 22%;
-  right: 15%;
-  transform: rotate(15deg);
-}
-
-.float-3 {
-  top: 38%;
-  right: 10%;
-  transform: rotate(-5deg);
-}
-
-.float-4 {
-  top: 48%;
-  left: 55%;
-  transform: rotate(10deg);
-}
-
-.floating-item:hover {
-  transform: scale(1.1) rotate(0deg);
-}
-
-.z-1 {
-  z-index: 1;
-}
-
-.z-0 {
-  z-index: 0;
-}
-
-/* =========================================================
-   LARGE LAPTOPS / DESKTOP
+   DESKTOP
 ========================================================= */
 
 @media (min-width: 1200px) {
 
-  .form-container {
-    max-width: 440px;
+  .left-panel {
+    flex: 0 0 50%;
+    max-width: 50%;
   }
 
-  .right-panel-inner {
-    min-height: calc(100vh - 32px);
+  .right-column {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .form-container {
+    max-width: 430px;
   }
 }
 
+
 /* =========================================================
-   LAPTOP / TABLET LANDSCAPE
+   LAPTOP
 ========================================================= */
 
-@media (max-width: 1199.98px) and (min-width: 992px) {
+@media (min-width: 992px) and (max-width: 1199.98px) {
 
   .form-container {
     max-width: 400px;
-    padding: 35px 20px;
+
+    padding: 25px 20px;
   }
 
   .logo {
     height: 62px;
   }
 
-  .right-panel-inner {
-    border-radius: 24px !important;
-  }
-
-  .features-list {
-    padding-left: 15px !important;
-    padding-right: 15px !important;
-  }
-
-  .graphic-placeholder {
-    width: 150px;
-    height: 110px;
-  }
-
-  .circle-1 {
-    width: 280px;
-    height: 280px;
-  }
-
-  .circle-2 {
-    width: 450px;
-    height: 450px;
-  }
-
-  .circle-3 {
-    width: 620px;
-    height: 620px;
+  .image-placeholder {
+    border-radius: 20px;
   }
 }
+
 
 /* =========================================================
    TABLET
 ========================================================= */
 
-@media (max-width: 991.98px) {
-
-  .login-layout {
-    min-height: 100vh;
-  }
+@media (min-width: 768px) and (max-width: 991.98px) {
 
   .left-panel {
-    min-height: 100vh;
-    width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    align-items: center;
+    min-height: 100dvh;
+
+    flex: 0 0 100%;
+    max-width: 100%;
   }
 
   .form-container {
-    max-width: 460px;
-    padding: 50px 24px;
+    max-width: 520px;
+
+    padding: 40px 28px;
   }
 
   .logo {
     height: 65px;
   }
 
-  .bg-shape.top-left {
-    width: 400px;
-    height: 400px;
-    top: -180px;
-    left: -180px;
-  }
-
-  .bg-shape.bottom-left {
-    width: 350px;
-    height: 350px;
-    bottom: -160px;
-    left: -160px;
+  .right-column {
+    display: none !important;
   }
 }
+
 
 /* =========================================================
    MOBILE
 ========================================================= */
 
-@media (max-width: 575.98px) {
+@media (max-width: 767.98px) {
 
   .login-layout {
-    min-height: 100vh;
+    min-height: 100dvh;
+
+    height: auto;
+  }
+
+  .login-layout>.row {
+    min-height: 100dvh;
+
+    height: auto;
   }
 
   .left-panel {
-    min-height: 100vh;
-    padding: 0;
+    width: 100%;
+
+    min-height: 100dvh;
+
+    flex: 0 0 100%;
+    max-width: 100%;
+
+    justify-content: center;
+    align-items: center;
+
+    overflow: visible;
   }
 
   .form-container {
-    max-width: 100%;
-    padding: 35px 20px 30px;
+    width: 100%;
+    max-width: 430px;
+
+    margin: auto;
+
+    padding: 30px 20px;
   }
 
   .logo {
     height: 58px;
+
     max-width: 190px;
+
+    margin-bottom: 12px !important;
   }
 
-  .form-container .text-center {
-    margin-bottom: 35px !important;
+  .form-container>.text-center {
+    margin-bottom: 30px !important;
   }
 
   .form-container h2 {
-    font-size: 1.5rem !important;
+    font-size: 1.45rem !important;
+
+    margin-bottom: 7px;
   }
 
   .form-container p {
     font-size: 0.82rem;
   }
 
-  .mb-4 {
-    margin-bottom: 1.1rem !important;
+  .static-form .mb-4 {
+    margin-bottom: 18px !important;
+  }
+
+  .static-form .d-flex.justify-content-end {
+    margin-bottom: 20px !important;
+  }
+
+  .static-form>.text-center {
+    margin-top: 28px !important;
+
+    padding-bottom: 10px !important;
+  }
+
+  .right-column {
+    display: none !important;
   }
 
   .bg-shape.top-left {
     width: 300px;
     height: 300px;
+
     top: -130px;
     left: -130px;
   }
@@ -433,91 +435,107 @@
   .bg-shape.bottom-left {
     width: 280px;
     height: 280px;
+
     bottom: -130px;
     left: -130px;
   }
 }
 
+
 /* =========================================================
    SMALL MOBILE
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .form-container {
+    max-width: 100%;
+
+    padding: 26px 16px 20px;
+  }
+
+  .logo {
+    height: 52px;
+
+    max-width: 170px;
+  }
+
+  .form-container>.text-center {
+    margin-bottom: 25px !important;
+  }
+
+  .form-container h2 {
+    font-size: 1.3rem !important;
+  }
+
+  .form-container p {
+    font-size: 0.76rem;
+  }
+
+  .static-form .mb-4 {
+    margin-bottom: 15px !important;
+  }
+
+  .static-form .d-flex.justify-content-end {
+    margin-bottom: 18px !important;
+  }
+
+  .static-form>.text-center {
+    margin-top: 22px !important;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
 ========================================================= */
 
 @media (max-width: 375px) {
 
   .form-container {
-    padding: 25px 16px;
+    padding: 20px 13px;
   }
 
   .logo {
-    height: 52px;
+    height: 46px;
+
+    max-width: 155px;
+  }
+
+  .form-container>.text-center {
+    margin-bottom: 22px !important;
   }
 
   .form-container h2 {
-    font-size: 1.35rem !important;
+    font-size: 1.2rem !important;
   }
 
-  .form-container .text-center {
-    margin-bottom: 28px !important;
-  }
-
-  .form-container .mt-5 {
-    margin-top: 2rem !important;
+  .form-container p {
+    font-size: 0.7rem;
   }
 }
 
+
 /* =========================================================
-   SHORT SCREENS
-   Prevent form from being vertically clipped
+   ACCESSIBILITY
 ========================================================= */
 
-@media (max-height: 700px) and (min-width: 992px) {
+.form-container a:focus-visible {
+  outline: 2px solid rgba(74, 58, 255, 0.3);
 
-  .left-panel {
-    overflow-y: auto;
-  }
+  outline-offset: 3px;
 
-  .form-container {
-    padding-top: 25px;
-    padding-bottom: 25px;
-  }
-
-  .form-container .text-center {
-    margin-bottom: 25px !important;
-  }
-
-  .logo {
-    height: 52px;
-  }
-
-  .mb-4 {
-    margin-bottom: 1rem !important;
-  }
-
-  .mt-5 {
-    margin-top: 1.5rem !important;
-  }
+  border-radius: 4px;
 }
 
+
 /* =========================================================
-   VERY SHORT MOBILE SCREENS
+   REDUCED MOTION
 ========================================================= */
 
-@media (max-height: 600px) {
+@media (prefers-reduced-motion: reduce) {
 
-  .left-panel {
-    align-items: flex-start;
-  }
-
-  .form-container {
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-
-  .logo {
-    height: 48px;
-  }
-
-  .form-container .text-center {
-    margin-bottom: 20px !important;
+  .btn-primary {
+    transition: none !important;
   }
 }

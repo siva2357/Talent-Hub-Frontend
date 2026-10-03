@@ -1,11 +1,18 @@
 export interface Blog {
     _id: string;
+    adminId: string;
+
     title: string;
-    description: string;
-    content?: string;
     category: string;
-    imageUrl?: string;
-    publishedAt?: string;
-    readTime?: number;
-    slug?: string;
+    content: string;
+
+    featuredMedia?: string;
+    blogBanner?: string;
+
+    tags: string[];
+
+    createdAt: string;
+    updatedAt: string;
+
+    __v?: number;
 }

@@ -1,47 +1,829 @@
+/* =========================================================
+   PORTFOLIO FORM - RESPONSIVE STYLES
+   ========================================================= */
+
 :host {
   --bg-color: #fafbfc;
   --primary-color: #0d6efd;
+  --purple-color: #a855f7;
+  display: block;
+  width: 100%;
+  min-height: 100%;
 }
 
+/* =========================================================
+   BASE
+   ========================================================= */
 
-
-.text-purple { color: #6f42c1; }
-.bg-purple-soft { background-color: rgba(111, 66, 193, 0.1); }
-.text-warning-dark { color: #d39e00; }
-
-.cursor-pointer { cursor: pointer; }
-.transition-all { transition: all 0.2s ease; }
-.hover-bg-light:hover { background-color: #f8f9fa !important; border-color: #dee2e6 !important; }
-
-.border-dashed { border-style: dashed !important; }
-.form-control:focus, .form-select:focus {
-  border-color: rgba(13, 110, 253, 0.5);
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+* {
+  box-sizing: border-box;
 }
+
+:host {
+  font-family: 'Inter', 'Outfit', sans-serif;
+}
+
+.text-purple {
+  color: #6f42c1;
+}
+
+.bg-purple-soft {
+  background-color: rgba(111, 66, 193, 0.1);
+}
+
+.text-warning-dark {
+  color: #d39e00;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.transition-all {
+  transition: all 0.2s ease;
+}
+
+.hover-bg-light:hover {
+  background-color: #f8f9fa !important;
+  border-color: #dee2e6 !important;
+}
+
+.border-dashed {
+  border-style: dashed !important;
+}
+
+/* =========================================================
+   PAGE BACKGROUND
+   ========================================================= */
 
 .dashboard-container {
   font-family: 'Inter', 'Outfit', sans-serif;
   background-color: #fcfbfe;
   position: relative;
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
-/* Background decorations */
-.bg-shape { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
-.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
-.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
-.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.05); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
-.concentric-circles { position: absolute; pointer-events: none; z-index: 0; top: 15%; left: 0; }
-.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.15); }
-.circle-1 { width: 300px; height: 300px; }
-.circle-2 { width: 500px; height: 500px; }
-.circle-3 { width: 700px; height: 700px; }
+/* =========================================================
+   BACKGROUND DECORATIONS
+   ========================================================= */
 
-/* Premium Card (Glassmorphism) */
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.top-left {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+  top: -150px;
+  left: -150px;
+}
+
+.bottom-right {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+  bottom: -200px;
+  right: -200px;
+}
+
+.right-shape {
+  width: 400px;
+  height: 400px;
+  background: rgba(37, 99, 235, 0.05);
+  filter: blur(80px);
+  top: 30%;
+  right: -100px;
+  transform: translateY(-50%);
+}
+
+.concentric-circles {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  top: 15%;
+  left: 0;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(168, 85, 247, 0.15);
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+}
+
+.circle-2 {
+  width: 500px;
+  height: 500px;
+}
+
+.circle-3 {
+  width: 700px;
+  height: 700px;
+}
+
+/* =========================================================
+   FORM CONTAINER
+   ========================================================= */
+
+form {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+/* Override inline max-width safely */
+form.w-100.mx-auto {
+  max-width: 800px !important;
+}
+
+/* =========================================================
+   INPUT FOCUS
+   ========================================================= */
+
+.form-control:focus,
+.form-select:focus {
+  border-color: rgba(13, 110, 253, 0.5);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+}
+
+/* =========================================================
+   SECTION HEADINGS
+   ========================================================= */
+
+h1,
+h2,
+p {
+  overflow-wrap: anywhere;
+}
+
+h1 {
+  line-height: 1.3;
+}
+
+h2 {
+  line-height: 1.4;
+}
+
+/* =========================================================
+   GLASS CARD
+   ========================================================= */
+
 .glass-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 15px 40px -10px rgba(74, 58, 255, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.05);
   border-radius: 20px !important;
+}
+
+/* =========================================================
+   DATE FIELDS
+   ========================================================= */
+
+.col-md-6>.d-flex.gap-3 {
+  width: 100%;
+}
+
+.col-md-6>.d-flex.gap-3>.flex-grow-1 {
+  min-width: 0;
+}
+
+/* =========================================================
+   UPLOAD / PREVIEW AREA
+   ========================================================= */
+
+app-file-upload,
+app-file-preview {
+  display: block;
+  width: 100%;
+}
+
+.row {
+  width: 100%;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.border-top {
+  border-color: #e9ecef !important;
+}
+
+.border-top>div:first-child {
+  min-width: 0;
+}
+
+.border-top>div:last-child {
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+app-button {
+  display: inline-block;
+}
+
+.w-md-auto {
+  width: auto !important;
+}
+
+/* =========================================================
+   LARGE TABLETS / SMALL DESKTOP
+   992px - 1199px
+   ========================================================= */
+
+@media (max-width: 1199.98px) {
+
+  .top-left {
+    width: 400px;
+    height: 400px;
+  }
+
+  .bottom-right {
+    width: 500px;
+    height: 500px;
+  }
+
+  .right-shape {
+    width: 300px;
+    height: 300px;
+  }
+
+  .circle-3 {
+    width: 600px;
+    height: 600px;
+  }
+}
+
+/* =========================================================
+   TABLET
+   768px - 991px
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+
+  /* Page padding */
+  .p-4 {
+    padding: 1.5rem !important;
+  }
+
+  form.w-100.mx-auto {
+    max-width: 760px !important;
+  }
+
+  /* Header */
+  form>.d-flex.justify-content-between {
+    margin-bottom: 2.25rem !important;
+  }
+
+  /* Reduce background decoration */
+  .top-left {
+    width: 350px;
+    height: 350px;
+    top: -120px;
+    left: -120px;
+  }
+
+  .bottom-right {
+    width: 450px;
+    height: 450px;
+    bottom: -150px;
+    right: -150px;
+  }
+
+  .right-shape {
+    width: 280px;
+    height: 280px;
+    right: -80px;
+  }
+
+  .circle-3 {
+    width: 500px;
+    height: 500px;
+  }
+
+  /* Upload section */
+  .col-md-6 app-file-upload {
+    min-height: 240px;
+  }
+
+  /* Footer */
+  .border-top {
+    align-items: stretch !important;
+  }
+
+  .border-top>div:first-child {
+    width: 100% !important;
+  }
+
+  .border-top>div:last-child {
+    width: 100% !important;
+  }
+
+  .border-top>div:last-child app-button {
+    flex: 1;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   Below 768px
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+  /* -------------------------------------------------------
+     PAGE
+     ------------------------------------------------------- */
+
+  .p-4 {
+    padding: 1rem !important;
+  }
+
+  .dashboard-container {
+    min-height: 100dvh;
+  }
+
+  form.w-100.mx-auto {
+    max-width: 100% !important;
+  }
+
+  /* -------------------------------------------------------
+     HEADER
+     ------------------------------------------------------- */
+
+  form>.d-flex.justify-content-between {
+    margin-bottom: 2rem !important;
+    align-items: flex-start !important;
+  }
+
+  form>.d-flex.justify-content-between>div {
+    width: 100%;
+    gap: 0.75rem !important;
+  }
+
+  form>.d-flex.justify-content-between>div>div:first-child {
+    width: 42px !important;
+    height: 42px !important;
+    flex: 0 0 42px;
+  }
+
+  form>.d-flex.justify-content-between>div>div:first-child i {
+    font-size: 1.1rem !important;
+  }
+
+  h1.fs-5 {
+    font-size: 1rem !important;
+  }
+
+  /* -------------------------------------------------------
+     SECTION SPACING
+     ------------------------------------------------------- */
+
+  form>.mb-5 {
+    margin-bottom: 2.25rem !important;
+  }
+
+  h2.fs-6 {
+    font-size: 0.95rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  /* -------------------------------------------------------
+     FORM GRID
+     ------------------------------------------------------- */
+
+  .row.g-4 {
+    --bs-gutter-x: 1rem;
+    --bs-gutter-y: 1.25rem;
+  }
+
+  /* -------------------------------------------------------
+     DATE FIELDS
+     ------------------------------------------------------- */
+
+  .col-md-6>.d-flex.gap-3 {
+    gap: 1rem !important;
+  }
+
+  .col-md-6>.d-flex.gap-3>.flex-grow-1 {
+    width: 50%;
+  }
+
+  /* -------------------------------------------------------
+     TECHNOLOGY HELP TEXT
+     ------------------------------------------------------- */
+
+  .text-muted[style*="font-size"] {
+    line-height: 1.5;
+  }
+
+  /* -------------------------------------------------------
+     UPLOAD SECTION
+     ------------------------------------------------------- */
+
+  .row.g-4>.col-md-6 {
+    width: 100%;
+  }
+
+  app-file-upload {
+    width: 100%;
+  }
+
+  .row.g-4 .border.rounded-4 {
+    min-height: 220px !important;
+  }
+
+  /* -------------------------------------------------------
+     MEDIA PREVIEWS
+     ------------------------------------------------------- */
+
+  .d-flex.flex-wrap.gap-3 {
+    gap: 0.75rem !important;
+  }
+
+  /* -------------------------------------------------------
+     FOOTER
+     ------------------------------------------------------- */
+
+  .border-top.pt-4.mt-5 {
+    padding-top: 1.25rem !important;
+    margin-top: 2rem !important;
+    gap: 1rem !important;
+  }
+
+  .border-top>div:first-child {
+    padding: 0.75rem 1rem !important;
+  }
+
+  .border-top>div:first-child i {
+    flex-shrink: 0;
+  }
+
+  .border-top>div:first-child span {
+    line-height: 1.4;
+  }
+
+  .border-top>div:last-child {
+    display: flex;
+    flex-direction: column;
+    width: 100% !important;
+    gap: 0.75rem !important;
+  }
+
+  .border-top>div:last-child app-button {
+    width: 100%;
+    display: block;
+  }
+
+  /* -------------------------------------------------------
+     DECORATIONS
+     ------------------------------------------------------- */
+
+  .top-left {
+    width: 280px;
+    height: 280px;
+    top: -100px;
+    left: -120px;
+  }
+
+  .bottom-right {
+    width: 350px;
+    height: 350px;
+    bottom: -130px;
+    right: -160px;
+  }
+
+  .right-shape {
+    width: 220px;
+    height: 220px;
+    right: -100px;
+    opacity: 0.7;
+  }
+
+  .concentric-circles {
+    display: none;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   Below 576px
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .p-4 {
+    padding: 0.875rem !important;
+  }
+
+  /* Header */
+  form>.d-flex.justify-content-between {
+    margin-bottom: 1.75rem !important;
+  }
+
+  form>.d-flex.justify-content-between>div {
+    align-items: flex-start !important;
+  }
+
+  h1.fs-5 {
+    font-size: 0.95rem !important;
+  }
+
+  form>.d-flex.justify-content-between p {
+    font-size: 0.72rem !important;
+    line-height: 1.45;
+  }
+
+  /* Sections */
+  form>.mb-5 {
+    margin-bottom: 2rem !important;
+  }
+
+  h2.fs-6 {
+    font-size: 0.9rem !important;
+  }
+
+  /* Date fields remain side by side */
+  .col-md-6>.d-flex.gap-3 {
+    gap: 0.65rem !important;
+  }
+
+  /* Description */
+  textarea {
+    min-height: 140px;
+  }
+
+  /* Upload empty state */
+  .row.g-4 .border.rounded-4 {
+    min-height: 190px !important;
+  }
+
+  /* Footer buttons */
+  .border-top>div:last-child {
+    flex-direction: column !important;
+  }
+
+  .border-top>div:last-child app-button {
+    width: 100% !important;
+  }
+
+  /* Decorative background */
+  .top-left {
+    width: 220px;
+    height: 220px;
+  }
+
+  .bottom-right {
+    width: 280px;
+    height: 280px;
+  }
+}
+
+/* =========================================================
+   EXTRA SMALL DEVICES
+   Below 400px
+   ========================================================= */
+
+@media (max-width: 399.98px) {
+
+  .p-4 {
+    padding: 0.75rem !important;
+  }
+
+  form>.d-flex.justify-content-between>div {
+    gap: 0.6rem !important;
+  }
+
+  form>.d-flex.justify-content-between>div>div:first-child {
+    width: 38px !important;
+    height: 38px !important;
+    flex-basis: 38px;
+  }
+
+  h1.fs-5 {
+    font-size: 0.9rem !important;
+  }
+
+  form>.d-flex.justify-content-between p {
+    font-size: 0.68rem !important;
+  }
+
+  h2.fs-6 {
+    font-size: 0.85rem !important;
+  }
+
+  /* Date fields stack on very narrow screens */
+  .col-md-6>.d-flex.gap-3 {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+
+  .col-md-6>.d-flex.gap-3>.flex-grow-1 {
+    width: 100%;
+  }
+
+  .border-top>div:first-child {
+    padding: 0.7rem 0.8rem !important;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY / TOUCH
+   ========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+  .hover-bg-light:hover {
+    background-color: transparent !important;
+  }
+
+  button,
+  app-button,
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+  }
+}
+
+/* =========================================================
+   REDUCE MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .transition-all {
+    transition: none !important;
+  }
+}
+
+.portfolio-empty-preview {
+  min-height: 280px;
+}
+
+@media (max-width: 767.98px) {
+  .portfolio-empty-preview {
+    min-height: 220px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .portfolio-empty-preview {
+    min-height: 190px;
+  }
+}
+
+
+/* =========================================================
+   PORTFOLIO HEADER
+   ========================================================= */
+
+.portfolio-header {
+  width: 100%;
+}
+
+.portfolio-header-icon {
+  width: 48px;
+  height: 48px;
+}
+
+/* Back button */
+.portfolio-back-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #495057;
+
+  font-size: 1.1rem;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.portfolio-back-btn:hover {
+  background: #f8f9fa;
+  color: #0d6efd;
+  border-color: rgba(13, 110, 253, 0.25);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.08);
+}
+
+.portfolio-back-btn:active {
+  transform: scale(0.95);
+}
+
+.portfolio-back-btn:focus-visible {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .portfolio-header {
+    gap: 0.75rem !important;
+    align-items: flex-start !important;
+  }
+
+  .portfolio-back-btn {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    font-size: 1rem;
+  }
+
+  .portfolio-header-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .portfolio-header-icon i {
+    font-size: 1.1rem !important;
+  }
+
+  .portfolio-header-content {
+    min-width: 0;
+  }
+
+  .portfolio-header-content h1 {
+    font-size: 1rem !important;
+    line-height: 1.3;
+  }
+
+  .portfolio-header-content p {
+    font-size: 0.72rem !important;
+    line-height: 1.4;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 399.98px) {
+
+  .portfolio-header {
+    gap: 0.6rem !important;
+  }
+
+  .portfolio-back-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+
+  .portfolio-header-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .portfolio-header-content h1 {
+    font-size: 0.9rem !important;
+  }
+
+  .portfolio-header-content p {
+    font-size: 0.68rem !important;
+  }
 }

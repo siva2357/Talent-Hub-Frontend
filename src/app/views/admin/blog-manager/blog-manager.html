@@ -136,18 +136,15 @@
 
       <div class="blog-table-wrapper">
 
-        <app-table [columns]="columns" [data]="blogs" [loading]="isLoading"
+        <app-table [columns]="columns" [data]="(paginatedBlogs$ | async) ?? []" [loading]="isLoading"
           emptyMessage="No blogs found. Create your first blog!">
 
           <!-- Index -->
           <ng-template #indexTpl let-value let-index="index">
-
             <span class="fw-semibold text-muted">
               {{ index + 1 }}
             </span>
-
           </ng-template>
-
 
           <!-- Media -->
           <ng-template #mediaTpl let-row="row">
@@ -156,11 +153,13 @@
 
               @if (row.featuredMedia) {
 
-              <img [src]="row.featuredMedia" alt="Blog Image">
+              <img [src]="row.featuredMedia" [alt]="row.title" class="blog-table-image">
 
               } @else {
 
-              <i class="bi bi-image text-muted"></i>
+              <div class="blog-table-media-placeholder">
+                <i class="bi bi-image text-muted"></i>
+              </div>
 
               }
 
@@ -168,35 +167,25 @@
 
           </ng-template>
 
-
           <!-- Title -->
           <ng-template #titleTpl let-value>
-
             <span class="blog-table-title">
               {{ value }}
             </span>
-
           </ng-template>
-
 
           <!-- Category -->
           <ng-template #categoryTpl let-value>
-
             <app-badge [label]="value" appearance="subtle" variant="primary">
             </app-badge>
-
           </ng-template>
-
 
           <!-- Created -->
           <ng-template #createdTpl let-value>
-
             <span class="blog-created-date">
               {{ value | date:'mediumDate' }}
             </span>
-
           </ng-template>
-
 
           <!-- Actions -->
           <ng-template #actionsTpl let-row="row">
@@ -209,7 +198,6 @@
                 <i class="bi bi-three-dots-vertical"></i>
 
               </button>
-
 
               <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none">
 

@@ -1,6 +1,11 @@
 :host {
   display: block;
+  width: 100%;
 }
+
+/* =========================================================
+   BASE
+   ========================================================= */
 
 .management-container {
   font-family: 'Inter', system-ui, sans-serif;
@@ -8,99 +13,963 @@
   min-height: 100vh;
 }
 
-.text-purple { color: #6f42c1 !important; }
-.bg-purple-soft { background-color: rgba(111, 66, 193, 0.1) !important; }
-.text-warning-dark { color: #d39e00 !important; }
-
-.hover-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-.hover-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
-  border-color: #0d6efd !important;
-}
-
-.cursor-pointer { cursor: pointer; }
-.hover-text-primary:hover { color: #0d6efd !important; }
-
-.nav-underline .nav-link {
-  color: #6c757d;
-  border-bottom: 2px solid transparent;
-}
-.nav-underline .nav-link.active {
-  color: #0d6efd !important;
-  border-bottom-color: #0d6efd;
-}
-
-/* Timeline Customization */
-.box-sizing-content {
-  box-sizing: content-box;
-}
-
 .dashboard-container {
   font-family: 'Inter', 'Outfit', sans-serif;
   background-color: #fcfbfe;
   min-height: 100vh;
   position: relative;
+  width: 100%;
+  overflow-x: hidden;
 }
 
-/* Background decorations */
-.bg-shape { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
-.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
-.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
-.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.05); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
-.concentric-circles { position: absolute; pointer-events: none; z-index: 0; top: 15%; left: 0; }
-.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.15); }
-.circle-1 { width: 300px; height: 300px; }
-.circle-2 { width: 500px; height: 500px; }
-.circle-3 { width: 700px; height: 700px; }
+/* Prevent flex/grid children from creating horizontal overflow */
+.dashboard-container *,
+.dashboard-container *::before,
+.dashboard-container *::after {
+  box-sizing: border-box;
+}
 
-/* Premium Card (Glassmorphism) */
+.dashboard-container .position-relative.z-1 {
+  width: 100%;
+}
+
+/* =========================================================
+   GENERAL UTILITIES
+   ========================================================= */
+
+.text-purple {
+  color: #6f42c1 !important;
+}
+
+.bg-purple-soft {
+  background-color: rgba(111, 66, 193, 0.1) !important;
+}
+
+.text-warning-dark {
+  color: #d39e00 !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.hover-text-primary:hover {
+  color: #0d6efd !important;
+}
+
+.hover-bg-light:hover {
+  background-color: rgba(0, 0, 0, 0.02) !important;
+}
+
+.box-sizing-content {
+  box-sizing: content-box;
+}
+
+/* =========================================================
+   HOVER CARD
+   ========================================================= */
+
+.hover-card {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  border-color: #0d6efd !important;
+}
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.nav-underline .nav-link {
+  color: #6c757d;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-underline .nav-link.active {
+  color: #0d6efd !important;
+  border-bottom-color: #0d6efd;
+}
+
+/* =========================================================
+   BACKGROUND DECORATIONS
+   ========================================================= */
+
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.top-left {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+  top: -150px;
+  left: -150px;
+}
+
+.bottom-right {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+  bottom: -200px;
+  right: -200px;
+}
+
+.right-shape {
+  width: 400px;
+  height: 400px;
+  background: rgba(37, 99, 235, 0.05);
+  filter: blur(80px);
+  top: 30%;
+  right: -100px;
+  transform: translateY(-50%);
+}
+
+.concentric-circles {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  top: 15%;
+  left: 0;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(168, 85, 247, 0.15);
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+}
+
+.circle-2 {
+  width: 500px;
+  height: 500px;
+}
+
+.circle-3 {
+  width: 700px;
+  height: 700px;
+}
+
+/* =========================================================
+   GLASS CARD
+   ========================================================= */
+
 .glass-card {
+  width: 100%;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 15px 40px -10px rgba(74, 58, 255, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.05);
   border-radius: 20px !important;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .glass-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 45px -10px rgba(74, 58, 255, 0.2), 0 8px 20px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 20px 45px -10px rgba(74, 58, 255, 0.2),
+    0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* =========================================================
-   RESPONSIVENESS
+   SUPPORT TICKET LIST
    ========================================================= */
 
-@media (max-width: 991.98px) {
-  .glass-card {
-    border-radius: 16px !important;
-  }
+.dashboard-container .col-lg-4 {
+  min-width: 0;
 }
 
-@media (max-width: 767.98px) {
-  h1.fs-3 {
-    font-size: 1.5rem !important;
+.dashboard-container .col-lg-4>.hover-card {
+  width: 100%;
+  min-width: 0;
+}
+
+/* =========================================================
+   TICKET DETAIL CARD
+   ========================================================= */
+
+.dashboard-container .col-lg-8 {
+  min-width: 0;
+}
+
+.dashboard-container .col-lg-8>.glass-card {
+  min-width: 0;
+}
+
+/* Ticket header */
+
+.dashboard-container .glass-card>.p-4.border-bottom {
+  min-width: 0;
+}
+
+.dashboard-container .glass-card>.p-4.border-bottom h2 {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.dashboard-container .glass-card>.p-4.border-bottom .d-flex.gap-3 {
+  min-width: 0;
+}
+
+/* Ticket category icon */
+
+.dashboard-container .glass-card>.p-4.border-bottom .rounded-3.flex-shrink-0 {
+  flex: 0 0 auto;
+}
+
+/* =========================================================
+   MESSAGE THREAD
+   ========================================================= */
+
+.dashboard-container .overflow-y-auto {
+  min-width: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Message rows */
+
+.dashboard-container .overflow-y-auto>.d-flex {
+  min-width: 0;
+}
+
+.dashboard-container .overflow-y-auto .flex-grow-1 {
+  min-width: 0;
+}
+
+/* Message content width */
+
+.dashboard-container .max-w-75 {
+  max-width: 75%;
+  min-width: 0;
+}
+
+/* Message text */
+
+.dashboard-container .overflow-y-auto p {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Message attachments */
+
+.dashboard-container .overflow-y-auto a {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.dashboard-container .overflow-y-auto a span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 220px;
+}
+
+/* =========================================================
+   REPLY AREA
+   ========================================================= */
+
+.dashboard-container textarea {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.dashboard-container textarea:focus {
+  outline: none;
+  box-shadow: none !important;
+}
+
+.focus-within-shadow:focus-within {
+  border-color: rgba(13, 110, 253, 0.45) !important;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.08);
+}
+
+/* =========================================================
+   LARGE TABLET / SMALL DESKTOP
+   ========================================================= */
+
+@media (max-width: 1199.98px) {
+
+  .dashboard-container>.position-relative.z-1 {
+    max-width: 100% !important;
+  }
+
+  .glass-card {
+    border-radius: 18px !important;
   }
 
   .top-left {
+    width: 420px;
+    height: 420px;
+  }
+
+  .bottom-right {
+    width: 500px;
+    height: 500px;
+  }
+
+  .right-shape {
+    width: 350px;
+    height: 350px;
+  }
+
+  .dashboard-container .max-w-75 {
+    max-width: 80%;
+  }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+
+  .dashboard-container {
+    padding: 1.25rem !important;
+  }
+
+  .dashboard-container>.position-relative.z-1 {
+    margin-top: 0.5rem !important;
+  }
+
+  /* Page heading */
+
+  .dashboard-container h1.fs-3 {
+    font-size: 1.5rem !important;
+  }
+
+  /* Create button */
+
+  .dashboard-container .btn.btn-primary {
+    white-space: nowrap;
+  }
+
+  /* Cards */
+
+  .glass-card {
+    border-radius: 16px !important;
+  }
+
+  /* Ticket list */
+
+  .dashboard-container .col-lg-4 {
+    width: 100%;
+  }
+
+  /* Ticket details */
+
+  .dashboard-container .col-lg-8 {
+    width: 100%;
+  }
+
+  /*
+   * When tablet width is reached the list and detail
+   * become vertically stacked.
+   */
+
+  .dashboard-container .col-lg-4.d-flex {
+    gap: 0.75rem !important;
+  }
+
+  /* Thread height */
+
+  .dashboard-container .overflow-y-auto {
+    max-height: 500px !important;
+  }
+
+  .top-left {
+    width: 350px;
+    height: 350px;
+    top: -120px;
+    left: -120px;
+  }
+
+  .bottom-right {
+    width: 450px;
+    height: 450px;
+    bottom: -160px;
+    right: -160px;
+  }
+
+  .right-shape {
     width: 300px;
     height: 300px;
+    right: -120px;
+  }
+
+  .concentric-circles {
+    opacity: 0.5;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .dashboard-container {
+    padding: 1rem !important;
+  }
+
+  .dashboard-container>.position-relative.z-1 {
+    margin-top: 0 !important;
+  }
+
+  /* =====================================================
+     HEADER
+     ===================================================== */
+
+  .dashboard-container h1.fs-3 {
+    font-size: 1.35rem !important;
+    line-height: 1.3;
+  }
+
+  .dashboard-container h1.fs-3 .badge {
+    font-size: 0.65rem !important;
+    padding: 0.35rem 0.6rem !important;
+  }
+
+  .dashboard-container .mb-4>p {
+    font-size: 0.78rem !important;
+    line-height: 1.5;
+  }
+
+  .dashboard-container .mb-4>a {
+    font-size: 0.78rem !important;
+  }
+
+  /*
+   * Header containing title + Create Ticket
+   * becomes vertical.
+   */
+
+  .dashboard-container .mb-4>.d-flex.justify-content-between {
+    align-items: stretch !important;
+    flex-direction: column;
+  }
+
+  .dashboard-container .mb-4>.d-flex.justify-content-between>button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* =====================================================
+     STAT CARDS
+     ===================================================== */
+
+  .dashboard-container .row.g-3.mb-4 {
+    row-gap: 0.75rem !important;
+  }
+
+  /* =====================================================
+     EMPTY STATE
+     ===================================================== */
+
+  .dashboard-container .glass-card.p-5 {
+    padding: 2rem 1rem !important;
+  }
+
+  .dashboard-container .glass-card.p-5 h2 {
+    font-size: 1.1rem !important;
+  }
+
+  .dashboard-container .glass-card.p-5 p {
+    font-size: 0.8rem !important;
+    line-height: 1.5;
+  }
+
+  /* =====================================================
+     TICKET LIST
+     ===================================================== */
+
+  .dashboard-container .col-lg-4.d-flex {
+    gap: 0.5rem !important;
+  }
+
+  .dashboard-container .hover-card {
+    margin-bottom: 0.5rem !important;
+    border-radius: 14px !important;
+  }
+
+  .dashboard-container .hover-card:hover {
+    transform: none;
+  }
+
+  /* =====================================================
+     TICKET DETAIL CARD
+     ===================================================== */
+
+  .dashboard-container .col-lg-8>.glass-card {
+    border-radius: 15px !important;
+    min-height: 0 !important;
+  }
+
+  /* =====================================================
+     DETAIL HEADER
+     ===================================================== */
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom {
+    padding: 1rem !important;
+  }
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom .d-flex.flex-column.flex-sm-row {
+    margin-bottom: 1rem !important;
+  }
+
+  /*
+   * Ticket icon + ticket information
+   */
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom .d-flex.gap-3.align-items-center {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom h2 {
+    font-size: 0.95rem !important;
+    line-height: 1.35;
+  }
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom .rounded-3.flex-shrink-0 {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  /*
+   * Header action buttons
+   */
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom .d-flex.flex-wrap.gap-2 {
+    width: 100%;
+    margin-top: 0.25rem !important;
+  }
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom .d-flex.flex-wrap.gap-2 .btn {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom .btn-close {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+
+  /*
+   * Ticket metadata
+   */
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom>.d-flex.flex-wrap.gap-4 {
+    gap: 0.65rem 1rem !important;
+    font-size: 0.7rem !important;
+  }
+
+  /* =====================================================
+     MESSAGE THREAD
+     ===================================================== */
+
+  .dashboard-container .overflow-y-auto {
+    max-height: 450px !important;
+    padding: 1rem !important;
+  }
+
+  /*
+   * User/admin message row
+   */
+
+  .dashboard-container .overflow-y-auto>.d-flex {
+    gap: 0.6rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /*
+   * Avatar
+   */
+
+  .dashboard-container .overflow-y-auto .rounded-circle.flex-shrink-0 {
+    width: 34px !important;
+    height: 34px !important;
+    flex: 0 0 34px;
+  }
+
+  .dashboard-container .overflow-y-auto .rounded-circle.flex-shrink-0 i {
+    font-size: 0.9rem !important;
+  }
+
+  /*
+   * Message body width
+   */
+
+  .dashboard-container .max-w-75 {
+    max-width: calc(100% - 44px) !important;
+    width: auto;
+  }
+
+  /*
+   * Message heading
+   */
+
+  .dashboard-container .overflow-y-auto .max-w-75 .d-flex {
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem !important;
+  }
+
+  /*
+   * Message bubble
+   */
+
+  .dashboard-container .overflow-y-auto .max-w-75 .p-3 {
+    padding: 0.75rem !important;
+    border-radius: 12px !important;
+  }
+
+  .dashboard-container .overflow-y-auto .max-w-75 p {
+    font-size: 0.78rem !important;
+    line-height: 1.5 !important;
+  }
+
+  /*
+   * Attachment buttons
+   */
+
+  .dashboard-container .overflow-y-auto a.btn {
+    max-width: 100%;
+    padding: 0.35rem 0.55rem !important;
+  }
+
+  .dashboard-container .overflow-y-auto a.btn span {
+    max-width: 150px;
+    font-size: 0.68rem !important;
+  }
+
+  /* =====================================================
+     REPLY AREA
+     ===================================================== */
+
+  .dashboard-container .col-lg-8 .glass-card>.p-3.border-top {
+    padding: 0.75rem !important;
+  }
+
+  .dashboard-container textarea {
+    min-height: 80px;
+    font-size: 0.78rem !important;
+  }
+
+  .dashboard-container .border.rounded-4>.d-flex.justify-content-between {
+    padding: 0.5rem !important;
+  }
+
+  .dashboard-container .border.rounded-4>.d-flex.justify-content-between .btn {
+    width: auto;
+    min-width: 120px;
+    justify-content: center;
+    font-size: 0.75rem !important;
+    padding: 0.45rem 0.85rem !important;
+  }
+
+  /* =====================================================
+     CLOSED TICKET
+     ===================================================== */
+
+  .dashboard-container .p-3.border-top.bg-light.text-center {
+    padding: 0.85rem !important;
+  }
+
+  .dashboard-container .p-3.border-top.bg-light.text-center p {
+    font-size: 0.72rem !important;
+    line-height: 1.45;
+  }
+
+  /* =====================================================
+     DECORATIONS
+     ===================================================== */
+
+  .top-left {
+    width: 280px;
+    height: 280px;
     top: -100px;
-    left: -100px;
+    left: -110px;
   }
-  
+
   .bottom-right {
-    width: 400px;
-    height: 400px;
-    bottom: -150px;
-    right: -150px;
+    width: 350px;
+    height: 350px;
+    bottom: -130px;
+    right: -140px;
   }
-  
+
+  .right-shape {
+    width: 250px;
+    height: 250px;
+    right: -120px;
+    filter: blur(60px);
+  }
+
   .concentric-circles {
     display: none;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .dashboard-container {
+    padding: 0.75rem !important;
+  }
+
+  /* Header */
+
+  .dashboard-container h1.fs-3 {
+    font-size: 1.2rem !important;
+  }
+
+  .dashboard-container h1.fs-3 .badge {
+    font-size: 0.58rem !important;
+    padding: 0.3rem 0.5rem !important;
+  }
+
+  .dashboard-container .mb-4 {
+    margin-bottom: 1.25rem !important;
+  }
+
+  /* Stats */
+
+  .dashboard-container .row.g-3.mb-4 {
+    margin-bottom: 1.25rem !important;
+  }
+
+  /* Ticket card */
+
+  .dashboard-container .glass-card {
+    border-radius: 13px !important;
+  }
+
+  /* Detail header */
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom {
+    padding: 0.85rem !important;
+  }
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom h2 {
+    font-size: 0.88rem !important;
+  }
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom .rounded-3.flex-shrink-0 {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom .rounded-3.flex-shrink-0 i {
+    font-size: 1rem !important;
+  }
+
+  /* Mark resolved */
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom .btn-outline-success {
+    font-size: 0.68rem !important;
+    padding: 0.35rem 0.6rem !important;
+  }
+
+  /* Thread */
+
+  .dashboard-container .overflow-y-auto {
+    max-height: 400px !important;
+    padding: 0.8rem !important;
+  }
+
+  .dashboard-container .overflow-y-auto>.d-flex {
+    gap: 0.5rem !important;
+  }
+
+  .dashboard-container .overflow-y-auto .rounded-circle.flex-shrink-0 {
+    width: 30px !important;
+    height: 30px !important;
+    flex-basis: 30px;
+  }
+
+  .dashboard-container .max-w-75 {
+    max-width: calc(100% - 38px) !important;
+  }
+
+  .dashboard-container .overflow-y-auto .max-w-75 .p-3 {
+    padding: 0.65rem !important;
+  }
+
+  .dashboard-container .overflow-y-auto .max-w-75 p {
+    font-size: 0.74rem !important;
+  }
+
+  /* Reply */
+
+  .dashboard-container textarea {
+    min-height: 70px;
+    padding: 0.7rem !important;
+  }
+
+  .dashboard-container .border.rounded-4>.d-flex.justify-content-between {
+    justify-content: flex-end !important;
+  }
+
+  .dashboard-container .border.rounded-4>.d-flex.justify-content-between .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Empty state */
+
+  .dashboard-container .glass-card.p-5 {
+    padding: 1.5rem 0.85rem !important;
+  }
+
+  .dashboard-container .glass-card.p-5>div:first-child {
+    width: 65px !important;
+    height: 65px !important;
+  }
+
+  .dashboard-container .glass-card.p-5>div:first-child i {
+    font-size: 1.7rem !important;
+  }
+
+  /* Background */
+
+  .top-left {
+    width: 220px;
+    height: 220px;
+    top: -80px;
+    left: -90px;
+  }
+
+  .bottom-right {
+    width: 280px;
+    height: 280px;
+    bottom: -100px;
+    right: -110px;
+  }
+
+  .right-shape {
+    display: none;
+  }
+}
+
+/* =========================================================
+   EXTRA SMALL DEVICES
+   ========================================================= */
+
+@media (max-width: 375px) {
+
+  .dashboard-container {
+    padding: 0.6rem !important;
+  }
+
+  .dashboard-container h1.fs-3 {
+    font-size: 1.1rem !important;
+  }
+
+  .dashboard-container h1.fs-3 .badge {
+    display: none;
+  }
+
+  .dashboard-container .glass-card {
+    border-radius: 12px !important;
+  }
+
+  /* Ticket metadata */
+
+  .dashboard-container .col-lg-8 .glass-card>.p-4.border-bottom>.d-flex.flex-wrap.gap-4 {
+    gap: 0.5rem !important;
+  }
+
+  /* Message thread */
+
+  .dashboard-container .overflow-y-auto {
+    padding: 0.65rem !important;
+  }
+
+  .dashboard-container .max-w-75 {
+    max-width: calc(100% - 35px) !important;
+  }
+
+  .dashboard-container .overflow-y-auto .max-w-75 p {
+    font-size: 0.7rem !important;
+  }
+
+  /* Attachment names */
+
+  .dashboard-container .overflow-y-auto a.btn span {
+    max-width: 110px;
+  }
+
+  /* Reply */
+
+  .dashboard-container textarea {
+    min-height: 65px;
+  }
+
+  /* Decoration */
+
+  .top-left {
+    width: 180px;
+    height: 180px;
+  }
+
+  .bottom-right {
+    width: 230px;
+    height: 230px;
+  }
+}
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) {
+
+  .glass-card:hover,
+  .hover-card:hover {
+    transform: none;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY / TOUCH TARGETS
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button {
+    touch-action: manipulation;
   }
 }

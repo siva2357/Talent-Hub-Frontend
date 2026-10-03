@@ -1,4 +1,4 @@
-<div class="dashboard-container position-relative px-5">
+<div class="dashboard-container position-relative ">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -27,7 +27,9 @@
           [ngClass]="currentTab === 'active' ? 'active fw-bold text-primary border-0 border-bottom border-2 border-primary bg-transparent' : 'text-muted border-0 bg-transparent fw-semibold hover-text-primary'"
           (click)="setTab('active')">
           <i class="bi bi-briefcase"></i> Active Contracts
-          <app-badge [label]="activeContracts.length.toString()" [variant]="currentTab === 'active' ? 'primary' : 'secondary'" [rounded]="true" appearance="subtle"></app-badge>
+          <app-badge [label]="activeContracts.length.toString()"
+            [variant]="currentTab === 'active' ? 'primary' : 'secondary'" [rounded]="true"
+            appearance="subtle"></app-badge>
         </a>
       </li>
       <li class="nav-item">
@@ -35,7 +37,9 @@
           [ngClass]="currentTab === 'completed' ? 'active fw-bold text-primary border-0 border-bottom border-2 border-primary bg-transparent' : 'text-muted border-0 bg-transparent fw-semibold hover-text-primary'"
           (click)="setTab('completed')">
           <i class="bi bi-check-circle"></i> Completed Contracts
-          <app-badge [label]="completedContracts.length.toString()" [variant]="currentTab === 'completed' ? 'primary' : 'secondary'" [rounded]="true" appearance="subtle"></app-badge>
+          <app-badge [label]="completedContracts.length.toString()"
+            [variant]="currentTab === 'completed' ? 'primary' : 'secondary'" [rounded]="true"
+            appearance="subtle"></app-badge>
         </a>
       </li>
     </ul>
@@ -44,21 +48,24 @@
       <!-- Active Contracts Tab -->
       @if (currentTab === 'active') {
       <div class="tab-pane fade show active">
-        
+
         <!-- Filter Bar -->
         <div class="glass-card rounded-3 mb-4 p-4">
           <div class="row g-3">
             <div class="col-lg-5">
-              <app-input-field type="text" placeholder="Search contracts, clients..." [showIcon]="true" icon="bi bi-search"
-                label="" [value]="searchQueryActive" (valueChange)="searchQueryActive = $event"></app-input-field>
+              <app-input-field type="text" placeholder="Search contracts, clients..." [showIcon]="true"
+                icon="bi bi-search" label="" [value]="searchQueryActive"
+                (valueChange)="searchQueryActive = $event"></app-input-field>
             </div>
             <div class="col-lg-3">
-              <app-input-field type="select" placeholder="All Categories" [options]="categoryOptions"
-                label="" [value]="selectedCategoryActive" (valueChange)="selectedCategoryActive = $event"></app-input-field>
+              <app-input-field type="select" placeholder="All Categories" [options]="categoryOptions" label=""
+                [value]="selectedCategoryActive" (valueChange)="selectedCategoryActive = $event"></app-input-field>
             </div>
             <div class="col-lg-4 d-flex gap-2">
-              <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply" (clicked)="applyFiltersActive()"></app-button>
-              <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset" (clicked)="resetFiltersActive()"></app-button>
+              <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply"
+                (clicked)="applyFiltersActive()"></app-button>
+              <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset"
+                (clicked)="resetFiltersActive()"></app-button>
             </div>
           </div>
           @if (activeFiltersActive.length > 0) {
@@ -80,21 +87,25 @@
       <!-- Completed Contracts Tab -->
       @if (currentTab === 'completed') {
       <div class="tab-pane fade show active">
-        
+
         <!-- Filter Bar -->
         <div class="glass-card rounded-3 mb-4 p-4">
           <div class="row g-3">
             <div class="col-lg-5">
-              <app-input-field type="text" placeholder="Search contracts, clients..." [showIcon]="true" icon="bi bi-search"
-                label="" [value]="searchQueryCompleted" (valueChange)="searchQueryCompleted = $event"></app-input-field>
+              <app-input-field type="text" placeholder="Search contracts, clients..." [showIcon]="true"
+                icon="bi bi-search" label="" [value]="searchQueryCompleted"
+                (valueChange)="searchQueryCompleted = $event"></app-input-field>
             </div>
             <div class="col-lg-3">
-              <app-input-field type="select" placeholder="All Categories" [options]="categoryOptions"
-                label="" [value]="selectedCategoryCompleted" (valueChange)="selectedCategoryCompleted = $event"></app-input-field>
+              <app-input-field type="select" placeholder="All Categories" [options]="categoryOptions" label=""
+                [value]="selectedCategoryCompleted"
+                (valueChange)="selectedCategoryCompleted = $event"></app-input-field>
             </div>
             <div class="col-lg-4 d-flex gap-2">
-              <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply" (clicked)="applyFiltersCompleted()"></app-button>
-              <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset" (clicked)="resetFiltersCompleted()"></app-button>
+              <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply"
+                (clicked)="applyFiltersCompleted()"></app-button>
+              <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset"
+                (clicked)="resetFiltersCompleted()"></app-button>
             </div>
           </div>
           @if (activeFiltersCompleted.length > 0) {
@@ -120,8 +131,8 @@
   <ng-template #titleTemplate let-row="row">
     <div>
       <h3 class="fs-6 fw-bold text-dark mb-1 text-truncate" style="max-width: 250px;">
-        <a [routerLink]="row.status === 'completed' || row.status === 'closed' ? ['/feedback-reports', row._id] : ['/contract-diary', row._id]" 
-           class="text-decoration-none text-dark hover-text-primary">
+        <a [routerLink]="row.status === 'completed' || row.status === 'closed' ? ['/feedback-reports', row._id] : ['/contract-diary', row._id]"
+          class="text-decoration-none text-dark hover-text-primary">
           {{ row.contractTitle }}
         </a>
       </h3>
@@ -133,8 +144,10 @@
 
   <ng-template #clientTemplate let-row="row">
     <div class="d-flex align-items-center gap-2">
-      <div class="rounded-circle overflow-hidden flex-shrink-0" style="width: 32px; height: 32px; background-color: #f8f9fa;">
-        <img [src]="'https://ui-avatars.com/api/?name=' + (row.clientName || 'Client') + '&background=random&size=32'" class="w-100 h-100" alt="Avatar">
+      <div class="rounded-circle overflow-hidden flex-shrink-0"
+        style="width: 32px; height: 32px; background-color: #f8f9fa;">
+        <img [src]="'https://ui-avatars.com/api/?name=' + (row.clientName || 'Client') + '&background=random&size=32'"
+          class="w-100 h-100" alt="Avatar">
       </div>
       <div>
         <span class="d-block fw-semibold text-dark" style="font-size: 0.85rem;">{{ row.clientName }}</span>
@@ -145,32 +158,35 @@
 
   <ng-template #durationTemplate let-row="row">
     <div>
-      <span class="d-block text-dark fw-medium" style="font-size: 0.85rem;">{{ getDuration(row.contractStartDate, row.contractEndDate) }}</span>
-      <span class="text-muted" style="font-size: 0.7rem;">{{ row.contractStartDate | date:'MMM d' }} - {{ row.contractEndDate | date:'MMM d, y' }}</span>
+      <span class="d-block text-dark fw-medium" style="font-size: 0.85rem;">{{ getDuration(row.contractStartDate,
+        row.contractEndDate) }}</span>
+      <span class="text-muted" style="font-size: 0.7rem;">{{ row.contractStartDate | date:'MMM d' }} - {{
+        row.contractEndDate | date:'MMM d, y' }}</span>
     </div>
   </ng-template>
 
   <ng-template #budgetTemplate let-row="row">
     <div>
       <span class="d-block text-success fw-bold">₹{{ row.estimatedBudget | number }}</span>
-      <span class="text-muted text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">{{ row.contractType }}</span>
+      <span class="text-muted text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">{{ row.contractType
+        }}</span>
     </div>
   </ng-template>
 
   <ng-template #statusTemplate let-row="row">
-    <app-badge [label]="row.status" 
-               [variant]="row.status === 'completed' || row.status === 'closed' ? 'success' : (row.status === 'in progress' ? 'primary' : 'warning')" 
-               appearance="subtle" [rounded]="true"></app-badge>
+    <app-badge [label]="row.status"
+      [variant]="row.status === 'completed' || row.status === 'closed' ? 'success' : (row.status === 'in progress' ? 'primary' : 'warning')"
+      appearance="subtle" [rounded]="true"></app-badge>
   </ng-template>
 
   <ng-template #actionsTemplate let-row="row">
     <div class="d-flex justify-content-center">
       @if (row.status === 'completed' || row.status === 'closed') {
-        <app-button variant="outline-success" [size]="'sm'" label="View Feedback" icon="bi bi-star"
-          [routerLink]="['/feedback-reports', row._id]"></app-button>
+      <app-button variant="outline-success" [size]="'sm'" label="View Feedback" icon="bi bi-star"
+        [routerLink]="['/feedback-reports', row._id]"></app-button>
       } @else {
-        <app-button variant="outline-primary" [size]="'sm'" label="Contract Diary" icon="bi bi-journal-text"
-          [routerLink]="['/contract-diary', row._id]"></app-button>
+      <app-button variant="outline-primary" [size]="'sm'" label="Contract Diary" icon="bi bi-journal-text"
+        [routerLink]="['/contract-diary', row._id]"></app-button>
       }
     </div>
   </ng-template>

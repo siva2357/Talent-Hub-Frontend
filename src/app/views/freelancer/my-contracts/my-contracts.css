@@ -1,19 +1,15 @@
 :host {
   --bg-color: #fafbfc;
   --primary-color: #0d6efd;
+  --purple-color: #a855f7;
 }
 
+/* =========================================================
+   BASE
+========================================================= */
 
-
-.text-purple { color: #6f42c1; }
-.bg-purple-soft { background-color: rgba(111, 66, 193, 0.1); }
-.text-warning-dark { color: #d39e00; }
-
-.cursor-pointer { cursor: pointer; }
-.hover-text-primary:hover { color: var(--primary-color) !important; }
-
-.nav-tabs .nav-link {
-  margin-bottom: -1px;
+* {
+  box-sizing: border-box;
 }
 
 .dashboard-container {
@@ -21,24 +17,620 @@
   background-color: #fcfbfe;
   position: relative;
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
-/* Background decorations */
-.bg-shape { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
-.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
-.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
-.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.05); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
-.concentric-circles { position: absolute; pointer-events: none; z-index: 0; top: 15%; left: 0; }
-.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.15); }
-.circle-1 { width: 300px; height: 300px; }
-.circle-2 { width: 500px; height: 500px; }
-.circle-3 { width: 700px; height: 700px; }
+.cursor-pointer {
+  cursor: pointer;
+}
 
-/* Premium Card (Glassmorphism) */
+.text-purple {
+  color: #6f42c1;
+}
+
+.bg-purple-soft {
+  background-color: rgba(111, 66, 193, 0.1);
+}
+
+.text-warning-dark {
+  color: #d39e00;
+}
+
+.hover-text-primary:hover {
+  color: var(--primary-color) !important;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.dashboard-container>.position-relative.z-1 {
+  width: 100%;
+  padding: 1.5rem !important;
+}
+
+
+/* =========================================================
+   BACKGROUND DECORATIONS
+========================================================= */
+
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.top-left {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+  top: -150px;
+  left: -150px;
+}
+
+.bottom-right {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+  bottom: -200px;
+  right: -200px;
+}
+
+.right-shape {
+  width: 400px;
+  height: 400px;
+  background: rgba(37, 99, 235, 0.05);
+  filter: blur(80px);
+  top: 30%;
+  right: -100px;
+  transform: translateY(-50%);
+}
+
+.concentric-circles {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  top: 15%;
+  left: 0;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(168, 85, 247, 0.15);
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+}
+
+.circle-2 {
+  width: 500px;
+  height: 500px;
+}
+
+.circle-3 {
+  width: 700px;
+  height: 700px;
+}
+
+
+/* =========================================================
+   GLASS CARD
+========================================================= */
+
 .glass-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
   border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
+
+  box-shadow:
+    0 15px 40px -10px rgba(74, 58, 255, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.05);
+
   border-radius: 20px !important;
+
+  width: 100%;
+}
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+.nav-tabs {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  scrollbar-width: thin;
+}
+
+.nav-tabs .nav-item {
+  flex: 0 0 auto;
+}
+
+.nav-tabs .nav-link {
+  margin-bottom: -1px;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+
+/* =========================================================
+   FILTER AREA
+========================================================= */
+
+.glass-card .row {
+  width: 100%;
+}
+
+.glass-card app-input-field {
+  display: block;
+  width: 100%;
+}
+
+.glass-card app-button {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   TABLE AREA
+========================================================= */
+
+/*
+   The table component should be allowed to scroll horizontally
+   rather than breaking the complete page on small screens.
+*/
+
+app-table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+
+/* =========================================================
+   COLUMN TEMPLATE CONTENT
+========================================================= */
+
+.dashboard-container ng-template {
+  max-width: 100%;
+}
+
+.dashboard-container h3 {
+  min-width: 0;
+}
+
+.dashboard-container img {
+  object-fit: cover;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width: 1400px) {
+
+  .dashboard-container>.position-relative.z-1 {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+}
+
+
+/* =========================================================
+   LAPTOP / TABLET
+========================================================= */
+
+@media (max-width: 1199.98px) {
+
+  .dashboard-container {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 1.25rem !important;
+  }
+
+  .top-left {
+    width: 400px;
+    height: 400px;
+  }
+
+  .bottom-right {
+    width: 450px;
+    height: 450px;
+  }
+
+  .right-shape {
+    width: 300px;
+    height: 300px;
+  }
+
+  .circle-1 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .circle-2 {
+    width: 400px;
+    height: 400px;
+  }
+
+  .circle-3 {
+    width: 550px;
+    height: 550px;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+  .dashboard-container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 1rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Filter
+  ----------------------------------------- */
+
+  .glass-card .row {
+    row-gap: 0.75rem;
+  }
+
+  .glass-card .col-lg-4.d-flex {
+    width: 100%;
+  }
+
+
+  /* -----------------------------------------
+     Active filters
+  ----------------------------------------- */
+
+  .glass-card .d-flex.align-items-center.flex-wrap {
+    align-items: flex-start !important;
+  }
+
+
+  /* -----------------------------------------
+     Table
+  ----------------------------------------- */
+
+  app-table {
+    overflow-x: auto;
+  }
+
+
+  /* -----------------------------------------
+     Background
+  ----------------------------------------- */
+
+  .concentric-circles {
+    left: -100px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .dashboard-container {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 0.875rem !important;
+  }
+
+
+  /* =====================================================
+     HEADER
+  ===================================================== */
+
+  .dashboard-container h1 {
+    font-size: 1.4rem !important;
+    line-height: 1.3;
+  }
+
+  .dashboard-container h1+p {
+    font-size: 0.78rem !important;
+    line-height: 1.5;
+  }
+
+
+  /* =====================================================
+     TABS
+  ===================================================== */
+
+  .nav-tabs {
+    margin-bottom: 1rem !important;
+    padding-bottom: 0;
+  }
+
+  .nav-tabs .nav-link {
+    padding: 0.65rem 0.75rem !important;
+    font-size: 0.78rem;
+  }
+
+  .nav-tabs .nav-link i {
+    font-size: 0.85rem;
+  }
+
+
+  /* =====================================================
+     FILTER CARD
+  ===================================================== */
+
+  .glass-card {
+    padding: 1rem !important;
+    border-radius: 16px !important;
+  }
+
+  .glass-card .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .glass-card .row>[class*="col-"] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+
+  /* Apply / Reset */
+
+  .glass-card .col-lg-4.d-flex {
+    flex-direction: row;
+    gap: 0.5rem !important;
+  }
+
+  .glass-card .col-lg-4.d-flex app-button {
+    width: 50%;
+    min-width: 0;
+  }
+
+
+  /* Active filters */
+
+  .glass-card .d-flex.align-items-center.flex-wrap {
+    gap: 0.4rem !important;
+  }
+
+  .glass-card .d-flex.align-items-center.flex-wrap>span:first-child {
+    width: 100%;
+    margin-bottom: 0.15rem;
+  }
+
+
+  /* =====================================================
+     TABLE
+  ===================================================== */
+
+  app-table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+
+  /* =====================================================
+     BACKGROUND DECORATIONS
+  ===================================================== */
+
+  .top-left {
+    width: 280px;
+    height: 280px;
+    top: -100px;
+    left: -120px;
+  }
+
+  .bottom-right {
+    width: 320px;
+    height: 320px;
+    bottom: -100px;
+    right: -120px;
+  }
+
+  .right-shape {
+    width: 220px;
+    height: 220px;
+    right: -100px;
+  }
+
+  .concentric-circles {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .dashboard-container {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 0.75rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Header
+  ----------------------------------------- */
+
+  .dashboard-container h1 {
+    font-size: 1.25rem !important;
+  }
+
+  .dashboard-container h1+p {
+    font-size: 0.75rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Tabs
+  ----------------------------------------- */
+
+  .nav-tabs .nav-link {
+    padding: 0.55rem 0.6rem !important;
+    font-size: 0.72rem;
+  }
+
+
+  /* -----------------------------------------
+     Filter
+  ----------------------------------------- */
+
+  .glass-card {
+    padding: 0.85rem !important;
+    border-radius: 14px !important;
+  }
+
+
+  /* -----------------------------------------
+     Filter buttons
+  ----------------------------------------- */
+
+  .glass-card .col-lg-4.d-flex {
+    gap: 0.4rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Active filter
+  ----------------------------------------- */
+
+  .glass-card .d-flex.align-items-center.flex-wrap {
+    margin-top: 0.75rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Table
+  ----------------------------------------- */
+
+  app-table {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 375px) {
+
+  .dashboard-container {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+  }
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 0.6rem !important;
+  }
+
+
+  .dashboard-container h1 {
+    font-size: 1.15rem !important;
+  }
+
+
+  .nav-tabs .nav-link {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    font-size: 0.68rem;
+  }
+
+
+  /* Stack filter buttons */
+
+  .glass-card .col-lg-4.d-flex {
+    flex-direction: column;
+  }
+
+  .glass-card .col-lg-4.d-flex app-button {
+    width: 100%;
+  }
+
+
+  /* Hide large decorative elements */
+
+  .top-left {
+    width: 220px;
+    height: 220px;
+  }
+
+  .bottom-right {
+    width: 250px;
+    height: 250px;
+  }
+
+  .right-shape {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+========================================================= */
+
+@media (hover: none) {
+
+  .hover-text-primary:hover {
+    color: inherit !important;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .nav-tabs .nav-link {
+    transition: none !important;
+  }
 }

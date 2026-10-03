@@ -4,32 +4,34 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
+
 import {
   TitleCasePipe
 } from '@angular/common';
-import { TimelineMode, TimelineStatus, TimelineStep } from '../../../../core/models/ui.model';
-export type {  TimelineMode, TimelineStatus, TimelineStep  };
 
+import {
+  TimelineMode,
+  TimelineStatus,
+  TimelineStep
+} from '../../../../core/models/ui.model';
+
+export type {
+  TimelineMode,
+  TimelineStatus,
+  TimelineStep
+};
 
 @Component({
-
   selector: 'app-timeline',
-
   standalone: true,
-
   imports: [TitleCasePipe],
-
   templateUrl: './timeline.html',
-
   styleUrl: './timeline.css'
-
 })
 export class Timeline {
 
-
   @Input()
   mode: TimelineMode = 'default';
-
 
   @Input()
   steps: TimelineStep[] = [];
@@ -40,6 +42,10 @@ export class Timeline {
   @Output()
   stepClicked = new EventEmitter<number>();
 
+
+  /* =====================================================
+     MODE
+  ===================================================== */
 
   get modeClass(): string {
 
@@ -58,30 +64,60 @@ export class Timeline {
         return '';
 
     }
-
   }
 
+
+  /* =====================================================
+     STATUS HELPERS
+  ===================================================== */
 
   isCompleted(step: TimelineStep): boolean {
-
     return step.status === 'completed';
-
   }
-
 
   isActive(step: TimelineStep): boolean {
-
     return step.status === 'active';
-
   }
-
 
   isUpcoming(step: TimelineStep): boolean {
-
     return step.status === 'upcoming';
+  }
+
+
+  /* =====================================================
+     CLICK BEHAVIOR
+  ===================================================== */
+
+  isStepClickable(step: TimelineStep): boolean {
+
+    return (
+      step.status === 'completed' ||
+      step.status === 'active'
+    );
 
   }
 
+
+  onStepClick(index: number): void {
+
+    const step = this.steps[index];
+
+    if (!step) {
+      return;
+    }
+
+    if (!this.isStepClickable(step)) {
+      return;
+    }
+
+    this.stepClicked.emit(index);
+
+  }
+
+
+  /* =====================================================
+     LINE STATES
+  ===================================================== */
 
   isLeftLineCompleted(index: number): boolean {
 
@@ -91,8 +127,14 @@ export class Timeline {
 
     const currentStep = this.steps[index];
 
-    return currentStep.status === 'completed' ||
-      currentStep.status === 'active';
+    if (!currentStep) {
+      return false;
+    }
+
+    return (
+      currentStep.status === 'completed' ||
+      currentStep.status === 'active'
+    );
 
   }
 
@@ -101,10 +143,18 @@ export class Timeline {
 
     const currentStep = this.steps[index];
 
+    if (!currentStep) {
+      return false;
+    }
+
     return currentStep.status === 'completed';
 
   }
 
+
+  /* =====================================================
+     ICON
+  ===================================================== */
 
   getStepIcon(step: TimelineStep): string {
 

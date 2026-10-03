@@ -1,15 +1,60 @@
+/* =========================================================
+   TALENT HUB - VERIFICATION RESULT PAGE
+   NO SCROLL / NO CARD / CENTERED / RESPONSIVE
+========================================================= */
+
+/* =========================================================
+   GLOBAL PAGE RESET
+========================================================= */
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden !important;
+}
+
+/* =========================================================
+   MAIN PAGE
+========================================================= */
+
 .otp-layout {
+  position: relative;
+  width: 100%;
   height: 100vh;
-  overflow: hidden;
+  height: 100dvh;
+  min-height: 0 !important;
+  margin: 0;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden !important;
+
+  background-color: #f9faff;
   font-family: 'Inter', 'Outfit', sans-serif;
-  background-color: #fcfbfe;
+  box-sizing: border-box;
+}
+
+.otp-layout *,
+.otp-layout *::before,
+.otp-layout *::after {
+  box-sizing: border-box;
 }
 
 .bg-light-purple {
   background-color: #f9faff;
 }
 
-/* Background decorations */
+/* =========================================================
+   BACKGROUND SHAPES
+========================================================= */
+
 .bg-shape {
   position: absolute;
   border-radius: 50%;
@@ -20,28 +65,41 @@
 .top-left {
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
   top: -100px;
   left: -100px;
+
+  background:
+    radial-gradient(circle,
+      rgba(168, 85, 247, 0.08) 0%,
+      rgba(255, 255, 255, 0) 70%);
 }
 
 .bottom-left {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
   bottom: -200px;
   left: -200px;
+
+  background:
+    radial-gradient(circle,
+      rgba(168, 85, 247, 0.08) 0%,
+      rgba(255, 255, 255, 0) 70%);
 }
 
 .right-shape {
   width: 350px;
   height: 350px;
-  background: rgba(168, 85, 247, 0.3);
-  filter: blur(80px);
   top: 50%;
   right: -150px;
   transform: translateY(-50%);
+
+  background: rgba(168, 85, 247, 0.3);
+  filter: blur(80px);
 }
+
+/* =========================================================
+   CONCENTRIC CIRCLES
+========================================================= */
 
 .concentric-circles,
 .concentric-circles-right {
@@ -56,8 +114,8 @@
 }
 
 .concentric-circles-right {
-  bottom: 0;
   right: 0;
+  bottom: 0;
 }
 
 .circle {
@@ -65,6 +123,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
   border-radius: 50%;
   border: 1px dashed rgba(168, 85, 247, 0.15);
 }
@@ -105,60 +164,832 @@
   border-color: rgba(168, 85, 247, 0.05);
 }
 
-.logo {
-  height: 80px;
+/* =========================================================
+   MAIN CONTENT
+   NO CARD
+========================================================= */
+
+.otp-layout>.form-container,
+.verification-result-container {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 480px;
+
+  margin: 0 auto !important;
+  padding: 0 16px;
+
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  flex-shrink: 1;
+}
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.verification-result-container .logo {
+  width: auto;
+  height: 72px;
+  max-width: 220px;
+
   object-fit: contain;
+  display: block;
+
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: 30px !important;
 }
 
-.icon-circle {
-  width: 100px;
-  height: 100px;
+/* =========================================================
+   RESULT ICON
+========================================================= */
+
+.verification-result-container .icon-circle {
+  width: 96px;
+  height: 96px;
+  flex: 0 0 96px;
+
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: 22px !important;
+
   border-radius: 50%;
-  background-color: #f1f5ff;
   border: 6px solid #f9faff;
-}
 
-.badge-icon {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-  width: 32px;
-  height: 32px;
+  background: #ffffff;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
+
+  position: relative;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.verification-result-container .icon-circle>i {
+  font-size: 3rem !important;
+  line-height: 1;
+}
+
+/* =========================================================
+   BADGE
+========================================================= */
+
+.verification-result-container .badge-icon {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   border: 3px solid #f9faff;
+  font-size: 0.85rem;
+}
+
+/* =========================================================
+   TYPOGRAPHY
+========================================================= */
+
+.verification-result-container h2 {
+  width: 100%;
+
+  margin: 0 0 10px !important;
+
+  font-size: 1.55rem !important;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+
+  text-align: center;
+}
+
+.verification-result-container p {
+  width: 100%;
+
+  margin: 0 0 24px !important;
+
+  font-size: 0.9rem;
+  line-height: 1.6;
+
+  text-align: center;
 }
 
 .text-primary {
   color: #4a3aff !important;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, #4a3aff, #2563eb);
-  border: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* =========================================================
+   APP-BUTTON
+   KEEP EXISTING HTML AND REUSABLE COMPONENT
+   NORMAL COMPACT BUTTON - NOT FORM WIDTH
+========================================================= */
+
+.verification-result-container app-button {
+  width: auto !important;
+  max-width: none !important;
+
+  display: inline-flex !important;
+
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto !important;
+
+  text-align: center;
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(74, 58, 255, 0.35);
-  background: linear-gradient(135deg, #3f31eb, #1d4ed8);
+.verification-result-container app-button.w-100,
+.verification-result-container app-button.d-block {
+  width: auto !important;
+  display: inline-flex !important;
 }
 
-.btn-danger {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  border: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.verification-result-container ::ng-deep app-button button {
+  width: auto !important;
+  min-width: 210px !important;
+  max-width: 280px !important;
+
+  height: 46px;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+
+  border-radius: 7px;
+
+  font-size: 0.9rem;
+  white-space: nowrap;
+
+  box-sizing: border-box;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.btn-danger:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.35);
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
+/* =========================================================
+   PRIMARY BUTTON
+========================================================= */
+
+.verification-result-container ::ng-deep app-button .btn-primary {
+  background:
+    linear-gradient(135deg,
+      #4a3aff,
+      #2563eb) !important;
+
+  border: none !important;
+  color: #ffffff !important;
 }
 
-.cursor-pointer {
-  cursor: pointer;
+.verification-result-container ::ng-deep app-button .btn-primary:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 16px rgba(74, 58, 255, 0.28);
+}
+
+/* =========================================================
+   DANGER BUTTON
+========================================================= */
+
+.verification-result-container ::ng-deep app-button .btn-danger {
+  background:
+    linear-gradient(135deg,
+      #ef4444,
+      #dc2626) !important;
+
+  border: none !important;
+  color: #ffffff !important;
+}
+
+.verification-result-container ::ng-deep app-button .btn-danger:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 16px rgba(239, 68, 68, 0.28);
+}
+
+/* Remove Bootstrap margin from app-button.
+   Spacing is controlled here instead. */
+.verification-result-container app-button.mb-4 {
+  margin-bottom: 0 !important;
+}
+
+/* =========================================================
+   BACK TO REGISTER TEXT LINK
+========================================================= */
+
+.verification-result-container>a {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: auto;
+
+  margin-top: 16px !important;
+  margin-left: auto;
+  margin-right: auto;
+
+  font-size: 0.82rem;
+  line-height: 1.4;
+
+  text-align: center;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.verification-result-container>a:hover {
+  color: #2563eb !important;
+  transform: translateX(-2px);
+}
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width: 1200px) {
+
+  .verification-result-container {
+    max-width: 500px;
+  }
+
+  .verification-result-container .logo {
+    height: 80px;
+  }
+
+  .verification-result-container .icon-circle {
+    width: 105px;
+    height: 105px;
+    flex-basis: 105px;
+  }
+
+  .verification-result-container .icon-circle>i {
+    font-size: 3rem !important;
+  }
+}
+
+/* =========================================================
+   LAPTOP
+========================================================= */
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+
+  .verification-result-container {
+    max-width: 470px;
+  }
+
+  .verification-result-container .logo {
+    height: 70px;
+  }
+
+  .verification-result-container .icon-circle {
+    width: 92px;
+    height: 92px;
+    flex-basis: 92px;
+  }
+
+  .verification-result-container .icon-circle>i {
+    font-size: 2.7rem !important;
+  }
+
+  .concentric-circles .circle-3 {
+    width: 600px;
+    height: 600px;
+  }
+
+  .concentric-circles-right .circle-3 {
+    width: 700px;
+    height: 700px;
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+  .otp-layout {
+    padding: 20px;
+  }
+
+  .verification-result-container {
+    max-width: 460px;
+  }
+
+  .verification-result-container .logo {
+    height: 65px;
+    margin-bottom: 28px !important;
+  }
+
+  .verification-result-container .icon-circle {
+    width: 90px;
+    height: 90px;
+    flex-basis: 90px;
+    margin-bottom: 20px !important;
+  }
+
+  .verification-result-container .icon-circle>i {
+    font-size: 2.6rem !important;
+  }
+
+  .verification-result-container .badge-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .top-left {
+    width: 320px;
+    height: 320px;
+    top: -90px;
+    left: -90px;
+  }
+
+  .bottom-left {
+    width: 400px;
+    height: 400px;
+    bottom: -170px;
+    left: -170px;
+  }
+
+  .right-shape {
+    width: 280px;
+    height: 280px;
+    right: -140px;
+    filter: blur(70px);
+  }
+
+  .concentric-circles .circle-3 {
+    width: 550px;
+    height: 550px;
+  }
+
+  .concentric-circles-right .circle-3 {
+    width: 650px;
+    height: 650px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .otp-layout {
+    width: 100%;
+    height: 100dvh;
+    min-height: 0 !important;
+
+    padding: 15px 12px;
+
+    justify-content: center !important;
+    overflow: hidden !important;
+  }
+
+  .verification-result-container {
+    width: 100%;
+    max-width: 420px;
+
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .verification-result-container .logo {
+    height: 52px;
+    max-width: 175px;
+    margin-bottom: 22px !important;
+  }
+
+  .verification-result-container .icon-circle {
+    width: 78px;
+    height: 78px;
+    flex-basis: 78px;
+
+    margin-bottom: 18px !important;
+    border-width: 5px;
+  }
+
+  .verification-result-container .icon-circle>i {
+    font-size: 2.25rem !important;
+  }
+
+  .verification-result-container .badge-icon {
+    width: 27px;
+    height: 27px;
+
+    right: 1px;
+    bottom: 1px;
+
+    font-size: 0.72rem;
+  }
+
+  .verification-result-container h2 {
+    font-size: 1.3rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  .verification-result-container p {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    margin-bottom: 20px !important;
+  }
+
+  .verification-result-container ::ng-deep app-button button {
+    min-width: 200px !important;
+    max-width: 260px !important;
+
+    height: 44px;
+
+    padding: 0 20px !important;
+
+    font-size: 0.82rem;
+  }
+
+  .verification-result-container>a {
+    margin-top: 14px !important;
+    font-size: 0.78rem;
+  }
+
+  .top-left {
+    width: 240px;
+    height: 240px;
+    top: -75px;
+    left: -75px;
+  }
+
+  .bottom-left {
+    width: 290px;
+    height: 290px;
+    bottom: -125px;
+    left: -125px;
+  }
+
+  .right-shape {
+    width: 210px;
+    height: 210px;
+    right: -115px;
+    filter: blur(60px);
+    opacity: 0.65;
+  }
+
+  .concentric-circles {
+    top: 8%;
+    left: -100px;
+  }
+
+  .concentric-circles .circle-1 {
+    width: 210px;
+    height: 210px;
+  }
+
+  .concentric-circles .circle-2 {
+    width: 340px;
+    height: 340px;
+  }
+
+  .concentric-circles .circle-3 {
+    width: 480px;
+    height: 480px;
+  }
+
+  .concentric-circles-right {
+    right: -115px;
+    bottom: -40px;
+  }
+
+  .concentric-circles-right .circle-1 {
+    width: 260px;
+    height: 260px;
+  }
+
+  .concentric-circles-right .circle-2 {
+    width: 400px;
+    height: 400px;
+  }
+
+  .concentric-circles-right .circle-3 {
+    width: 530px;
+    height: 530px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .otp-layout {
+    padding: 12px 10px;
+  }
+
+  .verification-result-container {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .verification-result-container .logo {
+    height: 46px;
+    max-width: 155px;
+    margin-bottom: 18px !important;
+  }
+
+  .verification-result-container .icon-circle {
+    width: 72px;
+    height: 72px;
+    flex-basis: 72px;
+
+    margin-bottom: 15px !important;
+  }
+
+  .verification-result-container .icon-circle>i {
+    font-size: 1.9rem !important;
+  }
+
+  .verification-result-container .badge-icon {
+    width: 24px;
+    height: 24px;
+
+    border-width: 2px;
+    font-size: 0.68rem;
+  }
+
+  .verification-result-container h2 {
+    font-size: 1.18rem !important;
+  }
+
+  .verification-result-container p {
+    font-size: 0.72rem;
+    line-height: 1.45;
+    margin-bottom: 18px !important;
+  }
+
+  .verification-result-container ::ng-deep app-button button {
+    min-width: 185px !important;
+    max-width: 240px !important;
+
+    height: 42px;
+
+    padding: 0 18px !important;
+
+    font-size: 0.78rem;
+  }
+
+  .verification-result-container>a {
+    margin-top: 12px !important;
+    font-size: 0.72rem;
+  }
+}
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 375px) {
+
+  .otp-layout {
+    padding: 8px;
+  }
+
+  .verification-result-container .logo {
+    height: 40px;
+    max-width: 145px;
+    margin-bottom: 14px !important;
+  }
+
+  .verification-result-container .icon-circle {
+    width: 64px;
+    height: 64px;
+    flex-basis: 64px;
+    margin-bottom: 12px !important;
+  }
+
+  .verification-result-container .icon-circle>i {
+    font-size: 1.65rem !important;
+  }
+
+  .verification-result-container .badge-icon {
+    width: 22px;
+    height: 22px;
+    font-size: 0.6rem;
+  }
+
+  .verification-result-container h2 {
+    font-size: 1.08rem !important;
+  }
+
+  .verification-result-container p {
+    font-size: 0.68rem;
+    margin-bottom: 15px !important;
+  }
+
+  .verification-result-container ::ng-deep app-button button {
+    min-width: 175px !important;
+    max-width: 220px !important;
+
+    height: 40px;
+
+    padding: 0 16px !important;
+
+    font-size: 0.75rem;
+  }
+}
+
+/* =========================================================
+   EXTRA SMALL PHONES
+========================================================= */
+
+@media (max-width: 340px) {
+
+  .otp-layout {
+    padding: 6px;
+  }
+
+  .verification-result-container .logo {
+    height: 36px;
+    margin-bottom: 10px !important;
+  }
+
+  .verification-result-container .icon-circle {
+    width: 58px;
+    height: 58px;
+    flex-basis: 58px;
+    margin-bottom: 10px !important;
+  }
+
+  .verification-result-container .icon-circle>i {
+    font-size: 1.5rem !important;
+  }
+
+  .verification-result-container .badge-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 0.55rem;
+  }
+
+  .verification-result-container h2 {
+    font-size: 1rem !important;
+  }
+}
+
+/* =========================================================
+   MOBILE LANDSCAPE
+========================================================= */
+
+@media (max-width: 767.98px) and (max-height: 600px) and (orientation: landscape) {
+
+  .otp-layout {
+    height: 100dvh;
+    min-height: 0 !important;
+
+    padding: 8px 15px;
+
+    justify-content: center !important;
+    overflow: hidden !important;
+  }
+
+  .verification-result-container .logo {
+    height: 32px;
+    margin-bottom: 8px !important;
+  }
+
+  .verification-result-container .icon-circle {
+    width: 52px;
+    height: 52px;
+    flex-basis: 52px;
+    margin-bottom: 8px !important;
+  }
+
+  .verification-result-container .icon-circle>i {
+    font-size: 1.35rem !important;
+  }
+
+  .verification-result-container .badge-icon {
+    width: 19px;
+    height: 19px;
+    font-size: 0.55rem;
+  }
+
+  .verification-result-container h2 {
+    font-size: 0.95rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .verification-result-container p {
+    font-size: 0.62rem;
+    line-height: 1.3;
+    margin-bottom: 8px !important;
+  }
+
+  .verification-result-container ::ng-deep app-button button {
+    min-width: 175px !important;
+    height: 36px;
+    padding: 0 14px !important;
+    font-size: 0.7rem;
+  }
+
+  .verification-result-container>a {
+    margin-top: 7px !important;
+    font-size: 0.65rem;
+  }
+}
+
+/* =========================================================
+   SHORT DESKTOP / LAPTOP
+========================================================= */
+
+@media (min-width: 768px) and (max-height: 700px) {
+
+  .otp-layout {
+    height: 100dvh;
+    min-height: 0 !important;
+
+    padding: 12px 20px;
+
+    justify-content: center !important;
+    overflow: hidden !important;
+  }
+
+  .verification-result-container .logo {
+    height: 50px;
+    margin-bottom: 15px !important;
+  }
+
+  .verification-result-container .icon-circle {
+    width: 72px;
+    height: 72px;
+    flex-basis: 72px;
+    margin-bottom: 12px !important;
+  }
+
+  .verification-result-container .icon-circle>i {
+    font-size: 2rem !important;
+  }
+
+  .verification-result-container .badge-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .verification-result-container h2 {
+    font-size: 1.3rem !important;
+    margin-bottom: 7px !important;
+  }
+
+  .verification-result-container p {
+    margin-bottom: 12px !important;
+    line-height: 1.4;
+  }
+
+  .verification-result-container ::ng-deep app-button button {
+    height: 42px;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.otp-layout a:focus-visible,
+.otp-layout app-button:focus-visible {
+  outline: 2px solid rgba(74, 58, 255, 0.25);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .verification-result-container ::ng-deep app-button button,
+  .verification-result-container>a {
+    transition: none !important;
+  }
 }

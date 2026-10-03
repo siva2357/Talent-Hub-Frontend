@@ -1,4 +1,4 @@
-<div class="dashboard-container position-relative p-4">
+<div class="dashboard-container position-relative ">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -58,15 +58,17 @@
                 label="" [value]="searchQueryProposals" (valueChange)="searchQueryProposals = $event"></app-input-field>
             </div>
             <div class="col-lg-3">
-              <app-input-field type="select" placeholder="Date Range" [options]="dateRangeOptions"
-                label="" [value]="selectedDateRangeProposals" (valueChange)="selectedDateRangeProposals = $event"></app-input-field>
+              <app-input-field type="select" placeholder="Date Range" [options]="dateRangeOptions" label=""
+                [value]="selectedDateRangeProposals"
+                (valueChange)="selectedDateRangeProposals = $event"></app-input-field>
             </div>
             <div class="col-lg-2">
-              <app-input-field type="select" placeholder="Status: All Status" [options]="proposalStatusOptions"
-                label="" [value]="selectedStatusProposals" (valueChange)="selectedStatusProposals = $event"></app-input-field>
+              <app-input-field type="select" placeholder="Status: All Status" [options]="proposalStatusOptions" label=""
+                [value]="selectedStatusProposals" (valueChange)="selectedStatusProposals = $event"></app-input-field>
             </div>
             <div class="col-lg-3 d-flex gap-2 align-items-start">
-              <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply" (clicked)="applyFiltersProposals()"></app-button>
+              <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply"
+                (clicked)="applyFiltersProposals()"></app-button>
               <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset"
                 icon="bi bi-arrow-clockwise" (clicked)="resetFiltersProposals()"></app-button>
             </div>
@@ -220,15 +222,16 @@
                 label="" [value]="searchQueryOffers" (valueChange)="searchQueryOffers = $event"></app-input-field>
             </div>
             <div class="col-lg-3">
-              <app-input-field type="select" placeholder="Date Range" [options]="dateRangeOptions"
-                label="" [value]="selectedDateRangeOffers" (valueChange)="selectedDateRangeOffers = $event"></app-input-field>
+              <app-input-field type="select" placeholder="Date Range" [options]="dateRangeOptions" label=""
+                [value]="selectedDateRangeOffers" (valueChange)="selectedDateRangeOffers = $event"></app-input-field>
             </div>
             <div class="col-lg-2">
-              <app-input-field type="select" placeholder="Status: All Status" [options]="offerStatusOptions"
-                label="" [value]="selectedStatusOffers" (valueChange)="selectedStatusOffers = $event"></app-input-field>
+              <app-input-field type="select" placeholder="Status: All Status" [options]="offerStatusOptions" label=""
+                [value]="selectedStatusOffers" (valueChange)="selectedStatusOffers = $event"></app-input-field>
             </div>
             <div class="col-lg-3 d-flex gap-2 align-items-start">
-              <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply" (clicked)="applyFiltersOffers()"></app-button>
+              <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply"
+                (clicked)="applyFiltersOffers()"></app-button>
               <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset"
                 icon="bi bi-arrow-clockwise" (clicked)="resetFiltersOffers()"></app-button>
             </div>

@@ -1,165 +1,600 @@
-.timeline-section { margin-bottom: 48px; }
-.timeline-section-title { font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 32px; }
-.timeline-divider { border: none; border-top: 1px solid #f3f4f6; margin: 32px 0; }
+/* =========================================================
+   TIMELINE BASE
+========================================================= */
+
+:host {
+    display: block;
+    width: 100%;
+}
+
+.timeline-wrapper {
+    width: 100%;
+    max-width: 100%;
+}
 
 .timeline-container {
     display: flex;
     width: 100%;
+    min-width: 0;
+    position: relative;
 }
 
+
+/* =========================================================
+   TIMELINE STEP
+========================================================= */
+
 .timeline-step {
-    flex: 1;
+    flex: 1 1 0;
+    min-width: 0;
+
     display: flex;
     flex-direction: column;
     align-items: center;
+
     text-align: center;
+
+    position: relative;
+
+    user-select: none;
+
+    cursor: default;
 }
+
+.timeline-step.clickable {
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   STATUS LABEL
+========================================================= */
 
 .timeline-title-top {
     font-size: 12px;
     font-weight: 600;
     color: #111827;
+
     margin-bottom: 16px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    max-width: 100%;
 }
+
+
+/* =========================================================
+   NODE WRAPPER
+========================================================= */
 
 .timeline-node-wrapper {
     display: flex;
     align-items: center;
+
     width: 100%;
+
     margin-bottom: 12px;
 }
 
+
+/* =========================================================
+   LINES
+========================================================= */
+
 .timeline-line {
-    flex: 1;
+    flex: 1 1 auto;
+
     height: 2px;
-    background-color: #9ca3af;
+
+    background-color: #d1d5db;
+
+    transition:
+        background-color 0.25s ease,
+        opacity 0.25s ease;
 }
 
 .timeline-line.completed-line {
     background-color: #22c55e;
 }
 
-.timeline-step:first-child .left-line { visibility: hidden; }
-.timeline-step:last-child .right-line { visibility: hidden; }
+.timeline-step:first-child .left-line {
+    visibility: hidden;
+}
 
-/* Default Node */
+.timeline-step:last-child .right-line {
+    visibility: hidden;
+}
+
+
+/* =========================================================
+   DEFAULT NODE
+========================================================= */
+
 .timeline-node {
     width: 24px;
     height: 24px;
+
+    flex: 0 0 24px;
+
     border-radius: 50%;
+
     border: 2px solid #9ca3af;
+
     background-color: #ffffff;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+
+    position: relative;
+
+    z-index: 2;
+
+    transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
+
+
+/* =========================================================
+   COMPLETED
+========================================================= */
 
 .timeline-step.completed .timeline-node {
     background-color: #22c55e;
     border-color: #22c55e;
+
     color: #ffffff;
-    font-size: 16px;
+
+    font-size: 14px;
 }
+
+.timeline-step.completed.clickable:hover .timeline-node {
+    transform: scale(1.08);
+
+    box-shadow:
+        0 0 0 5px rgba(34, 197, 94, 0.10);
+}
+
+
+/* =========================================================
+   ACTIVE
+========================================================= */
 
 .timeline-step.active .timeline-node {
     border-color: #2563eb;
     border-width: 2px;
 }
+
+.timeline-step.active.clickable:hover .timeline-node {
+    transform: scale(1.08);
+
+    box-shadow:
+        0 0 0 5px rgba(37, 99, 235, 0.10);
+}
+
 .timeline-inner-dot {
     width: 10px;
     height: 10px;
+
     background-color: #2563eb;
+
     border-radius: 50%;
 }
+
+
+/* =========================================================
+   UPCOMING
+========================================================= */
+
+.timeline-step.upcoming .timeline-node {
+    border-color: #d1d5db;
+    background-color: #ffffff;
+}
+
+.timeline-step.upcoming {
+    cursor: default;
+}
+
+
+/* =========================================================
+   FINAL NODE
+========================================================= */
 
 .final-node {
     border-color: #9ca3af;
 }
+
 .timeline-inner-dot-gray {
     width: 10px;
     height: 10px;
+
     border-radius: 50%;
+
     border: 2px solid #9ca3af;
 }
 
-/* Error / Skipped / Disabled */
-.timeline-step.error .timeline-node { border-color: #ef4444; }
-.timeline-inner-dot-error { width: 10px; height: 10px; background-color: #ef4444; border-radius: 50%; }
 
-.timeline-step.disabled .timeline-node.solid { background-color: #d1d5db; border-color: #d1d5db; }
+/* =========================================================
+   ERROR
+========================================================= */
 
-.timeline-step.skipped .timeline-node { border-color: #f59e0b; color: #f59e0b; font-size: 16px; }
+.timeline-step.error .timeline-node {
+    border-color: #ef4444;
+}
 
-/* Text Content */
+.timeline-inner-dot-error {
+    width: 10px;
+    height: 10px;
+
+    background-color: #ef4444;
+
+    border-radius: 50%;
+}
+
+
+/* =========================================================
+   DISABLED
+========================================================= */
+
+.timeline-step.disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.timeline-step.disabled .timeline-node.solid {
+    background-color: #d1d5db;
+    border-color: #d1d5db;
+}
+
+
+/* =========================================================
+   SKIPPED
+========================================================= */
+
+.timeline-step.skipped .timeline-node {
+    border-color: #f59e0b;
+
+    color: #f59e0b;
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   TEXT
+========================================================= */
+
+.timeline-content {
+    width: 100%;
+    min-width: 0;
+
+    padding: 0 6px;
+}
+
 .timeline-title {
     font-size: 13px;
     font-weight: 600;
+
     color: #6b7280;
-    margin-bottom: 4px;
+
+    line-height: 1.35;
+
+    overflow-wrap: anywhere;
 }
+
 .timeline-desc {
     font-size: 12px;
+
     color: #9ca3af;
+
+    line-height: 1.4;
+
+    margin-top: 4px;
+
+    overflow-wrap: anywhere;
 }
 
-.timeline-step.completed .timeline-title { color: #111827; }
-.timeline-step.active .timeline-title { color: #2563eb; }
-.timeline-step.error .timeline-title { color: #ef4444; }
-.timeline-step.skipped .timeline-title { color: #f59e0b; }
+.timeline-step.completed .timeline-title {
+    color: #111827;
+}
 
-/* 2. With Icons */
+.timeline-step.active .timeline-title {
+    color: #2563eb;
+}
+
+.timeline-step.error .timeline-title {
+    color: #ef4444;
+}
+
+.timeline-step.skipped .timeline-title {
+    color: #f59e0b;
+}
+
+
+/* =========================================================
+   WITH ICON
+========================================================= */
+
 .timeline-step.with-icon .timeline-node {
     width: 48px;
     height: 48px;
+
+    flex: 0 0 48px;
+
     border: none;
+
     font-size: 28px;
+
     color: #9ca3af;
+
     background: transparent;
+
     position: relative;
 }
-.timeline-step.with-icon .timeline-node i { z-index: 2; position: relative; }
+
+.timeline-step.with-icon .timeline-node i {
+    z-index: 2;
+    position: relative;
+}
+
 .timeline-step.with-icon .halo {
     position: absolute;
+
     top: 50%;
     left: 50%;
+
     width: 48px;
     height: 48px;
+
     transform: translate(-50%, -50%) scale(1.3);
+
     border-radius: 50%;
+
     z-index: 1;
 }
-.timeline-step.with-icon.completed .timeline-node { color: #22c55e; }
-.timeline-step.with-icon.completed .halo { background-color: #dcfce7; }
-.timeline-step.with-icon.active .timeline-node { color: #2563eb; }
-.timeline-step.with-icon.active .halo { background-color: #dbeafe; }
 
-/* 3. Minimal */
+.timeline-step.with-icon.completed .timeline-node {
+    color: #22c55e;
+}
+
+.timeline-step.with-icon.completed .halo {
+    background-color: #dcfce7;
+}
+
+.timeline-step.with-icon.active .timeline-node {
+    color: #2563eb;
+}
+
+.timeline-step.with-icon.active .halo {
+    background-color: #dbeafe;
+}
+
+
+/* =========================================================
+   MINIMAL
+========================================================= */
+
 .timeline-step.minimal .timeline-node {
     width: 16px;
     height: 16px;
+
+    flex: 0 0 16px;
 }
+
 .timeline-step.minimal.completed .timeline-node {
     background-color: #22c55e;
+
     color: #ffffff;
+
     font-size: 12px;
+
     border: none;
 }
+
 .timeline-step.minimal.active .timeline-node {
     background-color: #2563eb;
+
     border: none;
 }
-.timeline-step.minimal.active .timeline-inner-dot { display: none; }
 
-/* 4. Numbered */
+.timeline-step.minimal.active .timeline-inner-dot {
+    display: none;
+}
+
+
+/* =========================================================
+   NUMBERED
+========================================================= */
+
 .timeline-step.numbered .timeline-node {
     width: 32px;
     height: 32px;
+
+    flex: 0 0 32px;
+
     background-color: #9ca3af;
+
     border: none;
+
     color: #ffffff;
+
     font-size: 14px;
     font-weight: 600;
 }
-.timeline-step.numbered.completed .timeline-node { background-color: #22c55e; }
-.timeline-step.numbered.active .timeline-node { background-color: #2563eb; }
+
+.timeline-step.numbered.completed .timeline-node {
+    background-color: #22c55e;
+}
+
+.timeline-step.numbered.active .timeline-node {
+    background-color: #2563eb;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .timeline-container {
+        min-width: 620px;
+    }
+
+    .timeline-wrapper {
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        width: 100%;
+
+        padding-bottom: 8px;
+
+        scrollbar-width: thin;
+    }
+
+    .timeline-step {
+        min-width: 145px;
+    }
+
+    .timeline-title {
+        font-size: 12px;
+    }
+
+    .timeline-title-top {
+        font-size: 11px;
+        margin-bottom: 12px;
+    }
+
+    .timeline-desc {
+        font-size: 11px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 576px) {
+
+    .timeline-wrapper {
+        width: 100%;
+
+        overflow-x: auto;
+
+        padding-bottom: 10px;
+
+        /*
+         * Keeps the timeline usable instead of
+         * squeezing four steps into a tiny width.
+         */
+        -webkit-overflow-scrolling: touch;
+
+        scrollbar-width: thin;
+    }
+
+    .timeline-container {
+        min-width: 600px;
+    }
+
+    .timeline-step {
+        min-width: 140px;
+    }
+
+    .timeline-node {
+        width: 22px;
+        height: 22px;
+
+        flex-basis: 22px;
+    }
+
+    .timeline-inner-dot,
+    .timeline-inner-dot-gray,
+    .timeline-inner-dot-error {
+        width: 8px;
+        height: 8px;
+    }
+
+    .timeline-title {
+        font-size: 11px;
+
+        line-height: 1.3;
+
+        padding: 0 4px;
+    }
+
+    .timeline-desc {
+        font-size: 10px;
+    }
+
+    .timeline-title-top {
+        font-size: 10px;
+        margin-bottom: 10px;
+    }
+
+    .timeline-step.with-icon .timeline-node {
+        width: 42px;
+        height: 42px;
+
+        flex-basis: 42px;
+
+        font-size: 23px;
+    }
+
+    .timeline-step.with-icon .halo {
+        width: 42px;
+        height: 42px;
+    }
+
+    .timeline-step.numbered .timeline-node {
+        width: 28px;
+        height: 28px;
+
+        flex-basis: 28px;
+
+        font-size: 12px;
+    }
+
+    .timeline-step.minimal .timeline-node {
+        width: 14px;
+        height: 14px;
+
+        flex-basis: 14px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .timeline-container {
+        min-width: 560px;
+    }
+
+    .timeline-step {
+        min-width: 130px;
+    }
+
+    .timeline-title {
+        font-size: 10px;
+    }
+
+    .timeline-title-top {
+        font-size: 9px;
+    }
+
+    .timeline-line {
+        height: 1.5px;
+    }
+
+}

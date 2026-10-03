@@ -1,71 +1,147 @@
-<div class="otp-layout position-relative d-flex flex-column align-items-center justify-content-center bg-light-purple w-100">
+<div class="otp-layout position-relative d-flex flex-column align-items-center justify-content-center w-100">
+
     <!-- Decorative background elements -->
     <div class="bg-shape top-left"></div>
     <div class="bg-shape bottom-left"></div>
     <div class="bg-shape right-shape"></div>
-    
+
     <div class="concentric-circles z-0">
         <div class="circle circle-1"></div>
         <div class="circle circle-2"></div>
         <div class="circle circle-3"></div>
     </div>
+
     <div class="concentric-circles-right z-0">
         <div class="circle circle-1"></div>
         <div class="circle circle-2"></div>
         <div class="circle circle-3"></div>
     </div>
 
-    <!-- Main Content -->
-    <div class="form-container z-1 text-center w-100 px-3" style="max-width: 480px;">
-        <img src="/logo 2.png" alt="Talent Hub" class="logo mb-5" />
-        
-        <div class="icon-circle mx-auto bg-white d-flex align-items-center justify-content-center position-relative shadow-sm mb-4">
-            <i class="bi bi-envelope-fill text-primary" style="font-size: 2.5rem;"></i>
-            <div class="badge-icon bg-white text-primary rounded-circle shadow-sm">
+
+    <!-- OTP CONTENT - NO CARD -->
+    <div class="form-container otp-form-container z-1 text-center w-100">
+
+        <!-- Logo -->
+        <img src="/logo 2.png" alt="Talent Hub" class="logo mb-4" />
+
+        <!-- OTP Icon -->
+        <div class="icon-circle mx-auto d-flex align-items-center justify-content-center position-relative mb-4">
+
+            <i class="bi bi-envelope-fill text-primary"></i>
+
+            <div class="badge-icon text-primary rounded-circle">
                 <i class="bi bi-shield-lock-fill"></i>
             </div>
+
         </div>
-        
+
+
+        <!-- Heading -->
         <h2 class="fw-bold fs-3 text-dark mb-3">
-            {{ verificationType === 'forgot-password' ? 'Verify Reset Code' : 'Verify Your Email' }}
+            {{
+            verificationType === 'forgot-password'
+            ? 'Verify Reset Code'
+            : 'Verify Your Email'
+            }}
         </h2>
-        <p class="text-muted small mb-1">We've sent a 6-digit verification code to</p>
-        <p class="fw-bold text-primary mb-4" style="font-size: 0.95rem;">{{ email }} <i class="bi bi-pencil-fill ms-1 cursor-pointer"></i></p>
-        
-        <p class="text-muted small mb-3">Enter the 6-digit code below</p>
-        
+
+
+        <!-- Email -->
+        <p class="text-muted small mb-1">
+            We've sent a 6-digit verification code to
+        </p>
+
+        <p class="fw-bold text-primary email-text mb-4">
+            {{ email }}
+
+            <i class="bi bi-pencil-fill ms-1 cursor-pointer"></i>
+        </p>
+
+
+        <!-- Instruction -->
+        <p class="text-muted small mb-3">
+            Enter the 6-digit code below
+        </p>
+
+
+        <!-- OTP INPUTS -->
         <div class="otp-inputs-wrapper d-flex justify-content-center gap-2 mb-4">
-            <input type="text" class="form-control otp-input text-primary" [class.is-invalid]="errorMessage" maxlength="1" [(ngModel)]="otpDigits[0]" (input)="onOtpInput($event, 0)" (keydown)="onOtpKeyDown($event, 0)">
-            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1" [(ngModel)]="otpDigits[1]" (input)="onOtpInput($event, 1)" (keydown)="onOtpKeyDown($event, 1)">
-            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1" [(ngModel)]="otpDigits[2]" (input)="onOtpInput($event, 2)" (keydown)="onOtpKeyDown($event, 2)">
-            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1" [(ngModel)]="otpDigits[3]" (input)="onOtpInput($event, 3)" (keydown)="onOtpKeyDown($event, 3)">
-            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1" [(ngModel)]="otpDigits[4]" (input)="onOtpInput($event, 4)" (keydown)="onOtpKeyDown($event, 4)">
-            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1" [(ngModel)]="otpDigits[5]" (input)="onOtpInput($event, 5)" (keydown)="onOtpKeyDown($event, 5)">
+
+            <input type="text" class="form-control otp-input text-primary" [class.is-invalid]="errorMessage"
+                maxlength="1" [(ngModel)]="otpDigits[0]" (input)="onOtpInput($event, 0)"
+                (keydown)="onOtpKeyDown($event, 0)" />
+
+            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1"
+                [(ngModel)]="otpDigits[1]" (input)="onOtpInput($event, 1)" (keydown)="onOtpKeyDown($event, 1)" />
+
+            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1"
+                [(ngModel)]="otpDigits[2]" (input)="onOtpInput($event, 2)" (keydown)="onOtpKeyDown($event, 2)" />
+
+            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1"
+                [(ngModel)]="otpDigits[3]" (input)="onOtpInput($event, 3)" (keydown)="onOtpKeyDown($event, 3)" />
+
+            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1"
+                [(ngModel)]="otpDigits[4]" (input)="onOtpInput($event, 4)" (keydown)="onOtpKeyDown($event, 4)" />
+
+            <input type="text" class="form-control otp-input" [class.is-invalid]="errorMessage" maxlength="1"
+                [(ngModel)]="otpDigits[5]" (input)="onOtpInput($event, 5)" (keydown)="onOtpKeyDown($event, 5)" />
+
         </div>
-        
+
+
+        <!-- Error -->
         @if (errorMessage) {
-        <div class="alert alert-danger py-2 small mb-3">
+
+        <div class="alert alert-danger py-2 small mb-3 otp-error">
             {{ errorMessage }}
         </div>
+
         }
-        
+
+
+        <!-- Resend -->
         <p class="text-muted small mb-4">
-            Didn't receive the code? 
+
+            Didn't receive the code?
+
             @if (countdown > 0) {
-            <span>Resend OTP in <span class="text-primary fw-bold">{{ formatTime(countdown) }}</span></span>
+
+            <span>
+                Resend OTP in
+                <span class="text-primary fw-bold">
+                    {{ formatTime(countdown) }}
+                </span>
+            </span>
+
             } @else {
-            <a href="#" (click)="resendOtp($event)" class="fw-bold text-primary text-decoration-none" [class.text-muted]="isResending" [style.pointer-events]="isResending ? 'none' : 'auto'">Resend OTP</a> 
+
+            <a href="#" (click)="resendOtp($event)" class="fw-bold text-primary text-decoration-none"
+                [class.text-muted]="isResending" [style.pointer-events]="isResending ? 'none' : 'auto'">
+                Resend OTP
+            </a>
+
             }
+
         </p>
-        
-        <app-button type="button" variant="primary" size="lg" [block]="true" class="w-100 d-block mb-4" (clicked)="verify()" [loading]="isLoading || isResending" label="Verify & Continue">
+
+
+        <!-- Verify -->
+        <app-button type="button" variant="primary" size="lg" [block]="true" class="w-100 d-block mb-4 verify-button"
+            (clicked)="verify()" [loading]="isLoading || isResending" label="Verify & Continue">
+
             @if (!isLoading && !isResending) {
             <i class="bi bi-arrow-right me-2"></i>
             }
+
         </app-button>
-        
+
+
+        <!-- Back -->
         <a routerLink="/login" class="text-primary text-decoration-none fw-bold small">
-            <i class="bi bi-arrow-left me-1"></i> Back to Login
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Login
         </a>
+
     </div>
+
 </div>

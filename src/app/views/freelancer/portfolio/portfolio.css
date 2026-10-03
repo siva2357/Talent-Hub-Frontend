@@ -4,6 +4,22 @@
 }
 
 
+/* =========================================================
+   BASE
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+.dashboard-container {
+  font-family: 'Inter', 'Outfit', sans-serif;
+  background-color: #fcfbfe;
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
 
 .text-purple {
   color: #6f42c1;
@@ -21,14 +37,79 @@
   color: white;
 }
 
-.dashboard-container {
-  font-family: 'Inter', 'Outfit', sans-serif;
-  background-color: #fcfbfe;
-  position: relative;
-  min-height: 100vh;
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.dashboard-container>.position-relative.z-1 {
+  width: 100%;
+  padding: 1.5rem !important;
 }
 
-/* Background decorations */
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.dashboard-container h1 {
+  line-height: 1.3;
+}
+
+.dashboard-container h1 i {
+  flex-shrink: 0;
+}
+
+.dashboard-container .d-flex.justify-content-between.align-items-center.mb-4 {
+  gap: 1rem;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.dashboard-container app-table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+.dashboard-container app-table {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   PORTFOLIO MEDIA
+========================================================= */
+
+.dashboard-container .object-fit-cover {
+  object-fit: cover;
+}
+
+.dashboard-container img {
+  max-width: 100%;
+}
+
+
+/* =========================================================
+   PORTFOLIO CONTENT
+========================================================= */
+
+.dashboard-container h3 {
+  min-width: 0;
+}
+
+.dashboard-container .d-flex.flex-wrap {
+  max-width: 100%;
+}
+
+
+/* =========================================================
+   BACKGROUND DECORATIONS
+========================================================= */
+
 .bg-shape {
   position: absolute;
   border-radius: 50%;
@@ -39,7 +120,9 @@
 .top-left {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
   top: -150px;
   left: -150px;
 }
@@ -47,7 +130,9 @@
 .bottom-right {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
   bottom: -200px;
   right: -200px;
 }
@@ -95,9 +180,408 @@
 }
 
 
-/* Fix nested app-dropdown alignment inside bootstrap dropdown wrapper */
+/* =========================================================
+   DROPDOWN
+========================================================= */
+
 :host ::ng-deep app-dropdown .dropdown-menu {
   position: static !important;
   display: block !important;
   margin-top: 0 !important;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width: 1400px) {
+
+  .dashboard-container>.position-relative.z-1 {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+}
+
+
+/* =========================================================
+   LAPTOP
+========================================================= */
+
+@media (max-width: 1199.98px) {
+
+  .dashboard-container {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 1.25rem !important;
+  }
+
+  .top-left {
+    width: 400px;
+    height: 400px;
+  }
+
+  .bottom-right {
+    width: 450px;
+    height: 450px;
+  }
+
+  .right-shape {
+    width: 300px;
+    height: 300px;
+  }
+
+  .circle-1 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .circle-2 {
+    width: 400px;
+    height: 400px;
+  }
+
+  .circle-3 {
+    width: 550px;
+    height: 550px;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+  .dashboard-container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 1rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Header
+  ----------------------------------------- */
+
+  .dashboard-container .d-flex.justify-content-between.align-items-center.mb-4 {
+    align-items: flex-start !important;
+  }
+
+
+  /* -----------------------------------------
+     Table
+  ----------------------------------------- */
+
+  .dashboard-container app-table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+
+  /* -----------------------------------------
+     Decorative elements
+  ----------------------------------------- */
+
+  .concentric-circles {
+    left: -100px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .dashboard-container {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 0.875rem !important;
+  }
+
+
+  /* =====================================================
+     HEADER
+  ===================================================== */
+
+  .dashboard-container .d-flex.justify-content-between.align-items-center.mb-4 {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+
+  .dashboard-container h1 {
+    font-size: 1.4rem !important;
+    line-height: 1.3;
+  }
+
+  .dashboard-container h1 i {
+    font-size: 0.85rem !important;
+  }
+
+  .dashboard-container h1+p {
+    font-size: 0.78rem !important;
+    line-height: 1.5;
+  }
+
+
+  /* Add Project button */
+
+  .dashboard-container .d-flex.justify-content-between.align-items-center.mb-4>app-button {
+    width: 100%;
+  }
+
+
+  /* =====================================================
+     TABLE
+  ===================================================== */
+
+  .dashboard-container app-table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+
+  /* =====================================================
+     PORTFOLIO MEDIA
+  ===================================================== */
+
+  .dashboard-container .rounded-3.bg-light.border {
+    width: 65px !important;
+    height: 45px !important;
+    flex-shrink: 0;
+  }
+
+
+  /* =====================================================
+     PORTFOLIO TITLE
+  ===================================================== */
+
+  .dashboard-container h3.fs-6 {
+    font-size: 0.85rem !important;
+    line-height: 1.35;
+  }
+
+
+  /* =====================================================
+     TAGS
+  ===================================================== */
+
+  .dashboard-container .d-flex.flex-wrap.gap-1 {
+    gap: 0.25rem !important;
+  }
+
+
+  /* =====================================================
+     ACTION DROPDOWN
+  ===================================================== */
+
+  .dashboard-container .dropdown {
+    position: relative;
+  }
+
+
+  /* =====================================================
+     BACKGROUND
+  ===================================================== */
+
+  .top-left {
+    width: 280px;
+    height: 280px;
+    top: -100px;
+    left: -120px;
+  }
+
+  .bottom-right {
+    width: 320px;
+    height: 320px;
+    bottom: -100px;
+    right: -120px;
+  }
+
+  .right-shape {
+    width: 220px;
+    height: 220px;
+    right: -100px;
+  }
+
+  .concentric-circles {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .dashboard-container {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 0.75rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Header
+  ----------------------------------------- */
+
+  .dashboard-container h1 {
+    font-size: 1.25rem !important;
+  }
+
+  .dashboard-container h1+p {
+    font-size: 0.74rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Add Project button
+  ----------------------------------------- */
+
+  .dashboard-container .d-flex.justify-content-between.align-items-center.mb-4>app-button {
+    width: 100%;
+  }
+
+
+  /* -----------------------------------------
+     Table
+  ----------------------------------------- */
+
+  .dashboard-container app-table {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+
+  /* -----------------------------------------
+     Media
+  ----------------------------------------- */
+
+  .dashboard-container .rounded-3.bg-light.border {
+    width: 55px !important;
+    height: 40px !important;
+  }
+
+
+  /* -----------------------------------------
+     Title
+  ----------------------------------------- */
+
+  .dashboard-container h3.fs-6 {
+    font-size: 0.8rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Background
+  ----------------------------------------- */
+
+  .top-left {
+    width: 240px;
+    height: 240px;
+  }
+
+  .bottom-right {
+    width: 280px;
+    height: 280px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 375px) {
+
+  .dashboard-container {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+  }
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 0.6rem !important;
+  }
+
+
+  .dashboard-container h1 {
+    font-size: 1.15rem !important;
+  }
+
+  .dashboard-container h1 i {
+    font-size: 0.75rem !important;
+  }
+
+
+  /* Portfolio media */
+
+  .dashboard-container .rounded-3.bg-light.border {
+    width: 50px !important;
+    height: 36px !important;
+  }
+
+
+  /* Reduce decorative background */
+
+  .top-left {
+    width: 200px;
+    height: 200px;
+  }
+
+  .bottom-right {
+    width: 230px;
+    height: 230px;
+  }
+
+  .right-shape {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+========================================================= */
+
+@media (hover: none) {
+
+  .hover-text-primary:hover {
+    color: inherit !important;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
 }

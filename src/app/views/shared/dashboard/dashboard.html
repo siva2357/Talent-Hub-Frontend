@@ -1,4 +1,4 @@
-<div class="dashboard-container position-relative p-2 p-md-4">
+<div class="dashboard-container position-relative p-2">
   <!-- Decorative background wrapper to prevent overflow -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -14,7 +14,7 @@
 
 
 
-  <div class="position-relative z-1 mx-auto mt-2 mt-md-4" style="max-width: 1400px;">
+  <div class="position-relative z-1 mt-2 mt-md-4">
 
     @if (role === 'admin') {
     <!-- Header Section -->
@@ -244,7 +244,7 @@
     <!-- Top Stats Row -->
     <section class="row g-3 mb-5">
       @for (stat of clientStats; track stat.title) {
-      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+      <div class="col-12 col-sm-6 col-lg-3 ">
         <app-stat-card [stat]="stat"></app-stat-card>
       </div>
       }

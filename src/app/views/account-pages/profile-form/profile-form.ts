@@ -12,6 +12,7 @@ import { FileUpload } from '../../../library/shared/components/file-upload/file-
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
 import { Timeline } from '../../../library/shared/components/timeline/timeline';
 import { TimelineStep } from '../../../core/models/ui.model';
+import { MasterDataService } from '../../../core/services/master-data.service';
 
 @Component({
   selector: 'app-profile-form',
@@ -33,12 +34,25 @@ export class ProfileForm implements OnInit {
 
   profileForm!: FormGroup;
 
+  masterData: any = {};
+
+  genderOptions: any[] = [];
+  companyTypeOptions: any[] = [];
+  industryOptions: any[] = [];
+  availabilityOptions: any[] = [];
+  socialPlatformOptions: any[] = [];
+  languageOptions: any[] = [];
+  languageProficiencyOptions: any[] = [];
+  countryOptions: any[] = [];
+  stateOptions: any[] = [];
+  cityOptions: any[] = [];
+
   constructor(
     private tokenService: TokenService,
     private profileService: ProfileService,
-    private fileService: FileService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private masterDataService: MasterDataService,
   ) { }
 
   get timelineSteps(): TimelineStep[] {
@@ -63,19 +77,37 @@ export class ProfileForm implements OnInit {
   }
 
   onTimelineStepClicked(index: number): void {
-    this.currentStep = index + 1;
+
+    const targetStep = index + 1;
+
+    // Don't allow jumping to future steps
+    if (targetStep > this.currentStep) {
+      return;
+    }
+
+    this.currentStep = targetStep;
+
+    this.errorMessage = '';
   }
+
+
+
 
   ngOnInit(): void {
     const userRole = this.tokenService.getRole();
+
     if (userRole) {
-      this.role = userRole.toLowerCase(); // 'client' or 'freelancer'
+      this.role = userRole.toLowerCase();
+
       this.initForm();
+      this.loadMasterData();
 
       this.isLoading = true;
+
       this.profileService.getMyProfile().subscribe({
         next: (res) => {
           this.isLoading = false;
+
           if (res.success && res.user) {
             this.profileForm.get('basicInformation')?.patchValue({
               fullName: res.user.fullName || '',
@@ -88,10 +120,13 @@ export class ProfileForm implements OnInit {
           console.error('Failed to load user details for pre-fill', err);
         }
       });
+
     } else {
       this.router.navigate(['/login']);
     }
   }
+
+
 
   initForm(): void {
     let professionalDetails: FormGroup;
@@ -131,6 +166,40 @@ export class ProfileForm implements OnInit {
       languages: this.fb.array([])
     });
   }
+
+  loadMasterData(): void {
+    this.masterDataService.getAllMasterData().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.masterData = res.data;
+
+          this.genderOptions = this.mapOptions(res.data.Gender);
+          this.companyTypeOptions = this.mapOptions(res.data.CompanyTypes);
+          this.industryOptions = this.mapOptions(res.data.Industries);
+          this.availabilityOptions = this.mapOptions(res.data.Availability);
+          this.socialPlatformOptions = this.mapOptions(res.data.SocialMediaPlatforms);
+          this.languageOptions = this.mapOptions(res.data.Languages);
+          this.languageProficiencyOptions = this.mapOptions(res.data.LanguageProficiency);
+          this.countryOptions = this.mapOptions(res.data.Countries);
+          this.stateOptions = this.mapOptions(res.data.States);
+          this.cityOptions = this.mapOptions(res.data.Cities);
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load master data', err);
+        this.errorMessage = 'Failed to load profile options. Please try again.';
+      }
+    });
+  }
+
+
+  mapOptions(options: any[] = []): any[] {
+    return options.map(option => ({
+      label: option.value,
+      value: option.key
+    }));
+  }
+
 
   getValidationState(controlName: string, groupName: string = 'basicInformation'): 'success' | 'error' | 'none' {
     const group = this.profileForm.get(groupName);

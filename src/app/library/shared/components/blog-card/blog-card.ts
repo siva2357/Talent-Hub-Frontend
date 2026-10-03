@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Blog } from '../../../../core/models/blog.model';
 
-
-
 @Component({
   selector: 'app-blog-card',
   standalone: true,
@@ -17,6 +15,11 @@ export class BlogCard {
   @Output()
   viewDetails = new EventEmitter<string>();
 
+
+  // ============================================
+  // VIEW DETAILS
+  // ============================================
+
   onViewDetails(): void {
 
     if (!this.blog?._id) {
@@ -25,6 +28,11 @@ export class BlogCard {
 
     this.viewDetails.emit(this.blog._id);
   }
+
+
+  // ============================================
+  // DATE
+  // ============================================
 
   formatDate(date?: string): string {
 
@@ -45,12 +53,67 @@ export class BlogCard {
     });
   }
 
-  getReadTime(): string {
 
-    if (this.blog?.readTime) {
-      return `${this.blog.readTime} min read`;
+  // ============================================
+  // CONTENT → EXCERPT
+  // ============================================
+
+  getExcerpt(): string {
+
+    if (!this.blog?.content) {
+      return '';
     }
 
-    return '5 min read';
+    // Remove HTML if content contains rich text
+    const plainText = this.blog.content
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    if (!plainText) {
+      return '';
+    }
+
+    // Keep card description short
+    if (plainText.length <= 150) {
+      return plainText;
+    }
+
+    return `${plainText.substring(0, 150).trim()}...`;
   }
+
+
+  // ============================================
+  // CALCULATE READ TIME
+  // ============================================
+
+  getReadTime(): string {
+
+    if (!this.blog?.content) {
+      return '1 min read';
+    }
+
+    const plainText = this.blog.content
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    if (!plainText) {
+      return '1 min read';
+    }
+
+    const words = plainText
+      .split(/\s+/)
+      .filter(Boolean)
+      .length;
+
+    // Average reading speed = 200 words/minute
+    const minutes = Math.max(
+      1,
+      Math.ceil(words / 200)
+    );
+
+    return `${minutes} min read`;
+  }
+
 }
