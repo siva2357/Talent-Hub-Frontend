@@ -1,3 +1,4 @@
+@if (totalItems > 0) {
 <div class="pagination-container">
 
     <!-- LEFT: Page Size -->
@@ -6,7 +7,7 @@
 
     <div class="pagination-page-size">
 
-        <span>Show</span>
+        <span class="pagination-page-size-label pagination-page-size-prefix">Show</span>
 
         <select class="form-select form-select-sm" [value]="pageSize" (change)="onPageSizeChange($event)">
 
@@ -20,7 +21,7 @@
 
         </select>
 
-        <span>entries</span>
+        <span class="pagination-page-size-label pagination-page-size-suffix">entries</span>
 
     </div>
 
@@ -159,3 +160,4 @@
     </nav>
 
 </div>
+}

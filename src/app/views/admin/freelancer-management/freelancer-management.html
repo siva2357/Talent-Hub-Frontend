@@ -11,20 +11,16 @@
     </div>
   </div>
 
-  <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="position-relative z-1 glass-card p-4 mx-auto" style="max-width: 1400px;">
+  <!-- Main Content Wrapper -->
+  <div class="position-relative z-1 mx-auto w-100" style="max-width: 1400px;">
     <!-- Header -->
     <header class="mb-4">
-      <h1 class="fw-bold fs-4 mb-1">Freelancer Management</h1>
+      <h1 class="fw-bold fs-4 mb-1 text-dark">Freelancer Management</h1>
       <p class="text-muted small mb-0">Audit freelancer activities, spent volumes, and configure access settings.</p>
     </header>
 
 
 
-    <!-- Filter Section -->
-    <!-- =========================
-     FILTER SECTION
-========================= -->
     <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75 freelancer-filter-section">
 
       <div class="card-body p-4">
@@ -90,23 +86,10 @@
     </section>
 
     <!-- Data Table Section -->
-    <!-- =========================
-     FREELANCER DATA SECTION
-========================= -->
-    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75 freelancer-data-section">
+    <div class="desktop-table-view">
 
-      <div class="card-body p-0">
-
-
-        <!-- =====================================================
-         DESKTOP TABLE
-         1200px+
-    ====================================================== -->
-
-        <div class="desktop-table-view">
-
-          <app-table [columns]="columns" [data]="(paginatedFreelancers$ | async) || []">
-          </app-table>
+      <app-table [columns]="columns" [data]="(paginatedFreelancers$ | async) || []">
+      </app-table>
 
 
           @if (freelancers$ | async; as list) {
@@ -360,26 +343,6 @@
               </div>
 
 
-              <!-- =========================
-                     CARD FOOTER
-                ========================== -->
-
-              <div class="freelancer-card-footer">
-
-                <span class="freelancer-record-number">
-                  Freelancer #{{ freelancer.id }}
-                </span>
-
-                <button type="button" class="view-freelancer-button" (click)="viewFreelancer(freelancer)">
-
-                  View Details
-
-                  <i class="bi bi-arrow-right"></i>
-
-                </button>
-
-              </div>
-
             </article>
 
             }
@@ -391,7 +354,7 @@
 
           <div class="responsive-pagination">
 
-            <app-pagination [totalItems]="freelancers.length" [pageSize]="(pageSize$ | async)!"
+            <app-pagination [totalItems]="(freelancers$ | async)?.length || 0" [pageSize]="(pageSize$ | async)!"
               [currentPage]="(currentPage$ | async)!" (pageChange)="currentPage$.next($event)"
               (pageSizeChange)="onPageSizeChange($event)">
             </app-pagination>
@@ -421,14 +384,5 @@
           }
 
         </div>
-
-      </div>
-
-    </section>
   </div>
 </div>
-
-<app-modal [open]="isConfirmModalOpen" [title]="confirmModalTitle" [message]="confirmModalMessage"
-  [confirmLabel]="confirmModalConfirmLabel" [confirmVariant]="confirmModalConfirmVariant" size="sm"
-  (confirmed)="onConfirmAction()" (closed)="closeConfirmModal()" (cancelled)="closeConfirmModal()">
-</app-modal>

@@ -13,7 +13,7 @@
 </ng-template>
 
 
-<div class="dashboard-container">
+<div class="dashboard-container p-2 p-sm-3 p-md-4">
 
   <!-- =====================================================
        DECORATIVE BACKGROUND
@@ -163,128 +163,124 @@
 
     <section class="report-section">
 
-      <div class="report-card table-card">
+      <!-- Section Header -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
 
-        <!-- Section Header -->
-        <div class="report-card-header table-header">
+        <h2 class="fs-6 fw-bold text-dark mb-0">
+          <i class="bi bi-table text-primary me-2"></i>
+          Detailed Records
+        </h2>
 
-          <h2>
-            <i class="bi bi-table text-primary"></i>
-            Detailed Records
-          </h2>
+        <app-badge [label]="(data?.tableData?.length || 0) + ' Records'" appearance="subtle" variant="secondary"
+          [rounded]="true">
+        </app-badge>
 
-          <app-badge [label]="(data?.tableData?.length || 0) + ' Records'" appearance="subtle" variant="secondary"
-            [rounded]="true">
-          </app-badge>
-
-        </div>
+      </div>
 
 
-        <!-- =================================================
-         DESKTOP + TABLET TABLE
-         >= 768px
-         ================================================= -->
+      <!-- =================================================
+       DESKTOP + TABLET TABLE
+       >= 768px
+       ================================================= -->
 
-        <div class="desktop-table-view">
+      <div class="desktop-table-view">
 
-          <div class="table-responsive-wrapper">
+        <div class="table-responsive-wrapper">
 
-            <app-table [columns]="tableColumns" [data]="paginatedData" [loading]="isLoading">
-            </app-table>
-
-          </div>
+          <app-table [columns]="tableColumns" [data]="paginatedData" [loading]="isLoading">
+          </app-table>
 
         </div>
 
+      </div>
 
-        <!-- =================================================
-         MOBILE CARD VIEW
-         < 768px
-         ================================================= -->
 
-        <div class="mobile-records-view">
+      <!-- =================================================
+       MOBILE CARD VIEW
+       < 768px
+       ================================================= -->
 
-          @if (paginatedData.length > 0) {
+      <div class="mobile-records-view">
 
-          @for (row of paginatedData; track $index) {
+        @if (paginatedData.length > 0) {
 
-          <article class="record-card">
+        @for (row of paginatedData; track $index) {
 
-            @for (column of tableColumns; track column.field) {
+        <article class="record-card">
 
-            <div class="record-field">
+          @for (column of tableColumns; track column.field) {
 
-              <span class="record-label">
-                {{ column.headerName }}
+          <div class="record-field">
+
+            <span class="record-label">
+              {{ column.headerName }}
+            </span>
+
+            <div class="record-value">
+
+              @if (isBadge(row[column.field])) {
+
+              <app-badge [label]="row[column.field]" appearance="subtle" variant="primary" class="text-capitalize">
+              </app-badge>
+
+              } @else {
+
+              <span [ngClass]="{
+                      'fw-bold text-dark':
+                        tableColumns.length > 0 &&
+                        tableColumns[0].field === column.field,
+
+                      'text-muted':
+                        tableColumns.length === 0 ||
+                        tableColumns[0].field !== column.field
+                    }">
+
+                {{ row[column.field] }}
+
               </span>
 
-              <div class="record-value">
-
-                @if (isBadge(row[column.field])) {
-
-                <app-badge [label]="row[column.field]" appearance="subtle" variant="primary" class="text-capitalize">
-                </app-badge>
-
-                } @else {
-
-                <span [ngClass]="{
-                        'fw-bold text-dark':
-                          tableColumns.length > 0 &&
-                          tableColumns[0].field === column.field,
-
-                        'text-muted':
-                          tableColumns.length === 0 ||
-                          tableColumns[0].field !== column.field
-                      }">
-
-                  {{ row[column.field] }}
-
-                </span>
-
-                }
-
-              </div>
+              }
 
             </div>
 
-            }
-
-          </article>
-
-          }
-
-          } @else {
-
-          <div class="mobile-empty-state">
-
-            <i class="bi bi-inbox"></i>
-
-            <p>No records available</p>
-
           </div>
 
           }
 
-        </div>
+        </article>
 
+        }
 
-        <!-- =================================================
-         PAGINATION
-         ================================================= -->
+        } @else {
 
-        @if (data?.tableData?.length > 0) {
+        <div class="mobile-empty-state">
 
-        <div class="pagination-wrapper">
+          <i class="bi bi-inbox"></i>
 
-          <app-pagination [totalItems]="data?.tableData?.length || 0" [pageSize]="pageSize" [currentPage]="currentPage"
-            (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
-          </app-pagination>
+          <p>No records available</p>
 
         </div>
 
         }
 
       </div>
+
+
+      <!-- =================================================
+       PAGINATION
+       ================================================= -->
+
+      @if (data?.tableData?.length > 0) {
+
+      <div class="pagination-wrapper pt-3">
+
+        <app-pagination [totalItems]="data?.tableData?.length || 0" [pageSize]="pageSize" [currentPage]="currentPage"
+          (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
+        </app-pagination>
+
+      </div>
+
+      }
 
     </section>
 

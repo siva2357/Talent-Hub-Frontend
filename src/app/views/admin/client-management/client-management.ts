@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
+import { ModalService } from '../../../core/services/ui/modal.service';
 import { Table } from '../../../library/ui/components/table/table';
 import { Badge } from '../../../library/ui/components/badge/badge';
 import { Button } from '../../../library/ui/components/button/button';
@@ -9,7 +10,6 @@ import { InputField } from '../../../library/ui/components/input-field/input-fie
 import { Chip } from '../../../library/ui/components/chip/chip';
 import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
 import { Pagination } from '../../../library/ui/components/pagination/pagination';
-import { Modal } from '../../../library/ui/components/modal/modal';
 import { TableColumn } from '../../../core/models/ui.model';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { map, debounceTime } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { map, debounceTime } from 'rxjs/operators';
 @Component({
   selector: 'app-client-management',
   standalone: true,
-  imports: [CommonModule, Table, Badge, Button, FormsModule, InputField, Chip, Dropdown, Pagination, Modal],
+  imports: [CommonModule, Table, Badge, Button, FormsModule, InputField, Chip, Dropdown, Pagination],
   templateUrl: './client-management.html',
   styleUrl: './client-management.css'
 })
@@ -49,14 +49,10 @@ export class ClientManagement implements OnInit, AfterViewInit, OnDestroy {
 
   statusOptions: any[] = [];
 
-  isConfirmModalOpen = false;
-  confirmModalTitle = '';
-  confirmModalMessage = '';
-  confirmModalConfirmLabel = 'Confirm';
-  confirmModalConfirmVariant: 'primary' | 'danger' | 'warning' | 'success' | 'secondary' = 'primary';
-  pendingAction: { type: 'status', id: string, newStatus?: string } | null = null;
-
-  constructor(private adminService: AdminService) { }
+  constructor(
+    private adminService: AdminService,
+    private modalService: ModalService
+  ) { }
 
   ngOnInit() {
     this.clients$ = combineLatest([
@@ -179,35 +175,56 @@ export class ClientManagement implements OnInit, AfterViewInit, OnDestroy {
     this.currentPage$.next(1);
   }
 
-  updateStatus(clientId: string, newStatus: string) {
-    this.pendingAction = { type: 'status', id: clientId, newStatus };
-    this.confirmModalTitle = 'Confirm Status Change';
-    this.confirmModalMessage = `Are you sure you want to change the status to ${newStatus}?`;
-    this.confirmModalConfirmLabel = 'Update Status';
-    this.confirmModalConfirmVariant = (newStatus === 'Suspended' || newStatus === 'Blocked' || newStatus === 'Deactivated') ? 'danger' : 'primary';
-    this.isConfirmModalOpen = true;
-  }
+  async updateStatus(clientId: string, newStatus: string) {
+    let message = `Are you sure you want to change the status to ${newStatus}?`;
+    let confirmLabel = 'Update Status';
+    let confirmVariant: any = 'primary';
+    let icon = 'bi bi-info-circle';
+    let iconVariant: any = 'primary';
 
-  onConfirmAction() {
-    if (!this.pendingAction) return;
+    if (newStatus === 'Suspended') {
+      message = 'Are you sure you want to suspend this client? Their contracts and posting ability may be paused.';
+      confirmLabel = 'Suspend';
+      confirmVariant = 'warning';
+      icon = 'bi bi-pause-circle';
+      iconVariant = 'warning';
+    } else if (newStatus === 'Blocked') {
+      message = 'Are you sure you want to block this client? They will not be able to log in or create contracts.';
+      confirmLabel = 'Block Client';
+      confirmVariant = 'danger';
+      icon = 'bi bi-slash-circle';
+      iconVariant = 'danger';
+    } else if (newStatus === 'Deactivated') {
+      message = 'Are you sure you want to deactivate this account? This action disables their profile on the platform.';
+      confirmLabel = 'Deactivate';
+      confirmVariant = 'danger';
+      icon = 'bi bi-trash';
+      iconVariant = 'danger';
+    } else if (newStatus === 'Active') {
+      message = 'Are you sure you want to activate this client? They will be granted full platform access.';
+      confirmLabel = 'Activate';
+      confirmVariant = 'success';
+      icon = 'bi bi-check-circle';
+      iconVariant = 'success';
+    }
 
-    if (this.pendingAction.type === 'status' && this.pendingAction.newStatus) {
-      this.adminService.updateClientStatus(this.pendingAction.id, this.pendingAction.newStatus).subscribe({
+    const confirmed = await this.modalService.confirm({
+      title: `${newStatus} Client`,
+      message,
+      confirmLabel,
+      confirmVariant,
+      icon,
+      iconVariant
+    });
+
+    if (confirmed) {
+      this.adminService.updateClientStatus(clientId, newStatus).subscribe({
         next: (res) => {
           if (res.success) this.loadClients();
-          this.closeConfirmModal();
         },
-        error: (err) => {
-          console.error('Error updating status', err);
-          this.closeConfirmModal();
-        }
+        error: (err) => console.error('Error updating status', err)
       });
     }
-  }
-
-  closeConfirmModal() {
-    this.isConfirmModalOpen = false;
-    this.pendingAction = null;
   }
 
   getActionItems(client: any): DropdownItem[] {

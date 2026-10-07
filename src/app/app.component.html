@@ -8,3 +8,14 @@
   </app-toast>
   }
 </div>
+
+@if (activeModal?.open) {
+<app-modal [open]="activeModal!.open" [title]="activeModal!.title || ''" [message]="activeModal!.message || ''"
+  [variant]="activeModal!.variant || 'icon'" [size]="activeModal!.size || 'sm'"
+  [icon]="activeModal!.icon || 'bi bi-exclamation-triangle'" [iconVariant]="activeModal!.iconVariant || 'warning'"
+  [showClose]="activeModal!.showClose ?? true" [showActions]="activeModal!.showActions ?? true"
+  [showCancel]="activeModal!.showCancel ?? true" [cancelLabel]="activeModal!.cancelLabel || 'Cancel'"
+  [confirmLabel]="activeModal!.confirmLabel || 'Confirm'" [confirmVariant]="activeModal!.confirmVariant || 'primary'"
+  (confirmed)="onModalConfirm()" (closed)="onModalClose()" (cancelled)="onModalClose()">
+</app-modal>
+}

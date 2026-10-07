@@ -15,7 +15,7 @@ import { Notification } from '../../../../core/models/notification.model';
 export class NotificationDropdown implements OnInit, OnDestroy {
   notifications: Notification[] = [];
   unreadCount: number = 0;
-  visibleLimit: number = 4;
+  visibleLimit: number = 3;
   private subscriptions: Subscription = new Subscription();
 
   constructor(private notificationService: NotificationService) { }
@@ -43,12 +43,12 @@ export class NotificationDropdown implements OnInit, OnDestroy {
 
   viewMore(event: Event): void {
     event.preventDefault();
-    this.visibleLimit = 6;
+    this.visibleLimit = this.notifications.length;
   }
 
   viewLess(event: Event): void {
     event.preventDefault();
-    this.visibleLimit = 4;
+    this.visibleLimit = 3;
   }
 
   markAllAsRead(event: Event): void {

@@ -145,27 +145,16 @@
 
 
 /* =========================================================
-   MAIN GLASS CONTAINER
+   MAIN CONTENT CONTAINER
    ========================================================= */
 
 .blog-content-wrapper {
   width: 100%;
   max-width: 1400px;
-
-  padding: 1.5rem !important;
-
-  background: rgba(255, 255, 255, 0.7);
-
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-
-  border: 1px solid var(--border-color);
-
-  box-shadow:
-    0 15px 40px -10px rgba(74, 58, 255, 0.1),
-    0 4px 15px rgba(0, 0, 0, 0.05);
-
-  border-radius: 20px !important;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0 !important;
 }
 
 
@@ -517,9 +506,7 @@
   }
 
   .blog-content-wrapper {
-    padding: 1rem !important;
-
-    border-radius: 16px !important;
+    padding: 0 !important;
   }
 
 
@@ -528,13 +515,15 @@
      ----------------------------------------- */
 
   .blog-page-header {
-    align-items: flex-start;
-
-    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 1rem;
   }
 
   .blog-header-content {
-    flex: 1 1 100%;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
 
@@ -919,13 +908,7 @@
   }
 
   .blog-content-wrapper {
-    padding: 0.75rem !important;
-
-    border-radius: 12px !important;
-
-    box-shadow:
-      0 8px 25px rgba(74, 58, 255, 0.07),
-      0 2px 8px rgba(0, 0, 0, 0.04);
+    padding: 0 !important;
   }
 
 
@@ -983,13 +966,16 @@
      ----------------------------------------- */
 
   .blog-page-header {
-    flex-direction: column;
-
-    align-items: stretch;
-
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     gap: 0.8rem;
-
     margin-bottom: 1rem !important;
+  }
+
+  .blog-header-content {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .blog-header-content h1 {
@@ -998,14 +984,12 @@
 
   .blog-header-content p {
     font-size: 0.72rem !important;
-
-    line-height: 1.5;
+    line-height: 1.4;
   }
 
   .blog-add-button {
-    width: 100%;
-
-    padding: 0.65rem 1rem !important;
+    flex: 0 0 auto;
+    width: auto !important;
   }
 
 
@@ -1032,13 +1016,15 @@
   }
 
   .blog-filter-actions {
-    flex-direction: column;
-
-    gap: 0.6rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .blog-filter-actions app-button {
-    width: 100% !important;
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto !important;
   }
 
 
@@ -1146,7 +1132,7 @@
   }
 
   .blog-content-wrapper {
-    padding: 0.6rem !important;
+    padding: 0 !important;
   }
 
   .blog-header-content h1 {

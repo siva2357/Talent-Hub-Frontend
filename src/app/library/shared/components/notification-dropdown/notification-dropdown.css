@@ -1,16 +1,20 @@
 .notification-dropdown {
     width: 360px;
+    max-width: calc(100vw - 24px);
     border: 1px solid #f3f4f6;
     border-radius: 12px;
     background-color: #ffffff;
     position: relative;
     font-family: 'Inter', sans-serif;
+    right: 0 !important;
+    left: auto !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
 }
 
 .dropdown-caret {
     position: absolute;
     top: -6px;
-    right: 80px;
+    right: 14px;
     width: 12px;
     height: 12px;
     background-color: #ffffff;
@@ -46,8 +50,14 @@
 }
 
 .notif-list {
-    max-height: 400px;
+    max-height: 480px;
     overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.notif-list::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
 .notif-item:hover {
@@ -106,20 +116,80 @@
     gap: 6px;
 }
 
-.notif-footer {
-    padding: 16px;
-    text-align: center;
+.notif-trigger-btn {
+    box-shadow: none !important;
+    width: 38px;
+    height: 38px;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
 }
 
-.notif-footer a {
-    font-size: 12px;
-    font-weight: 500;
-    color: #2563eb;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+.notif-trigger-btn:hover {
+    background-color: #f1f5f9 !important;
 }
-.notif-footer a:hover {
-    text-decoration: underline;
+
+.notif-badge-wrapper {
+    margin-top: 4px;
+    margin-left: -4px;
+}
+
+/* =========================================================
+   RESPONSIVE ADAPTATIONS
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+    .notification-dropdown {
+        width: 310px;
+        max-width: calc(100vw - 20px);
+        border-radius: 10px;
+    }
+
+    .notif-trigger-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    .notif-trigger-btn i {
+        font-size: 1.25rem !important;
+    }
+
+    .notif-header {
+        padding: 12px 14px;
+    }
+
+    .notif-subheader {
+        padding: 6px 14px;
+    }
+
+    .notif-item {
+        padding: 10px 12px;
+        gap: 8px;
+    }
+
+    .notif-list {
+        max-height: 320px;
+    }
+
+    .notif-footer {
+        padding: 10px 12px;
+    }
+}
+
+@media (max-width: 380px) {
+    .notification-dropdown {
+        width: 280px;
+        max-width: calc(100vw - 12px);
+    }
+
+    .notif-trigger-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .notif-trigger-btn i {
+        font-size: 1.15rem !important;
+    }
 }

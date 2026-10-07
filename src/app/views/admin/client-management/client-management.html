@@ -1,4 +1,4 @@
-<div class="dashboard-container position-relative p-4">
+<div class="dashboard-container position-relative p-2 p-sm-3 p-md-4">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -11,19 +11,15 @@
     </div>
   </div>
 
-  <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="position-relative z-1 glass-card p-4 mx-auto" style="max-width: 1400px;">
+  <!-- Main Content Wrapper -->
+  <div class="position-relative z-1 mx-auto w-100" style="max-width: 1400px;">
     <!-- Header -->
     <header class="mb-4">
-      <h1 class="fw-bold fs-4 mb-1">Client Management</h1>
+      <h1 class="fw-bold fs-4 mb-1 text-dark">Client Management</h1>
       <p class="text-muted small mb-0">Audit client activities, spent volumes, and configure access settings.</p>
     </header>
 
 
-
-    <!-- =========================
-     FILTER SECTION
-========================= -->
     <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75 client-filter-section">
 
       <div class="card-body p-4">
@@ -91,282 +87,247 @@
 
     </section>
 
-    <!-- =========================
-     CLIENT DATA SECTION
-========================= -->
-    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75 client-data-section">
-      <div class="card-body p-0">
+    <!-- <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75 client-data-section">
+      <div class="card-body p-0"> -->
 
-        <!-- =========================
-         DESKTOP TABLE
-         1200px+
-    ========================== -->
-        <div class="desktop-table-view">
-          <app-table [columns]="columns" [data]="(paginatedClients$ | async) || []">
-          </app-table>
+    <div class="desktop-table-view">
+      <app-table [columns]="columns" [data]="(paginatedClients$ | async) || []">
+      </app-table>
 
-          @if (clients$ | async; as list) {
-          @if (list.length > 0) {
-          <div class="px-4 pb-4 mt-2">
-            <app-pagination [totalItems]="list.length" [pageSize]="(pageSize$ | async)!"
-              [currentPage]="(currentPage$ | async)!" (pageChange)="currentPage$.next($event)"
-              (pageSizeChange)="onPageSizeChange($event)">
-            </app-pagination>
-          </div>
-          }
-          }
+      @if (clients$ | async; as list) {
+      @if (list.length > 0) {
+      <div class="px-4 pb-4 mt-2">
+        <app-pagination [totalItems]="list.length" [pageSize]="(pageSize$ | async)!"
+          [currentPage]="(currentPage$ | async)!" (pageChange)="currentPage$.next($event)"
+          (pageSizeChange)="onPageSizeChange($event)">
+        </app-pagination>
+      </div>
+      }
+      }
+    </div>
+
+
+    <ng-template #indexTpl let-row="row" let-index="index">
+      <span class="ps-4 fw-semibold text-muted">
+        {{ index + 1 }}
+      </span>
+    </ng-template>
+
+    <ng-template #profileTpl let-row="row">
+      <img [src]="row.profileImage || 'https://i.pravatar.cc/150?u=' + row.id"
+        class="rounded-circle border border-2 border-white shadow-sm object-fit-cover" width="40" height="40"
+        alt="Avatar">
+    </ng-template>
+
+    <ng-template #fullNameTpl let-row="row">
+      <span class="d-block fw-bold text-dark">
+        {{ row.name }}
+      </span>
+    </ng-template>
+
+    <ng-template #emailTpl let-row="row">
+      <span class="text-muted client-email">
+        {{ row.email }}
+      </span>
+    </ng-template>
+
+    <ng-template #industryTpl let-row="row">
+      <app-badge [label]="row.industry || 'Unknown'" appearance="subtle" variant="primary">
+      </app-badge>
+    </ng-template>
+
+    <ng-template #statusTpl let-row="row">
+      <app-badge [label]="row.status" appearance="subtle" [variant]="getBadgeVariant(row.status)">
+      </app-badge>
+    </ng-template>
+
+    <ng-template #actionsTpl let-row="row">
+      <div class="dropdown">
+        <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown"
+          aria-expanded="false" data-bs-display="static">
+
+          <i class="bi bi-three-dots-vertical"></i>
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none" style="min-width: auto;">
+
+          <app-dropdown [items]="getActionItems(row)" (itemSelected)="onActionSelected($event, row)" class="d-block"
+            style="position: relative;">
+          </app-dropdown>
+
         </div>
+      </div>
+    </ng-template>
 
 
-        <!-- =========================
-         TABLE TEMPLATES
-    ========================== -->
-
-        <ng-template #indexTpl let-row="row" let-index="index">
-          <span class="ps-4 fw-semibold text-muted">
-            {{ index + 1 }}
-          </span>
-        </ng-template>
-
-        <ng-template #profileTpl let-row="row">
-          <img [src]="row.profileImage || 'https://i.pravatar.cc/150?u=' + row.id"
-            class="rounded-circle border border-2 border-white shadow-sm object-fit-cover" width="40" height="40"
-            alt="Avatar">
-        </ng-template>
-
-        <ng-template #fullNameTpl let-row="row">
-          <span class="d-block fw-bold text-dark">
-            {{ row.name }}
-          </span>
-        </ng-template>
-
-        <ng-template #emailTpl let-row="row">
-          <span class="text-muted client-email">
-            {{ row.email }}
-          </span>
-        </ng-template>
-
-        <ng-template #industryTpl let-row="row">
-          <app-badge [label]="row.industry || 'Unknown'" appearance="subtle" variant="primary">
-          </app-badge>
-        </ng-template>
-
-        <ng-template #statusTpl let-row="row">
-          <app-badge [label]="row.status" appearance="subtle" [variant]="getBadgeVariant(row.status)">
-          </app-badge>
-        </ng-template>
-
-        <ng-template #actionsTpl let-row="row">
-          <div class="dropdown">
-            <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown"
-              aria-expanded="false" data-bs-display="static">
-
-              <i class="bi bi-three-dots-vertical"></i>
-            </button>
-
-            <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none"
-              style="min-width: auto;">
-
-              <app-dropdown [items]="getActionItems(row)" (itemSelected)="onActionSelected($event, row)" class="d-block"
-                style="position: relative;">
-              </app-dropdown>
-
-            </div>
-          </div>
-        </ng-template>
-
-
-        <!-- =========================
+    <!-- =========================
          RESPONSIVE CARD VIEW
          < 1200px
     ========================== -->
-        <div class="responsive-client-list">
+    <div class="responsive-client-list">
 
-          @if (paginatedClients$ | async; as clients) {
+      @if (paginatedClients$ | async; as clients) {
 
-          @if (clients.length > 0) {
+      @if (clients.length > 0) {
 
-          <div class="client-card-grid">
+      <div class="client-card-grid">
 
-            @for (client of clients; track client.id) {
+        @for (client of clients; track client.id) {
 
-            <article class="client-card">
+        <article class="client-card">
 
-              <!-- Card Header -->
-              <div class="client-card-header">
+          <!-- Card Header -->
+          <div class="client-card-header">
 
-                <div class="client-identity">
+            <div class="client-identity">
 
-                  <img [src]="client.profileImage || 'https://i.pravatar.cc/150?u=' + client.id" class="client-avatar"
-                    alt="Client Avatar">
+              <img [src]="client.profileImage || 'https://i.pravatar.cc/150?u=' + client.id" class="client-avatar"
+                alt="Client Avatar">
 
-                  <div class="client-name-wrapper">
-                    <h3 class="client-name">
-                      {{ client.name }}
-                    </h3>
+              <div class="client-name-wrapper">
+                <h3 class="client-name">
+                  {{ client.name }}
+                </h3>
 
-                    <span class="client-id">
-                      ID: {{ client.id }}
-                    </span>
-                  </div>
-
-                </div>
-
-                <!-- Action Menu -->
-                <div class="dropdown client-action-dropdown">
-
-                  <button class="client-action-button" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                    data-bs-display="static">
-
-                    <i class="bi bi-three-dots-vertical"></i>
-
-                  </button>
-
-                  <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none">
-
-                    <app-dropdown [items]="getActionItems(client)" (itemSelected)="onActionSelected($event, client)"
-                      class="d-block">
-                    </app-dropdown>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-
-              <!-- Card Body -->
-              <div class="client-card-body">
-
-                <!-- Email -->
-                <div class="client-info-item">
-
-                  <div class="client-info-icon">
-                    <i class="bi bi-envelope"></i>
-                  </div>
-
-                  <div class="client-info-content">
-                    <span class="client-info-label">
-                      Email
-                    </span>
-
-                    <span class="client-info-value client-email">
-                      {{ client.email }}
-                    </span>
-                  </div>
-
-                </div>
-
-
-                <!-- Industry -->
-                <div class="client-info-item">
-
-                  <div class="client-info-icon">
-                    <i class="bi bi-building"></i>
-                  </div>
-
-                  <div class="client-info-content">
-                    <span class="client-info-label">
-                      Industry
-                    </span>
-
-                    <div class="client-info-value">
-                      <app-badge [label]="client.industry || 'Unknown'" appearance="subtle" variant="primary">
-                      </app-badge>
-                    </div>
-                  </div>
-
-                </div>
-
-
-                <!-- Status -->
-                <div class="client-info-item">
-
-                  <div class="client-info-icon">
-                    <i class="bi bi-activity"></i>
-                  </div>
-
-                  <div class="client-info-content">
-                    <span class="client-info-label">
-                      Status
-                    </span>
-
-                    <div class="client-info-value">
-                      <app-badge [label]="client.status" appearance="subtle" [variant]="getBadgeVariant(client.status)">
-                      </app-badge>
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-
-
-              <!-- Card Footer -->
-              <div class="client-card-footer">
-
-                <span class="client-record-number">
-                  Client #{{ client.id }}
+                <span class="client-id">
+                  ID: {{ client.id }}
                 </span>
-
-                <button type="button" class="view-client-button" (click)="viewClient(client)">
-
-                  View Details
-
-                  <i class="bi bi-arrow-right"></i>
-
-                </button>
-
               </div>
 
-            </article>
-
-            }
-
-          </div>
-
-
-          <!-- Responsive Pagination -->
-          <div class="responsive-pagination">
-
-            <app-pagination [totalItems]="clients.length" [pageSize]="(pageSize$ | async)!"
-              [currentPage]="(currentPage$ | async)!" (pageChange)="currentPage$.next($event)"
-              (pageSizeChange)="onPageSizeChange($event)">
-            </app-pagination>
-
-          </div>
-
-          }
-
-          @else {
-
-          <div class="client-empty-state">
-
-            <div class="empty-icon">
-              <i class="bi bi-people"></i>
             </div>
 
-            <h4>No clients found</h4>
+            <!-- Action Menu -->
+            <div class="dropdown client-action-dropdown">
 
-            <p>
-              No clients match the current search or filter criteria.
-            </p>
+              <button class="client-action-button" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                data-bs-display="static">
+
+                <i class="bi bi-three-dots-vertical"></i>
+
+              </button>
+
+              <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none">
+
+                <app-dropdown [items]="getActionItems(client)" (itemSelected)="onActionSelected($event, client)"
+                  class="d-block">
+                </app-dropdown>
+
+              </div>
+
+            </div>
 
           </div>
 
-          }
 
-          }
+          <!-- Card Body -->
+          <div class="client-card-body">
 
-        </div>
+            <!-- Email -->
+            <div class="client-info-item">
+
+              <div class="client-info-icon">
+                <i class="bi bi-envelope"></i>
+              </div>
+
+              <div class="client-info-content">
+                <span class="client-info-label">
+                  Email
+                </span>
+
+                <span class="client-info-value client-email">
+                  {{ client.email }}
+                </span>
+              </div>
+
+            </div>
+
+
+            <!-- Industry -->
+            <div class="client-info-item">
+
+              <div class="client-info-icon">
+                <i class="bi bi-building"></i>
+              </div>
+
+              <div class="client-info-content">
+                <span class="client-info-label">
+                  Industry
+                </span>
+
+                <div class="client-info-value">
+                  <app-badge [label]="client.industry || 'Unknown'" appearance="subtle" variant="primary">
+                  </app-badge>
+                </div>
+              </div>
+
+            </div>
+
+
+            <!-- Status -->
+            <div class="client-info-item">
+
+              <div class="client-info-icon">
+                <i class="bi bi-activity"></i>
+              </div>
+
+              <div class="client-info-content">
+                <span class="client-info-label">
+                  Status
+                </span>
+
+                <div class="client-info-value">
+                  <app-badge [label]="client.status" appearance="subtle" [variant]="getBadgeVariant(client.status)">
+                  </app-badge>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </article>
+
+        }
 
       </div>
-    </section>
+
+
+      <!-- Responsive Pagination -->
+      <div class="responsive-pagination">
+
+        <app-pagination [totalItems]="(clients$ | async)?.length || 0" [pageSize]="(pageSize$ | async)!"
+          [currentPage]="(currentPage$ | async)!" (pageChange)="currentPage$.next($event)"
+          (pageSizeChange)="onPageSizeChange($event)">
+        </app-pagination>
+
+      </div>
+
+      }
+
+      @else {
+
+      <div class="client-empty-state">
+
+        <div class="empty-icon">
+          <i class="bi bi-people"></i>
+        </div>
+
+        <h4>No clients found</h4>
+
+        <p>
+          No clients match the current search or filter criteria.
+        </p>
+
+      </div>
+
+      }
+
+      }
+
+    </div>
+
+    <!-- </div>
+    </section> -->
 
   </div>
 </div>
-
-<app-modal [open]="isConfirmModalOpen" [title]="confirmModalTitle" [message]="confirmModalMessage"
-  [confirmLabel]="confirmModalConfirmLabel" [confirmVariant]="confirmModalConfirmVariant" size="sm"
-  (confirmed)="onConfirmAction()" (closed)="closeConfirmModal()" (cancelled)="closeConfirmModal()">
-</app-modal>
