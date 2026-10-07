@@ -37,44 +37,54 @@
           class="bi bi-file-earmark-text text-primary"></i> Project Information</h2>
 
       <div class="row g-4">
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
           <app-input-field label="Project Title" [value]="portfolioForm.get('title')?.value"
             (valueChange)="portfolioForm.get('title')?.setValue($event)"
             (blurred)="portfolioForm.get('title')?.markAsTouched()" placeholder="e.g. Real-time Analytics Dashboard"
             [required]="true" [validation]="isInvalid('title') ? 'error' : 'none'"
-            errorMessage="Project title is required">
+            [errorMessage]="getErrorMessage('title')">
           </app-input-field>
         </div>
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
           <app-input-field label="Project Category / Type" type="select" [options]="projectTypeOptions"
             [value]="portfolioForm.get('projectType')?.value"
             (valueChange)="portfolioForm.get('projectType')?.setValue($event)"
             (blurred)="portfolioForm.get('projectType')?.markAsTouched()" placeholder="Select project category / type"
             [required]="true" [validation]="isInvalid('projectType') ? 'error' : 'none'"
-            errorMessage="Project category is required">
+            [errorMessage]="getErrorMessage('projectType')">
           </app-input-field>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
           <app-input-field label="Your Role / Contribution" [value]="portfolioForm.get('role')?.value"
             (valueChange)="portfolioForm.get('role')?.setValue($event)"
             (blurred)="portfolioForm.get('role')?.markAsTouched()" placeholder="e.g. Frontend Lead, Fullstack Architect"
-            [required]="true" [validation]="isInvalid('role') ? 'error' : 'none'" errorMessage="Role is required">
+            [required]="true" [validation]="isInvalid('role') ? 'error' : 'none'"
+            [errorMessage]="getErrorMessage('role')">
           </app-input-field>
         </div>
-        <div class="col-md-6">
-          <div class="d-flex gap-3">
-            <div class="flex-grow-1">
+        <div class="col-12 col-md-6">
+          <div class="row g-2">
+            <div class="col-12 col-sm-6">
               <app-input-field label="Start Date" type="date" [value]="portfolioForm.get('startDate')?.value"
-                (valueChange)="portfolioForm.get('startDate')?.setValue($event)" placeholder="">
+                (valueChange)="portfolioForm.get('startDate')?.setValue($event)"
+                (blurred)="portfolioForm.get('startDate')?.markAsTouched()" placeholder="">
               </app-input-field>
             </div>
-            <div class="flex-grow-1">
+            <div class="col-12 col-sm-6">
               <app-input-field label="End Date" type="date" [value]="portfolioForm.get('endDate')?.value"
-                (valueChange)="portfolioForm.get('endDate')?.setValue($event)" placeholder="">
+                (valueChange)="portfolioForm.get('endDate')?.setValue($event)"
+                (blurred)="portfolioForm.get('endDate')?.markAsTouched()" placeholder=""
+                [validation]="isDateRangeInvalid() ? 'error' : 'none'"
+                [errorMessage]="isDateRangeInvalid() ? 'End date cannot precede start date' : ''">
               </app-input-field>
             </div>
           </div>
+          @if (isDateRangeInvalid()) {
+          <span class="text-danger mt-1 d-block" style="font-size: 0.75rem;">
+            <i class="bi bi-exclamation-circle me-1"></i>End date cannot be earlier than start date
+          </span>
+          }
         </div>
       </div>
     </div>
@@ -85,18 +95,18 @@
           class="bi bi-code-slash text-primary"></i> Technologies & Links</h2>
 
       <div class="row g-4">
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
           <app-input-field label="Technologies Used (comma-separated)" [value]="portfolioForm.get('tags')?.value"
             (valueChange)="portfolioForm.get('tags')?.setValue($event)"
             (blurred)="portfolioForm.get('tags')?.markAsTouched()" placeholder="e.g. Angular, TypeScript, Node.js"
             [required]="true" [validation]="isInvalid('tags') ? 'error' : 'none'"
-            errorMessage="Technologies used is required">
+            [errorMessage]="getErrorMessage('tags')">
           </app-input-field>
           <span class="text-muted mt-1 d-block" style="font-size: 0.7rem;">Add all technologies, frameworks, libraries
             used in this project.</span>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
           <app-input-field label="Project URL / Live Demo" [value]="portfolioForm.get('projectUrl')?.value"
             (valueChange)="portfolioForm.get('projectUrl')?.setValue($event)" placeholder="e.g. https://yourproject.com"
             icon="bi bi-link-45deg" [showIcon]="true">
@@ -115,7 +125,7 @@
         (valueChange)="portfolioForm.get('description')?.setValue($event)"
         (blurred)="portfolioForm.get('description')?.markAsTouched()"
         placeholder="Describe the scope, challenges solved, and deliverables..." [required]="true"
-        [validation]="isInvalid('description') ? 'error' : 'none'" errorMessage="Project description is required">
+        [validation]="isInvalid('description') ? 'error' : 'none'" [errorMessage]="getErrorMessage('description')">
       </app-input-field>
     </div>
 
@@ -156,25 +166,23 @@
       </div>
     </div>
 
-    <!-- Footer Actions -->
-    <div class="border-top pt-4 mt-5 d-flex flex-column flex-md-row justify-content-between align-items-center gap-4">
-      <div
-        class="d-flex align-items-center gap-3 bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-3 w-100 w-md-auto">
-        <i class="bi bi-info-circle-fill"></i>
+    <!-- Footer Actions: Cancel on Left, Publish on Right -->
+    <div class="border-top pt-4 mt-5">
+
+
+      <div class="d-flex flex-row align-items-center justify-content-between gap-3 w-100">
         <div>
-          <span class="d-block fw-bold" style="font-size: 0.75rem;">You can edit these details anytime</span>
-          <span class="text-muted" style="font-size: 0.7rem;">Keep your portfolio updated to attract more
-            clients.</span>
+          <app-button type="button" variant="secondary" [disabled]="isSubmitting" routerLink="/portfolio"
+            label="Cancel">
+          </app-button>
         </div>
-      </div>
-      <div class="d-flex gap-3 w-100 w-md-auto justify-content-end">
-        <app-button type="button" variant="secondary" [disabled]="isSubmitting"
-          routerLink="/portfolio">Cancel</app-button>
-        <app-button type="submit" variant="primary" [disabled]="isSubmitting || portfolioForm.invalid"
-          [loading]="isSubmitting">
-          <i class="bi bi-send me-2" *ngIf="!isSubmitting"></i>
-          {{ isSubmitting ? 'Publishing...' : 'Publish Portfolio' }}
-        </app-button>
+
+        <div>
+          <app-button type="submit" variant="primary" [disabled]="isSubmitting || portfolioForm.invalid"
+            [loading]="isSubmitting" [label]="isSubmitting ? 'Publishing...' : 'Publish Portfolio'">
+            <i class="bi bi-send me-2" *ngIf="!isSubmitting"></i>
+          </app-button>
+        </div>
       </div>
     </div>
 

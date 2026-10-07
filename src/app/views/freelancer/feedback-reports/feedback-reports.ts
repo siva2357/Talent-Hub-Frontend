@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FeedbackService } from '../../../core/services/feedback.service';
-import { AIService } from '../../../core/services/ai.service';
+
 
 @Component({
   selector: 'app-feedback-reports',
@@ -16,15 +16,15 @@ export class FeedbackReports implements OnInit {
   feedbackData: any = null;
   isLoading = true;
   error: string | null = null;
-  
+
   isAnalyzing: boolean = false;
   aiAnalysis: any = null;
 
   constructor(
     private route: ActivatedRoute,
     private feedbackService: FeedbackService,
-    private aiService: AIService
-  ) {}
+
+  ) { }
 
   ngOnInit(): void {
     this.contractId = this.route.snapshot.paramMap.get('id') || '';
@@ -42,7 +42,6 @@ export class FeedbackReports implements OnInit {
       next: (res) => {
         if (res.success && res.feedback) {
           this.feedbackData = res.feedback;
-          this.analyzeWithAI(); // Automatically trigger AI analysis
         } else {
           this.error = "Feedback not found.";
         }
@@ -56,23 +55,6 @@ export class FeedbackReports implements OnInit {
     });
   }
 
-  analyzeWithAI(): void {
-    if (!this.feedbackData) return;
-    
-    this.isAnalyzing = true;
-    this.aiService.analyzeFeedback(this.feedbackData).subscribe({
-      next: (res) => {
-        if (res && res.result) {
-          this.aiAnalysis = res.result;
-        }
-        this.isAnalyzing = false;
-      },
-      error: (err) => {
-        console.error('AI Analysis failed:', err);
-        this.isAnalyzing = false;
-      }
-    });
-  }
 
   getOverallRatingText(rating: number): string {
     if (rating >= 4.5) return 'Excellent';

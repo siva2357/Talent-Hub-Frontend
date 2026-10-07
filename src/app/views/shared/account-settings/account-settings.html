@@ -184,7 +184,7 @@
             <div class="form-grid form-grid-3">
 
               <div class="form-grid-item">
-                <app-input-field label="Company Type *" type="text"
+                <app-input-field label="Company Type *" type="select" [options]="companyTypeOptions"
                   [value]="accountSettingsForm.get('professionalDetails.companyType')?.value || ''" (valueChange)="
               accountSettingsForm.get('professionalDetails.companyType')?.setValue($event);
               accountSettingsForm.get('professionalDetails.companyType')?.markAsTouched()
@@ -204,7 +204,7 @@
               </div>
 
               <div class="form-grid-item">
-                <app-input-field label="Industry *" type="text"
+                <app-input-field label="Industry *" type="select" [options]="industryOptions"
                   [value]="accountSettingsForm.get('professionalDetails.industry')?.value || ''" (valueChange)="
               accountSettingsForm.get('professionalDetails.industry')?.setValue($event);
               accountSettingsForm.get('professionalDetails.industry')?.markAsTouched()
@@ -297,7 +297,7 @@
             <div class="form-grid form-grid-3">
 
               <div class="form-grid-item">
-                <app-input-field label="City *" type="text"
+                <app-input-field label="City *" type="select" [options]="cityOptions"
                   [value]="accountSettingsForm.get('location.city')?.value || ''" (valueChange)="
             accountSettingsForm.get('location.city')?.setValue($event);
             accountSettingsForm.get('location.city')?.markAsTouched()
@@ -307,7 +307,7 @@
               </div>
 
               <div class="form-grid-item">
-                <app-input-field label="State *" type="text"
+                <app-input-field label="State *" type="select" [options]="stateOptions"
                   [value]="accountSettingsForm.get('location.state')?.value || ''" (valueChange)="
             accountSettingsForm.get('location.state')?.setValue($event);
             accountSettingsForm.get('location.state')?.markAsTouched()
@@ -317,7 +317,7 @@
               </div>
 
               <div class="form-grid-item">
-                <app-input-field label="Country *" type="text"
+                <app-input-field label="Country *" type="select" [options]="countryOptions"
                   [value]="accountSettingsForm.get('location.country')?.value || ''" (valueChange)="
             accountSettingsForm.get('location.country')?.setValue($event);
             accountSettingsForm.get('location.country')?.markAsTouched()

@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { ProfileService } from '../../../core/services/profile.service';
-import { AIService } from '../../../core/services/ai.service';
 import { MasterDataService } from '../../../core/services/master-data.service';
 import { TalentCard } from '../../../library/shared/components/talent-card/talent-card';
 import { InputField, InputOption } from '../../../library/ui/components/input-field/input-field';
@@ -63,7 +62,7 @@ export class SearchTalent implements OnInit, OnDestroy {
 
   constructor(
     private profileService: ProfileService,
-    private aiService: AIService,
+
     private masterDataService: MasterDataService,
     private router: Router
   ) { }
@@ -203,54 +202,6 @@ export class SearchTalent implements OnInit, OnDestroy {
     this.searchSkills = this.searchSkills.filter(s => s !== skill);
   }
 
-  matchWithAI(): void {
-    if (!this.searchCategory || this.freelancers.length === 0) return;
-
-    this.isAIMatching = true;
-
-    this.aiService.matchTalent(this.searchCategory, this.searchSkills, this.rawFreelancers).subscribe({
-      next: (res) => {
-        if (res && res.matches) {
-          const matchResults = Array.isArray(res.matches) ? res.matches : (res.matches.results || []);
-
-          const mappedFreelancers = this.rawFreelancers.map(freelancer => {
-            const match = matchResults.find((m: any) => m.candidate_id === freelancer.userId || m.candidate_id === freelancer._id);
-            if (match) {
-              return {
-                ...freelancer,
-                matchPercentage: match.match_percentage,
-                matchCategory: match.match_category,
-                matchReasoning: match.reasoning
-              };
-            }
-            return freelancer;
-          });
-
-          mappedFreelancers.sort((a, b) => {
-            const scoreA = a.matchPercentage !== undefined ? a.matchPercentage : -1;
-            const scoreB = b.matchPercentage !== undefined ? b.matchPercentage : -1;
-            return scoreB - scoreA;
-          });
-
-          this.freelancers = mappedFreelancers;
-          this.isAIApplied = true;
-        }
-        this.isAIMatching = false;
-      },
-      error: (err) => {
-        console.error('AI Matching failed:', err);
-        this.isAIMatching = false;
-      }
-    });
-  }
-
-  clearAIMatch(): void {
-    this.isAIApplied = false;
-    this.searchCategory = '';
-    this.searchSkills = [];
-    this.searchSkillInput = '';
-    this.freelancers = [...this.rawFreelancers];
-  }
 
   viewProfile(id: string): void {
     this.router.navigate(['/profile'], { queryParams: { id } });

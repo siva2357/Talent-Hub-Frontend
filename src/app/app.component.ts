@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AiChatbot } from './library/shared/components/ai-chatbot/ai-chatbot';
+
 import { ToastService } from './core/services/ui/toast.service';
 import { ToastConfig } from './core/models/ui.model';
 import { Toast } from './library/ui/components/toast/toast';
@@ -9,7 +9,7 @@ import { Toast } from './library/ui/components/toast/toast';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, AiChatbot, CommonModule, Toast],
+  imports: [RouterOutlet, CommonModule, Toast],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   toasts: (ToastConfig & { id: number })[] = [];
   private toastId = 0;
 
-  constructor(private toastService: ToastService) {}
+  constructor(private toastService: ToastService) { }
 
   ngOnInit() {
     this.toastService.toasts$.subscribe(toast => {

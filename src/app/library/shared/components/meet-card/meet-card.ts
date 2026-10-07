@@ -10,15 +10,11 @@ import { Button } from '../../../ui/components/button/button';
 import { MeetCardData } from '../../../../core/models/meet.model';
 export type { MeetCardData };
 
-
 @Component({
   selector: 'app-meet-card',
-
   standalone: true,
-  imports: [CommonModule, Button,],
-
+  imports: [CommonModule, Button, Badge],
   templateUrl: './meet-card.html',
-
   styleUrl: './meet-card.css'
 })
 export class MeetCard {
@@ -27,59 +23,28 @@ export class MeetCard {
   interview!: MeetCardData;
 
   @Output()
-  join =
-    new EventEmitter<MeetCardData>();
+  join = new EventEmitter<MeetCardData>();
 
-
-  /*
-   * =========================================
-   * =========================================
-   * DESCRIPTION
-   * =========================================
-   */
-
-  getStatusVariant(status: string): any {
-    switch (status?.toLowerCase()) {
-      case 'completed': return 'success';
-      case 'upcoming': return 'primary';
-      case 'scheduled': return 'info';
-      case 'cancelled': return 'danger';
-      case 'pending': return 'warning';
-      default: return 'secondary';
+  get statusVariant(): 'success' | 'primary' | 'info' | 'danger' | 'warning' | 'secondary' {
+    switch (this.interview?.interview?.status?.toLowerCase()) {
+      case 'completed':
+        return 'success';
+      case 'upcoming':
+        return 'primary';
+      case 'scheduled':
+        return 'info';
+      case 'cancelled':
+        return 'danger';
+      case 'pending':
+        return 'warning';
+      default:
+        return 'secondary';
     }
   }
 
-  get cleanDescription(): string {
-
-    const description =
-      this.interview?.interview?.description ?? '';
-
-    return description
-      .replace(/https?:\/\/\S+/gi, '')
-      .replace(/^Join link:\s*/i, '')
-      .trim();
-
+  get isCompleted(): boolean {
+    return this.interview?.interview?.status?.toLowerCase() === 'completed';
   }
-
-
-  /*
-   * =========================================
-   * MEETING LINK
-   * =========================================
-   */
-
-  get meetingLink(): string {
-
-    const description =
-      this.interview?.interview?.description ?? '';
-
-    const match =
-      description.match(/https?:\/\/\S+/i);
-
-    return match?.[0] ?? '';
-
-  }
-
 
   /*
    * =========================================
@@ -88,25 +53,16 @@ export class MeetCard {
    */
 
   get formattedDate(): string {
-
-    const date =
-      this.interview?.interview?.date;
-
+    const date = this.interview?.interview?.date;
     if (!date) {
       return 'N/A';
     }
-
-    return new Date(date).toLocaleDateString(
-      'en-IN',
-      {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      }
-    );
-
+    return new Date(date).toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
   }
-
 
   /*
    * =========================================
@@ -115,25 +71,19 @@ export class MeetCard {
    */
 
   get formattedTime(): string {
-
-    const date =
-      this.interview?.interview?.date;
-
+    if (this.interview?.interview?.time) {
+      return this.interview.interview.time;
+    }
+    const date = this.interview?.interview?.date;
     if (!date) {
       return 'N/A';
     }
-
-    return new Date(date).toLocaleTimeString(
-      'en-IN',
-      {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-      }
-    );
-
+    return new Date(date).toLocaleTimeString('en-IN', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
   }
-
 
   /*
    * =========================================
@@ -142,25 +92,16 @@ export class MeetCard {
    */
 
   getInitials(name: string): string {
-
     if (!name) {
       return '';
     }
-
     return name
       .trim()
       .split(/\s+/)
       .slice(0, 2)
-      .map(
-        part => part.charAt(0).toUpperCase()
-      )
+      .map(part => part.charAt(0).toUpperCase())
       .join('');
-
   }
-
-
-
-
 
   /*
    * =========================================
@@ -169,21 +110,14 @@ export class MeetCard {
    */
 
   onJoin(): void {
-
-    if (!this.meetingLink) {
+    const link = this.interview?.interview?.link?.trim();
+    if (!link) {
       return;
     }
 
-    window.open(
-      this.meetingLink,
-      '_blank',
-      'noopener,noreferrer'
-    );
-
-    this.join.emit(
-      this.interview
-    );
-
+    const targetUrl = link.startsWith('http') ? link : `https://${link}`;
+    window.open(targetUrl, '_blank', 'noopener,noreferrer');
+    this.join.emit(this.interview);
   }
 
 }

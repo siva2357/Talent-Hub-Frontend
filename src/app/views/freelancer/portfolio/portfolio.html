@@ -14,7 +14,7 @@
   <!-- Main Content Wrapper (Glassmorphism) -->
   <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
       <div>
         <h1 class="fw-bold fs-3 mb-1 text-dark d-flex align-items-center gap-2">My Professional Portfolio <i
             class="bi bi-star-fill text-danger"
@@ -28,9 +28,111 @@
       </app-button>
     </div>
 
+    <!-- Desktop View: Table (>= 992px) -->
+    <div class="d-none d-lg-block">
+      <app-table [data]="portfolios" [columns]="columns" [loading]="isLoading"
+        emptyMessage="You haven't added any projects to your portfolio yet."></app-table>
+    </div>
 
-    <app-table [data]="portfolios" [columns]="columns" [loading]="isLoading"
-      emptyMessage="You haven't added any projects to your portfolio yet."></app-table>
+    <!-- Mobile & Tablet View: Cards (< 992px) -->
+    <div class="d-lg-none">
+      @if (isLoading) {
+      <div class="text-center py-4 text-muted small">Loading portfolio projects...</div>
+      } @else if (!portfolios || portfolios.length === 0) {
+      <div class="text-center py-5 bg-white rounded-3 border">
+        <i class="bi bi-folder-x fs-1 text-muted d-block mb-2"></i>
+        <p class="text-muted mb-3 small">You haven't added any projects to your portfolio yet.</p>
+        <app-button variant="outline-primary" label="Add First Project" (clicked)="navigateToAdd()">
+          <i class="bi bi-plus me-1"></i>
+        </app-button>
+      </div>
+      } @else {
+      <div class="row g-3">
+        @for (row of portfolios; track row._id || $index) {
+        <div class="col-12 col-md-6">
+          <div class="portfolio-mobile-card border rounded-3 bg-white p-3 shadow-sm h-100 d-flex flex-column">
+            
+            <!-- Card Top: Media Preview + Info + Dropdown -->
+            <div class="d-flex align-items-start gap-3 mb-3">
+              <!-- Media Thumbnail -->
+              <div class="rounded-3 bg-light border overflow-hidden d-flex align-items-center justify-content-center flex-shrink-0"
+                style="width: 72px; height: 54px;">
+                @if (row.media && row.media.length > 0) {
+                <img [src]="row.media[0].url" class="w-100 h-100 object-fit-cover" alt="Project image">
+                } @else {
+                <i class="bi bi-image text-muted fs-4"></i>
+                }
+              </div>
+
+              <!-- Title & Category -->
+              <div class="min-w-0 flex-grow-1">
+                <h3 class="fs-6 fw-bold text-dark mb-1 text-truncate" [title]="row.title">{{ row.title }}</h3>
+                <app-badge [label]="row.projectType || 'Project'" variant="primary" appearance="subtle"
+                  [rounded]="true" size="small"></app-badge>
+              </div>
+
+              <!-- 3-Dots Action Dropdown -->
+              <div class="dropdown flex-shrink-0">
+                <button class="btn btn-sm btn-light border rounded-circle d-flex align-items-center justify-content-center"
+                  type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"
+                  style="width: 32px; height: 32px;">
+                  <i class="bi bi-three-dots-vertical text-muted"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none" style="min-width: auto;">
+                  <app-dropdown [items]="getDropdownItems(row)" (itemSelected)="onDropdownAction($event, row)" class="d-block"
+                    style="position: relative;">
+                  </app-dropdown>
+                </div>
+              </div>
+            </div>
+
+            <!-- Description Preview (if present) -->
+            @if (row.description) {
+            <p class="text-muted small mb-3 text-truncate-2 flex-grow-1" style="line-height: 1.4; font-size: 13px;">
+              {{ row.description }}
+            </p>
+            }
+
+            <!-- Tags Strip -->
+            @if (row.tags && row.tags.length > 0) {
+            <div class="d-flex flex-wrap gap-1 mb-3">
+              @for (tag of (row.tags || []).slice(0, 4); track tag) {
+              <app-badge [label]="tag" variant="secondary" appearance="outline" size="small"></app-badge>
+              }
+              @if ((row.tags || []).length > 4) {
+              <app-badge [label]="'+' + (row.tags.length - 4)" variant="secondary" appearance="outline" size="small"></app-badge>
+              }
+            </div>
+            }
+
+            <!-- Card Bottom Bar: Role / External URL & Quick Action -->
+            <div class="d-flex align-items-center justify-content-between pt-2 border-top mt-auto">
+              <div class="min-w-0">
+                @if (row.role) {
+                <span class="text-muted d-block text-truncate" style="font-size: 12px;">
+                  <i class="bi bi-person me-1"></i>{{ row.role }}
+                </span>
+                } @else if (row.projectUrl) {
+                <a [href]="row.projectUrl" target="_blank" class="text-primary text-decoration-none text-truncate d-block" style="font-size: 12px;">
+                  <i class="bi bi-link-45deg me-1"></i>View Project
+                </a>
+                }
+              </div>
+
+              <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1"
+                  (click)="navigateToEdit(row._id)" style="font-size: 12px;">
+                  <i class="bi bi-pencil me-1"></i>Edit
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </div>
 
 
   </div>

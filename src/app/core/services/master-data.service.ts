@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class MasterDataService extends BaseService {
 
-  private API_URL = 'http://localhost:5000/api/';
+  private API_URL = 'http://localhost:5000/api';
 
 
 

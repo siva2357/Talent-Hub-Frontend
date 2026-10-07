@@ -7,6 +7,7 @@ import { Button } from '../../../library/ui/components/button/button';
 import { Badge } from '../../../library/ui/components/badge/badge';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from '../../../library/ui/components/chip/chip';
+import { ContractCard, ContractCardAction } from '../../../library/shared/components/contract-card/contract-card';
 import { TableColumn, DropdownItem } from '../../../core/models/ui.model';
 import { MasterDataService } from '../../../core/services/master-data.service';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
@@ -14,17 +15,17 @@ import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 @Component({
   selector: 'app-my-contracts',
   standalone: true,
-  imports: [RouterModule, CommonModule, Table, Button,  Badge, InputField, Chip],
+  imports: [RouterModule, CommonModule, Table, Button, Badge, InputField, Chip],
   templateUrl: './my-contracts.html',
   styleUrl: './my-contracts.css'
 })
 export class MyContracts implements OnInit, AfterViewInit {
   isLoading = true;
   currentTab: 'active' | 'completed' = 'active';
-  
+
   rawActiveContracts$ = new BehaviorSubject<any[]>([]);
   rawCompletedContracts$ = new BehaviorSubject<any[]>([]);
-  
+
   activeContracts: any[] = [];
   completedContracts: any[] = [];
 
@@ -55,7 +56,7 @@ export class MyContracts implements OnInit, AfterViewInit {
   @ViewChild('statusTemplate', { static: true }) statusTemplate!: TemplateRef<any>;
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
 
-  constructor(private contractService: ContractService, private router: Router, private masterDataService: MasterDataService) {}
+  constructor(private contractService: ContractService, private router: Router, private masterDataService: MasterDataService) { }
 
   ngOnInit(): void {
     this.fetchMasterData();
@@ -216,7 +217,7 @@ export class MyContracts implements OnInit, AfterViewInit {
     const end = new Date(endDate);
     const diffTime = Math.abs(end.getTime() - start.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays < 30) {
       return `${diffDays} Days`;
     }
@@ -233,6 +234,25 @@ export class MyContracts implements OnInit, AfterViewInit {
   onDropdownAction(item: DropdownItem, row: any): void {
     if (item.value === 'view') {
       this.router.navigate(['/contract-details', row._id]);
+    }
+  }
+
+  getFreelancerCardActions(contract: any): ContractCardAction[] {
+    if (contract.status === 'completed' || contract.status === 'closed') {
+      return [
+        { label: 'View Feedback', value: 'feedback', icon: 'bi bi-star' }
+      ];
+    }
+    return [
+      { label: 'Contract Diary', value: 'diary', icon: 'bi bi-journal-text' }
+    ];
+  }
+
+  onFreelancerCardAction(event: { action: string; contract: any }): void {
+    if (event.action === 'feedback') {
+      this.router.navigate(['/feedback-reports', event.contract._id]);
+    } else if (event.action === 'diary') {
+      this.router.navigate(['/contract-diary', event.contract._id]);
     }
   }
 }

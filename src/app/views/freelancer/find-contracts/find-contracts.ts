@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ContractService } from '../../../core/services/contract.service';
-import { AIService } from '../../../core/services/ai.service';
+
 import { ProfileService } from '../../../core/services/profile.service';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from '../../../library/ui/components/chip/chip';
@@ -44,7 +44,7 @@ export class FindContracts implements OnInit {
 
   constructor(
     private contractService: ContractService,
-    private aiService: AIService,
+
     private profileService: ProfileService,
     private router: Router,
     private masterDataService: MasterDataService
@@ -252,57 +252,4 @@ export class FindContracts implements OnInit {
     this.router.navigate(['/contract-details', cardData._id]);
   }
 
-  // --- AI ---
-  matchWithAI(): void {
-    const rawContracts = this.rawContracts$.value;
-    if (rawContracts.length === 0) return;
-    this.isAIMatching = true;
-
-    this.profileService.getMyProfile().subscribe({
-      next: (profileRes) => {
-        if (profileRes.success && profileRes.profile) {
-          this.aiService.matchContracts(profileRes.profile, rawContracts).subscribe({
-            next: (aiRes: any) => {
-              if (aiRes && aiRes.matches) {
-                const matchResults = aiRes.matches;
-                let mappedContracts = this.contracts.map(contract => {
-                  const match = matchResults.find((m: any) => m.contract_id === contract._id);
-                  if (match) {
-                    return { ...contract, matchPercentage: match.match_percentage, matchCategory: match.match_category, matchReasoning: match.reasoning };
-                  }
-                  return contract;
-                });
-
-                mappedContracts.sort((a, b) => {
-                  const scoreA = a.matchPercentage !== undefined ? a.matchPercentage : -1;
-                  const scoreB = b.matchPercentage !== undefined ? b.matchPercentage : -1;
-                  return scoreB - scoreA;
-                });
-
-                this.contracts = mappedContracts;
-                this.isAIApplied = true;
-              }
-              this.isAIMatching = false;
-            },
-            error: (err) => {
-              console.error('AI Matching failed:', err);
-              this.isAIMatching = false;
-            }
-          });
-        } else {
-          this.isAIMatching = false;
-        }
-      },
-      error: (err) => {
-        console.error('Failed to fetch profile for AI matching:', err);
-        this.isAIMatching = false;
-      }
-    });
-  }
-
-  clearAIMatch(): void {
-    this.isAIApplied = false;
-    // Re-trigger the filter subscription to restore normal list
-    this.appliedFilters$.next(this.appliedFilters$.value);
-  }
 }

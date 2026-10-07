@@ -12,7 +12,7 @@
   </div>
 
   <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
+  <div class="position-relative z-1 p-2 p-sm-3 p-md-4 mx-auto" style="max-width: 1400px;">
 
     <!-- Header -->
     <div class="mb-4">
@@ -50,18 +50,18 @@
       <div class="tab-pane fade show active">
 
         <!-- Filter Bar -->
-        <div class="glass-card rounded-3 mb-4 p-4">
+        <div class="glass-card rounded-3 mb-4 p-3 p-md-4">
           <div class="row g-3">
-            <div class="col-lg-5">
+            <div class="col-12 col-md-5">
               <app-input-field type="text" placeholder="Search contracts, clients..." [showIcon]="true"
                 icon="bi bi-search" label="" [value]="searchQueryActive"
                 (valueChange)="searchQueryActive = $event"></app-input-field>
             </div>
-            <div class="col-lg-3">
+            <div class="col-12 col-sm-6 col-md-3">
               <app-input-field type="select" placeholder="All Categories" [options]="categoryOptions" label=""
                 [value]="selectedCategoryActive" (valueChange)="selectedCategoryActive = $event"></app-input-field>
             </div>
-            <div class="col-lg-4 d-flex gap-2">
+            <div class="col-12 col-sm-6 col-md-4 d-flex gap-2">
               <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply"
                 (clicked)="applyFiltersActive()"></app-button>
               <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset"
@@ -78,8 +78,89 @@
           }
         </div>
 
-        <app-table [data]="activeContracts" [columns]="columns" [loading]="isLoading"
-          emptyMessage="You don't have any active contracts at the moment."></app-table>
+        <!-- Desktop Table (>= 992px) -->
+        <div class="d-none d-lg-block">
+          <app-table [data]="activeContracts" [columns]="columns" [loading]="isLoading"
+            emptyMessage="You don't have any active contracts at the moment."></app-table>
+        </div>
+
+        <!-- Mobile & Tablet Cards (< 992px) -->
+        <div class="d-lg-none">
+          @if (isLoading) {
+          <div class="text-center py-4 text-muted small">Loading contracts...</div>
+          } @else if (activeContracts.length === 0) {
+          <div class="text-center py-4 text-muted small">
+            You don't have any active contracts at the moment.
+          </div>
+          } @else {
+          <div class="row g-3">
+            @for (contract of activeContracts; track contract._id; let i = $index) {
+            <div class="col-12 col-md-6">
+              <div class="contract-freelancer-card border rounded-3 p-3 bg-white shadow-sm h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <!-- Header: Title + Status Badge -->
+                  <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                    <div class="min-w-0">
+                      <h6 class="fw-bold mb-1 text-dark text-truncate">
+                        <a [routerLink]="['/contract-diary', contract._id]" class="text-decoration-none text-dark hover-text-primary">
+                          {{ contract.contractTitle }}
+                        </a>
+                      </h6>
+                      <div class="d-flex flex-wrap gap-1 align-items-center">
+                        @if (contract.contractSubject) {
+                        <app-badge [label]="contract.contractSubject" variant="primary" appearance="outline" size="small"></app-badge>
+                        }
+                        @if (contract.contractType) {
+                        <app-badge [label]="contract.contractType" variant="secondary" appearance="outline" size="small"></app-badge>
+                        }
+                      </div>
+                    </div>
+                    <app-badge [label]="contract.status || 'in progress'" variant="primary" appearance="subtle" [rounded]="true" size="small" class="text-capitalize flex-shrink-0"></app-badge>
+                  </div>
+
+                  <!-- Client Info Row -->
+                  <div class="d-flex align-items-center gap-2 my-3 p-2 bg-light rounded-2 border border-secondary border-opacity-10">
+                    <div class="rounded-circle overflow-hidden flex-shrink-0" style="width: 28px; height: 28px; background-color: #e2e8f0;">
+                      <img [src]="'https://ui-avatars.com/api/?name=' + (contract.clientName || 'Client') + '&background=random&size=28'" class="w-100 h-100" alt="Avatar">
+                    </div>
+                    <div class="min-w-0">
+                      <span class="d-block fw-semibold text-dark text-truncate" style="font-size: 0.8rem;">{{ contract.clientName || 'Client' }}</span>
+                      <span class="text-muted d-block" style="font-size: 0.65rem;">Client</span>
+                    </div>
+                  </div>
+
+                  <!-- Budget & Duration Row -->
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <div class="p-2 rounded bg-light border border-secondary border-opacity-10 h-100">
+                        <span class="d-block text-muted text-uppercase fw-semibold" style="font-size: 0.65rem;">Budget</span>
+                        <span class="fw-bold text-success" style="font-size: 0.9rem;">₹{{ contract.estimatedBudget | number }}</span>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="p-2 rounded bg-light border border-secondary border-opacity-10 h-100">
+                        <span class="d-block text-muted text-uppercase fw-semibold" style="font-size: 0.65rem;">Duration</span>
+                        <span class="fw-semibold text-dark d-block" style="font-size: 0.8rem;">{{ getDuration(contract.contractStartDate, contract.contractEndDate) }}</span>
+                        <span class="text-muted d-block text-truncate" style="font-size: 0.65rem;">
+                          {{ contract.contractStartDate | date:'MMM d' }} - {{ contract.contractEndDate | date:'MMM d, y' }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Footer Action Button -->
+                <div class="pt-2 border-top d-flex justify-content-end">
+                  <app-button variant="outline-primary" size="sm" label="Contract Diary" icon="bi bi-journal-text"
+                    [routerLink]="['/contract-diary', contract._id]">
+                  </app-button>
+                </div>
+              </div>
+            </div>
+            }
+          </div>
+          }
+        </div>
 
       </div>
       }
@@ -89,19 +170,19 @@
       <div class="tab-pane fade show active">
 
         <!-- Filter Bar -->
-        <div class="glass-card rounded-3 mb-4 p-4">
+        <div class="glass-card rounded-3 mb-4 p-3 p-md-4">
           <div class="row g-3">
-            <div class="col-lg-5">
+            <div class="col-12 col-md-5">
               <app-input-field type="text" placeholder="Search contracts, clients..." [showIcon]="true"
                 icon="bi bi-search" label="" [value]="searchQueryCompleted"
                 (valueChange)="searchQueryCompleted = $event"></app-input-field>
             </div>
-            <div class="col-lg-3">
+            <div class="col-12 col-sm-6 col-md-3">
               <app-input-field type="select" placeholder="All Categories" [options]="categoryOptions" label=""
                 [value]="selectedCategoryCompleted"
                 (valueChange)="selectedCategoryCompleted = $event"></app-input-field>
             </div>
-            <div class="col-lg-4 d-flex gap-2">
+            <div class="col-12 col-sm-6 col-md-4 d-flex gap-2">
               <app-button variant="primary" class="flex-grow-1" [block]="true" label="Apply"
                 (clicked)="applyFiltersCompleted()"></app-button>
               <app-button variant="secondary" class="flex-grow-1" [block]="true" label="Reset"
@@ -118,8 +199,89 @@
           }
         </div>
 
-        <app-table [data]="completedContracts" [columns]="columns" [loading]="isLoading"
-          emptyMessage="You don't have any completed contracts yet."></app-table>
+        <!-- Desktop Table (>= 992px) -->
+        <div class="d-none d-lg-block">
+          <app-table [data]="completedContracts" [columns]="columns" [loading]="isLoading"
+            emptyMessage="You don't have any completed contracts yet."></app-table>
+        </div>
+
+        <!-- Mobile & Tablet Cards (< 992px) -->
+        <div class="d-lg-none">
+          @if (isLoading) {
+          <div class="text-center py-4 text-muted small">Loading contracts...</div>
+          } @else if (completedContracts.length === 0) {
+          <div class="text-center py-4 text-muted small">
+            You don't have any completed contracts yet.
+          </div>
+          } @else {
+          <div class="row g-3">
+            @for (contract of completedContracts; track contract._id; let i = $index) {
+            <div class="col-12 col-md-6">
+              <div class="contract-freelancer-card border rounded-3 p-3 bg-white shadow-sm h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <!-- Header: Title + Status Badge -->
+                  <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                    <div class="min-w-0">
+                      <h6 class="fw-bold mb-1 text-dark text-truncate">
+                        <a [routerLink]="['/feedback-reports', contract._id]" class="text-decoration-none text-dark hover-text-primary">
+                          {{ contract.contractTitle }}
+                        </a>
+                      </h6>
+                      <div class="d-flex flex-wrap gap-1 align-items-center">
+                        @if (contract.contractSubject) {
+                        <app-badge [label]="contract.contractSubject" variant="primary" appearance="outline" size="small"></app-badge>
+                        }
+                        @if (contract.contractType) {
+                        <app-badge [label]="contract.contractType" variant="secondary" appearance="outline" size="small"></app-badge>
+                        }
+                      </div>
+                    </div>
+                    <app-badge [label]="contract.status || 'completed'" variant="success" appearance="subtle" [rounded]="true" size="small" class="text-capitalize flex-shrink-0"></app-badge>
+                  </div>
+
+                  <!-- Client Info Row -->
+                  <div class="d-flex align-items-center gap-2 my-3 p-2 bg-light rounded-2 border border-secondary border-opacity-10">
+                    <div class="rounded-circle overflow-hidden flex-shrink-0" style="width: 28px; height: 28px; background-color: #e2e8f0;">
+                      <img [src]="'https://ui-avatars.com/api/?name=' + (contract.clientName || 'Client') + '&background=random&size=28'" class="w-100 h-100" alt="Avatar">
+                    </div>
+                    <div class="min-w-0">
+                      <span class="d-block fw-semibold text-dark text-truncate" style="font-size: 0.8rem;">{{ contract.clientName || 'Client' }}</span>
+                      <span class="text-muted d-block" style="font-size: 0.65rem;">Client</span>
+                    </div>
+                  </div>
+
+                  <!-- Budget & Duration Row -->
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <div class="p-2 rounded bg-light border border-secondary border-opacity-10 h-100">
+                        <span class="d-block text-muted text-uppercase fw-semibold" style="font-size: 0.65rem;">Budget</span>
+                        <span class="fw-bold text-success" style="font-size: 0.9rem;">₹{{ contract.estimatedBudget | number }}</span>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="p-2 rounded bg-light border border-secondary border-opacity-10 h-100">
+                        <span class="d-block text-muted text-uppercase fw-semibold" style="font-size: 0.65rem;">Duration</span>
+                        <span class="fw-semibold text-dark d-block" style="font-size: 0.8rem;">{{ getDuration(contract.contractStartDate, contract.contractEndDate) }}</span>
+                        <span class="text-muted d-block text-truncate" style="font-size: 0.65rem;">
+                          {{ contract.contractStartDate | date:'MMM d' }} - {{ contract.contractEndDate | date:'MMM d, y' }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Footer Action Button -->
+                <div class="pt-2 border-top d-flex justify-content-end">
+                  <app-button variant="outline-success" size="sm" label="View Feedback" icon="bi bi-star"
+                    [routerLink]="['/feedback-reports', contract._id]">
+                  </app-button>
+                </div>
+              </div>
+            </div>
+            }
+          </div>
+          }
+        </div>
 
       </div>
       }

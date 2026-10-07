@@ -29,157 +29,12 @@
         </p>
       </div>
 
-      <div class="filter-toggle">
 
-        @if (showAIFilter) {
-
-        <app-button label="Use Manual Filters" variant="outline-secondary" (clicked)="toggleAIFilter()">
-          <i class="bi bi-funnel me-2"></i>
-        </app-button>
-
-        } @else {
-
-        <app-button label="Use AI Intelligence for Smart Match" variant="primary" (clicked)="toggleAIFilter()"
-          [style]="'background: linear-gradient(45deg, #0dcaf0, #0b5ed7); border: none;'">
-
-          <i class="bi bi-magic me-2"></i>
-
-        </app-button>
-
-        }
-
-      </div>
 
     </header>
 
 
-    <!-- =====================================================
-         AI FILTER
-         ===================================================== -->
 
-    @if (showAIFilter) {
-
-    <div class="glass-card ai-filter-card">
-
-      <!-- Decorative icon -->
-      <div class="ai-decoration">
-        <i class="bi bi-robot"></i>
-      </div>
-
-      <h5 class="fw-bold text-primary mb-2 d-flex align-items-center gap-2">
-        <i class="bi bi-magic"></i>
-        AI Smart Talent Match
-      </h5>
-
-      <p class="text-muted small ai-description">
-        Tell our AI exactly what you're looking for. Select a category
-        and list specific skills, and we'll instantly evaluate and score
-        all available talents to find your perfect match.
-      </p>
-
-
-      <div class="ai-filter-grid">
-
-        <!-- Category -->
-        <div class="ai-category">
-
-          <app-input-field label="Required Category" type="select" [options]="categoryOptions" [value]="searchCategory"
-            (valueChange)="searchCategory = $event" [disabled]="isAIApplied || isAIMatching">
-          </app-input-field>
-
-        </div>
-
-
-        <!-- Skills -->
-        <div class="ai-skills">
-
-          <div class="skill-input-row">
-
-            <div class="skill-input">
-
-              <app-input-field label="Required Skills (Press Enter to add)" type="text"
-                placeholder="e.g. Angular, Node.js, Python..." icon="bi bi-code-square" [showIcon]="true"
-                [value]="searchSkillInput" (valueChange)="searchSkillInput = $event" (keyup.enter)="addSkill()"
-                [disabled]="isAIApplied || isAIMatching">
-              </app-input-field>
-
-            </div>
-
-            <div class="add-skill-button">
-
-              <app-button label="Add" variant="primary" (clicked)="addSkill()"
-                [disabled]="!searchSkillInput || isAIApplied || isAIMatching">
-              </app-button>
-
-            </div>
-
-          </div>
-
-
-          @if (searchSkills.length > 0) {
-
-          <div class="selected-skills">
-
-            <span class="text-muted small fw-semibold">
-              Selected Skills:
-            </span>
-
-            <div class="skills-list">
-
-              @for (skill of searchSkills; track skill) {
-
-              <app-chip [label]="skill" [showClose]="!isAIApplied && !isAIMatching" (removed)="removeSkill(skill)">
-              </app-chip>
-
-              }
-
-            </div>
-
-          </div>
-
-          }
-
-        </div>
-
-
-        <!-- Match button -->
-        <div class="ai-action">
-
-          @if (isAIApplied) {
-
-          <app-button label="Clear Match" variant="outline-danger" [block]="true" class="w-100"
-            (clicked)="clearAIMatch()">
-
-            <i class="bi bi-x-circle me-2"></i>
-
-          </app-button>
-
-          } @else {
-
-          <app-button label="Find Match" variant="primary" [block]="true" class="w-100" (clicked)="matchWithAI()"
-            [disabled]="isLoading || isAIMatching || freelancers.length === 0 || !searchCategory"
-            [loading]="isAIMatching">
-
-            <i class="bi bi-robot me-2"></i>
-
-          </app-button>
-
-          }
-
-        </div>
-
-      </div>
-
-    </div>
-
-    }
-
-
-    <!-- =====================================================
-         MANUAL FILTER
-         ===================================================== -->
-
-    @else {
 
     <div class="glass-card manual-filter-card">
 
@@ -242,7 +97,7 @@
 
     </div>
 
-    }
+
 
 
     <!-- =====================================================

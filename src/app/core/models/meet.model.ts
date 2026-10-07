@@ -4,8 +4,10 @@ export interface MeetCardData {
     title: string;
     description: string;
     date: string;
+    time?: string;
+    link?: string;
     status: string;
-    feedback: string;
+    feedback?: string;
   };
   contractTitle: string;
   otherUser: {

@@ -1,885 +1,113 @@
+/* =========================================================
+   MEET CARD (Bootstrap-Enhanced & Streamlined CSS)
+   ========================================================= */
+
 .meet-card {
-    position: relative;
-
-    display: flex;
-    flex-direction: column;
-
-    width: 100%;
-    height: 100%;
-    min-width: 0;
-
-    padding: 20px;
-
-    overflow: hidden;
-
-    border: 1px solid rgba(148, 163, 184, 0.22);
-    border-radius: 18px;
-
-    background:
-        linear-gradient(145deg,
-            rgba(255, 255, 255, 0.99),
-            rgba(249, 250, 255, 0.97));
-
-    box-shadow:
-        0 8px 25px rgba(15, 23, 42, 0.055),
-        0 2px 6px rgba(15, 23, 42, 0.025);
-
-    font-family: 'Inter', 'Outfit', sans-serif;
-
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        border-color 0.25s ease;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .meet-card:hover {
-    transform: translateY(-4px);
-
-    border-color: rgba(124, 58, 237, 0.22);
-
-    box-shadow:
-        0 18px 40px rgba(76, 29, 149, 0.10),
-        0 5px 12px rgba(15, 23, 42, 0.05);
+  transform: translateY(-3px);
+  border-color: rgba(99, 102, 241, 0.3) !important;
+  box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.1), 0 4px 10px -2px rgba(15, 23, 42, 0.04) !important;
 }
 
-
-/* =========================================================
-   TOP ACCENT
-   ========================================================= */
-
-.meet-card-accent {
-    position: absolute;
-
-    top: 0;
-    left: 22px;
-    right: 22px;
-
-    height: 3px;
-
-    border-radius: 0 0 8px 8px;
-
-    background:
-        linear-gradient(90deg,
-            #7c3aed,
-            #6366f1,
-            #2563eb);
+/* Subtle Top Accent bar */
+.card-accent {
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #3b82f6, #06b6d4);
 }
 
-
-/* =========================================================
-   DECORATIVE GLOW
-   ========================================================= */
-
-.meet-card-glow {
-    position: absolute;
-
-    top: -100px;
-    right: -100px;
-
-    width: 220px;
-    height: 220px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(circle,
-            rgba(124, 58, 237, 0.11),
-            rgba(124, 58, 237, 0) 70%);
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.meet-card-header {
-    position: relative;
-    z-index: 1;
-
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-
-    gap: 12px;
-
-    margin-bottom: 18px;
-}
-
-.meet-card-heading {
-    display: flex;
-    align-items: center;
-
-    gap: 11px;
-
-    min-width: 0;
-    flex: 1;
-}
-
-
-/* =========================================================
-   MEETING ICON
-   ========================================================= */
-
+/* Icon Containers */
 .meet-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+}
 
-    width: 40px;
-    height: 40px;
+.meet-title {
+  font-size: 0.95rem;
+}
 
-    flex: 0 0 40px;
-
-    border: 1px solid rgba(124, 58, 237, 0.13);
-    border-radius: 12px;
-
-    background:
-        linear-gradient(135deg,
-            #f3e8ff,
-            #eef2ff);
-
-    color: #7c3aed;
-
-    font-size: 15px;
-
-    box-shadow:
-        0 5px 12px rgba(124, 58, 237, 0.08);
+.meet-subtitle {
+  font-size: 0.75rem;
 }
 
 
-/* =========================================================
-   TITLE
-   ========================================================= */
-
-.meet-card-title {
-    min-width: 0;
-}
-
-.meet-card-title h5 {
-    margin: 0;
-
-    color: #172033;
-
-    font-size: 15px;
-    font-weight: 700;
-
-    line-height: 1.35;
-
-    overflow-wrap: anywhere;
-}
-
-.meet-card-title span {
-    display: block;
-
-    margin-top: 4px;
-
-    color: #7b8798;
-
-    font-size: 11px;
-    font-weight: 500;
-
-    line-height: 1.4;
-
-    overflow-wrap: anywhere;
-}
-
-
-/* =========================================================
-   STATUS
-   ========================================================= */
-
-.meet-status {
-    display: inline-flex;
-    align-items: center;
-
-    gap: 6px;
-
-    flex-shrink: 0;
-
-    padding: 6px 9px;
-
-    border: 1px solid rgba(16, 185, 129, 0.16);
-    border-radius: 999px;
-
-    background: #ecfdf5;
-
-    color: #059669;
-
-    font-size: 9px;
-    font-weight: 700;
-
-    text-transform: capitalize;
-
-    white-space: nowrap;
-}
-
-.status-dot {
-    width: 6px;
-    height: 6px;
-
-    flex: 0 0 6px;
-
-    border-radius: 50%;
-
-    background: #10b981;
-
-    box-shadow:
-        0 0 0 3px rgba(16, 185, 129, 0.10);
-}
-
-
-/* =========================================================
-   PERSON
-   ========================================================= */
-
+/* Person Section */
 .meet-person {
-    position: relative;
-    z-index: 1;
-
-    display: flex;
-    align-items: center;
-
-    gap: 10px;
-
-    margin-bottom: 16px;
-    padding: 10px;
-
-    border: 1px solid rgba(226, 232, 240, 0.75);
-    border-radius: 12px;
-
-    background: rgba(248, 250, 252, 0.72);
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
 }
 
-.meet-person-avatar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 36px;
-    height: 36px;
-
-    flex: 0 0 36px;
-
-    border: 1px solid #dbeafe;
-    border-radius: 50%;
-
-    background:
-        linear-gradient(135deg,
-            #eff6ff,
-            #eef2ff);
-
-    color: #2563eb;
-
-    font-size: 10px;
-    font-weight: 700;
-
-    box-shadow:
-        0 3px 8px rgba(37, 99, 235, 0.08);
+.meet-avatar {
+  width: 32px;
+  height: 32px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  font-size: 0.75rem;
 }
 
-.meet-person-info {
-    display: flex;
-    flex-direction: column;
-
-    gap: 3px;
-
-    min-width: 0;
+.meet-person-label,
+.meet-schedule-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.6px;
 }
 
-.meet-person-info span {
-    color: #9aa5b5;
-
-    font-size: 8px;
-    font-weight: 700;
-
-    line-height: 1;
-
-    letter-spacing: 0.8px;
+.meet-person-name {
+  font-size: 0.85rem;
 }
 
-.meet-person-info strong {
-    display: block;
-
-    overflow: hidden;
-
-    color: #334155;
-
-    font-size: 11px;
-    font-weight: 600;
-
-    line-height: 1.3;
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-
-/* =========================================================
-   DESCRIPTION
-   ========================================================= */
-
+/* Description */
 .meet-description {
-    position: relative;
-    z-index: 1;
-
-    display: flex;
-    align-items: flex-start;
-
-    gap: 8px;
-
-    margin: 0 0 16px;
-    padding: 10px 11px;
-
-    border: 1px solid rgba(139, 92, 246, 0.06);
-    border-radius: 10px;
-
-    background: #faf9ff;
-
-    color: #64748b;
-
-    font-size: 11px;
-
-    line-height: 1.5;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
 }
 
-.meet-description i {
-    flex: 0 0 auto;
-
-    margin-top: 2px;
-
-    color: #8b5cf6;
-
-    font-size: 11px;
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.meet-description p {
-    margin: 0;
+/* Schedule Info */
+.meet-schedule-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
 
-    overflow-wrap: anywhere;
+.schedule-icon {
+  width: 28px;
+  height: 28px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  font-size: 0.8rem;
+}
+
+.schedule-divider {
+  width: 1px;
+  height: 24px;
+  background: #cbd5e1;
 }
 
 
-/* =========================================================
-   DATE / TIME
-   Keep DATE + TIME side-by-side at all normal sizes.
-   ========================================================= */
-
-.meet-details {
-    position: relative;
-    z-index: 1;
-
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    align-items: center;
-
-    width: 100%;
-
-    margin: 0 0 16px;
-    padding: 10px 12px;
-
-    border: 1px solid #e6eaf0;
-    border-radius: 13px;
-
-    background:
-        linear-gradient(145deg,
-            #f8fafc,
-            #f5f7fb);
-
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+/* Helpers */
+.min-w-0 {
+  min-width: 0;
 }
-
-.meet-detail {
-    display: flex;
-    align-items: center;
-
-    min-width: 0;
-
-    gap: 9px;
-}
-
-.meet-detail-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 32px;
-    height: 32px;
-
-    flex: 0 0 32px;
-
-    border-radius: 9px;
-
-    background: #ffffff;
-
-    font-size: 11px;
-
-    box-shadow:
-        0 3px 8px rgba(15, 23, 42, 0.05);
-}
-
-.date-icon {
-    color: #7c3aed;
-}
-
-.time-icon {
-    color: #2563eb;
-}
-
-.meet-detail-content {
-    display: flex;
-    flex-direction: column;
-
-    gap: 3px;
-
-    min-width: 0;
-}
-
-.meet-detail-content span {
-    color: #9aa5b5;
-
-    font-size: 8px;
-    font-weight: 700;
-
-    line-height: 1;
-
-    letter-spacing: 0.7px;
-}
-
-.meet-detail-content strong {
-    display: block;
-
-    color: #334155;
-
-    font-size: 11px;
-    font-weight: 700;
-
-    line-height: 1.3;
-
-    white-space: nowrap;
-}
-
-.meet-detail-divider {
-    width: 1px;
-    height: 28px;
-
-    margin: 0 10px;
-
-    background: #e2e8f0;
-}
-
-
-/* =========================================================
-   FOOTER
-   ========================================================= */
-
-.meet-card-footer {
-    position: relative;
-    z-index: 1;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 10px;
-
-    margin-top: auto;
-    padding-top: 15px;
-
-    border-top: 1px solid #edf0f5;
-}
-
-.meeting-status-info {
-    display: flex;
-    align-items: center;
-
-    gap: 7px;
-
-    min-width: 0;
-}
-
-.link-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 28px;
-    height: 28px;
-
-    flex: 0 0 28px;
-
-    border-radius: 8px;
-
-    background: #eff6ff;
-
-    color: #2563eb;
-
-    font-size: 12px;
-}
-
-.link-icon.disabled {
-    background: #f1f5f9;
-
-    color: #94a3b8;
-}
-
-.meeting-status-info>div:last-child {
-    display: flex;
-    flex-direction: column;
-
-    gap: 2px;
-
-    min-width: 0;
-}
-
-.meeting-status-info span {
-    color: #9aa5b5;
-
-    font-size: 8px;
-    font-weight: 700;
-
-    line-height: 1.2;
-
-    letter-spacing: 0.6px;
-}
-
-.meeting-status-info strong {
-    display: block;
-
-    overflow: hidden;
-
-    color: #475569;
-
-    font-size: 10px;
-    font-weight: 600;
-
-    line-height: 1.2;
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-
-/* =========================================================
-   BUTTON HOST
-   Helps the custom app-button fit the footer.
-   ========================================================= */
-
-.meet-card-footer app-button {
-    display: block;
-
-    flex: 0 0 auto;
-
-    min-width: 0;
-}
-
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 991.98px) {
-
-    .meet-card {
-        padding: 18px;
-    }
-
-    .meet-card-header {
-        gap: 10px;
-    }
-
-    .meet-icon {
-        width: 38px;
-        height: 38px;
-
-        flex-basis: 38px;
-    }
-
-    .meet-card-title h5 {
-        font-size: 14px;
-    }
-
-    .meet-details {
-        padding: 10px;
-    }
-
-    .meet-detail {
-        gap: 8px;
-    }
-
-    .meet-detail-divider {
-        margin: 0 8px;
-    }
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
 
 @media (max-width: 575.98px) {
-
-    .meet-card {
-        padding: 16px;
-
-        border-radius: 16px;
-    }
-
-    .meet-card-header {
-        gap: 8px;
-
-        margin-bottom: 15px;
-    }
-
-    .meet-icon {
-        width: 36px;
-        height: 36px;
-
-        flex-basis: 36px;
-
-        border-radius: 10px;
-
-        font-size: 13px;
-    }
-
-    .meet-card-title h5 {
-        font-size: 13px;
-    }
-
-    .meet-card-title span {
-        margin-top: 3px;
-
-        font-size: 10px;
-    }
-
-    .meet-status {
-        padding: 5px 7px;
-
-        font-size: 8px;
-    }
-
-    .status-dot {
-        width: 5px;
-        height: 5px;
-
-        flex-basis: 5px;
-    }
-
-    .meet-person {
-        margin-bottom: 14px;
-        padding: 9px;
-    }
-
-    .meet-description {
-        margin-bottom: 14px;
-        padding: 9px 10px;
-
-        font-size: 10px;
-    }
-
-    /*
-     * IMPORTANT:
-     * Do NOT stack DATE/TIME vertically.
-     * Keep them side-by-side to prevent the card
-     * from becoming unnecessarily tall.
-     */
-    .meet-details {
-        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-
-        padding: 9px 10px;
-    }
-
-    .meet-detail {
-        gap: 7px;
-    }
-
-    .meet-detail-icon {
-        width: 30px;
-        height: 30px;
-
-        flex-basis: 30px;
-    }
-
-    .meet-detail-content span {
-        font-size: 7px;
-    }
-
-    .meet-detail-content strong {
-        font-size: 10px;
-    }
-
-    .meet-detail-divider {
-        height: 26px;
-
-        margin: 0 7px;
-    }
-
-    .meet-card-footer {
-        gap: 8px;
-
-        padding-top: 13px;
-    }
-
-    .meeting-status-info {
-        gap: 6px;
-    }
-
-    .link-icon {
-        width: 27px;
-        height: 27px;
-
-        flex-basis: 27px;
-    }
-
-    .meeting-status-info span {
-        font-size: 7px;
-    }
-
-    .meeting-status-info strong {
-        font-size: 9px;
-    }
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 400px) {
-
-    .meet-card {
-        padding: 14px;
-    }
-
-    .meet-card-header {
-        gap: 7px;
-    }
-
-    .meet-icon {
-        width: 34px;
-        height: 34px;
-
-        flex-basis: 34px;
-    }
-
-    .meet-card-title h5 {
-        font-size: 12px;
-    }
-
-    .meet-card-title span {
-        font-size: 9px;
-    }
-
-    .meet-status {
-        padding: 4px 6px;
-
-        font-size: 7px;
-    }
-
-    .meet-person {
-        padding: 8px;
-    }
-
-    .meet-person-avatar {
-        width: 34px;
-        height: 34px;
-
-        flex-basis: 34px;
-    }
-
-    .meet-details {
-        padding: 8px;
-    }
-
-    .meet-detail {
-        gap: 6px;
-    }
-
-    .meet-detail-icon {
-        width: 28px;
-        height: 28px;
-
-        flex-basis: 28px;
-    }
-
-    .meet-detail-content strong {
-        font-size: 9px;
-    }
-
-    .meet-detail-divider {
-        margin: 0 5px;
-    }
-
-    .meet-card-footer {
-        gap: 6px;
-    }
-
-    .meeting-status-info strong {
-        font-size: 8px;
-    }
-}
-
-
-/* =========================================================
-   VERY SMALL DEVICES
-   ========================================================= */
-
-@media (max-width: 350px) {
-
-    .meet-card {
-        padding: 12px;
-    }
-
-    .meet-card-title h5 {
-        font-size: 11px;
-    }
-
-    .meet-card-title span {
-        font-size: 8px;
-    }
-
-    .meet-status {
-        padding: 4px 5px;
-    }
-
-    .meet-detail-icon {
-        width: 26px;
-        height: 26px;
-
-        flex-basis: 26px;
-    }
-
-    .meet-detail-content strong {
-        font-size: 8px;
-    }
-
-    .meet-detail-divider {
-        margin: 0 4px;
-    }
-
-    .meeting-status-info span {
-        font-size: 6px;
-    }
-
-    .meeting-status-info strong {
-        font-size: 7px;
-    }
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    .meet-card {
-        transition: none;
-    }
-
-    .meet-card:hover {
-        transform: none;
-    }
+  .meet-schedule-box {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 0.5rem;
+  }
+
+  .schedule-divider {
+    display: none;
+  }
 }

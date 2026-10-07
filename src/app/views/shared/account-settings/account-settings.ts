@@ -12,6 +12,7 @@ import { Button } from '../../../library/ui/components/button/button';
 import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
 import { InputOption, InputValidation } from '../../../core/models/ui.model';
+import { MasterDataService } from '../../../core/services/master-data.service';
 
 export const passwordMatchValidator = (control: AbstractControl): ValidationErrors | null => {
   const newPassword = control.get('newPassword');
@@ -53,58 +54,33 @@ export class AccountSettings implements OnInit {
   isSaving: boolean = false;
   isSavingPassword: boolean = false;
 
-  // Dropdown options
-  genderOptions: InputOption[] = [
-    { label: 'Male', value: 'male' },
-    { label: 'Female', value: 'female' },
-    { label: 'Other', value: 'other' }
-  ];
 
-  availabilityOptions: InputOption[] = [
-    { label: 'Full Time (40hrs/wk)', value: 'Full Time (40hrs/wk)' },
-    { label: 'Part Time (20hrs/wk)', value: 'Part Time (20hrs/wk)' },
-    { label: 'As needed', value: 'As needed' }
-  ];
+  companyTypeOptions: InputOption[] = [];
+  industryOptions: InputOption[] = [];
+  genderOptions: InputOption[] = [];
+  availabilityOptions: InputOption[] = [];
+  preferredJobTypeOptions: InputOption[] = [];
+  socialMediaPlatformOptions: InputOption[] = [];
+  languageOptions: InputOption[] = [];
+  proficiencyOptions: InputOption[] = [];
 
-  preferredJobTypeOptions: InputOption[] = [
-    { label: 'Long-term contract', value: 'Long-term contract' },
-    { label: 'Short-term project', value: 'Short-term project' },
-    { label: 'Hourly work', value: 'Hourly work' }
-  ];
-
-  socialMediaPlatformOptions: InputOption[] = [
-    { label: 'LinkedIn', value: 'LinkedIn' },
-    { label: 'GitHub', value: 'GitHub' },
-    { label: 'Twitter', value: 'Twitter' },
-    { label: 'Portfolio Website', value: 'Portfolio Website' }
-  ];
-
-  languageOptions: InputOption[] = [
-    { label: 'English', value: 'English' },
-    { label: 'Spanish', value: 'Spanish' },
-    { label: 'French', value: 'French' },
-    { label: 'German', value: 'German' },
-    { label: 'Hindi', value: 'Hindi' }
-  ];
-
-  proficiencyOptions: InputOption[] = [
-    { label: 'Basic', value: 'Basic' },
-    { label: 'Conversational', value: 'Conversational' },
-    { label: 'Fluent', value: 'Fluent' },
-    { label: 'Native or Bilingual', value: 'Native or Bilingual' }
-  ];
+  countryOptions: InputOption[] = [];
+  stateOptions: InputOption[] = [];
+  cityOptions: InputOption[] = [];
 
   private profileService = inject(ProfileService);
   private tokenService = inject(TokenService);
   private authService = inject(AuthService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private masterDataService = inject(MasterDataService);
 
   constructor() { }
 
   ngOnInit() {
     this.role = this.tokenService.getRole()?.toLowerCase() || '';
     this.initForms();
+    this.loadMasterData();
     this.loadProfileData();
   }
 
@@ -198,6 +174,60 @@ export class AccountSettings implements OnInit {
 
   goBack() {
     this.router.navigate(['/dashboard']);
+  }
+
+  loadMasterData(): void {
+    this.masterDataService.getAllMasterData().subscribe({
+      next: (res: any) => {
+
+        if (res.success && res.data) {
+
+          this.genderOptions = this.mapOptions(res.data.Gender);
+
+          this.companyTypeOptions =
+            this.mapOptions(res.data.CompanyTypes);
+
+          this.industryOptions =
+            this.mapOptions(res.data.Industries);
+
+          this.availabilityOptions =
+            this.mapOptions(res.data.Availability);
+
+          this.socialMediaPlatformOptions =
+            this.mapOptions(res.data.SocialMediaPlatforms);
+
+          this.languageOptions =
+            this.mapOptions(res.data.Languages);
+
+          this.proficiencyOptions =
+            this.mapOptions(res.data.LanguageProficiency);
+
+          this.countryOptions =
+            this.mapOptions(res.data.Countries);
+
+          this.stateOptions =
+            this.mapOptions(res.data.States);
+
+          this.cityOptions =
+            this.mapOptions(res.data.Cities);
+
+          // Only if your MasterData contains this category
+          this.preferredJobTypeOptions =
+            this.mapOptions(res.data.ContractTypes);
+        }
+      },
+
+      error: (err) => {
+        console.error('Failed to load master data:', err);
+      }
+    });
+  }
+
+  mapOptions(options: any[] = []): InputOption[] {
+    return options.map(option => ({
+      label: option.value,
+      value: option.key
+    }));
   }
 
   loadProfileData() {
