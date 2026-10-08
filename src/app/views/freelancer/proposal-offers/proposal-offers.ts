@@ -17,21 +17,21 @@ import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-proposal-offers',
-  imports: [RouterModule, CommonModule, Button, Badge, InputField, Timeline, Chip],
+  imports: [RouterModule, CommonModule, Button, Badge, InputField, Chip],
   templateUrl: './proposal-offers.html',
   styleUrl: './proposal-offers.css'
 })
 export class ProposalOffers implements OnInit {
   activeTab: 'proposals' | 'offers' = 'proposals';
-  
+
   rawApplications$ = new BehaviorSubject<AppliedContract[]>([]);
   applications: AppliedContract[] = [];
   totalApplications = 0;
-  
+
   rawOffers$ = new BehaviorSubject<any[]>([]);
   offers: any[] = [];
   totalOffers = 0;
-  
+
   isLoading = true;
   isLoadingOffers = true;
 
@@ -166,12 +166,12 @@ export class ProposalOffers implements OnInit {
         if (date && date !== 'all') {
           const dateLabel = this.dateRangeOptions.find(o => o.value === date)?.label || date;
           this.activeFiltersProposals.push({ label: `Date: ${dateLabel}`, type: 'date', value: date });
-          
+
           const now = new Date();
           let threshold = new Date();
           if (date === '7days') threshold.setDate(now.getDate() - 7);
           if (date === '30days') threshold.setDate(now.getDate() - 30);
-          
+
           filtered = filtered.filter(a => new Date(a.appliedAt) >= threshold);
         }
 
@@ -205,12 +205,12 @@ export class ProposalOffers implements OnInit {
         if (date && date !== 'all') {
           const dateLabel = this.dateRangeOptions.find(o => o.value === date)?.label || date;
           this.activeFiltersOffers.push({ label: `Date: ${dateLabel}`, type: 'date', value: date });
-          
+
           const now = new Date();
           let threshold = new Date();
           if (date === '7days') threshold.setDate(now.getDate() - 7);
           if (date === '30days') threshold.setDate(now.getDate() - 30);
-          
+
           filtered = filtered.filter(o => new Date(o.date) >= threshold);
         }
 

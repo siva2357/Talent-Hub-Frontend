@@ -51,7 +51,7 @@ export class CreatePortfolio implements OnInit {
       description: ['', [Validators.required]],
       projectUrl: [''],
       tags: ['', [Validators.required]]
-    });
+    }, { validators: this.dateRangeValidator });
 
     this.route.paramMap.subscribe(params => {
       this.portfolioId = params.get('id');
@@ -62,9 +62,39 @@ export class CreatePortfolio implements OnInit {
     });
   }
 
+  dateRangeValidator(group: FormGroup): { [key: string]: any } | null {
+    const start = group.get('startDate')?.value;
+    const end = group.get('endDate')?.value;
+    if (start && end && new Date(start) > new Date(end)) {
+      return { dateRangeInvalid: true };
+    }
+    return null;
+  }
+
   isInvalid(controlName: string): boolean {
     const control = this.portfolioForm.get(controlName);
     return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+
+  isDateRangeInvalid(): boolean {
+    return !!(this.portfolioForm.errors?.['dateRangeInvalid'] && 
+             (this.portfolioForm.get('startDate')?.touched || this.portfolioForm.get('endDate')?.touched));
+  }
+
+  getErrorMessage(controlName: string): string {
+    const control = this.portfolioForm.get(controlName);
+    if (!control || !control.errors) return '';
+    if (control.errors['required']) {
+      switch (controlName) {
+        case 'title': return 'Project title is required';
+        case 'projectType': return 'Project category is required';
+        case 'role': return 'Your role or contribution is required';
+        case 'description': return 'Project description is required';
+        case 'tags': return 'Technologies used is required';
+        default: return 'This field is required';
+      }
+    }
+    return 'Invalid value';
   }
 
   loadPortfolioData(id: string) {

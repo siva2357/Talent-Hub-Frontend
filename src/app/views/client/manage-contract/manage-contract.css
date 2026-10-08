@@ -4,11 +4,6 @@
   --primary-color: #0d6efd;
 }
 
-
-
-
-
-
 .dashboard-container {
   font-family: 'Inter', 'Outfit', sans-serif;
   background-color: #fcfbfe;
@@ -17,6 +12,7 @@
 }
 
 /* Background decorations */
+
 .bg-shape {
   position: absolute;
   border-radius: 50%;
@@ -27,7 +23,9 @@
 .top-left {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
   top: -150px;
   left: -150px;
 }
@@ -35,7 +33,9 @@
 .bottom-right {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
   bottom: -200px;
   right: -200px;
 }
@@ -82,7 +82,8 @@
   height: 700px;
 }
 
-/* Premium Card (Glassmorphism) */
+/* Premium Card */
+
 .glass-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
@@ -90,9 +91,144 @@
   border-radius: 20px !important;
 }
 
-/* Fix nested app-dropdown alignment inside bootstrap dropdown wrapper */
+/* Dropdown */
+
 :host ::ng-deep app-dropdown .dropdown-menu {
   position: static !important;
   display: block !important;
   margin-top: 0 !important;
+}
+
+
+/* =========================================
+   MANAGE CONTRACTS - FILTER SECTION
+   ========================================= */
+
+.manage-contracts-filters {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.manage-contracts-filters .card-body {
+  width: 100%;
+}
+
+/* Prevent Bootstrap columns from causing
+   custom components to overflow */
+.manage-contracts-filters .filter-control {
+  min-width: 0;
+}
+
+.manage-contracts-filters app-input-field {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+/* =========================================
+   ACTION BUTTONS
+   ========================================= */
+
+.manage-contracts-filters .filter-actions {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.manage-contracts-filters .filter-actions app-button {
+  display: block;
+  flex: 1 1 0;
+  width: 100%;
+  min-width: 0;
+}
+
+
+/* =========================================
+   ACTIVE FILTERS
+   ========================================= */
+
+.manage-contracts-filters .active-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+
+  border-top: 1px solid rgba(168, 85, 247, 0.12);
+}
+
+.manage-contracts-filters .active-filter-label {
+  color: #343a40;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+
+/* =========================================
+   DESKTOP
+   ========================================= */
+
+@media (min-width: 992px) {
+
+  .manage-contracts-filters .filter-actions {
+    min-width: 0;
+  }
+
+}
+
+
+/* =========================================
+   TABLET
+   ========================================= */
+
+@media (max-width: 991.98px) {
+
+  .manage-contracts-filters .filter-actions {
+    margin-top: 0.25rem;
+  }
+
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 767.98px) {
+
+  .manage-contracts-filters .filter-actions {
+    gap: 0.5rem;
+  }
+
+  .manage-contracts-filters .active-filters {
+    align-items: flex-start;
+  }
+
+  .manage-contracts-filters .active-filter-label {
+    width: 100%;
+    margin-right: 0;
+  }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+   ========================================= */
+
+@media (max-width: 575.98px) {
+
+  .manage-contracts-filters .filter-actions {
+    flex-direction: column;
+  }
+
+  .manage-contracts-filters .filter-actions app-button {
+    width: 100%;
+  }
+
 }

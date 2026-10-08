@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Router } from '@angular/router';
 
 type ButtonVariant =
   | 'primary'
@@ -29,30 +30,57 @@ type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 })
 export class Button {
 
-  @Input() label: string = '';
+  @Input() label = '';
 
   @Input() variant: ButtonVariant = 'primary';
 
   @Input() size: ButtonSize = 'md';
 
-  @Input() disabled: boolean = false;
+  @Input() disabled = false;
 
-  @Input() loading: boolean = false;
+  @Input() loading = false;
 
-  @Input() iconOnly: boolean = false;
+  @Input() iconOnly = false;
 
-  @Input() block: boolean = false;
+  @Input() block = false;
 
   @Input() type: 'button' | 'submit' | 'reset' = 'button';
 
-  @Output() clicked = new EventEmitter<Event>();
+  @Input() route: string | null = null;
 
-  onClick(event: Event): void {
+  @Input() target: string | null = null;
+
+  @Output() clicked = new EventEmitter<void>();
+
+  constructor(private router: Router) { }
+
+  async onClick(event: Event): Promise<void> {
+
     if (this.disabled || this.loading) {
       event.preventDefault();
       return;
     }
 
-    this.clicked.emit(event);
+    // Notify parent component
+    this.clicked.emit();
+
+    // Optional navigation
+    if (this.route) {
+
+      if (this.target === '_blank') {
+
+        window.open(
+          this.router.serializeUrl(
+            this.router.createUrlTree([this.route])
+          ),
+          '_blank'
+        );
+
+      } else {
+
+        await this.router.navigateByUrl(this.route);
+
+      }
+    }
   }
 }

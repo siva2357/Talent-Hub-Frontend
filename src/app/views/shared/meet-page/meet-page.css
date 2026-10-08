@@ -1,84 +1,702 @@
+/* =========================================================
+   HOST
+   ========================================================= */
+
 :host {
   display: block;
-  height: 100vh;
-}
-
-.meet-container {
-  font-family: 'Inter', system-ui, sans-serif;
-  height: 100%;
   width: 100%;
-  background-color: #f4f6f8;
-  position: relative;
+  min-height: 100%;
 }
 
-.text-purple { color: #6f42c1 !important; }
-.bg-purple { background-color: #6f42c1 !important; }
-.border-purple { border-color: #6f42c1 !important; }
-.bg-purple-soft { background-color: rgba(111, 66, 193, 0.1) !important; }
+
+/* =========================================================
+   MAIN DASHBOARD
+   ========================================================= */
+
+.dashboard-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+
+  overflow-x: hidden;
+
+  font-family: 'Inter', 'Outfit', system-ui, sans-serif;
+
+  background-color: #fcfbfe;
+}
+
+
+/* =========================================================
+   BACKGROUND DECORATIONS
+   ========================================================= */
+
+.background-decorations {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+.bg-shape {
+  position: absolute;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+
+/* Top left glow */
+
+.top-left {
+  width: 500px;
+  height: 500px;
+
+  top: -150px;
+  left: -150px;
+
+  background:
+    radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+}
+
+
+/* Bottom right glow */
+
+.bottom-right {
+  width: 600px;
+  height: 600px;
+
+  right: -200px;
+  bottom: -200px;
+
+  background:
+    radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+}
+
+
+/* Right blue glow */
+
+.right-shape {
+  width: 400px;
+  height: 400px;
+
+  top: 30%;
+  right: -100px;
+
+  transform: translateY(-50%);
+
+  background: rgba(37, 99, 235, 0.05);
+
+  filter: blur(80px);
+}
+
+
+/* =========================================================
+   CONCENTRIC CIRCLES
+   ========================================================= */
+
+.concentric-circles {
+  position: absolute;
+
+  top: 15%;
+  left: 0;
+
+  width: 0;
+  height: 0;
+
+  pointer-events: none;
+}
+
+.circle {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  border: 1px dashed rgba(168, 85, 247, 0.15);
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+}
+
+.circle-2 {
+  width: 500px;
+  height: 500px;
+}
+
+.circle-3 {
+  width: 700px;
+  height: 700px;
+}
+
+
+/* =========================================================
+   CONTENT CONTAINER
+   ========================================================= */
+
+.dashboard-content {
+  position: relative;
+
+  z-index: 1;
+
+  width: 100%;
+  max-width: 1400px;
+
+  padding: 32px;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.page-header {
+  margin-bottom: 28px;
+}
+
+.page-header h1 {
+  margin: 0 0 6px;
+
+  color: #212529;
+
+  font-size: 1.5rem;
+  font-weight: 700;
+
+  line-height: 1.3;
+}
+
+.page-header p {
+  margin: 0;
+
+  color: #6c757d;
+
+  font-size: 0.875rem;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   MEETINGS GRID
+   ========================================================= */
+
+.meetings-grid {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 1.5rem;
+}
+
+.meeting-column {
+  display: flex;
+}
+
+.meeting-column>app-meet-card {
+  display: block;
+
+  width: 100%;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   LOADING STATE
+   ========================================================= */
+
+.loading-state {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 280px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 280px;
+
+  padding: 40px 20px;
+
+  text-align: center;
+
+  color: #6c757d;
+}
+
+.empty-state i {
+  margin-bottom: 16px;
+
+  font-size: 3rem;
+
+  color: #adb5bd;
+}
+
+.empty-state p {
+  margin: 0;
+
+  font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   PURPLE UTILITIES
+   ========================================================= */
+
+.text-purple {
+  color: #6f42c1 !important;
+}
+
+.bg-purple {
+  background-color: #6f42c1 !important;
+}
+
+.border-purple {
+  border-color: #6f42c1 !important;
+}
+
+.bg-purple-soft {
+  background-color: rgba(111, 66, 193, 0.1) !important;
+}
 
 .btn-outline-purple {
   color: #6f42c1;
+
   border-color: #6f42c1;
+
   background-color: transparent;
-}
-.btn-outline-purple:hover {
-  background-color: #6f42c1;
-  color: white;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
-.cursor-pointer { cursor: pointer; }
-.hover-bg-light:hover { background-color: rgba(0,0,0,0.05) !important; }
-.hover-text-primary:hover { color: #0d6efd !important; }
+.btn-outline-purple:hover {
+  background-color: #6f42c1;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   COMMON UTILITIES
+   ========================================================= */
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.hover-bg-light:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.hover-text-primary:hover {
+  color: #0d6efd !important;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
 
 .nav-underline .nav-link {
   color: #6c757d;
+
   border-bottom: 2px solid transparent;
 }
+
 .nav-underline .nav-link.active {
   color: #6f42c1 !important;
 }
 
-/* Custom scrollbars */
+
+/* =========================================================
+   CUSTOM SCROLLBARS
+   ========================================================= */
+
 .meeting-scroll::-webkit-scrollbar,
 .side-panel-scroll::-webkit-scrollbar {
   width: 6px;
 }
+
 .meeting-scroll::-webkit-scrollbar-track,
 .side-panel-scroll::-webkit-scrollbar-track {
-  background: transparent; 
+  background: transparent;
 }
+
 .meeting-scroll::-webkit-scrollbar-thumb,
 .side-panel-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.1); 
+  background: rgba(0, 0, 0, 0.1);
+
   border-radius: 10px;
 }
+
 .meeting-scroll:hover::-webkit-scrollbar-thumb,
 .side-panel-scroll:hover::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.2); 
+  background: rgba(0, 0, 0, 0.2);
 }
 
-.dashboard-container {
-  font-family: 'Inter', 'Outfit', sans-serif;
-  background-color: #fcfbfe;
-  position: relative;
-}
 
-/* Background decorations */
-.bg-shape { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
-.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
-.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
-.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.05); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
-.concentric-circles { position: absolute; pointer-events: none; z-index: 0; top: 15%; left: 0; }
-.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.15); }
-.circle-1 { width: 300px; height: 300px; }
-.circle-2 { width: 500px; height: 500px; }
-.circle-3 { width: 700px; height: 700px; }
+/* =========================================================
+   GLASS CARD
+   ========================================================= */
 
-/* Premium Card (Glassmorphism) */
 .glass-card {
   background: rgba(255, 255, 255, 0.7);
+
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
   border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
+
+  box-shadow:
+    0 15px 40px -10px rgba(74, 58, 255, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.05);
+
   border-radius: 20px !important;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1400px) {
+
+  .dashboard-content {
+    padding: 40px;
+  }
+
+  .page-header {
+    margin-bottom: 32px;
+  }
+
+  .meetings-grid {
+    --bs-gutter-x: 1.75rem;
+    --bs-gutter-y: 1.75rem;
+  }
+}
+
+
+/* =========================================================
+   TABLET / SMALL LAPTOP
+   ========================================================= */
+
+@media (max-width: 1199.98px) {
+
+  .dashboard-content {
+    padding: 28px;
+  }
+
+  .top-left {
+    width: 420px;
+    height: 420px;
+
+    top: -130px;
+    left: -130px;
+  }
+
+  .bottom-right {
+    width: 500px;
+    height: 500px;
+
+    right: -180px;
+    bottom: -180px;
+  }
+
+  .right-shape {
+    width: 320px;
+    height: 320px;
+
+    right: -100px;
+  }
+
+  .circle-1 {
+    width: 260px;
+    height: 260px;
+  }
+
+  .circle-2 {
+    width: 430px;
+    height: 430px;
+  }
+
+  .circle-3 {
+    width: 600px;
+    height: 600px;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+
+  .dashboard-content {
+    padding: 24px;
+  }
+
+  .page-header {
+    margin-bottom: 24px;
+  }
+
+  .page-header h1 {
+    font-size: 1.35rem;
+  }
+
+  .meetings-grid {
+    --bs-gutter-x: 1.25rem;
+    --bs-gutter-y: 1.25rem;
+  }
+
+  .top-left {
+    width: 380px;
+    height: 380px;
+
+    top: -120px;
+    left: -140px;
+  }
+
+  .bottom-right {
+    width: 450px;
+    height: 450px;
+
+    right: -180px;
+    bottom: -160px;
+  }
+
+  .right-shape {
+    width: 280px;
+    height: 280px;
+
+    right: -120px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .dashboard-container {
+    min-height: 100vh;
+
+    overflow-x: hidden;
+  }
+
+  .dashboard-content {
+    padding: 20px 16px;
+  }
+
+  .page-header {
+    margin-bottom: 20px;
+  }
+
+  .page-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .page-header p {
+    font-size: 0.8125rem;
+
+    max-width: 100%;
+  }
+
+  .meetings-grid {
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 1rem;
+  }
+
+  .meeting-column {
+    width: 100%;
+  }
+
+  .loading-state {
+    min-height: 220px;
+  }
+
+  .empty-state {
+    min-height: 220px;
+
+    padding: 30px 16px;
+  }
+
+  .empty-state i {
+    font-size: 2.5rem;
+  }
+
+
+  /* Reduce decorative elements */
+
+  .top-left {
+    width: 300px;
+    height: 300px;
+
+    top: -100px;
+    left: -120px;
+  }
+
+  .bottom-right {
+    width: 350px;
+    height: 350px;
+
+    right: -150px;
+    bottom: -120px;
+  }
+
+  .right-shape {
+    width: 220px;
+    height: 220px;
+
+    right: -100px;
+
+    filter: blur(60px);
+  }
+
+
+  /* Smaller circles */
+
+  .circle-1 {
+    width: 200px;
+    height: 200px;
+  }
+
+  .circle-2 {
+    width: 340px;
+    height: 340px;
+  }
+
+  .circle-3 {
+    width: 480px;
+    height: 480px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .dashboard-content {
+    padding: 18px 12px;
+  }
+
+  .page-header {
+    margin-bottom: 18px;
+  }
+
+  .page-header h1 {
+    font-size: 1.15rem;
+  }
+
+  .page-header p {
+    font-size: 0.78rem;
+  }
+
+  .meetings-grid {
+    --bs-gutter-y: 0.875rem;
+  }
+
+  .loading-state {
+    min-height: 180px;
+  }
+
+  .empty-state {
+    min-height: 180px;
+
+    padding: 24px 12px;
+  }
+
+  .empty-state i {
+    font-size: 2.25rem;
+  }
+
+  .empty-state p {
+    font-size: 0.8125rem;
+  }
+
+
+  /* Almost hide decorative circles on very small screens */
+
+  .circle-2,
+  .circle-3 {
+    opacity: 0.5;
+  }
+
+  .circle-3 {
+    width: 400px;
+    height: 400px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+   ========================================================= */
+
+@media (max-width: 375px) {
+
+  .dashboard-content {
+    padding: 16px 10px;
+  }
+
+  .page-header h1 {
+    font-size: 1.1rem;
+  }
+
+  .page-header p {
+    font-size: 0.75rem;
+  }
+
+  .meetings-grid {
+    --bs-gutter-y: 0.75rem;
+  }
+
+  .top-left {
+    width: 240px;
+    height: 240px;
+
+    top: -80px;
+    left: -100px;
+  }
+
+  .bottom-right {
+    width: 280px;
+    height: 280px;
+
+    right: -120px;
+    bottom: -100px;
+  }
 }

@@ -1,26 +1,24 @@
-<nav class="user-navbar bg-white border-bottom py-2 px-4 d-flex justify-content-between align-items-center w-100 position-sticky top-0"
+<nav class="user-navbar bg-white border-bottom  px-2 px-md-4 d-flex justify-content-between align-items-center w-100 position-sticky top-0"
     style="z-index: 1020;">
 
     <!-- LEFT: Hamburger & Logo -->
-    <div class="d-flex align-items-center gap-3">
-        <button class="btn btn-light border-0 d-flex align-items-center justify-content-center p-0"
-            (click)="toggleSidebar.emit()" style="border-radius: 50%; width: 40px; height: 40px;">
+    <div class="d-flex align-items-center gap-2 gap-sm-3">
+        <button class="btn btn-light border-0 d-flex align-items-center justify-content-center p-0 navbar-hamburger-btn"
+            (click)="toggleSidebar.emit()" aria-label="Toggle navigation">
             <i class="bi bi-list fs-4 text-secondary"></i>
         </button>
-        <a href="#" class="d-flex align-items-center text-decoration-none">
-            <img src="/logo 2.png" alt="TalentHub Logo" style="height: 45px;">
+        <a href="javascript:void(0)" class="d-flex align-items-center text-decoration-none"
+            (click)="navigateToDashboard()" aria-label="Go to dashboard">
+
+            <img src="/logo 2.png" alt="TalentHub Logo" class="navbar-brand-logo">
+
         </a>
     </div>
 
-    <!-- RIGHT: Icons -->
-    <div class="d-flex align-items-center gap-3">
 
-        <!-- Notification Icon -->
+    <div class="d-flex align-items-center gap-1 gap-sm-2 gap-md-3">
         <app-notification-dropdown></app-notification-dropdown>
-
-        <div class="vr mx-2 bg-secondary opacity-25" style="height: 24px;"></div>
-
-        <!-- Profile Avatar Dropdown -->
+        <div class="vr mx-1 mx-sm-2 bg-secondary opacity-25 navbar-divider" style="height: 24px;"></div>
         <app-profile-avatar></app-profile-avatar>
 
     </div>

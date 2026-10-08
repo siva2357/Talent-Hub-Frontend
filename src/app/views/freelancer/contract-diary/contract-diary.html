@@ -1,4 +1,4 @@
-<div class="dashboard-container position-relative p-4"
+<div class="dashboard-container position-relative"
   [ngStyle]="{'min-height': (!isLoading && diary && !isFunded() && userRole === 'freelancer') ? '100vh' : 'auto'}">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
@@ -27,179 +27,144 @@
   </div>
   } @else {
   <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
+  <div class="position-relative z-1 p-2 p-sm-3 p-md-4 mx-auto" style="max-width: 1400px;">
 
-    <!-- Header Section -->
-    <div class="mb-4">
-      <div class="d-flex align-items-center gap-3 mb-4">
-        <h1 class="fw-bold fs-3 mb-0 text-dark">{{ diary?.contractId?.contractTitle || 'Loading...' }}</h1>
-        <div style="text-transform: capitalize;">
+    <!-- Header & Navigation -->
+    <div class="mb-4 pb-3 border-bottom">
+      <!-- Title Row: Back Arrow + Contract Title + Status Badge -->
+      <div class="d-flex align-items-center gap-2 gap-sm-3 min-w-0 mb-3">
+        <a routerLink="/my-contracts"
+          class="btn btn-sm btn-light border rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 header-back-btn"
+          title="Back to My Contracts" aria-label="Back">
+          <i class="bi bi-arrow-left fs-6"></i>
+        </a>
+
+        <h1 class="fw-bold fs-4 mb-0 text-dark text-truncate">{{ diary?.contractId?.contractTitle || 'Loading...' }}</h1>
+
+        <div style="text-transform: capitalize;" class="flex-shrink-0">
           <app-badge [label]="diary?.overallStatus || 'Active'" [variant]="getBadgeVariant(diary?.overallStatus)"
-            appearance="solid" [rounded]="true"></app-badge>
+            appearance="subtle" [rounded]="true" size="small"></app-badge>
         </div>
       </div>
 
-      <!-- Metadata Row -->
-      <div class="d-flex flex-wrap gap-4 align-items-center mb-4">
-        <div class="d-flex flex-column pe-4 border-end">
-          <span class="text-muted d-block mb-1" style="font-size: 0.65rem;">Client</span>
-          <span class="fw-bold text-dark d-block" style="font-size: 0.8rem;">{{
+      <!-- Metadata Free Inline Row (No card box, plain clean text) -->
+      <div class="d-flex flex-wrap align-items-center gap-2 gap-md-3">
+        <div class="d-inline-flex align-items-center gap-1 min-w-0">
+          <span class="text-muted" style="font-size: 13px;">Client:</span>
+          <span class="fw-semibold text-dark text-truncate" style="font-size: 13px;">{{
             diary?.clientId?.registrationDetails?.fullName || 'Client Name' }}</span>
         </div>
 
-        <div class="d-flex flex-column pe-4 border-end">
-          <span class="text-muted d-block mb-1" style="font-size: 0.65rem;">Start Date</span>
-          <span class="fw-bold text-dark d-flex align-items-center gap-2" style="font-size: 0.8rem;">
-            <i class="bi bi-calendar3 text-muted"></i> {{ diary?.contractId?.contractStartDate | date:'MMM dd, yyyy' }}
+        <span class="text-muted opacity-50 d-none d-md-inline">•</span>
+
+        <div class="d-inline-flex align-items-center gap-1 flex-shrink-0">
+          <span class="text-muted" style="font-size: 13px;">Start Date:</span>
+          <span class="fw-semibold text-dark" style="font-size: 13px;">
+            <i class="bi bi-calendar3 text-muted me-1"></i>{{ diary?.contractId?.contractStartDate | date:'MMM dd, yyyy' }}
           </span>
         </div>
 
-        <div class="d-flex flex-column">
-          <span class="text-muted d-block mb-1" style="font-size: 0.65rem;">End Date</span>
-          <span class="fw-bold text-dark d-flex align-items-center gap-2" style="font-size: 0.8rem;">
-            <i class="bi bi-calendar3 text-muted"></i> {{ diary?.contractId?.contractEndDate | date:'MMM dd, yyyy' }}
+        <span class="text-muted opacity-50 d-none d-md-inline">•</span>
+
+        <div class="d-inline-flex align-items-center gap-1 flex-shrink-0">
+          <span class="text-muted" style="font-size: 13px;">End Date:</span>
+          <span class="fw-semibold text-dark" style="font-size: 13px;">
+            <i class="bi bi-calendar3 text-muted me-1"></i>{{ diary?.contractId?.contractEndDate | date:'MMM dd, yyyy' }}
           </span>
         </div>
       </div>
     </div>
 
-    <!-- Top Stat Cards -->
+    <!-- Top Stat Cards (Stacked vertically on mobile: col-12, 2 on tablet: col-sm-6, 4 on desktop: col-lg-3) -->
     <div class="row g-3 mb-4">
       @for (stat of stats; track stat.title) {
-      <div class="col-md-3">
+      <div class="col-12 col-sm-6 col-lg-3">
         <app-stat-card [stat]="stat"></app-stat-card>
       </div>
       }
     </div>
 
-    <!-- Main Content Split -->
-    <div class="row g-4">
-      <!-- Left Column (Tabs & Main Content) -->
-      <div class="col-lg-8">
-
-        <!-- Project Phases -->
-        <div class="glass-card rounded-3 p-4 bg-white mb-4">
-          <div class="d-flex justify-content-between align-items-start mb-4">
-            <div>
-              <h3 class="fs-6 fw-bold text-dark mb-1">Project Phases</h3>
-              <p class="text-muted small mb-0">Track progress of all contract phases</p>
-            </div>
-          </div>
-
-          <app-table [columns]="columns" [data]="diary?.phases" [loading]="isLoading"></app-table>
-
-        </div>
-
-      </div>
-
-      <!-- Right Column (Sidebar) -->
-      <div class="col-lg-4">
-        <div class="d-flex flex-column gap-4 h-100">
-
-          <!-- AI Contract Insights -->
-          <div class="glass-card rounded-3 p-4 bg-white">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h3 class="fs-6 fw-bold text-dark mb-0 d-flex align-items-center gap-2"
-                style="color: #4338ca !important;">
-                <i class="bi bi-stars"></i> AI Contract Insights
-              </h3>
-              <i class="bi bi-arrow-clockwise text-muted cursor-pointer"></i>
-            </div>
-
-            <div class="rounded-3 p-3 mb-3 d-flex gap-3 align-items-center"
-              style="background-color: #f0fdf4; border: 1px solid #bbf7d0;">
-              <div
-                class="rounded-circle bg-success bg-opacity-25 d-flex align-items-center justify-content-center text-success flex-shrink-0"
-                style="width: 40px; height: 40px;">
-                <i class="bi bi-shield-check fs-5"></i>
-              </div>
-              <div>
-                <span class="fw-bold text-success d-block fs-6 mb-0">Healthy</span>
-                <span class="text-muted small" style="font-size: 0.7rem;">This contract is on track</span>
-              </div>
-            </div>
-
-            <div class="d-flex justify-content-between text-center px-2">
-              <div>
-                <span class="d-block fw-bold text-dark fs-6 d-flex justify-content-center gap-1"><i
-                    class="bi bi-clock text-warning"></i> 12</span>
-                <span class="text-muted" style="font-size: 0.65rem;">Days Remaining</span>
-              </div>
-              <div>
-                <span class="d-block fw-bold text-dark fs-6 d-flex justify-content-center gap-1"><i
-                    class="bi bi-pie-chart text-success"></i> 10%</span>
-                <span class="text-muted" style="font-size: 0.65rem;">Budget Left</span>
-              </div>
-              <div>
-                <span class="d-block fw-bold text-dark fs-6 d-flex justify-content-center gap-1"
-                  style="color: #a855f7 !important;"><i class="bi bi-list-task"></i> 2</span>
-                <span class="text-muted" style="font-size: 0.65rem;">Phases Pending</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Upcoming Milestones -->
-          <div class="glass-card rounded-3 p-4 bg-white">
-            <h3 class="fs-6 fw-bold text-dark mb-4">Upcoming Milestones</h3>
-            <div class="text-center p-4 text-muted small">No milestones found.</div>
-          </div>
-
-          <!-- Recent Payments -->
-          <div class="glass-card rounded-3 p-4 bg-white">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <h3 class="fs-6 fw-bold text-dark mb-0">Recent Payments</h3>
-              <a href="#" class="text-primary text-decoration-none fw-bold" style="font-size: 0.75rem;">View All</a>
-            </div>
-
-            <div class="text-center p-4 text-muted small">No payments yet.</div>
-          </div>
-
-          <!-- Contract Participants -->
-          <div class="glass-card rounded-3 p-4 bg-white flex-grow-1">
-            <h3 class="fs-6 fw-bold text-dark mb-4">Contract Participants</h3>
-            <div class="d-flex flex-column gap-4 mb-4">
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex gap-3 align-items-center">
-                  <div
-                    class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center flex-shrink-0"
-                    style="width: 36px; height: 36px;">{{ diary?.freelancerId?.registrationDetails?.fullName?.charAt(0)
-                    || 'F' }}</div>
-                  <div>
-                    <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">{{
-                      diary?.freelancerId?.registrationDetails?.fullName || 'Freelancer' }}</span>
-                    <span class="text-muted" style="font-size: 0.65rem;">Freelancer</span>
-                  </div>
-                </div>
-                <span *ngIf="userRole === 'freelancer'"
-                  class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-2 py-1"
-                  style="font-size: 0.65rem;">You</span>
-              </div>
-
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex gap-3 align-items-center">
-                  <div
-                    class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
-                    style="width: 36px; height: 36px;">{{ diary?.clientId?.registrationDetails?.fullName?.charAt(0) ||
-                    'C' }}</div>
-                  <div>
-                    <span class="fw-bold text-dark d-block" style="font-size: 0.75rem;">{{
-                      diary?.clientId?.registrationDetails?.fullName || 'Client' }}</span>
-                    <span class="text-muted" style="font-size: 0.65rem;">Client</span>
-                  </div>
-                </div>
-                <span *ngIf="userRole === 'client'"
-                  class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-2 py-1"
-                  style="font-size: 0.65rem;">You</span>
-              </div>
-            </div>
-            <app-button label="Send Message" variant="outline-primary" [block]="true" class="mt-auto">
-              <i class="bi bi-send me-2"></i>
-            </app-button>
-          </div>
-
-        </div>
+    <!-- Project Phases Header Section -->
+    <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+      <div class="min-w-0">
+        <h3 class="fs-5 fw-bold text-dark mb-1">Project Phases</h3>
+        <p class="text-muted mb-0" style="font-size: 14px; line-height: 1.4;">
+          Track progress and deliverables of all contract phases
+        </p>
       </div>
     </div>
+
+    <!-- Project Phases Content (Full Width) -->
+
+    <!-- Desktop: Table view (Large screens >= 992px) -->
+    <div class="d-none d-lg-block table-responsive">
+      <app-table [columns]="columns" [data]="diary?.phases" [loading]="isLoading"></app-table>
+    </div>
+
+    <!-- Mobile & Tablet: Cards List View (< 992px) -->
+    <div class="d-lg-none">
+      @if (isLoading) {
+      <div class="text-center py-4 text-muted small">Loading phases...</div>
+      } @else if (!diary?.phases || diary?.phases?.length === 0) {
+      <div class="text-center py-4 text-muted small">No phases found for this contract.</div>
+      } @else {
+      <div class="d-flex flex-column gap-3">
+        @for (phase of diary.phases; track phase._id || $index; let i = $index) {
+        <div class="phase-mobile-card border rounded-3 p-3 bg-white shadow-sm">
+          <!-- Card Header: Number + Title + Action -->
+          <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+            <div class="d-flex align-items-center gap-2 min-w-0">
+              <span
+                class="rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+                style="width: 28px; height: 28px; font-size: 0.75rem;">
+                {{ i + 1 }}
+              </span>
+              <h6 class="fw-bold mb-0 text-dark text-truncate" [title]="phase.name">
+                {{ phase.name }}
+              </h6>
+            </div>
+
+            <div class="dropdown flex-shrink-0">
+              <button class="btn btn-sm btn-link text-dark p-0 text-decoration-none" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                <i class="bi bi-three-dots-vertical fs-6"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none"
+                style="min-width: auto;">
+                <app-dropdown [items]="getDropdownItems(phase)" (itemSelected)="onDropdownAction($event, phase)"
+                  class="d-block" style="position: relative;">
+                </app-dropdown>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Badge -->
+          <div class="mb-3">
+            <app-badge [label]="phase.status" [variant]="getBadgeVariant(phase.status)" appearance="subtle"
+              [rounded]="true" size="small" class="text-capitalize"></app-badge>
+          </div>
+
+          <!-- Key Details Row: Budget & Due Date -->
+          <div class="d-flex align-items-center justify-content-between pt-2 border-top gap-2 text-muted small">
+            <div>
+              <span class="d-block text-uppercase fw-semibold" style="font-size: 0.65rem;">Budget</span>
+              <span class="fw-bold text-dark fs-6">₹{{ phase.amount | number }}</span>
+            </div>
+
+            <div class="text-end">
+              <span class="d-block text-uppercase fw-semibold" style="font-size: 0.65rem;">Due Date</span>
+              <span class="fw-semibold text-dark d-flex align-items-center gap-1 justify-content-end"
+                style="font-size: 0.8rem;">
+                <i class="bi bi-calendar3 text-muted"></i> {{ phase.deadline | date:'MMM dd, yyyy' }}
+              </span>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </div>
+
   </div>
   }
 </div>

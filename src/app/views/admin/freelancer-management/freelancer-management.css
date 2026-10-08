@@ -12,15 +12,70 @@
 }
 
 /* Background decorations */
-.bg-shape { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
-.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
-.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
-.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.05); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
-.concentric-circles { position: absolute; pointer-events: none; z-index: 0; top: 15%; left: 0; }
-.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.15); }
-.circle-1 { width: 300px; height: 300px; }
-.circle-2 { width: 500px; height: 500px; }
-.circle-3 { width: 700px; height: 700px; }
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.top-left {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  top: -150px;
+  left: -150px;
+}
+
+.bottom-right {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  bottom: -200px;
+  right: -200px;
+}
+
+.right-shape {
+  width: 400px;
+  height: 400px;
+  background: rgba(37, 99, 235, 0.05);
+  filter: blur(80px);
+  top: 30%;
+  right: -100px;
+  transform: translateY(-50%);
+}
+
+.concentric-circles {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  top: 15%;
+  left: 0;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(168, 85, 247, 0.15);
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+}
+
+.circle-2 {
+  width: 500px;
+  height: 500px;
+}
+
+.circle-3 {
+  width: 700px;
+  height: 700px;
+}
 
 /* Premium Card (Glassmorphism) */
 .glass-card {
@@ -95,4 +150,809 @@
   position: static !important;
   display: block !important;
   margin-top: 0 !important;
+}
+
+/* =========================================================
+   FREELANCER FILTER
+========================================================= */
+
+.freelancer-filter-section {
+  position: relative;
+  overflow: visible;
+}
+
+.freelancer-filter-row {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 2fr) minmax(180px, 1fr) minmax(260px, 1fr);
+
+  gap: 16px;
+
+  align-items: end;
+}
+
+.freelancer-search-field,
+.freelancer-status-field,
+.freelancer-filter-actions {
+  min-width: 0;
+}
+
+.freelancer-filter-actions {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 10px;
+
+  min-width: 0;
+}
+
+.filter-action-button {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   ACTIVE FILTERS
+========================================================= */
+
+.active-filters {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 18px;
+
+  padding-top: 16px;
+
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.active-filter-title {
+  flex: 0 0 auto;
+
+  color: #343a40;
+
+  font-size: 0.8rem;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.active-filter-list {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   DATA SECTION
+========================================================= */
+
+.freelancer-data-section {
+  overflow: hidden;
+}
+
+.desktop-table-view {
+  display: block;
+}
+
+.responsive-freelancer-list {
+  display: none;
+}
+
+
+/* =========================================================
+   FREELANCER CARD GRID
+========================================================= */
+
+.freelancer-card-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 18px;
+
+  padding: 20px;
+}
+
+
+/* =========================================================
+   FREELANCER CARD
+========================================================= */
+
+.freelancer-card {
+  position: relative;
+
+  min-width: 0;
+
+  padding: 18px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  border: 1px solid rgba(168, 85, 247, 0.12);
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.045);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.freelancer-card:hover {
+  transform: translateY(-2px);
+
+  border-color: rgba(168, 85, 247, 0.25);
+
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.freelancer-card-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding-bottom: 16px;
+
+  border-bottom: 1px solid #f0f0f3;
+}
+
+.freelancer-identity {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+}
+
+.freelancer-avatar {
+  width: 48px;
+  height: 48px;
+
+  min-width: 48px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  border: 2px solid #ffffff;
+
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.12);
+}
+
+.freelancer-name-wrapper {
+  min-width: 0;
+}
+
+.freelancer-name {
+  margin: 0;
+
+  color: #212529;
+
+  font-size: 0.95rem;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.freelancer-id {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #8a8f98;
+
+  font-size: 0.72rem;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   ACTION BUTTON
+========================================================= */
+
+.freelancer-action-dropdown {
+  flex-shrink: 0;
+}
+
+.freelancer-action-button {
+  width: 34px;
+  height: 34px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 1px solid #e8e8ed;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #555b65;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.freelancer-action-button:hover {
+  background: #f7f4ff;
+
+  border-color: rgba(168, 85, 247, 0.25);
+
+  color: #a855f7;
+}
+
+
+/* =========================================================
+   CARD BODY
+========================================================= */
+
+.freelancer-card-body {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+
+  padding: 16px 0 0;
+}
+
+.freelancer-info-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+}
+
+.freelancer-info-icon {
+  width: 34px;
+  height: 34px;
+
+  min-width: 34px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f7f5ff;
+
+  color: #a855f7;
+
+  font-size: 0.9rem;
+}
+
+.freelancer-info-content {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+
+  min-width: 0;
+}
+
+.freelancer-info-label {
+  color: #969aa3;
+
+  font-size: 0.7rem;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.04em;
+}
+
+.freelancer-info-value {
+  min-width: 0;
+
+  color: #343840;
+
+  font-size: 0.82rem;
+}
+
+.freelancer-email {
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   CARD FOOTER
+========================================================= */
+
+.freelancer-card-footer {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding-top: 14px;
+
+  border-top: 1px solid #f0f0f3;
+}
+
+.freelancer-record-number {
+  color: #969aa3;
+
+  font-size: 0.72rem;
+
+  white-space: nowrap;
+}
+
+.view-freelancer-button {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 4px 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #0d6efd;
+
+  font-size: 0.78rem;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  transition:
+    color 0.2s ease,
+    gap 0.2s ease;
+}
+
+.view-freelancer-button:hover {
+  gap: 8px;
+
+  color: #084298;
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.responsive-pagination {
+  padding: 0 20px 20px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.freelancer-empty-state {
+  min-height: 260px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 40px 20px;
+
+  text-align: center;
+}
+
+.freelancer-empty-state .empty-icon {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin-bottom: 14px;
+
+  border-radius: 50%;
+
+  background: #f5f2ff;
+
+  color: #a855f7;
+
+  font-size: 1.5rem;
+}
+
+.freelancer-empty-state h4 {
+  margin: 0 0 6px;
+
+  color: #292d33;
+
+  font-size: 1rem;
+
+  font-weight: 700;
+}
+
+.freelancer-empty-state p {
+  margin: 0;
+
+  color: #8a8f98;
+
+  font-size: 0.8rem;
+}
+
+
+/* =========================================================
+   DROPDOWN ALIGNMENT
+========================================================= */
+
+:host ::ng-deep app-dropdown .dropdown-menu {
+  position: static !important;
+
+  display: block !important;
+
+  margin-top: 0 !important;
+}
+
+
+/* =========================================================
+   DESKTOP
+   1200px+
+========================================================= */
+
+@media (min-width: 1200px) {
+
+  .desktop-table-view {
+    display: block;
+  }
+
+  .responsive-freelancer-list {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   768px - 1199px
+
+   TWO CARDS PER ROW
+========================================================= */
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+
+  .dashboard-container {
+    padding: 1rem !important;
+  }
+
+  .glass-card {
+    max-width: 100% !important;
+
+    padding: 1.25rem !important;
+
+    border-radius: 18px !important;
+  }
+
+
+  /* Filter */
+
+  .freelancer-filter-row {
+    grid-template-columns:
+      minmax(0, 1fr) minmax(220px, 0.55fr);
+
+    gap: 14px;
+  }
+
+  .freelancer-search-field {
+    grid-column: 1 / -1;
+  }
+
+  .freelancer-status-field {
+    grid-column: 1;
+  }
+
+  .freelancer-filter-actions {
+    grid-column: 2;
+  }
+
+
+  /* Cards */
+
+  .desktop-table-view {
+    display: none;
+  }
+
+  .responsive-freelancer-list {
+    display: block;
+  }
+
+  .freelancer-card-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+
+    padding: 16px;
+  }
+
+  .freelancer-card {
+    padding: 16px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   < 768px
+
+   ONE CARD PER ROW
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .dashboard-container {
+    padding: 0.75rem !important;
+  }
+
+  .glass-card {
+    max-width: 100% !important;
+
+    padding: 1rem !important;
+
+    border-radius: 16px !important;
+  }
+
+
+  /* Filter */
+
+  .freelancer-filter-section .card-body {
+    padding: 16px !important;
+  }
+
+  .freelancer-filter-row {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 12px;
+  }
+
+  .freelancer-search-field,
+  .freelancer-status-field,
+  .freelancer-filter-actions {
+    width: 100%;
+  }
+
+  .freelancer-filter-actions {
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+
+  /* Active filters */
+
+  .active-filters {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 8px;
+
+    margin-top: 16px;
+
+    padding-top: 14px;
+  }
+
+  .active-filter-title {
+    width: 100%;
+  }
+
+  .active-filter-list {
+    width: 100%;
+  }
+
+
+  /* Cards */
+
+  .desktop-table-view {
+    display: none;
+  }
+
+  .responsive-freelancer-list {
+    display: block;
+  }
+
+  .freelancer-card-grid {
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+
+    padding: 12px;
+  }
+
+  .freelancer-card {
+    padding: 15px;
+
+    border-radius: 16px;
+  }
+
+  .freelancer-avatar {
+    width: 44px;
+    height: 44px;
+
+    min-width: 44px;
+  }
+
+  .freelancer-name {
+    font-size: 0.9rem;
+  }
+
+  .freelancer-card-body {
+    padding: 15px 0;
+
+    gap: 12px;
+  }
+
+  .freelancer-info-icon {
+    width: 32px;
+    height: 32px;
+
+    min-width: 32px;
+  }
+
+  .responsive-pagination {
+    padding: 0 12px 15px;
+  }
+
+
+  /* Background decorations */
+
+  .concentric-circles {
+    display: none;
+  }
+
+  .top-left {
+    width: 300px;
+    height: 300px;
+  }
+
+  .bottom-right {
+    width: 350px;
+    height: 350px;
+  }
+
+  .right-shape {
+    width: 250px;
+    height: 250px;
+  }
+
+}
+
+
+/* =========================================================
+   EXTRA SMALL
+   < 480px
+========================================================= */
+
+@media (max-width: 479.98px) {
+
+  .dashboard-container {
+    padding: 0.5rem !important;
+  }
+
+  .glass-card {
+    padding: 0.75rem !important;
+
+    border-radius: 14px !important;
+  }
+
+  .freelancer-filter-section .card-body {
+    padding: 12px !important;
+  }
+
+  .freelancer-card-grid {
+    padding: 8px;
+
+    gap: 10px;
+  }
+
+  .freelancer-card {
+    padding: 13px;
+
+    border-radius: 14px;
+  }
+
+  .freelancer-name {
+    max-width: 180px;
+  }
+
+  .freelancer-email {
+    max-width: 190px;
+  }
+
+  .freelancer-card-footer {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .view-freelancer-button {
+    width: 100%;
+
+    justify-content: center;
+
+    padding: 8px 10px;
+
+    border-radius: 8px;
+
+    background: #f5f7ff;
+  }
+
 }

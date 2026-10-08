@@ -1,20 +1,5 @@
-:host {
-  --bg-color: #fafbfc;
-  --primary-color: #0d6efd;
-}
-
-
-
 .cursor-pointer {
   cursor: pointer;
-}
-
-.nav-tabs .nav-link {
-  padding-bottom: 1rem;
-}
-
-.nav-tabs .nav-link.active {
-  border-bottom: 2px solid var(--primary-color) !important;
 }
 
 .dashboard-container {
@@ -35,7 +20,7 @@
 .top-left {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
   top: -150px;
   left: -150px;
 }
@@ -43,7 +28,7 @@
 .bottom-right {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
   bottom: -200px;
   right: -200px;
 }
@@ -51,7 +36,7 @@
 .right-shape {
   width: 400px;
   height: 400px;
-  background: rgba(37, 99, 235, 0.05);
+  background: rgba(37, 99, 235, 0.04);
   filter: blur(80px);
   top: 30%;
   right: -100px;
@@ -72,33 +57,73 @@
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  border: 1px dashed rgba(168, 85, 247, 0.15);
+  border: 1px dashed rgba(168, 85, 247, 0.12);
 }
 
-.circle-1 {
-  width: 300px;
-  height: 300px;
-}
-
-.circle-2 {
-  width: 500px;
-  height: 500px;
-}
-
-.circle-3 {
-  width: 700px;
-  height: 700px;
-}
+.circle-1 { width: 300px; height: 300px; }
+.circle-2 { width: 500px; height: 500px; }
+.circle-3 { width: 700px; height: 700px; }
 
 /* Premium Card (Glassmorphism) */
 .glass-card {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
-  border-radius: 20px !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.06), 0 4px 10px rgba(0, 0, 0, 0.02);
+  border-radius: 16px !important;
 }
 
+/* Header Single-Row Styling */
+.header-back-btn {
+  width: 36px;
+  height: 36px;
+  color: #475569;
+  background: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.header-back-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Meta Inline Strip */
+.meta-inline-strip {
+  background: rgba(248, 250, 252, 0.85);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  padding: 10px 14px !important;
+  max-width: 100%;
+}
+
+.meta-inline-label {
+  font-size: 0.78rem;
+}
+
+.meta-inline-val {
+  font-size: 0.82rem;
+}
+
+.meta-dot {
+  opacity: 0.5;
+  font-size: 0.85rem;
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+/* Phase Mobile Card */
+.phase-mobile-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-color: rgba(226, 232, 240, 0.8) !important;
+}
+
+.phase-mobile-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.08) !important;
+}
 
 /* Fix nested app-dropdown alignment inside bootstrap dropdown wrapper */
 :host ::ng-deep app-dropdown .dropdown-menu {

@@ -1,10 +1,9 @@
 <div class="dropdown">
-    <button class="btn btn-light position-relative p-0 border-0" type="button" data-bs-toggle="dropdown"
-        aria-expanded="false" id="notifDropdown"
-        style="box-shadow: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+    <button class="btn btn-light position-relative p-0 border-0 notif-trigger-btn" type="button"
+        data-bs-toggle="dropdown" aria-expanded="false" id="notifDropdown" aria-label="Notifications">
         <i class="bi bi-bell text-secondary fs-4"></i>
         @if (unreadCount > 0) {
-        <span class="position-absolute top-0 start-100 translate-middle" style="margin-top: 6px; margin-left: -6px;">
+        <span class="position-absolute top-0 start-100 translate-middle notif-badge-wrapper">
             <app-badge size="small" [count]="unreadCount" variant="danger" appearance="solid"
                 [rounded]="true"></app-badge>
         </span>
@@ -35,7 +34,9 @@
                     <div class="notif-time-long d-flex justify-content-between align-items-center">
                         <span><i class="bi bi-clock"></i> {{ notif.createdAt | date:'medium' }}</span>
                         @if (!notif.read) {
-                            <a href="#" (click)="markAsRead($event, notif._id!)" style="font-size: 12px; color: #2563eb; text-decoration: none; font-weight: 500;">Mark as read</a>
+                        <a href="#" (click)="markAsRead($event, notif._id!)"
+                            style="font-size: 12px; color: #2563eb; text-decoration: none; font-weight: 500;">Mark as
+                            read</a>
                         }
                     </div>
                 </div>
@@ -50,14 +51,16 @@
 
         @if (notifications.length > 0) {
         <div class="notif-footer d-flex justify-content-between px-3 py-2 border-top">
-            <a href="#" (click)="clearAll($event)" style="font-size: 12px; color: #dc3545; text-decoration: none;">Clear all</a>
+            <a href="#" (click)="clearAll($event)" style="font-size: 12px; color: #dc3545; text-decoration: none;">Clear
+                all</a>
             <div class="d-flex gap-3">
-                @if (visibleLimit > 4) {
-                    <a href="#" (click)="viewLess($event)" style="font-size: 12px; color: #6b7280; text-decoration: none;">View Less</a>
+                @if (visibleLimit > 3) {
+                <a href="#" (click)="viewLess($event)"
+                    style="font-size: 12px; color: #6b7280; text-decoration: none;">View Less</a>
                 }
-                @if (visibleLimit < notifications.length) {
-                    <a href="#" (click)="viewMore($event)" style="font-size: 12px; color: #2563eb; font-weight: 500; text-decoration: none;">View More</a>
-                }
+                @if (visibleLimit < notifications.length) { <a href="#" (click)="viewMore($event)"
+                    style="font-size: 12px; color: #2563eb; font-weight: 500; text-decoration: none;">View More</a>
+                    }
             </div>
         </div>
         }

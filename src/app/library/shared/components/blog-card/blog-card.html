@@ -1,0 +1,98 @@
+<article class="blog-card">
+
+    <!-- =========================
+         BLOG IMAGE
+    ========================== -->
+    <div class="blog-card-image">
+
+        @if (blog.featuredMedia || blog.blogBanner) {
+
+        <img [src]="blog.featuredMedia || blog.blogBanner" [alt]="blog.title" loading="lazy" class="blog-image">
+
+        } @else {
+
+        <div class="blog-image-placeholder">
+            <i class="bi bi-image"></i>
+        </div>
+
+        }
+
+        <!-- Category -->
+        @if (blog.category) {
+
+        <span class="blog-category">
+            {{ blog.category }}
+        </span>
+
+        }
+
+    </div>
+
+
+    <!-- =========================
+         BLOG CONTENT
+    ========================== -->
+    <div class="blog-card-body">
+
+        <!-- Title -->
+        <h2 class="blog-card-title">
+            {{ blog.title }}
+        </h2>
+
+
+        <!-- Description / Excerpt -->
+        @if (getExcerpt()) {
+
+        <p class="blog-card-description">
+            {{ getExcerpt() }}
+        </p>
+
+        }
+
+
+        <!-- Tags -->
+        @if (blog.tags.length) {
+
+        <div class="blog-tags">
+
+            @for (tag of blog.tags.slice(0, 3); track tag) {
+
+            <span class="blog-tag">
+                #{{ tag }}
+            </span>
+
+            }
+
+        </div>
+
+        }
+
+
+        <!-- Details -->
+        <button type="button" class="blog-details-link" (click)="onViewDetails()">
+
+            <span>
+                View details
+            </span>
+
+            <i class="bi bi-arrow-right"></i>
+
+        </button>
+
+
+        <!-- Meta -->
+        <div class="blog-card-meta">
+
+            <span class="blog-date">
+                {{ formatDate(blog.createdAt) }}
+            </span>
+
+            <span class="blog-read-time">
+                {{ getReadTime() }}
+            </span>
+
+        </div>
+
+    </div>
+
+</article>

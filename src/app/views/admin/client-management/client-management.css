@@ -2,7 +2,15 @@
   --bg-color: #fafbfc;
   --primary-light: #d6eaff;
   --primary-color: #0d6efd;
+  --purple-color: #a855f7;
+  --text-dark: #212529;
+  --text-muted: #6c757d;
+  --border-color: rgba(168, 85, 247, 0.12);
 }
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
 
 .dashboard-container {
   font-family: 'Inter', 'Outfit', sans-serif;
@@ -11,7 +19,11 @@
   min-height: 100vh;
 }
 
-/* Background decorations */
+
+/* =========================================================
+   BACKGROUND DECORATIONS
+========================================================= */
+
 .bg-shape {
   position: absolute;
   border-radius: 50%;
@@ -22,7 +34,9 @@
 .top-left {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
   top: -150px;
   left: -150px;
 }
@@ -30,7 +44,9 @@
 .bottom-right {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
   bottom: -200px;
   right: -200px;
 }
@@ -77,50 +93,854 @@
   height: 700px;
 }
 
-/* Premium Card (Glassmorphism) */
+
+/* =========================================================
+   GLASS CARD
+========================================================= */
+
 .glass-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
   border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
+
+  box-shadow:
+    0 15px 40px -10px rgba(74, 58, 255, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.05);
+
   border-radius: 20px !important;
 }
 
-.stat-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+/* =========================================================
+   CLIENT DATA SECTION
+========================================================= */
+
+.client-data-section {
+  overflow: hidden;
 }
 
-.stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+
+/* =========================================================
+   DESKTOP TABLE
+========================================================= */
+
+.desktop-table-view {
+  display: block;
 }
 
 
-.avatar-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #fff;
-  border: 3px solid #5a5ce8;
+/* =========================================================
+   RESPONSIVE CARD VIEW
+========================================================= */
+
+.responsive-client-list {
+  display: none;
+}
+
+.client-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  padding: 20px;
+}
+
+
+/* =========================================================
+   CLIENT CARD
+========================================================= */
+
+.client-card {
   position: relative;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  border: 1px solid rgba(168, 85, 247, 0.12);
+
+  border-radius: 18px;
+
+  padding: 18px;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.045);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+
+  min-width: 0;
 }
 
-.avatar-circle::after {
-  content: "";
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  right: 4px;
-  bottom: 4px;
+.client-card:hover {
+  transform: translateY(-2px);
+
+  border-color: rgba(168, 85, 247, 0.25);
+
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.client-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding-bottom: 16px;
+
+  border-bottom: 1px solid #f0f0f3;
+}
+
+.client-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  min-width: 0;
+}
+
+.client-avatar {
+  width: 48px;
+  height: 48px;
+
+  min-width: 48px;
+
   border-radius: 50%;
-  background-color: #212529;
+
+  object-fit: cover;
+
+  border: 2px solid #ffffff;
+
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.12);
+}
+
+.client-name-wrapper {
+  min-width: 0;
+}
+
+.client-name {
+  margin: 0;
+
+  font-size: 0.95rem;
+  font-weight: 700;
+
+  color: var(--text-dark);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.client-id {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 0.72rem;
+
+  color: #8a8f98;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 
+/* =========================================================
+   ACTION BUTTON
+========================================================= */
 
-/* Fix nested app-dropdown alignment inside bootstrap dropdown wrapper */
+.client-action-dropdown {
+  flex-shrink: 0;
+}
+
+.client-action-button {
+  width: 34px;
+  height: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e8e8ed;
+
+  background: #ffffff;
+
+  color: #555b65;
+
+  border-radius: 9px;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.client-action-button:hover {
+  background: #f7f4ff;
+
+  border-color: rgba(168, 85, 247, 0.25);
+
+  color: var(--purple-color);
+}
+
+
+/* =========================================================
+   CARD BODY
+========================================================= */
+
+.client-card-body {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  padding: 16px 0 0;
+}
+
+.client-info-item {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+}
+
+.client-info-icon {
+  width: 34px;
+  height: 34px;
+
+  min-width: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f7f5ff;
+
+  color: var(--purple-color);
+
+  font-size: 0.9rem;
+}
+
+.client-info-content {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+
+  min-width: 0;
+}
+
+.client-info-label {
+  font-size: 0.7rem;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.04em;
+
+  color: #969aa3;
+}
+
+.client-info-value {
+  min-width: 0;
+
+  font-size: 0.82rem;
+
+  color: #343840;
+}
+
+.client-email {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   CARD FOOTER
+========================================================= */
+
+.client-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding-top: 14px;
+
+  border-top: 1px solid #f0f0f3;
+}
+
+.client-record-number {
+  font-size: 0.72rem;
+
+  color: #969aa3;
+
+  white-space: nowrap;
+}
+
+.view-client-button {
+  border: 0;
+
+  background: transparent;
+
+  color: var(--primary-color);
+
+  font-size: 0.78rem;
+
+  font-weight: 600;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 4px 0;
+
+  white-space: nowrap;
+
+  transition:
+    color 0.2s ease,
+    gap 0.2s ease;
+}
+
+.view-client-button:hover {
+  color: #084298;
+  gap: 8px;
+}
+
+
+/* =========================================================
+   RESPONSIVE PAGINATION
+========================================================= */
+
+.responsive-pagination {
+  padding: 0 20px 20px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.client-empty-state {
+  min-height: 260px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 40px 20px;
+}
+
+.empty-icon {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #f5f2ff;
+
+  color: var(--purple-color);
+
+  font-size: 1.5rem;
+
+  margin-bottom: 14px;
+}
+
+.client-empty-state h4 {
+  margin: 0 0 6px;
+
+  font-size: 1rem;
+
+  font-weight: 700;
+
+  color: #292d33;
+}
+
+.client-empty-state p {
+  margin: 0;
+
+  color: #8a8f98;
+
+  font-size: 0.8rem;
+}
+
+
+/* =========================================================
+   DROPDOWN ALIGNMENT
+========================================================= */
+
 :host ::ng-deep app-dropdown .dropdown-menu {
   position: static !important;
   display: block !important;
   margin-top: 0 !important;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   TABLE
+========================================================= */
+
+@media (min-width: 1200px) {
+
+  .desktop-table-view {
+    display: block;
+  }
+
+  .responsive-client-list {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   MEDIUM
+   768px - 1199px
+   TWO CARDS PER ROW
+========================================================= */
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+
+  .dashboard-container {
+    padding: 1rem !important;
+  }
+
+  .glass-card {
+    padding: 1.25rem !important;
+
+    max-width: 100% !important;
+
+    border-radius: 18px !important;
+  }
+
+  .desktop-table-view {
+    display: none;
+  }
+
+  .responsive-client-list {
+    display: block;
+  }
+
+  .client-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+
+    padding: 16px;
+  }
+
+  .client-card {
+    padding: 16px;
+  }
+}
+
+
+/* =========================================================
+   SMALL
+   < 768px
+   ONE CARD PER ROW
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .dashboard-container {
+    padding: 0.75rem !important;
+  }
+
+  .glass-card {
+    padding: 1rem !important;
+
+    max-width: 100% !important;
+
+    border-radius: 16px !important;
+  }
+
+  .desktop-table-view {
+    display: none;
+  }
+
+  .responsive-client-list {
+    display: block;
+  }
+
+  .client-card-grid {
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+
+    padding: 12px;
+  }
+
+  .client-card {
+    padding: 15px;
+
+    border-radius: 16px;
+  }
+
+  .client-card-header {
+    padding-bottom: 13px;
+  }
+
+  .client-avatar {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
+
+  .client-name {
+    font-size: 0.9rem;
+  }
+
+  .client-card-body {
+    padding: 15px 0;
+
+    gap: 12px;
+  }
+
+  .client-info-icon {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+  }
+
+  .client-card-footer {
+    padding-top: 12px;
+  }
+
+  .responsive-pagination {
+    padding: 0 12px 15px;
+  }
+
+  /* Hide large decorative circles on phones */
+  .concentric-circles {
+    display: none;
+  }
+
+  .top-left {
+    width: 300px;
+    height: 300px;
+  }
+
+  .bottom-right {
+    width: 350px;
+    height: 350px;
+  }
+
+  .right-shape {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+
+/* =========================================================
+   EXTRA SMALL
+   < 480px
+========================================================= */
+
+@media (max-width: 479.98px) {
+
+  .dashboard-container {
+    padding: 0.5rem !important;
+  }
+
+  .glass-card {
+    padding: 0.75rem !important;
+
+    border-radius: 14px !important;
+  }
+
+  .client-card-grid {
+    padding: 8px;
+
+    gap: 10px;
+  }
+
+  .client-card {
+    padding: 13px;
+
+    border-radius: 14px;
+  }
+
+  .client-name {
+    max-width: 180px;
+  }
+
+  .client-email {
+    max-width: 190px;
+  }
+
+  .client-card-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .view-client-button {
+    width: 100%;
+
+    justify-content: center;
+
+    padding: 8px 10px;
+
+    border-radius: 8px;
+
+    background: #f5f7ff;
+  }
+}
+
+
+
+/* =========================================================
+   CLIENT FILTER SECTION
+========================================================= */
+
+.client-filter-section {
+  position: relative;
+  overflow: visible;
+}
+
+
+/* =========================================================
+   FILTER ROW
+========================================================= */
+
+.client-filter-row {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 2fr) minmax(180px, 1fr) minmax(260px, 1fr);
+
+  gap: 16px;
+
+  align-items: end;
+}
+
+
+/* =========================================================
+   FILTER FIELDS
+========================================================= */
+
+.client-search-field,
+.client-status-field,
+.client-filter-actions {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.client-filter-actions {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 10px;
+
+  min-width: 0;
+}
+
+.filter-action-button {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   ACTIVE FILTERS
+========================================================= */
+
+.active-filters {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 18px;
+
+  padding-top: 16px;
+
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.active-filter-title {
+  flex: 0 0 auto;
+
+  color: #343a40;
+
+  font-size: 0.8rem;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.active-filter-list {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   TABLET
+   768px - 1199px
+========================================================= */
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+
+  .client-filter-row {
+    grid-template-columns:
+      minmax(0, 1fr) minmax(220px, 0.55fr);
+
+    gap: 14px;
+  }
+
+  /*
+    Search occupies complete first row.
+    Status and buttons share second row.
+  */
+
+  .client-search-field {
+    grid-column: 1 / -1;
+  }
+
+  .client-status-field {
+    grid-column: 1;
+  }
+
+  .client-filter-actions {
+    grid-column: 2;
+  }
+
+  .active-filters {
+    margin-top: 16px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   < 768px
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .client-filter-section .card-body {
+    padding: 16px !important;
+  }
+
+  .client-filter-row {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 12px;
+  }
+
+  .client-search-field,
+  .client-status-field,
+  .client-filter-actions {
+    width: 100%;
+  }
+
+  .client-filter-actions {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+
+    width: 100%;
+  }
+
+  .filter-action-button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .active-filters {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-top: 16px;
+
+    padding-top: 14px;
+  }
+
+  .active-filter-title {
+    width: 100%;
+  }
+
+  .active-filter-list {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   EXTRA SMALL MOBILE
+   < 480px
+========================================================= */
+
+@media (max-width: 479.98px) {
+
+  .client-filter-section .card-body {
+    padding: 12px !important;
+  }
+
+  .client-filter-row {
+    gap: 10px;
+  }
+
+  .client-filter-actions {
+    gap: 8px;
+  }
+
+  .active-filters {
+    margin-top: 14px;
+
+    padding-top: 12px;
+  }
+
+  .active-filter-list {
+    gap: 6px;
+  }
 }

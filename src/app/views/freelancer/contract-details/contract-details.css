@@ -37,9 +37,43 @@
 
 /* Premium Card (Glassmorphism) */
 .glass-card {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.08), 0 4px 15px rgba(0, 0, 0, 0.04);
   border-radius: 20px !important;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 0.75rem !important;
+  }
+
+  .glass-card {
+    border-radius: 16px !important;
+  }
+
+  .contract-icon-box {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .contract-icon-box i {
+    font-size: 1.25rem !important;
+  }
+
+  h1.fs-4 {
+    font-size: 1.15rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-container {
+    padding: 0.5rem !important;
+  }
+
+  .glass-card {
+    border-radius: 14px !important;
+  }
 }

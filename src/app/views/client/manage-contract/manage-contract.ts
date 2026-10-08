@@ -12,13 +12,14 @@ import { Chip } from '../../../library/ui/components/chip/chip';
 import { Button } from '../../../library/ui/components/button/button';
 import { Badge } from '../../../library/ui/components/badge/badge';
 import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
+import { ContractCard, ContractCardAction } from '../../../library/shared/components/contract-card/contract-card';
 
 declare var window: any;
 
 @Component({
   selector: 'app-manage-contract',
   standalone: true,
-  imports: [CommonModule, Table, InputField, Chip, Button, Badge, Dropdown],
+  imports: [CommonModule, Table, InputField, Chip, Button, Badge, Dropdown, ContractCard],
   templateUrl: './manage-contract.html',
   styleUrl: './manage-contract.css'
 })
@@ -26,7 +27,7 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
   allContracts: Contract[] = [];
   filteredContracts: Contract[] = [];
   isLoading: boolean = true;
-  
+
   // Filters
   searchQuery: string = '';
   selectedCategory: string = 'all';
@@ -127,8 +128,8 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
         if (search && search.trim() !== '') {
           this.activeFilters.push({ label: `Search: ${search}`, type: 'search', value: search });
           const query = search.toLowerCase();
-          filtered = filtered.filter(c => 
-            c.contractTitle?.toLowerCase().includes(query) || 
+          filtered = filtered.filter(c =>
+            c.contractTitle?.toLowerCase().includes(query) ||
             c.contractSubject?.toLowerCase().includes(query)
           );
         }
@@ -198,6 +199,128 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
         break;
     }
   }
+
+
+  onClientCardAction(event: {
+    action: string;
+    contract: Contract;
+  }): void {
+
+    const contract = event.contract as Contract;
+
+    switch (event.action) {
+
+      case 'applicants':
+
+        this.viewApplicants(contract._id);
+
+        break;
+
+
+      case 'progress':
+
+        this.viewContractProgress(contract._id);
+
+        break;
+
+
+      case 'edit':
+
+        this.editContract(contract._id);
+
+        break;
+
+
+      case 'fund':
+
+        this.fundContract(contract);
+
+        break;
+
+
+      case 'feedback':
+
+        this.router.navigate([
+          '/submit-feedback',
+          contract._id
+        ]);
+
+        break;
+
+
+      case 'delete':
+
+        this.deleteContract(contract._id);
+
+        break;
+
+    }
+  }
+
+  getClientCardActions(contract: Contract): ContractCardAction[] {
+
+    const actions: ContractCardAction[] = [
+
+      {
+        label: 'Applicants',
+        value: 'applicants',
+        icon: 'bi bi-people'
+      },
+
+      {
+        label: 'Contract Progress',
+        value: 'progress',
+        icon: 'bi bi-graph-up'
+      },
+
+      {
+        label: 'Edit',
+        value: 'edit',
+        icon: 'bi bi-pencil'
+      }
+
+    ];
+
+
+    // Feedback only after completion
+    if (
+      contract.status?.toLowerCase() === 'completed' &&
+      !(contract as any).feedbackSubmitted
+    ) {
+
+      actions.push({
+        label: 'Submit Feedback',
+        value: 'feedback',
+        icon: 'bi bi-star'
+      });
+
+    }
+
+
+    // Fund only when not fully funded
+    if (!this.isFullyFunded(contract)) {
+
+      actions.push({
+        label: 'Fund Contract',
+        value: 'fund',
+        icon: 'bi bi-credit-card'
+      });
+
+    }
+
+
+    // Delete
+    actions.push({
+      label: 'Delete',
+      value: 'delete',
+      icon: 'bi bi-trash',
+      className: 'dropdown-item-danger'
+    });
+
+
+    return actions;
+  }
+
 
   ngAfterViewInit(): void {
     setTimeout(() => {

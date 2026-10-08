@@ -1,4 +1,4 @@
-<div class="dashboard-container position-relative p-4">
+<div class="dashboard-container position-relative p-2 p-sm-3 p-md-4">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -12,7 +12,7 @@
   </div>
 
   <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
+  <div class="position-relative z-1 p-2 p-sm-3 p-md-4 mx-auto w-100" style="max-width: 1400px;">
     <!-- Back Navigation -->
     <div class="mb-3">
       <a routerLink="/find-contracts"
@@ -29,34 +29,30 @@
       </div>
     </div>
     } @else if (contract) {
-    <!-- Header Card -->
-    <div class="glass-card rounded-4 bg-white mb-4 overflow-hidden border border-light">
-      <div class="card-body p-4">
-        <div class="d-flex justify-content-between align-items-start mb-4">
-          <div class="d-flex gap-3 align-items-center">
-            <div
-              class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0"
-              style="width: 56px; height: 56px;">
-              <i class="bi bi-file-earmark-text fs-3"></i>
-            </div>
-            <div>
-              <h1 class="fw-bold fs-4 mb-2 text-dark">{{ contract.contractTitle }}</h1>
-              <div class="d-flex flex-wrap align-items-center gap-2">
-                <app-badge [label]="contract.contractType" variant="primary" appearance="subtle"
-                  [rounded]="true"></app-badge>
-                <span class="text-muted d-flex align-items-center gap-1 ms-2" style="font-size: 0.7rem;"><i
-                    class="bi bi-clock"></i> Posted on {{ contract.createdAt | date:'mediumDate' }}</span>
-              </div>
-            </div>
-          </div>
-          <app-button [variant]="isSaved ? 'light' : 'outline-secondary'" [iconOnly]="true" size="md"
-            (clicked)="toggleSave()" [disabled]="isSaving">
-            <i class="bi fs-5" [class.text-primary]="isSaved" [class.bi-bookmark-fill]="isSaved"
-              [class.bi-bookmark]="!isSaved"></i>
-          </app-button>
+    <!-- Header Open Row -->
+    <div class="d-flex justify-content-between align-items-center gap-3 mb-4">
+      <div class="d-flex align-items-center gap-3 min-w-0 flex-grow-1">
+        <div
+          class="contract-icon-box rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0"
+          style="width: 52px; height: 52px;">
+          <i class="bi bi-file-earmark-text fs-3"></i>
         </div>
-
-
+        <div class="min-w-0 flex-grow-1">
+          <h1 class="fw-bold fs-4 mb-1 text-dark text-truncate" [title]="contract.contractTitle">{{ contract.contractTitle }}</h1>
+          <div class="d-flex flex-wrap align-items-center gap-2">
+            <app-badge [label]="contract.contractType" variant="primary" appearance="subtle"
+              [rounded]="true"></app-badge>
+            <span class="text-muted d-flex align-items-center gap-1" style="font-size: 0.75rem;"><i
+                class="bi bi-clock"></i> Posted on {{ contract.createdAt | date:'mediumDate' }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex-shrink-0">
+        <app-button [variant]="isSaved ? 'light' : 'outline-secondary'" [iconOnly]="true" size="md"
+          (clicked)="toggleSave()" [disabled]="isSaving">
+          <i class="bi fs-5" [class.text-primary]="isSaved" [class.bi-bookmark-fill]="isSaved"
+            [class.bi-bookmark]="!isSaved"></i>
+        </app-button>
       </div>
     </div>
 
@@ -66,11 +62,11 @@
 
         <!-- Project & Budget Details -->
         <div class="glass-card rounded-4 bg-white mb-4">
-          <div class="card-body p-4">
-            <h2 class="fs-6 fw-bold mb-4 text-dark">Project & Budget Details</h2>
+          <div class="card-body p-3 p-sm-4">
+            <h2 class="fs-6 fw-bold mb-3 mb-sm-4 text-dark">Project & Budget Details</h2>
             <div class="row g-3">
               @for(stat of projectStats; track $index) {
-              <div class="col-md-4">
+              <div class="col-12 col-sm-6 col-md-4">
                 <app-stat-card [stat]="stat"></app-stat-card>
               </div>
               }
@@ -80,11 +76,11 @@
 
         <!-- Description & Deliverables -->
         <div class="row g-4 mb-4">
-          <div class="col-md-12">
+          <div class="col-12">
             <div class="glass-card rounded-4 bg-white h-100">
-              <div class="card-body p-4">
+              <div class="card-body p-3 p-sm-4">
                 <h2 class="fs-6 fw-bold mb-3 text-dark">Description</h2>
-                <p class="text-muted mb-0" style="font-size: 0.8rem; line-height: 1.6; white-space: pre-wrap;">{{
+                <p class="text-muted mb-0" style="font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap;">{{
                   contract.contractDescription }}</p>
               </div>
             </div>
@@ -94,7 +90,7 @@
 
       <!-- Right Sidebar -->
       <div class="col-lg-4">
-        <div class="d-flex flex-column gap-4">
+        <div class="d-flex flex-column gap-3 gap-sm-4">
 
 
           <!-- Action Banner -->
@@ -107,18 +103,18 @@
             </div>
           </div>
 
-          <div class="glass-card rounded-4 bg-white text-center p-4">
-            <h3 class="fs-5 fw-bold text-dark mb-3">Applied</h3>
-            <p class="text-muted mb-4" style="font-size: 0.8rem; line-height: 1.5;">You have already applied to this
+          <div class="glass-card rounded-4 bg-white text-center p-3 p-sm-4">
+            <h3 class="fs-5 fw-bold text-dark mb-2 mb-sm-3">Applied</h3>
+            <p class="text-muted mb-3 mb-sm-4" style="font-size: 0.8rem; line-height: 1.5;">You have already applied to this
               contract. You can withdraw your application if you no longer wish to be considered.</p>
             <app-button variant="danger" [block]="true" class="w-100 d-block" (clicked)="withdrawApplication()"
               [loading]="isApplying" [label]="isApplying ? 'Withdrawing...' : 'Withdraw Application'">
             </app-button>
           </div>
           } @else {
-          <div class="glass-card rounded-4 bg-white text-center p-4">
-            <h3 class="fs-5 fw-bold text-dark mb-3">Ready to Apply?</h3>
-            <p class="text-muted mb-4" style="font-size: 0.8rem; line-height: 1.5;">Submit your proposal to the client
+          <div class="glass-card rounded-4 bg-white text-center p-3 p-sm-4">
+            <h3 class="fs-5 fw-bold text-dark mb-2 mb-sm-3">Ready to Apply?</h3>
+            <p class="text-muted mb-3 mb-sm-4" style="font-size: 0.8rem; line-height: 1.5;">Submit your proposal to the client
               and show why you are the best fit for this project.</p>
             <app-button variant="primary" [block]="true" class="w-100 d-block" (clicked)="applyForContract()"
               [loading]="isApplying" [label]="isApplying ? 'Applying...' : 'Apply Now'">
@@ -128,42 +124,42 @@
 
 
           <!-- About the Client -->
-          <div class="glass-card rounded-4 bg-white p-4">
-            <h3 class="fs-6 fw-bold text-dark mb-4 d-flex align-items-center gap-2"><i
+          <div class="glass-card rounded-4 bg-white p-3 p-sm-4">
+            <h3 class="fs-6 fw-bold text-dark mb-3 mb-sm-4 d-flex align-items-center gap-2"><i
                 class="bi bi-person text-primary"></i> About the Client</h3>
 
             <div class="d-flex align-items-center gap-3 mb-4">
-              <div class="rounded-circle overflow-hidden flex-shrink-0" style="width: 50px; height: 50px;">
+              <div class="rounded-circle overflow-hidden flex-shrink-0" style="width: 48px; height: 48px;">
                 <img
                   [src]="'https://ui-avatars.com/api/?name=' + (contract.clientName || 'Client') + '&background=random'"
                   class="w-100 h-100" alt="Client Avatar">
               </div>
-              <div>
-                <h4 class="fs-6 fw-bold text-dark mb-1">{{ contract.clientName }}</h4>
+              <div class="min-w-0 flex-grow-1">
+                <h4 class="fs-6 fw-bold text-dark mb-1 text-truncate">{{ contract.clientName }}</h4>
                 <app-badge [label]="contract.clientRole || 'Client'" variant="primary" appearance="subtle"
                   [rounded]="true"></app-badge>
               </div>
             </div>
 
-            <div class="d-flex flex-column gap-3 mb-4" style="font-size: 0.8rem;">
+            <div class="d-flex flex-column gap-3 mb-2" style="font-size: 0.8rem;">
               @if(contract.clientEmail) {
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="text-muted d-flex align-items-center gap-2"><i class="bi bi-envelope"></i> Email</span>
-                <span class="text-dark fw-semibold text-truncate" style="max-width: 150px;">{{ contract.clientEmail
+              <div class="d-flex justify-content-between align-items-center gap-2">
+                <span class="text-muted d-flex align-items-center gap-2 flex-shrink-0"><i class="bi bi-envelope"></i> Email</span>
+                <span class="text-dark fw-semibold text-truncate" style="max-width: 170px;">{{ contract.clientEmail
                   }}</span>
               </div>
               }
               @if(contract.industry) {
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="text-muted d-flex align-items-center gap-2"><i class="bi bi-building"></i> Industry</span>
-                <span class="text-dark fw-semibold">{{ contract.industry }}</span>
+              <div class="d-flex justify-content-between align-items-center gap-2">
+                <span class="text-muted d-flex align-items-center gap-2 flex-shrink-0"><i class="bi bi-building"></i> Industry</span>
+                <span class="text-dark fw-semibold text-truncate" style="max-width: 170px;">{{ contract.industry }}</span>
               </div>
               }
               @if(contract.website) {
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="text-muted d-flex align-items-center gap-2"><i class="bi bi-globe"></i> Website</span>
+              <div class="d-flex justify-content-between align-items-center gap-2">
+                <span class="text-muted d-flex align-items-center gap-2 flex-shrink-0"><i class="bi bi-globe"></i> Website</span>
                 <a [href]="contract.website" target="_blank"
-                  class="text-primary fw-semibold text-truncate text-decoration-none" style="max-width: 150px;">Visit
+                  class="text-primary fw-semibold text-truncate text-decoration-none" style="max-width: 170px;">Visit
                   Site</a>
               </div>
               }
@@ -171,20 +167,20 @@
           </div>
 
           <!-- Quick Overview -->
-          <div class="glass-card rounded-4 bg-white p-4">
-            <h3 class="fs-6 fw-bold text-dark mb-4">Quick Overview</h3>
+          <div class="glass-card rounded-4 bg-white p-3 p-sm-4">
+            <h3 class="fs-6 fw-bold text-dark mb-3 mb-sm-4">Quick Overview</h3>
             <div class="d-flex flex-column gap-3" style="font-size: 0.8rem;">
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="text-muted">Total Duration</span>
-                <span class="text-dark fw-semibold">{{ contract.totalDuration || 'Not Specified' }}</span>
+              <div class="d-flex justify-content-between align-items-center gap-2">
+                <span class="text-muted flex-shrink-0">Total Duration</span>
+                <span class="text-dark fw-semibold text-truncate text-end">{{ contract.totalDuration || 'Not Specified' }}</span>
               </div>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="text-muted">Expected Start</span>
-                <span class="text-dark fw-semibold">{{ contract.contractStartDate | date:'mediumDate' }}</span>
+              <div class="d-flex justify-content-between align-items-center gap-2">
+                <span class="text-muted flex-shrink-0">Expected Start</span>
+                <span class="text-dark fw-semibold text-truncate text-end">{{ contract.contractStartDate | date:'mediumDate' }}</span>
               </div>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="text-muted">Expected End</span>
-                <span class="text-dark fw-semibold">{{ contract.contractEndDate | date:'mediumDate' }}</span>
+              <div class="d-flex justify-content-between align-items-center gap-2">
+                <span class="text-muted flex-shrink-0">Expected End</span>
+                <span class="text-dark fw-semibold text-truncate text-end">{{ contract.contractEndDate | date:'mediumDate' }}</span>
               </div>
             </div>
           </div>

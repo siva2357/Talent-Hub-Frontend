@@ -1,23 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AiChatbot } from './library/shared/components/ai-chatbot/ai-chatbot';
+
 import { ToastService } from './core/services/ui/toast.service';
 import { ToastConfig } from './core/models/ui.model';
 import { Toast } from './library/ui/components/toast/toast';
+import { Modal } from './library/ui/components/modal/modal';
+import { ModalService, ActiveModal } from './core/services/ui/modal.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, AiChatbot, CommonModule, Toast],
+  imports: [RouterOutlet, CommonModule, Toast, Modal],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
   toasts: (ToastConfig & { id: number })[] = [];
   private toastId = 0;
+  activeModal: ActiveModal | null = null;
 
-  constructor(private toastService: ToastService) {}
+  constructor(
+    private toastService: ToastService,
+    private modalService: ModalService
+  ) { }
 
   ngOnInit() {
     this.toastService.toasts$.subscribe(toast => {
@@ -25,6 +31,24 @@ export class AppComponent implements OnInit {
       this.toasts.push({ ...toast, id });
       setTimeout(() => this.removeToast(id), toast.duration || 3000);
     });
+
+    this.modalService.modalState$.subscribe(modal => {
+      this.activeModal = modal;
+    });
+  }
+
+  onModalConfirm() {
+    if (this.activeModal?.resolve) {
+      this.activeModal.resolve(true);
+    }
+    this.activeModal = null;
+  }
+
+  onModalClose() {
+    if (this.activeModal?.resolve) {
+      this.activeModal.resolve(false);
+    }
+    this.activeModal = null;
   }
 
   removeToast(id: number) {

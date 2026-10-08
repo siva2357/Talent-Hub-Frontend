@@ -1,63 +1,207 @@
+/* =========================================================
+   SUPPORT REQUEST
+   Clean + Responsive CSS
+========================================================= */
+
 :host {
   --bg-color: #fafbfc;
   --primary-light: #d6eaff;
   --primary-color: #0d6efd;
+  --border-color: rgba(168, 85, 247, 0.15);
+}
+
+/* =========================================================
+   BASE
+========================================================= */
+
+:host,
+:host * {
+  box-sizing: border-box;
 }
 
 .dashboard-container {
-  font-family: 'Inter', 'Outfit', sans-serif;
-  background-color: #fcfbfe;
   position: relative;
+  width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
+  background-color: #fcfbfe;
+  font-family: 'Inter', 'Outfit', sans-serif;
 }
 
-/* Background decorations */
-.bg-shape { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
-.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
-.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
-.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.05); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
-.concentric-circles { position: absolute; pointer-events: none; z-index: 0; top: 15%; left: 0; }
-.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.15); }
-.circle-1 { width: 300px; height: 300px; }
-.circle-2 { width: 500px; height: 500px; }
-.circle-3 { width: 700px; height: 700px; }
+.dashboard-container h1,
+.dashboard-container h2,
+.dashboard-container h3,
+.dashboard-container h4,
+.dashboard-container h5,
+.dashboard-container h6,
+.dashboard-container p,
+.dashboard-container span {
+  overflow-wrap: anywhere;
+}
 
-/* Premium Card (Glassmorphism) */
+/* =========================================================
+   BACKGROUND DECORATIONS
+========================================================= */
+
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.top-left {
+  width: 500px;
+  height: 500px;
+  top: -150px;
+  left: -150px;
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+}
+
+.bottom-right {
+  width: 600px;
+  height: 600px;
+  right: -200px;
+  bottom: -200px;
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+}
+
+.right-shape {
+  width: 400px;
+  height: 400px;
+  top: 30%;
+  right: -100px;
+  transform: translateY(-50%);
+  background: rgba(37, 99, 235, 0.05);
+  filter: blur(80px);
+}
+
+.concentric-circles {
+  position: absolute;
+  top: 15%;
+  left: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px dashed rgba(168, 85, 247, 0.15);
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+}
+
+.circle-2 {
+  width: 500px;
+  height: 500px;
+}
+
+.circle-3 {
+  width: 700px;
+  height: 700px;
+}
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.dashboard-container>.position-relative {
+  width: 100%;
+  max-width: 1400px;
+}
+
+/* =========================================================
+   GLASS CARD
+========================================================= */
+
 .glass-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
   border-radius: 20px !important;
+  box-shadow:
+    0 15px 40px -10px rgba(74, 58, 255, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .stat-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
 }
 
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+  width: 100%;
+}
+
+header .glass-card {
+  min-width: 0;
+}
+
+header h1 {
+  line-height: 1.3;
+}
+
+header p {
+  max-width: 900px;
+}
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
 .filter-badge {
+  padding: 0.4rem 0.75rem;
   background-color: var(--primary-light);
   color: var(--primary-color);
-  font-weight: 500;
-  padding: 0.4rem 0.75rem;
   font-size: 0.75rem;
+  font-weight: 500;
 }
 
 .badge-close {
+  margin-left: 0.25rem;
   cursor: pointer;
   font-size: 1rem;
   line-height: 0.5;
-  margin-left: 0.25rem;
 }
 
 .badge-close:hover {
   color: #000;
 }
+
+/* Angular custom controls */
+.card-header app-input-field,
+.card-header app-button {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+/* =========================================================
+   TICKET LIST
+========================================================= */
 
 .ticket-list-card {
   border-left: 4px solid transparent !important;
@@ -68,11 +212,701 @@
   border-left-color: var(--primary-color) !important;
 }
 
+.hover-card {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+}
+
+/* Ticket scrollbar */
+.col-lg-4>.d-flex.flex-column {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(13, 110, 253, 0.25) transparent;
+}
+
+.col-lg-4>.d-flex.flex-column::-webkit-scrollbar {
+  width: 5px;
+}
+
+.col-lg-4>.d-flex.flex-column::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.col-lg-4>.d-flex.flex-column::-webkit-scrollbar-thumb {
+  background: rgba(13, 110, 253, 0.25);
+  border-radius: 20px;
+}
+
+/* =========================================================
+   TICKET DETAILS
+========================================================= */
+
+.col-lg-8 {
+  min-width: 0;
+}
+
+.col-lg-8>.bg-white {
+  min-width: 0;
+  min-height: 0;
+}
+
+.col-lg-8 .border-bottom {
+  min-width: 0;
+}
+
+.col-lg-8 h5 {
+  min-width: 0;
+  word-break: break-word;
+}
+
+/* =========================================================
+   CHAT
+========================================================= */
+
 .chat-container {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .message-bubble {
   background-color: #fff;
+  word-break: break-word;
+}
+
+/* Conversation scrollbar */
+.col-lg-8 .overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(13, 110, 253, 0.2) transparent;
+}
+
+.col-lg-8 .overflow-y-auto::-webkit-scrollbar {
+  width: 5px;
+}
+
+.col-lg-8 .overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.col-lg-8 .overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(13, 110, 253, 0.2);
+  border-radius: 20px;
+}
+
+/* =========================================================
+   MESSAGE CONTENT
+========================================================= */
+
+.col-lg-8 .d-inline-block {
+  max-width: min(90%, 700px);
+  word-break: break-word;
+}
+
+.col-lg-8 .d-inline-block p {
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   ATTACHMENTS
+========================================================= */
+
+.col-lg-8 a {
+  max-width: 100%;
+}
+
+.col-lg-8 a .text-truncate {
+  max-width: 150px;
+}
+
+/* =========================================================
+   REPLY AREA
+========================================================= */
+
+textarea.form-control {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+}
+
+select.form-select {
+  max-width: 100%;
+}
+
+.focus-within-shadow:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1) !important;
+}
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.col-lg-8 .max-w-sm {
+  max-width: 420px;
+}
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width: 1400px) {
+
+  .dashboard-container>.position-relative {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+}
+
+/* =========================================================
+   SMALL LAPTOP
+   992px - 1199px
+========================================================= */
+
+@media (max-width: 1199.98px) {
+
+  .dashboard-container>.position-relative {
+    padding: 1.25rem !important;
+  }
+
+  .glass-card {
+    border-radius: 18px !important;
+  }
+
+  header .glass-card {
+    padding: 1.25rem !important;
+  }
+
+  header h1 {
+    font-size: 1.3rem !important;
+  }
+
+  header p {
+    font-size: 0.8rem !important;
+  }
+
+  .card-header,
+  .card-body {
+    padding: 1.25rem !important;
+  }
+
+  .col-lg-4>.d-flex.flex-column {
+    max-height: 520px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-right: 4px !important;
+  }
+
+  .col-lg-8>.bg-white {
+    min-height: 520px;
+  }
+
+  .col-lg-8 .overflow-y-auto {
+    max-height: 450px !important;
+  }
+
+  .col-lg-8 .border-bottom {
+    padding: 1.25rem !important;
+  }
+
+  .col-lg-8 h5 {
+    font-size: 1.1rem !important;
+  }
+
+  .col-lg-8 .border-top {
+    padding: 1.25rem !important;
+  }
+}
+
+/* =========================================================
+   TABLET
+   768px - 991px
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+  .dashboard-container>.position-relative {
+    padding: 1rem !important;
+  }
+
+  header {
+    margin-bottom: 1rem !important;
+  }
+
+  header .glass-card {
+    padding: 1.15rem !important;
+  }
+
+  header h1 {
+    font-size: 1.2rem !important;
+  }
+
+  header p {
+    font-size: 0.78rem !important;
+    line-height: 1.5;
+  }
+
+  .card-header,
+  .card-body {
+    padding: 1rem !important;
+  }
+
+  .card-header .row {
+    row-gap: 0.75rem;
+  }
+
+  .card-header .d-flex.gap-2 {
+    gap: 0.5rem !important;
+  }
+
+  .col-lg-4>.d-flex.flex-column {
+    max-height: 420px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-right: 0 !important;
+  }
+
+  .col-lg-8>.bg-white {
+    min-height: 520px;
+  }
+
+  .col-lg-8 .border-bottom {
+    padding: 1rem !important;
+  }
+
+  .col-lg-8 h5 {
+    font-size: 1.05rem !important;
+  }
+
+  .col-lg-8 .d-flex.flex-wrap.gap-4 {
+    gap: 0.5rem 1rem !important;
+  }
+
+  .col-lg-8 .d-flex.flex-wrap.gap-4 span {
+    font-size: 0.75rem !important;
+  }
+
+  .col-lg-8 .p-4 {
+    padding: 1rem !important;
+  }
+
+  .col-lg-8 .overflow-y-auto {
+    max-height: 430px !important;
+  }
+
+  .col-lg-8 .d-inline-block {
+    max-width: 90%;
+  }
+
+  .col-lg-8 .border-top {
+    padding: 1rem !important;
+  }
+}
+
+/* =========================================================
+   SMALL TABLET / LARGE MOBILE
+   576px - 767px
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .dashboard-container {
+    min-height: 100dvh;
+  }
+
+  .dashboard-container>.position-relative {
+    padding: 0.75rem !important;
+  }
+
+  /* Background */
+  .top-left {
+    width: 300px;
+    height: 300px;
+    top: -100px;
+    left: -100px;
+  }
+
+  .bottom-right {
+    width: 350px;
+    height: 350px;
+    right: -130px;
+    bottom: -120px;
+  }
+
+  .right-shape {
+    width: 250px;
+    height: 250px;
+    right: -100px;
+    filter: blur(60px);
+  }
+
+  .circle-1 {
+    width: 180px;
+    height: 180px;
+  }
+
+  .circle-2 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .circle-3 {
+    width: 420px;
+    height: 420px;
+  }
+
+  /* Cards */
+  .glass-card {
+    border-radius: 16px !important;
+  }
+
+  /* Header */
+  header {
+    margin-bottom: 0.75rem !important;
+  }
+
+  header .glass-card {
+    padding: 1rem !important;
+  }
+
+  header h1 {
+    font-size: 1.05rem !important;
+    line-height: 1.4;
+  }
+
+  header p {
+    font-size: 0.73rem !important;
+    line-height: 1.5;
+  }
+
+  /* Filters */
+  .card-header {
+    padding: 0.9rem !important;
+  }
+
+  .card-body {
+    padding: 0.75rem !important;
+  }
+
+  .card-header .row {
+    row-gap: 0.65rem;
+  }
+
+  .card-header .col-md-3,
+  .card-header .col-lg-4,
+  .card-header .col-lg-3,
+  .card-header .col-lg-2 {
+    width: 100%;
+  }
+
+  .card-header .d-flex.gap-2 {
+    width: 100%;
+    flex-direction: row;
+    gap: 0.5rem !important;
+  }
+
+  .card-header app-button {
+    width: 100%;
+  }
+
+  .card-header .mt-3 {
+    margin-top: 0.75rem !important;
+  }
+
+  .card-header .text-dark.small.fw-semibold {
+    width: 100%;
+    margin-bottom: 0.2rem;
+  }
+
+  /* Ticket list */
+  .col-lg-4>.d-flex.flex-column {
+    max-height: 360px !important;
+    padding-right: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .hover-card {
+    border-radius: 14px !important;
+  }
+
+  /* Details */
+  .col-lg-8>.bg-white {
+    min-height: auto;
+    height: auto !important;
+    border-radius: 16px !important;
+  }
+
+  .col-lg-8 .border-bottom {
+    padding: 0.9rem !important;
+  }
+
+  .col-lg-8 h5 {
+    font-size: 0.95rem !important;
+    line-height: 1.35;
+  }
+
+  .col-lg-8 .d-flex.flex-wrap.gap-4 {
+    gap: 0.4rem 0.9rem !important;
+  }
+
+  .col-lg-8 .d-flex.flex-wrap.gap-4 span {
+    font-size: 0.7rem !important;
+  }
+
+  /* Chat */
+  .col-lg-8 .p-4 {
+    padding: 0.85rem !important;
+  }
+
+  .col-lg-8 .overflow-y-auto {
+    max-height: 52vh !important;
+    min-height: 260px;
+  }
+
+  .col-lg-8 .rounded-circle {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    font-size: 0.75rem;
+  }
+
+  .col-lg-8 .d-inline-block {
+    max-width: calc(100vw - 100px);
+  }
+
+  .col-lg-8 .d-inline-block p {
+    font-size: 0.76rem !important;
+    line-height: 1.55 !important;
+  }
+
+  /* Attachments */
+  .col-lg-8 a {
+    max-width: 100%;
+  }
+
+  .col-lg-8 a .text-truncate {
+    max-width: calc(100vw - 130px) !important;
+  }
+
+  /* Reply */
+  .col-lg-8 .border-top {
+    padding: 0.85rem !important;
+  }
+
+  textarea.form-control {
+    min-height: 90px;
+    font-size: 0.8rem !important;
+  }
+
+  .col-lg-8 .border-top .d-flex.justify-content-between {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 0.65rem;
+  }
+
+  .col-lg-8 .border-top .d-flex.align-items-center.gap-3 {
+    width: 100%;
+  }
+
+  .col-lg-8 .border-top select.form-select {
+    width: 100% !important;
+    max-width: none;
+  }
+
+  .col-lg-8 .border-top button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Empty state */
+  .col-lg-8 .justify-content-center {
+    min-height: 300px !important;
+    padding: 2rem 1rem !important;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   0px - 575px
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .dashboard-container>.position-relative {
+    padding: 0.5rem !important;
+  }
+
+  /* Header */
+  header .glass-card {
+    padding: 0.85rem !important;
+  }
+
+  header h1 {
+    font-size: 0.95rem !important;
+  }
+
+  header h1 i {
+    margin-right: 0.3rem !important;
+  }
+
+  header p {
+    font-size: 0.68rem !important;
+  }
+
+  /* Filters */
+  .card-header {
+    padding: 0.75rem !important;
+  }
+
+  .card-body {
+    padding: 0.6rem !important;
+  }
+
+  .card-header .row {
+    row-gap: 0.55rem;
+  }
+
+  /* Ticket list */
+  .col-lg-4>.d-flex.flex-column {
+    max-height: 320px !important;
+  }
+
+  /* Details */
+  .col-lg-8 .border-bottom {
+    padding: 0.75rem !important;
+  }
+
+  .col-lg-8 h5 {
+    font-size: 0.88rem !important;
+  }
+
+  .col-lg-8 .d-flex.flex-wrap.gap-4 {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 0.35rem !important;
+  }
+
+  .col-lg-8 .d-flex.flex-wrap.gap-4 span {
+    font-size: 0.67rem !important;
+  }
+
+  /* Chat */
+  .col-lg-8 .p-4 {
+    padding: 0.7rem !important;
+  }
+
+  .col-lg-8 .overflow-y-auto {
+    max-height: 48vh !important;
+    min-height: 240px;
+  }
+
+  .col-lg-8 .d-flex.gap-3 {
+    gap: 0.5rem !important;
+  }
+
+  .col-lg-8 .rounded-circle {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+  }
+
+  .col-lg-8 .d-inline-block {
+    max-width: calc(100vw - 80px);
+  }
+
+  .col-lg-8 .d-inline-block p {
+    font-size: 0.73rem !important;
+  }
+
+  /* Reply */
+  .col-lg-8 .border-top {
+    padding: 0.7rem !important;
+  }
+
+  textarea.form-control {
+    min-height: 85px;
+  }
+
+  /* Empty state */
+  .col-lg-8 .justify-content-center {
+    min-height: 260px !important;
+    padding: 1.5rem 0.75rem !important;
+  }
+
+  .col-lg-8 .justify-content-center h5 {
+    font-size: 0.95rem;
+  }
+
+  .col-lg-8 .justify-content-center p {
+    font-size: 0.7rem;
+  }
+}
+
+/* =========================================================
+   VERY SMALL PHONES
+   0px - 380px
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .dashboard-container>.position-relative {
+    padding: 0.35rem !important;
+  }
+
+  header .glass-card {
+    padding: 0.7rem !important;
+  }
+
+  header h1 {
+    font-size: 0.9rem !important;
+  }
+
+  header p {
+    font-size: 0.65rem !important;
+  }
+
+  .card-header,
+  .card-body {
+    padding: 0.55rem !important;
+  }
+
+  .col-lg-8 h5 {
+    font-size: 0.82rem !important;
+  }
+
+  .col-lg-8 .d-inline-block p {
+    font-size: 0.7rem !important;
+  }
+
+  .col-lg-8 .rounded-circle {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+  }
+
+  .col-lg-8 .d-inline-block {
+    max-width: calc(100vw - 70px);
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .stat-card,
+  .hover-card {
+    transition: none !important;
+  }
+
+  .stat-card:hover,
+  .hover-card:hover {
+    transform: none !important;
+  }
 }

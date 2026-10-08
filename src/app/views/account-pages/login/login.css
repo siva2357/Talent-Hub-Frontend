@@ -1,181 +1,607 @@
+/* =========================================================
+   LOGIN LAYOUT
+========================================================= */
+
 .login-layout {
-  height: 100vh;
-  overflow: hidden;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  margin: 0;
+  padding: 0;
+
+  background: #ffffff;
+
+  overflow-x: hidden;
+
   font-family: 'Inter', 'Outfit', sans-serif;
 }
 
+
+/* =========================================================
+   ROW
+========================================================= */
+
+.login-layout>.row {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  margin: 0;
+}
+
+
+/* =========================================================
+   LEFT LOGIN PANEL
+========================================================= */
+
 .left-panel {
+  position: relative;
+
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  display: flex;
+
+  align-items: center;
   justify-content: center;
+
+  background: radial-gradient(circle at 10% 10%, #faf8ff 0%, #ffffff 50%, #f4f6ff 100%);
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   DECORATIVE BACKGROUND
+========================================================= */
+
+.decorative-bg {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  pointer-events: none;
+
+  z-index: 0;
 }
 
 .bg-shape {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
-  z-index: 0;
   pointer-events: none;
 }
 
 .bg-shape.top-left {
-  width: 500px;
-  height: 500px;
-  top: -200px;
-  left: -200px;
-}
-
-.bg-shape.bottom-left {
-  width: 400px;
-  height: 400px;
-  bottom: -150px;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
+  top: -150px;
   left: -150px;
 }
 
-.logo {
-  height: 70px;
-  object-fit: contain;
+.bg-shape.bottom-left {
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(74, 58, 255, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+  bottom: -140px;
+  left: -120px;
 }
 
-.input-group-text {
-  transition: border-color 0.15s ease-in-out;
+.bg-shape.right-shape {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+  top: 40%;
+  right: -100px;
 }
+
+/* Concentric Circles */
+.concentric-circles,
+.concentric-circles-bottom {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.concentric-circles {
+  top: 10%;
+  left: 0;
+}
+
+.concentric-circles-bottom {
+  bottom: 5%;
+  right: 0;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(168, 85, 247, 0.18);
+}
+
+.concentric-circles .circle-1 {
+  width: 220px;
+  height: 220px;
+}
+
+.concentric-circles .circle-2 {
+  width: 380px;
+  height: 380px;
+}
+
+.concentric-circles .circle-3 {
+  width: 540px;
+  height: 540px;
+}
+
+.concentric-circles-bottom .circle-1 {
+  width: 260px;
+  height: 260px;
+  border-style: solid;
+  border-color: rgba(74, 58, 255, 0.07);
+}
+
+.concentric-circles-bottom .circle-2 {
+  width: 440px;
+  height: 440px;
+  border-style: dashed;
+  border-color: rgba(74, 58, 255, 0.08);
+}
+
+.concentric-circles-bottom .circle-3 {
+  width: 620px;
+  height: 620px;
+  border-style: solid;
+  border-color: rgba(74, 58, 255, 0.05);
+}
+
+
+/* =========================================================
+   FORM CONTAINER
+========================================================= */
+
+.form-container {
+  position: relative;
+
+  z-index: 2;
+
+  width: 100%;
+  max-width: 430px;
+
+  margin: auto;
+
+  padding: 30px 24px;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo {
+  display: block;
+
+  width: auto;
+  height: 70px;
+
+  max-width: 220px;
+
+  object-fit: contain;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* =========================================================
+   FORM HEADER
+========================================================= */
+
+.form-container>.text-center {
+  width: 100%;
+}
+
+.form-container h2 {
+  line-height: 1.3;
+
+  letter-spacing: -0.02em;
+}
+
+.form-container p {
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.static-form {
+  width: 100%;
+}
+
+.static-form app-input-field,
+.static-form app-button {
+  display: block;
+
+  width: 100%;
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
 
 .form-control:focus {
   border-color: #4a3aff;
+
   box-shadow: none;
 }
 
-.form-control:focus + .input-group-text,
 .input-group:focus-within .input-group-text,
 .input-group:focus-within .form-control {
   border-color: #4a3aff;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, #4a3aff, #2563eb);
-  border: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(74, 58, 255, 0.35);
-  background: linear-gradient(135deg, #3f31eb, #1d4ed8);
-}
+/* =========================================================
+   PRIMARY COLOR
+========================================================= */
 
 .text-primary {
   color: #4a3aff !important;
 }
 
-.cursor-pointer {
-  cursor: pointer;
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.btn-primary {
+  background:
+    linear-gradient(135deg,
+      #4a3aff,
+      #2563eb);
+
+  border: none;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-/* Right Panel Styles */
-.right-panel-inner {
-  background: linear-gradient(135deg, #a855f7 0%, #2563eb 100%);
-  overflow: hidden;
-  border-radius: 28px !important;
+.btn-primary:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(74, 58, 255, 0.35);
 }
 
-.max-w-lg {
-  max-width: 550px;
-}
 
-.divider {
-  width: 40px;
-  height: 2px;
-}
+/* =========================================================
+   RIGHT IMAGE COLUMN
+========================================================= */
 
-.icon-circle {
-  width: 52px;
-  height: 52px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
+.right-column {
+  min-height: 100vh;
+  min-height: 100dvh;
 
-.icon-circle .text-primary {
-  color: #4a3aff !important;
-}
+  padding: 16px !important;
 
-.graphic-placeholder {
-  position: relative;
-  z-index: 2;
-  width: 180px;
-  height: 130px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
   display: flex;
+
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-  transform: rotate(-3deg);
-  transition: transform 0.3s ease;
+
+  overflow: hidden;
 }
 
-.graphic-placeholder:hover {
-  transform: rotate(0deg);
+
+/* =========================================================
+   IMAGE PLACEHOLDER
+========================================================= */
+
+.image-placeholder {
+  position: relative;
+
+  width: 100%;
+  height: calc(100dvh - 32px);
+
+  overflow: hidden;
+
+  border-radius: 24px;
+
+  background: #f5f6fa;
 }
 
-/* Concentric Circles */
-.concentric-circles {
-  position: absolute;
-  top: 30%;
-  left: 50%;
+
+/* =========================================================
+   BANNER IMAGE
+========================================================= */
+
+.banner-image {
   width: 100%;
   height: 100%;
-  pointer-events: none;
+
+  display: block;
+
+  object-fit: cover;
+
+  object-position: center;
 }
 
-.circle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
+@media (min-width: 1200px) {
+
+  .left-panel {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .right-column {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .form-container {
+    max-width: 430px;
+  }
 }
 
-.circle-1 { width: 350px; height: 350px; }
-.circle-2 { width: 550px; height: 550px; }
-.circle-3 { width: 750px; height: 750px; }
 
-/* Floating Items */
-.floating-item {
-  position: absolute;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  color: #fff;
-  transition: transform 0.3s ease;
+/* =========================================================
+   LAPTOP
+========================================================= */
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+
+  .form-container {
+    max-width: 400px;
+
+    padding: 25px 20px;
+  }
+
+  .logo {
+    height: 62px;
+  }
+
+  .image-placeholder {
+    border-radius: 20px;
+  }
 }
 
-.float-1, .float-2, .float-4 {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+  .left-panel {
+    min-height: 100dvh;
+
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .form-container {
+    max-width: 520px;
+
+    padding: 40px 28px;
+  }
+
+  .logo {
+    height: 65px;
+  }
+
+  .right-column {
+    display: none !important;
+  }
 }
 
-.float-3 {
-  padding: 8px 12px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  gap: 4px;
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .login-layout {
+    min-height: 100dvh;
+
+    height: auto;
+  }
+
+  .login-layout>.row {
+    min-height: 100dvh;
+
+    height: auto;
+  }
+
+  .left-panel {
+    width: 100%;
+
+    min-height: 100dvh;
+
+    flex: 0 0 100%;
+    max-width: 100%;
+
+    justify-content: center;
+    align-items: center;
+
+    overflow: visible;
+  }
+
+  .form-container {
+    width: 100%;
+    max-width: 430px;
+
+    margin: auto;
+
+    padding: 30px 20px;
+  }
+
+  .logo {
+    height: 58px;
+
+    max-width: 190px;
+
+    margin-bottom: 12px !important;
+  }
+
+  .form-container>.text-center {
+    margin-bottom: 30px !important;
+  }
+
+  .form-container h2 {
+    font-size: 1.45rem !important;
+
+    margin-bottom: 7px;
+  }
+
+  .form-container p {
+    font-size: 0.82rem;
+  }
+
+  .static-form .mb-4 {
+    margin-bottom: 18px !important;
+  }
+
+  .static-form .d-flex.justify-content-end {
+    margin-bottom: 20px !important;
+  }
+
+  .static-form>.text-center {
+    margin-top: 28px !important;
+
+    padding-bottom: 10px !important;
+  }
+
+  .right-column {
+    display: none !important;
+  }
+
+  .bg-shape.top-left {
+    width: 300px;
+    height: 300px;
+
+    top: -130px;
+    left: -130px;
+  }
+
+  .bg-shape.bottom-left {
+    width: 280px;
+    height: 280px;
+
+    bottom: -130px;
+    left: -130px;
+  }
 }
 
-.float-1 { top: 15%; left: 20%; transform: rotate(-10deg); }
-.float-2 { top: 22%; right: 15%; transform: rotate(15deg); }
-.float-3 { top: 38%; right: 10%; transform: rotate(-5deg); }
-.float-4 { top: 48%; left: 55%; transform: rotate(10deg); }
 
-.floating-item:hover {
-  transform: scale(1.1) rotate(0deg);
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .form-container {
+    max-width: 100%;
+
+    padding: 26px 16px 20px;
+  }
+
+  .logo {
+    height: 52px;
+
+    max-width: 170px;
+  }
+
+  .form-container>.text-center {
+    margin-bottom: 25px !important;
+  }
+
+  .form-container h2 {
+    font-size: 1.3rem !important;
+  }
+
+  .form-container p {
+    font-size: 0.76rem;
+  }
+
+  .static-form .mb-4 {
+    margin-bottom: 15px !important;
+  }
+
+  .static-form .d-flex.justify-content-end {
+    margin-bottom: 18px !important;
+  }
+
+  .static-form>.text-center {
+    margin-top: 22px !important;
+  }
 }
 
-.z-1 {
-  z-index: 1;
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 375px) {
+
+  .form-container {
+    padding: 20px 13px;
+  }
+
+  .logo {
+    height: 46px;
+
+    max-width: 155px;
+  }
+
+  .form-container>.text-center {
+    margin-bottom: 22px !important;
+  }
+
+  .form-container h2 {
+    font-size: 1.2rem !important;
+  }
+
+  .form-container p {
+    font-size: 0.7rem;
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.form-container a:focus-visible {
+  outline: 2px solid rgba(74, 58, 255, 0.3);
+
+  outline-offset: 3px;
+
+  border-radius: 4px;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .btn-primary {
+    transition: none !important;
+  }
 }

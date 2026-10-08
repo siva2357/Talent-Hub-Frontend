@@ -1,4 +1,4 @@
-<div class="dashboard-container position-relative p-4">
+<div class="dashboard-container position-relative ">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -19,20 +19,7 @@
         <h1 class="fw-bold fs-3 mb-1 text-dark">Contract Hub</h1>
         <p class="text-muted small mb-0">Discover and explore contract opportunities that match your skills.</p>
       </div>
-      <div class="d-flex gap-2">
-        @if (isAIApplied) {
-          <app-button label="Clear AI Match" variant="secondary" icon="bi bi-x-circle" [size]="'md'" (clicked)="clearAIMatch()">
-          </app-button>
-        } @else {
-          <app-button label="AI Smart Match" variant="info" icon="bi bi-magic" [size]="'md'" (clicked)="matchWithAI()"
-            [disabled]="isLoading || isAIMatching || contracts.length === 0">
-            @if (isAIMatching) {
-            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            Matching...
-            }
-          </app-button>
-        }
-      </div>
+
     </div>
 
     <!-- Tabs -->
@@ -60,8 +47,8 @@
         <div class="row g-3 align-items-center mb-3">
           <div class="col-lg-4">
             <app-input-field label="" icon="bi bi-search" [showIcon]="true"
-              placeholder="Search contracts, skills, or keywords..."
-              [value]="searchQuery" (valueChange)="searchQuery = $event">
+              placeholder="Search contracts, skills, or keywords..." [value]="searchQuery"
+              (valueChange)="searchQuery = $event">
             </app-input-field>
           </div>
           <div class="col-lg-3">
@@ -75,10 +62,10 @@
             </app-input-field>
           </div>
           <div class="col-lg-3 d-flex gap-2">
-            <app-button label="Apply" variant="primary" [size]="'md'" [block]="true"
-              class="flex-grow-1 w-100" (clicked)="applyFilters()"></app-button>
-            <app-button label="Reset" variant="secondary" [size]="'md'" [block]="true"
-              class="flex-grow-1 w-100" (clicked)="resetFilters()"></app-button>
+            <app-button label="Apply" variant="primary" [size]="'md'" [block]="true" class="flex-grow-1 w-100"
+              (clicked)="applyFilters()"></app-button>
+            <app-button label="Reset" variant="secondary" [size]="'md'" [block]="true" class="flex-grow-1 w-100"
+              (clicked)="resetFilters()"></app-button>
           </div>
         </div>
 
@@ -102,7 +89,7 @@
       </div>
       } @else {
       @if (activeTab === 'discover') {
-      
+
       @if (contracts.length === 0) {
       <div class="col-12 text-center py-5">
         <p class="text-muted">No contracts found.</p>

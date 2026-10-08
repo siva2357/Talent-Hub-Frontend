@@ -6,12 +6,13 @@ import { AdminService } from '../../../core/services/admin.service';
 import { DashboardService } from '../../../core/services/dashboard.service';
 import { StatCard } from '../../../library/shared/components/stat-card/stat-card';
 import { StatCardData } from '../../../core/models/ui.model';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, StatCard],
+  imports: [CommonModule, StatCard, RouterLink],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })

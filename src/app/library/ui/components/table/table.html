@@ -1,8 +1,10 @@
 <div class="table-component-wrapper position-relative">
 
     <ngx-datatable class="bootstrap" [rows]="data" [columnMode]="columnModeEnum.force" [headerHeight]="50"
-        [footerHeight]="0" [rowHeight]="'auto'" [messages]="{ emptyMessage: emptyMessage, totalMessage: '' }"
-        [style.min-height.px]="minHeight">
+        [footerHeight]="0" [rowHeight]="'auto'" [messages]="{
+      emptyMessage: emptyMessage,
+      totalMessage: ''
+    }" [style.min-height.px]="minHeight">
 
         @for (column of columns; track column.field) {
 
@@ -13,20 +15,21 @@
 
                 @if (column.cellTemplate) {
 
-                <ng-container *ngTemplateOutlet="
-                        column.cellTemplate;
-                        context: {
-                            $implicit: value,
-                            row: row,
-                            index: rowIndex,
-                            column: column
-                        }
-                    ">
+                <ng-container [ngTemplateOutlet]="column.cellTemplate" [ngTemplateOutletContext]="{
+                $implicit: value,
+                value: value,
+                row: row,
+                index: rowIndex,
+                rowIndex: rowIndex,
+                column: column
+              }">
                 </ng-container>
 
                 } @else {
 
-                {{ value }}
+                <span class="table-cell-value">
+                    {{ value }}
+                </span>
 
                 }
 
@@ -38,12 +41,24 @@
 
     </ngx-datatable>
 
+
     @if (loading) {
+
     <div class="position-absolute w-100 start-0 d-flex flex-column align-items-center justify-content-center bg-white bg-opacity-75"
-        style="top: 50px; height: calc(100% - 50px); z-index: 10;">
+        style="
+        top: 50px;
+        height: calc(100% - 50px);
+        z-index: 10;
+      ">
+
         <app-loader></app-loader>
-        <span class="mt-2 text-muted ">Loading data...</span>
+
+        <span class="mt-2 text-muted">
+            Loading data...
+        </span>
+
     </div>
+
     }
 
 </div>

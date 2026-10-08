@@ -5,6 +5,7 @@
     <div class="bg-shape top-left"></div>
     <div class="bg-shape bottom-right"></div>
     <div class="bg-shape right-shape"></div>
+
     <div class="concentric-circles">
       <div class="circle circle-1"></div>
       <div class="circle circle-2"></div>
@@ -12,70 +13,148 @@
     </div>
   </div>
 
-
-
   <!-- Main Content Wrapper -->
-  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
+  <div class="position-relative z-1 reports-content mx-auto">
+
     <!-- Header -->
-    <header class="mb-4">
-      <h1 class="fw-bold fs-4 mb-1">Reports & Analytics</h1>
-      <p class="text-muted small mb-0">Generate custom spreadsheets, download active audits, and track user growth
-        records.</p>
+    <header class="reports-header mb-4">
+      <h1 class="fw-bold fs-4 mb-1">
+        Reports &amp; Analytics
+      </h1>
+
+      <p class="text-muted small mb-0">
+        Generate custom spreadsheets, download active audits, and track user growth records.
+      </p>
     </header>
 
     <div class="row g-4">
       <div class="col-12">
-        <!-- Filters Row -->
-        <div class="row g-3 mb-4 align-items-center">
-          <div class="col-md-3 col-lg-5">
-            <app-input-field type="text" placeholder="Search reports..." [showIcon]="true" icon="bi bi-search" label=""
-              [value]="localSearchTerm" (valueChange)="onSearchChange($event)">
-            </app-input-field>
-          </div>
-          <div class="col-md-3 col-lg-4">
-            <app-input-field type="select" [options]="typeOptions" label="" [value]="localTypeFilter"
-              (valueChange)="onTypeChange($event)">
-            </app-input-field>
-          </div>
-          <div class="col-md-3 col-lg-3 d-flex gap-2">
-            <app-button variant="primary" class="w-100" label="Apply" [block]="true"
-              (clicked)="applyFilters()"></app-button>
-            <app-button variant="secondary" class="w-100" label="Reset Filters" [block]="true"
-              (clicked)="resetFilters()"></app-button>
+
+        <!-- =========================
+             FILTERS
+        ========================== -->
+        <div class="reports-filter-section mb-4">
+
+          <div class="row g-3 align-items-end">
+
+            <!-- Search -->
+            <div class="col-12 col-md-6 col-xl-5 reports-search">
+              <app-input-field type="text" placeholder="Search reports..." [showIcon]="true" icon="bi bi-search"
+                label="" [value]="localSearchTerm" (valueChange)="onSearchChange($event)">
+              </app-input-field>
+            </div>
+
+            <!-- Type -->
+            <div class="col-12 col-md-6 col-xl-4 reports-type">
+              <app-input-field type="select" [options]="typeOptions" label="" [value]="localTypeFilter"
+                (valueChange)="onTypeChange($event)">
+              </app-input-field>
+            </div>
+
+            <!-- Actions -->
+            <div class="col-12 col-xl-3 reports-filter-actions">
+
+              <app-button variant="primary" class="filter-button" label="Apply" [block]="true"
+                (clicked)="applyFilters()">
+              </app-button>
+
+              <app-button variant="secondary" class="filter-button" label="Reset Filters" [block]="true"
+                (clicked)="resetFilters()">
+              </app-button>
+
+            </div>
+
           </div>
         </div>
 
+        <!-- =========================
+             ACTIVE FILTERS
+        ========================== -->
         @if (activeFilters.length > 0) {
-        <div class="d-flex align-items-center flex-wrap gap-2 mb-4">
-          <span class="text-dark small fw-semibold me-2">Active Filters :</span>
-          @for (filter of activeFilters; track filter.label) {
-          <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)"></app-chip>
-          }
+
+        <div class="active-filters mb-4">
+
+          <span class="active-filter-title">
+            Active Filters:
+          </span>
+
+          <div class="active-filter-list">
+
+            @for (filter of activeFilters; track filter.label) {
+
+            <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)">
+            </app-chip>
+
+            }
+
+          </div>
+
         </div>
+
         }
 
-        <!-- Generated Report Items -->
+        <!-- =========================
+             REPORTS
+        ========================== -->
         @if (isLoading) {
-        <div class="text-center py-5">
+
+        <div class="reports-loading">
           <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
+            <span class="visually-hidden">
+              Loading...
+            </span>
           </div>
+
+          <p class="text-muted small mt-3 mb-0">
+            Loading reports...
+          </p>
         </div>
+
         } @else {
-        <div class="row g-4">
+
+        <div class="row g-4 reports-grid">
+
           @for (report of (filteredReports$ | async); track report.id) {
-          <div class="col-12 col-md-6 col-xl-4">
-            <app-report-card [report]="report"></app-report-card>
+
+          <div class="col-12 col-md-6 col-xl-4 report-column">
+
+            <div class="report-card-wrapper h-100">
+
+              <app-report-card [report]="report">
+              </app-report-card>
+
+            </div>
+
           </div>
+
           } @empty {
-          <div class="col-12 text-center py-5 text-muted">
-            No reports generated yet.
+
+          <div class="col-12">
+
+            <div class="reports-empty-state">
+              <div class="empty-icon">
+                <i class="bi bi-file-earmark-bar-graph"></i>
+              </div>
+
+              <h5 class="mb-1">
+                No reports generated yet.
+              </h5>
+
+              <p class="text-muted small mb-0">
+                Try changing your search or report type filter.
+              </p>
+            </div>
+
           </div>
+
           }
+
         </div>
+
         }
 
       </div>
     </div>
+
   </div>
 </div>

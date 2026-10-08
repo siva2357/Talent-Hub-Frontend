@@ -8,12 +8,13 @@ import { Button } from '../../../library/ui/components/button/button';
 import { Badge } from '../../../library/ui/components/badge/badge';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
-import { Timeline, TimelineStep } from '../../../library/shared/components/timeline/timeline';
+import { StatCard } from '../../../library/shared/components/stat-card/stat-card';
+import { StatCardData } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-phase-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, Button, Badge, InputField, FilePreview, Timeline],
+  imports: [CommonModule, RouterModule, FormsModule, Button, Badge, InputField, FilePreview, StatCard],
   templateUrl: './phase-details.html',
   styleUrl: './phase-details.css'
 })
@@ -84,6 +85,20 @@ export class PhaseDetails implements OnInit {
     return (this.phase?.amount || 0) - this.amountReleased;
   }
 
+  get phaseStats(): StatCardData[] {
+    const budget = this.phase?.amount || 0;
+    const released = this.amountReleased;
+    const remaining = this.remainingAmount;
+    const dueDateStr = this.phase?.deadline ? new Date(this.phase.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'No Due Date';
+
+    return [
+      { title: 'PHASE BUDGET', value: `₹${budget.toLocaleString('en-IN')}`, icon: 'bi bi-wallet2' },
+      { title: 'AMOUNT RELEASED', value: `₹${released.toLocaleString('en-IN')}`, icon: 'bi bi-cash-stack' },
+      { title: 'REMAINING AMOUNT', value: `₹${remaining.toLocaleString('en-IN')}`, icon: 'bi bi-house-door' },
+      { title: 'DUE DATE', value: dueDateStr, icon: 'bi bi-calendar-event' }
+    ];
+  }
+
   get phaseProgress() {
     if (!this.phase) return 0;
     const statusMap: Record<string, number> = {
@@ -124,69 +139,5 @@ export class PhaseDetails implements OnInit {
       }
     });
   }
-
-  get mappedTimelineSteps(): TimelineStep[] {
-    if (!this.phase) return [];
-
-    const events: TimelineStep[] = [];
-
-    const statusMap: Record<string, number> = {
-      'pending': 0,
-      'created': 0,
-      'in-progress': 1,
-      'overdue': 1,
-      'submitted': 2,
-      'changes-requested': 3,
-      'revision-requested': 3,
-      'approved': 4,
-      'completed': 4
-    };
-
-    const currentStatusLevel = statusMap[this.phase.status?.toLowerCase()] || 0;
-
-    // 1. Created
-    events.push({
-      title: 'Phase Created',
-      description: 'by System',
-      status: 'completed'
-    });
-
-    // 2. Started (In Progress)
-    events.push({
-      title: 'Phase Started',
-      description: 'by Freelancer',
-      status: currentStatusLevel > 1 ? 'completed' : (currentStatusLevel === 1 ? 'active' : 'upcoming')
-    });
-
-    // 3. Submitted
-    events.push({
-      title: 'Phase Submitted',
-      description: 'by Freelancer',
-      status: currentStatusLevel > 2 ? 'completed' : (currentStatusLevel === 2 ? 'completed' : 'upcoming')
-    });
-
-    // 4. Under Review / Changes Requested
-    if (currentStatusLevel === 3) {
-      events.push({
-        title: 'Changes Requested',
-        description: 'by Client',
-        status: 'active'
-      });
-    } else {
-      events.push({
-        title: 'Under Review',
-        description: 'by Client',
-        status: currentStatusLevel >= 4 ? 'completed' : (currentStatusLevel === 2 ? 'active' : 'upcoming')
-      });
-    }
-
-    // 5. Approved
-    events.push({
-      title: 'Approved',
-      description: currentStatusLevel >= 4 ? 'by Client' : 'Pending',
-      status: currentStatusLevel >= 4 ? 'completed' : 'upcoming'
-    });
-
-    return events;
-  }
 }
+

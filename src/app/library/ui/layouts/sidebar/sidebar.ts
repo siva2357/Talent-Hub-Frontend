@@ -49,4 +49,11 @@ export class Sidebar implements OnInit {
     this.isOpen = !this.isOpen;
     localStorage.setItem('sidebarOpen', String(this.isOpen));
   }
+
+  closeOnMobile() {
+    if (window.innerWidth <= 768) {
+      this.isOpen = false;
+      localStorage.setItem('sidebarOpen', 'false');
+    }
+  }
 }

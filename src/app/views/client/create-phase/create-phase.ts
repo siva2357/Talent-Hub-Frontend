@@ -201,19 +201,41 @@ export class CreatePhase implements OnInit {
   createPhase(): void {
     if (this.phaseForm.invalid) {
       this.phaseForm.markAllAsTouched();
-      this.toastService.show("Please fill in all required fields (Name, Deadline, Budget).", "warning");
+      this.deliverables.controls.forEach(ctrl => ctrl.markAsTouched());
+      this.acceptanceCriteria.controls.forEach(ctrl => ctrl.markAsTouched());
+
+      const invalidControls: string[] = [];
+      if (this.phaseForm.get('phaseName')?.invalid) invalidControls.push('Phase Name');
+      if (this.phaseForm.get('deadline')?.invalid) invalidControls.push('Deadline');
+      if (this.phaseForm.get('budget')?.invalid) invalidControls.push('Phase Budget');
+      if (this.deliverables.invalid) invalidControls.push('Deliverables');
+      if (this.acceptanceCriteria.invalid) invalidControls.push('Acceptance Criteria');
+
+      const message = invalidControls.length > 0 
+        ? `Please fill in all required fields: ${invalidControls.join(', ')}.`
+        : 'Please fix the errors in the form before submitting.';
+      
+      this.toastService.show(message, "warning");
       return;
     }
 
     const formVal = this.phaseForm.value;
+    const deliverablesList = (formVal.deliverables || [])
+      .map((d: any) => typeof d === 'string' ? d.trim() : '')
+      .filter((d: string) => d.length > 0);
+
+    const criteriaList = (formVal.acceptanceCriteria || [])
+      .map((c: any) => typeof c === 'string' ? c.trim() : '')
+      .filter((c: string) => c.length > 0);
+
     const payload = {
-      name: formVal.phaseName,
+      name: formVal.phaseName?.trim(),
       description: "Phase details setup by client",
-      amount: formVal.budget,
+      amount: Number(formVal.budget),
       deadline: formVal.deadline,
-      deliverables: formVal.deliverables.filter((d: string) => d?.trim() !== ''),
-      acceptanceCriteria: formVal.acceptanceCriteria.filter((c: string) => c?.trim() !== ''),
-      clientAttachments: formVal.clientAttachments
+      deliverables: deliverablesList,
+      acceptanceCriteria: criteriaList,
+      clientAttachments: formVal.clientAttachments || []
     };
 
     if (this.isEditMode && this.phaseId) {

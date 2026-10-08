@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ContractService } from '../../../core/services/contract.service';
-import { AIService } from '../../../core/services/ai.service';
+
 import { ProfileService } from '../../../core/services/profile.service';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from '../../../library/ui/components/chip/chip';
 import { Button } from '../../../library/ui/components/button/button';
 import { Loader } from '../../../library/ui/components/loader/loader';
 import { ContractCard } from '../../../library/shared/components/contract-card/contract-card';
-import { Contract, ContractCardData, AIContractCardData } from '../../../core/models/contract.model';
+import { Contract } from '../../../core/models/contract.model';
 import { InputOption } from '../../../core/models/ui.model';
 import { MasterDataService } from '../../../core/services/master-data.service';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
@@ -24,8 +24,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 export class FindContracts implements OnInit {
   activeTab: 'discover' | 'saved' = 'discover';
   rawContracts$ = new BehaviorSubject<Contract[]>([]);
-  contracts: AIContractCardData[] = [];
-  savedContracts: AIContractCardData[] = [];
+  contracts: Contract[] = [];
+  savedContracts: Contract[] = [];
   isLoading: boolean = true;
   isAIMatching: boolean = false;
   isAIApplied: boolean = false;
@@ -36,7 +36,7 @@ export class FindContracts implements OnInit {
   searchBudget = '';
 
   appliedFilters$ = new BehaviorSubject<{ query: string; category: string; budget: string }>({ query: '', category: 'all', budget: '' });
-  
+
   activeFilters: { label: string, type: string, value: string }[] = [];
   categoryOptions: InputOption[] = [{ label: 'All Categories', value: 'all' }];
 
@@ -44,7 +44,7 @@ export class FindContracts implements OnInit {
 
   constructor(
     private contractService: ContractService,
-    private aiService: AIService,
+
     private profileService: ProfileService,
     private router: Router,
     private masterDataService: MasterDataService
@@ -88,7 +88,7 @@ export class FindContracts implements OnInit {
     }
   }
 
-  mapToCardData(c: Contract): ContractCardData {
+  mapToCardData(c: Contract): any {
     return {
       _id: c._id,
       industry: c.industry || 'General',
@@ -170,8 +170,8 @@ export class FindContracts implements OnInit {
       if (query) {
         const q = query.toLowerCase();
         this.activeFilters.push({ label: `Search: ${query}`, type: 'search', value: query });
-        filtered = filtered.filter(c => 
-          c.contractTitle.toLowerCase().includes(q) || 
+        filtered = filtered.filter(c =>
+          c.contractTitle.toLowerCase().includes(q) ||
           c.contractDescription.toLowerCase().includes(q)
         );
       }
@@ -179,7 +179,7 @@ export class FindContracts implements OnInit {
       if (category && category !== 'all') {
         const catLabel = this.categoryOptions.find(o => o.value === category)?.label || category;
         this.activeFilters.push({ label: `Category: ${catLabel}`, type: 'category', value: category });
-        filtered = filtered.filter(c => 
+        filtered = filtered.filter(c =>
           (c.contractCategory && c.contractCategory.toLowerCase().includes(category.toLowerCase())) ||
           (c.contractSubject && c.contractSubject.toLowerCase().includes(category.toLowerCase()))
         );
@@ -189,7 +189,7 @@ export class FindContracts implements OnInit {
         this.activeFilters.push({ label: `Budget: ${budget}`, type: 'budget', value: budget });
         const budgetNum = parseFloat(budget);
         if (!isNaN(budgetNum)) {
-           filtered = filtered.filter(c => c.estimatedBudget >= budgetNum);
+          filtered = filtered.filter(c => c.estimatedBudget >= budgetNum);
         }
       }
 
@@ -216,13 +216,13 @@ export class FindContracts implements OnInit {
     if (filterToRemove.type === 'search') this.searchQuery = '';
     else if (filterToRemove.type === 'category') this.searchCategory = 'all';
     else if (filterToRemove.type === 'budget') this.searchBudget = '';
-    
+
     this.applyFilters();
   }
 
   // --- Actions ---
 
-  toggleSave(cardData: ContractCardData): void {
+  toggleSave(cardData: Contract): void {
     const isSaved = cardData.hasSaved;
     cardData.hasSaved = !isSaved;
 
@@ -248,61 +248,8 @@ export class FindContracts implements OnInit {
     }
   }
 
-  viewDetails(cardData: ContractCardData): void {
+  viewDetails(cardData: Contract): void {
     this.router.navigate(['/contract-details', cardData._id]);
   }
 
-  // --- AI ---
-  matchWithAI(): void {
-    const rawContracts = this.rawContracts$.value;
-    if (rawContracts.length === 0) return;
-    this.isAIMatching = true;
-
-    this.profileService.getMyProfile().subscribe({
-      next: (profileRes) => {
-        if (profileRes.success && profileRes.profile) {
-          this.aiService.matchContracts(profileRes.profile, rawContracts).subscribe({
-            next: (aiRes: any) => {
-              if (aiRes && aiRes.matches) {
-                const matchResults = aiRes.matches;
-                let mappedContracts = this.contracts.map(contract => {
-                  const match = matchResults.find((m: any) => m.contract_id === contract._id);
-                  if (match) {
-                    return { ...contract, matchPercentage: match.match_percentage, matchCategory: match.match_category, matchReasoning: match.reasoning };
-                  }
-                  return contract;
-                });
-
-                mappedContracts.sort((a, b) => {
-                  const scoreA = a.matchPercentage !== undefined ? a.matchPercentage : -1;
-                  const scoreB = b.matchPercentage !== undefined ? b.matchPercentage : -1;
-                  return scoreB - scoreA;
-                });
-
-                this.contracts = mappedContracts;
-                this.isAIApplied = true;
-              }
-              this.isAIMatching = false;
-            },
-            error: (err) => {
-              console.error('AI Matching failed:', err);
-              this.isAIMatching = false;
-            }
-          });
-        } else {
-          this.isAIMatching = false;
-        }
-      },
-      error: (err) => {
-        console.error('Failed to fetch profile for AI matching:', err);
-        this.isAIMatching = false;
-      }
-    });
-  }
-
-  clearAIMatch(): void {
-    this.isAIApplied = false;
-    // Re-trigger the filter subscription to restore normal list
-    this.appliedFilters$.next(this.appliedFilters$.value);
-  }
 }

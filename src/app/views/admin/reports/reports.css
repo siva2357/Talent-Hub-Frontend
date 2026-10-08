@@ -3,47 +3,714 @@
   --primary-color: #0d6efd;
 }
 
+/* =========================================================
+   PAGE
+========================================================= */
+
 .dashboard-container {
   font-family: 'Inter', 'Outfit', sans-serif;
   background-color: #fcfbfe;
   position: relative;
   min-height: 100vh;
+  overflow: hidden;
+  isolation: isolate;
 }
 
-/* Background decorations */
-.bg-shape { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
-.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
-.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
-.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.05); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
-.concentric-circles { position: absolute; pointer-events: none; z-index: 0; top: 15%; left: 0; }
-.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.15); }
-.circle-1 { width: 300px; height: 300px; }
-.circle-2 { width: 500px; height: 500px; }
-.circle-3 { width: 700px; height: 700px; }
-
-/* Premium Card (Glassmorphism) */
-.glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
-  border-radius: 20px !important;
+.reports-content {
+  width: 100%;
+  max-width: 1400px;
+  padding: 1.5rem;
 }
 
-.report-item {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
+.reports-header {
+  position: relative;
+  z-index: 2;
 }
 
-.report-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+.reports-header h1 {
+  color: #111827;
+  letter-spacing: -0.02em;
 }
+
+.reports-header p {
+  max-width: 850px;
+}
+
+
+/* =========================================================
+   BACKGROUND DECORATIONS
+========================================================= */
+
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.top-left {
+  width: 500px;
+  height: 500px;
+
+  background:
+    radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+
+  top: -150px;
+  left: -150px;
+}
+
+.bottom-right {
+  width: 600px;
+  height: 600px;
+
+  background:
+    radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+
+  bottom: -200px;
+  right: -200px;
+}
+
+.right-shape {
+  width: 400px;
+  height: 400px;
+
+  background: rgba(37, 99, 235, 0.05);
+
+  filter: blur(80px);
+
+  top: 30%;
+  right: -100px;
+
+  transform: translateY(-50%);
+}
+
+.concentric-circles {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+
+  top: 15%;
+  left: 0;
+}
+
+.circle {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  border: 1px dashed rgba(168, 85, 247, 0.15);
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+}
+
+.circle-2 {
+  width: 500px;
+  height: 500px;
+}
+
+.circle-3 {
+  width: 700px;
+  height: 700px;
+}
+
+
+/* =========================================================
+   FILTER SECTION
+========================================================= */
+
+.reports-filter-section {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.reports-filter-section .row {
+  align-items: end;
+}
+
+.reports-search,
+.reports-type,
+.reports-filter-actions {
+  min-width: 0;
+}
+
+.reports-filter-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.filter-button {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
 
 .form-label {
   color: #111827;
 }
 
-.input-group-text, .form-control, .form-select, .btn-outline-secondary {
+.input-group-text,
+.form-control,
+.form-select,
+.btn-outline-secondary {
   border-color: #d1d5db;
+}
+
+
+/* =========================================================
+   ACTIVE FILTERS
+========================================================= */
+
+.active-filters {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 0.6rem;
+
+  min-width: 0;
+}
+
+.active-filter-title {
+  color: #111827;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.active-filter-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+
+/* =========================================================
+   REPORT GRID
+========================================================= */
+
+.reports-grid {
+  position: relative;
+  z-index: 2;
+}
+
+.report-column {
+  display: flex;
+  min-width: 0;
+}
+
+.report-card-wrapper {
+  width: 100%;
+  min-width: 0;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+/* =========================================================
+   REPORT CARD
+========================================================= */
+
+.report-item {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  cursor: pointer;
+}
+
+.report-item:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+}
+
+
+/* =========================================================
+   GLASS CARD
+========================================================= */
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(168, 85, 247, 0.15);
+
+  box-shadow:
+    0 15px 40px -10px rgba(74, 58, 255, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.05);
+
+  border-radius: 20px !important;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.reports-loading {
+  position: relative;
+  z-index: 2;
+
+  min-height: 260px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.reports-empty-state {
+  position: relative;
+  z-index: 2;
+
+  min-height: 260px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 2rem;
+
+  background: rgba(255, 255, 255, 0.55);
+
+  border: 1px dashed rgba(168, 85, 247, 0.2);
+
+  border-radius: 18px;
+}
+
+.empty-icon {
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 1rem;
+
+  border-radius: 16px;
+
+  background: rgba(168, 85, 247, 0.08);
+
+  color: #7c3aed;
+
+  font-size: 1.6rem;
+}
+
+.reports-empty-state h5 {
+  color: #111827;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   1200px+
+========================================================= */
+
+@media (min-width: 1200px) {
+
+  .reports-content {
+    padding: 1.5rem;
+  }
+
+  .reports-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .reports-grid {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 1.5rem;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   768px - 1199px
+
+   2 CARDS PER ROW
+========================================================= */
+
+@media (min-width: 768px) and (max-width: 1199.98px) {
+
+  .dashboard-container {
+    padding: 1rem !important;
+  }
+
+  .reports-content {
+    padding: 1rem;
+  }
+
+  .reports-header {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .reports-header h1 {
+    font-size: 1.35rem !important;
+  }
+
+  .reports-header p {
+    font-size: 0.82rem !important;
+    line-height: 1.5;
+  }
+
+  /* Filters */
+
+  .reports-filter-section {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .reports-search,
+  .reports-type {
+    width: 50%;
+  }
+
+  .reports-filter-actions {
+    width: 100%;
+
+    display: flex;
+    gap: 0.75rem;
+
+    margin-top: 0.25rem;
+  }
+
+  .filter-button {
+    width: 50%;
+  }
+
+  /* Active filters */
+
+  .active-filters {
+    align-items: flex-start;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .active-filter-title {
+    width: 100%;
+  }
+
+  /* Cards */
+
+  .reports-grid {
+    --bs-gutter-x: 1rem;
+    --bs-gutter-y: 1rem;
+  }
+
+  .report-column {
+    width: 50%;
+  }
+
+  /* Background */
+
+  .top-left {
+    width: 400px;
+    height: 400px;
+  }
+
+  .bottom-right {
+    width: 450px;
+    height: 450px;
+  }
+
+  .right-shape {
+    width: 300px;
+    height: 300px;
+  }
+
+  .circle-1 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .circle-2 {
+    width: 400px;
+    height: 400px;
+  }
+
+  .circle-3 {
+    width: 550px;
+    height: 550px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   <768px
+
+   1 CARD PER ROW
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .dashboard-container {
+    padding: 0.75rem !important;
+  }
+
+  .reports-content {
+    padding: 0.75rem;
+  }
+
+  /* Header */
+
+  .reports-header {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .reports-header h1 {
+    font-size: 1.25rem !important;
+    line-height: 1.3;
+  }
+
+  .reports-header p {
+    font-size: 0.78rem !important;
+    line-height: 1.5;
+
+    max-width: 100%;
+  }
+
+
+  /* Filters */
+
+  .reports-filter-section {
+    margin-bottom: 1rem !important;
+  }
+
+  .reports-filter-section .row {
+    --bs-gutter-y: 0.75rem;
+  }
+
+  .reports-search,
+  .reports-type {
+    width: 100%;
+  }
+
+  .reports-filter-actions {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.65rem;
+
+    margin-top: 0;
+  }
+
+  .filter-button {
+    width: 100% !important;
+    min-height: 42px;
+  }
+
+
+  /* Active Filters */
+
+  .active-filters {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 0.65rem;
+
+    margin-bottom: 1rem !important;
+  }
+
+  .active-filter-title {
+    width: 100%;
+  }
+
+  .active-filter-list {
+    width: 100%;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 0.5rem;
+  }
+
+
+  /* Reports */
+
+  .reports-grid {
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 1rem;
+  }
+
+  .report-column {
+    width: 100%;
+  }
+
+  .report-card-wrapper {
+    width: 100%;
+  }
+
+
+  /* Loading */
+
+  .reports-loading {
+    min-height: 220px;
+  }
+
+
+  /* Empty */
+
+  .reports-empty-state {
+    min-height: 220px;
+
+    padding: 1.5rem 1rem;
+  }
+
+
+  /* Background decorations */
+
+  .top-left {
+    width: 300px;
+    height: 300px;
+
+    top: -120px;
+    left: -120px;
+  }
+
+  .bottom-right {
+    width: 350px;
+    height: 350px;
+
+    bottom: -150px;
+    right: -150px;
+  }
+
+  .right-shape {
+    width: 250px;
+    height: 250px;
+
+    filter: blur(60px);
+
+    right: -100px;
+  }
+
+  .concentric-circles {
+    left: -100px;
+    top: 25%;
+  }
+
+  .circle-1 {
+    width: 220px;
+    height: 220px;
+  }
+
+  .circle-2 {
+    width: 350px;
+    height: 350px;
+  }
+
+  .circle-3 {
+    width: 480px;
+    height: 480px;
+  }
+
+}
+
+
+/* =========================================================
+   EXTRA SMALL MOBILE
+   <480px
+========================================================= */
+
+@media (max-width: 479.98px) {
+
+  .dashboard-container {
+    padding: 0.5rem !important;
+  }
+
+  .reports-content {
+    padding: 0.5rem;
+  }
+
+  .reports-header h1 {
+    font-size: 1.15rem !important;
+  }
+
+  .reports-header p {
+    font-size: 0.75rem !important;
+  }
+
+  .active-filter-title {
+    font-size: 0.78rem;
+  }
+
+  .reports-empty-state {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .empty-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 1.4rem;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+========================================================= */
+
+@media (max-width: 360px) {
+
+  .reports-content {
+    padding: 0.35rem;
+  }
+
+  .reports-header h1 {
+    font-size: 1.05rem !important;
+  }
+
+  .reports-header p {
+    font-size: 0.72rem !important;
+  }
+
+  .filter-button {
+    min-height: 40px;
+  }
+
 }

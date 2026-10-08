@@ -1,141 +1,301 @@
-<div class="dashboard-container position-relative p-4">
-  <!-- Decorative background wrapper -->
-  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+<div class="dashboard-container position-relative p-3">
+
+  <!-- =====================================================
+       DECORATIVE BACKGROUND
+  ====================================================== -->
+  <div class="blog-background position-absolute top-0 start-0 w-100 h-100 overflow-hidden" aria-hidden="true">
+
     <div class="bg-shape top-left"></div>
     <div class="bg-shape bottom-right"></div>
     <div class="bg-shape right-shape"></div>
+
     <div class="concentric-circles">
       <div class="circle circle-1"></div>
       <div class="circle circle-2"></div>
       <div class="circle circle-3"></div>
     </div>
+
   </div>
 
-  <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="col-9 p-5 mx-auto ">
-    <!-- Back Link & Header -->
-    <div class="mb-5 border-bottom border-light pb-4">
+
+  <!-- =====================================================
+       MAIN CONTENT
+  ====================================================== -->
+  <main class="create-blog-wrapper w-100">
+
+    <!-- Back Link + Header -->
+    <header class="create-blog-header">
+
       <a routerLink="/blog-manager"
-        class="text-primary text-decoration-none fw-semibold mb-3 d-inline-flex align-items-center gap-2 cursor-pointer transition-all hover-opacity"><i
-          class="bi bi-arrow-left"></i> Back to Blog Manager</a>
-      <h1 class="fw-bold fs-3 mb-1 text-dark">Create New Blog Article</h1>
-      <p class="text-muted mb-0">Share your knowledge and insights with the community.</p>
-    </div>
+        class="back-link text-primary text-decoration-none fw-semibold d-inline-flex align-items-center gap-2">
 
-    <!-- Main Content Form -->
-    <form [formGroup]="blogForm" (ngSubmit)="onSubmit(false)">
+        <i class="bi bi-arrow-left"></i>
 
-      <div class="row g-5 mb-5">
+        <span>Back to Blog Manager</span>
 
-        <!-- Blog Banner Row -->
-        <div>
-          <h6 class="fw-bold mb-3"><i class="bi bi-image text-primary me-2"></i> Blog Banner</h6>
-          <div class="row g-4 mb-2">
-            <!-- Upload Component (Left) -->
-            <div class="col-md-6">
-              <div class="p-4 bg-light bg-opacity-50 border border-light rounded-4 h-100">
-                <app-file-upload (uploadComplete)="onUploadComplete($event, 'banner')"
-                  [uploadBucket]="uploadBucket.AdminCollection" [uploadSection]="uploadSection.BlogMedia"
-                  title="Drop Banner Image" browseText="browse" acceptedFormats="Image"></app-file-upload>
-              </div>
-            </div>
-            
-            <!-- Preview Component (Right) -->
-            <div class="col-md-6">
-              <div class="p-4 bg-light bg-opacity-50 border border-light rounded-4 h-100 d-flex flex-column justify-content-center align-items-center">
-                @if (blogBannerUrl) {
-                <div class="w-100">
-                  <app-file-preview mode="image" [previewUrl]="blogBannerUrl"
-                    (removeClicked)="clearFile('banner')"></app-file-preview>
-                </div>
-                } @else {
-                <div class="text-muted text-center opacity-50">
-                  <i class="bi bi-image fs-1 mb-2 d-block"></i>
-                  <p class="mb-0 small fw-medium">Banner preview will appear here</p>
-                </div>
-                }
-              </div>
-            </div>
-          </div>
+      </a>
+
+
+      <div class="create-blog-heading">
+
+        <h1 class="fw-bold text-dark">
+          Create New Blog Article
+        </h1>
+
+        <p class="text-muted mb-0">
+          Share your knowledge and insights with the community.
+        </p>
+
+      </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+    <form [formGroup]="blogForm" (ngSubmit)="onSubmit(false)" class="blog-form">
+
+
+      <!-- ===================================================
+           BLOG BANNER
+      ==================================================== -->
+      <section class="form-section">
+
+        <div class="section-heading">
+
+          <h6 class="fw-bold mb-0">
+            <i class="bi bi-image text-primary me-2"></i>
+            Blog Banner
+          </h6>
+
         </div>
 
-        <!-- Title & Content -->
-        <div class="mb-4">
+
+        <div class="row g-4">
+
+          <!-- Upload -->
+          <div class="col-md-6">
+
+            <div class="media-panel">
+
+              <app-file-upload (uploadComplete)="onUploadComplete($event, 'banner')"
+                [uploadBucket]="uploadBucket.AdminCollection" [uploadSection]="uploadSection.BlogMedia"
+                title="Drop Banner Image" browseText="browse" acceptedFormats="Image">
+              </app-file-upload>
+
+            </div>
+
+          </div>
+
+
+          <!-- Preview -->
+          <div class="col-md-6">
+
+            <div class="media-panel preview-panel">
+
+              @if (blogBannerUrl) {
+
+              <div class="preview-content">
+
+                <app-file-preview mode="image" [previewUrl]="blogBannerUrl" (removeClicked)="clearFile('banner')">
+                </app-file-preview>
+
+              </div>
+
+              } @else {
+
+              <div class="empty-preview">
+
+                <i class="bi bi-image"></i>
+
+                <p>
+                  Banner preview will appear here
+                </p>
+
+              </div>
+
+              }
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
+           ARTICLE TITLE
+      ==================================================== -->
+      <section class="form-section">
+
+        <div class="field-wrapper">
+
           <app-input-field type="text" [value]="blogForm.get('title')?.value || ''"
             (valueChange)="blogForm.get('title')?.setValue($event)"
             placeholder="Enter an engaging title for your article..." label="Article Title *" [showIcon]="true"
-            icon="bi bi-fonts"></app-input-field>
-          <div class="text-end text-muted mt-1" style="font-size: 0.75rem;">{{ blogForm.get('title')?.value?.length ||
-            0 }}/150</div>
-        </div>
+            icon="bi bi-fonts">
+          </app-input-field>
 
-        <div class="mb-4">
-          <label class="form-label fw-bold text-dark small mb-2"><i
-              class="bi bi-text-paragraph text-muted me-2"></i>Blog Content <span class="text-danger">*</span></label>
-          <div class="border border-light rounded-4 bg-white shadow-sm">
-            <app-rich-text-editor
-              formControlName="content"
-              placeholder="Write your blog content here..."
-              height="300px">
-            </app-rich-text-editor>
+          <div class="character-count">
+            {{ blogForm.get('title')?.value?.length || 0 }}/150
           </div>
+
         </div>
 
-        <!-- Right Column: Settings, Media, Tags -->
+      </section>
 
-        <!-- Meta Fields Row -->
-        <div class="row g-4 mb-4">
+
+      <!-- ===================================================
+           BLOG CONTENT
+      ==================================================== -->
+      <section class="form-section">
+
+        <label class="form-label fw-bold text-dark small mb-2">
+
+          <i class="bi bi-text-paragraph text-muted me-2"></i>
+
+          Blog Content
+
+          <span class="text-danger">*</span>
+
+        </label>
+
+
+        <div class="editor-wrapper">
+
+          <app-rich-text-editor formControlName="content" placeholder="Write your blog content here..." height="300px">
+          </app-rich-text-editor>
+
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
+           META FIELDS
+      ==================================================== -->
+      <section class="form-section">
+
+        <div class="row g-4">
+
+          <!-- Category -->
           <div class="col-md-6">
+
             <app-input-field type="select" [options]="categoryOptions" [value]="blogForm.get('category')?.value || ''"
               (valueChange)="blogForm.get('category')?.setValue($event)" label="Category *" [showIcon]="true"
-              icon="bi bi-folder"></app-input-field>
+              icon="bi bi-folder">
+            </app-input-field>
+
           </div>
+
+
+          <!-- Tags -->
           <div class="col-md-6">
+
             <app-input-field type="text" [value]="blogForm.get('tags')?.value || ''"
-              (valueChange)="blogForm.get('tags')?.setValue($event)" placeholder="e.g., UI, Tech, Remote"
-              label="Tags"></app-input-field>
+              (valueChange)="blogForm.get('tags')?.setValue($event)" placeholder="e.g., UI, Tech, Remote" label="Tags">
+            </app-input-field>
+
           </div>
+
         </div>
 
-        <!-- Uploads Row -->
-        <h6 class="fw-bold mb-3"><i class="bi bi-cloud-upload text-primary me-2"></i> Featured Media</h6>
+      </section>
+
+
+      <!-- ===================================================
+           FEATURED MEDIA
+      ==================================================== -->
+      <section class="form-section">
+
+        <div class="section-heading">
+
+          <h6 class="fw-bold mb-0">
+
+            <i class="bi bi-cloud-upload text-primary me-2"></i>
+
+            Featured Media
+
+          </h6>
+
+        </div>
+
+
         <div class="row g-4">
-          <!-- Upload Component (Left) -->
+
+          <!-- Upload -->
           <div class="col-md-6">
-            <div class="p-4 bg-light bg-opacity-50 border border-light rounded-4 h-100">
+
+            <div class="media-panel">
+
               <app-file-upload (uploadComplete)="onUploadComplete($event, 'featured')"
                 [uploadBucket]="uploadBucket.AdminCollection" [uploadSection]="uploadSection.BlogMedia"
-                title="Drop Featured Media" browseText="browse" acceptedFormats="Image or Video"></app-file-upload>
+                title="Drop Featured Media" browseText="browse" acceptedFormats="Image or Video">
+              </app-file-upload>
+
             </div>
+
           </div>
-          
-          <!-- Preview Component (Right) -->
+
+
+          <!-- Preview -->
           <div class="col-md-6">
-            <div class="p-4 bg-light bg-opacity-50 border border-light rounded-4 h-100 d-flex flex-column justify-content-center align-items-center">
+
+            <div class="media-panel preview-panel">
+
               @if (featuredMediaUrl) {
-              <div class="w-100">
-                <app-file-preview mode="image" [previewUrl]="featuredMediaUrl"
-                  (removeClicked)="clearFile('featured')"></app-file-preview>
+
+              <div class="preview-content">
+
+                <app-file-preview mode="image" [previewUrl]="featuredMediaUrl" (removeClicked)="clearFile('featured')">
+                </app-file-preview>
+
               </div>
+
               } @else {
-              <div class="text-muted text-center opacity-50">
-                <i class="bi bi-image fs-1 mb-2 d-block"></i>
-                <p class="mb-0 small fw-medium">Image preview will appear here</p>
+
+              <div class="empty-preview">
+
+                <i class="bi bi-image"></i>
+
+                <p>
+                  Image preview will appear here
+                </p>
+
               </div>
+
               }
+
             </div>
+
           </div>
+
         </div>
 
-      </div>
+      </section>
 
-      <!-- Action Footer -->
-      <div class="d-flex justify-content-between align-items-center pt-4 border-top border-light mt-4">
-        <app-button variant="light" label="Cancel" class="text-dark" [iconOnly]="false"
-          (clicked)="router.navigate(['/blog-manager'])"></app-button>
+
+      <!-- ===================================================
+           ACTION FOOTER
+      ==================================================== -->
+      <footer class="form-actions">
+
+        <app-button variant="light" label="Cancel" class="cancel-button text-dark" [iconOnly]="false"
+          (clicked)="router.navigate(['/blog-manager'])">
+        </app-button>
+
+
         <app-button variant="primary" [label]="isSubmitting ? 'Publishing...' : 'Publish Blog'" [iconOnly]="false"
-          [disabled]="isSubmitting || blogForm.invalid" (clicked)="onSubmit(false)"></app-button>
-      </div>
+          [disabled]="isSubmitting || blogForm.invalid" (clicked)="onSubmit(false)">
+        </app-button>
+
+      </footer>
+
     </form>
-  </div>
+
+  </main>
+
 </div>

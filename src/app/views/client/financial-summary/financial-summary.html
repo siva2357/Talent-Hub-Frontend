@@ -60,16 +60,178 @@
       </div>
     </div>
 
-    <!-- Recent Payment Activity Table -->
+    <!-- =========================================================
+     RECENT PAYMENT ACTIVITY
+     ========================================================= -->
+
     <div class="mb-4">
-      <h3 class="fs-6 fw-bold text-dark mb-3">Recent Payment Activity</h3>
-      <app-table [columns]="transactionColumns" [data]="transactions" [loading]="loading"></app-table>
+
+      <h3 class="section-title fs-6 fw-bold text-dark mb-3">
+        Recent Payment Activity
+      </h3>
+
+      <!-- Desktop / Tablet -->
+      <div class="desktop-table">
+        <app-table [columns]="transactionColumns" [data]="transactions" [loading]="loading">
+        </app-table>
+      </div>
+
+      <!-- Mobile List -->
+      <div class="mobile-list">
+
+        @if (transactions.length > 0) {
+
+        @for (txn of transactions; track txn._id || txn.createdAt) {
+
+        <div class="mobile-list-item">
+
+          <div class="mobile-item-main">
+
+            <div class="mobile-item-icon">
+              <i class="bi bi-arrow-left-right"></i>
+            </div>
+
+            <div class="mobile-item-content">
+
+              <div class="mobile-item-top">
+                <span class="mobile-item-title">
+                  {{ txn.type }}
+                </span>
+
+                <span class="mobile-item-amount">
+                  ₹{{ txn.amount | number:'1.2-2' }}
+                </span>
+              </div>
+
+              <div class="mobile-item-bottom">
+
+                <span class="mobile-item-date">
+                  {{ txn.createdAt | date:'mediumDate' }}
+                </span>
+
+                <app-badge [label]="txn.status" variant="success">
+                </app-badge>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        }
+
+        } @else {
+
+        <div class="mobile-empty-state">
+          <i class="bi bi-receipt"></i>
+          <span>No payment activity available</span>
+        </div>
+
+        }
+
+      </div>
+
     </div>
 
-    <!-- Invoices Table -->
+
+    <!-- =========================================================
+     INVOICES
+     ========================================================= -->
+
     <div class="mb-4">
-      <h3 class="fs-6 fw-bold text-dark mb-3">Invoices</h3>
-      <app-table [columns]="columns" [data]="invoices" [loading]="loading"></app-table>
+
+      <h3 class="section-title fs-6 fw-bold text-dark mb-3">
+        Invoices
+      </h3>
+
+      <!-- Desktop / Tablet -->
+      <div class="desktop-table">
+        <app-table [columns]="columns" [data]="invoices" [loading]="loading">
+        </app-table>
+      </div>
+
+      <!-- Mobile List -->
+      <div class="mobile-list">
+
+        @if (invoices.length > 0) {
+
+        @for (invoice of invoices; track invoice._id) {
+
+        <div class="mobile-list-item">
+
+          <div class="mobile-item-main">
+
+            <div class="mobile-item-icon invoice-icon">
+              <i class="bi bi-receipt"></i>
+            </div>
+
+            <div class="mobile-item-content">
+
+              <div class="mobile-item-top">
+
+                <div class="invoice-info">
+
+                  <span class="mobile-item-title">
+                    {{ getShortId(invoice._id) }}
+                  </span>
+
+                  <span class="mobile-item-subtitle">
+                    {{ invoice.contractId?.contractTitle || 'Direct Deposit' }}
+                  </span>
+
+                </div>
+
+                <span class="mobile-item-amount">
+                  ₹{{ invoice.amount | number:'1.2-2' }}
+                </span>
+
+              </div>
+
+              <div class="mobile-item-bottom">
+
+                <div class="invoice-meta">
+
+                  <span>
+                    Fee: ₹{{ invoice.platformFee | number:'1.2-2' }}
+                  </span>
+
+                </div>
+
+                <div class="invoice-actions">
+
+                  <app-badge appearance="subtle" [label]="invoice.status | titlecase" variant="success">
+                  </app-badge>
+
+                  <app-button variant="outline-primary" size="sm" label="Invoice"
+                    (clicked)="downloadInvoice(invoice._id)">
+                    <i class="bi bi-download me-1"></i>
+                  </app-button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        }
+
+        } @else {
+
+        <div class="mobile-empty-state">
+          <i class="bi bi-file-earmark-text"></i>
+          <span>No invoices available</span>
+        </div>
+
+        }
+
+      </div>
+
     </div>
 
     <!-- Templates for Table Columns -->
@@ -98,20 +260,21 @@
         <i class="bi bi-download me-1"></i>
       </app-button>
     </ng-template>
-    
+
     <!-- Transaction Templates -->
     <ng-template #txnDateTpl let-row="row">
-      <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.8rem;">{{ row.createdAt | date:'mediumDate' }}</span>
+      <span class="fw-bold text-dark d-block mb-1" style="font-size: 0.8rem;">{{ row.createdAt | date:'mediumDate'
+        }}</span>
     </ng-template>
-    
+
     <ng-template #txnTypeTpl let-row="row">
       <span class="text-muted" style="font-size: 0.8rem;">{{ row.type }}</span>
     </ng-template>
-    
+
     <ng-template #txnAmountTpl let-row="row">
       <span class="fw-bold text-dark" style="font-size: 0.8rem;">₹{{ row.amount | number:'1.2-2' }}</span>
     </ng-template>
-    
+
     <ng-template #txnStatusTpl let-row="row">
       <app-badge [label]="row.status" variant="success"></app-badge>
     </ng-template>

@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
+import { ModalService } from '../../../core/services/ui/modal.service';
 import { Table, TableColumn } from '../../../library/ui/components/table/table';
 import { Badge } from '../../../library/ui/components/badge/badge';
 import { Button } from '../../../library/ui/components/button/button';
@@ -9,14 +10,13 @@ import { InputField } from '../../../library/ui/components/input-field/input-fie
 import { Chip } from '../../../library/ui/components/chip/chip';
 import { Dropdown, DropdownItem } from "../../../library/ui/components/dropdown/dropdown";
 import { Pagination } from '../../../library/ui/components/pagination/pagination';
-import { Modal } from '../../../library/ui/components/modal/modal';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { map, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-freelancer-management',
   standalone: true,
-  imports: [CommonModule, Table, Badge, Button, FormsModule, InputField, Chip, Dropdown, Pagination, Modal],
+  imports: [CommonModule, Table, Badge, Button, FormsModule, InputField, Chip, Dropdown, Pagination],
   templateUrl: './freelancer-management.html',
   styleUrl: './freelancer-management.css'
 })
@@ -31,14 +31,14 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('jobTitleTpl') jobTitleTpl!: TemplateRef<any>;
   @ViewChild('statusTpl') statusTpl!: TemplateRef<any>;
   @ViewChild('actionsTpl') actionsTpl!: TemplateRef<any>;
-  
+
   rawFreelancers$ = new BehaviorSubject<any[]>([]);
   searchQuery$ = new BehaviorSubject<string>('');
   selectedStatus$ = new BehaviorSubject<string>('All Statuses');
-  
+
   tempSearchQuery = '';
   tempSelectedStatus = 'All Statuses';
-  
+
   currentPage$ = new BehaviorSubject<number>(1);
   pageSize$ = new BehaviorSubject<number>(10);
 
@@ -48,14 +48,10 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
 
   statusOptions: any[] = [];
 
-  isConfirmModalOpen = false;
-  confirmModalTitle = '';
-  confirmModalMessage = '';
-  confirmModalConfirmLabel = 'Confirm';
-  confirmModalConfirmVariant: 'primary' | 'danger' | 'warning' | 'success' | 'secondary' = 'primary';
-  pendingAction: { type: 'status' | 'approve', id: string, newStatus?: string } | null = null;
-
-  constructor(private adminService: AdminService) {}
+  constructor(
+    private adminService: AdminService,
+    private modalService: ModalService
+  ) { }
 
   ngOnInit() {
     this.freelancers$ = combineLatest([
@@ -68,7 +64,7 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
 
         if (search) {
           const q = search.toLowerCase();
-          filtered = filtered.filter(f => 
+          filtered = filtered.filter(f =>
             (f.name && f.name.toLowerCase().includes(q)) ||
             (f.email && f.email.toLowerCase().includes(q)) ||
             (f.id && String(f.id).toLowerCase().includes(q))
@@ -83,7 +79,7 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
         return filtered;
       })
     );
-    
+
     this.paginatedFreelancers$ = combineLatest([
       this.freelancers$,
       this.currentPage$,
@@ -94,7 +90,7 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
         return filtered.slice(start, start + size);
       })
     );
-    
+
     this.fetchStatusOptions();
     this.loadFreelancers();
   }
@@ -124,7 +120,7 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   loadFreelancers() {
     this.adminService.getAllFreelancers().subscribe({
@@ -178,55 +174,76 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
     this.currentPage$.next(1);
   }
 
-  updateStatus(freelancerId: string, newStatus: string) {
-    this.pendingAction = { type: 'status', id: freelancerId, newStatus };
-    this.confirmModalTitle = 'Confirm Status Change';
-    this.confirmModalMessage = `Are you sure you want to change the status to ${newStatus}?`;
-    this.confirmModalConfirmLabel = 'Update Status';
-    this.confirmModalConfirmVariant = (newStatus === 'Suspended' || newStatus === 'Blocked' || newStatus === 'Deactivated') ? 'danger' : 'primary';
-    this.isConfirmModalOpen = true;
-  }
+  async updateStatus(freelancerId: string, newStatus: string) {
+    let message = `Are you sure you want to change the status to ${newStatus}?`;
+    let confirmLabel = 'Update Status';
+    let confirmVariant: any = 'primary';
+    let icon = 'bi bi-info-circle';
+    let iconVariant: any = 'primary';
 
-  approveFreelancer(freelancerId: string) {
-    this.pendingAction = { type: 'approve', id: freelancerId };
-    this.confirmModalTitle = 'Approve Freelancer';
-    this.confirmModalMessage = 'Are you sure you want to approve this freelancer?';
-    this.confirmModalConfirmLabel = 'Approve';
-    this.confirmModalConfirmVariant = 'success';
-    this.isConfirmModalOpen = true;
-  }
+    if (newStatus === 'Suspended') {
+      message = 'Are you sure you want to suspend this freelancer? Their active applications and projects may be paused.';
+      confirmLabel = 'Suspend';
+      confirmVariant = 'warning';
+      icon = 'bi bi-pause-circle';
+      iconVariant = 'warning';
+    } else if (newStatus === 'Blocked') {
+      message = 'Are you sure you want to block this freelancer? They will not be able to log in or apply to any contracts.';
+      confirmLabel = 'Block Freelancer';
+      confirmVariant = 'danger';
+      icon = 'bi bi-slash-circle';
+      iconVariant = 'danger';
+    } else if (newStatus === 'Deactivated') {
+      message = 'Are you sure you want to deactivate this account? This action disables their profile on the platform.';
+      confirmLabel = 'Deactivate';
+      confirmVariant = 'danger';
+      icon = 'bi bi-trash';
+      iconVariant = 'danger';
+    } else if (newStatus === 'Active') {
+      message = 'Are you sure you want to activate this freelancer? They will be granted full platform access.';
+      confirmLabel = 'Activate';
+      confirmVariant = 'success';
+      icon = 'bi bi-check-circle';
+      iconVariant = 'success';
+    }
 
-  onConfirmAction() {
-    if (!this.pendingAction) return;
+    const confirmed = await this.modalService.confirm({
+      title: `${newStatus} Freelancer`,
+      message,
+      confirmLabel,
+      confirmVariant,
+      icon,
+      iconVariant
+    });
 
-    if (this.pendingAction.type === 'approve') {
-      this.adminService.approveFreelancer(this.pendingAction.id).subscribe({
+    if (confirmed) {
+      this.adminService.updateFreelancerStatus(freelancerId, newStatus).subscribe({
         next: (res) => {
           if (res.success) this.loadFreelancers();
-          this.closeConfirmModal();
         },
-        error: (err) => {
-          console.error('Error approving freelancer', err);
-          this.closeConfirmModal();
-        }
-      });
-    } else if (this.pendingAction.type === 'status' && this.pendingAction.newStatus) {
-      this.adminService.updateFreelancerStatus(this.pendingAction.id, this.pendingAction.newStatus).subscribe({
-        next: (res) => {
-          if (res.success) this.loadFreelancers();
-          this.closeConfirmModal();
-        },
-        error: (err) => {
-          console.error('Error updating status', err);
-          this.closeConfirmModal();
-        }
+        error: (err) => console.error('Error updating status', err)
       });
     }
   }
 
-  closeConfirmModal() {
-    this.isConfirmModalOpen = false;
-    this.pendingAction = null;
+  async approveFreelancer(freelancerId: string) {
+    const confirmed = await this.modalService.confirm({
+      title: 'Approve Freelancer',
+      message: 'Are you sure you want to approve this freelancer? Their account will become Active immediately.',
+      confirmLabel: 'Approve Account',
+      confirmVariant: 'success',
+      icon: 'bi bi-person-check',
+      iconVariant: 'success'
+    });
+
+    if (confirmed) {
+      this.adminService.approveFreelancer(freelancerId).subscribe({
+        next: (res) => {
+          if (res.success) this.loadFreelancers();
+        },
+        error: (err) => console.error('Error approving freelancer', err)
+      });
+    }
   }
 
   getActionItems(freelancer: any): DropdownItem[] {
@@ -268,4 +285,14 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
     if (status === 'Suspended') return 'danger';
     return 'warning';
   }
+
+  viewFreelancer(freelancer: any): void {
+    const viewItem = this.getActionItems(freelancer)
+      .find(item => item.value === 'view');
+
+    if (viewItem) {
+      this.onActionSelected(viewItem, freelancer);
+    }
+  }
+
 }
