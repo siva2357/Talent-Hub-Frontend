@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Button } from '../../../library/ui/components/button/button';
 
 interface Feature {
   title: string;
@@ -19,7 +20,7 @@ interface GettingStartedStep {
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [],
+  imports: [Button],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css'
 })

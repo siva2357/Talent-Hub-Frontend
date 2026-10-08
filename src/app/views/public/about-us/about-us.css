@@ -368,7 +368,29 @@
 
 
 /* =========================================================
-   TABLET
+   TABLET / LAPTOP (<= 1199.98px)
+========================================================= */
+
+@media (max-width: 1199.98px) {
+
+  .hero-title {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+  }
+
+  .mission-title {
+    font-size: clamp(1.85rem, 3vw, 2.5rem);
+  }
+
+  .hero-image-placeholder {
+    max-width: 480px;
+    max-height: 480px;
+    border-radius: 100px 0 0 100px;
+  }
+}
+
+
+/* =========================================================
+   TABLET (<= 991.98px)
 ========================================================= */
 
 @media (max-width: 991.98px) {
@@ -385,26 +407,38 @@
   .hero-content,
   .mission-content {
     max-width: 100%;
+    text-align: center;
   }
 
-  .hero-image-placeholder {
-    margin: 0 auto;
-    max-width: 600px;
-    max-height: none;
-
-    border-radius: 80px 0 0 80px;
+  .hero-title,
+  .mission-title {
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .hero-description,
   .mission-description {
     max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
+  .hero-image-placeholder {
+    margin: 0 auto;
+    max-width: 480px;
+    aspect-ratio: 16 / 10;
+    max-height: none;
+    border-radius: 2rem;
+  }
+
+  .section-header {
+    margin-bottom: 2.5rem;
+  }
 }
 
 
 /* =========================================================
-   MOBILE
+   MOBILE (<= 767.98px)
 ========================================================= */
 
 @media (max-width: 767.98px) {
@@ -419,30 +453,31 @@
   .mission-section,
   .growth-section,
   .values-section {
-    padding-top: 2.5rem;
-    padding-bottom: 2.5rem;
+    padding-top: 2.25rem;
+    padding-bottom: 2.25rem;
   }
 
   .hero-title {
-    margin-bottom: 1rem;
-    font-size: clamp(1.9rem, 8vw, 2.5rem);
+    margin-bottom: 0.85rem;
+    font-size: clamp(1.75rem, 7.5vw, 2.3rem);
+    line-height: 1.2;
   }
 
   .hero-description,
   .mission-description {
-    font-size: 0.95rem;
-    line-height: 1.65;
+    font-size: 0.92rem;
+    line-height: 1.6;
   }
 
   .hero-image-placeholder {
     width: 100%;
     max-width: 100%;
-
-    border-radius: 60px 0 0 60px;
+    aspect-ratio: 16 / 10;
+    border-radius: 1.25rem;
   }
 
   .hero-image-placeholder i {
-    font-size: 3.5rem;
+    font-size: 3rem;
   }
 
   .section-header {
@@ -450,7 +485,18 @@
   }
 
   .section-title {
-    font-size: clamp(1.65rem, 7vw, 2rem);
+    font-size: clamp(1.5rem, 6vw, 1.9rem);
+    line-height: 1.25;
+  }
+
+  .section-description {
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .mission-title {
+    font-size: clamp(1.6rem, 6.5vw, 2rem);
+    line-height: 1.25;
   }
 
   .feature-card {
@@ -458,22 +504,26 @@
     padding: 1.25rem;
   }
 
+  .values-heading {
+    font-size: clamp(1.4rem, 5.5vw, 1.75rem);
+  }
+
   .value-card {
-    min-height: 240px;
-    padding: 1.5rem 1rem;
+    min-height: auto;
+    padding: 1.25rem 1rem;
   }
 
   .value-icon {
-    width: 85px;
-    height: 85px;
-    font-size: 1.75rem;
+    width: 70px;
+    height: 70px;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
   }
-
 }
 
 
 /* =========================================================
-   SMALL MOBILE
+   SMALL MOBILE (<= 575.98px)
 ========================================================= */
 
 @media (max-width: 575.98px) {
@@ -493,20 +543,29 @@
   }
 
   .hero-title {
-    font-size: 1.8rem;
+    font-size: 1.75rem;
   }
 
   .mission-title {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
   }
 
   .hero-image-placeholder {
-    aspect-ratio: 1 / 0.9;
-    border-radius: 40px 0 0 40px;
+    aspect-ratio: 16 / 11;
+    border-radius: 1rem;
   }
 
   .feature-card {
-    padding: 1.15rem;
+    padding: 1.15rem 1rem;
+  }
+
+  .feature-title {
+    font-size: 1.05rem;
+  }
+
+  .feature-description {
+    font-size: 0.88rem;
+    line-height: 1.55;
   }
 
   .custom-icon-box {
@@ -515,38 +574,51 @@
     font-size: 1.2rem;
   }
 
+  .value-card {
+    padding: 1.15rem 0.85rem;
+  }
 }
 
 
 /* =========================================================
-   VERY SMALL DEVICES
+   VERY SMALL DEVICES (<= 375px)
 ========================================================= */
 
 @media (max-width: 375px) {
 
   .about-container {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
   }
 
   .hero-title {
-    font-size: 1.65rem;
-  }
-
-  .mission-title {
     font-size: 1.55rem;
   }
 
+  .mission-title {
+    font-size: 1.45rem;
+  }
+
   .section-title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+  }
+
+  .hero-description,
+  .mission-description {
+    font-size: 0.85rem;
   }
 
   .feature-card {
-    padding: 1rem;
+    padding: 1rem 0.75rem;
   }
 
   .value-card {
-    min-height: 220px;
+    padding: 1rem 0.75rem;
   }
 
+  .value-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.35rem;
+  }
 }

@@ -108,10 +108,15 @@
   margin-top: 0.5rem;
 }
 
-.hero-button {
+.hero-actions app-button {
+  display: inline-flex;
+}
+
+.hero-actions app-button button,
+.hero-actions app-button .btn {
   border-radius: 6px;
   font-weight: 500;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.75rem;
 }
 
 
@@ -342,20 +347,45 @@
   }
 
   .home-container {
-    padding-left: 4rem;
-    padding-right: 4rem;
+    padding-left: clamp(2rem, 4vw, 4rem);
+    padding-right: clamp(2rem, 4vw, 4rem);
   }
 }
 
 
 /* =========================================================
-   TABLET
+   TABLET / LAPTOP (<= 1199.98px)
+========================================================= */
+
+@media (max-width: 1199.98px) {
+
+  .hero-row {
+    min-height: 480px;
+  }
+
+  .hero-title {
+    font-size: clamp(2.2rem, 3.8vw, 3.25rem);
+  }
+
+  .hero-image {
+    max-width: 580px;
+  }
+
+  .ai-row {
+    row-gap: 2.5rem;
+  }
+}
+
+
+/* =========================================================
+   TABLET (<= 991.98px)
 ========================================================= */
 
 @media (max-width: 991.98px) {
 
   .home-hero {
     padding-top: 2rem;
+    padding-bottom: 3rem;
   }
 
   .hero-row {
@@ -380,18 +410,40 @@
     justify-content: center;
   }
 
+  .features-section,
+  .capabilities-section,
+  .getting-started-section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .ai-section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
   .ai-content {
     padding-left: 0;
   }
 
   .ai-title {
     margin-top: 1rem;
+    text-align: center;
+  }
+
+  .ai-description {
+    text-align: center;
+  }
+
+  .ai-list {
+    max-width: 640px;
+    margin: 0 auto;
   }
 }
 
 
 /* =========================================================
-   MOBILE
+   MOBILE (<= 767.98px)
 ========================================================= */
 
 @media (max-width: 767.98px) {
@@ -402,12 +454,12 @@
   }
 
   .home-hero {
-    padding-top: 1.5rem;
+    padding-top: 1.25rem;
     padding-bottom: 2.5rem;
   }
 
   .hero-row {
-    row-gap: 2rem;
+    row-gap: 1.75rem;
   }
 
   .hero-image-column {
@@ -419,59 +471,83 @@
   }
 
   .hero-image {
-    max-width: 100%;
+    max-width: 88%;
+    max-height: 380px;
   }
 
   .hero-title {
-    font-size: clamp(2rem, 9vw, 2.75rem);
-    line-height: 1.15;
+    font-size: clamp(1.9rem, 7.5vw, 2.5rem);
+    line-height: 1.18;
+    margin-bottom: 0.85rem !important;
   }
 
   .hero-description {
     font-size: 0.95rem !important;
-    line-height: 1.65;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
   }
 
-  .hero-button {
+  .hero-actions {
     width: 100%;
-    max-width: 300px;
+  }
+
+  .hero-actions app-button {
+    width: 100%;
+    max-width: 280px;
+    display: inline-flex;
+    justify-content: center;
+  }
+
+  .hero-actions app-button button,
+  .hero-actions app-button .btn {
+    width: 100%;
   }
 
   .features-section,
   .ai-section,
   .capabilities-section,
   .getting-started-section {
-    padding-top: 2.5rem;
-    padding-bottom: 2.5rem;
+    padding-top: 2.25rem;
+    padding-bottom: 2.25rem;
+  }
+
+  .section-header,
+  .section-heading {
+    margin-bottom: 2rem;
   }
 
   .section-title {
-    font-size: 1.75rem;
+    font-size: clamp(1.5rem, 5.5vw, 1.9rem);
+    line-height: 1.25;
   }
 
   .section-description {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
   }
 
   .ai-title {
-    font-size: 1.75rem;
+    font-size: clamp(1.5rem, 5.5vw, 1.9rem);
+    line-height: 1.25;
   }
 
   .ai-description {
-    font-size: 0.95rem !important;
+    font-size: 0.92rem !important;
+    line-height: 1.6;
   }
 
   .ai-list-item {
-    gap: 0.6rem;
+    gap: 0.65rem;
   }
 
   .ai-list-item span {
-    font-size: 0.95rem !important;
+    font-size: 0.92rem !important;
     line-height: 1.5;
   }
 
   .capability-image {
-    height: 200px;
+    height: auto;
+    aspect-ratio: 16 / 10;
   }
 
   .capability-body {
@@ -479,21 +555,27 @@
   }
 
   .cta-section {
-    padding-bottom: 2rem;
+    padding: 1rem 0 2.5rem;
   }
 
   .cta-box {
     border-radius: 0.75rem !important;
+    padding: 2.25rem 1.25rem;
+  }
+
+  .cta-box h2 {
+    font-size: clamp(1.4rem, 5vw, 1.85rem);
   }
 
   .cta-box p {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
   }
 }
 
 
 /* =========================================================
-   SMALL MOBILE
+   SMALL MOBILE (<= 575.98px)
 ========================================================= */
 
 @media (max-width: 575.98px) {
@@ -503,17 +585,26 @@
     padding-right: 0.875rem;
   }
 
+  .hero-image {
+    max-width: 95%;
+    max-height: 300px;
+  }
+
   .hero-title {
-    font-size: 2rem;
+    font-size: 1.85rem;
   }
 
   .hero-description {
-    font-size: 0.9rem !important;
+    font-size: 0.88rem !important;
+  }
+
+  .hero-actions app-button {
+    max-width: 100%;
   }
 
   .feature-card .card-body,
   .getting-card .card-body {
-    padding: 1.25rem;
+    padding: 1.25rem 1rem;
   }
 
   .feature-title {
@@ -521,7 +612,7 @@
   }
 
   .capability-image {
-    height: 190px;
+    aspect-ratio: 16 / 10;
   }
 
   .capability-body h5 {
@@ -529,8 +620,8 @@
   }
 
   .capability-body p {
-    font-size: 0.9rem !important;
-    line-height: 1.6;
+    font-size: 0.88rem !important;
+    line-height: 1.55;
   }
 
   .custom-icon-box {
@@ -541,35 +632,54 @@
   }
 
   .cta-box {
-    padding: 2rem 1.25rem;
+    padding: 2rem 1rem;
   }
 
   .cta-box h2 {
-    font-size: 1.5rem;
+    font-size: 1.45rem;
+  }
+
+  .cta-box p {
+    font-size: 0.88rem;
   }
 }
 
 
 /* =========================================================
-   VERY SMALL DEVICES
+   VERY SMALL DEVICES (<= 375px)
 ========================================================= */
 
 @media (max-width: 375px) {
 
+  .home-container {
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+  }
+
   .hero-title {
-    font-size: 1.8rem;
+    font-size: 1.65rem;
+  }
+
+  .hero-description {
+    font-size: 0.84rem !important;
   }
 
   .section-title,
   .section-heading h2 {
-    font-size: 1.55rem;
+    font-size: 1.4rem;
   }
 
   .ai-title {
-    font-size: 1.55rem;
+    font-size: 1.4rem;
   }
 
   .cta-box h2 {
-    font-size: 1.35rem;
+    font-size: 1.28rem;
+  }
+
+  .feature-card .card-body,
+  .getting-card .card-body,
+  .capability-body {
+    padding: 1rem 0.85rem;
   }
 }

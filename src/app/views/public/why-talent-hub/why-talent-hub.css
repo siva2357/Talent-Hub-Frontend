@@ -323,10 +323,18 @@
 
 
 /* =========================================================
-   LARGE TABLET / SMALL DESKTOP
+   LARGE TABLET / SMALL DESKTOP (<= 1199.98px)
 ========================================================= */
 
 @media (max-width: 1199.98px) {
+
+  .hero-title {
+    font-size: clamp(2rem, 3.5vw, 2.85rem);
+  }
+
+  .hero-image-wrapper {
+    border-radius: 100px 0 0 100px;
+  }
 
   .benefits-wrapper {
     grid-template-columns: repeat(2, 1fr);
@@ -339,12 +347,11 @@
   .benefit-item:nth-child(-n + 2) {
     border-bottom: 1px solid rgba(108, 117, 125, 0.15);
   }
-
 }
 
 
 /* =========================================================
-   TABLET
+   TABLET (<= 991.98px)
 ========================================================= */
 
 @media (max-width: 991.98px) {
@@ -356,25 +363,34 @@
 
   .hero-content {
     max-width: 100%;
+    text-align: center;
+  }
+
+  .hero-title {
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .hero-description {
     max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .hero-image-wrapper {
-    border-radius: 90px 0 0 90px;
+    margin: 0 auto;
+    max-width: 550px;
+    border-radius: 2rem;
   }
 
   .hero-image {
-    height: clamp(300px, 50vw, 450px);
+    height: clamp(280px, 45vw, 400px);
   }
-
 }
 
 
 /* =========================================================
-   MOBILE
+   MOBILE (<= 767.98px)
 ========================================================= */
 
 @media (max-width: 767.98px) {
@@ -386,39 +402,47 @@
 
   .hero-section,
   .features-section {
-    padding-top: 2.5rem;
-    padding-bottom: 2.5rem;
+    padding-top: 2.25rem;
+    padding-bottom: 2.25rem;
   }
 
   .benefits-section {
     padding-top: 0;
-    padding-bottom: 2.5rem;
+    padding-bottom: 2.25rem;
   }
 
   .hero-title {
-    margin-bottom: 1rem;
-    font-size: clamp(1.8rem, 8vw, 2.4rem);
+    margin-bottom: 0.85rem;
+    font-size: clamp(1.75rem, 7.5vw, 2.3rem);
+    line-height: 1.2;
   }
 
   .hero-description {
-    font-size: 0.95rem;
-    line-height: 1.65;
+    font-size: 0.92rem;
+    line-height: 1.6;
   }
 
   .hero-image-wrapper {
-    border-radius: 60px 0 0 60px;
+    border-radius: 1.25rem;
+    max-width: 100%;
   }
 
   .hero-image {
-    height: clamp(260px, 65vw, 400px);
+    height: clamp(220px, 50vw, 320px);
+  }
+
+  .section-header {
+    margin-bottom: 2rem;
   }
 
   .section-title {
-    font-size: clamp(1.65rem, 7vw, 2.1rem);
+    font-size: clamp(1.5rem, 6vw, 1.9rem);
+    line-height: 1.25;
   }
 
   .section-description {
-    font-size: 0.9rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
   }
 
   .feature-image {
@@ -431,13 +455,11 @@
 
   .benefits-wrapper {
     grid-template-columns: 1fr;
-
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
   }
 
   .benefit-item {
     padding: 1.25rem;
-
     border-right: none;
     border-bottom: 1px solid rgba(108, 117, 125, 0.15);
   }
@@ -449,12 +471,11 @@
   .benefit-item:last-child {
     border-bottom: none;
   }
-
 }
 
 
 /* =========================================================
-   SMALL MOBILE
+   SMALL MOBILE (<= 575.98px)
 ========================================================= */
 
 @media (max-width: 575.98px) {
@@ -470,16 +491,20 @@
     padding-bottom: 2rem;
   }
 
+  .hero-title {
+    font-size: 1.75rem;
+  }
+
   .hero-image-wrapper {
-    border-radius: 40px 0 0 40px;
+    border-radius: 1rem;
   }
 
   .hero-image {
-    height: 250px;
+    height: 230px;
   }
 
   .feature-image {
-    height: 160px;
+    height: 155px;
   }
 
   .feature-image i {
@@ -496,40 +521,43 @@
   }
 
   .benefit-icon {
-    width: 55px;
-    height: 55px;
-    flex-basis: 55px;
-    font-size: 1.25rem;
+    width: 50px;
+    height: 50px;
+    flex-basis: 50px;
+    font-size: 1.2rem;
   }
-
 }
 
 
 /* =========================================================
-   VERY SMALL DEVICES
+   VERY SMALL DEVICES (<= 375px)
 ========================================================= */
 
 @media (max-width: 375px) {
 
   .why-container {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
   }
 
   .hero-title {
-    font-size: 1.7rem;
+    font-size: 1.55rem;
+  }
+
+  .hero-description {
+    font-size: 0.85rem;
   }
 
   .hero-image {
-    height: 220px;
+    height: 200px;
   }
 
   .section-title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 
   .feature-image {
-    height: 145px;
+    height: 140px;
   }
 
   .benefit-title {
@@ -539,5 +567,4 @@
   .benefit-description {
     font-size: 0.72rem;
   }
-
 }
