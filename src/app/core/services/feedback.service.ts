@@ -6,13 +6,13 @@ import { environment } from '../../../environments/environment';
 export interface FeedbackData {
   contractId: string;
   freelancerId: string;
-  overallRating: number;
+  overallRating?: number;
   categories: {
-    qualityOfWork: number;
-    requirementsAndDeliverables: number;
-    communication: number;
-    timeliness: number;
-    behaviorAndProfessionalism: number;
+    qualityOfWork: string;
+    requirementsAndDeliverables: string;
+    communication: string;
+    timeliness: string;
+    behaviorAndProfessionalism: string;
   };
   clientComments: string;
   pros: string[];

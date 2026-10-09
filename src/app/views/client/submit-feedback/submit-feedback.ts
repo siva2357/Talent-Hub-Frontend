@@ -10,7 +10,7 @@ import { Button } from '../../../library/ui/components/button/button';
 @Component({
   selector: 'app-submit-feedback',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, Button],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, Button, InputField],
   templateUrl: './submit-feedback.html',
   styleUrl: './submit-feedback.css'
 })
@@ -21,9 +21,8 @@ export class SubmitFeedback implements OnInit {
   isSubmitting = false;
   contractDetails: any = null;
 
-  // For star rating UI
+  // For rating UI (no longer used for numeric score but kept for structural consistency if needed)
   ratingHover: { [key: string]: number } = {
-    overallRating: 0,
     qualityOfWork: 0,
     requirementsAndDeliverables: 0,
     communication: 0,
@@ -52,12 +51,11 @@ export class SubmitFeedback implements OnInit {
 
   initForm(): void {
     this.feedbackForm = this.fb.group({
-      overallRating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
-      qualityOfWork: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
-      requirementsAndDeliverables: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
-      communication: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
-      timeliness: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
-      behaviorAndProfessionalism: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
+      qualityOfWork: ['', [Validators.required, Validators.maxLength(500)]],
+      requirementsAndDeliverables: ['', [Validators.required, Validators.maxLength(500)]],
+      communication: ['', [Validators.required, Validators.maxLength(500)]],
+      timeliness: ['', [Validators.required, Validators.maxLength(500)]],
+      behaviorAndProfessionalism: ['', [Validators.required, Validators.maxLength(500)]],
       clientComments: ['', [Validators.required, Validators.maxLength(1000)]],
       pros: [''], // Will split by comma
       cons: ['']  // Will split by comma
@@ -103,7 +101,6 @@ export class SubmitFeedback implements OnInit {
     const payload = {
       contractId: this.contractId,
       freelancerId: this.freelancerId,
-      overallRating: formValue.overallRating,
       categories: {
         qualityOfWork: formValue.qualityOfWork,
         requirementsAndDeliverables: formValue.requirementsAndDeliverables,

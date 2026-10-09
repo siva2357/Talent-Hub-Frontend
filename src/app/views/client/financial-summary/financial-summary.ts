@@ -1,18 +1,21 @@
 import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { TransactionService } from '../../../core/services/transaction.service';
+import { Router } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
 import { StatCard, StatCardData } from '../../../library/shared/components/stat-card/stat-card';
 import { Table, TableColumn } from '../../../library/ui/components/table/table';
 import { Badge } from '../../../library/ui/components/badge/badge';
 import { Button } from '../../../library/ui/components/button/button';
+import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-financial-summary',
   standalone: true,
-  imports: [CommonModule, StatCard, Table, Badge, Button],
+  imports: [CommonModule, StatCard, Table, Badge, Dropdown],
   templateUrl: './financial-summary.html',
   styleUrl: './financial-summary.css'
 })
@@ -26,12 +29,10 @@ export class FinancialSummary implements OnInit, AfterViewInit {
   };
   contracts: any[] = [];
   invoices: any[] = [];
-  transactions: any[] = [];
   loading: boolean = true;
 
   statCards: StatCardData[] = [];
   columns: TableColumn[] = [];
-  transactionColumns: TableColumn[] = [];
 
   @ViewChild('invoiceIdTpl') invoiceIdTpl!: TemplateRef<any>;
   @ViewChild('contractTpl') contractTpl!: TemplateRef<any>;
@@ -40,15 +41,13 @@ export class FinancialSummary implements OnInit, AfterViewInit {
   @ViewChild('statusTpl') statusTpl!: TemplateRef<any>;
   @ViewChild('actionTpl') actionTpl!: TemplateRef<any>;
 
-  @ViewChild('txnDateTpl') txnDateTpl!: TemplateRef<any>;
-  @ViewChild('txnTypeTpl') txnTypeTpl!: TemplateRef<any>;
-  @ViewChild('txnAmountTpl') txnAmountTpl!: TemplateRef<any>;
-  @ViewChild('txnStatusTpl') txnStatusTpl!: TemplateRef<any>;
-
   distributionChart: any[] = [];
   chartInstance: any = null;
 
-  constructor(private transactionService: TransactionService) { }
+  constructor(
+    private transactionService: TransactionService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -63,13 +62,6 @@ export class FinancialSummary implements OnInit, AfterViewInit {
         { field: 'platformFee', headerName: 'Platform Fee', cellTemplate: this.feeTpl },
         { field: 'status', headerName: 'Status', cellTemplate: this.statusTpl },
         { field: 'action', headerName: 'Action', cellTemplate: this.actionTpl }
-      ];
-
-      this.transactionColumns = [
-        { field: 'createdAt', headerName: 'Date', cellTemplate: this.txnDateTpl },
-        { field: 'type', headerName: 'Type', cellTemplate: this.txnTypeTpl },
-        { field: 'amount', headerName: 'Amount', cellTemplate: this.txnAmountTpl },
-        { field: 'status', headerName: 'Status', cellTemplate: this.txnStatusTpl }
       ];
     });
   }
@@ -119,19 +111,10 @@ export class FinancialSummary implements OnInit, AfterViewInit {
         if (res.success) {
           this.invoices = (res.invoices || []).filter((inv: any) => inv.type === 'Escrow Funded' || inv.type === 'Deposit');
         }
-      },
-      error: (err: any) => console.error("Error fetching invoices", err)
-    });
-
-    this.transactionService.getTransactions().subscribe({
-      next: (res: any) => {
-        if (res.success) {
-          this.transactions = (res.transactions || []).filter((txn: any) => txn.type === 'Escrow Funded' || txn.type === 'Deposit');
-        }
         this.loading = false;
       },
       error: (err: any) => {
-        console.error("Error fetching transactions", err);
+        console.error("Error fetching invoices", err);
         this.loading = false;
       }
     });
@@ -208,7 +191,23 @@ export class FinancialSummary implements OnInit, AfterViewInit {
     if (!id) return '';
     return String(id).substring(0, 8).toUpperCase();
   }
-  
+
+  getInvoiceDropdownItems(row: any): DropdownItem[] {
+    return [
+      { label: 'View Transactions', value: 'view-transactions', icon: 'bi bi-eye' },
+      { label: 'Download Invoice', value: 'download-invoice', icon: 'bi bi-download' }
+    ];
+  }
+
+  onInvoiceDropdownAction(item: DropdownItem, row: any): void {
+    if (item.value === 'view-transactions') {
+      const contractId = row.contractId?._id || row.contractId;
+      this.router.navigate(['/transaction-history'], { queryParams: { contractId } });
+    } else if (item.value === 'download-invoice') {
+      this.downloadInvoice(row._id);
+    }
+  }
+
   downloadInvoice(invoiceId: string): void {
     this.transactionService.downloadInvoicePdf(invoiceId).subscribe({
       next: (blob) => {

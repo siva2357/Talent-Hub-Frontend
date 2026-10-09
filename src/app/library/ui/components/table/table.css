@@ -248,11 +248,16 @@
    Prevent ngx-datatable / Bootstrap blue text
    ========================================================= */
 
-:host ::ng-deep .ngx-datatable.bootstrap .datatable-body-cell span:not(.badge),
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body-cell span:not(.badge):not(.badge span),
 :host ::ng-deep .ngx-datatable.bootstrap .datatable-body-cell div:not(.dropdown),
 :host ::ng-deep .ngx-datatable.bootstrap .datatable-body-cell p {
 
   color: #374151 !important;
+}
+
+/* Ensure inner spans in badges inherit the correct color */
+:host ::ng-deep .ngx-datatable.bootstrap .datatable-body-cell .badge span {
+  color: inherit !important;
 }
 
 
@@ -280,65 +285,7 @@
 }
 
 
-/* =========================================================
-   STATUS BADGE
-   ========================================================= */
 
-:host ::ng-deep .ngx-datatable.bootstrap .badge {
-
-  display: inline-flex !important;
-
-  align-items: center;
-  justify-content: center;
-
-  width: auto;
-  min-width: 50px;
-
-  height: 23px;
-
-  padding: 0 10px;
-
-  border-radius: 6px;
-
-  font-size: 11px !important;
-  font-weight: 600 !important;
-
-  line-height: 1 !important;
-
-  white-space: nowrap;
-
-  color: #ffffff !important;
-}
-
-
-/* Success */
-
-:host ::ng-deep .ngx-datatable.bootstrap .badge.bg-success {
-
-  background-color: #198754 !important;
-
-  color: #ffffff !important;
-}
-
-
-/* Warning */
-
-:host ::ng-deep .ngx-datatable.bootstrap .badge.bg-warning {
-
-  background-color: #ffc107 !important;
-
-  color: #ffffff !important;
-}
-
-
-/* Danger */
-
-:host ::ng-deep .ngx-datatable.bootstrap .badge.bg-danger {
-
-  background-color: #dc3545 !important;
-
-  color: #ffffff !important;
-}
 
 
 /* =========================================================
