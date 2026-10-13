@@ -29,15 +29,7 @@ export class SearchTalent implements OnInit, OnDestroy {
   availabilityFilter$ = new BehaviorSubject<string>('all');
   private subscription: Subscription = new Subscription();
 
-  // UI State
-  showAIFilter = false;
 
-  // AI Matching properties
-  isAIMatching = false;
-  isAIApplied = false;
-  searchCategory = '';
-  searchSkillInput = '';
-  searchSkills: string[] = [];
 
   // Manual Filter Options
   skillOptions: InputOption[] = [{ label: 'All Skills', value: 'all' }];
@@ -51,14 +43,7 @@ export class SearchTalent implements OnInit, OnDestroy {
 
   activeManualFilters: { label: string, type: string, value: string }[] = [];
 
-  categoryOptions: InputOption[] = [
-    { label: 'Select a category...', value: '' },
-    { label: 'Frontend Developer', value: 'Frontend Developer' },
-    { label: 'Backend Developer', value: 'Backend Developer' },
-    { label: 'Fullstack Developer', value: 'Fullstack Developer' },
-    { label: 'UI/UX Designer', value: 'UI/UX Designer' },
-    { label: 'DevOps Engineer', value: 'DevOps Engineer' }
-  ];
+
 
   constructor(
     private profileService: ProfileService,
@@ -85,8 +70,6 @@ export class SearchTalent implements OnInit, OnDestroy {
         this.experienceFilter$,
         this.availabilityFilter$
       ]).subscribe(([freelancers, skill, experience, availability]) => {
-        if (this.showAIFilter && this.isAIApplied) return;
-
         let filtered = [...freelancers];
         this.activeManualFilters = [];
 
@@ -140,9 +123,7 @@ export class SearchTalent implements OnInit, OnDestroy {
     });
   }
 
-  toggleAIFilter(): void {
-    this.showAIFilter = !this.showAIFilter;
-  }
+
 
   fetchFreelancers(): void {
     this.isLoading = true;
@@ -164,10 +145,6 @@ export class SearchTalent implements OnInit, OnDestroy {
   // --- Manual Filters ---
 
   applyManualFilters(): void {
-    if (this.showAIFilter && this.isAIApplied) {
-      return; // Skip manual filtering if AI match is active
-    }
-
     this.skillFilter$.next(this.selectedSkill);
     this.experienceFilter$.next(this.selectedExperience);
     this.availabilityFilter$.next(this.selectedAvailability);
@@ -188,19 +165,7 @@ export class SearchTalent implements OnInit, OnDestroy {
     this.applyManualFilters();
   }
 
-  // --- AI Filters ---
 
-  addSkill(): void {
-    const skill = this.searchSkillInput.trim();
-    if (skill && !this.searchSkills.includes(skill)) {
-      this.searchSkills.push(skill);
-    }
-    this.searchSkillInput = '';
-  }
-
-  removeSkill(skill: string): void {
-    this.searchSkills = this.searchSkills.filter(s => s !== skill);
-  }
 
 
   viewProfile(id: string): void {

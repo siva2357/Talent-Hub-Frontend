@@ -48,18 +48,20 @@ export class FinanceOverview implements OnInit, AfterViewInit {
   constructor(private transactionService: TransactionService, private http: HttpClient) { }
 
   ngAfterViewInit(): void {
-    this.columns = [
-      { field: 'title', headerName: 'Contract Title', cellTemplate: this.contractTpl, width: 120 },
-      { field: 'type', headerName: 'Contract Type', cellTemplate: this.typeTpl, width: 120 },
-      { field: 'budget', headerName: 'Contract Budget', cellTemplate: this.budgetTpl, width: 120 },
-      { field: 'status', headerName: 'Contract Status', cellTemplate: this.statusTpl, width: 120 },
-      { field: 'lastPaymentDate', headerName: 'End Date', cellTemplate: this.dateTpl, width: 120 },
-      { field: 'earned', headerName: 'Earned Amount', cellTemplate: this.earnedTpl, width: 120 },
-      { field: 'platformFeesDeducted', headerName: 'Platform Fee', cellTemplate: this.feeTpl, width: 120 },
-      { field: 'receivedAmount', headerName: 'Received Amount', cellTemplate: this.receivedTpl, width: 120 },
-      { field: 'netWithdrawnAmount', headerName: 'Withdrawn Amount', cellTemplate: this.withdrawnTpl, width: 120 },
-      { field: 'actions', headerName: 'Actions', cellTemplate: this.actionTpl, minWidth: 150 }
-    ];
+    setTimeout(() => {
+      this.columns = [
+        { field: 'title', headerName: 'Contract Title', cellTemplate: this.contractTpl, width: 120 },
+        { field: 'type', headerName: 'Contract Type', cellTemplate: this.typeTpl, width: 120 },
+        { field: 'budget', headerName: 'Contract Budget', cellTemplate: this.budgetTpl, width: 120 },
+        { field: 'status', headerName: 'Contract Status', cellTemplate: this.statusTpl, width: 120 },
+        { field: 'lastPaymentDate', headerName: 'End Date', cellTemplate: this.dateTpl, width: 120 },
+        { field: 'earned', headerName: 'Earned Amount', cellTemplate: this.earnedTpl, width: 120 },
+        { field: 'platformFeesDeducted', headerName: 'Platform Fee', cellTemplate: this.feeTpl, width: 120 },
+        { field: 'receivedAmount', headerName: 'Received Amount', cellTemplate: this.receivedTpl, width: 120 },
+        { field: 'netWithdrawnAmount', headerName: 'Withdrawn Amount', cellTemplate: this.withdrawnTpl, width: 120 },
+        { field: 'actions', headerName: 'Actions', cellTemplate: this.actionTpl, minWidth: 150 }
+      ];
+    });
   }
 
   ngOnInit(): void {

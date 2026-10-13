@@ -1,23 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AccountPages } from './account-pages';
+import { provideRouter } from '@angular/router';
+import { By } from '@angular/platform-browser';
+import { RouterOutlet } from '@angular/router';
 
-import { AccountSection } from './account-section';
-
-describe('AccountSection', () => {
-  let component: AccountSection;
-  let fixture: ComponentFixture<AccountSection>;
+describe('AccountPages', () => {
+  let component: AccountPages;
+  let fixture: ComponentFixture<AccountPages>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AccountSection]
-    })
-    .compileComponents();
+      imports: [AccountPages],
+      providers: [provideRouter([])]
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(AccountSection);
+    fixture = TestBed.createComponent(AccountPages);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create the account pages shell component', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should contain a router-outlet', () => {
+    const routerOutlet = fixture.debugElement.query(By.directive(RouterOutlet));
+    expect(routerOutlet).toBeTruthy();
   });
 });

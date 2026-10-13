@@ -3,6 +3,14 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FeedbackService } from '../../../core/services/feedback.service';
 
+export interface FeedbackCategoryItem {
+  key: string;
+  title: string;
+  icon: string;
+  iconBg: string;
+  iconColor: string;
+  description: string;
+}
 
 @Component({
   selector: 'app-feedback-reports',
@@ -17,13 +25,47 @@ export class FeedbackReports implements OnInit {
   isLoading = true;
   error: string | null = null;
 
-  isAnalyzing: boolean = false;
-  aiAnalysis: any = null;
+  categoriesConfig = [
+    {
+      key: 'qualityOfWork',
+      title: 'Resolved Fully (Quality)',
+      icon: 'bi-patch-check-fill',
+      iconBg: 'bg-primary-subtle',
+      iconColor: 'text-primary'
+    },
+    {
+      key: 'requirementsAndDeliverables',
+      title: 'Work Commitment',
+      icon: 'bi-award-fill',
+      iconBg: 'bg-success-subtle',
+      iconColor: 'text-success'
+    },
+    {
+      key: 'communication',
+      title: 'Communication',
+      icon: 'bi-chat-dots-fill',
+      iconBg: 'bg-info-subtle',
+      iconColor: 'text-info'
+    },
+    {
+      key: 'timeliness',
+      title: 'On-Time Delivery',
+      icon: 'bi-clock-history',
+      iconBg: 'bg-warning-subtle',
+      iconColor: 'text-warning'
+    },
+    {
+      key: 'behaviorAndProfessionalism',
+      title: 'Professional Behavior',
+      icon: 'bi-person-check-fill',
+      iconBg: 'bg-purple-subtle',
+      iconColor: 'text-purple'
+    }
+  ];
 
   constructor(
     private route: ActivatedRoute,
-    private feedbackService: FeedbackService,
-
+    private feedbackService: FeedbackService
   ) { }
 
   ngOnInit(): void {
@@ -55,6 +97,25 @@ export class FeedbackReports implements OnInit {
     });
   }
 
+  getClientName(): string {
+    return this.feedbackData?.clientId?.registrationDetails?.fullName || 'Client';
+  }
+
+  getClientInitials(): string {
+    const name = this.getClientName();
+    if (!name || name === 'Client') return 'CL';
+    return name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .substring(0, 2)
+      .toUpperCase();
+  }
+
+  getCategoryFeedback(key: string): string {
+    if (!this.feedbackData?.categories) return 'No feedback provided for this category.';
+    return this.feedbackData.categories[key] || 'No feedback provided for this category.';
+  }
 
   getOverallRatingText(rating: number): string {
     if (rating >= 4.5) return 'Excellent';

@@ -27,111 +27,69 @@
 
       <form [formGroup]="feedbackForm" (ngSubmit)="submit()">
 
-        <!-- Overall Rating -->
-        <div class="mb-5 text-center">
-          <label class="fw-bold text-dark mb-2 d-block fs-5">Overall Rating</label>
-          <div class="d-flex justify-content-center gap-2" (mouseleave)="hoverRating('overallRating', 0)">
-            @for (star of [1,2,3,4,5]; track star) {
-            <i class="bi bi-star-fill star-rating overall"
-              [class.active]="star <= (ratingHover['overallRating'] || getRating('overallRating'))"
-              (mouseenter)="hoverRating('overallRating', star)" (click)="setRating('overallRating', star)">
-            </i>
-            }
-          </div>
-          @if (feedbackForm.get('overallRating')?.touched && feedbackForm.get('overallRating')?.errors?.['min']) {
-          <div class="text-danger small mt-2">Overall rating is required.</div>
-          }
-        </div>
-
-        <h4 class="fs-6 fw-bold mb-4 text-primary border-bottom pb-2">Category Ratings</h4>
+        <h4 class="fs-6 fw-bold mb-4 text-dark border-bottom pb-2">Category Ratings</h4>
 
         <div class="row g-4 mb-5">
           <!-- Quality of Work -->
           <div class="col-md-6">
-            <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-3">
-              <span class="fw-semibold small"><i class="bi bi-shield-check text-success me-2"></i>Quality of Work</span>
-              <div class="d-flex gap-1" (mouseleave)="hoverRating('qualityOfWork', 0)">
-                @for (star of [1,2,3,4,5]; track star) {
-                <i class="bi bi-star-fill star-rating"
-                  [class.active]="star <= (ratingHover['qualityOfWork'] || getRating('qualityOfWork'))"
-                  (mouseenter)="hoverRating('qualityOfWork', star)" (click)="setRating('qualityOfWork', star)">
-                </i>
-                }
-              </div>
-            </div>
+            <app-input-field
+              label="Resolved Fully (Quality)"
+              type="textarea"
+              formControlName="qualityOfWork"
+              placeholder="Provide feedback on the quality of work...">
+            </app-input-field>
           </div>
 
           <!-- Requirements & Deliverables -->
           <div class="col-md-6">
-            <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-3">
-              <span class="fw-semibold small"><i class="bi bi-clipboard-check text-primary me-2"></i>Requirements &
-                Deliverables</span>
-              <div class="d-flex gap-1" (mouseleave)="hoverRating('requirementsAndDeliverables', 0)">
-                @for (star of [1,2,3,4,5]; track star) {
-                <i class="bi bi-star-fill star-rating"
-                  [class.active]="star <= (ratingHover['requirementsAndDeliverables'] || getRating('requirementsAndDeliverables'))"
-                  (mouseenter)="hoverRating('requirementsAndDeliverables', star)"
-                  (click)="setRating('requirementsAndDeliverables', star)">
-                </i>
-                }
-              </div>
-            </div>
+            <app-input-field
+              label="Work Commitment"
+              type="textarea"
+              formControlName="requirementsAndDeliverables"
+              placeholder="Provide feedback on work commitment...">
+            </app-input-field>
           </div>
 
           <!-- Communication -->
           <div class="col-md-6">
-            <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-3">
-              <span class="fw-semibold small"><i class="bi bi-chat-dots text-purple me-2"></i>Communication</span>
-              <div class="d-flex gap-1" (mouseleave)="hoverRating('communication', 0)">
-                @for (star of [1,2,3,4,5]; track star) {
-                <i class="bi bi-star-fill star-rating"
-                  [class.active]="star <= (ratingHover['communication'] || getRating('communication'))"
-                  (mouseenter)="hoverRating('communication', star)" (click)="setRating('communication', star)">
-                </i>
-                }
-              </div>
-            </div>
+            <app-input-field
+              label="Communication"
+              type="textarea"
+              formControlName="communication"
+              placeholder="Provide feedback on communication...">
+            </app-input-field>
           </div>
 
           <!-- Timeliness -->
           <div class="col-md-6">
-            <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-3">
-              <span class="fw-semibold small"><i class="bi bi-clock text-warning me-2"></i>Timeliness</span>
-              <div class="d-flex gap-1" (mouseleave)="hoverRating('timeliness', 0)">
-                @for (star of [1,2,3,4,5]; track star) {
-                <i class="bi bi-star-fill star-rating"
-                  [class.active]="star <= (ratingHover['timeliness'] || getRating('timeliness'))"
-                  (mouseenter)="hoverRating('timeliness', star)" (click)="setRating('timeliness', star)">
-                </i>
-                }
-              </div>
-            </div>
+            <app-input-field
+              label="On-Time Delivery"
+              type="textarea"
+              formControlName="timeliness"
+              placeholder="Provide feedback on punctuality and delivery...">
+            </app-input-field>
           </div>
 
           <!-- Behavior & Professionalism -->
           <div class="col-md-6">
-            <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-3">
-              <span class="fw-semibold small"><i class="bi bi-person-badge text-info me-2"></i>Behavior &
-                Professionalism</span>
-              <div class="d-flex gap-1" (mouseleave)="hoverRating('behaviorAndProfessionalism', 0)">
-                @for (star of [1,2,3,4,5]; track star) {
-                <i class="bi bi-star-fill star-rating"
-                  [class.active]="star <= (ratingHover['behaviorAndProfessionalism'] || getRating('behaviorAndProfessionalism'))"
-                  (mouseenter)="hoverRating('behaviorAndProfessionalism', star)"
-                  (click)="setRating('behaviorAndProfessionalism', star)">
-                </i>
-                }
-              </div>
-            </div>
+            <app-input-field
+              label="Professional Behavior"
+              type="textarea"
+              formControlName="behaviorAndProfessionalism"
+              placeholder="Provide feedback on professional behavior...">
+            </app-input-field>
           </div>
         </div>
 
-        <h4 class="fs-6 fw-bold mb-4 text-primary border-bottom pb-2">Detailed Comments</h4>
+        <h4 class="fs-6 fw-bold mb-4 text-dark border-bottom pb-2">Detailed Comments</h4>
 
         <div class="mb-4">
-          <label class="form-label fw-semibold small">Client Comments (Required)</label>
-          <textarea formControlName="clientComments" class="form-control" rows="4"
-            placeholder="Describe your experience working with this freelancer..."></textarea>
+          <app-input-field
+            label="Client Comments (Required)"
+            type="textarea"
+            formControlName="clientComments"
+            placeholder="Describe your experience working with this freelancer...">
+          </app-input-field>
           @if (feedbackForm.get('clientComments')?.touched && feedbackForm.get('clientComments')?.invalid) {
           <div class="text-danger small mt-1">Comments are required.</div>
           }
@@ -139,22 +97,28 @@
 
         <div class="row g-4 mb-4">
           <div class="col-md-6">
-            <label class="form-label fw-semibold small text-success">What went well (Pros)</label>
-            <textarea formControlName="pros" class="form-control" rows="3"
-              placeholder="Comma separated, e.g., Fast delivery, Good communication"></textarea>
-            <div class="form-text small">Enter positive points separated by commas.</div>
+            <app-input-field
+              label="What went well (Pros)"
+              type="textarea"
+              formControlName="pros"
+              placeholder="Comma separated, e.g., Fast delivery, Good communication">
+            </app-input-field>
+            <div class="form-text small mt-1">Enter positive points separated by commas.</div>
           </div>
           <div class="col-md-6">
-            <label class="form-label fw-semibold small text-danger">What could be improved (Cons)</label>
-            <textarea formControlName="cons" class="form-control" rows="3"
-              placeholder="Comma separated, e.g., Missed some edge cases"></textarea>
-            <div class="form-text small">Enter areas to improve separated by commas.</div>
+            <app-input-field
+              label="What could be improved (Cons)"
+              type="textarea"
+              formControlName="cons"
+              placeholder="Comma separated, e.g., Missed some edge cases">
+            </app-input-field>
+            <div class="form-text small mt-1">Enter areas to improve separated by commas.</div>
           </div>
         </div>
 
-        <div class="d-flex justify-content-end gap-3 pt-3 border-top">
-          <app-button label="Cancel" variant="outline-secondary" routerLink="/manage-contract"></app-button>
-          <app-button label="Submit Feedback" variant="primary" type="submit"
+        <div class="d-flex flex-column-reverse flex-sm-row justify-content-sm-end gap-3 pt-4 border-top mt-4">
+          <app-button class="w-100 w-sm-auto" label="Cancel" variant="outline-secondary" routerLink="/manage-contract"></app-button>
+          <app-button class="w-100 w-sm-auto" label="Submit Feedback" variant="primary" type="submit"
             [disabled]="feedbackForm.invalid || isSubmitting"></app-button>
         </div>
       </form>

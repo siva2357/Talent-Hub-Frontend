@@ -1,4 +1,4 @@
-<div class="dashboard-container position-relative min-vh-100 py-5">
+<div class="dashboard-container position-relative min-vh-100 py-3 py-sm-4 py-md-5 overflow-hidden">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -11,254 +11,194 @@
     </div>
   </div>
 
-  <div class="container-fluid position-relative z-1" style="max-width: 1200px;">
+  <div class="container-fluid position-relative z-1 px-3 px-sm-4 px-lg-5" style="max-width: 1180px;">
 
     @if (isLoading) {
     <div class="d-flex flex-column justify-content-center align-items-center py-5 glass-card rounded-4">
-      <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem;"></div>
-      <span class="mt-3 text-muted fw-medium fs-sm">Loading Report...</span>
+      <div class="spinner-border text-primary" role="status" style="width: 2.25rem; height: 2.25rem;"></div>
+      <span class="mt-3 text-muted fw-medium small">Loading Feedback Report...</span>
     </div>
     } @else if (error) {
-    <div
-      class="alert alert-danger glass-card border border-danger border-opacity-25 text-danger rounded-4 p-4 shadow-sm">
-      <h4 class="alert-heading mb-1 fs-6 fw-bold">Error Loading Report</h4>
+    <div class="mb-3">
+      <a routerLink="/my-contracts"
+        class="text-muted fw-semibold text-decoration-none d-inline-flex align-items-center gap-2 hover-text-primary transition-all"
+        style="font-size: 0.85rem;">
+        <i class="bi bi-arrow-left"></i> Back to My Contracts
+      </a>
+    </div>
+    <div class="alert alert-danger glass-card border border-danger border-opacity-25 text-danger rounded-4 p-4 shadow-sm">
+      <h4 class="alert-heading mb-1 fs-6 fw-bold d-flex align-items-center gap-2">
+        <i class="bi bi-exclamation-triangle-fill"></i> Error Loading Report
+      </h4>
       <p class="mb-0 small">{{ error }}</p>
     </div>
     } @else if (feedbackData) {
 
     <!-- Top Navigation -->
-    <div class="mb-4">
+    <div class="mb-3">
       <a routerLink="/my-contracts"
-        class="text-muted fw-medium text-decoration-none d-inline-flex align-items-center gap-2 hover-text-primary transition-all"
+        class="text-muted fw-semibold text-decoration-none d-inline-flex align-items-center gap-2 hover-text-primary transition-all py-1"
         style="font-size: 0.85rem;">
-        <i class="bi bi-arrow-left"></i> Back to Contracts
+        <i class="bi bi-arrow-left"></i> Back to My Contracts
       </a>
     </div>
 
-    <!-- Header Section -->
-    <div class="mb-5 pb-4 border-bottom border-light">
-      <h1 class="fw-bold text-dark mb-1" style="font-size: 1.75rem; letter-spacing: -0.5px;">Feedback Report</h1>
-      <p class="text-muted mb-0" style="font-size: 0.95rem;">Performance evaluation and AI insights for Contract</p>
+    <!-- Page Header & Summary Card -->
+    <div class="glass-card rounded-4 p-3 p-sm-4 p-md-5 mb-4 shadow-sm border border-light">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 pb-3 pb-md-4 border-bottom">
+        <div class="w-100 w-md-auto">
+          <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2.5 py-1 rounded-pill small fw-semibold">
+              <i class="bi bi-check-circle-fill me-1"></i> Verified Client Feedback
+            </span>
+            @if (feedbackData.overallRating > 0) {
+            <span class="badge px-3 py-1 rounded-pill fw-semibold small" [ngClass]="getOverallRatingColorClass(feedbackData.overallRating)" style="background-color: rgba(255, 193, 7, 0.15);">
+              <i class="bi bi-star-fill text-warning me-1"></i> {{ feedbackData.overallRating }} / 5 ({{ getOverallRatingText(feedbackData.overallRating) }})
+            </span>
+            }
+          </div>
+          <h1 class="fw-bold text-dark mb-1 fs-3 fs-md-2">Contract Performance Feedback</h1>
+          <p class="text-muted small mb-0">Client review and evaluation submitted upon contract completion.</p>
+        </div>
+
+        @if (feedbackData.createdAt) {
+        <div class="text-start text-md-end text-muted small w-100 w-md-auto pt-2 pt-md-0 border-top border-md-0 border-light">
+          <span class="d-block text-uppercase fw-semibold text-muted" style="font-size: 0.7rem; letter-spacing: 0.5px;">Submitted On</span>
+          <span class="text-dark fw-medium">{{ feedbackData.createdAt | date:'mediumDate' }}</span>
+        </div>
+        }
+      </div>
+
+      <!-- Client Profile Bar -->
+      <div class="pt-3 pt-md-4">
+        <div class="d-flex align-items-center gap-3">
+          <div class="client-avatar rounded-circle d-flex align-items-center justify-content-center text-white fw-bold shadow-sm flex-shrink-0">
+            {{ getClientInitials() }}
+          </div>
+          <div class="text-truncate">
+            <span class="text-muted text-uppercase fw-semibold d-block" style="font-size: 0.7rem; letter-spacing: 0.5px;">Reviewed By Client</span>
+            <span class="fw-bold text-dark fs-6 text-truncate d-block">{{ getClientName() }}</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- ROW 1: Overall Score & Category Bars -->
-    <div class="row g-4 mb-4">
+    <!-- Category Ratings Section -->
+    <div class="mb-4 mb-md-5">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <i class="bi bi-grid-fill text-primary"></i>
+        <h2 class="fs-5 fw-bold text-dark mb-0">Category Feedback & Deliverables</h2>
+      </div>
 
-      <!-- Overall Score Card -->
-      <div class="col-lg-4">
-        <div
-          class="glass-card rounded-4 p-4 p-md-5 h-100 shadow-sm border border-light d-flex flex-column justify-content-center align-items-center text-center">
-          <h6 class="text-muted fw-semibold text-uppercase tracking-wider mb-3"
-            style="font-size: 0.75rem; letter-spacing: 1px;">Overall Rating</h6>
+      <div class="row g-3 g-md-4">
+        @for (cat of categoriesConfig; track cat.key; let last = $last) {
+        <div class="col-12" [ngClass]="last ? 'col-12' : 'col-md-6'">
+          <div class="glass-card rounded-4 p-3 p-sm-4 h-100 border border-light shadow-sm d-flex flex-column hover-card">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="category-icon-wrapper rounded-3 d-flex align-items-center justify-content-center" [ngClass]="cat.iconBg">
+                <i class="bi fs-5" [ngClass]="[cat.icon, cat.iconColor]"></i>
+              </div>
+              <div class="min-w-0 flex-grow-1">
+                <h3 class="fs-6 fw-bold text-dark mb-0 text-truncate">{{ cat.title }}</h3>
+                <span class="text-muted" style="font-size: 0.72rem;">Client Assessment</span>
+              </div>
+            </div>
 
-          <div class="display-2 fw-bold text-dark mb-2" style="letter-spacing: -2px;">
-            {{ feedbackData.overallRating | number:'1.1-1' }}
+            <div class="category-feedback-box p-3 rounded-3 flex-grow-1">
+              <p class="text-secondary mb-0 small feedback-text">
+                {{ getCategoryFeedback(cat.key) }}
+              </p>
+            </div>
           </div>
-          <div class="d-flex gap-1 text-warning mb-3 fs-4">
-            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-              class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-          </div>
-          <span class="badge px-3 py-2 rounded-pill fw-medium fs-6 shadow-sm"
-            [ngClass]="getOverallRatingColorClass(feedbackData.overallRating)">
-            {{ getOverallRatingText(feedbackData.overallRating) }}
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Client Detailed Comments Section -->
+    <div class="mb-4 mb-md-5">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <i class="bi bi-chat-quote-fill text-primary"></i>
+        <h2 class="fs-5 fw-bold text-dark mb-0">Client Detailed Comments</h2>
+      </div>
+
+      <div class="glass-card rounded-4 p-3 p-sm-4 p-md-5 border border-light shadow-sm position-relative overflow-hidden">
+        <div class="quote-bg-icon position-absolute top-0 end-0 opacity-10 pe-3 pe-md-4 pt-2 d-none d-sm-block">
+          <i class="bi bi-quote" style="font-size: 6rem; line-height: 1; color: var(--primary-color);"></i>
+        </div>
+
+        <div class="position-relative z-1">
+          <span class="text-uppercase fw-semibold text-primary d-block mb-2" style="font-size: 0.75rem; letter-spacing: 1px;">
+            Overall Experience
           </span>
-        </div>
-      </div>
-
-      <!-- Detailed Breakdown Card -->
-      <div class="col-lg-8">
-        <div
-          class="glass-card rounded-4 p-4 p-md-5 h-100 shadow-sm border border-light d-flex flex-column justify-content-center">
-          <h6 class="text-dark fw-bold mb-4" style="font-size: 1.1rem;">Category Breakdown</h6>
-
-          <div class="row g-x-5 g-y-4">
-            <!-- Quality of Work -->
-            <div class="col-md-6 mb-4 mb-md-3">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="text-muted fw-medium" style="font-size: 0.9rem;">Quality of Work</span>
-                <span class="text-dark fw-bold">{{ feedbackData.categories.qualityOfWork | number:'1.1-1' }}</span>
-              </div>
-              <div class="progress rounded-pill bg-light" style="height: 8px;">
-                <div class="progress-bar bg-success rounded-pill" role="progressbar"
-                  [style.width.%]="(feedbackData.categories.qualityOfWork / 5) * 100"></div>
-              </div>
-            </div>
-
-            <!-- Requirements -->
-            <div class="col-md-6 mb-4 mb-md-3">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="text-muted fw-medium" style="font-size: 0.9rem;">Requirements & Deliverables</span>
-                <span class="text-dark fw-bold">{{ feedbackData.categories.requirementsAndDeliverables | number:'1.1-1'
-                  }}</span>
-              </div>
-              <div class="progress rounded-pill bg-light" style="height: 8px;">
-                <div class="progress-bar bg-primary rounded-pill" role="progressbar"
-                  [style.width.%]="(feedbackData.categories.requirementsAndDeliverables / 5) * 100"></div>
-              </div>
-            </div>
-
-            <!-- Communication -->
-            <div class="col-md-6 mb-4 mb-md-3">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="text-muted fw-medium" style="font-size: 0.9rem;">Communication</span>
-                <span class="text-dark fw-bold">{{ feedbackData.categories.communication | number:'1.1-1' }}</span>
-              </div>
-              <div class="progress rounded-pill bg-light" style="height: 8px;">
-                <div class="progress-bar bg-info rounded-pill" role="progressbar"
-                  [style.width.%]="(feedbackData.categories.communication / 5) * 100"></div>
-              </div>
-            </div>
-
-            <!-- Timeliness -->
-            <div class="col-md-6 mb-4 mb-md-3">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="text-muted fw-medium" style="font-size: 0.9rem;">Timeliness</span>
-                <span class="text-dark fw-bold">{{ feedbackData.categories.timeliness | number:'1.1-1' }}</span>
-              </div>
-              <div class="progress rounded-pill bg-light" style="height: 8px;">
-                <div class="progress-bar bg-warning rounded-pill" role="progressbar"
-                  [style.width.%]="(feedbackData.categories.timeliness / 5) * 100"></div>
-              </div>
-            </div>
-
-            <!-- Professionalism -->
-            <div class="col-md-6">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="text-muted fw-medium" style="font-size: 0.9rem;">Professionalism</span>
-                <span class="text-dark fw-bold">{{ feedbackData.categories.behaviorAndProfessionalism | number:'1.1-1'
-                  }}</span>
-              </div>
-              <div class="progress rounded-pill bg-light" style="height: 8px;">
-                <div class="progress-bar bg-purple rounded-pill" role="progressbar"
-                  [style.width.%]="(feedbackData.categories.behaviorAndProfessionalism / 5) * 100"></div>
-              </div>
-            </div>
+          <p class="fs-6 text-dark fst-italic mb-3 feedback-text quote-text">
+            "{{ feedbackData.clientComments || 'No overall comments provided.' }}"
+          </p>
+          <div class="d-flex align-items-center gap-2 text-muted small flex-wrap">
+            <i class="bi bi-person-circle"></i>
+            <span>Verified feedback submitted by <strong>{{ getClientName() }}</strong></span>
           </div>
         </div>
       </div>
-
     </div>
 
-    <!-- ROW 2: Client Review (Left col-6) & AI Analysis (Right col-6) -->
-    <div class="row g-4">
-
-      <!-- Left Col-6: Qualitative Feedback -->
-      <div class="col-lg-6 d-flex flex-column">
-        <div class="glass-card rounded-4 p-4 p-md-5 border border-light shadow-sm flex-grow-1">
-          <h6 class="text-dark fw-bold mb-4" style="font-size: 1.1rem;"><i
-              class="bi bi-chat-left-quote text-primary me-2"></i> Client Review</h6>
-
-          <!-- Client Comments -->
-          <div class="mb-4">
-            <span class="text-muted fw-semibold text-uppercase tracking-wider mb-3 d-block"
-              style="font-size: 0.7rem; letter-spacing: 1px;">General Comments</span>
-            <div
-              class="bg-primary bg-opacity-10 border border-primary border-opacity-25 rounded-3 p-4 position-relative">
-              <i class="bi bi-quote text-primary opacity-25 position-absolute top-0 start-0 ms-2"
-                style="font-size: 2.5rem; transform: translateY(-20%);"></i>
-              <p class="text-dark fst-italic mb-0 position-relative z-1" style="font-size: 0.95rem; line-height: 1.6;">
-                {{ feedbackData.clientComments || 'No specific comments provided.' }}
-              </p>
+    <!-- Highlights & Areas to Improve (Pros & Cons) -->
+    <div class="row g-3 g-md-4 mb-4">
+      <!-- What went well (Pros) -->
+      <div class="col-12 col-md-6">
+        <div class="glass-card rounded-4 p-3 p-sm-4 h-100 border border-light shadow-sm d-flex flex-column">
+          <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+            <div class="category-icon-wrapper rounded-3 bg-success-subtle d-flex align-items-center justify-content-center">
+              <i class="bi bi-hand-thumbs-up-fill text-success fs-5"></i>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-0">What Went Well (Pros)</h3>
+              <span class="text-muted" style="font-size: 0.72rem;">Key project strengths highlighted by the client</span>
             </div>
           </div>
 
-          <!-- Pros & Cons -->
-          <div class="row g-4 mt-2">
-            <!-- Pros -->
-            <div class="col-12">
-              <span
-                class="text-muted fw-semibold text-uppercase tracking-wider mb-2 d-block d-flex align-items-center gap-2"
-                style="font-size: 0.7rem; letter-spacing: 1px;">
-                <i class="bi bi-hand-thumbs-up-fill text-success"></i> Highlights
-              </span>
-
-              @if (feedbackData.pros?.length) {
-              <ul class="list-group list-group-flush gap-2">
-                @for (pro of feedbackData.pros; track $index) {
-                <li class="list-group-item bg-transparent border-0 p-0 text-dark d-flex gap-2"
-                  style="font-size: 0.9rem;">
-                  <i class="bi bi-check-circle-fill text-success mt-1"></i> {{ pro }}
-                </li>
-                }
-              </ul>
-              } @else {
-              <span class="text-muted fst-italic" style="font-size: 0.85rem;">None listed.</span>
-              }
-            </div>
-
-            <!-- Cons -->
-            <div class="col-12">
-              <span
-                class="text-muted fw-semibold text-uppercase tracking-wider mb-2 d-block d-flex align-items-center gap-2 mt-3"
-                style="font-size: 0.7rem; letter-spacing: 1px;">
-                <i class="bi bi-graph-down-arrow text-danger"></i> Areas to Improve
-              </span>
-
-              @if (feedbackData.cons?.length) {
-              <ul class="list-group list-group-flush gap-2">
-                @for (con of feedbackData.cons; track $index) {
-                <li class="list-group-item bg-transparent border-0 p-0 text-dark d-flex gap-2"
-                  style="font-size: 0.9rem;">
-                  <i class="bi bi-arrow-right-circle-fill text-danger mt-1"></i> {{ con }}
-                </li>
-                }
-              </ul>
-              } @else {
-              <span class="text-muted fst-italic" style="font-size: 0.85rem;">None listed.</span>
-              }
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Right Col-6: AI Analysis -->
-      <div class="col-lg-6 d-flex flex-column">
-        <div class="glass-card rounded-4 p-4 p-md-5 border border-light shadow-sm position-relative overflow-hidden flex-grow-1">
-          <h6 class="text-dark fw-bold mb-4 d-flex justify-content-between align-items-center" style="font-size: 1.1rem;">
-            <span><i class="bi bi-robot text-primary me-2"></i> AI Alignment Analysis</span>
-          </h6>
-
-          @if (isAnalyzing) {
-          <div class="py-5 text-center h-100 d-flex flex-column justify-content-center">
-            <div class="spinner-grow text-primary mx-auto mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
-            <div class="text-dark fw-bold">Evaluating feedback authenticity...</div>
-            <p class="text-muted small mt-1">Comparing numeric scores with written comments.</p>
-          </div>
-          } @else if (aiAnalysis) {
-          <div class="d-flex flex-column h-100">
-
-            <!-- Huge Percentage Display -->
-            <div class="d-flex flex-column align-items-center justify-content-center mb-4 py-2 bg-light rounded-4 border border-white" style="max-width: 250px; margin: 0 auto;">
-              <span class="text-muted fw-semibold text-uppercase tracking-wider mb-1"
-                style="font-size: 0.7rem; letter-spacing: 1px;">Alignment Score</span>
-              <div class="display-5 fw-bold mb-1" style="letter-spacing: -1px;"
-                [ngClass]="aiAnalysis.percentage_alignment >= 80 ? 'text-success' : (aiAnalysis.percentage_alignment >= 50 ? 'text-warning-dark' : 'text-danger')">
-                {{ aiAnalysis.percentage_alignment }}%
-              </div>
-              <div class="progress rounded-pill bg-white border border-light w-75" style="height: 6px;">
-                <div class="progress-bar rounded-pill"
-                  [ngClass]="aiAnalysis.percentage_alignment >= 80 ? 'bg-success' : (aiAnalysis.percentage_alignment >= 50 ? 'bg-warning' : 'bg-danger')"
-                  role="progressbar" [style.width.%]="aiAnalysis.percentage_alignment"
-                  [attr.aria-valuenow]="aiAnalysis.percentage_alignment" aria-valuemin="0" aria-valuemax="100">
-                </div>
-              </div>
-            </div>
-
-            <!-- Descriptive Text -->
-            <div class="flex-grow-1">
-              <h6 class="text-muted fw-semibold text-uppercase tracking-wider mb-3"
-                style="font-size: 0.7rem; letter-spacing: 1px;">Analysis Insights</h6>
-              <p class="text-dark mb-0" style="font-size: 0.95rem; line-height: 1.7;">
-                {{ aiAnalysis.analysis }}
-              </p>
-            </div>
-
-          </div>
+          @if (feedbackData.pros && feedbackData.pros.length > 0) {
+          <ul class="list-unstyled d-flex flex-column gap-2 mb-0 flex-grow-1">
+            @for (pro of feedbackData.pros; track $index) {
+            <li class="d-flex align-items-start gap-2 p-2.5 rounded-3 bg-success bg-opacity-10 text-dark small">
+              <i class="bi bi-check-circle-fill text-success mt-0.5 flex-shrink-0"></i>
+              <span class="fw-medium feedback-text">{{ pro }}</span>
+            </li>
+            }
+          </ul>
+          } @else {
+          <p class="text-muted small fst-italic mb-0">No specific pros listed.</p>
           }
         </div>
       </div>
 
+      <!-- What could be improved (Cons) -->
+      <div class="col-12 col-md-6">
+        <div class="glass-card rounded-4 p-3 p-sm-4 h-100 border border-light shadow-sm d-flex flex-column">
+          <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+            <div class="category-icon-wrapper rounded-3 bg-warning-subtle d-flex align-items-center justify-content-center">
+              <i class="bi bi-lightbulb-fill text-warning fs-5"></i>
+            </div>
+            <div>
+              <h3 class="fs-6 fw-bold text-dark mb-0">What Could Be Improved (Cons)</h3>
+              <span class="text-muted" style="font-size: 0.72rem;">Opportunities for future project growth</span>
+            </div>
+          </div>
+
+          @if (feedbackData.cons && feedbackData.cons.length > 0) {
+          <ul class="list-unstyled d-flex flex-column gap-2 mb-0 flex-grow-1">
+            @for (con of feedbackData.cons; track $index) {
+            <li class="d-flex align-items-start gap-2 p-2.5 rounded-3 bg-warning bg-opacity-10 text-dark small">
+              <i class="bi bi-arrow-right-circle-fill text-warning mt-0.5 flex-shrink-0"></i>
+              <span class="fw-medium feedback-text">{{ con }}</span>
+            </li>
+            }
+          </ul>
+          } @else {
+          <p class="text-muted small fst-italic mb-0">No areas for improvement listed.</p>
+          }
+        </div>
+      </div>
     </div>
 
     }
