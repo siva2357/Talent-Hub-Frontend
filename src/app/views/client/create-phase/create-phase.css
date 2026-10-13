@@ -1,19 +1,3 @@
-:host {
-  --bg-color: #fafbfc;
-  --primary-color: #0d6efd;
-}
-
-
-
-.border-dashed {
-  border-style: dashed !important;
-  border-color: #dee2e6 !important;
-}
-
-.btn-outline-primary.border-dashed {
-  border-color: var(--primary-color) !important;
-}
-
 .dashboard-container {
   font-family: 'Inter', 'Outfit', sans-serif;
   background-color: #fcfbfe;
@@ -23,20 +7,52 @@
 
 /* Background decorations */
 .bg-shape { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
-.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
-.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
-.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.05); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
+.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
+.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
+.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.04); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
 .concentric-circles { position: absolute; pointer-events: none; z-index: 0; top: 15%; left: 0; }
-.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.15); }
+.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.12); }
 .circle-1 { width: 300px; height: 300px; }
 .circle-2 { width: 500px; height: 500px; }
 .circle-3 { width: 700px; height: 700px; }
 
+/* Back button */
+.header-back-btn {
+  width: 36px;
+  height: 36px;
+  background-color: #ffffff;
+  color: #334155;
+  transition: all 0.2s ease;
+}
+
+.header-back-btn:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  transform: translateX(-2px);
+}
+
 /* Premium Card (Glassmorphism) */
 .glass-card {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
-  border-radius: 20px !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.06), 0 4px 10px rgba(0, 0, 0, 0.02);
+  border-radius: 16px !important;
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .action-btn-wrapper {
+    flex: 1 1 100%;
+  }
+
+  .action-btn-wrapper app-button,
+  .action-btn-wrapper :host ::ng-deep button,
+  .action-btn-wrapper ::ng-deep .btn {
+    width: 100% !important;
+  }
 }

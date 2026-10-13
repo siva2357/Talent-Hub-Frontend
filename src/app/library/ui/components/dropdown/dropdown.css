@@ -3,40 +3,144 @@
 .custom-dropdown {
   border: 1px solid #f3f4f6;
   border-radius: 8px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025) !important;
-  padding: 12px 0;
-  min-width: 260px; /* Matched the slightly wider look from the design */
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.05),
+    0 4px 6px -2px rgba(0, 0, 0, 0.025) !important;
+  padding: 8px 0;
+  min-width: 180px;
   font-family: 'Inter', sans-serif;
 }
 
+
+/* =========================================
+   COMMON DROPDOWN ITEM
+   ========================================= */
+
 .custom-dropdown .dropdown-item {
-  padding: 14px 24px;
+  padding: 10px 16px;
   font-size: 14px;
   font-weight: 500;
-  color: #374151;
+  color: #000000;
+
   display: flex;
   align-items: center;
-  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+
+  transition:
+    background-color 0.15s ease-in-out,
+    color 0.15s ease-in-out;
+
+  border: 0;
+  background: transparent;
 }
 
-.custom-dropdown .dropdown-item i {
-  color: #6b7280;
-  font-size: 18px;
+
+/* =========================================
+   ICON MODE
+   ========================================= */
+
+.custom-dropdown.dropdown-icon-mode .dropdown-item i {
+  color: #000000;
+  font-size: 16px;
+
   display: inline-flex;
-  width: 24px;
+  align-items: center;
   justify-content: center;
+
+  width: 20px;
+  min-width: 20px;
+
+  margin-right: 10px;
+
   transition: color 0.15s ease-in-out;
 }
 
+
+/* =========================================
+   TEXT MODE
+   ========================================= */
+
+.custom-dropdown.dropdown-text-mode .dropdown-item {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+
+/* =========================================
+   HOVER / FOCUS
+   ========================================= */
+
 .custom-dropdown .dropdown-item:hover,
 .custom-dropdown .dropdown-item:focus {
-  background-color: #f9fafb;
-  color: #111827;
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
 }
 
-.custom-dropdown .dropdown-item:hover i,
-.custom-dropdown .dropdown-item:focus i {
-  color: #111827;
+.custom-dropdown .dropdown-item:hover span,
+.custom-dropdown .dropdown-item:focus span {
+  color: #2563eb !important;
 }
 
-/* Add a bit of spacing between items if desired, but design looks flush */
+/* Icon hover */
+
+.custom-dropdown.dropdown-icon-mode .dropdown-item:hover i,
+.custom-dropdown.dropdown-icon-mode .dropdown-item:focus i {
+  color: #2563eb !important;
+}
+
+/* =========================================
+   DANGER / DELETE THEME
+   ========================================= */
+
+.custom-dropdown .dropdown-item.dropdown-item-danger {
+  color: #ef4444 !important;
+}
+
+.custom-dropdown .dropdown-item.dropdown-item-danger span {
+  color: #ef4444 !important;
+}
+
+.custom-dropdown.dropdown-icon-mode .dropdown-item.dropdown-item-danger i {
+  color: #ef4444 !important;
+}
+
+.custom-dropdown .dropdown-item.dropdown-item-danger:hover,
+.custom-dropdown .dropdown-item.dropdown-item-danger:focus {
+  background-color: #fef2f2 !important;
+  color: #dc2626 !important;
+}
+
+.custom-dropdown .dropdown-item.dropdown-item-danger:hover span,
+.custom-dropdown .dropdown-item.dropdown-item-danger:focus span {
+  color: #dc2626 !important;
+}
+
+.custom-dropdown.dropdown-icon-mode .dropdown-item.dropdown-item-danger:hover i,
+.custom-dropdown.dropdown-icon-mode .dropdown-item.dropdown-item-danger:focus i {
+  color: #dc2626 !important;
+}
+
+
+/* =========================================
+   ACTIVE / SELECTED
+   ========================================= */
+
+.custom-dropdown .dropdown-item.active {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+
+/* =========================================
+   DISABLED
+   ========================================= */
+
+.custom-dropdown .dropdown-item:disabled {
+  color: #9ca3af;
+  background-color: transparent;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.custom-dropdown.dropdown-icon-mode .dropdown-item:disabled i {
+  color: #9ca3af;
+}

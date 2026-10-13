@@ -4,39 +4,680 @@
 }
 
 
-
-.hover-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.hover-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
-}
+/* =========================================================
+   PAGE
+   ========================================================= */
 
 .dashboard-container {
-  font-family: 'Inter', 'Outfit', sans-serif;
-  background-color: #fcfbfe;
   position: relative;
   min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+
+  font-family: 'Inter', 'Outfit', sans-serif;
+
+  background-color: #fcfbfe;
+
+  padding: 24px;
 }
 
-/* Background decorations */
-.bg-shape { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
-.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
-.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
-.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.05); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
-.concentric-circles { position: absolute; pointer-events: none; z-index: 0; top: 15%; left: 0; }
-.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.15); }
-.circle-1 { width: 300px; height: 300px; }
-.circle-2 { width: 500px; height: 500px; }
-.circle-3 { width: 700px; height: 700px; }
 
-/* Premium Card (Glassmorphism) */
+/* =========================================================
+   BACKGROUND DECORATIONS
+   ========================================================= */
+
+.background-decorations {
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.top-left {
+  width: 500px;
+  height: 500px;
+
+  top: -150px;
+  left: -150px;
+
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+}
+
+.bottom-right {
+  width: 600px;
+  height: 600px;
+
+  bottom: -200px;
+  right: -200px;
+
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+}
+
+.right-shape {
+  width: 400px;
+  height: 400px;
+
+  top: 30%;
+  right: -100px;
+
+  background: rgba(37, 99, 235, 0.05);
+
+  filter: blur(80px);
+
+  transform: translateY(-50%);
+}
+
+
+/* =========================================================
+   CONCENTRIC CIRCLES
+   ========================================================= */
+
+.concentric-circles {
+  position: absolute;
+
+  top: 15%;
+  left: 0;
+
+  pointer-events: none;
+}
+
+.circle {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  border: 1px dashed rgba(168, 85, 247, 0.15);
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+}
+
+.circle-2 {
+  width: 500px;
+  height: 500px;
+}
+
+.circle-3 {
+  width: 700px;
+  height: 700px;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.main-content {
+  width: 100%;
+  max-width: 1400px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-heading {
+  min-width: 0;
+}
+
+.page-heading h1 {
+  line-height: 1.25;
+}
+
+.page-heading p {
+  line-height: 1.5;
+}
+
+.filter-toggle {
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   GLASS CARD
+   ========================================================= */
+
 .glass-card {
+  position: relative;
+
   background: rgba(255, 255, 255, 0.7);
+
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
   border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
-  border-radius: 20px !important;
+
+  box-shadow:
+    0 15px 40px -10px rgba(74, 58, 255, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.05);
+
+  border-radius: 20px;
+}
+
+
+/* =========================================================
+   AI FILTER
+   ========================================================= */
+
+.ai-filter-card {
+  padding: 32px;
+
+  margin-bottom: 24px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(145deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(240, 248, 255, 0.95) 100%);
+
+  border-color: rgba(13, 110, 253, 0.25);
+}
+
+.ai-decoration {
+  position: absolute;
+
+  top: 15px;
+  right: 25px;
+
+  opacity: 0.08;
+
+  font-size: 80px;
+
+  pointer-events: none;
+}
+
+.ai-description {
+  max-width: 650px;
+
+  line-height: 1.6;
+
+  margin-bottom: 28px;
+}
+
+
+/* =========================================================
+   AI FILTER GRID
+   ========================================================= */
+
+.ai-filter-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(180px, 0.9fr) minmax(300px, 1.5fr) minmax(150px, 0.55fr);
+
+  gap: 20px;
+
+  align-items: end;
+}
+
+.ai-category,
+.ai-skills,
+.ai-action {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   SKILL INPUT
+   ========================================================= */
+
+.skill-input-row {
+  display: flex;
+
+  align-items: flex-end;
+
+  gap: 10px;
+}
+
+.skill-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.add-skill-button {
+  flex-shrink: 0;
+  margin-bottom: 0;
+}
+
+
+/* =========================================================
+   SELECTED SKILLS
+   ========================================================= */
+
+.selected-skills {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 10px;
+
+  padding: 12px;
+
+  background: rgba(255, 255, 255, 0.85);
+
+  border: 1px solid #e9ecef;
+
+  border-radius: 12px;
+}
+
+.skills-list {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   MANUAL FILTER
+   ========================================================= */
+
+.manual-filter-card {
+  padding: 24px;
+
+  margin-bottom: 24px;
+
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.manual-filter-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 16px;
+
+  margin-bottom: 20px;
+}
+
+.filter-actions {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-bottom: 4px;
+}
+
+
+/* =========================================================
+   ACTIVE FILTERS
+   ========================================================= */
+
+.active-filters {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  padding-top: 16px;
+
+  margin-top: 16px;
+
+  border-top: 1px solid #e9ecef;
+}
+
+.active-filter-list {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   TALENT GRID
+   ========================================================= */
+
+.talent-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 24px;
+
+  width: 100%;
+}
+
+.talent-item {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   LOADING / EMPTY
+   ========================================================= */
+
+.loading-state,
+.empty-state {
+  grid-column: 1 / -1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 250px;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .ai-filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ai-action {
+    grid-column: 1 / -1;
+  }
+
+  .talent-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =========================================================
+   SMALL TABLET
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .dashboard-container {
+    padding: 16px;
+  }
+
+  .main-content {
+    max-width: 100%;
+  }
+
+
+  /* Header */
+
+  .page-header {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    margin-bottom: 20px;
+  }
+
+  .filter-toggle {
+    width: 100%;
+  }
+
+  .filter-toggle app-button {
+    width: 100%;
+  }
+
+
+  /* AI */
+
+  .ai-filter-card {
+    padding: 22px;
+  }
+
+  .ai-filter-grid {
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+  }
+
+  .ai-action {
+    grid-column: auto;
+  }
+
+  .ai-decoration {
+    display: none;
+  }
+
+
+  /* Manual */
+
+  .manual-filter-card {
+    padding: 20px;
+  }
+
+  .manual-filter-grid {
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+  }
+
+
+  /* Talent */
+
+  .talent-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 576px) {
+
+  .dashboard-container {
+    padding: 10px;
+  }
+
+
+  /* Header */
+
+  .page-header {
+    gap: 14px;
+  }
+
+  .page-heading h1 {
+    font-size: 1.4rem !important;
+  }
+
+  .page-heading p {
+    font-size: 0.78rem;
+  }
+
+
+  /* Cards */
+
+  .glass-card {
+    border-radius: 16px;
+  }
+
+  .ai-filter-card {
+    padding: 18px;
+
+    margin-bottom: 18px;
+  }
+
+  .manual-filter-card {
+    padding: 16px;
+
+    margin-bottom: 18px;
+  }
+
+
+  /* AI title */
+
+  .ai-filter-card h5 {
+    font-size: 1rem;
+  }
+
+  .ai-description {
+    font-size: 0.78rem;
+
+    margin-bottom: 20px;
+  }
+
+
+  /* Skill input */
+
+  .skill-input-row {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 6px;
+  }
+
+  .add-skill-button {
+    width: 100%;
+  }
+
+  .add-skill-button app-button {
+    width: 100%;
+  }
+
+
+  /* Selected skills */
+
+  .selected-skills {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    padding: 10px;
+  }
+
+  .skills-list {
+    width: 100%;
+  }
+
+
+  /* Manual actions */
+
+  .filter-actions {
+    flex-direction: column;
+  }
+
+  .filter-actions app-button {
+    width: 100%;
+  }
+
+
+  /* Active filters */
+
+  .active-filters {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .active-filter-list {
+    width: 100%;
+  }
+
+
+  /* Talent cards */
+
+  .talent-grid {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+
+  /* Background */
+
+  .top-left {
+    width: 300px;
+    height: 300px;
+
+    top: -100px;
+    left: -100px;
+  }
+
+  .bottom-right {
+    width: 350px;
+    height: 350px;
+
+    bottom: -120px;
+    right: -120px;
+  }
+
+  .right-shape {
+    width: 250px;
+    height: 250px;
+
+    right: -100px;
+  }
+
+  .concentric-circles {
+    display: none;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .dashboard-container {
+    padding: 8px;
+  }
+
+  .ai-filter-card {
+    padding: 14px;
+  }
+
+  .manual-filter-card {
+    padding: 14px;
+  }
+
+  .page-heading h1 {
+    font-size: 1.25rem !important;
+  }
+
 }

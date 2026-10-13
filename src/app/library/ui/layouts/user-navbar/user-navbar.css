@@ -1,26 +1,67 @@
 .user-navbar {
-  height: 70px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  height: 80px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
-.icon-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background-color: #f3f4f6;
-  transition: all 0.2s ease;
+.navbar-brand-logo {
+  height: 44px;
+  cursor: pointer;
+  object-fit: contain;
+  transition: transform 0.2s ease;
 }
 
-.icon-btn:hover {
-  background-color: #e5e7eb;
+.navbar-brand-logo:hover {
+  transform: scale(1.02);
 }
 
-.icon-btn i {
-  color: #4b5563 !important;
+.navbar-hamburger-btn {
+  border-radius: 50% !important;
+  width: 45px;
+  height: 45px;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
+}
+
+.navbar-hamburger-btn:hover {
+  background-color: #f1f5f9 !important;
+}
+
+/* Responsive adjustments across mobile & tablet devices */
+@media (max-width: 575.98px) {
+  .user-navbar {
+    height: 70px;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .navbar-brand-logo {
+    height: 38px;
+  }
+
+  .navbar-hamburger-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .navbar-hamburger-btn i {
+    font-size: 1.35rem !important;
+  }
+
+  .navbar-divider {
+    height: 20px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .user-navbar {
+    height: 58px;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  .navbar-brand-logo {
+    height: 32px;
+  }
 }
 
 .avatar-circle {

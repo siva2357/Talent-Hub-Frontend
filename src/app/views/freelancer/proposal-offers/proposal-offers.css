@@ -1,27 +1,15 @@
 :host {
   --bg-color: #fafbfc;
   --primary-color: #0d6efd;
+  --purple-color: #a855f7;
 }
 
+/* =========================================================
+   BASE
+========================================================= */
 
-
-.text-purple { color: #6f42c1; }
-.bg-purple-soft { background-color: rgba(111, 66, 193, 0.1); }
-.text-warning-dark { color: #d39e00; }
-
-.cursor-pointer { cursor: pointer; }
-.hover-text-primary:hover { color: var(--primary-color) !important; }
-
-.hover-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.hover-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
-}
-
-.nav-tabs .nav-link {
-  margin-bottom: -1px;
+* {
+  box-sizing: border-box;
 }
 
 .dashboard-container {
@@ -29,24 +17,816 @@
   background-color: #fcfbfe;
   position: relative;
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
-/* Background decorations */
-.bg-shape { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
-.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
-.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
-.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.05); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
-.concentric-circles { position: absolute; pointer-events: none; z-index: 0; top: 15%; left: 0; }
-.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.15); }
-.circle-1 { width: 300px; height: 300px; }
-.circle-2 { width: 500px; height: 500px; }
-.circle-3 { width: 700px; height: 700px; }
+.cursor-pointer {
+  cursor: pointer;
+}
 
-/* Premium Card (Glassmorphism) */
-.glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
-  border-radius: 20px !important;
+.text-purple {
+  color: #6f42c1;
+}
+
+.bg-purple-soft {
+  background-color: rgba(111, 66, 193, 0.1);
+}
+
+.text-warning-dark {
+  color: #d39e00;
+}
+
+.hover-text-primary:hover {
+  color: var(--primary-color) !important;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.dashboard-container>.position-relative.z-1 {
+  width: 100%;
+  padding: 1.5rem !important;
+}
+
+
+/* =========================================================
+   BACKGROUND DECORATIONS
+========================================================= */
+
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.top-left {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+  top: -150px;
+  left: -150px;
+}
+
+.bottom-right {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+  bottom: -200px;
+  right: -200px;
+}
+
+.right-shape {
+  width: 400px;
+  height: 400px;
+  background: rgba(37, 99, 235, 0.05);
+  filter: blur(80px);
+  top: 30%;
+  right: -100px;
+  transform: translateY(-50%);
+}
+
+.concentric-circles {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  top: 15%;
+  left: 0;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(168, 85, 247, 0.15);
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+}
+
+.circle-2 {
+  width: 500px;
+  height: 500px;
+}
+
+.circle-3 {
+  width: 700px;
+  height: 700px;
+}
+
+
+/* =========================================================
+   HOVER CARD
+========================================================= */
+
+.hover-card {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+.nav-tabs {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  scrollbar-width: thin;
+}
+
+.nav-tabs .nav-item {
+  flex: 0 0 auto;
+}
+
+.nav-tabs .nav-link {
+  margin-bottom: -1px;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+
+/* =========================================================
+   FILTER CONTAINER
+========================================================= */
+
+.tab-pane>.bg-white {
+  width: 100%;
+}
+
+.tab-pane>.bg-white .row {
+  width: 100%;
+}
+
+.tab-pane>.bg-white app-input-field {
+  display: block;
+  width: 100%;
+}
+
+.tab-pane>.bg-white app-button {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   PROPOSAL CARD
+========================================================= */
+
+.tab-pane .card {
+  max-width: 100%;
+}
+
+.tab-pane .card-body {
+  min-width: 0;
+}
+
+.tab-pane .card h3 {
+  min-width: 0;
+}
+
+.tab-pane .card .overflow-hidden {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   PROPOSAL TOP INFORMATION
+========================================================= */
+
+.proposal-info {
+  min-width: 0;
+}
+
+.tab-pane .d-flex.gap-3.w-100 {
+  min-width: 0;
+}
+
+.tab-pane .flex-grow-1.overflow-hidden {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   TIMELINE / ACTION AREA
+========================================================= */
+
+.proposal-timeline-box {
+  width: 100% !important;
+  display: block !important;
+  box-sizing: border-box;
+}
+
+.proposal-timeline-box .overflow-auto {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.tab-pane .bg-primary.bg-opacity-10 {
+  width: 100%;
+}
+
+.tab-pane .border-start {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   OFFER CARDS
+========================================================= */
+
+.row.g-4>.col-lg-4 {
+  min-width: 0;
+}
+
+.row.g-4 .card {
+  width: 100%;
+  min-width: 0;
+}
+
+.row.g-4 .card-body {
+  min-width: 0;
+}
+
+.min-w-0 {
+  min-width: 0 !important;
+}
+
+
+/* =========================================================
+   OFFER ACTIONS
+========================================================= */
+
+.card-body>.border-top {
+  flex-wrap: wrap;
+}
+
+.card-body>.border-top app-button {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width: 1400px) {
+
+  .dashboard-container>.position-relative.z-1 {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+}
+
+
+/* =========================================================
+   TABLET / SMALL LAPTOP
+========================================================= */
+
+@media (max-width: 1199.98px) {
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 1.25rem !important;
+  }
+
+  .top-left {
+    width: 400px;
+    height: 400px;
+  }
+
+  .bottom-right {
+    width: 450px;
+    height: 450px;
+  }
+
+  .right-shape {
+    width: 300px;
+    height: 300px;
+  }
+
+  .circle-1 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .circle-2 {
+    width: 400px;
+    height: 400px;
+  }
+
+  .circle-3 {
+    width: 550px;
+    height: 550px;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 1rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Proposal filters
+  ----------------------------------------- */
+
+  .tab-pane>.bg-white .row {
+    row-gap: 0.75rem;
+  }
+
+  .tab-pane>.bg-white .col-lg-3.d-flex {
+    width: 100%;
+  }
+
+
+  /* -----------------------------------------
+     Proposal content
+  ----------------------------------------- */
+
+  .tab-pane .card-body {
+    padding: 1.25rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Timeline + actions
+  ----------------------------------------- */
+
+  .tab-pane .border-start {
+    border-left: 0 !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding-left: 0 !important;
+    padding-top: 1rem;
+  }
+
+
+  /* -----------------------------------------
+     Background
+  ----------------------------------------- */
+
+  .concentric-circles {
+    left: -100px;
+  }
+
+
+  /* -----------------------------------------
+     Hover
+  ----------------------------------------- */
+
+  .hover-card:hover {
+    transform: none;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 0.875rem !important;
+  }
+
+
+  /* =====================================================
+     PAGE TITLE
+  ===================================================== */
+
+  .dashboard-container h1 {
+    font-size: 1.4rem !important;
+    line-height: 1.3;
+  }
+
+  .dashboard-container h1+p {
+    font-size: 0.78rem !important;
+    line-height: 1.5;
+  }
+
+
+  /* =====================================================
+     TABS
+  ===================================================== */
+
+  .nav-tabs {
+    margin-bottom: 1rem !important;
+  }
+
+  .nav-tabs .nav-link {
+    padding: 0.65rem 0.75rem !important;
+    font-size: 0.78rem;
+  }
+
+  .nav-tabs .nav-link i {
+    font-size: 0.85rem;
+  }
+
+
+  /* =====================================================
+     FILTER CARD
+  ===================================================== */
+
+  .tab-pane>.bg-white {
+    padding: 0.9rem !important;
+    border-radius: 16px !important;
+  }
+
+  .tab-pane>.bg-white .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .tab-pane>.bg-white .row>[class*="col-"] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+
+  /* Apply / Reset */
+
+  .tab-pane>.bg-white .col-lg-3.d-flex {
+    flex-direction: row;
+    gap: 0.5rem !important;
+  }
+
+  .tab-pane>.bg-white .col-lg-3.d-flex app-button {
+    width: 50%;
+  }
+
+
+  /* Active filters */
+
+  .tab-pane>.bg-white .d-flex.align-items-center.flex-wrap {
+    align-items: flex-start !important;
+    gap: 0.4rem !important;
+  }
+
+  .tab-pane>.bg-white .d-flex.align-items-center.flex-wrap>span:first-child {
+    width: 100%;
+    margin-bottom: 0.15rem;
+  }
+
+
+  /* =====================================================
+     PROPOSAL CARD
+  ===================================================== */
+
+  .tab-pane .card-body {
+    padding: 1rem !important;
+  }
+
+
+  /* Top row */
+
+  .tab-pane .d-flex.flex-column.flex-lg-row {
+    gap: 1rem !important;
+  }
+
+
+  /* Proposal icon */
+
+  .proposal-card-icon {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 12px !important;
+  }
+
+  .proposal-card-icon i {
+    font-size: 1.3rem !important;
+  }
+
+
+  /* Title */
+
+  .tab-pane .card h3 {
+    font-size: 1rem !important;
+    line-height: 1.4;
+  }
+
+
+  /* Proposal meta information */
+
+  .tab-pane .d-flex.align-items-center.gap-4.text-muted {
+    gap: 0.6rem 1rem !important;
+    font-size: 0.76rem !important;
+  }
+
+
+  /* =====================================================
+     TIMELINE AREA
+  ===================================================== */
+
+  .tab-pane .bg-primary.bg-opacity-10 {
+    padding: 1rem !important;
+    border-radius: 14px !important;
+  }
+
+  .tab-pane .bg-primary.bg-opacity-10 .row {
+    row-gap: 1rem !important;
+  }
+
+  .tab-pane .border-start {
+    padding-top: 0.9rem;
+  }
+
+
+  /* =====================================================
+     INTERVIEW / ASSESSMENT BOX
+  ===================================================== */
+
+  .tab-pane .bg-white.p-2 {
+    width: 100%;
+  }
+
+
+  /* =====================================================
+     OFFER CARDS
+  ===================================================== */
+
+  .row.g-4 {
+    --bs-gutter-x: 0.85rem;
+    --bs-gutter-y: 0.85rem;
+  }
+
+  .row.g-4 .card-body {
+    padding: 1rem !important;
+  }
+
+
+  /* Offer title */
+
+  .row.g-4 .card h3 {
+    font-size: 1rem !important;
+    line-height: 1.35;
+  }
+
+
+  /* Offer status */
+
+  .row.g-4 .card .d-flex.justify-content-between.align-items-start.mb-2 {
+    gap: 0.6rem !important;
+  }
+
+
+  /* Budget */
+
+  .row.g-4 .bg-light.rounded-3 {
+    padding: 0.8rem !important;
+  }
+
+
+  /* Dates */
+
+  .row.g-4 .row.g-2 {
+    margin-left: -0.3rem;
+    margin-right: -0.3rem;
+  }
+
+  .row.g-4 .row.g-2>div {
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+  }
+
+  .row.g-4 .row.g-2 .p-3 {
+    padding: 0.75rem !important;
+  }
+
+
+  /* Offer actions */
+  .card-body>.border-top {
+    gap: 0.75rem !important;
+  }
+
+  .card-body>.border-top>div {
+    margin-left: auto !important;
+  }
+
+  /* =====================================================
+     BACKGROUND DECORATIONS
+  ===================================================== */
+
+  .top-left {
+    width: 280px;
+    height: 280px;
+    top: -100px;
+    left: -120px;
+  }
+
+  .bottom-right {
+    width: 320px;
+    height: 320px;
+    bottom: -100px;
+    right: -120px;
+  }
+
+  .right-shape {
+    width: 220px;
+    height: 220px;
+    right: -100px;
+  }
+
+  .concentric-circles {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 0.75rem !important;
+  }
+
+
+  /* Page title */
+
+  .dashboard-container h1 {
+    font-size: 1.25rem !important;
+  }
+
+  .dashboard-container h1+p {
+    font-size: 0.75rem !important;
+  }
+
+
+  /* Tabs */
+
+  .nav-tabs .nav-link {
+    padding: 0.55rem 0.6rem !important;
+    font-size: 0.72rem;
+  }
+
+
+  /* Filter */
+
+  .tab-pane>.bg-white {
+    padding: 0.8rem !important;
+    border-radius: 14px !important;
+  }
+
+
+  /* Filter buttons */
+
+  .tab-pane>.bg-white .col-lg-3.d-flex {
+    gap: 0.4rem !important;
+  }
+
+
+  /* Proposal */
+
+  .tab-pane .card {
+    border-radius: 14px !important;
+  }
+
+  .tab-pane .card-body {
+    padding: 0.85rem !important;
+  }
+
+
+  /* Proposal metadata */
+
+  .tab-pane .d-flex.align-items-center.gap-4.text-muted {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 0.45rem !important;
+  }
+
+
+  /* Offer */
+
+  .row.g-4 .card-body {
+    padding: 0.85rem !important;
+  }
+
+
+  /* Tech stack */
+
+  .row.g-4 .d-flex.flex-wrap.gap-2 {
+    gap: 0.35rem !important;
+  }
+
+
+  /* Dates */
+
+  .row.g-4 .row.g-2 .p-3 {
+    padding: 0.65rem !important;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 375px) {
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 0.6rem !important;
+  }
+
+
+  .dashboard-container h1 {
+    font-size: 1.15rem !important;
+  }
+
+
+  .nav-tabs .nav-link {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    font-size: 0.68rem;
+  }
+
+
+  /* Stack Apply / Reset */
+
+  .tab-pane>.bg-white .col-lg-3.d-flex {
+    flex-direction: column;
+  }
+
+  .tab-pane>.bg-white .col-lg-3.d-flex app-button {
+    width: 100%;
+  }
+
+
+  /* Proposal icon */
+
+  .proposal-card-icon {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+
+  /* Date boxes */
+
+  .row.g-4 .row.g-2 {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .row.g-4 .row.g-2>.col-6 {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+========================================================= */
+
+@media (hover: none) {
+
+  .hover-card:hover {
+    transform: none;
+    box-shadow: inherit !important;
+  }
+
+  .hover-text-primary:hover {
+    color: inherit !important;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .hover-card,
+  .nav-tabs .nav-link {
+    transition: none !important;
+  }
+
+  .hover-card:hover {
+    transform: none;
+  }
 }

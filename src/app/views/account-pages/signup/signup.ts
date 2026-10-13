@@ -1,28 +1,34 @@
-import { Component } from '@angular/core';
-
-import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+
+import { Button } from '../../../library/ui/components/button/button';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink, Button],
   templateUrl: './signup.html',
   styleUrl: './signup.css'
 })
 export class Signup {
-  selectedRole: 'client' | 'freelancer' | null = null;
+  private readonly router = inject(Router);
 
-  constructor(private router: Router) { }
+  selectedRole: 'client' | 'freelancer' | null = null;
 
   selectRole(role: 'client' | 'freelancer'): void {
     this.selectedRole = role;
   }
 
   continue(): void {
-    if (this.selectedRole) {
-      // You can also pass the selected role as a query parameter or via state if needed
-      this.router.navigate(['/register']);
+    if (!this.selectedRole) {
+      return;
     }
+
+    this.router.navigate(['/register'], {
+      queryParams: {
+        role: this.selectedRole
+      }
+    });
   }
 }
+

@@ -1,11 +1,178 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
+import { ProfileService } from '../../../core/services/profile.service';
+import { MasterDataService } from '../../../core/services/master-data.service';
+import { TalentCard } from '../../../library/shared/components/talent-card/talent-card';
+import { InputField, InputOption } from '../../../library/ui/components/input-field/input-field';
+import { Chip } from '../../../library/ui/components/chip/chip';
+import { Button } from '../../../library/ui/components/button/button';
 
 @Component({
   selector: 'app-search-talent',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, FormsModule, TalentCard, InputField, Chip, Button],
   templateUrl: './search-talent.html',
   styleUrl: './search-talent.css'
 })
-export class SearchTalent {
+export class SearchTalent implements OnInit, OnDestroy {
+  rawFreelancers: any[] = [];
+  freelancers: any[] = [];
+  isLoading = false;
 
+  // RxJS Subjects
+  freelancersSource$ = new BehaviorSubject<any[]>([]);
+  skillFilter$ = new BehaviorSubject<string>('all');
+  experienceFilter$ = new BehaviorSubject<string>('all');
+  availabilityFilter$ = new BehaviorSubject<string>('all');
+  private subscription: Subscription = new Subscription();
+
+
+
+  // Manual Filter Options
+  skillOptions: InputOption[] = [{ label: 'All Skills', value: 'all' }];
+  experienceOptions: InputOption[] = [{ label: 'All Levels', value: 'all' }];
+  availabilityOptions: InputOption[] = [{ label: 'All Availability', value: 'all' }];
+
+  // Manual Filter state
+  selectedSkill = 'all';
+  selectedExperience = 'all';
+  selectedAvailability = 'all';
+
+  activeManualFilters: { label: string, type: string, value: string }[] = [];
+
+
+
+  constructor(
+    private profileService: ProfileService,
+
+    private masterDataService: MasterDataService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    this.setupRxJSFilters();
+    this.fetchMasterData();
+    this.fetchFreelancers();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  setupRxJSFilters(): void {
+    this.subscription.add(
+      combineLatest([
+        this.freelancersSource$,
+        this.skillFilter$,
+        this.experienceFilter$,
+        this.availabilityFilter$
+      ]).subscribe(([freelancers, skill, experience, availability]) => {
+        let filtered = [...freelancers];
+        this.activeManualFilters = [];
+
+        if (skill !== 'all') {
+          const q = skill.toLowerCase();
+          this.activeManualFilters.push({ label: `Skill: ${skill}`, type: 'skill', value: skill });
+          filtered = filtered.filter(f =>
+            (f.skills && Array.isArray(f.skills) && f.skills.some((s: string) => s.toLowerCase() === q)) ||
+            (f.professionalHeadline && f.professionalHeadline.toLowerCase().includes(q))
+          );
+        }
+
+        if (experience !== 'all') {
+          const q = experience.toLowerCase();
+          this.activeManualFilters.push({ label: `Experience: ${experience}`, type: 'experience', value: experience });
+          filtered = filtered.filter(f => f.experienceLevel?.toLowerCase() === q);
+        }
+
+        if (availability !== 'all') {
+          const q = availability.toLowerCase();
+          this.activeManualFilters.push({ label: `Availability: ${availability}`, type: 'availability', value: availability });
+          filtered = filtered.filter(f => {
+            if (Array.isArray(f.availability)) {
+              return f.availability.some((a: string) => a.toLowerCase().includes(q));
+            }
+            return f.availability?.toLowerCase().includes(q);
+          });
+        }
+
+        this.freelancers = filtered;
+      })
+    );
+  }
+
+  fetchMasterData(): void {
+    this.masterDataService.getAllMasterData().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          if (res.data['Skills']) {
+            this.skillOptions = [{ label: 'All Skills', value: 'all' }, ...res.data['Skills'].map((o: any) => ({ label: o.value, value: o.key }))];
+          }
+          if (res.data['ExperienceLevel']) {
+            this.experienceOptions = [{ label: 'All Levels', value: 'all' }, ...res.data['ExperienceLevel'].map((o: any) => ({ label: o.value, value: o.key }))];
+          }
+          if (res.data['Availability']) {
+            this.availabilityOptions = [{ label: 'All Availability', value: 'all' }, ...res.data['Availability'].map((o: any) => ({ label: o.value, value: o.key }))];
+          }
+        }
+      },
+      error: (err) => console.error('Error fetching master data', err)
+    });
+  }
+
+
+
+  fetchFreelancers(): void {
+    this.isLoading = true;
+    this.profileService.getAllFreelancers().subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        if (res.success && (res.items || res.data)) {
+          this.rawFreelancers = res.items || res.data;
+          this.freelancersSource$.next(this.rawFreelancers);
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Error fetching freelancers', err);
+      }
+    });
+  }
+
+  // --- Manual Filters ---
+
+  applyManualFilters(): void {
+    this.skillFilter$.next(this.selectedSkill);
+    this.experienceFilter$.next(this.selectedExperience);
+    this.availabilityFilter$.next(this.selectedAvailability);
+  }
+
+  resetManualFilters(): void {
+    this.selectedSkill = 'all';
+    this.selectedExperience = 'all';
+    this.selectedAvailability = 'all';
+    this.applyManualFilters();
+  }
+
+  removeManualFilter(filterToRemove: { label: string, type: string, value: string }): void {
+    if (filterToRemove.type === 'skill') this.selectedSkill = 'all';
+    else if (filterToRemove.type === 'experience') this.selectedExperience = 'all';
+    else if (filterToRemove.type === 'availability') this.selectedAvailability = 'all';
+
+    this.applyManualFilters();
+  }
+
+
+
+
+  viewProfile(id: string): void {
+    this.router.navigate(['/profile'], { queryParams: { id } });
+  }
+
+  onTalentSave(talent: any): void {
+    talent.isSaved = !talent.isSaved;
+  }
 }

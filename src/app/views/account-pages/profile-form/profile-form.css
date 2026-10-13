@@ -1,30 +1,43 @@
 :host {
   display: block;
+  width: 100%;
 }
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
 
 .management-container {
   font-family: 'Inter', 'Outfit', sans-serif;
   background-color: #fcfbfe;
   min-height: 100vh;
+  width: 100%;
   position: relative;
+  overflow-x: hidden;
 }
 
 .bg-light-purple {
   background-color: #f9faff;
 }
 
-/* Background decorations */
+/* =========================================================
+   BACKGROUND DECORATIONS
+========================================================= */
+
 .bg-shape {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
+  max-width: 100vw;
 }
 
 .top-left {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%);
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
   top: -150px;
   left: -150px;
 }
@@ -32,7 +45,9 @@
 .bottom-right {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%);
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
   bottom: -200px;
   right: -200px;
 }
@@ -46,6 +61,10 @@
   right: -100px;
   transform: translateY(-50%);
 }
+
+/* =========================================================
+   CONCENTRIC CIRCLES
+========================================================= */
 
 .concentric-circles {
   position: absolute;
@@ -64,41 +83,87 @@
   border: 1px dashed rgba(168, 85, 247, 0.15);
 }
 
-.circle-1 { width: 300px; height: 300px; }
-.circle-2 { width: 500px; height: 500px; }
-.circle-3 { width: 700px; height: 700px; }
-
-/* Premium Card */
-.glass-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
-  border-radius: 24px !important;
+.circle-1 {
+  width: 300px;
+  height: 300px;
 }
 
-.cursor-pointer { cursor: pointer; }
+.circle-2 {
+  width: 500px;
+  height: 500px;
+}
 
-/* Form Elements */
-.form-control, .form-select {
+.circle-3 {
+  width: 700px;
+  height: 700px;
+}
+
+/* =========================================================
+   MAIN CONTENT WIDTH
+========================================================= */
+
+.management-container>.position-relative.z-1 {
+  width: 100%;
+  max-width: 800px;
+}
+
+/* =========================================================
+   PREMIUM GLASS CARD
+========================================================= */
+
+.glass-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  box-shadow:
+    0 15px 40px -10px rgba(74, 58, 255, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 24px !important;
+  overflow: hidden;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* =========================================================
+   FORM ELEMENTS
+========================================================= */
+
+.form-control,
+.form-select {
+  width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid #d1d5db;
   border-radius: 12px;
   background-color: #f9fafb;
-  transition: all 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
   border-color: #4a3aff;
   background-color: #ffffff;
   box-shadow: 0 0 0 3px rgba(74, 58, 255, 0.15);
+  outline: none;
 }
+
+/* =========================================================
+   BUTTONS
+========================================================= */
 
 .btn-primary {
   background: linear-gradient(135deg, #4a3aff, #2563eb);
   border: none;
   border-radius: 10px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .btn-primary:hover {
@@ -115,20 +180,535 @@
 
 .btn-outline-primary:hover {
   background-color: #4a3aff;
-  color: white;
+  color: #ffffff;
 }
 
 .text-primary {
   color: #4a3aff !important;
 }
 
-/* Stepper overriding styles */
+/* =========================================================
+   STEPPER
+========================================================= */
+
 .step-circle {
   transition: all 0.3s ease;
 }
+
 .step-active {
   border-color: #4a3aff !important;
 }
+
 .step-dot-active {
   background-color: #4a3aff !important;
+}
+
+/* =========================================================
+   REVIEW CONTENT
+========================================================= */
+
+.glass-card .text-truncate {
+  max-width: 100%;
+}
+
+/* Long URLs / descriptions should never break layout */
+.glass-card a,
+.glass-card span {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* =========================================================
+   LARGE TABLETS / SMALL DESKTOP
+   <= 992px
+========================================================= */
+
+@media (max-width: 992px) {
+
+  .management-container {
+    min-height: 100dvh;
+  }
+
+  .management-container>.position-relative.z-1 {
+    max-width: 760px !important;
+    margin-top: 1.5rem !important;
+  }
+
+  .glass-card {
+    border-radius: 20px !important;
+  }
+
+  .top-left {
+    width: 400px;
+    height: 400px;
+    top: -120px;
+    left: -120px;
+  }
+
+  .bottom-right {
+    width: 450px;
+    height: 450px;
+    bottom: -150px;
+    right: -150px;
+  }
+
+  .right-shape {
+    width: 300px;
+    height: 300px;
+    filter: blur(65px);
+  }
+
+  .circle-1 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .circle-2 {
+    width: 400px;
+    height: 400px;
+  }
+
+  .circle-3 {
+    width: 550px;
+    height: 550px;
+  }
+}
+
+/* =========================================================
+   TABLET
+   <= 768px
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .management-container {
+    padding: 1rem !important;
+  }
+
+  .management-container>.position-relative.z-1 {
+    max-width: 100% !important;
+    margin-top: 1rem !important;
+  }
+
+  /* Header */
+  .management-container h2 {
+    font-size: 1.5rem !important;
+  }
+
+  .management-container h3 {
+    font-size: 1rem !important;
+  }
+
+  .management-container h4 {
+    font-size: 0.85rem !important;
+  }
+
+  /* Stepper */
+  .management-container .mb-5.px-3 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-bottom: 1.5rem !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  /* Card */
+  .glass-card {
+    padding: 1.25rem !important;
+    margin-bottom: 1.5rem !important;
+    border-radius: 18px !important;
+  }
+
+  /* Reduce Bootstrap row gaps */
+  .glass-card .row.g-4 {
+    --bs-gutter-y: 1rem;
+    --bs-gutter-x: 1rem;
+  }
+
+  /* Profile photo + form */
+  .glass-card .col-md-3,
+  .glass-card .col-md-9 {
+    width: 100%;
+  }
+
+  .glass-card .col-md-3 {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Social media / language add rows */
+  .glass-card .d-flex.align-items-start.gap-3 {
+    flex-wrap: wrap;
+  }
+
+  .glass-card .d-flex.align-items-start.gap-3>.flex-grow-1 {
+    flex: 1 1 calc(50% - 0.5rem);
+    min-width: 200px;
+  }
+
+  /* Add button */
+  .glass-card .d-flex.align-items-start.gap-3>div[style*="margin-top"] {
+    margin-top: 1.85rem !important;
+  }
+
+  /* Review avatar/content */
+  .glass-card .d-flex.gap-4.align-items-start {
+    gap: 1rem !important;
+  }
+
+  /* Background decorations */
+  .top-left {
+    width: 350px;
+    height: 350px;
+    top: -100px;
+    left: -120px;
+  }
+
+  .bottom-right {
+    width: 400px;
+    height: 400px;
+    bottom: -150px;
+    right: -150px;
+  }
+
+  .right-shape {
+    width: 250px;
+    height: 250px;
+    right: -100px;
+    filter: blur(55px);
+  }
+
+  .circle-1 {
+    width: 220px;
+    height: 220px;
+  }
+
+  .circle-2 {
+    width: 350px;
+    height: 350px;
+  }
+
+  .circle-3 {
+    width: 480px;
+    height: 480px;
+  }
+
+  /* Success screen */
+  .glass-card .py-5 {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   <= 576px
+========================================================= */
+
+@media (max-width: 576px) {
+
+  .management-container {
+    padding: 0.75rem !important;
+  }
+
+  .management-container>.position-relative.z-1 {
+    margin-top: 0.5rem !important;
+  }
+
+  /* Main heading */
+  .management-container h2 {
+    font-size: 1.3rem !important;
+    line-height: 1.3;
+  }
+
+  .management-container h2+p {
+    font-size: 0.75rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  /* Card */
+  .glass-card {
+    padding: 1rem !important;
+    border-radius: 16px !important;
+    box-shadow:
+      0 10px 30px -10px rgba(74, 58, 255, 0.1),
+      0 3px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Form spacing */
+  .glass-card .row.g-4 {
+    --bs-gutter-y: 0.85rem;
+    --bs-gutter-x: 0.75rem;
+  }
+
+  /* Make all desktop columns full width */
+  .glass-card .col-md-3,
+  .glass-card .col-md-4,
+  .glass-card .col-md-6,
+  .glass-card .col-md-9 {
+    width: 100%;
+  }
+
+  /* Profile image */
+  .glass-card .col-md-3 {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Social / language fields */
+  .glass-card .d-flex.align-items-start.gap-3 {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    width: 100%;
+  }
+
+  .glass-card .d-flex.align-items-start.gap-3>.flex-grow-1 {
+    width: 100%;
+    min-width: 0;
+    flex: none;
+  }
+
+  /* Remove inline 30px margin on Add button */
+  .glass-card .d-flex.align-items-start.gap-3>div[style*="margin-top"] {
+    width: 100%;
+    margin-top: 0 !important;
+  }
+
+  .glass-card .d-flex.align-items-start.gap-3 app-button {
+    width: 100%;
+  }
+
+  /* Added social / language items */
+  .glass-card .d-flex.align-items-center.gap-3.p-2 {
+    gap: 0.6rem !important;
+    padding: 0.65rem !important;
+    min-width: 0;
+  }
+
+  .glass-card .d-flex.align-items-center.gap-3.p-2 span {
+    min-width: 0;
+    flex: 1;
+  }
+
+  /* Review sections */
+  .glass-card .border.rounded-4.p-4 {
+    padding: 1rem !important;
+    border-radius: 14px !important;
+  }
+
+  /* Review header */
+  .glass-card .justify-content-between.align-items-center {
+    gap: 0.75rem;
+  }
+
+  /* Review basic information */
+  .glass-card .d-flex.gap-4.align-items-start {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1rem !important;
+  }
+
+  .glass-card .d-flex.gap-4.align-items-start>.row {
+    width: 100%;
+  }
+
+  /* Review data */
+  .glass-card .row.g-3 {
+    --bs-gutter-y: 0.75rem;
+    --bs-gutter-x: 0.75rem;
+  }
+
+  /* Buttons */
+  .glass-card .border-top {
+    padding-top: 1rem !important;
+  }
+
+  .glass-card .border-top>* {
+    max-width: 48%;
+  }
+
+  /* Prevent button overflow */
+  .glass-card app-button {
+    max-width: 100%;
+  }
+
+  /* Success */
+  .glass-card .py-5 {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  .glass-card img[alt="Talent Hub"] {
+    height: 55px !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .glass-card h3.fs-4 {
+    font-size: 1.25rem !important;
+    line-height: 1.4;
+  }
+
+  .glass-card p[style*="max-width"] {
+    font-size: 0.82rem !important;
+    margin-bottom: 2rem !important;
+    padding: 0 0.5rem;
+  }
+
+  /* Success icon */
+  .glass-card div[style*="width: 100px"] {
+    width: 82px !important;
+    height: 82px !important;
+  }
+
+  .glass-card div[style*="width: 100px"] i {
+    font-size: 2.8rem !important;
+  }
+
+  /* Dashboard button */
+  .glass-card app-button.px-5 {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  /* Decorative elements */
+  .top-left {
+    width: 250px;
+    height: 250px;
+    top: -80px;
+    left: -100px;
+  }
+
+  .bottom-right {
+    width: 300px;
+    height: 300px;
+    bottom: -120px;
+    right: -120px;
+  }
+
+  .right-shape {
+    width: 180px;
+    height: 180px;
+    right: -80px;
+    filter: blur(45px);
+  }
+
+  /* Circles */
+  .circle-1 {
+    width: 160px;
+    height: 160px;
+  }
+
+  .circle-2 {
+    width: 260px;
+    height: 260px;
+  }
+
+  .circle-3 {
+    width: 360px;
+    height: 360px;
+  }
+
+  .concentric-circles {
+    top: 25%;
+  }
+}
+
+/* =========================================================
+   VERY SMALL MOBILE
+   <= 400px
+========================================================= */
+
+@media (max-width: 400px) {
+
+  .management-container {
+    padding: 0.5rem !important;
+  }
+
+  .glass-card {
+    padding: 0.85rem !important;
+    border-radius: 14px !important;
+  }
+
+  .management-container h2 {
+    font-size: 1.15rem !important;
+  }
+
+  .glass-card h3 {
+    font-size: 0.95rem !important;
+  }
+
+  .glass-card h4 {
+    font-size: 0.8rem !important;
+  }
+
+  /* Bottom navigation */
+  .glass-card .border-top {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+
+  .glass-card .border-top>* {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .glass-card .border-top app-button {
+    width: 100%;
+  }
+
+  /* Review edit buttons */
+  .glass-card .justify-content-between.align-items-center {
+    align-items: flex-start !important;
+  }
+
+  /* Smaller profile image */
+  .glass-card img.rounded-circle {
+    width: 68px !important;
+    height: 68px !important;
+  }
+
+  /* Success */
+  .glass-card div[style*="width: 100px"] {
+    width: 75px !important;
+    height: 75px !important;
+  }
+
+  .glass-card div[style*="width: 100px"] i {
+    font-size: 2.4rem !important;
+  }
+}
+
+/* =========================================================
+   TOUCH DEVICES
+========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+  .btn-primary:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: transparent;
+    color: #4a3aff;
+  }
+
+  .cursor-pointer {
+    cursor: default;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY / REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .step-circle,
+  .form-control,
+  .form-select,
+  .btn-primary {
+    transition: none !important;
+  }
 }

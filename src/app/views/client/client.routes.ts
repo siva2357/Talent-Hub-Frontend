@@ -15,17 +15,17 @@ import { ChatPage } from '../shared/chat-page/chat-page';
 
 import { CreateContract } from './create-contract/create-contract';
 import { LegalContractPage } from './legal-contract-page/legal-contract-page';
-import { RecruitmentWorkflow } from './recruitment-workflow/recruitment-workflow';
 import { CreatePhase } from './create-phase/create-phase';
 import { PhaseDetails } from './phase-details/phase-details';
 import { TransactionHistory } from './transaction-history/transaction-history';
 import { CreateTicket } from '../shared/create-ticket/create-ticket';
+import { SubmitFeedback } from './submit-feedback/submit-feedback';
 
 export const CLIENT_ROUTES: Routes = [
   { path: 'dashboard', component: Dashboard },
   { path: 'manage-contract', component: ManageContract },
-  { path: 'applicants', component: Applicants },
-  { path: 'contract-progress', component: ContractProgress },
+  { path: 'applicants/:id', component: Applicants },
+  { path: 'contract-progress/:id', component: ContractProgress },
   { path: 'search-talent', component: SearchTalent },
   { path: 'financial-summary', component: FinancialSummary },
   { path: 'profile', component: Profile },
@@ -33,11 +33,11 @@ export const CLIENT_ROUTES: Routes = [
   { path: 'contact-support', component: ContactSupport },
   { path: 'create-ticket', component: CreateTicket },
   { path: 'create-contract', component: CreateContract },
-  { path: 'legal-contract-page', component: LegalContractPage },
-  { path: 'recruitment-workflow', component: RecruitmentWorkflow },
-  { path: 'create-phase', component: CreatePhase },
-  { path: 'phase-details', component: PhaseDetails },
+  { path: 'legal-contract-page/:applicationId', component: LegalContractPage },
+  { path: 'create-phase/:id', component: CreatePhase },
+  { path: 'phase-details/:id', component: PhaseDetails },
   { path: 'transaction-history', component: TransactionHistory },
   { path: 'meet-page', component: MeetPage },
-  { path: 'chat-page', component: ChatPage }
+  { path: 'chat-page', component: ChatPage },
+  { path: 'submit-feedback/:id', component: SubmitFeedback }
 ];

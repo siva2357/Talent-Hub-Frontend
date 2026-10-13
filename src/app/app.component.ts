@@ -1,11 +1,78 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
+import { ToastService } from './core/services/ui/toast.service';
+import { ToastConfig } from './core/models/ui.model';
+import { Toast } from './library/ui/components/toast/toast';
+import { Modal } from './library/ui/components/modal/modal';
+import { ModalService, ActiveModal } from './core/services/ui/modal.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, CommonModule, Toast, Modal],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  toasts: (ToastConfig & { id: number })[] = [];
+  private toastId = 0;
+  activeModal: ActiveModal | null = null;
+
+  constructor(
+    private toastService: ToastService,
+    private modalService: ModalService
+  ) { }
+
+  ngOnInit() {
+    this.toastService.toasts$.subscribe(toast => {
+      const id = this.toastId++;
+      this.toasts.push({ ...toast, id });
+      setTimeout(() => this.removeToast(id), toast.duration || 3000);
+    });
+
+    this.modalService.modalState$.subscribe(modal => {
+      this.activeModal = modal;
+    });
+  }
+
+  onModalConfirm() {
+    if (this.activeModal?.resolve) {
+      this.activeModal.resolve(true);
+    }
+    this.activeModal = null;
+  }
+
+  onModalClose() {
+    if (this.activeModal?.resolve) {
+      this.activeModal.resolve(false);
+    }
+    this.activeModal = null;
+  }
+
+  removeToast(id: number) {
+    this.toasts = this.toasts.filter(t => t.id !== id);
+  }
+
+  getVariant(type?: string): any {
+    if (type === 'error') return 'danger';
+    if (type === 'success') return 'success';
+    if (type === 'warning') return 'warning';
+    return 'info';
+  }
+
+  getIcon(type?: string): string {
+    if (type === 'error') return 'bi bi-exclamation-octagon-fill';
+    if (type === 'success') return 'bi bi-check-circle-fill';
+    if (type === 'warning') return 'bi bi-exclamation-triangle-fill';
+    return 'bi bi-info-circle-fill';
+  }
+
+  getTitle(type?: string): string {
+    if (type === 'error') return 'Error';
+    if (type === 'success') return 'Success';
+    if (type === 'warning') return 'Warning';
+    return 'Notification';
+  }
+}

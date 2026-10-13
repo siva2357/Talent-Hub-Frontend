@@ -1,421 +1,579 @@
 <div class="management-container p-3 p-md-4 position-relative">
   <!-- Decorative background wrapper to prevent overflow -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
-      <div class="bg-shape top-left"></div>
-      <div class="bg-shape bottom-right"></div>
-      <div class="bg-shape right-shape"></div>
-      
-      <div class="concentric-circles">
-          <div class="circle circle-1"></div>
-          <div class="circle circle-2"></div>
-          <div class="circle circle-3"></div>
-      </div>
-  </div>
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
 
-  <!-- Role Switcher (For Development) -->
-  <div class="position-absolute top-0 end-0 m-4 z-3 d-flex gap-2">
-    <button class="btn btn-sm rounded-pill px-3 fw-semibold shadow-sm border" 
-            [class.btn-primary]="role === 'client'" 
-            [class.btn-light]="role !== 'client'"
-            (click)="role = 'client'">Client View</button>
-    <button class="btn btn-sm rounded-pill px-3 fw-semibold shadow-sm border" 
-            [class.btn-primary]="role === 'freelancer'" 
-            [class.btn-light]="role !== 'freelancer'"
-            (click)="role = 'freelancer'">Freelancer View</button>
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
   </div>
 
   <div class="position-relative z-1 mx-auto" style="max-width: 900px; margin-top: 2rem;">
-    <div class="mb-4 text-center">
-      <h1 class="fw-bold fs-3 text-dark mb-1">Account Settings</h1>
-      <p class="text-muted" style="font-size: 0.85rem;">Manage your account settings and profile.</p>
+    <div class="d-flex align-items-center mb-4">
+      <button
+        class="btn btn-white rounded-circle shadow-sm border d-flex justify-content-center align-items-center me-3"
+        style="width: 40px; height: 40px; flex-shrink: 0;" (click)="goBack()">
+        <i class="bi bi-arrow-left fs-5 text-dark"></i>
+      </button>
+      <div>
+        <h1 class="fw-bold fs-3 text-dark mb-1">Account Settings</h1>
+        <p class="text-muted mb-0" style="font-size: 0.85rem;">Manage your account settings and profile.</p>
+      </div>
     </div>
+
+    @if (isLoading) {
+    <div class="d-flex justify-content-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    } @else if (error) {
+    <div class="alert alert-danger text-center">{{ error }}</div>
+    } @else {
 
     <div class="glass-card shadow-lg p-0 overflow-hidden mb-5">
-    
-    <!-- Custom Tabs Navigation -->
-    <div class="border-bottom px-4 pt-3 bg-light bg-opacity-50">
-      <ul class="nav nav-underline gap-4 justify-content-center" style="font-size: 0.85rem;">
-        <li class="nav-item">
-          <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" 
-             [class.active]="activeTab === 'profile'" 
-             [class.text-primary]="activeTab === 'profile'"
-             [class.text-muted]="activeTab !== 'profile'"
-             (click)="setTab('profile')">Profile Details</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" 
-             [class.active]="activeTab === 'security'"
-             [class.text-primary]="activeTab === 'security'"
-             [class.text-muted]="activeTab !== 'security'"
-             (click)="setTab('security')">Security and Password</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" 
-             [class.active]="activeTab === 'notifications'"
-             [class.text-primary]="activeTab === 'notifications'"
-             [class.text-muted]="activeTab !== 'notifications'"
-             (click)="setTab('notifications')">Notifications</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" 
-             [class.active]="activeTab === 'manage'"
-             [class.text-danger]="activeTab === 'manage'"
-             [class.text-muted]="activeTab !== 'manage'"
-             (click)="setTab('manage')"
-             [style.border-bottom-color]="activeTab === 'manage' ? '#dc3545' : 'transparent'">Manage Account</a>
-        </li>
-      </ul>
-    </div>
 
-    <!-- Tab Content Area -->
-    <div class="p-4 p-md-5">
-      
-      <!-- PROFILE DETAILS TAB -->
-      @if (activeTab === 'profile') {
-        <form>
-          <!-- Basic Details -->
-          <div class="mb-5">
-            <h2 class="fs-5 fw-bold text-dark mb-4">Basic Details</h2>
-            
-            <div class="row g-4 mb-4">
-              <div class="col-md-3">
-                <div class="d-flex flex-column align-items-center gap-3">
-                  <div class="position-relative">
-                    <img src="https://i.pravatar.cc/150?u=a042581f4e29026704a" class="rounded-circle object-fit-cover border border-4 border-light shadow-sm" width="100" height="100" alt="Avatar">
-                    <button type="button" class="btn btn-primary btn-sm rounded-circle position-absolute bottom-0 end-0 d-flex justify-content-center align-items-center shadow" style="width: 32px; height: 32px;"><i class="bi bi-pencil-fill" style="font-size: 0.75rem;"></i></button>
-                  </div>
-                  <span class="text-muted fw-semibold" style="font-size: 0.75rem;">Max 5MB (JPG, PNG)</span>
-                </div>
-              </div>
-              <div class="col-md-9">
-                <div class="row g-4">
-                  <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Full Name *</label>
-                    <input type="text" class="form-control" value="Rohit Sharma" style="font-size: 0.85rem;">
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Email Address *</label>
-                    <input type="email" class="form-control" value="rohit.sharma@example.com" style="font-size: 0.85rem;">
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Phone Number *</label>
-                    <input type="tel" class="form-control" value="+91 98765 43210" style="font-size: 0.85rem;">
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Gender *</label>
-                    <select class="form-select" style="font-size: 0.85rem;">
-                      <option disabled>Select gender</option>
-                      <option selected>Male</option>
-                      <option>Female</option>
-                      <option>Other</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
+      <!-- Custom Tabs Navigation -->
+      <div class="border-bottom px-4 pt-3 bg-light bg-opacity-50">
+        <ul class="nav nav-underline gap-4 justify-content-center" style="font-size: 0.85rem;">
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" [class.active]="activeTab === 'profile'"
+              [class.text-primary]="activeTab === 'profile'" [class.text-muted]="activeTab !== 'profile'"
+              (click)="setTab('profile')">Profile Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" [class.active]="activeTab === 'security'"
+              [class.text-primary]="activeTab === 'security'" [class.text-muted]="activeTab !== 'security'"
+              (click)="setTab('security')">Security and Password</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" [class.active]="activeTab === 'manage'"
+              [class.text-danger]="activeTab === 'manage'" [class.text-muted]="activeTab !== 'manage'"
+              (click)="setTab('manage')"
+              [style.border-bottom-color]="activeTab === 'manage' ? '#dc3545' : 'transparent'">Manage Account</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div class="p-4 p-md-5">
+
+        <!-- =========================================================
+     PROFILE DETAILS TAB
+     ========================================================= -->
+
+        @if (activeTab === 'profile') {
+
+        <form class="profile-settings-form" [formGroup]="accountSettingsForm" (ngSubmit)="saveProfileChanges()">
+
+
+          <section class="profile-section" formGroupName="basicInformation">
+
+            <div class="section-heading">
+              <h2>Basic Details</h2>
             </div>
 
-            <div class="mb-4">
-              <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Short Bio *</label>
-              <textarea class="form-control" rows="4" style="font-size: 0.85rem; resize: none;">Passionate professional with extensive experience in the industry, looking to connect and collaborate on meaningful projects.</textarea>
+            <div class="basic-details-layout">
+
+              <!-- Profile Photo -->
+              <div class="profile-photo-column">
+
+                <div class="profile-photo-wrapper">
+
+                  @if (!accountSettingsForm.get('basicInformation.profilePhoto')?.value) {
+
+                  <app-file-upload mode="avatar" (fileSelected)="onFileSelected($event)">
+                  </app-file-upload>
+
+                  } @else {
+
+                  <app-file-preview mode="profile"
+                    [previewUrl]="accountSettingsForm.get('basicInformation.profilePhoto')?.value"
+                    (editClicked)="onFileRemoved()">
+                  </app-file-preview>
+
+                  }
+
+                  <span class="profile-photo-hint">
+                    Max 5MB (JPG, PNG)
+                  </span>
+
+                </div>
+
+              </div>
+
+              <!-- Basic Fields -->
+              <div class="basic-fields-column">
+
+                <div class="form-grid form-grid-2">
+
+                  <div class="form-grid-item">
+                    <app-input-field label="Full Name" type="text"
+                      [value]="accountSettingsForm.get('basicInformation.fullName')?.value || ''" (valueChange)="
+                accountSettingsForm.get('basicInformation.fullName')?.setValue($event);
+                accountSettingsForm.get('basicInformation.fullName')?.markAsTouched()
+              " [required]="true" [validation]="getValidationState('basicInformation', 'fullName')"
+                      [errorMessage]="getErrorMessage('basicInformation', 'fullName')">
+                    </app-input-field>
+                  </div>
+
+                  <div class="form-grid-item">
+                    <app-input-field label="Email Address *" type="email" [disabled]="true"
+                      [value]="accountSettingsForm.get('basicInformation.email')?.value || ''"
+                      (valueChange)="accountSettingsForm.get('basicInformation.email')?.setValue($event)">
+                    </app-input-field>
+                  </div>
+
+                  <div class="form-grid-item">
+                    <app-input-field label="Phone Number *" type="text"
+                      [value]="accountSettingsForm.get('basicInformation.phoneNumber')?.value || ''" (valueChange)="
+                accountSettingsForm.get('basicInformation.phoneNumber')?.setValue($event);
+                accountSettingsForm.get('basicInformation.phoneNumber')?.markAsTouched()
+              " [required]="true" [validation]="getValidationState('basicInformation', 'phoneNumber')"
+                      [errorMessage]="getErrorMessage('basicInformation', 'phoneNumber')">
+                    </app-input-field>
+                  </div>
+
+                  <div class="form-grid-item">
+                    <app-input-field label="Gender *" type="select" [options]="genderOptions"
+                      [value]="accountSettingsForm.get('basicInformation.gender')?.value || ''" (valueChange)="
+                accountSettingsForm.get('basicInformation.gender')?.setValue($event);
+                accountSettingsForm.get('basicInformation.gender')?.markAsTouched()
+              " [required]="true" [validation]="getValidationState('basicInformation', 'gender')"
+                      [errorMessage]="getErrorMessage('basicInformation', 'gender')">
+                    </app-input-field>
+                  </div>
+
+                </div>
+
+              </div>
+
             </div>
+
+            <!-- Short Bio -->
+            <div class="form-field-full">
+              <app-input-field label="Short Bio *" type="textarea"
+                [value]="accountSettingsForm.get('basicInformation.shortBio')?.value || ''" (valueChange)="
+          accountSettingsForm.get('basicInformation.shortBio')?.setValue($event);
+          accountSettingsForm.get('basicInformation.shortBio')?.markAsTouched()
+        " [required]="true" [validation]="getValidationState('basicInformation', 'shortBio')"
+                [errorMessage]="getErrorMessage('basicInformation', 'shortBio')">
+              </app-input-field>
+            </div>
+
+          </section>
+
+          <section class="profile-section profile-section-border" formGroupName="professionalDetails">
+
+            <div class="section-heading">
+              <h2>
+                @if (role === 'client') {
+                Company Information
+                } @else {
+                Professional Information
+                }
+              </h2>
+            </div>
+
+            @if (role === 'client') {
+
+            <div class="form-grid form-grid-3">
+
+              <div class="form-grid-item">
+                <app-input-field label="Company Type *" type="select" [options]="companyTypeOptions"
+                  [value]="accountSettingsForm.get('professionalDetails.companyType')?.value || ''" (valueChange)="
+              accountSettingsForm.get('professionalDetails.companyType')?.setValue($event);
+              accountSettingsForm.get('professionalDetails.companyType')?.markAsTouched()
+            " [required]="true" [validation]="getValidationState('professionalDetails', 'companyType')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'companyType')">
+                </app-input-field>
+              </div>
+
+              <div class="form-grid-item">
+                <app-input-field label="Website *" type="text" placeholder="https://"
+                  [value]="accountSettingsForm.get('professionalDetails.website')?.value || ''" (valueChange)="
+              accountSettingsForm.get('professionalDetails.website')?.setValue($event);
+              accountSettingsForm.get('professionalDetails.website')?.markAsTouched()
+            " [required]="true" [validation]="getValidationState('professionalDetails', 'website')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'website')">
+                </app-input-field>
+              </div>
+
+              <div class="form-grid-item">
+                <app-input-field label="Industry *" type="select" [options]="industryOptions"
+                  [value]="accountSettingsForm.get('professionalDetails.industry')?.value || ''" (valueChange)="
+              accountSettingsForm.get('professionalDetails.industry')?.setValue($event);
+              accountSettingsForm.get('professionalDetails.industry')?.markAsTouched()
+            " [required]="true" [validation]="getValidationState('professionalDetails', 'industry')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'industry')">
+                </app-input-field>
+              </div>
+
+              <div class="form-grid-item form-grid-full">
+                <app-input-field label="Company Description *" type="textarea"
+                  [value]="accountSettingsForm.get('professionalDetails.companyDescription')?.value || ''"
+                  (valueChange)="
+              accountSettingsForm.get('professionalDetails.companyDescription')?.setValue($event);
+              accountSettingsForm.get('professionalDetails.companyDescription')?.markAsTouched()
+            " [required]="true" [validation]="getValidationState('professionalDetails', 'companyDescription')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'companyDescription')">
+                </app-input-field>
+              </div>
+
+            </div>
+
+            } @else {
+
+            <div class="form-grid form-grid-2">
+
+              <div class="form-grid-item form-grid-full">
+                <app-input-field label="Professional Headline *" type="text"
+                  [value]="accountSettingsForm.get('professionalDetails.professionalHeadline')?.value || ''"
+                  (valueChange)="
+              accountSettingsForm.get('professionalDetails.professionalHeadline')?.setValue($event);
+              accountSettingsForm.get('professionalDetails.professionalHeadline')?.markAsTouched()
+            " [required]="true" [validation]="getValidationState('professionalDetails', 'professionalHeadline')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'professionalHeadline')">
+                </app-input-field>
+              </div>
+
+              <div class="form-grid-item form-grid-full">
+                <app-input-field label="Skills *" type="text"
+                  [value]="accountSettingsForm.get('professionalDetails.skills')?.value || ''" (valueChange)="
+              accountSettingsForm.get('professionalDetails.skills')?.setValue($event);
+              accountSettingsForm.get('professionalDetails.skills')?.markAsTouched()
+            " [required]="true" [validation]="getValidationState('professionalDetails', 'skills')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'skills')">
+                </app-input-field>
+              </div>
+
+              <div class="form-grid-item form-grid-full">
+                <app-input-field label="Technologies *" type="text"
+                  [value]="accountSettingsForm.get('professionalDetails.technologies')?.value || ''" (valueChange)="
+              accountSettingsForm.get('professionalDetails.technologies')?.setValue($event);
+              accountSettingsForm.get('professionalDetails.technologies')?.markAsTouched()
+            " [required]="true" [validation]="getValidationState('professionalDetails', 'technologies')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'technologies')">
+                </app-input-field>
+              </div>
+
+              <div class="form-grid-item">
+                <app-input-field label="Availability *" type="select" [options]="availabilityOptions"
+                  [value]="accountSettingsForm.get('professionalDetails.availability')?.value || ''" (valueChange)="
+              accountSettingsForm.get('professionalDetails.availability')?.setValue($event);
+              accountSettingsForm.get('professionalDetails.availability')?.markAsTouched()
+            " [required]="true" [validation]="getValidationState('professionalDetails', 'availability')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'availability')">
+                </app-input-field>
+              </div>
+
+              <div class="form-grid-item">
+                <app-input-field label="Preferred Job Type *" type="select" [options]="preferredJobTypeOptions"
+                  [value]="accountSettingsForm.get('professionalDetails.preferredJobType')?.value || ''" (valueChange)="
+              accountSettingsForm.get('professionalDetails.preferredJobType')?.setValue($event);
+              accountSettingsForm.get('professionalDetails.preferredJobType')?.markAsTouched()
+            " [required]="true" [validation]="getValidationState('professionalDetails', 'preferredJobType')"
+                  [errorMessage]="getErrorMessage('professionalDetails', 'preferredJobType')">
+                </app-input-field>
+              </div>
+
+            </div>
+
+            }
+
+          </section>
+
+
+          <section class="profile-section">
+
+            <div class="section-heading">
+              <h2>Location</h2>
+            </div>
+
+            <div class="form-grid form-grid-3">
+
+              <div class="form-grid-item">
+                <app-input-field label="City *" type="select" [options]="cityOptions"
+                  [value]="accountSettingsForm.get('location.city')?.value || ''" (valueChange)="
+            accountSettingsForm.get('location.city')?.setValue($event);
+            accountSettingsForm.get('location.city')?.markAsTouched()
+          " [required]="true" [validation]="getValidationState('location', 'city')"
+                  [errorMessage]="getErrorMessage('location', 'city')">
+                </app-input-field>
+              </div>
+
+              <div class="form-grid-item">
+                <app-input-field label="State *" type="select" [options]="stateOptions"
+                  [value]="accountSettingsForm.get('location.state')?.value || ''" (valueChange)="
+            accountSettingsForm.get('location.state')?.setValue($event);
+            accountSettingsForm.get('location.state')?.markAsTouched()
+          " [required]="true" [validation]="getValidationState('location', 'state')"
+                  [errorMessage]="getErrorMessage('location', 'state')">
+                </app-input-field>
+              </div>
+
+              <div class="form-grid-item">
+                <app-input-field label="Country *" type="select" [options]="countryOptions"
+                  [value]="accountSettingsForm.get('location.country')?.value || ''" (valueChange)="
+            accountSettingsForm.get('location.country')?.setValue($event);
+            accountSettingsForm.get('location.country')?.markAsTouched()
+          " [required]="true" [validation]="getValidationState('location', 'country')"
+                  [errorMessage]="getErrorMessage('location', 'country')">
+                </app-input-field>
+              </div>
+
+            </div>
+
+          </section>
+
+          <section class="profile-section profile-section-border">
+
+            <div class="section-heading">
+              <h2>Social Media and Languages</h2>
+            </div>
+
+
+            <div class="dynamic-section">
+
+              <div class="dynamic-section-header">
+
+                <h4>Social Media Profiles</h4>
+
+                <app-button type="button" variant="outline-primary" size="sm" (clicked)="addSocialLink()">
+                  <i class="bi bi-plus-circle me-1"></i>
+                  Add Profile
+                </app-button>
+
+              </div>
+
+
+              <div formArrayName="socialLinks" class="dynamic-list">
+
+                @for (socialCtrl of socialLinks.controls; track $index) {
+
+                <div [formGroupName]="$index" class="dynamic-row">
+
+                  <div class="dynamic-field dynamic-field-platform">
+
+                    <app-input-field label="Select media *" type="select" [options]="socialMediaPlatformOptions"
+                      [value]="socialCtrl.get('platform')?.value || ''" (valueChange)="
+                  socialCtrl.get('platform')?.setValue($event);
+                  socialCtrl.get('platform')?.markAsTouched()
+                " [required]="true" [validation]="getArrayValidationState('socialLinks', $index, 'platform')"
+                      [errorMessage]="getArrayErrorMessage('socialLinks', $index, 'platform')">
+                    </app-input-field>
+
+                  </div>
+
+
+                  <div class="dynamic-field dynamic-field-link">
+
+                    <app-input-field label="Platform link *" type="text" placeholder="https://"
+                      [value]="socialCtrl.get('profileUrl')?.value || ''" (valueChange)="
+                  socialCtrl.get('profileUrl')?.setValue($event);
+                  socialCtrl.get('profileUrl')?.markAsTouched()
+                " [required]="true" [validation]="getArrayValidationState('socialLinks', $index, 'profileUrl')"
+                      [errorMessage]="getArrayErrorMessage('socialLinks', $index, 'profileUrl')">
+                    </app-input-field>
+
+                  </div>
+
+
+                  <div class="dynamic-action">
+
+                    <app-button type="button" variant="outline-danger" [iconOnly]="true"
+                      (clicked)="removeSocialLink($index)">
+                      <i class="bi bi-trash"></i>
+                    </app-button>
+
+                  </div>
+
+                </div>
+
+                }
+
+                @if (socialLinks.controls.length === 0) {
+
+                <p class="empty-state">
+                  No social media profiles added.
+                </p>
+
+                }
+
+              </div>
+
+            </div>
+
+
+            <!-- =====================================================
+         LANGUAGES
+         ===================================================== -->
+
+            <div class="dynamic-section">
+
+              <div class="dynamic-section-header">
+
+                <h4>Languages</h4>
+
+                <app-button type="button" variant="outline-primary" size="sm" (clicked)="addLanguage()">
+                  <i class="bi bi-plus-circle me-1"></i>
+                  Add Language
+                </app-button>
+
+              </div>
+
+
+              <div formArrayName="languages" class="dynamic-list">
+
+                @for (langCtrl of languages.controls; track $index) {
+
+                <div [formGroupName]="$index" class="dynamic-row">
+
+                  <div class="dynamic-field">
+
+                    <app-input-field label="Select language *" type="select" [options]="languageOptions"
+                      [value]="langCtrl.get('language')?.value || ''" (valueChange)="
+                  langCtrl.get('language')?.setValue($event);
+                  langCtrl.get('language')?.markAsTouched()
+                " [required]="true" [validation]="getArrayValidationState('languages', $index, 'language')"
+                      [errorMessage]="getArrayErrorMessage('languages', $index, 'language')">
+                    </app-input-field>
+
+                  </div>
+
+
+                  <div class="dynamic-field">
+
+                    <app-input-field label="Select proficiency *" type="select" [options]="proficiencyOptions"
+                      [value]="langCtrl.get('proficiency')?.value || ''" (valueChange)="
+                  langCtrl.get('proficiency')?.setValue($event);
+                  langCtrl.get('proficiency')?.markAsTouched()
+                " [required]="true" [validation]="getArrayValidationState('languages', $index, 'proficiency')"
+                      [errorMessage]="getArrayErrorMessage('languages', $index, 'proficiency')">
+                    </app-input-field>
+
+                  </div>
+
+
+                  <div class="dynamic-action">
+
+                    <app-button type="button" variant="outline-danger" [iconOnly]="true"
+                      (clicked)="removeLanguage($index)">
+                      <i class="bi bi-trash"></i>
+                    </app-button>
+
+                  </div>
+
+                </div>
+
+                }
+
+                @if (languages.controls.length === 0) {
+
+                <p class="empty-state">
+                  No languages added.
+                </p>
+
+                }
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <div class="profile-actions">
+
+            <app-button type="button" variant="secondary" (clicked)="loadProfileData()" label="Cancel">
+            </app-button>
+
+            <app-button type="submit" variant="primary" [loading]="isSaving" label="Save Changes">
+            </app-button>
+
           </div>
 
-          <!-- Professional Details / Company Information -->
-          <div class="mb-5 border-top pt-5">
-            <h2 class="fs-5 fw-bold text-dark mb-4">
-              @if (role === 'client') { Company Information } @else { Professional Information }
-            </h2>
-            
-            <div class="row g-4">
-              @if (role === 'client') {
-                <div class="col-md-4">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Company Type *</label>
-                  <input type="text" class="form-control" value="LLC" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Website *</label>
-                  <input type="url" class="form-control" value="https://example.com" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Industry *</label>
-                  <input type="text" class="form-control" value="Technology" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">City *</label>
-                  <input type="text" class="form-control" value="Hyderabad" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">State *</label>
-                  <input type="text" class="form-control" value="Telangana" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Country *</label>
-                  <input type="text" class="form-control" value="India" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-12">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Company Description *</label>
-                  <textarea class="form-control" rows="4" style="font-size: 0.85rem; resize: none;">A forward-thinking technology firm specializing in web solutions and e-commerce platforms.</textarea>
-                </div>
-              } @else {
-                <div class="col-12">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Professional Headline *</label>
-                  <input type="text" class="form-control" value="Senior Frontend Developer" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-12">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Skills *</label>
-                  <input type="text" class="form-control" value="Angular, React, TypeScript" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-12">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Technologies *</label>
-                  <input type="text" class="form-control" value="HTML/CSS, Git, Bootstrap" style="font-size: 0.85rem;">
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Availability *</label>
-                  <select class="form-select" style="font-size: 0.85rem;">
-                    <option disabled>Select availability</option>
-                    <option selected>Full Time (40hrs/wk)</option>
-                    <option>Part Time (20hrs/wk)</option>
-                    <option>As needed</option>
-                  </select>
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Preferred Job Type *</label>
-                  <select class="form-select" style="font-size: 0.85rem;">
-                    <option disabled>Select preferred type</option>
-                    <option selected>Long-term contract</option>
-                    <option>Short-term project</option>
-                    <option>Hourly work</option>
-                  </select>
-                </div>
-              }
-            </div>
-          </div>
-
-          <!-- Social Media and Languages -->
-          <div class="mb-5 border-top pt-5">
-            <h2 class="fs-5 fw-bold text-dark mb-4">Social media and languages</h2>
-            
-            <div class="mb-4">
-              <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Social Media profile</h4>
-              <div class="d-flex align-items-end gap-3 mb-3">
-                <div class="flex-grow-1">
-                  <label class="form-label text-muted" style="font-size: 0.7rem;">Select media *</label>
-                  <select class="form-select" style="font-size: 0.8rem;">
-                    <option>LinkedIn</option>
-                    <option>GitHub</option>
-                    <option>Twitter</option>
-                    <option>Portfolio Website</option>
-                  </select>
-                </div>
-                <div class="flex-grow-1" style="flex: 2;">
-                  <label class="form-label text-muted" style="font-size: 0.7rem;">Platform link *</label>
-                  <input type="url" class="form-control" placeholder="https://" style="font-size: 0.8rem;">
-                </div>
-                <button class="btn btn-primary px-4 fw-semibold shadow-sm" style="font-size: 0.8rem;">Add</button>
-              </div>
-              
-              <!-- Added media items list -->
-              <div class="d-flex flex-column gap-2 mb-4">
-                <div class="d-flex align-items-center gap-3 p-2 border rounded-3 bg-light bg-opacity-50">
-                  <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;"><i class="bi bi-linkedin"></i></div>
-                  <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">https://linkedin.com/in/username</span>
-                  <button class="btn btn-link text-danger p-0 border-0 text-decoration-none"><i class="bi bi-x-circle"></i></button>
-                </div>
-              </div>
-            </div>
-
-            <div class="mb-4">
-              <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Languages</h4>
-              <div class="d-flex align-items-end gap-3 mb-3">
-                <div class="flex-grow-1">
-                  <label class="form-label text-muted" style="font-size: 0.7rem;">Select language *</label>
-                  <select class="form-select" style="font-size: 0.8rem;">
-                    <option>English</option>
-                    <option>Spanish</option>
-                    <option>French</option>
-                    <option>German</option>
-                    <option>Hindi</option>
-                  </select>
-                </div>
-                <div class="flex-grow-1">
-                  <label class="form-label text-muted" style="font-size: 0.7rem;">Select proficiency *</label>
-                  <select class="form-select" style="font-size: 0.8rem;">
-                    <option>Basic</option>
-                    <option>Conversational</option>
-                    <option>Fluent</option>
-                    <option>Native or Bilingual</option>
-                  </select>
-                </div>
-                <button class="btn btn-primary px-4 fw-semibold shadow-sm" style="font-size: 0.8rem;">Add</button>
-              </div>
-
-              <!-- Added language items list -->
-              <div class="d-flex flex-column gap-2">
-                <div class="d-flex align-items-center gap-3 p-2 border rounded-3 bg-light bg-opacity-50">
-                  <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">English - <span class="text-muted fw-normal">Fluent</span></span>
-                  <button class="btn btn-link text-danger p-0 border-0 text-decoration-none"><i class="bi bi-x-circle"></i></button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Actions -->
-          <div class="d-flex justify-content-end gap-3 pt-4 border-top">
-            <button type="button" class="btn btn-light fw-semibold px-4" style="font-size: 0.85rem;">Cancel</button>
-            <button type="button" class="btn btn-primary fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;">Save Changes</button>
-          </div>
         </form>
-      }
 
-      <!-- SECURITY AND PASSWORD TAB -->
-      @if (activeTab === 'security') {
+        }
+
+
+        <!-- SECURITY AND PASSWORD TAB -->
+        @if (activeTab === 'security') {
         <div class="row justify-content-center">
           <div class="col-md-8 col-lg-6">
             <h2 class="fs-5 fw-bold text-dark mb-4 text-center">Change Password</h2>
-            <p class="text-center text-muted mb-5" style="font-size: 0.85rem;">Ensure your account is using a long, random password to stay secure.</p>
-            
-            <form class="d-flex flex-column gap-4">
+            <p class="text-center text-muted mb-5" style="font-size: 0.85rem;">Ensure your account is using a long,
+              random password to stay secure.</p>
+
+            <form [formGroup]="changePasswordForm" (ngSubmit)="updatePassword()" class="d-flex flex-column gap-4">
               <div>
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Current Password <span class="text-danger">*</span></label>
-                <div class="input-group">
-                  <input type="password" class="form-control bg-light border-end-0" placeholder="Enter current password" style="font-size: 0.85rem;">
-                  <span class="input-group-text bg-light bg-transparent cursor-pointer"><i class="bi bi-eye-slash text-muted"></i></span>
-                </div>
+                <app-input-field label="Current Password *" type="password" placeholder="Enter current password"
+                  [showPasswordToggle]="true" [value]="changePasswordForm.get('oldPassword')?.value || ''"
+                  (valueChange)="changePasswordForm.get('oldPassword')?.setValue($event); changePasswordForm.get('oldPassword')?.markAsTouched()"
+                  [required]="true" [validation]="getPasswordValidationState('oldPassword')"
+                  [errorMessage]="getPasswordErrorMessage('oldPassword')">
+                </app-input-field>
               </div>
+
               <div>
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">New Password <span class="text-danger">*</span></label>
-                <div class="input-group">
-                  <input type="password" class="form-control bg-light border-end-0" placeholder="Enter new password" style="font-size: 0.85rem;">
-                  <span class="input-group-text bg-light bg-transparent cursor-pointer"><i class="bi bi-eye-slash text-muted"></i></span>
-                </div>
-                <div class="form-text mt-2" style="font-size: 0.7rem;"><i class="bi bi-info-circle text-primary"></i> Password must be at least 8 characters long and include a number and a symbol.</div>
+                <app-input-field label="New Password *" type="password" placeholder="Enter new password"
+                  [showPasswordToggle]="true" [value]="changePasswordForm.get('newPassword')?.value || ''"
+                  (valueChange)="changePasswordForm.get('newPassword')?.setValue($event); changePasswordForm.get('newPassword')?.markAsTouched()"
+                  [required]="true" [validation]="getPasswordValidationState('newPassword')"
+                  [errorMessage]="getPasswordErrorMessage('newPassword')">
+                </app-input-field>
+                <div class="form-text mt-2" style="font-size: 0.7rem;"><i class="bi bi-info-circle text-primary"></i>
+                  Password must be at least 8 characters long and include a number and a symbol.</div>
               </div>
+
               <div>
-                <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Confirm New Password <span class="text-danger">*</span></label>
-                <div class="input-group">
-                  <input type="password" class="form-control bg-light border-end-0" placeholder="Confirm new password" style="font-size: 0.85rem;">
-                  <span class="input-group-text bg-light bg-transparent cursor-pointer"><i class="bi bi-eye-slash text-muted"></i></span>
-                </div>
+                <app-input-field label="Confirm New Password *" type="password" placeholder="Confirm new password"
+                  [showPasswordToggle]="true" [value]="changePasswordForm.get('confirmPassword')?.value || ''"
+                  (valueChange)="changePasswordForm.get('confirmPassword')?.setValue($event); changePasswordForm.get('confirmPassword')?.markAsTouched()"
+                  [required]="true" [validation]="getPasswordValidationState('confirmPassword')"
+                  [errorMessage]="getPasswordErrorMessage('confirmPassword')">
+                </app-input-field>
               </div>
-              
-              <div class="d-flex justify-content-between align-items-center mt-3 pt-4 border-top">
-                <a href="#" class="text-primary text-decoration-none fw-semibold" style="font-size: 0.8rem;">Forgot Password?</a>
-                <button type="button" class="btn btn-primary fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;">Update Password</button>
+
+              <div class="security-actions">
+                <app-button type="submit" variant="primary" [loading]="isSavingPassword"
+                  label="Update Password"></app-button>
               </div>
             </form>
           </div>
         </div>
-      }
+        }
 
-      <!-- NOTIFICATIONS TAB -->
-      @if (activeTab === 'notifications') {
-        <div class="row justify-content-center">
-          <div class="col-md-10 col-lg-8">
-            <h2 class="fs-5 fw-bold text-dark mb-2">Notification Preferences</h2>
-            <p class="text-muted mb-4 pb-3 border-bottom" style="font-size: 0.85rem;">Choose how and when you want to be notified about activity on your account.</p>
-            
-            <div class="d-flex flex-column gap-4">
-              <!-- Item 1 -->
-              <div class="d-flex justify-content-between align-items-start gap-4">
-                <div class="d-flex gap-3">
-                  <div class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;">
-                    <i class="bi bi-envelope fs-5"></i>
-                  </div>
-                  <div>
-                    <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Email Notifications</span>
-                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Receive an email for important updates, contract offers, and messages.</p>
-                  </div>
-                </div>
-                <div class="form-check form-switch fs-4 mt-1">
-                  <input class="form-check-input" type="checkbox" role="switch" checked>
-                </div>
-              </div>
-
-              <!-- Item 2 -->
-              <div class="d-flex justify-content-between align-items-start gap-4">
-                <div class="d-flex gap-3">
-                  <div class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;">
-                    <i class="bi bi-phone fs-5"></i>
-                  </div>
-                  <div>
-                    <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Push Notifications</span>
-                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Get real-time push notifications on your device for immediate alerts.</p>
-                  </div>
-                </div>
-                <div class="form-check form-switch fs-4 mt-1">
-                  <input class="form-check-input" type="checkbox" role="switch" checked>
-                </div>
-              </div>
-
-              <!-- Item 3 -->
-              <div class="d-flex justify-content-between align-items-start gap-4">
-                <div class="d-flex gap-3">
-                  <div class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;">
-                    <i class="bi bi-chat-dots fs-5"></i>
-                  </div>
-                  <div>
-                    <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Messages & Chat</span>
-                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Notify me when I receive a new direct message or chat reply.</p>
-                  </div>
-                </div>
-                <div class="form-check form-switch fs-4 mt-1">
-                  <input class="form-check-input" type="checkbox" role="switch" checked>
-                </div>
-              </div>
-              
-              <!-- Item 4 -->
-              <div class="d-flex justify-content-between align-items-start gap-4">
-                <div class="d-flex gap-3">
-                  <div class="bg-primary bg-opacity-10 text-primary rounded d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;">
-                    <i class="bi bi-megaphone fs-5"></i>
-                  </div>
-                  <div>
-                    <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Marketing & Promotions</span>
-                    <p class="text-muted mb-0" style="font-size: 0.75rem;">Receive occasional emails about new features, tips, and special offers.</p>
-                  </div>
-                </div>
-                <div class="form-check form-switch fs-4 mt-1">
-                  <input class="form-check-input" type="checkbox" role="switch">
-                </div>
-              </div>
-            </div>
-
-            <div class="d-flex justify-content-end mt-5 pt-4 border-top">
-              <button type="button" class="btn btn-primary fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;">Save Preferences</button>
-            </div>
-          </div>
-        </div>
-      }
-
-      <!-- MANAGE ACCOUNT TAB -->
-      @if (activeTab === 'manage') {
+        <!-- MANAGE ACCOUNT TAB -->
+        @if (activeTab === 'manage') {
         <div class="row justify-content-center">
           <div class="col-md-10 col-lg-8">
             <h2 class="fs-5 fw-bold text-dark mb-4">Account Management</h2>
-            
 
             <div class="card border border-danger border-opacity-25 bg-danger bg-opacity-10 shadow-none">
               <div class="card-body p-4">
-                <h3 class="fs-6 fw-bold text-danger mb-2 d-flex align-items-center gap-2"><i class="bi bi-exclamation-triangle-fill"></i> Delete Account</h3>
+                <h3 class="fs-6 fw-bold text-danger mb-2 d-flex align-items-center gap-2"><i
+                    class="bi bi-exclamation-triangle-fill"></i> Delete Account</h3>
                 <p class="text-muted mb-4" style="font-size: 0.8rem; line-height: 1.5;">
-                  Once you delete your account, there is no going back. All your data, including profile details, messages, and contract history will be permanently wiped out. Please be certain.
+                  Once you delete your account, there is no going back. All your data, including profile details,
+                  messages, and contract history will be permanently wiped out. Please be certain.
                 </p>
-                <div class="form-check mb-4">
-                  <input class="form-check-input border-danger" type="checkbox" id="confirmDelete">
-                  <label class="form-check-label text-dark fw-semibold" for="confirmDelete" style="font-size: 0.8rem;">
-                    I confirm that I want to permanently delete my account.
-                  </label>
+                <div class="delete-account-actions">
+                  <app-button type="button" variant="danger" (clicked)="deleteAccount()"
+                    label="Permanently Delete Account"></app-button>
                 </div>
-                <button class="btn btn-danger fw-semibold px-4 shadow-sm" style="font-size: 0.85rem;" disabled>Permanently Delete Account</button>
               </div>
             </div>
 
           </div>
         </div>
-      }
-
+        }
+      </div>
     </div>
+    }
   </div>
-  </div>
-
 </div>

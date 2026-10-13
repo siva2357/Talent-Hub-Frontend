@@ -1,11 +1,237 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  Output
+} from '@angular/core';
+
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR
+} from '@angular/forms';
+
+import {
+  InputFieldType,
+  InputValidation,
+  InputOption
+} from '../../../../core/models/ui.model';
+
+export type {
+  InputFieldType,
+  InputValidation,
+  InputOption
+};
 
 @Component({
   selector: 'app-input-field',
   standalone: true,
   templateUrl: './input-field.html',
-  styleUrl: './input-field.css'
+  styleUrl: './input-field.css',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputField),
+      multi: true
+    }
+  ]
 })
-export class InputField {
-  // Static representation, dynamic logic will be added later
+export class InputField implements ControlValueAccessor {
+
+  @Input() label: string = 'Email address';
+
+  @Input() type: InputFieldType = 'text';
+
+  @Input() placeholder: string = 'Enter email address';
+
+  @Input() value: string | null = '';
+
+  // Icon
+  @Input() icon: string = 'bi bi-lock';
+
+  @Input() showIcon: boolean = false;
+
+  // Options
+  @Input() options: InputOption[] = [];
+
+  // States
+  @Input() disabled: boolean = false;
+
+  @Input() readonly: boolean = false;
+
+  @Input() required: boolean = false;
+
+  // Validation
+  @Input() validation: InputValidation = 'none';
+
+  @Input() errorMessage: string = '';
+
+  @Input() successMessage: string = '';
+
+  // Multi-select
+  @Input() selectedValues: string[] = [];
+
+  // Events
+  @Output() valueChange = new EventEmitter<string>();
+
+  @Output() selectedValuesChange = new EventEmitter<string[]>();
+
+  @Output() changed = new EventEmitter<string>();
+
+  @Output() blurred = new EventEmitter<void>();
+
+  @Input() showPasswordToggle: boolean = false;
+
+  isPasswordVisible: boolean = false;
+
+  isDropdownOpen: boolean = false;
+
+  // =========================================================
+  // ControlValueAccessor
+  // =========================================================
+
+  private onChange: (value: string | null) => void = () => { };
+
+  private onTouched: () => void = () => { };
+
+  writeValue(value: string | null): void {
+    this.value = value ?? '';
+  }
+
+  registerOnChange(fn: (value: string | null) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
+  // =========================================================
+  // Password
+  // =========================================================
+
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
+  }
+
+  // =========================================================
+  // Normal input / textarea
+  // =========================================================
+
+  onValueChange(event: Event): void {
+    const target =
+      event.target as HTMLInputElement | HTMLTextAreaElement;
+
+    this.value = target.value;
+
+    // Reactive Forms
+    this.onChange(this.value);
+
+    // Existing custom events
+    this.valueChange.emit(this.value);
+    this.changed.emit(this.value);
+  }
+
+  // =========================================================
+  // Blur
+  // =========================================================
+
+  onBlur(): void {
+    // Reactive Forms
+    this.onTouched();
+
+    // Existing custom event
+    this.blurred.emit();
+  }
+
+  // =========================================================
+  // Select
+  // =========================================================
+
+  onSelectChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+
+    this.value = target.value;
+
+    // Reactive Forms
+    this.onChange(this.value);
+
+    // Existing custom events
+    this.valueChange.emit(this.value);
+    this.changed.emit(this.value);
+  }
+
+  // =========================================================
+  // Multi-select
+  // =========================================================
+
+  toggleDropdown(): void {
+    if (this.disabled || this.readonly) {
+      return;
+    }
+
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  toggleOption(option: InputOption): void {
+    if (
+      this.disabled ||
+      this.readonly ||
+      option.disabled
+    ) {
+      return;
+    }
+
+    const exists =
+      this.selectedValues.includes(option.value);
+
+    if (exists) {
+      this.selectedValues =
+        this.selectedValues.filter(
+          value => value !== option.value
+        );
+    } else {
+      this.selectedValues = [
+        ...this.selectedValues,
+        option.value
+      ];
+    }
+
+    this.selectedValuesChange.emit(
+      this.selectedValues
+    );
+  }
+
+  isSelected(value: string): boolean {
+    return this.selectedValues.includes(value);
+  }
+
+  get selectedLabels(): string {
+    return this.options
+      .filter(option =>
+        this.selectedValues.includes(option.value)
+      )
+      .map(option => option.label)
+      .join(', ');
+  }
+
+  // =========================================================
+  // Validation
+  // =========================================================
+
+  get validationMessage(): string {
+    if (this.validation === 'error') {
+      return this.errorMessage;
+    }
+
+    if (this.validation === 'success') {
+      return this.successMessage;
+    }
+
+    return '';
+  }
 }

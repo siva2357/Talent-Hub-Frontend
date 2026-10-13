@@ -1,96 +1,201 @@
-/* Custom Spinner Variations */
+/* =========================================================
+   SPINNER
+   ========================================================= */
+
+/* Standard Spinner */
+.spinner-border {
+  display: inline-block;
+}
+
+/* Dotted Spinner */
 .spinner-dotted {
   border-style: dotted;
   border-width: 3px;
 }
 
+/* Thick Spinner */
 .spinner-thick {
   border-width: 4px;
 }
 
+/* Track Spinner */
 .spinner-track {
+  width: 2rem;
+  height: 2rem;
   border: 3px solid #e5e7eb;
   border-top-color: #2563eb;
   border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
-  animation: spinner-border .75s linear infinite;
+  animation: spinner-border 0.75s linear infinite;
 }
 
-/* Custom Progress Bar Overrides */
+
+/* =========================================================
+   PROGRESS BAR
+   ========================================================= */
+
 .progress {
+  width: 100%;
   height: 6px;
+  flex: 1 1 auto;
   background-color: #f3f4f6;
   border-radius: 10px;
-  width: 100%;
+  overflow: visible;
 }
 
 .progress-bar {
+  height: 100%;
+  min-width: 0;
   background-color: #2563eb;
   border-radius: 10px;
+  transition: width 0.3s ease;
 }
 
-/* Progress bar with a handle/dot */
-.progress-with-handle {
-  overflow: visible; /* so the handle can overflow */
+
+/* =========================================================
+   PROGRESS - STRIPED
+   ========================================================= */
+
+.progress-bar-striped {
+  background-image: linear-gradient(45deg,
+      rgba(255, 255, 255, 0.15) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(255, 255, 255, 0.15) 75%,
+      transparent 75%);
+
+  background-size: 1rem 1rem;
 }
 
-.progress-with-handle .progress-bar {
+
+/* =========================================================
+   PROGRESS - ANIMATED
+   ========================================================= */
+
+.progress-bar-animated {
+  animation: progress-bar-stripes 1s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+  from {
+    background-position: 1rem 0;
+  }
+
+  to {
+    background-position: 0 0;
+  }
+}
+
+
+/* =========================================================
+   PROGRESS - HANDLE
+   ========================================================= */
+
+.progress-bar.progress-with-handle {
   position: relative;
+  overflow: visible;
 }
 
-.progress-with-handle .progress-bar::after {
+.progress-bar.progress-with-handle::after {
   content: "";
+
   position: absolute;
+
   right: -6px;
   top: 50%;
-  transform: translateY(-50%);
+
   width: 12px;
   height: 12px;
+
+  transform: translateY(-50%);
+
   background-color: #2563eb;
   border-radius: 50%;
+
   box-shadow: 0 0 0 2px #ffffff;
 }
 
-/* Circular Progress Rings via Conic Gradients */
+
+/* =========================================================
+   CIRCULAR PROGRESS
+   ========================================================= */
+
 .circular-progress {
   position: relative;
-  border-radius: 50%;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  border-radius: 50%;
+
   font-family: 'Inter', sans-serif;
   font-size: 13px;
   font-weight: 600;
+
   color: #111827;
 }
 
+
+/* Inner Circle */
 .circular-progress::before {
   content: "";
+
   position: absolute;
-  background-color: #fff;
+
+  background-color: #ffffff;
   border-radius: 50%;
 }
 
+
+/* Percentage */
 .circular-progress span {
   position: relative;
   z-index: 1;
 }
 
-/* Sizes & Thicknesses */
+
+/* =========================================================
+   CIRCULAR PROGRESS - SIZE
+   ========================================================= */
+
 .circle-size {
   width: 64px;
   height: 64px;
 }
 
+
+/* =========================================================
+   CIRCULAR PROGRESS - THIN
+   ========================================================= */
+
 .ring-thin::before {
-  top: 4px; left: 4px; right: 4px; bottom: 4px;
+  top: 4px;
+  right: 4px;
+  bottom: 4px;
+  left: 4px;
 }
+
+
+/* =========================================================
+   CIRCULAR PROGRESS - MEDIUM
+   ========================================================= */
 
 .ring-md::before {
-  top: 6px; left: 6px; right: 6px; bottom: 6px;
+  top: 6px;
+  right: 6px;
+  bottom: 6px;
+  left: 6px;
 }
 
+
+/* =========================================================
+   CIRCULAR PROGRESS - THICK
+   ========================================================= */
+
 .ring-thick::before {
-  top: 8px; left: 8px; right: 8px; bottom: 8px;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
 }

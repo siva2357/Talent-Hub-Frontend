@@ -1,4 +1,4 @@
-<div class="dashboard-container position-relative p-4">
+<div class="dashboard-container position-relative ">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -12,258 +12,183 @@
   </div>
 
   <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
-  <!-- Header -->
-  <header class="mb-4 d-flex justify-content-between align-items-center">
-    <div>
-      <h1 class="fw-bold fs-4 mb-1 text-dark d-flex align-items-center gap-2">
-        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; border: 2px solid var(--primary-color);">
-          <i class="bi bi-file-earmark-plus text-primary"></i>
+  <div class="position-relative z-1 p-3 p-sm-4 mx-auto w-100" style="max-width: 960px;">
+    <!-- Header -->
+    <header class="mb-4 pb-3 border-bottom d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-2 gap-sm-3 min-w-0">
+        <a [routerLink]="['/contract-progress', contractId]"
+          class="btn btn-sm btn-light border rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 header-back-btn"
+          title="Back to Contract Progress" aria-label="Back">
+          <i class="bi bi-arrow-left fs-6"></i>
+        </a>
+        <div class="min-w-0">
+          <h1 class="fw-bold fs-4 mb-0 text-dark text-truncate">
+            {{ isEditMode ? 'Edit Phase' : 'Create New Phase' }}
+          </h1>
+          <p class="text-muted small mb-0 text-truncate">Define phase details, deliverables, instructions and upload references</p>
         </div>
-        Create New Phase
-      </h1>
-      <p class="text-muted small mb-0 ms-5">Define phase details, deliverables, instructions and upload references</p>
-    </div>
-    <div class="d-flex gap-2">
-      <button class="btn btn-outline-secondary bg-white text-dark shadow-sm px-3 d-flex align-items-center gap-2">
-        <i class="bi bi-save"></i> Save Draft
-      </button>
-      <div class="rounded-circle border border-primary d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-        <i class="bi bi-search text-primary"></i>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <!-- Main Content Split -->
-  <div class="row g-4 mb-5">
-    
-    <!-- Left Column (Form Fields) -->
-    <div class="col-lg-8">
-      
-      <!-- 1. Basic Details -->
-      <div class="mb-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-          <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; font-size: 0.75rem;">1</div>
-          <h2 class="fs-6 fw-bold mb-0 text-dark">Basic Details</h2>
-        </div>
-        
-        <div class="row g-3">
-          <div class="col-md-7">
-            <label class="form-label fw-bold text-dark small mb-1">Phase Name <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" value="Frontend Development - Dashboard">
-            <div class="text-end text-muted mt-1" style="font-size: 0.65rem;">33/100</div>
+    <!-- Main Form Content -->
+    <div [formGroup]="phaseForm">
+      <div class="row g-4 mb-4">
+        <!-- Full Width Form Column -->
+        <div class="col-12">
+
+        <!-- 1. Basic Details -->
+        <div class="mb-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+              style="width: 24px; height: 24px; font-size: 0.75rem;">1</div>
+            <h2 class="fs-6 fw-bold mb-0 text-dark">Basic Details</h2>
           </div>
-          <div class="col-md-5">
-            <label class="form-label fw-bold text-dark small mb-1">Template</label>
-            <div class="d-flex gap-2">
-              <button class="btn btn-sm btn-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 fw-semibold">&lt;/&gt; Frontend</button>
-              <button class="btn btn-sm btn-outline-secondary bg-white rounded-pill px-3 text-muted">Backend</button>
-              <button class="btn btn-sm btn-outline-secondary bg-white rounded-pill px-3 text-muted">UI/UX</button>
-              <button class="btn btn-sm btn-outline-secondary bg-white rounded-pill px-3 text-muted">Testing</button>
+
+          <div class="row g-3">
+            <div class="col-12">
+              <app-input-field label="Phase Name" type="text" placeholder="Frontend Development - Dashboard"
+                [required]="true" [value]="phaseForm.get('phaseName')?.value"
+                (valueChange)="phaseForm.get('phaseName')?.setValue($event)"
+                (blurred)="phaseForm.get('phaseName')?.markAsTouched()"
+                [validation]="phaseForm.get('phaseName')?.invalid && phaseForm.get('phaseName')?.touched ? 'error' : 'none'"
+                errorMessage="Phase Name is required"></app-input-field>
+              <div class="text-end text-muted mt-1" style="font-size: 0.65rem;">{{
+                phaseForm.get('phaseName')?.value?.length || 0 }}/100</div>
+            </div>
+
+            <div class="col-12 col-sm-6">
+              <app-input-field label="Deadline" type="date" [required]="true" [showIcon]="true" icon="bi bi-calendar3"
+                [value]="phaseForm.get('deadline')?.value" (valueChange)="phaseForm.get('deadline')?.setValue($event)"
+                (blurred)="phaseForm.get('deadline')?.markAsTouched()"
+                [validation]="phaseForm.get('deadline')?.invalid && phaseForm.get('deadline')?.touched ? 'error' : 'none'"
+                errorMessage="Deadline is required"></app-input-field>
+              <div class="text-muted mt-1" style="font-size: 0.65rem;">Select deadline</div>
+            </div>
+
+            <div class="col-12 col-sm-6">
+              <app-input-field label="Phase Budget (₹)" type="text" placeholder="15000" [required]="true"
+                [showIcon]="true" icon="bi bi-currency-rupee" [value]="phaseForm.get('budget')?.value"
+                (valueChange)="phaseForm.get('budget')?.setValue($event)"
+                (blurred)="phaseForm.get('budget')?.markAsTouched()"
+                [validation]="phaseForm.get('budget')?.invalid && phaseForm.get('budget')?.touched ? 'error' : 'none'"
+                errorMessage="Budget is required"></app-input-field>
+              <div class="text-muted mt-1" style="font-size: 0.65rem;">Set budget for this phase</div>
             </div>
           </div>
-          
-          <div class="col-md-6 mt-3">
-            <label class="form-label fw-bold text-dark small mb-1">Deadline <span class="text-danger">*</span></label>
-            <div class="input-group">
-              <span class="input-group-text bg-white text-muted"><i class="bi bi-calendar3"></i></span>
-              <input type="text" class="form-control border-start-0 ps-0" value="25 Jul, 2026">
-            </div>
-            <div class="text-muted mt-1" style="font-size: 0.65rem;">15 days from now</div>
-          </div>
-          <div class="col-md-6 mt-3">
-            <label class="form-label fw-bold text-dark small mb-1">Phase Budget (₹) <span class="text-danger">*</span></label>
-            <div class="input-group">
-              <span class="input-group-text bg-white text-muted">₹</span>
-              <input type="text" class="form-control border-start-0 ps-0" value="15,000">
-            </div>
-            <div class="text-muted mt-1" style="font-size: 0.65rem;">Set budget for this phase</div>
-          </div>
         </div>
-      </div>
 
-      <!-- 2. Deliverables -->
-      <div class="mb-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-          <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; font-size: 0.75rem;">2</div>
-          <h2 class="fs-6 fw-bold mb-0 text-dark">Deliverables</h2>
-        </div>
-        <p class="text-muted small mb-3">List all expected deliverables for this phase</p>
-        
-        <div class="d-flex flex-column gap-2 mb-3">
-          <div class="input-group">
-            <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-grip-vertical"></i></span>
-            <span class="input-group-text bg-white border-start-0 border-end-0 px-2"><i class="bi bi-check-square-fill text-primary"></i></span>
-            <input type="text" class="form-control border-start-0 border-end-0 ps-0" value="Responsive dashboard layout">
-            <span class="input-group-text bg-white text-muted"><i class="bi bi-trash"></i></span>
-          </div>
-          <div class="input-group">
-            <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-grip-vertical"></i></span>
-            <span class="input-group-text bg-white border-start-0 border-end-0 px-2"><i class="bi bi-check-square-fill text-primary"></i></span>
-            <input type="text" class="form-control border-start-0 border-end-0 ps-0" value="Login and authentication flow">
-            <span class="input-group-text bg-white text-muted"><i class="bi bi-trash"></i></span>
-          </div>
-          <div class="input-group">
-            <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-grip-vertical"></i></span>
-            <span class="input-group-text bg-white border-start-0 border-end-0 px-2"><i class="bi bi-check-square-fill text-primary"></i></span>
-            <input type="text" class="form-control border-start-0 border-end-0 ps-0" value="API integration with backend">
-            <span class="input-group-text bg-white text-muted"><i class="bi bi-trash"></i></span>
-          </div>
-          <div class="input-group">
-            <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-grip-vertical"></i></span>
-            <span class="input-group-text bg-white border-start-0 border-end-0 px-2"><i class="bi bi-check-square-fill text-primary"></i></span>
-            <input type="text" class="form-control border-start-0 border-end-0 ps-0" value="Dark mode support">
-            <span class="input-group-text bg-white text-muted"><i class="bi bi-trash"></i></span>
-          </div>
-          <div class="input-group">
-            <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-grip-vertical"></i></span>
-            <span class="input-group-text bg-white border-start-0 border-end-0 px-2"><i class="bi bi-check-square-fill text-primary"></i></span>
-            <input type="text" class="form-control border-start-0 border-end-0 ps-0" value="Unit testing for components">
-            <span class="input-group-text bg-white text-muted"><i class="bi bi-trash"></i></span>
-          </div>
-        </div>
-        <button class="btn btn-outline-primary btn-sm bg-white fw-bold w-100 py-2 border-dashed">+ Add Deliverable</button>
-      </div>
-
-      <!-- 4. Acceptance Criteria -->
-      <div class="mb-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-          <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 24px; height: 24px; font-size: 0.75rem;">4</div>
-          <h2 class="fs-6 fw-bold mb-0 text-dark">Acceptance Criteria</h2>
-        </div>
-        <p class="text-muted small mb-3">Define completion criteria for this phase</p>
-        
-        <div class="d-flex flex-column gap-2 mb-3">
-          <div class="input-group">
-            <span class="input-group-text bg-white text-muted border-end-0 px-2"><i class="bi bi-check-square-fill text-primary"></i></span>
-            <input type="text" class="form-control border-start-0 border-end-0 ps-0" value="Matches the Figma design exactly">
-            <span class="input-group-text bg-white text-muted"><i class="bi bi-trash"></i></span>
-          </div>
-          <div class="input-group">
-            <span class="input-group-text bg-white text-muted border-end-0 px-2"><i class="bi bi-check-square-fill text-primary"></i></span>
-            <input type="text" class="form-control border-start-0 border-end-0 ps-0" value="Fully responsive on mobile and tablet">
-            <span class="input-group-text bg-white text-muted"><i class="bi bi-trash"></i></span>
-          </div>
-          <div class="input-group">
-            <span class="input-group-text bg-white text-muted border-end-0 px-2"><i class="bi bi-check-square-fill text-primary"></i></span>
-            <input type="text" class="form-control border-start-0 border-end-0 ps-0" value="All APIs integrated and working">
-            <span class="input-group-text bg-white text-muted"><i class="bi bi-trash"></i></span>
-          </div>
-          <div class="input-group">
-            <span class="input-group-text bg-white text-muted border-end-0 px-2"><i class="bi bi-check-square-fill text-primary"></i></span>
-            <input type="text" class="form-control border-start-0 border-end-0 ps-0" value="No console errors or warnings">
-            <span class="input-group-text bg-white text-muted"><i class="bi bi-trash"></i></span>
-          </div>
-          <div class="input-group">
-            <span class="input-group-text bg-white text-muted border-end-0 px-2"><i class="bi bi-check-square-fill text-primary"></i></span>
-            <input type="text" class="form-control border-start-0 border-end-0 ps-0" value="Cross browser compatibility (Chrome, Firefox, Edge)">
-            <span class="input-group-text bg-white text-muted"><i class="bi bi-trash"></i></span>
-          </div>
-        </div>
-        <button class="btn btn-outline-primary btn-sm bg-white fw-bold w-100 py-2 border-dashed">+ Add Criteria</button>
-      </div>
-
-    </div>
-
-    <!-- Middle/Right Column -->
-    <div class="col-lg-4">
-      
-      <!-- Budget Summary -->
-      <div class="glass-card rounded-3 mb-4 p-3 bg-white">
-        <h3 class="fs-6 fw-bold mb-3 d-flex align-items-center gap-2"><i class="bi bi-wallet2 text-primary"></i> Budget Summary</h3>
-        <ul class="list-group list-group-flush small">
-          <li class="list-group-item d-flex justify-content-between px-0 py-2 border-0">
-            <span class="text-muted">Total Contract Budget</span>
-            <span class="fw-bold" style="color: #a855f7;">₹80,000</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between px-0 py-2 border-0">
-            <span class="text-muted">Already Allocated</span>
-            <span class="fw-bold text-primary">₹30,000</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between px-0 py-2 border-0">
-            <span class="text-muted">This Phase Budget</span>
-            <span class="fw-bold text-warning">₹15,000</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between px-0 py-2 border-0 mt-2 border-top">
-            <span class="text-dark fw-bold">Remaining After Creation</span>
-            <span class="fw-bold text-success">₹35,000</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Phase Preview -->
-      <div class="glass-card rounded-3 mb-4 p-3 bg-white">
-        <h3 class="fs-6 fw-bold mb-3 d-flex align-items-center gap-2"><i class="bi bi-eye text-primary"></i> Phase Preview</h3>
-        <p class="text-muted small mb-1" style="font-size: 0.7rem;">Phase Name</p>
-        <p class="fw-bold text-dark small mb-3">Frontend Development - Dashboard</p>
-        
-        <p class="text-muted small mb-1" style="font-size: 0.7rem;">Deadline</p>
-        <p class="fw-semibold text-dark small mb-3"><i class="bi bi-calendar3 me-1"></i> 25 Jul, 2026</p>
-        
-        <p class="text-muted small mb-1" style="font-size: 0.7rem;">Budget</p>
-        <p class="fw-bold text-dark mb-3">₹15,000</p>
-        
-        <p class="text-muted small mb-2" style="font-size: 0.7rem;">Deliverables (5)</p>
-        <ul class="list-unstyled small text-dark mb-3" style="font-size: 0.75rem; line-height: 1.8;">
-          <li><i class="bi bi-check-circle-fill text-success me-1"></i> Responsive dashboard layout</li>
-          <li><i class="bi bi-check-circle-fill text-success me-1"></i> Login and authentication flow</li>
-          <li><i class="bi bi-check-circle-fill text-success me-1"></i> API integration with backend</li>
-          <li><i class="bi bi-check-circle-fill text-success me-1"></i> Dark mode support</li>
-          <li class="text-muted ps-3">+1 more</li>
-        </ul>
-
-        <div class="p-2 border rounded-3 bg-light">
-          <p class="text-muted small mb-1" style="font-size: 0.7rem;">This phase will be created for:</p>
-          <div class="d-flex align-items-center gap-2">
-            <div class="rounded-circle bg-dark" style="width: 24px; height: 24px;"></div>
+        <!-- 2. Deliverables -->
+        <div class="mb-4">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
             <div>
-              <p class="mb-0 fw-bold small" style="font-size: 0.75rem;">Siva Prasad Kurra</p>
-              <p class="mb-0 text-muted" style="font-size: 0.65rem;">Frontend Developer</p>
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <div
+                  class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+                  style="width: 24px; height: 24px; font-size: 0.75rem;">2</div>
+                <h2 class="fs-6 fw-bold mb-0 text-dark">Deliverables</h2>
+              </div>
+              <p class="text-muted small mb-0">List all expected deliverables for this phase</p>
             </div>
+            <app-button label="+ Add Deliverable" variant="outline-primary" size="sm" class="flex-shrink-0" (clicked)="addDeliverable()"></app-button>
+          </div>
+
+          <div class="d-flex flex-column gap-3 mb-4">
+            @for (deliverable of deliverables.controls; track $index) {
+            <div class="d-flex align-items-start gap-2 gap-sm-3">
+              <div class="flex-grow-1 min-w-0">
+                <app-input-field [showIcon]="true" icon="bi bi-check2-square text-primary" type="text"
+                  placeholder="Enter deliverable" [value]="deliverable.value"
+                  (valueChange)="deliverable.setValue($event)"
+                  (blurred)="deliverable.markAsTouched()"
+                  [validation]="deliverable.invalid && deliverable.touched ? 'error' : 'none'"
+                  errorMessage="Deliverable item cannot be empty"
+                  [label]="''"></app-input-field>
+              </div>
+              @if (deliverables.length > 1) {
+              <app-button variant="outline-danger" size="md" class="flex-shrink-0" (clicked)="removeDeliverable($index)"><i
+                  class="bi bi-trash"></i></app-button>
+              }
+            </div>
+            }
           </div>
         </div>
+
+        <!-- 3. Acceptance Criteria -->
+        <div class="mb-5">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <div
+                  class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+                  style="width: 24px; height: 24px; font-size: 0.75rem;">3</div>
+                <h2 class="fs-6 fw-bold mb-0 text-dark">Acceptance Criteria</h2>
+              </div>
+              <p class="text-muted small mb-0">Define completion criteria for this phase</p>
+            </div>
+            <app-button label="+ Add Criteria" variant="outline-primary" size="sm" class="flex-shrink-0" (clicked)="addCriteria()"></app-button>
+          </div>
+
+          <div class="d-flex flex-column gap-3 mb-4">
+            @for (criteria of acceptanceCriteria.controls; track $index) {
+            <div class="d-flex align-items-start gap-2 gap-sm-3">
+              <div class="flex-grow-1 min-w-0">
+                <app-input-field [showIcon]="true" icon="bi bi-flag text-primary" type="text"
+                  placeholder="Enter criteria" [value]="criteria.value" (valueChange)="criteria.setValue($event)"
+                  (blurred)="criteria.markAsTouched()"
+                  [validation]="criteria.invalid && criteria.touched ? 'error' : 'none'"
+                  errorMessage="Criteria item cannot be empty"
+                  [label]="''"></app-input-field>
+              </div>
+              @if (acceptanceCriteria.length > 1) {
+              <app-button variant="outline-danger" size="md" class="flex-shrink-0" (clicked)="removeCriteria($index)"><i
+                  class="bi bi-trash"></i></app-button>
+              }
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- 5. Reference Attachments -->
+        <div class="mb-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+              style="width: 24px; height: 24px; font-size: 0.75rem;">4</div>
+            <h2 class="fs-6 fw-bold mb-0 text-dark">Reference Attachments</h2>
+          </div>
+          <p class="text-muted small mb-3">Upload any reference documents, brand guidelines, or sketches.</p>
+
+          <!-- Upload UI -->
+          <app-file-upload mode="file" title="Drag & drop your reference file here" browseText="or click to browse"
+            acceptedFormats="PDF, DOCX, PNG, JPG" maxSize="5MB" [uploadBucket]="UploadBucket.ClientData"
+            [uploadSection]="UploadSection.ContractFiles" (fileSelected)="onFileSelected($event)"
+            (uploadComplete)="onUploadSuccess($event)" (uploadError)="onUploadError($event)">
+          </app-file-upload>
+
+          <!-- File List -->
+          @if (clientAttachments.controls.length > 0) {
+          <div class="mt-4">
+            <app-file-preview mode="document" [files]="clientAttachments.value"
+              (removeClicked)="removeAttachment($event)">
+            </app-file-preview>
+          </div>
+          }
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-4 pt-3 border-top">
+      <div class="action-btn-wrapper">
+        <app-button label="Cancel" variant="secondary" appearance="ghost" (clicked)="resetForm()">
+        </app-button>
       </div>
 
-      <!-- AI Assistant -->
-      <div class="glass-card rounded-3 p-3 bg-white border border-primary border-opacity-25">
-        <h3 class="fs-6 fw-bold mb-2 d-flex align-items-center gap-2" style="color: #a855f7;"><i class="bi bi-stars"></i> AI Assistant</h3>
-        <p class="text-muted mb-3" style="font-size: 0.7rem;">Based on your contract and similar projects, here are my suggestions</p>
-        
-        <ul class="list-group list-group-flush small mb-3" style="font-size: 0.75rem;">
-          <li class="list-group-item d-flex justify-content-between px-0 py-1 border-0">
-            <span class="text-muted"><i class="bi bi-clock me-1 text-success"></i> Estimated Duration</span>
-            <span class="fw-bold">12 - 15 days</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between px-0 py-1 border-0">
-            <span class="text-muted"><i class="bi bi-wallet2 me-1 text-success"></i> Recommended Budget</span>
-            <span class="fw-bold">₹12,000 - ₹18,000</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between px-0 py-1 border-0">
-            <span class="text-muted"><i class="bi bi-bar-chart me-1 text-success"></i> Complexity Level</span>
-            <span class="fw-bold">Medium</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between px-0 py-1 border-0">
-            <span class="text-muted"><i class="bi bi-shield me-1 text-warning"></i> Potential Risk</span>
-            <span class="fw-bold">Low</span>
-          </li>
-        </ul>
-        
-        <button class="btn btn-outline-primary btn-sm w-100 fw-bold border-opacity-50" style="color: #a855f7; border-color: #a855f7;">
-          <i class="bi bi-magic"></i> Apply Suggestions
-        </button>
+      <div class="action-btn-wrapper ms-auto">
+        <app-button [label]="isEditMode ? 'Save Changes' : 'Create Phase'" variant="primary" (clicked)="createPhase()">
+        </app-button>
       </div>
-
     </div>
   </div>
-
-  <!-- Footer Actions -->
-  <div class="d-flex justify-content-between border-top pt-3 mt-5">
-    <button class="btn btn-link text-dark text-decoration-none px-0"><i class="bi bi-x me-1"></i> Cancel</button>
-    <div class="d-flex gap-2">
-      <button class="btn btn-outline-secondary bg-white text-dark px-4"><i class="bi bi-eye me-1"></i> Preview Phase</button>
-      <button class="btn btn-primary rounded-pill fw-semibold shadow-sm px-4"><i class="bi bi-plus-circle me-1"></i> Create Phase</button>
-    </div>
-  </div>
-</div>
 
 </div>

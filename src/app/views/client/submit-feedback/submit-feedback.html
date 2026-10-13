@@ -1,0 +1,134 @@
+<div class="dashboard-container position-relative p-4">
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+  </div>
+
+  <div class="position-relative z-1 mx-auto" style="max-width: 900px;">
+    <!-- Header -->
+    <div class="mb-4">
+      <a routerLink="/manage-contract"
+        class="text-muted fw-semibold text-decoration-none d-inline-flex align-items-center gap-2 mb-3 hover-text-primary"
+        style="font-size: 0.85rem;">
+        <i class="bi bi-arrow-left"></i> Back to Manage Contracts
+      </a>
+      <div>
+        <h1 class="fw-bold fs-4 mb-1 text-dark">Submit Feedback</h1>
+        <p class="text-muted small mb-0">Evaluate the freelancer's performance for this completed contract.</p>
+      </div>
+    </div>
+
+    @if (contractDetails) {
+    <div class="glass-card rounded-4 bg-white p-4 mb-4">
+      <div class="d-flex flex-column mb-3 border-bottom pb-3">
+        <span class="text-muted small">Contract</span>
+        <span class="fw-bold fs-5">{{ contractDetails.contractTitle }}</span>
+      </div>
+
+      <form [formGroup]="feedbackForm" (ngSubmit)="submit()">
+
+        <h4 class="fs-6 fw-bold mb-4 text-dark border-bottom pb-2">Category Ratings</h4>
+
+        <div class="row g-4 mb-5">
+          <!-- Quality of Work -->
+          <div class="col-md-6">
+            <app-input-field
+              label="Resolved Fully (Quality)"
+              type="textarea"
+              formControlName="qualityOfWork"
+              placeholder="Provide feedback on the quality of work...">
+            </app-input-field>
+          </div>
+
+          <!-- Requirements & Deliverables -->
+          <div class="col-md-6">
+            <app-input-field
+              label="Work Commitment"
+              type="textarea"
+              formControlName="requirementsAndDeliverables"
+              placeholder="Provide feedback on work commitment...">
+            </app-input-field>
+          </div>
+
+          <!-- Communication -->
+          <div class="col-md-6">
+            <app-input-field
+              label="Communication"
+              type="textarea"
+              formControlName="communication"
+              placeholder="Provide feedback on communication...">
+            </app-input-field>
+          </div>
+
+          <!-- Timeliness -->
+          <div class="col-md-6">
+            <app-input-field
+              label="On-Time Delivery"
+              type="textarea"
+              formControlName="timeliness"
+              placeholder="Provide feedback on punctuality and delivery...">
+            </app-input-field>
+          </div>
+
+          <!-- Behavior & Professionalism -->
+          <div class="col-md-6">
+            <app-input-field
+              label="Professional Behavior"
+              type="textarea"
+              formControlName="behaviorAndProfessionalism"
+              placeholder="Provide feedback on professional behavior...">
+            </app-input-field>
+          </div>
+        </div>
+
+        <h4 class="fs-6 fw-bold mb-4 text-dark border-bottom pb-2">Detailed Comments</h4>
+
+        <div class="mb-4">
+          <app-input-field
+            label="Client Comments (Required)"
+            type="textarea"
+            formControlName="clientComments"
+            placeholder="Describe your experience working with this freelancer...">
+          </app-input-field>
+          @if (feedbackForm.get('clientComments')?.touched && feedbackForm.get('clientComments')?.invalid) {
+          <div class="text-danger small mt-1">Comments are required.</div>
+          }
+        </div>
+
+        <div class="row g-4 mb-4">
+          <div class="col-md-6">
+            <app-input-field
+              label="What went well (Pros)"
+              type="textarea"
+              formControlName="pros"
+              placeholder="Comma separated, e.g., Fast delivery, Good communication">
+            </app-input-field>
+            <div class="form-text small mt-1">Enter positive points separated by commas.</div>
+          </div>
+          <div class="col-md-6">
+            <app-input-field
+              label="What could be improved (Cons)"
+              type="textarea"
+              formControlName="cons"
+              placeholder="Comma separated, e.g., Missed some edge cases">
+            </app-input-field>
+            <div class="form-text small mt-1">Enter areas to improve separated by commas.</div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-column-reverse flex-sm-row justify-content-sm-end gap-3 pt-4 border-top mt-4">
+          <app-button class="w-100 w-sm-auto" label="Cancel" variant="outline-secondary" routerLink="/manage-contract"></app-button>
+          <app-button class="w-100 w-sm-auto" label="Submit Feedback" variant="primary" type="submit"
+            [disabled]="feedbackForm.invalid || isSubmitting"></app-button>
+        </div>
+      </form>
+    </div>
+    } @else {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    }
+  </div>
+</div>

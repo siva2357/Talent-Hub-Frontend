@@ -1,29 +1,570 @@
+/* =========================================================
+   BASE
+========================================================= */
+
+:host {
+  display: block;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.why-section {
+  width: 100%;
+}
+
+.why-container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+
+  padding-left: clamp(1rem, 4vw, 4rem);
+  padding-right: clamp(1rem, 4vw, 4rem);
+}
+
+
+/* =========================================================
+   GRADIENT TEXT
+========================================================= */
+
 .text-gradient {
   background: linear-gradient(90deg, #0d6efd, #d63384);
+
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+
   background-clip: text;
   color: transparent;
 }
 
-.custom-icon-box {
-  border: 2px solid rgba(108, 117, 125, 0.3) !important;
-  background-color: rgba(108, 117, 125, 0.05);
-  color: #6c757d;
+
+/* =========================================================
+   SECTION SPACING
+========================================================= */
+
+.hero-section {
+  padding-top: clamp(3rem, 7vw, 6rem);
+  padding-bottom: clamp(3rem, 7vw, 6rem);
 }
 
-.hero-img-curved {
-  border-radius: 150px 0 0 150px;
-  height: 400px;
+.features-section {
+  padding-top: clamp(2.5rem, 6vw, 5rem);
+  padding-bottom: clamp(3rem, 7vw, 6rem);
+}
+
+.benefits-section {
+  padding-top: 1rem;
+  padding-bottom: clamp(3rem, 7vw, 6rem);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero-content {
   width: 100%;
+  max-width: 550px;
+}
+
+.hero-title {
+  margin: 0 0 1.5rem;
+
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+
+  color: #212529;
+}
+
+.hero-description {
+  max-width: 500px;
+  margin: 0;
+
+  color: #6c757d;
+
+  font-size: clamp(0.95rem, 1.5vw, 1rem);
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   HERO IMAGE
+========================================================= */
+
+.hero-image-wrapper {
+  width: 100%;
+  overflow: hidden;
+
+  border-radius: 150px 0 0 150px;
+
+  background-color: #f1f3f5;
+
+  box-shadow:
+    0 0.5rem 1rem rgba(0, 0, 0, 0.12);
+}
+
+.hero-image {
+  display: block;
+
+  width: 100%;
+  height: clamp(300px, 40vw, 500px);
+
   object-fit: cover;
 }
 
-.hover-shadow {
-  transition: all 0.3s ease;
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.section-header {
+  max-width: 850px;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
 }
 
-.hover-shadow:hover {
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+.section-title {
+  margin: 0 0 1rem;
+
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  line-height: 1.25;
+  font-weight: 700;
+
+  color: #212529;
+}
+
+.section-description {
+  max-width: 700px;
+  margin: 0;
+
+  color: #6c757d;
+
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   FEATURE CARD
+========================================================= */
+
+.feature-card {
+  height: 100%;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #fff;
+
+  border: 1px solid rgba(108, 117, 125, 0.2);
+  border-radius: 0.75rem;
+
+  box-shadow:
+    0 0.125rem 0.4rem rgba(0, 0, 0, 0.04);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.feature-card:hover {
   transform: translateY(-5px);
+
+  border-color: rgba(13, 110, 253, 0.2);
+
+  box-shadow:
+    0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   FEATURE IMAGE
+========================================================= */
+
+.feature-image {
+  width: 100%;
+  height: 180px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgba(108, 117, 125, 0.1);
+
+  border-bottom: 1px solid rgba(108, 117, 125, 0.15);
+
+  color: #6c757d;
+}
+
+.feature-image i {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+
+/* =========================================================
+   FEATURE BODY
+========================================================= */
+
+.feature-body {
+  flex: 1;
+
+  padding: 1.5rem;
+}
+
+.feature-title {
+  margin: 0 0 0.65rem;
+
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: 700;
+
+  color: #212529;
+}
+
+.feature-description {
+  margin: 0;
+
+  color: #6c757d;
+
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   BOTTOM BENEFITS
+========================================================= */
+
+.benefits-wrapper {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  background-color: #fff;
+
+  border: 1px solid rgba(108, 117, 125, 0.2);
+  border-radius: 2rem;
+
+  box-shadow:
+    0 0.25rem 1rem rgba(0, 0, 0, 0.06);
+
+  overflow: hidden;
+}
+
+.benefit-item {
+  min-width: 0;
+
+  padding: 1.5rem;
+
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  border-right: 1px solid rgba(108, 117, 125, 0.15);
+}
+
+.benefit-item-last {
+  border-right: none;
+}
+
+
+/* =========================================================
+   BENEFIT ICON
+========================================================= */
+
+.benefit-icon {
+  width: 65px;
+  height: 65px;
+
+  flex: 0 0 65px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #b6d4fe;
+  border-radius: 50%;
+
+  background-color: rgba(108, 117, 125, 0.12);
+
+  color: #6c757d;
+
+  font-size: 1.5rem;
+}
+
+.benefit-content {
+  min-width: 0;
+}
+
+.benefit-title {
+  margin: 0 0 0.35rem;
+
+  color: #212529;
+
+  font-size: 0.9rem;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.benefit-description {
+  margin: 0;
+
+  color: #6c757d;
+
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   LARGE TABLET / SMALL DESKTOP (<= 1199.98px)
+========================================================= */
+
+@media (max-width: 1199.98px) {
+
+  .hero-title {
+    font-size: clamp(2rem, 3.5vw, 2.85rem);
+  }
+
+  .hero-image-wrapper {
+    border-radius: 100px 0 0 100px;
+  }
+
+  .benefits-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .benefit-item:nth-child(2) {
+    border-right: none;
+  }
+
+  .benefit-item:nth-child(-n + 2) {
+    border-bottom: 1px solid rgba(108, 117, 125, 0.15);
+  }
+}
+
+
+/* =========================================================
+   TABLET (<= 991.98px)
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+  .hero-section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .hero-content {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .hero-title {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-description {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-image-wrapper {
+    margin: 0 auto;
+    max-width: 550px;
+    border-radius: 2rem;
+  }
+
+  .hero-image {
+    height: clamp(280px, 45vw, 400px);
+  }
+}
+
+
+/* =========================================================
+   MOBILE (<= 767.98px)
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .why-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .hero-section,
+  .features-section {
+    padding-top: 2.25rem;
+    padding-bottom: 2.25rem;
+  }
+
+  .benefits-section {
+    padding-top: 0;
+    padding-bottom: 2.25rem;
+  }
+
+  .hero-title {
+    margin-bottom: 0.85rem;
+    font-size: clamp(1.75rem, 7.5vw, 2.3rem);
+    line-height: 1.2;
+  }
+
+  .hero-description {
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .hero-image-wrapper {
+    border-radius: 1.25rem;
+    max-width: 100%;
+  }
+
+  .hero-image {
+    height: clamp(220px, 50vw, 320px);
+  }
+
+  .section-header {
+    margin-bottom: 2rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 6vw, 1.9rem);
+    line-height: 1.25;
+  }
+
+  .section-description {
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .feature-image {
+    height: 170px;
+  }
+
+  .feature-body {
+    padding: 1.25rem;
+  }
+
+  .benefits-wrapper {
+    grid-template-columns: 1fr;
+    border-radius: 1.25rem;
+  }
+
+  .benefit-item {
+    padding: 1.25rem;
+    border-right: none;
+    border-bottom: 1px solid rgba(108, 117, 125, 0.15);
+  }
+
+  .benefit-item:nth-child(2) {
+    border-right: none;
+  }
+
+  .benefit-item:last-child {
+    border-bottom: none;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE (<= 575.98px)
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .why-container {
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+  }
+
+  .hero-section,
+  .features-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .hero-title {
+    font-size: 1.75rem;
+  }
+
+  .hero-image-wrapper {
+    border-radius: 1rem;
+  }
+
+  .hero-image {
+    height: 230px;
+  }
+
+  .feature-image {
+    height: 155px;
+  }
+
+  .feature-image i {
+    font-size: 2.5rem;
+  }
+
+  .feature-body {
+    padding: 1.15rem;
+  }
+
+  .benefit-item {
+    align-items: flex-start;
+    padding: 1.15rem;
+  }
+
+  .benefit-icon {
+    width: 50px;
+    height: 50px;
+    flex-basis: 50px;
+    font-size: 1.2rem;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES (<= 375px)
+========================================================= */
+
+@media (max-width: 375px) {
+
+  .why-container {
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+  }
+
+  .hero-title {
+    font-size: 1.55rem;
+  }
+
+  .hero-description {
+    font-size: 0.85rem;
+  }
+
+  .hero-image {
+    height: 200px;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+  }
+
+  .feature-image {
+    height: 140px;
+  }
+
+  .benefit-title {
+    font-size: 0.85rem;
+  }
+
+  .benefit-description {
+    font-size: 0.72rem;
+  }
 }

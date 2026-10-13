@@ -1,38 +1,33 @@
-<div class="border border-dark border-1 rounded-3"
-    style="padding: 40px; font-family: 'Inter', sans-serif; background: #fff; max-width: 500px;">
-    <h1 style="font-size: 14px; font-weight: 700; color: #2563eb; margin-bottom: 8px; text-transform: uppercase;">1.
-        Profile Avatar</h1>
-    <p style="color: #6b7280; font-size: 12px; margin-bottom: 32px;">Displays user avatar with name and role. On click,
-        shows dropdown menu with user actions.</p>
+<div class="dropdown">
+    <button class="btn p-0 border-0 d-flex align-items-center gap-2" type="button" id="userProfileDropdown"
+        data-bs-toggle="dropdown" aria-expanded="false">
+        <img [src]="profileImage || 'https://i.pravatar.cc/150?img=5'" alt="Avatar"
+            class="rounded-circle object-fit-cover" width="36" height="36">
+        <div class="d-none d-md-flex flex-column align-items-start ms-1">
+            <span class="fw-semibold text-dark lh-1" style="font-size: 14px;">{{ fullName }}</span>
+            <span class="text-muted lh-1 mt-1" style="font-size: 12px;">{{ role }}</span>
+        </div>
+        <i class="bi bi-chevron-down text-secondary" style="font-size: 12px;"></i>
+    </button>
 
-    <!-- Dropdown -->
-    <div class="profile-dropdown shadow-sm">
-        <div class="profile-header">
-            <img src="https://i.pravatar.cc/150?img=5" alt="Avatar">
+    <div class="dropdown-menu dropdown-menu-end p-0 border-0 mt-2 shadow-sm profile-dropdown"
+        aria-labelledby="userProfileDropdown">
+        <div class="profile-header border-bottom">
+            <img [src]="profileImage || 'https://i.pravatar.cc/150?img=5'" alt="Avatar"
+                class="rounded-circle object-fit-cover" width="40" height="40">
             <div>
-                <div class="profile-name">Kate Dudley</div>
-                <div class="profile-email">kate.dudley@email.com</div>
+                <div class="profile-name fw-semibold" style="font-size: 14px;">{{ fullName || 'User Name' }}</div>
+                <div class="profile-email text-muted" style="font-size: 12px;">{{ email || 'user@email.com' }}</div>
             </div>
         </div>
 
         <div class="dropdown-list">
-            <a href="#" class="dropdown-item"><i class="bi bi-person"></i> Profile</a>
-            <a href="#" class="dropdown-item"><i class="bi bi-chat-left-text"></i> Messages</a>
-            <a href="#" class="dropdown-item"><i class="bi bi-grid"></i> Dashboard</a>
-            <a href="#" class="dropdown-item"><i class="bi bi-globe"></i> Help</a>
-
-            <div class="dropdown-divider"></div>
-
-            <a href="#" class="dropdown-item">
-                <i class="bi bi-wallet2"></i> Balance: <span
-                    style="font-weight: 700; margin-left: 4px; color: #111827;">$6861.02</span>
-            </a>
-            <a href="#" class="dropdown-item" style="display: flex; justify-content: space-between;">
-                <span><i class="bi bi-gear"></i> Settings</span>
-                <span class="badge bg-success-subtle text-success" style="font-size: 10px;">New</span>
-            </a>
-            <a href="#" class="dropdown-item"><i class="bi bi-lock"></i> Lock Screen</a>
-            <a href="#" class="dropdown-item"><i class="bi bi-box-arrow-right"></i> Logout</a>
+            <a routerLink="/profile" class="dropdown-item"><i class="bi bi-person"></i> My Profile</a>
+            <a routerLink="/account-settings" class="dropdown-item"><i class="bi bi-gear"></i> Account Settings</a>
+            <a routerLink="/contact-support" class="dropdown-item"><i class="bi bi-headset"></i> Contact Support</a>
+            <div class="dropdown-divider border-top my-1"></div>
+            <a routerLink="/login" (click)="logout()" class="dropdown-item text-danger"><i
+                    class="bi bi-box-arrow-right text-danger"></i> Logout</a>
         </div>
     </div>
 </div>

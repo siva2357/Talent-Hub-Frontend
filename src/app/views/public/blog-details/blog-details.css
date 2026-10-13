@@ -1,3 +1,9 @@
+:host {
+  display: block;
+  width: 100%;
+  overflow-x: hidden;
+}
+
 .text-gradient {
   background: linear-gradient(90deg, #0d6efd, #d63384);
   -webkit-background-clip: text;
@@ -12,11 +18,82 @@
   color: #6c757d;
 }
 
-.hero-img-curved {
-  border-radius: 150px 0 0 150px;
-  height: 400px;
-  width: 100%;
+/* =========================================================
+   HERO
+========================================================= */
+
+.blog-details-hero {
+  min-height: 540px;
+  max-height: 80vh;
+  padding: clamp(3rem, 8vw, 6rem) 1rem;
+}
+
+.blog-details-hero-bg {
   object-fit: cover;
+  z-index: 0;
+}
+
+.hero-overlay {
+  z-index: 1;
+}
+
+.blog-details-hero-content {
+  max-width: 800px;
+}
+
+.blog-details-hero-title {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.15;
+}
+
+.blog-details-hero-lead {
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   BODY CONTENT
+========================================================= */
+
+.blog-details-body {
+  max-width: 768px;
+}
+
+.section-text {
+  font-size: clamp(0.9rem, 1.2vw, 0.98rem);
+}
+
+/* =========================================================
+   SHOWCASE GRID
+========================================================= */
+
+.showcase-box {
+  min-height: 220px;
+  aspect-ratio: 16 / 10;
+}
+
+.showcase-box-large {
+  min-height: 460px;
+  aspect-ratio: auto;
+}
+
+.showcase-icon-large {
+  font-size: clamp(3.5rem, 6vw, 5rem);
+}
+
+.showcase-icon-small {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+/* =========================================================
+   PROJECT CARDS
+========================================================= */
+
+.project-card-media {
+  aspect-ratio: 16 / 9;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
 }
 
 .hover-shadow {
@@ -24,6 +101,64 @@
 }
 
 .hover-shadow:hover {
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-4px);
+}
+
+/* =========================================================
+   TABLET (<= 991.98px)
+========================================================= */
+
+@media (max-width: 991.98px) {
+  .blog-details-hero {
+    min-height: 440px;
+    padding: 3.5rem 1rem;
+  }
+
+  .showcase-box-large {
+    min-height: 320px;
+  }
+}
+
+/* =========================================================
+   MOBILE (<= 767.98px)
+========================================================= */
+
+@media (max-width: 767.98px) {
+  .blog-details-hero {
+    min-height: 360px;
+    padding: 2.5rem 0.75rem;
+  }
+
+  .blog-details-hero-title {
+    font-size: 1.85rem;
+  }
+
+  .blog-details-hero-lead {
+    font-size: 0.9rem;
+  }
+
+  .showcase-box,
+  .showcase-box-large {
+    min-height: 200px;
+  }
+}
+
+/* =========================================================
+   VERY SMALL DEVICES (<= 375px)
+========================================================= */
+
+@media (max-width: 375px) {
+  .blog-details-hero-title {
+    font-size: 1.6rem;
+  }
+
+  .blog-details-hero-lead {
+    font-size: 0.85rem;
+  }
+
+  .showcase-box,
+  .showcase-box-large {
+    min-height: 170px;
+  }
 }

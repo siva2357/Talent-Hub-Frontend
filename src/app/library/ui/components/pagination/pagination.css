@@ -1,16 +1,18 @@
-.pagination-section-title { 
-    font-size: 14px; 
-    font-weight: 700; 
-    color: #2563eb; 
-    margin-bottom: 24px; 
-    text-transform: uppercase; 
+.pagination-section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #2563eb;
+    margin-bottom: 24px;
+    text-transform: uppercase;
 }
 
 /* Bootstrap Overrides for Pagination */
 .pagination {
-    gap: 8px; /* Spacing between items */
+    gap: 8px;
+    /* Spacing between items */
     margin-bottom: 0;
 }
+
 .page-item .page-link {
     border-radius: 4px !important;
     border: 1px solid #e5e7eb;
@@ -25,19 +27,23 @@
     padding: 0;
     transition: all 0.2s ease-in-out;
 }
+
 .page-item .page-link i {
     font-size: 12px;
 }
+
 .page-item .page-link:hover {
     background-color: #eff6ff;
     color: #2563eb;
     border-color: #bfdbfe;
 }
+
 .page-item.active .page-link {
     background-color: #2563eb;
     border-color: #2563eb;
     color: #ffffff;
 }
+
 .page-item.disabled .page-link {
     background-color: #ffffff;
     border-color: #f3f4f6;
@@ -54,6 +60,7 @@
     padding: 0 4px;
     cursor: default;
 }
+
 .page-item.ellipsis .page-link:hover {
     background: transparent;
     color: #9ca3af;
@@ -65,7 +72,10 @@
     height: 44px;
     font-size: 16px;
 }
-.pagination-lg .page-item .page-link i { font-size: 14px; }
+
+.pagination-lg .page-item .page-link i {
+    font-size: 14px;
+}
 
 /* Small Size */
 .pagination-sm .page-item .page-link {
@@ -73,12 +83,16 @@
     height: 28px;
     font-size: 12px;
 }
-.pagination-sm .page-item .page-link i { font-size: 10px; }
+
+.pagination-sm .page-item .page-link i {
+    font-size: 10px;
+}
 
 /* Text Pagination (Variant 6) */
 .pagination-text {
     gap: 16px;
 }
+
 .pagination-text .page-item .page-link {
     border: none;
     background: transparent;
@@ -87,16 +101,19 @@
     padding: 4px 8px;
     font-weight: 600;
 }
+
 .pagination-text .page-item.active .page-link {
     color: #2563eb;
     background: transparent;
 }
+
 .pagination-text .page-item .page-link.text-link {
     color: #4b5563;
     font-weight: 500;
     display: flex;
     align-items: center;
 }
+
 .pagination-text .page-item .page-link.text-link:hover {
     color: #111827;
 }
@@ -105,15 +122,18 @@
 .pagination-minimal {
     gap: 8px;
 }
+
 .pagination-minimal .page-item .page-link {
     border: none;
     background: transparent;
 }
+
 .pagination-minimal .page-item.active .page-link {
     background-color: #2563eb;
     color: #ffffff;
     border-radius: 4px;
 }
+
 .pagination-minimal .page-item:not(.active) .page-link:hover {
     background-color: #f3f4f6;
     color: #111827;
@@ -126,6 +146,7 @@
     display: flex;
     align-items: center;
 }
+
 .showcase-label {
     width: 200px;
     font-size: 14px;
@@ -133,29 +154,194 @@
     color: #111827;
     flex-shrink: 0;
 }
+
 .showcase-divider {
     border: none;
     border-top: 1px solid #f3f4f6;
     margin: 24px 0;
 }
+
 .states-box {
     border: 1px solid #f3f4f6;
     border-radius: 8px;
     padding: 24px;
 }
+
 .state-item {
     margin-bottom: 24px;
 }
-.state-item:last-child { margin-bottom: 0; }
+
+.state-item:last-child {
+    margin-bottom: 0;
+}
+
 .state-label {
     font-size: 13px;
     font-weight: 600;
     color: #111827;
     margin-bottom: 12px;
 }
+
 /* Hover Demo Hack */
 .pagination.hover-demo .active-hover .page-link {
     background-color: #eff6ff;
     color: #2563eb;
     border-color: #bfdbfe;
+}
+
+
+.pagination-container {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+}
+
+.pagination-page-size {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #4b5563;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.pagination-page-size .form-select {
+    width: 72px;
+    padding-left: 8px;
+    padding-right: 20px;
+    font-size: 12px;
+}
+
+.pagination-summary {
+    font-size: 12px;
+    color: #6b7280;
+    white-space: nowrap;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.pagination-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+
+.pagination-navigation .pagination {
+    margin-bottom: 0;
+    flex-wrap: nowrap;
+    gap: 4px;
+}
+
+/* =========================================================
+   PAGINATION COMPACT ROW FOR MOBILE & RESPONSIVE BEHAVIOR
+   ========================================================= */
+
+/* Medium devices (tablets 576px to 991px): Show all in single row cleanly */
+@media (min-width: 576px) and (max-width: 991.98px) {
+    .pagination-container {
+        gap: 8px;
+    }
+
+    .pagination-page-size {
+        font-size: 12px;
+        gap: 4px;
+    }
+
+    .pagination-page-size .form-select {
+        width: 64px;
+        font-size: 11px;
+    }
+
+    .pagination-summary {
+        font-size: 11px;
+    }
+
+    .page-item .page-link {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+}
+
+/* Small devices (< 576px):
+   - Keep in a single row without wrapping
+   - Hide middle summary text ("Showing X to Y of Z entries")
+   - Show entries select count cleanly
+   - Show page buttons compactly
+*/
+@media (max-width: 575.98px) {
+    .pagination-container {
+        flex-wrap: nowrap !important;
+        justify-content: space-between;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
+    }
+
+    /* Keep entries count on the left */
+    .pagination-page-size {
+        font-size: 11px;
+        gap: 3px;
+        flex-shrink: 0;
+    }
+
+    .pagination-page-size-prefix {
+        display: none; /* Hide "Show" on small screens to save space */
+    }
+
+    .pagination-page-size .form-select {
+        width: 52px;
+        padding: 2px 14px 2px 6px;
+        font-size: 11px;
+        height: 28px;
+    }
+
+    /* Hide middle summary text on small devices */
+    .pagination-summary {
+        display: none !important;
+    }
+
+    /* Keep pagination buttons aligned right in the same row */
+    .pagination-navigation {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-shrink: 0;
+    }
+
+    .pagination {
+        flex-wrap: nowrap !important;
+        gap: 2px;
+        margin-bottom: 0;
+    }
+
+    .page-item .page-link {
+        width: 26px;
+        height: 26px;
+        font-size: 11px;
+        padding: 0;
+        border-radius: 4px !important;
+    }
+
+    .page-item .page-link i {
+        font-size: 10px;
+    }
+}
+
+/* Extra small devices (< 380px) */
+@media (max-width: 380px) {
+    .pagination-page-size-suffix {
+        display: none; /* Show only the dropdown on ultra narrow screens */
+    }
+
+    .page-item .page-link {
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+    }
 }

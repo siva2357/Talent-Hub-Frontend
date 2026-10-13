@@ -1,26 +1,234 @@
 :host {
   --bg-color: #fafbfc;
   --primary-color: #0d6efd;
+  --purple-color: #a855f7;
+}
+
+/* =========================================================
+   BASE
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+.dashboard-container {
+  font-family: 'Inter', 'Outfit', sans-serif;
+  background-color: #fcfbfe;
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.text-purple {
+  color: #6f42c1;
+}
+
+.bg-purple-soft {
+  background-color: rgba(111, 66, 193, 0.1);
+}
+
+.text-warning-dark {
+  color: #d39e00;
+}
+
+.text-teal {
+  color: #20c997;
+}
+
+.bg-teal {
+  background-color: #20c997;
+}
+
+.hover-text-primary:hover {
+  color: var(--primary-color) !important;
+}
+
+.hover-bg-light:hover {
+  background-color: #f8f9fa !important;
 }
 
 
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
 
-.text-purple { color: #6f42c1; }
-.bg-purple-soft { background-color: rgba(111, 66, 193, 0.1); }
-.text-warning-dark { color: #d39e00; }
-.text-teal { color: #20c997; }
-.bg-teal { background-color: #20c997; }
+.dashboard-container>.position-relative.z-1 {
+  width: 100%;
+  padding: 1.5rem !important;
+}
 
-.cursor-pointer { cursor: pointer; }
-.hover-text-primary:hover { color: var(--primary-color) !important; }
-.hover-bg-light:hover { background-color: #f8f9fa !important; }
+
+/* =========================================================
+   BACKGROUND DECORATIONS
+========================================================= */
+
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.top-left {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+  top: -150px;
+  left: -150px;
+}
+
+.bottom-right {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      rgba(255, 255, 255, 0) 70%);
+  bottom: -200px;
+  right: -200px;
+}
+
+.right-shape {
+  width: 400px;
+  height: 400px;
+  background: rgba(37, 99, 235, 0.05);
+  filter: blur(80px);
+  top: 30%;
+  right: -100px;
+  transform: translateY(-50%);
+}
+
+.concentric-circles {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  top: 15%;
+  left: 0;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(168, 85, 247, 0.15);
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+}
+
+.circle-2 {
+  width: 500px;
+  height: 500px;
+}
+
+.circle-3 {
+  width: 700px;
+  height: 700px;
+}
+
+
+/* =========================================================
+   GLASS CARD
+========================================================= */
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(168, 85, 247, 0.15);
+
+  box-shadow:
+    0 15px 40px -10px rgba(74, 58, 255, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.05);
+
+  border-radius: 20px !important;
+  width: 100%;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.dashboard-container h1 {
+  line-height: 1.25;
+}
+
+.dashboard-container .d-flex.justify-content-between {
+  gap: 1rem;
+}
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+.nav-tabs {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  scrollbar-width: thin;
+}
+
+.nav-tabs .nav-item {
+  flex: 0 0 auto;
+}
+
+.nav-tabs .nav-link {
+  margin-bottom: -1px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+
+/* =========================================================
+   FILTER SECTION
+========================================================= */
+
+.glass-card .card-body {
+  width: 100%;
+}
+
+.glass-card .row {
+  width: 100%;
+}
+
+.glass-card app-input-field {
+  display: block;
+  width: 100%;
+}
+
+.glass-card app-button {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   CONTRACT GRID
+========================================================= */
 
 .contract-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
+
 .contract-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important;
 }
 
 .hover-filter:hover {
@@ -29,33 +237,373 @@
   border-color: var(--primary-color) !important;
 }
 
-.nav-tabs .nav-link {
-  margin-bottom: -1px;
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width: 1400px) {
+  .dashboard-container>.position-relative.z-1 {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
 }
 
-.dashboard-container {
-  font-family: 'Inter', 'Outfit', sans-serif;
-  background-color: #fcfbfe;
-  position: relative;
-  min-height: 100vh;
+
+/* =========================================================
+   TABLET / SMALL LAPTOP
+========================================================= */
+
+@media (max-width: 1199.98px) {
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 1.25rem !important;
+  }
+
+  .top-left {
+    width: 400px;
+    height: 400px;
+  }
+
+  .bottom-right {
+    width: 450px;
+    height: 450px;
+  }
+
+  .right-shape {
+    width: 300px;
+    height: 300px;
+  }
+
+  .circle-1 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .circle-2 {
+    width: 400px;
+    height: 400px;
+  }
+
+  .circle-3 {
+    width: 550px;
+    height: 550px;
+  }
 }
 
-/* Background decorations */
-.bg-shape { position: absolute; border-radius: 50%; pointer-events: none; z-index: 0; }
-.top-left { width: 500px; height: 500px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); top: -150px; left: -150px; }
-.bottom-right { width: 600px; height: 600px; background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(255,255,255,0) 70%); bottom: -200px; right: -200px; }
-.right-shape { width: 400px; height: 400px; background: rgba(37, 99, 235, 0.05); filter: blur(80px); top: 30%; right: -100px; transform: translateY(-50%); }
-.concentric-circles { position: absolute; pointer-events: none; z-index: 0; top: 15%; left: 0; }
-.circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.15); }
-.circle-1 { width: 300px; height: 300px; }
-.circle-2 { width: 500px; height: 500px; }
-.circle-3 { width: 700px; height: 700px; }
 
-/* Premium Card (Glassmorphism) */
-.glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
-  border-radius: 20px !important;
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 1rem !important;
+  }
+
+  /* Header */
+  .dashboard-container .d-flex.justify-content-between.align-items-center.mb-4 {
+    align-items: flex-start !important;
+    flex-direction: column;
+  }
+
+  .dashboard-container .d-flex.justify-content-between.align-items-center.mb-4>div:last-child {
+    width: 100%;
+  }
+
+  .dashboard-container .d-flex.justify-content-between.align-items-center.mb-4 app-button {
+    width: 100%;
+  }
+
+  /* Filter buttons */
+  .glass-card .col-lg-3.d-flex {
+    width: 100%;
+  }
+
+  /* Cards */
+  .contract-card:hover {
+    transform: none;
+  }
+
+  .concentric-circles {
+    left: -100px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .dashboard-container {
+    min-height: 100vh;
+  }
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 0.875rem !important;
+  }
+
+  /* -----------------------------------------
+     Header
+  ----------------------------------------- */
+
+  .dashboard-container h1 {
+    font-size: 1.45rem !important;
+  }
+
+  .dashboard-container h1+p {
+    font-size: 0.8rem !important;
+    line-height: 1.5;
+  }
+
+  .dashboard-container .d-flex.justify-content-between.align-items-center.mb-4 {
+    margin-bottom: 1rem !important;
+  }
+
+  /* -----------------------------------------
+     Tabs
+  ----------------------------------------- */
+
+  .nav-tabs {
+    margin-bottom: 1rem !important;
+    padding-bottom: 0;
+  }
+
+  .nav-tabs .nav-link {
+    padding: 0.65rem 0.75rem !important;
+    font-size: 0.78rem;
+  }
+
+  .nav-tabs .nav-link i {
+    font-size: 0.85rem;
+  }
+
+  /* -----------------------------------------
+     Filter Card
+  ----------------------------------------- */
+
+  .glass-card {
+    border-radius: 16px !important;
+  }
+
+  .glass-card .card-body {
+    padding: 1rem !important;
+  }
+
+  .glass-card .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .glass-card .row>[class*="col-"] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .glass-card .row.g-3 {
+    row-gap: 0.75rem !important;
+  }
+
+  /* Filter buttons */
+  .glass-card .col-lg-3.d-flex {
+    flex-direction: row;
+    gap: 0.5rem !important;
+  }
+
+  .glass-card .col-lg-3.d-flex app-button {
+    width: 50%;
+    min-width: 0;
+  }
+
+  /* Active filters */
+  .glass-card .d-flex.align-items-center.flex-wrap {
+    align-items: flex-start !important;
+  }
+
+  .glass-card .d-flex.align-items-center.flex-wrap>span:first-child {
+    width: 100%;
+    margin-bottom: 0.15rem;
+  }
+
+  /* -----------------------------------------
+     Contract cards
+  ----------------------------------------- */
+
+  .row.g-4 {
+    --bs-gutter-x: 0.9rem;
+    --bs-gutter-y: 0.9rem;
+  }
+
+  /* -----------------------------------------
+     Empty state
+  ----------------------------------------- */
+
+  .row.g-4 .text-center.py-5 {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+
+  /* -----------------------------------------
+     Background decorations
+  ----------------------------------------- */
+
+  .top-left {
+    width: 280px;
+    height: 280px;
+    top: -100px;
+    left: -120px;
+  }
+
+  .bottom-right {
+    width: 320px;
+    height: 320px;
+    bottom: -100px;
+    right: -120px;
+  }
+
+  .right-shape {
+    width: 220px;
+    height: 220px;
+    right: -100px;
+  }
+
+  .concentric-circles {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 0.75rem !important;
+  }
+
+  /* Header */
+  .dashboard-container h1 {
+    font-size: 1.3rem !important;
+  }
+
+  .dashboard-container h1+p {
+    font-size: 0.76rem !important;
+  }
+
+  /* AI button */
+  .dashboard-container .d-flex.justify-content-between.align-items-center.mb-4 app-button {
+    width: 100%;
+  }
+
+  /* Tabs */
+  .nav-tabs .nav-link {
+    padding: 0.55rem 0.6rem !important;
+    font-size: 0.73rem;
+  }
+
+  .nav-tabs .nav-link .badge {
+    font-size: 0.65rem;
+  }
+
+  /* Filter */
+  .glass-card .card-body {
+    padding: 0.85rem !important;
+  }
+
+  .glass-card {
+    border-radius: 14px !important;
+  }
+
+  /* Apply / Reset */
+  .glass-card .col-lg-3.d-flex {
+    gap: 0.4rem !important;
+  }
+
+  /* Active filters */
+  .glass-card .d-flex.align-items-center.flex-wrap {
+    gap: 0.4rem !important;
+  }
+
+  /* Contract cards */
+  .row.g-4 {
+    --bs-gutter-x: 0.7rem;
+    --bs-gutter-y: 0.7rem;
+  }
+}
+
+
+/* =========================================================
+   EXTRA SMALL DEVICES
+========================================================= */
+
+@media (max-width: 375px) {
+
+  .dashboard-container>.position-relative.z-1 {
+    padding: 0.6rem !important;
+  }
+
+  .dashboard-container h1 {
+    font-size: 1.2rem !important;
+  }
+
+  .nav-tabs .nav-link {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    font-size: 0.7rem;
+  }
+
+  .glass-card .card-body {
+    padding: 0.75rem !important;
+  }
+
+  .glass-card .col-lg-3.d-flex {
+    flex-direction: column;
+  }
+
+  .glass-card .col-lg-3.d-flex app-button {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY / TOUCH DEVICES
+========================================================= */
+
+@media (hover: none) {
+
+  .contract-card:hover {
+    transform: none;
+  }
+
+  .hover-text-primary:hover {
+    color: inherit !important;
+  }
+
+  .hover-filter:hover {
+    background-color: inherit !important;
+    color: inherit !important;
+  }
+}
+
+
+/* =========================================================
+   REDUCE MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .contract-card,
+  .nav-tabs .nav-link {
+    transition: none !important;
+  }
+
+  .contract-card:hover {
+    transform: none;
+  }
 }
