@@ -30,7 +30,7 @@ jobs:
           };
           EOF
           cp src/environments/environment.prod.ts src/environments/environment.ts
-      - run: npm ci && npm run build
+      - run: npm ci --legacy-peer-deps && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         continue-on-error: true
         with:
