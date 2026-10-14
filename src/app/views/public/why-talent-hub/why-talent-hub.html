@@ -9,7 +9,7 @@
         <div class="row align-items-center g-4 g-lg-5">
 
             <!-- Content -->
-            <div class="col-12 col-lg-5 order-2 order-lg-1">
+            <div class="col-12 col-lg-5 order-1">
 
                 <div class="hero-content">
 
@@ -32,7 +32,7 @@
 
 
             <!-- Image -->
-            <div class="col-12 col-lg-7 order-1 order-lg-2">
+            <div class="col-12 col-lg-7 order-2">
 
                 <div class="hero-image-wrapper">
 
@@ -91,9 +91,7 @@
                 <article class="feature-card">
 
                     <div class="feature-image">
-
-                        <i class="bi bi-image"></i>
-
+                        <img [src]="feature.image" [alt]="feature.title" class="feature-img" loading="lazy" />
                     </div>
 
                     <div class="feature-body">
@@ -129,25 +127,29 @@
 
     <div class="why-container">
 
-        <div class="benefits-wrapper">
+        <div class="row g-3 g-lg-4">
 
-            @for (benefit of benefits; track benefit.title; let last = $last) {
+            @for (benefit of benefits; track benefit.title) {
 
-            <div class="benefit-item" [class.benefit-item-last]="last">
+            <div class="col-12 col-lg-3">
 
-                <div class="benefit-icon">
-                    <i class="bi bi-stars"></i>
-                </div>
+                <div class="benefit-card">
 
-                <div class="benefit-content">
+                    <div class="benefit-icon">
+                        <i [class]="'bi ' + benefit.icon"></i>
+                    </div>
 
-                    <h6 class="benefit-title">
-                        {{ benefit.title }}
-                    </h6>
+                    <div class="benefit-content">
 
-                    <p class="benefit-description">
-                        {{ benefit.description }}
-                    </p>
+                        <h6 class="benefit-title">
+                            {{ benefit.title }}
+                        </h6>
+
+                        <p class="benefit-description">
+                            {{ benefit.description }}
+                        </p>
+
+                    </div>
 
                 </div>
 
