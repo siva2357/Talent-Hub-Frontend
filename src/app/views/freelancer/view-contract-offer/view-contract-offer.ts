@@ -6,6 +6,7 @@ import { OfferService } from '../../../core/services/offer.service';
 import { StatCard } from '../../../library/shared/components/stat-card/stat-card';
 import { Button } from '../../../library/ui/components/button/button';
 import { StatCardData } from '../../../core/models/ui.model';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-view-contract-offer',
@@ -49,7 +50,7 @@ export class ViewContractOffer implements OnInit {
   ngOnInit(): void {
     this.offerId = this.route.snapshot.paramMap.get('id') || '';
     if (this.offerId) {
-      this.safePdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`http://localhost:5000/api/offers/${this.offerId}/pdf`);
+      this.safePdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.apiGatewayUrl}/offers/${this.offerId}/pdf`);
       this.fetchOfferDetails();
     }
   }

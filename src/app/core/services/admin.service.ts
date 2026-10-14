@@ -3,11 +3,13 @@ import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
 import { TokenService } from './token.service';
 
+import { environment } from '../../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService extends BaseService {
-  private readonly API_URL = 'http://localhost:5000/api/admin';
+  private readonly API_URL = `${environment.apiGatewayUrl}/admin`;
 
   getUserStatusOptions(): Observable<any> {
     return this.get<any>(`${this.API_URL}/users/status-options`);

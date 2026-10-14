@@ -3,13 +3,14 @@ import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
 import { Contract } from '../models/contract.model';
 import { CreateContractDto, UpdateContractDto } from '../dtos/contract.dto';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class ContractService extends BaseService {
-  private apiUrl = 'http://localhost:5000/api/contracts'; // Base URL for contracts
+  private apiUrl = `${environment.apiGatewayUrl}/contracts`; // Base URL for contracts
 
   // --- Client Endpoints ---
   getMyContracts(): Observable<{ success: boolean; contracts: Contract[] }> {

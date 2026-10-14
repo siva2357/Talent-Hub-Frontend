@@ -3,12 +3,13 @@ import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { TokenService } from './token.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService extends BaseService {
-  private readonly API_URL = 'http://localhost:5000/api/profile';
+  private readonly API_URL = `${environment.apiGatewayUrl}/profile`;
 
   
 

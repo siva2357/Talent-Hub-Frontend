@@ -8,6 +8,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { of, throwError } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 
 describe('LegalContractAcceptance', () => {
   let component: LegalContractAcceptance;
@@ -118,7 +119,7 @@ describe('LegalContractAcceptance', () => {
       const safeUrl = component.getSafePdfUrl();
 
       expect(sanitizer.bypassSecurityTrustResourceUrl).toHaveBeenCalledWith(
-        'http://localhost:5000/api/offers/offer-555/pdf'
+        `${environment.apiGatewayUrl}/offers/offer-555/pdf`
       );
       expect(safeUrl).toBeDefined();
     });

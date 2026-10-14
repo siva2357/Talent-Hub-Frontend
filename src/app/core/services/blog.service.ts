@@ -2,14 +2,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseService } from './base.service';
-
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BlogService extends BaseService {
 
-  private apiUrl = 'http://localhost:5000/api/blogs';
+  private apiUrl = `${environment.apiGatewayUrl}/blogs`;
 
   // =========================================================
   // ADMIN APIs
