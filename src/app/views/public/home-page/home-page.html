@@ -1,37 +1,45 @@
 <!-- =========================
      HERO SECTION
 ========================= -->
-<section class="home-hero">
-    <div class="container-fluid home-container">
+<section class="home-section hero-section">
+    <div class="home-container">
 
-        <div class="row flex-lg-row-reverse align-items-center hero-row">
-
-            <!-- Hero Image -->
-            <div class="col-12 col-lg-6 hero-image-column">
-                <img src="../../../../assets/Hero Image.png" class="hero-image" alt="Talent Hub Hero Image"
-                    loading="lazy" />
-            </div>
+        <div class="row align-items-center g-4 g-lg-5">
 
             <!-- Hero Content -->
-            <div class="col-12 col-lg-6 hero-content">
+            <div class="col-12 col-lg-6 order-1">
 
-                <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3 hero-title">
-                    Find the
-                    <span class="text-gradient">right talent</span>
-                    <br />
-                    Do your
-                    <span class="text-gradient">best work</span>
-                </h1>
+                <div class="hero-content">
 
-                <p class="lead text-muted fs-6 hero-description">
-                    AI matches you with the perfect opportunities, while hiring,
-                    collaboration, contracts, communication, and secure payments
-                    are seamlessly managed in one unified digital workspace.
-                </p>
+                    <h1 class="hero-title">
+                        Find the
+                        <span class="text-gradient">right talent</span>
+                        <br />
+                        Do your
+                        <span class="text-gradient">best work</span>
+                    </h1>
 
-                <div class="hero-actions">
-                    <app-button label="Get started" variant="primary" size="md" route="/signup">
-                    </app-button>
+                    <p class="hero-description">
+                        AI matches you with the perfect opportunities, while hiring,
+                        collaboration, contracts, communication, and secure payments
+                        are seamlessly managed in one unified digital workspace.
+                    </p>
+
+                    <div class="hero-actions">
+                        <app-button label="Get started" variant="primary" size="md" route="/signup">
+                        </app-button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Hero Image -->
+            <div class="col-12 col-lg-6 order-2">
+
+                <div class="hero-image-wrapper">
+                    <img src="../../../../assets/Hero Image.png" class="hero-image" alt="Talent Hub Hero Image"
+                        loading="lazy" />
                 </div>
 
             </div>
@@ -45,15 +53,15 @@
 <!-- =========================
      FEATURES SECTION
 ========================= -->
-<section class="features-section">
-    <div class="container-fluid home-container">
+<section class="home-section features-section">
+    <div class="home-container">
 
         <div class="section-header">
-            <h2 class="section-title fw-bold">
+            <h2 class="section-title">
                 A seamless way to hire, collaborate, and grow.
             </h2>
 
-            <p class="section-description text-muted">
+            <p class="section-description">
                 Experience the new standard in freelance management through our
                 all-encompassing platform that connects businesses, talent, and
                 skills seamlessly worldwide.
@@ -63,28 +71,27 @@
         <div class="row g-4">
 
             @for (feature of features; track feature.title) {
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-lg-4">
 
-                <div
-                    class="feature-card card rounded-3 h-100 shadow-sm border border-secondary-subtle bg-body-tertiary">
+                <article class="feature-card">
 
-                    <div class="card-body">
+                    <div class="feature-body">
 
-                        <div class="feature-icon custom-icon-box">
-                            <!-- Icon Placeholder -->
+                        <div class="custom-icon-box">
+                            <i [class]="'bi ' + feature.icon"></i>
                         </div>
 
-                        <h3 class="feature-title fs-5 text-body-emphasis fw-bold">
+                        <h3 class="feature-title">
                             {{ feature.title }}
                         </h3>
 
-                        <p class="text-muted fs-6 mb-0">
+                        <p class="feature-description">
                             {{ feature.description }}
                         </p>
 
                     </div>
 
-                </div>
+                </article>
 
             </div>
             }
@@ -98,35 +105,25 @@
 <!-- =========================
      AI INTELLIGENCE SECTION
 ========================= -->
-<section class="ai-section">
-    <div class="container-fluid home-container">
+<section class="home-section ai-section">
+    <div class="home-container">
 
-        <div class="row align-items-center ai-row">
-
-            <!-- Image -->
-            <div class="col-12 col-lg-6">
-
-                <div class="ai-image-wrapper">
-                    <img src="../../../../assets/Talehtbub section.png" class="ai-image" alt="Talent Hub Dashboard"
-                        loading="lazy" />
-                </div>
-
-            </div>
+        <div class="row align-items-center ai-row g-4 g-lg-5">
 
             <!-- Content -->
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-lg-6 order-1 order-lg-2">
 
                 <div class="ai-content">
 
-                    <h2 class="ai-title fw-bold">
+                    <h2 class="ai-title">
                         <span class="text-gradient">AI Intelligence</span>
                         That Transforms Talent, Projects & Business Growth
                     </h2>
 
-                    <p class="lead text-muted fs-6 ai-description">
+                    <p class="ai-description">
                         Talent Hub accelerates every aspect of the modern workspace
                         from smart matching and predictive analytics to robust
-                        project structures. Empower your team to make data driven
+                        project structures. Empower your team to make data-driven
                         decisions with proactive performance metrics across
                         distributed talent.
                     </p>
@@ -137,23 +134,10 @@
                         <li class="ai-list-item">
 
                             <div class="check-icon">
-                                <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-
-                                    <circle cx="8" cy="8" r="8" fill="currentColor" fill-opacity="0.2">
-                                    </circle>
-
-                                    <path d="M10.97 4.97a.75.75 0 0 1
-                      1.07 1.05l-3.99 4.99a.75.75 0 0 1
-                      -1.08.02L4.324 8.384a.75.75 0 1
-                      1 1.06-1.06l2.094 2.093
-                      3.473-4.425a.267.267 0 0 1
-                      .02-.022z">
-                                    </path>
-
-                                </svg>
+                                <i class="bi bi-check-circle-fill"></i>
                             </div>
 
-                            <span class="text-muted fs-6">
+                            <span class="ai-item-text">
                                 {{ item }}
                             </span>
 
@@ -162,6 +146,16 @@
 
                     </ul>
 
+                </div>
+
+            </div>
+
+            <!-- Image -->
+            <div class="col-12 col-lg-6 order-2 order-lg-1">
+
+                <div class="ai-image-wrapper">
+                    <img src="../../../../assets/Talehtbub section.png" class="ai-image" alt="Talent Hub Dashboard"
+                        loading="lazy" />
                 </div>
 
             </div>
@@ -175,39 +169,45 @@
 <!-- =========================
      CAPABILITIES SECTION
 ========================= -->
-<section class="capabilities-section">
-    <div class="container-fluid home-container">
+<section class="home-section capabilities-section">
+    <div class="home-container">
 
-        <div class="text-center section-heading">
-            <h2 class="fw-bold">
+        <div class="section-header">
+            <h2 class="section-title">
                 Get to know what's possible.
             </h2>
+            <p class="section-description">
+                Explore intelligent workspace capabilities designed to streamline execution,
+                optimize workflows, and accelerate growth.
+            </p>
         </div>
 
         <div class="row g-4">
 
             @for (capability of capabilities; track capability.title) {
 
-            <div class="col-12 col-sm-6 col-lg-4">
+            <div class="col-12 col-lg-4">
 
-                <div
-                    class="capability-card card rounded-3 shadow-sm h-100 border border-secondary-subtle bg-body-tertiary">
+                <article class="capability-card">
 
-                    <img [src]="capability.image" [alt]="capability.title" class="capability-image" loading="lazy" />
+                    <div class="capability-image-wrapper">
+                        <img [src]="capability.image" [alt]="capability.title" class="capability-image"
+                            loading="lazy" />
+                    </div>
 
-                    <div class="card-body capability-body">
+                    <div class="capability-body">
 
-                        <h5 class="card-title fw-bold">
+                        <h3 class="capability-title">
                             {{ capability.title }}
-                        </h5>
+                        </h3>
 
-                        <p class="card-text text-muted fs-6 mb-0">
+                        <p class="capability-description">
                             {{ capability.description }}
                         </p>
 
                     </div>
 
-                </div>
+                </article>
 
             </div>
 
@@ -222,39 +222,46 @@
 <!-- =========================
      GETTING STARTED
 ========================= -->
-<section class="getting-started-section">
-    <div class="container-fluid home-container">
+<section class="home-section getting-started-section">
+    <div class="home-container">
 
-        <h2 class="section-title fw-bold mb-4">
-            Getting started is simple.
-        </h2>
+        <div class="section-header">
+            <h2 class="section-title">
+                Getting started is simple.
+            </h2>
+            <p class="section-description">
+                Jumpstart your journey with Talent Hub in three simple steps and unlock your full potential.
+            </p>
+        </div>
 
         <div class="row g-4">
 
             @for (step of gettingStarted; track step.title) {
 
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-lg-4">
 
-                <div
-                    class="getting-card card rounded-3 h-100 border border-secondary-subtle shadow-sm bg-body-tertiary">
+                <article class="getting-card">
 
-                    <div class="card-body">
+                    <div class="getting-body">
 
-                        <div class="feature-icon custom-icon-box">
-                            <!-- Icon Placeholder -->
+                        <div class="getting-header">
+                            <div class="custom-icon-box">
+                                <i [class]="'bi ' + step.icon"></i>
+                            </div>
+                            <span class="step-badge">Step {{ step.step }}</span>
                         </div>
 
-                        <h3 class="fs-5 text-body-emphasis fw-bold">
+                        <h3 class="getting-title">
                             {{ step.title }}
                         </h3>
 
-                        <p class="text-muted fs-6 mb-0">
+                        <p class="getting-description">
                             {{ step.description }}
                         </p>
 
                     </div>
 
-                </div>
+                </article>
 
             </div>
 
@@ -269,20 +276,25 @@
 <!-- =========================
      CTA SECTION
 ========================= -->
-<section class="cta-section">
-    <div class="container-fluid home-container">
+<section class="home-section cta-section">
+    <div class="home-container">
 
-        <div class="cta-box text-center bg-primary text-white rounded-3">
+        <div class="cta-box text-center">
 
-            <h2 class="text-white fw-bold mb-3">
+            <h2 class="cta-title">
                 Everything you need, all in one place.
             </h2>
 
-            <p class="lead mb-0">
+            <p class="cta-description">
                 Manage projects, scale teams, and hire top talent from our
-                diverse database - all in a single workspace designed
+                diverse database — all in a single workspace designed
                 specifically to empower your business.
             </p>
+
+            <div class="cta-actions">
+                <app-button label="Get started for free" variant="light" size="md" route="/signup">
+                </app-button>
+            </div>
 
         </div>
 

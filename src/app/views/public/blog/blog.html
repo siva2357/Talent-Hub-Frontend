@@ -2,14 +2,14 @@
      BLOG HEADER
 ========================================================= -->
 
-<section class="blog-header">
+<section class="blog-section blog-header">
 
-    <div class="container-fluid blog-container">
+    <div class="blog-container">
 
         <div class="blog-header-content">
 
             <h1 class="blog-title">
-                Latest insights &amp; updates.
+                Latest <span class="text-gradient">insights</span> &amp; updates.
             </h1>
 
             <p class="blog-description">
@@ -25,25 +25,20 @@
              CATEGORY FILTERS
         ================================================== -->
 
-        @if (!loading && blogs.length > 0) {
+        @if (!loading && categories.length > 0) {
 
         <div class="blog-filters">
 
             <button type="button" class="blog-filter-btn" [class.active]="selectedCategory === 'All'"
                 (click)="filterByCategory('All')">
-
                 View all
-
             </button>
-
 
             @for (category of categories; track category) {
 
             <button type="button" class="blog-filter-btn" [class.active]="selectedCategory === category"
                 (click)="filterByCategory(category)">
-
                 {{ category }}
-
             </button>
 
             }
@@ -61,10 +56,9 @@
      BLOG CONTENT
 ========================================================= -->
 
-<section class="blog-content">
+<section class="blog-section blog-content">
 
-    <div class="container-fluid blog-container">
-
+    <div class="blog-container">
 
         <!-- =================================================
              LOADING
@@ -75,11 +69,7 @@
         <div class="blog-state">
 
             <div class="spinner-border text-primary" role="status">
-
-                <span class="visually-hidden">
-                    Loading...
-                </span>
-
+                <span class="visually-hidden">Loading...</span>
             </div>
 
             <p class="blog-state-text">
@@ -95,7 +85,7 @@
              ERROR
         ================================================== -->
 
-        @else if (errorMessage) {
+        @else if (errorMessage && filteredBlogs.length === 0) {
 
         <div class="blog-state">
 
@@ -103,18 +93,13 @@
                 <i class="bi bi-exclamation-circle"></i>
             </div>
 
-            <h4>
-                Unable to load blogs
-            </h4>
+            <h4>Unable to load blogs</h4>
 
-            <p>
-                {{ errorMessage }}
-            </p>
+            <p>{{ errorMessage }}</p>
 
-            <button type="button" class="btn btn-dark retry-btn" (click)="getAllBlogs()">
-
+            <button type="button" class="btn btn-primary retry-btn" (click)="getAllBlogs()">
+                <i class="bi bi-arrow-clockwise me-1"></i>
                 Try again
-
             </button>
 
         </div>
@@ -134,9 +119,7 @@
                 <i class="bi bi-journal-text"></i>
             </div>
 
-            <h4>
-                No blogs found
-            </h4>
+            <h4>No blogs found</h4>
 
             <p>
                 There are no published blogs in this category yet.
