@@ -13,11 +13,12 @@ import { Pagination } from '../../../library/ui/components/pagination/pagination
 import { TableColumn } from '../../../core/models/ui.model';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { map, debounceTime } from 'rxjs/operators';
+import { ClientCard } from '../../../library/shared/components/client-card/client-card';
 
 @Component({
   selector: 'app-client-management',
   standalone: true,
-  imports: [CommonModule, Table, Badge, Button, FormsModule, InputField, Chip, Dropdown, Pagination],
+  imports: [CommonModule, Table, Badge, Button, FormsModule, InputField, Chip, Dropdown, Pagination, ClientCard],
   templateUrl: './client-management.html',
   styleUrl: './client-management.css'
 })
@@ -229,7 +230,7 @@ export class ClientManagement implements OnInit, AfterViewInit, OnDestroy {
 
   getActionItems(client: any): DropdownItem[] {
     const items: DropdownItem[] = [
-      { label: 'View', value: 'view', icon: 'bi-eye text-primary' }
+      { label: 'View Profile', value: 'view', icon: 'bi-eye text-primary' }
     ];
     if (client.status !== 'Active') {
       items.push({ label: 'Activate', value: 'Active', icon: 'bi-check-circle text-success' });

@@ -24,6 +24,8 @@ import {
 } from '../../../library/ui/components/dropdown/dropdown';
 import { Badge } from '../../../library/ui/components/badge/badge';
 import { MasterDataService } from '../../../core/services/master-data.service';
+import { ModalService } from '../../../core/services/ui/modal.service';
+import { ToastService } from '../../../core/services/ui/toast.service';
 
 import {
   BehaviorSubject,
@@ -131,7 +133,9 @@ export class BlogManager
   constructor(
     private blogService: BlogService,
     private masterDataService: MasterDataService,
-    private router: Router
+    private router: Router,
+    private modalService: ModalService,
+    private toastService: ToastService
   ) { }
 
   // =========================================================
@@ -262,52 +266,46 @@ export class BlogManager
   // =========================================================
 
   ngAfterViewInit(): void {
-
-    this.columns = [
-
-      {
-        field: 'index',
-        headerName: 'S.No',
-        cellTemplate: this.indexTpl,
-        width: 60
-      },
-
-      {
-        field: 'blogBanner',
-        headerName: 'Media',
-        cellTemplate: this.mediaTpl,
-        width: 100
-      },
-
-      {
-        field: 'title',
-        headerName: 'Blog Title',
-        cellTemplate: this.titleTpl,
-        flexGrow: 1
-      },
-
-      {
-        field: 'category',
-        headerName: 'Category',
-        cellTemplate: this.categoryTpl,
-        width: 150
-      },
-
-      {
-        field: 'createdAt',
-        headerName: 'Created',
-        cellTemplate: this.createdTpl,
-        width: 150
-      },
-
-      {
-        field: 'actions',
-        headerName: 'Actions',
-        cellTemplate: this.actionsTpl,
-        width: 100
-      }
-
-    ];
+    setTimeout(() => {
+      this.columns = [
+        {
+          field: 'index',
+          headerName: 'S.No',
+          cellTemplate: this.indexTpl,
+          width: 70
+        },
+        {
+          field: 'blogBanner',
+          headerName: 'Media',
+          cellTemplate: this.mediaTpl,
+          width: 100
+        },
+        {
+          field: 'title',
+          headerName: 'Blog Title',
+          cellTemplate: this.titleTpl,
+          flexGrow: 2
+        },
+        {
+          field: 'category',
+          headerName: 'Category',
+          cellTemplate: this.categoryTpl,
+          width: 140
+        },
+        {
+          field: 'createdAt',
+          headerName: 'Created',
+          cellTemplate: this.createdTpl,
+          width: 150
+        },
+        {
+          field: 'actions',
+          headerName: 'Actions',
+          cellTemplate: this.actionsTpl,
+          width: 90
+        }
+      ];
+    });
   }
 
   // =========================================================
@@ -465,22 +463,22 @@ export class BlogManager
   // DELETE
   // =========================================================
 
-  deleteBlog(id: string): void {
+  async deleteBlog(id: string): Promise<void> {
+    const confirmed = await this.modalService.confirm({
+      title: 'Delete Blog Article',
+      message: 'Are you sure you want to delete this blog article? This action cannot be undone.',
+      confirmLabel: 'Delete',
+      confirmVariant: 'danger',
+      icon: 'bi bi-trash3',
+      iconVariant: 'danger'
+    });
 
-    if (
-      confirm(
-        'Are you sure you want to delete this blog?'
-      )
-    ) {
-
+    if (confirmed) {
       this.blogService
         .deleteBlog(id)
         .subscribe({
-
           next: (res) => {
-
             if (res.success) {
-
               const updated =
                 this.rawBlogs$.value.filter(
                   (blog: any) =>
@@ -490,17 +488,12 @@ export class BlogManager
               this.rawBlogs$.next(
                 updated
               );
+              this.toastService.show('Blog deleted successfully', 'success');
             }
           },
-
           error: (err) => {
-
-            console.error(
-              'Error deleting blog',
-              err
-            );
+            this.toastService.show('Failed to delete blog article', 'error');
           }
-
         });
     }
   }

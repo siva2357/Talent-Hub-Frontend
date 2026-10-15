@@ -1,0 +1,292 @@
+:host {
+  display: block;
+  min-width: 0;
+  position: relative;
+}
+
+:host:hover,
+:host:focus-within,
+:host:has(.show) {
+  z-index: 100;
+}
+
+/* =========================================================
+   FREELANCER CARD CONTAINER
+========================================================= */
+
+.freelancer-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  padding: 12px 18px;
+  background: #ffffff;
+  border: 1px solid rgba(168, 85, 247, 0.14);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.035);
+  transition:
+    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s ease;
+  overflow: visible;
+  z-index: 1;
+}
+
+.freelancer-card:hover,
+.freelancer-card:focus-within,
+.freelancer-card:has(.show) {
+  z-index: 100;
+  transform: translateY(-2px);
+  border-color: rgba(168, 85, 247, 0.32);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.08);
+}
+
+/* Top accent gradient bar */
+.freelancer-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #8b5cf6, #c084fc);
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  opacity: 0.9;
+}
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.freelancer-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f1f5;
+}
+
+.freelancer-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.freelancer-avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.freelancer-avatar {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f7f5ff;
+}
+
+.status-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  background-color: #94a3b8;
+}
+
+.status-indicator.active {
+  background-color: #10b981;
+}
+
+.status-indicator.suspended {
+  background-color: #f59e0b;
+}
+
+.status-indicator.pending-approval {
+  background-color: #8b5cf6;
+}
+
+.status-indicator.blocked,
+.status-indicator.deactivated {
+  background-color: #ef4444;
+}
+
+.freelancer-name-wrapper {
+  min-width: 0;
+}
+
+.freelancer-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.freelancer-name {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+}
+
+.freelancer-joined-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 9999px;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.freelancer-joined-badge i {
+  font-size: 0.75rem;
+  color: #8b5cf6;
+}
+
+/* =========================================================
+   ACTION BUTTON & DROPDOWN
+========================================================= */
+
+.freelancer-action-dropdown {
+  position: relative;
+  flex-shrink: 0;
+  z-index: 110;
+}
+
+.freelancer-action-dropdown .dropdown-menu {
+  z-index: 1060 !important;
+}
+
+.freelancer-action-button {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e8e8ed;
+  background: #ffffff;
+  color: #555b65;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.freelancer-action-button:hover {
+  background: #f7f4ff;
+  border-color: rgba(168, 85, 247, 0.3);
+  color: #8b5cf6;
+}
+
+/* =========================================================
+   CARD BODY
+========================================================= */
+
+.freelancer-card-body {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+  padding-top: 10px;
+  flex: 1;
+}
+
+.freelancer-info-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.freelancer-info-item.email-item {
+  flex-shrink: 0;
+}
+
+.freelancer-info-icon {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #f7f5ff;
+  color: #8b5cf6;
+  font-size: 0.85rem;
+}
+
+.freelancer-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.freelancer-info-label {
+  font-size: 0.64rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+}
+
+.freelancer-info-value {
+  min-width: 0;
+  font-size: 0.82rem;
+  color: #334155;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.freelancer-email {
+  white-space: nowrap;
+  font-size: 0.84rem;
+  color: #334155;
+  font-weight: 500;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* =========================================================
+   RESPONSIVE ADJUSTMENTS
+========================================================= */
+
+@media (max-width: 767.98px) {
+  .freelancer-card {
+    padding: 10px 14px;
+  }
+
+  .freelancer-card-body {
+    gap: 12px 20px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .freelancer-card-body {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .freelancer-email {
+    word-break: break-all;
+    white-space: normal;
+  }
+}

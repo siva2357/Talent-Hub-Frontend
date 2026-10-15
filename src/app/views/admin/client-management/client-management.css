@@ -118,7 +118,7 @@
 ========================================================= */
 
 .client-data-section {
-  overflow: hidden;
+  overflow: visible;
 }
 
 
@@ -141,9 +141,9 @@
 
 .client-card-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  padding: 20px;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 10px 0;
 }
 
 
@@ -546,10 +546,9 @@
   }
 
   .client-card-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     gap: 16px;
-
-    padding: 16px;
+    padding: 16px 0;
   }
 
   .client-card {
@@ -714,58 +713,32 @@
 
 
 /* =========================================================
-   CLIENT FILTER SECTION
+   FILTER COMPONENTS
 ========================================================= */
 
-.client-filter-section {
-  position: relative;
-  overflow: visible;
+:host app-input-field,
+app-input-field {
+  display: block;
+  width: 100%;
 }
 
-
-/* =========================================================
-   FILTER ROW
-========================================================= */
-
-.client-filter-row {
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 2fr) minmax(180px, 1fr) minmax(260px, 1fr);
-
-  gap: 16px;
-
-  align-items: end;
+:host app-button,
+app-button {
+  display: block;
+  width: 100%;
 }
 
-
-/* =========================================================
-   FILTER FIELDS
-========================================================= */
-
-.client-search-field,
-.client-status-field,
-.client-filter-actions {
-  min-width: 0;
+app-input-field ::ng-deep .input-group {
+  flex-wrap: nowrap !important;
 }
 
-
-/* =========================================================
-   ACTION BUTTONS
-========================================================= */
-
-.client-filter-actions {
-  display: grid;
-
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-
-  gap: 10px;
-
-  min-width: 0;
+app-input-field ::ng-deep .form-control,
+app-input-field ::ng-deep .form-select {
+  width: 100%;
 }
 
-.filter-action-button {
-  min-width: 0;
+app-button ::ng-deep button {
+  width: 100%;
 }
 
 
@@ -821,30 +794,6 @@
 
 @media (min-width: 768px) and (max-width: 1199.98px) {
 
-  .client-filter-row {
-    grid-template-columns:
-      minmax(0, 1fr) minmax(220px, 0.55fr);
-
-    gap: 14px;
-  }
-
-  /*
-    Search occupies complete first row.
-    Status and buttons share second row.
-  */
-
-  .client-search-field {
-    grid-column: 1 / -1;
-  }
-
-  .client-status-field {
-    grid-column: 1;
-  }
-
-  .client-filter-actions {
-    grid-column: 2;
-  }
-
   .active-filters {
     margin-top: 16px;
   }
@@ -857,41 +806,6 @@
 ========================================================= */
 
 @media (max-width: 767.98px) {
-
-  .client-filter-section .card-body {
-    padding: 16px !important;
-  }
-
-  .client-filter-row {
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: stretch;
-
-    gap: 12px;
-  }
-
-  .client-search-field,
-  .client-status-field,
-  .client-filter-actions {
-    width: 100%;
-  }
-
-  .client-filter-actions {
-    display: grid;
-
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-
-    gap: 10px;
-
-    width: 100%;
-  }
-
-  .filter-action-button {
-    width: 100%;
-    min-width: 0;
-  }
 
   .active-filters {
     align-items: flex-start;
@@ -921,18 +835,6 @@
 ========================================================= */
 
 @media (max-width: 479.98px) {
-
-  .client-filter-section .card-body {
-    padding: 12px !important;
-  }
-
-  .client-filter-row {
-    gap: 10px;
-  }
-
-  .client-filter-actions {
-    gap: 8px;
-  }
 
   .active-filters {
     margin-top: 14px;

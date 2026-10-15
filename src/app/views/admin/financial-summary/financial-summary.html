@@ -36,47 +36,42 @@
 
     </section>
 
-    <!-- Filter Section -->
     <!-- =========================
-     FILTER SECTION
-========================= -->
-    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75 financial-filter-section">
+         FILTER SECTION
+    ========================== -->
+    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
 
-      <div class="card-body p-4">
+      <div class="card-body p-3 p-sm-4">
 
-        <div class="financial-filter-row">
+        <div class="row g-3 align-items-end">
 
-          <!-- Search -->
-          <div class="financial-search-field">
-
+          <!-- Search (Large screen: col-lg-5 col-xl-6, Medium: col-12 full row) -->
+          <div class="col-12 col-lg-5 col-xl-6">
             <app-input-field type="text" placeholder="Search by Client, Freelancer, Contract..." [showIcon]="true"
               icon="bi bi-search" label="" [value]="tempSearchQuery" (valueChange)="onSearchChange($event)">
             </app-input-field>
-
           </div>
 
-
-          <!-- Status -->
-          <div class="financial-status-field">
-
+          <!-- Status (Large screen: col-lg-3, Medium: col-md-6) -->
+          <div class="col-12 col-sm-6 col-md-6 col-lg-3">
             <app-input-field type="select" placeholder="Select status" [options]="statusOptions" label=""
               [value]="tempSelectedStatus" (valueChange)="onStatusChange($event)">
             </app-input-field>
-
           </div>
 
-
-          <!-- Actions -->
-          <div class="financial-filter-actions">
-
-            <app-button variant="primary" class="filter-action-button" [block]="true" label="Apply"
-              (clicked)="applyFilters()">
-            </app-button>
-
-            <app-button variant="secondary" class="filter-action-button" [block]="true" label="Reset Filters"
-              (clicked)="resetFilters()">
-            </app-button>
-
+          <!-- Actions (Large screen: col-lg-4 col-xl-3, Medium: col-md-6) -->
+          <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+            <div class="row g-2">
+              <div class="col-6">
+                <app-button variant="primary" label="Apply" [block]="true" (clicked)="applyFilters()">
+                </app-button>
+              </div>
+              <div class="col-6">
+                <app-button variant="secondary" label="Reset Filters" [block]="true" (clicked)="resetFilters()"
+                  class="text-primary hover-bg-light border border-light">
+                </app-button>
+              </div>
+            </div>
           </div>
 
         </div>

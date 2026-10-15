@@ -1,0 +1,140 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.report-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(222, 226, 230, 0.75);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.035), 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.report-card:hover {
+  transform: translateY(-4px);
+  background: #ffffff;
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: 
+    0 16px 36px -6px rgba(37, 99, 235, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+/* Accent bar at top */
+.report-accent-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2563eb, #60a5fa);
+  opacity: 0.85;
+  transition: height 0.25s ease;
+}
+
+.report-card:hover .report-accent-bar {
+  height: 4px;
+}
+
+.accent-info {
+  background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+}
+.accent-success {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+.accent-warning {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+.accent-danger {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+.accent-purple {
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+}
+
+/* Icon Box */
+.report-icon-box {
+  width: 38px;
+  height: 38px;
+  font-size: 1.15rem;
+  border-radius: 10px !important;
+  transition: transform 0.25s ease;
+}
+
+.report-card:hover .report-icon-box {
+  transform: scale(1.08);
+}
+
+.icon-box-primary {
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+}
+.icon-box-info {
+  background: rgba(14, 165, 233, 0.1);
+  color: #0284c7;
+}
+.icon-box-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+.icon-box-warning {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+}
+.icon-box-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+.icon-box-purple {
+  background: rgba(139, 92, 246, 0.1);
+  color: #7c3aed;
+}
+
+/* Date */
+.report-date {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* Title & Description */
+.report-title {
+  color: #0f172a;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  transition: color 0.2s ease;
+}
+
+.report-card:hover .report-title {
+  color: #2563eb;
+}
+
+.report-description {
+  color: #64748b;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+/* File pill */
+.report-file-pill {
+  background: rgba(241, 245, 249, 0.85);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  font-size: 0.75rem;
+}
+
+.report-file-pill i {
+  font-size: 0.95rem;
+}
+
+/* Action buttons */
+.report-actions {
+  flex-shrink: 0;
+}

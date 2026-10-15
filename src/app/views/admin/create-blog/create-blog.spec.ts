@@ -48,12 +48,14 @@ describe('CreateBlog', () => {
   ];
 
   beforeEach(async () => {
-    blogServiceSpy = jasmine.createSpyObj('BlogService', ['createBlog']);
+    blogServiceSpy = jasmine.createSpyObj('BlogService', ['createBlog', 'getBlogByIdAdmin', 'updateBlog']);
     fileServiceSpy = jasmine.createSpyObj('FileService', ['deleteFile']);
     masterDataServiceSpy = jasmine.createSpyObj('MasterDataService', ['getMasterDataByCategory']);
     toastServiceSpy = jasmine.createSpyObj('ToastService', ['show']);
 
     blogServiceSpy.createBlog.and.returnValue(of({ success: true }));
+    blogServiceSpy.getBlogByIdAdmin.and.returnValue(of({ success: true, blog: null }));
+    blogServiceSpy.updateBlog.and.returnValue(of({ success: true }));
     masterDataServiceSpy.getMasterDataByCategory.and.returnValue(of({ success: true, data: structuredClone(mockCategories) }));
 
     await TestBed.configureTestingModule({

@@ -12,11 +12,12 @@ import { Dropdown, DropdownItem } from "../../../library/ui/components/dropdown/
 import { Pagination } from '../../../library/ui/components/pagination/pagination';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { map, debounceTime } from 'rxjs/operators';
+import { FreelancerCard } from '../../../library/shared/components/freelancer-card/freelancer-card';
 
 @Component({
   selector: 'app-freelancer-management',
   standalone: true,
-  imports: [CommonModule, Table, Badge, Button, FormsModule, InputField, Chip, Dropdown, Pagination],
+  imports: [CommonModule, Table, Badge, Button, FormsModule, InputField, Chip, Dropdown, Pagination, FreelancerCard],
   templateUrl: './freelancer-management.html',
   styleUrl: './freelancer-management.css'
 })
@@ -248,7 +249,7 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
 
   getActionItems(freelancer: any): DropdownItem[] {
     const items: DropdownItem[] = [
-      { label: 'View', value: 'view', icon: 'bi-eye text-primary' }
+      { label: 'View Profile', value: 'view', icon: 'bi-eye text-primary' }
     ];
 
     if (freelancer.status === 'Pending Approval') {

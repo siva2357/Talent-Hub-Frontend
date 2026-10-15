@@ -33,65 +33,61 @@
         <!-- =========================
              FILTERS
         ========================== -->
-        <div class="reports-filter-section mb-4">
+        <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
 
-          <div class="row g-3 align-items-end">
+          <div class="card-body p-3 p-sm-4">
 
-            <!-- Search -->
-            <div class="col-12 col-md-6 col-xl-5 reports-search">
-              <app-input-field type="text" placeholder="Search reports..." [showIcon]="true" icon="bi bi-search"
-                label="" [value]="localSearchTerm" (valueChange)="onSearchChange($event)">
-              </app-input-field>
+            <div class="row g-3 align-items-end">
+
+              <!-- Search (Large screen: col-lg-5 col-xl-6, Medium: col-12 full row) -->
+              <div class="col-12 col-lg-5 col-xl-6">
+                <app-input-field type="text" placeholder="Search reports..." [showIcon]="true" icon="bi bi-search"
+                  label="" [value]="localSearchTerm" (valueChange)="onSearchChange($event)">
+                </app-input-field>
+              </div>
+
+              <!-- Type (Large screen: col-lg-3, Medium: col-md-6) -->
+              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                <app-input-field type="select" [options]="typeOptions" label="" [value]="localTypeFilter"
+                  (valueChange)="onTypeChange($event)">
+                </app-input-field>
+              </div>
+
+              <!-- Actions (Large screen: col-lg-4 col-xl-3, Medium: col-md-6) -->
+              <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                <div class="row g-2">
+                  <div class="col-6">
+                    <app-button variant="primary" label="Apply" [block]="true" (clicked)="applyFilters()">
+                    </app-button>
+                  </div>
+                  <div class="col-6">
+                    <app-button variant="secondary" label="Reset Filters" [block]="true" (clicked)="resetFilters()"
+                      class="text-primary hover-bg-light border border-light">
+                    </app-button>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
-            <!-- Type -->
-            <div class="col-12 col-md-6 col-xl-4 reports-type">
-              <app-input-field type="select" [options]="typeOptions" label="" [value]="localTypeFilter"
-                (valueChange)="onTypeChange($event)">
-              </app-input-field>
+            <!-- Active Filters -->
+            @if (activeFilters.length > 0) {
+            <div class="active-filters">
+              <span class="active-filter-title">
+                Active Filters:
+              </span>
+              <div class="active-filter-list">
+                @for (filter of activeFilters; track filter.label) {
+                <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)">
+                </app-chip>
+                }
+              </div>
             </div>
-
-            <!-- Actions -->
-            <div class="col-12 col-xl-3 reports-filter-actions">
-
-              <app-button variant="primary" class="filter-button" label="Apply" [block]="true"
-                (clicked)="applyFilters()">
-              </app-button>
-
-              <app-button variant="secondary" class="filter-button" label="Reset Filters" [block]="true"
-                (clicked)="resetFilters()">
-              </app-button>
-
-            </div>
-
-          </div>
-        </div>
-
-        <!-- =========================
-             ACTIVE FILTERS
-        ========================== -->
-        @if (activeFilters.length > 0) {
-
-        <div class="active-filters mb-4">
-
-          <span class="active-filter-title">
-            Active Filters:
-          </span>
-
-          <div class="active-filter-list">
-
-            @for (filter of activeFilters; track filter.label) {
-
-            <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)">
-            </app-chip>
-
             }
 
           </div>
 
-        </div>
-
-        }
+        </section>
 
         <!-- =========================
              REPORTS

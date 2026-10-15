@@ -21,37 +21,42 @@
 
 
 
-    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75 freelancer-filter-section">
+    <!-- =========================
+         FILTER SECTION
+    ========================== -->
+    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
 
-      <div class="card-body p-4">
+      <div class="card-body p-3 p-sm-4">
 
-        <div class="freelancer-filter-row">
+        <div class="row g-3 align-items-end">
 
-          <!-- Search -->
-          <div class="freelancer-search-field">
+          <!-- Search (Large screen: col-lg-5 col-xl-6, Medium: col-12 full row) -->
+          <div class="col-12 col-lg-5 col-xl-6">
             <app-input-field type="text" placeholder="Search by Freelancer ID, Email..." [showIcon]="true"
               icon="bi bi-search" label="" [value]="tempSearchQuery" (valueChange)="onSearchChange($event)">
             </app-input-field>
           </div>
 
-          <!-- Status -->
-          <div class="freelancer-status-field">
+          <!-- Status (Large screen: col-lg-3, Medium: col-md-6) -->
+          <div class="col-12 col-sm-6 col-md-6 col-lg-3">
             <app-input-field type="select" placeholder="All Statuses" [options]="statusOptions" label=""
               [value]="tempSelectedStatus" (valueChange)="onStatusChange($event)">
             </app-input-field>
           </div>
 
-          <!-- Actions -->
-          <div class="freelancer-filter-actions">
-
-            <app-button variant="primary" class="filter-action-button" [block]="true" label="Apply"
-              (clicked)="applyFilters()">
-            </app-button>
-
-            <app-button variant="secondary" class="filter-action-button" [block]="true" label="Reset Filters"
-              (clicked)="resetFilters()">
-            </app-button>
-
+          <!-- Actions (Large screen: col-lg-4 col-xl-3, Medium: col-md-6) -->
+          <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+            <div class="row g-2">
+              <div class="col-6">
+                <app-button variant="primary" label="Apply" [block]="true" (clicked)="applyFilters()">
+                </app-button>
+              </div>
+              <div class="col-6">
+                <app-button variant="secondary" label="Reset Filters" [block]="true" (clicked)="resetFilters()"
+                  class="text-primary hover-bg-light border border-light">
+                </app-button>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -202,7 +207,7 @@
 
         <div class="responsive-freelancer-list">
 
-          @if (paginatedFreelancers$ | async; as freelancers) {
+          @if (freelancers$ | async; as freelancers) {
 
           @if (freelancers.length > 0) {
 
@@ -210,154 +215,14 @@
 
             @for (freelancer of freelancers; track freelancer.id) {
 
-            <article class="freelancer-card">
-
-
-              <!-- =========================
-                     CARD HEADER
-                ========================== -->
-
-              <div class="freelancer-card-header">
-
-                <div class="freelancer-identity">
-
-                  <img [src]="freelancer.profileImage || 'https://i.pravatar.cc/150?u=' + freelancer.id"
-                    class="freelancer-avatar" alt="Freelancer Avatar">
-
-
-                  <div class="freelancer-name-wrapper">
-
-                    <h3 class="freelancer-name">
-                      {{ freelancer.name }}
-                    </h3>
-
-                    <span class="freelancer-id">
-                      ID: {{ freelancer.id }}
-                    </span>
-
-                  </div>
-
-                </div>
-
-
-                <!-- Action Menu -->
-                <div class="dropdown freelancer-action-dropdown">
-
-                  <button class="freelancer-action-button" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                    data-bs-display="static">
-
-                    <i class="bi bi-three-dots-vertical"></i>
-
-                  </button>
-
-
-                  <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none">
-
-                    <app-dropdown [items]="getActionItems(freelancer)"
-                      (itemSelected)="onActionSelected($event, freelancer)" class="d-block">
-                    </app-dropdown>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-
-              <!-- =========================
-                     CARD BODY
-                ========================== -->
-
-              <div class="freelancer-card-body">
-
-
-                <!-- Email -->
-                <div class="freelancer-info-item">
-
-                  <div class="freelancer-info-icon">
-                    <i class="bi bi-envelope"></i>
-                  </div>
-
-                  <div class="freelancer-info-content">
-
-                    <span class="freelancer-info-label">
-                      Email
-                    </span>
-
-                    <span class="freelancer-info-value freelancer-email">
-                      {{ freelancer.email }}
-                    </span>
-
-                  </div>
-
-                </div>
-
-
-                <!-- Job Title -->
-                <div class="freelancer-info-item">
-
-                  <div class="freelancer-info-icon">
-                    <i class="bi bi-briefcase"></i>
-                  </div>
-
-                  <div class="freelancer-info-content">
-
-                    <span class="freelancer-info-label">
-                      Job Title
-                    </span>
-
-                    <span class="freelancer-info-value">
-                      {{ freelancer.title || 'Not specified' }}
-                    </span>
-
-                  </div>
-
-                </div>
-
-
-                <!-- Status -->
-                <div class="freelancer-info-item">
-
-                  <div class="freelancer-info-icon">
-                    <i class="bi bi-activity"></i>
-                  </div>
-
-                  <div class="freelancer-info-content">
-
-                    <span class="freelancer-info-label">
-                      Status
-                    </span>
-
-                    <div class="freelancer-info-value">
-
-                      <app-badge [label]="freelancer.status" appearance="subtle"
-                        [variant]="getBadgeVariant(freelancer.status)">
-                      </app-badge>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-
-            </article>
+            <app-freelancer-card
+              [freelancer]="freelancer"
+              [actionItems]="getActionItems(freelancer)"
+              (actionSelected)="onActionSelected($event.action, freelancer)"
+              (view)="viewFreelancer($event)">
+            </app-freelancer-card>
 
             }
-
-          </div>
-
-
-          <!-- Responsive Pagination -->
-
-          <div class="responsive-pagination">
-
-            <app-pagination [totalItems]="(freelancers$ | async)?.length || 0" [pageSize]="(pageSize$ | async)!"
-              [currentPage]="(currentPage$ | async)!" (pageChange)="currentPage$.next($event)"
-              (pageSizeChange)="onPageSizeChange($event)">
-            </app-pagination>
 
           </div>
 

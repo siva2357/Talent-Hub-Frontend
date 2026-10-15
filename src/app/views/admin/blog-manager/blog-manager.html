@@ -29,15 +29,19 @@
     <header class="blog-page-header mb-4">
 
       <div class="blog-header-content">
-
-        <h1 class="fw-bold fs-4 mb-1">
+        <h1 class="fw-bold fs-4 mb-1 text-dark">
           Public Blog Publisher
         </h1>
-
         <p class="text-muted small mb-0">
           Write articles, manage publication releases, and view platform blogs.
         </p>
+      </div>
 
+      <div class="blog-header-action">
+        <app-button route="/create-blog" variant="primary" size="sm" class="blog-add-button">
+          <i class="bi bi-plus-lg me-1"></i>
+          <span>Add Blog</span>
+        </app-button>
       </div>
 
     </header>
@@ -46,65 +50,56 @@
     <!-- ===================================================
          FILTER SECTION
     ==================================================== -->
-    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75 blog-filter-card">
+    <section class="card shadow-sm border border-light rounded-4 mb-4 bg-white bg-opacity-75">
 
-      <div class="card-body p-4">
+      <div class="card-body p-3 p-sm-4">
 
-        <div class="row g-3 align-items-center mb-3">
+        <div class="row g-3 align-items-end">
 
-          <!-- Search -->
-          <div class="col-md-5 col-lg-5">
-
+          <!-- Search (Large screen: col-lg-5 col-xl-6, Medium: col-12 full row) -->
+          <div class="col-12 col-lg-5 col-xl-6">
             <app-input-field type="text" placeholder="Search blogs by title or content..." [showIcon]="true"
               icon="bi bi-search" label="" [value]="localSearchQuery" (valueChange)="onSearchChange($event)">
             </app-input-field>
-
           </div>
 
-
-          <!-- Category -->
-          <div class="col-md-4 col-lg-4">
-
-            <app-input-field type="select" [options]="categoryOptions" label="" [value]="localSelectedCategory"
-              (valueChange)="onCategoryChange($event)">
+          <!-- Category (Large screen: col-lg-3, Medium: col-md-6) -->
+          <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+            <app-input-field type="select" placeholder="All Categories" [options]="categoryOptions" label=""
+              [value]="localSelectedCategory" (valueChange)="onCategoryChange($event)">
             </app-input-field>
-
           </div>
 
-
-          <!-- Buttons -->
-          <div class="col-md-3 col-lg-3 blog-filter-actions">
-
-            <app-button variant="primary" label="Apply" [block]="true" (clicked)="applyFilters()" class="w-100">
-            </app-button>
-
-            <app-button variant="secondary" label="Reset Filters" [block]="true" (clicked)="resetFilters()"
-              class="w-100 text-primary hover-bg-light border border-light">
-            </app-button>
-
+          <!-- Actions (Large screen: col-lg-4 col-xl-3, Medium: col-md-6) -->
+          <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+            <div class="row g-2">
+              <div class="col-6">
+                <app-button variant="primary" label="Apply" [block]="true" (clicked)="applyFilters()">
+                </app-button>
+              </div>
+              <div class="col-6">
+                <app-button variant="secondary" label="Reset Filters" [block]="true" (clicked)="resetFilters()"
+                  class="text-primary hover-bg-light border border-light">
+                </app-button>
+              </div>
+            </div>
           </div>
 
         </div>
-
 
         <!-- Active Filters -->
         @if (activeFilters.length > 0) {
-
         <div class="active-filters">
-
-          <span class="text-dark small fw-semibold active-filter-label">
+          <span class="active-filter-title">
             Active Filters:
           </span>
-
-          @for (filter of activeFilters; track filter.label) {
-
-          <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)">
-          </app-chip>
-
-          }
-
+          <div class="active-filter-list">
+            @for (filter of activeFilters; track filter.label) {
+            <app-chip [label]="filter.label" [showClose]="true" (removed)="removeFilter(filter)">
+            </app-chip>
+            }
+          </div>
         </div>
-
         }
 
       </div>
@@ -113,105 +108,14 @@
 
 
     <!-- ===================================================
-         ACTIONS BAR (ABOVE LIST / TABLE)
+         DESKTOP TABLE (>= 992px)
     ==================================================== -->
-    <div class="d-flex justify-content-end align-items-center mb-3 blog-actions-bar">
-      <app-button route="/create-blog" variant="primary" size="sm" class="blog-add-button">
-        <i class="bi bi-plus-lg me-1"></i>
-        <span>Add Blog</span>
-      </app-button>
-    </div>
-
-
-    <!-- ===================================================
-         BLOG DATA
-    ==================================================== -->
-
-    @if (paginatedBlogs$ | async; as blogs) {
-
-    <!-- =================================================
-           DESKTOP TABLE
-           992px+
-      ================================================== -->
     <section class="blog-table-section">
 
       <div class="blog-table-wrapper">
 
         <app-table [columns]="columns" [data]="(paginatedBlogs$ | async) ?? []" [loading]="isLoading"
           emptyMessage="No blogs found. Create your first blog!">
-
-          <!-- Index -->
-          <ng-template #indexTpl let-value let-index="index">
-            <span class="fw-semibold text-muted">
-              {{ index + 1 }}
-            </span>
-          </ng-template>
-
-          <!-- Media -->
-          <ng-template #mediaTpl let-row="row">
-
-            <div class="blog-table-media">
-
-              @if (row.featuredMedia) {
-
-              <img [src]="row.featuredMedia" [alt]="row.title" class="blog-table-image">
-
-              } @else {
-
-              <div class="blog-table-media-placeholder">
-                <i class="bi bi-image text-muted"></i>
-              </div>
-
-              }
-
-            </div>
-
-          </ng-template>
-
-          <!-- Title -->
-          <ng-template #titleTpl let-value>
-            <span class="blog-table-title">
-              {{ value }}
-            </span>
-          </ng-template>
-
-          <!-- Category -->
-          <ng-template #categoryTpl let-value>
-            <app-badge [label]="value" appearance="subtle" variant="primary">
-            </app-badge>
-          </ng-template>
-
-          <!-- Created -->
-          <ng-template #createdTpl let-value>
-            <span class="blog-created-date">
-              {{ value | date:'mediumDate' }}
-            </span>
-          </ng-template>
-
-          <!-- Actions -->
-          <ng-template #actionsTpl let-row="row">
-
-            <div class="dropdown blog-table-actions">
-
-              <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false" data-bs-display="static" aria-label="Blog actions">
-
-                <i class="bi bi-three-dots-vertical"></i>
-
-              </button>
-
-              <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none">
-
-                <app-dropdown [items]="getActionItems(row)" (itemSelected)="onActionSelected($event, row)"
-                  class="d-block">
-                </app-dropdown>
-
-              </div>
-
-            </div>
-
-          </ng-template>
-
         </app-table>
 
       </div>
@@ -219,162 +123,150 @@
     </section>
 
 
-    <!-- =================================================
-           MOBILE / TABLET CARDS
-           < 992px
-      ================================================== -->
+    <!-- =====================================================
+         TABLE TEMPLATES
+    ====================================================== -->
+    <ng-template #indexTpl let-row="row" let-index="index">
+      <span class="fw-semibold text-muted">
+        {{ index + 1 }}
+      </span>
+    </ng-template>
+
+    <ng-template #mediaTpl let-row="row">
+      <div class="blog-table-media">
+        @if (row.featuredMedia || row.blogBanner) {
+        <img [src]="row.featuredMedia || row.blogBanner" [alt]="row.title" class="blog-table-image">
+        } @else {
+        <div class="blog-table-media-placeholder">
+          <i class="bi bi-image text-muted"></i>
+        </div>
+        }
+      </div>
+    </ng-template>
+
+    <ng-template #titleTpl let-value>
+      <span class="blog-table-title" [title]="value">
+        {{ value }}
+      </span>
+    </ng-template>
+
+    <ng-template #categoryTpl let-value>
+      <app-badge [label]="value" appearance="subtle" variant="primary">
+      </app-badge>
+    </ng-template>
+
+    <ng-template #createdTpl let-value>
+      <span class="blog-created-date">
+        {{ value | date:'mediumDate' }}
+      </span>
+    </ng-template>
+
+    <ng-template #actionsTpl let-row="row">
+      <div class="dropdown blog-table-actions">
+        <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown"
+          aria-expanded="false" data-bs-display="static" aria-label="Blog actions">
+          <i class="bi bi-three-dots-vertical"></i>
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none">
+          <app-dropdown [items]="getActionItems(row)" (itemSelected)="onActionSelected($event, row)" class="d-block">
+          </app-dropdown>
+        </div>
+      </div>
+    </ng-template>
+
+
+    <!-- ===================================================
+         MOBILE / TABLET CARDS (< 992px)
+    ==================================================== -->
     <section class="mobile-blog-cards">
 
       @if (isLoading) {
-
-      <!-- Loading -->
       <div class="blog-mobile-loading">
-
-        <div class="spinner-border text-primary" role="status">
-        </div>
-
-        <span>
-          Loading blogs...
-        </span>
-
+        <div class="spinner-border text-primary" role="status"></div>
+        <span>Loading blogs...</span>
       </div>
+      } @else if ((paginatedBlogs$ | async); as blogs) {
 
-      } @else if (blogs.length > 0) {
+      @if (blogs.length > 0) {
+      <div class="blog-card-grid">
+        @for (blog of blogs; track blog._id) {
+        <article class="blog-mobile-card">
 
-      <!-- Cards -->
-      @for (blog of blogs; track blog._id) {
-
-      <article class="blog-mobile-card">
-
-        <!-- Image -->
-        <div class="blog-mobile-media">
-
-          @if (blog.featuredMedia) {
-
-          <img [src]="blog.featuredMedia" alt="Blog Image">
-
-          } @else {
-
-          <div class="blog-mobile-media-placeholder">
-
-            <i class="bi bi-image"></i>
-
+          <!-- Image -->
+          <div class="blog-mobile-media">
+            @if (blog.featuredMedia || blog.blogBanner) {
+            <img [src]="blog.featuredMedia || blog.blogBanner" [alt]="blog.title">
+            } @else {
+            <div class="blog-mobile-media-placeholder">
+              <i class="bi bi-image"></i>
+            </div>
+            }
           </div>
 
-          }
+          <!-- Content -->
+          <div class="blog-mobile-content">
 
-        </div>
-
-
-        <!-- Content -->
-        <div class="blog-mobile-content">
-
-          <!-- Top -->
-          <div class="blog-mobile-top">
-
-            <div class="blog-mobile-title-wrapper">
-
-              <span class="blog-mobile-label">
-                BLOG
-              </span>
-
-              <h3 class="blog-mobile-title">
-                {{ blog.title }}
-              </h3>
-
-            </div>
-
-
-            <!-- Actions -->
-            <div class="dropdown blog-mobile-actions">
-
-              <button class="btn btn-link text-dark p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                aria-label="Blog actions">
-
-                <i class="bi bi-three-dots-vertical"></i>
-
-              </button>
-
-
-              <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none">
-
-                <app-dropdown [items]="getActionItems(blog)" (itemSelected)="onActionSelected($event, blog)">
-                </app-dropdown>
-
+            <!-- Top -->
+            <div class="blog-mobile-top">
+              <div class="blog-mobile-title-wrapper">
+                <span class="blog-mobile-label">BLOG</span>
+                <h3 class="blog-mobile-title" [title]="blog.title">
+                  {{ blog.title }}
+                </h3>
               </div>
 
+              <!-- Actions -->
+              <div class="dropdown blog-mobile-actions">
+                <button class="btn btn-link text-dark p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                  data-bs-display="static" aria-label="Blog actions">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+
+                <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none">
+                  <app-dropdown [items]="getActionItems(blog)" (itemSelected)="onActionSelected($event, blog)">
+                  </app-dropdown>
+                </div>
+              </div>
+            </div>
+
+            <!-- Category -->
+            <div class="blog-mobile-category">
+              <app-badge [label]="blog.category" appearance="subtle" variant="primary">
+              </app-badge>
+            </div>
+
+            <!-- Meta -->
+            <div class="blog-mobile-meta">
+              <div class="blog-mobile-meta-item">
+                <i class="bi bi-calendar3"></i>
+                <span>{{ blog.createdAt | date:'mediumDate' }}</span>
+              </div>
+
+              <div class="blog-mobile-meta-item">
+                <i class="bi bi-file-text"></i>
+                <span>Published Blog</span>
+              </div>
             </div>
 
           </div>
 
-
-          <!-- Category -->
-          <div class="blog-mobile-category">
-
-            <app-badge [label]="blog.category" appearance="subtle" variant="primary">
-            </app-badge>
-
-          </div>
-
-
-          <!-- Meta -->
-          <div class="blog-mobile-meta">
-
-            <div class="blog-mobile-meta-item">
-
-              <i class="bi bi-calendar3"></i>
-
-              <span>
-                {{ blog.createdAt | date:'mediumDate' }}
-              </span>
-
-            </div>
-
-
-            <div class="blog-mobile-meta-item">
-
-              <i class="bi bi-file-text"></i>
-
-              <span>
-                Published Blog
-              </span>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </article>
-
-      }
-
-      } @else {
-
-      <!-- Empty -->
-      <div class="blog-mobile-empty">
-
-        <div class="blog-mobile-empty-icon">
-
-          <i class="bi bi-journal-text"></i>
-
-        </div>
-
-        <h3>
-          No blogs found
-        </h3>
-
-        <p>
-          Create your first blog to get started.
-        </p>
-
+        </article>
+        }
       </div>
+      } @else {
+      <div class="blog-mobile-empty">
+        <div class="blog-mobile-empty-icon">
+          <i class="bi bi-journal-text"></i>
+        </div>
+        <h3>No blogs found</h3>
+        <p>Create your first blog to get started.</p>
+      </div>
+      }
 
       }
 
     </section>
-
-    }
 
 
     <!-- ===================================================
@@ -382,11 +274,9 @@
     ==================================================== -->
     @if (totalItems > 0) {
     <div class="blog-pagination mt-4">
-
       <app-pagination [currentPage]="(currentPage$ | async) || 1" [pageSize]="(pageSize$ | async) || 10"
         [totalItems]="totalItems" (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
       </app-pagination>
-
     </div>
     }
 

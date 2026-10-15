@@ -153,44 +153,32 @@
 }
 
 /* =========================================================
-   FREELANCER FILTER
+   FILTER COMPONENTS
 ========================================================= */
 
-.freelancer-filter-section {
-  position: relative;
-  overflow: visible;
+:host app-input-field,
+app-input-field {
+  display: block;
+  width: 100%;
 }
 
-.freelancer-filter-row {
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 2fr) minmax(180px, 1fr) minmax(260px, 1fr);
-
-  gap: 16px;
-
-  align-items: end;
+:host app-button,
+app-button {
+  display: block;
+  width: 100%;
 }
 
-.freelancer-search-field,
-.freelancer-status-field,
-.freelancer-filter-actions {
-  min-width: 0;
+app-input-field ::ng-deep .input-group {
+  flex-wrap: nowrap !important;
 }
 
-.freelancer-filter-actions {
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 10px;
-
-  min-width: 0;
+app-input-field ::ng-deep .form-control,
+app-input-field ::ng-deep .form-select {
+  width: 100%;
 }
 
-.filter-action-button {
-  min-width: 0;
+app-button ::ng-deep button {
+  width: 100%;
 }
 
 
@@ -244,7 +232,7 @@
 ========================================================= */
 
 .freelancer-data-section {
-  overflow: hidden;
+  overflow: visible;
 }
 
 .desktop-table-view {
@@ -262,13 +250,9 @@
 
 .freelancer-card-grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 18px;
-
-  padding: 20px;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 10px 0;
 }
 
 
@@ -694,28 +678,6 @@
   }
 
 
-  /* Filter */
-
-  .freelancer-filter-row {
-    grid-template-columns:
-      minmax(0, 1fr) minmax(220px, 0.55fr);
-
-    gap: 14px;
-  }
-
-  .freelancer-search-field {
-    grid-column: 1 / -1;
-  }
-
-  .freelancer-status-field {
-    grid-column: 1;
-  }
-
-  .freelancer-filter-actions {
-    grid-column: 2;
-  }
-
-
   /* Cards */
 
   .desktop-table-view {
@@ -727,12 +689,9 @@
   }
 
   .freelancer-card-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
+    grid-template-columns: 1fr;
     gap: 16px;
-
-    padding: 16px;
+    padding: 16px 0;
   }
 
   .freelancer-card {
@@ -761,38 +720,6 @@
     padding: 1rem !important;
 
     border-radius: 16px !important;
-  }
-
-
-  /* Filter */
-
-  .freelancer-filter-section .card-body {
-    padding: 16px !important;
-  }
-
-  .freelancer-filter-row {
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: stretch;
-
-    gap: 12px;
-  }
-
-  .freelancer-search-field,
-  .freelancer-status-field,
-  .freelancer-filter-actions {
-    width: 100%;
-  }
-
-  .freelancer-filter-actions {
-    display: grid;
-
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
-    gap: 10px;
   }
 
 
