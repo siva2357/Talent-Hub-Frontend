@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class TransactionService extends BaseService {
-  private apiUrl = 'http://localhost:5000/api/finance'; // Base URL for finance routes
+  private apiUrl = `${environment.apiGatewayUrl}/finance`; // Base URL for finance routes
 
   // --- Reports & Stats ---
   getFinanceStats(): Observable<any> {

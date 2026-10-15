@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ContractDiaryService extends BaseService {
-  private apiUrl = 'http://localhost:5000/api/contract-diary'; // Base URL for contract diary
+  private apiUrl = `${environment.apiGatewayUrl}/contract-diary`; // Base URL for contract diary
 
   // --- Client Endpoints ---
   

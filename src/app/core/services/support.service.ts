@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class SupportService extends BaseService {
-  private apiUrl = 'http://localhost:5000/api/support';
+  private apiUrl = `${environment.apiGatewayUrl}/support`;
 
   
 

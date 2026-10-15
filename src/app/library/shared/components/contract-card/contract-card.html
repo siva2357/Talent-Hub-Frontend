@@ -8,357 +8,343 @@
 
     <div class="contract-card-header">
 
-        <div class="contract-card-title">
+        <div class="contract-card-header-top">
 
-            <h6>
-                {{ contract.contractTitle }}
-            </h6>
-
-            <div class="contract-tags">
-
-                @if (contract.contractSubject) {
-
-                <app-badge [label]="contract.contractSubject" variant="primary" appearance="outline">
-                </app-badge>
-
-                }
-
-                @if (contract.contractType) {
-
-                <app-badge [label]="contract.contractType" variant="secondary" appearance="outline">
-                </app-badge>
-
-                }
-
+            <div class="contract-card-title">
+                <h6>
+                    {{ contract.contractTitle }}
+                </h6>
             </div>
 
-        </div>
+            <!-- =====================================
+                 FREELANCER MATCH BADGE
+                 ===================================== -->
+            @if (isFreelancer && contract.matchPercentage !== undefined) {
+            <div class="contract-header-status">
+                <app-badge [label]="contract.matchPercentage + '% Match (' + contract.matchCategory + ')'" [variant]="
+                            contract.matchCategory === 'High'
+                                ? 'success'
+                                : contract.matchCategory === 'Average'
+                                    ? 'warning'
+                                    : 'danger'
+                        " appearance="subtle" [rounded]="true" size="small">
+                </app-badge>
+            </div>
+            }
 
+            <!-- =====================================
+                 CLIENT HEADER
+                 ===================================== -->
+            @if (isClient) {
+            <div class="contract-client-header-actions">
+                <!-- STATUS -->
+                <div class="contract-header-status">
+                    <app-badge [label]="contract.status || 'Unknown'" [variant]="statusVariant" appearance="subtle"
+                        [rounded]="true" size="small">
+                    </app-badge>
+                </div>
 
-        <!-- =====================================
-             FREELANCER HEADER
-             ===================================== -->
+                <!-- THREE DOT MENU -->
+                <div class="contract-card-menu">
+                    <button class="contract-menu-button" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                        data-bs-display="static">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
 
-        @if (isFreelancer) {
-
-        <div class="contract-header-status">
-
-            <app-badge [label]="contract.hasApplied ? 'Applied' : 'Not Applied'"
-                [variant]="contract.hasApplied ? 'success' : 'secondary'" appearance="subtle" [rounded]="true">
-            </app-badge>
-
-
-            @if (contract.matchPercentage !== undefined) {
-
-            <app-badge [label]="contract.matchPercentage + '% Match (' + contract.matchCategory + ')'" [variant]="
-                    contract.matchCategory === 'High'
-                        ? 'success'
-                        : contract.matchCategory === 'Average'
-                            ? 'warning'
-                            : 'danger'
-                " appearance="subtle" [rounded]="true">
-            </app-badge>
-
+                    <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none">
+                        <app-dropdown [items]="getDropdownItems()" (itemSelected)="onDropdownAction($event)" class="d-block">
+                        </app-dropdown>
+                    </div>
+                </div>
+            </div>
             }
 
         </div>
 
-        }
-
-
         <!-- =====================================
-             CLIENT HEADER
+             TAGS (SIDE BY SIDE IN A ROW)
              ===================================== -->
+        <div class="contract-tags">
+            @if (contract.contractSubject) {
+            <app-badge [label]="contract.contractSubject" variant="primary" appearance="outline" size="small">
+            </app-badge>
+            }
 
-        @if (isClient) {
-
-        <div class="contract-client-header-actions">
-
-            <!-- STATUS -->
-
-            <div class="contract-header-status">
-
-                <app-badge [label]="contract.status || 'Unknown'" [variant]="statusVariant" appearance="subtle"
-                    [rounded]="true">
-                </app-badge>
-
-            </div>
-
-
-            <!-- THREE DOT MENU -->
-
-            <div class="contract-card-menu">
-
-                <button class="contract-menu-button" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                    data-bs-display="static">
-
-                    <i class="bi bi-three-dots-vertical"></i>
-
-                </button>
-
-
-                <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none">
-
-                    <app-dropdown [items]="getDropdownItems()" (itemSelected)="onDropdownAction($event)"
-                        class="d-block">
-                    </app-dropdown>
-
-                </div>
-
-            </div>
-
+            @if (contract.contractType) {
+            <app-badge [label]="contract.contractType" variant="secondary" appearance="outline" size="small">
+            </app-badge>
+            }
         </div>
-
-        }
 
     </div>
 
 
-    <!-- =========================================
+<!-- =========================================
          DESCRIPTION
          ========================================= -->
 
-    @if (contract.contractDescription) {
+@if (contract.contractDescription) {
 
-    <p class="contract-description">
-        {{ contract.contractDescription }}
-    </p>
+<p class="contract-description">
+    {{ contract.contractDescription }}
+</p>
 
-    }
+}
 
 
-    <!-- =========================================
+<!-- =========================================
          FREELANCER BUDGET / DURATION
          ========================================= -->
 
-    @if (isFreelancer) {
+@if (isFreelancer) {
 
-    <div class="contract-details">
+<div class="contract-details">
 
-        <div class="contract-detail-item">
+    <div class="contract-detail-item">
 
-            <span class="contract-detail-label">
-                EST. BUDGET
-            </span>
+        <span class="contract-detail-label">
+            EST. BUDGET
+        </span>
 
-            <span class="contract-detail-value">
-                {{ formattedBudget }}
-            </span>
-
-        </div>
-
-
-        <div class="contract-detail-divider"></div>
-
-
-        <div class="contract-detail-item">
-
-            <span class="contract-detail-label">
-                DURATION
-            </span>
-
-            <span class="contract-detail-value">
-                {{ contract.totalDuration }}
-            </span>
-
-        </div>
+        <span class="contract-detail-value">
+            {{ formattedBudget }}
+        </span>
 
     </div>
 
-    }
+
+    <div class="contract-detail-divider"></div>
 
 
-    <!-- =========================================
+    <div class="contract-detail-item">
+
+        <span class="contract-detail-label">
+            DURATION
+        </span>
+
+        <span class="contract-detail-value">
+            {{ contract.totalDuration }}
+        </span>
+
+    </div>
+
+</div>
+
+}
+
+
+<!-- =========================================
          CLIENT BUDGET / SPENT
          ========================================= -->
 
-    @if (isClient) {
+@if (isClient) {
 
-    <div class="contract-details">
+<div class="contract-details">
 
-        <div class="contract-detail-item">
+    <div class="contract-detail-item">
 
-            <span class="contract-detail-label">
-                EST. BUDGET
-            </span>
+        <span class="contract-detail-label">
+            EST. BUDGET
+        </span>
 
-            <span class="contract-detail-value">
-                {{ formattedBudget }}
-            </span>
-
-        </div>
-
-
-        <div class="contract-detail-divider"></div>
-
-
-        <div class="contract-detail-item">
-
-            <span class="contract-detail-label">
-                SPENT
-            </span>
-
-            <span class="contract-detail-value">
-                {{ formattedSpent }}
-            </span>
-
-        </div>
+        <span class="contract-detail-value">
+            {{ formattedBudget }}
+        </span>
 
     </div>
 
-    }
+
+    <div class="contract-detail-divider"></div>
 
 
-    <!-- =========================================
+    <div class="contract-detail-item">
+
+        <span class="contract-detail-label">
+            SPENT
+        </span>
+
+        <span class="contract-detail-value">
+            {{ formattedSpent }}
+        </span>
+
+    </div>
+
+</div>
+
+}
+
+
+<!-- =========================================
          INDUSTRY
          ========================================= -->
 
-    @if (contract.industry) {
+@if (contract.industry) {
 
-    <div class="contract-section">
+<div class="contract-section">
 
-        <span class="contract-section-label">
-            INDUSTRY
+    <span class="contract-section-label">
+        INDUSTRY
+    </span>
+
+
+    <div class="contract-tags">
+
+        <span class="contract-info-tag">
+            {{ contract.industry }}
         </span>
-
-
-        <div class="contract-tags">
-
-            <span class="contract-info-tag">
-                {{ contract.industry }}
-            </span>
-
-        </div>
 
     </div>
 
-    }
+</div>
+
+}
 
 
-    <!-- =========================================
+<!-- =========================================
          DATES
          ========================================= -->
 
-    <div class="contract-dates">
+<div class="contract-dates">
 
-        <div class="contract-date">
+    <div class="contract-date">
 
-            <span>
-                Start Date
-            </span>
+        <span>
+            Start Date
+        </span>
 
-            <strong>
-                {{ formattedStartDate }}
-            </strong>
-
-        </div>
-
-
-        <div class="contract-date">
-
-            <span>
-                End Date
-            </span>
-
-            <strong>
-                {{ formattedEndDate }}
-            </strong>
-
-        </div>
+        <strong>
+            {{ formattedStartDate }}
+        </strong>
 
     </div>
 
 
-    <!-- =========================================
+    <div class="contract-date">
+
+        <span>
+            End Date
+        </span>
+
+        <strong>
+            {{ formattedEndDate }}
+        </strong>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
          CLIENT FUND / FEEDBACK
          ========================================= -->
 
-    @if (isClient) {
+@if (isClient) {
 
-    <div class="contract-client-meta">
+<div class="contract-client-meta">
 
-        <!-- FUNDS -->
+    <!-- FUNDS -->
 
-        <div class="contract-client-meta-item">
+    <div class="contract-client-meta-item">
 
-            <span class="contract-detail-label">
-                FUNDS
-            </span>
-
-
-            @if (isFunded) {
-
-            <app-badge label="Funded" variant="success" appearance="subtle" [rounded]="true">
-            </app-badge>
-
-            } @else {
-
-            <app-badge label="Not Funded" variant="warning" appearance="subtle" [rounded]="true">
-            </app-badge>
-
-            }
-
-        </div>
+        <span class="contract-detail-label">
+            FUNDS
+        </span>
 
 
-        <!-- FEEDBACK -->
+        @if (isFunded) {
 
-        <div class="contract-client-meta-item">
+        <app-badge label="Funded" variant="success" appearance="subtle" [rounded]="true" size="small">
+        </app-badge>
 
-            <span class="contract-detail-label">
-                FEEDBACK
-            </span>
+        } @else {
 
+        <app-badge label="Not Funded" variant="warning" appearance="subtle" [rounded]="true" size="small">
+        </app-badge>
 
-            @if (contract.feedbackSubmitted) {
-
-            <app-badge label="Submitted" variant="success" appearance="subtle" [rounded]="true">
-            </app-badge>
-
-            } @else {
-
-            <app-badge label="Pending" variant="secondary" appearance="subtle" [rounded]="true">
-            </app-badge>
-
-            }
-
-        </div>
+        }
 
     </div>
 
-    }
+
+    <!-- FEEDBACK -->
+
+    <div class="contract-client-meta-item">
+
+        <span class="contract-detail-label">
+            FEEDBACK
+        </span>
 
 
-    <!-- =========================================
+        @if (contract.feedbackSubmitted) {
+
+        <app-badge label="Submitted" variant="success" appearance="subtle" [rounded]="true" size="small">
+        </app-badge>
+
+        } @else {
+
+        <app-badge label="Pending" variant="secondary" appearance="subtle" [rounded]="true" size="small">
+        </app-badge>
+
+        }
+
+    </div>
+
+</div>
+
+}
+
+
+<!-- =========================================
+         APPLICATION STATUS
+         ========================================= -->
+
+@if (isFreelancer) {
+
+<div class="contract-application-status">
+
+    <span class="contract-app-status-label">
+        Application Status:
+    </span>
+
+    <app-badge [label]="contract.hasApplied ? 'Applied' : 'Not Applied'"
+        [variant]="contract.hasApplied ? 'success' : 'secondary'" appearance="subtle" [rounded]="true" size="small">
+    </app-badge>
+
+</div>
+
+}
+
+
+<!-- =========================================
          FOOTER
          ========================================= -->
 
-    @if (isFreelancer) {
+@if (isFreelancer) {
 
-    <div class="contract-card-footer">
+<div class="contract-card-footer">
 
-        <!-- SAVE -->
+    <!-- SAVE -->
 
-        <app-button variant="light" size="md" [iconOnly]="true" (clicked)="onSave()" class="rounded-circle">
+    <app-button variant="light" size="sm" [iconOnly]="true" (clicked)="onSave()" class="rounded-circle">
 
-            <i class="bi fs-5" [class.text-primary]="contract.hasSaved" [class.bi-bookmark-fill]="contract.hasSaved"
-                [class.bi-bookmark]="!contract.hasSaved">
-            </i>
+        <i class="bi fs-6" [class.text-primary]="contract.hasSaved" [class.bi-bookmark-fill]="contract.hasSaved"
+            [class.bi-bookmark]="!contract.hasSaved">
+        </i>
 
-        </app-button>
+    </app-button>
 
 
-        <!-- VIEW DETAILS -->
+    <!-- VIEW DETAILS -->
 
-        <app-button variant="info" size="md" (clicked)="onViewDetails()">
+    <app-button variant="info" size="sm" (clicked)="onViewDetails()">
 
-            View Details
+        View Details
 
-        </app-button>
+    </app-button>
 
-    </div>
+</div>
 
-    }
+}
 
 
 

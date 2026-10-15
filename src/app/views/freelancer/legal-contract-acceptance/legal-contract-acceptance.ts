@@ -9,6 +9,7 @@ import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
 import { Button } from '../../../library/ui/components/button/button';
 import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-legal-contract-acceptance',
@@ -44,7 +45,7 @@ export class LegalContractAcceptance implements OnInit {
   ) { }
 
   getSafePdfUrl(): SafeResourceUrl {
-    const url = `http://localhost:5000/api/offers/${this.offerId}/pdf`;
+    const url = `${environment.apiGatewayUrl}/offers/${this.offerId}/pdf`;
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 

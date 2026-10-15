@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
 import { UploadBucket, UploadSection } from '../enums/upload.enum';
+import { environment } from '../../../environments/environment';
 
 export interface UploadResponse {
   success: boolean;
@@ -13,7 +14,7 @@ export interface UploadResponse {
   providedIn: 'root'
 })
 export class FileService extends BaseService {
-  private readonly UPLOAD_API = 'http://localhost:5000/api/uploads/upload';
+  private readonly UPLOAD_API = `${environment.apiGatewayUrl}/uploads/upload`;
 
   
 

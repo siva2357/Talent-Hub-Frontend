@@ -9,7 +9,7 @@
         <div class="row align-items-center g-4 g-lg-5">
 
             <!-- Content -->
-            <div class="col-12 col-lg-5 order-2 order-lg-1">
+            <div class="col-12 col-lg-5 order-1">
 
                 <div class="hero-content">
 
@@ -18,7 +18,7 @@
                         <span class="text-gradient">
                             right talent
                         </span>
-                        <br />
+
 
                         Do your
                         <span class="text-gradient">
@@ -43,7 +43,7 @@
 
 
             <!-- Image -->
-            <div class="col-12 col-lg-7 order-1 order-lg-2">
+            <div class="col-12 col-lg-7 order-2">
 
                 <div class="hero-image-wrapper">
 
@@ -90,21 +90,23 @@
 
             @for (feature of features; track feature.title) {
 
-            <div class="col-12 col-sm-6 col-lg-3">
+            <div class="col-12 col-lg-3">
 
                 <article class="feature-card">
 
                     <div class="feature-icon custom-icon-box">
-                        <i class="bi bi-stars"></i>
+                        <i [class]="'bi ' + (feature.icon || 'bi-stars')"></i>
                     </div>
 
-                    <h5 class="feature-title">
-                        {{ feature.title }}
-                    </h5>
+                    <div class="feature-body">
+                        <h5 class="feature-title">
+                            {{ feature.title }}
+                        </h5>
 
-                    <p class="feature-description">
-                        {{ feature.description }}
-                    </p>
+                        <p class="feature-description">
+                            {{ feature.description }}
+                        </p>
+                    </div>
 
                 </article>
 
@@ -130,7 +132,7 @@
         <div class="row align-items-center g-4 g-lg-5">
 
             <!-- Image -->
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-lg-6 order-2 order-lg-1">
 
                 <div class="workspace-image-wrapper">
 
@@ -143,7 +145,7 @@
 
 
             <!-- Content -->
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-lg-6 order-1 order-lg-2">
 
                 <div class="workspace-content">
 
@@ -222,7 +224,7 @@
                     <div class="process-header">
 
                         <div class="process-icon custom-icon-box">
-                            <i class="bi bi-stars"></i>
+                            <i [class]="'bi ' + (step.icon || 'bi-stars')"></i>
                         </div>
 
                         <span class="process-number">
@@ -309,88 +311,10 @@
         <!-- Contract Cards -->
         <div class="row g-4">
 
-            @for (contract of contracts; track contract.title) {
+            @for (contract of contracts; track contract._id) {
 
             <div class="col-12 col-md-6 col-lg-4">
-
-                <article class="contract-card">
-
-                    <div class="contract-body">
-
-                        <div class="contract-heading">
-
-                            <h5 class="contract-title">
-                                {{ contract.title }}
-                            </h5>
-
-                            <i class="bi bi-bookmark contract-bookmark"></i>
-
-                        </div>
-
-
-                        <p class="contract-client">
-
-                            Posted by
-                            {{ contract.client }}
-
-                            <span class="text-warning">
-                                ★
-                            </span>
-
-                            <span class="verified-client">
-                                Verified Client
-                            </span>
-
-                        </p>
-
-
-                        <p class="contract-description">
-                            {{ contract.description }}
-                        </p>
-
-
-                        <div class="contract-skills">
-
-                            @for (skill of contract.skills; track skill) {
-
-                            <span class="contract-skill">
-                                {{ skill }}
-                            </span>
-
-                            }
-
-                        </div>
-
-
-                        <div class="contract-details">
-
-                            <span>
-                                {{ contract.budget }}
-                            </span>
-
-                            <span>
-                                {{ contract.duration }}
-                            </span>
-
-                            <span>
-                                {{ contract.match }}
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="contract-footer">
-
-                        <button type="button" class="btn btn-primary w-100 contract-button">
-                            Apply now
-                        </button>
-
-                    </div>
-
-                </article>
-
+                <app-contract-card [contract]="contract" [role]="'freelancer'" (apply)="onApplyContract($event)" (save)="onSaveContract($event)"></app-contract-card>
             </div>
 
             }
@@ -423,21 +347,23 @@
 
             @for (step of hiringSteps; track step.title) {
 
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-lg-4">
 
                 <article class="feature-card">
 
                     <div class="feature-icon custom-icon-box">
-                        <i class="bi bi-check-lg"></i>
+                        <i [class]="'bi ' + (step.icon || 'bi-check-lg')"></i>
                     </div>
 
-                    <h5 class="feature-title">
-                        {{ step.title }}
-                    </h5>
+                    <div class="feature-body">
+                        <h5 class="feature-title">
+                            {{ step.title }}
+                        </h5>
 
-                    <p class="feature-description">
-                        {{ step.description }}
-                    </p>
+                        <p class="feature-description">
+                            {{ step.description }}
+                        </p>
+                    </div>
 
                 </article>
 

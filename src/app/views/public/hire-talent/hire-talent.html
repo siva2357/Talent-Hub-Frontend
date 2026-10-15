@@ -9,7 +9,7 @@
         <div class="row align-items-center g-4 g-lg-5">
 
             <!-- Content -->
-            <div class="col-12 col-lg-5 order-2 order-lg-1">
+            <div class="col-12 col-lg-5 order-1">
 
                 <div class="hero-content">
 
@@ -37,7 +37,7 @@
 
 
             <!-- Image -->
-            <div class="col-12 col-lg-7 order-1 order-lg-2">
+            <div class="col-12 col-lg-7 order-2">
 
                 <div class="hero-image-wrapper">
 
@@ -84,21 +84,23 @@
 
             @for (feature of features; track feature.title) {
 
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-lg-4">
 
                 <article class="feature-card">
 
                     <div class="feature-icon custom-icon-box">
-                        <i class="bi bi-stars"></i>
+                        <i [class]="'bi ' + feature.icon"></i>
                     </div>
 
-                    <h5 class="feature-title">
-                        {{ feature.title }}
-                    </h5>
+                    <div class="feature-body">
+                        <h5 class="feature-title">
+                            {{ feature.title }}
+                        </h5>
 
-                    <p class="feature-description">
-                        {{ feature.description }}
-                    </p>
+                        <p class="feature-description">
+                            {{ feature.description }}
+                        </p>
+                    </div>
 
                 </article>
 
@@ -124,7 +126,7 @@
         <div class="row align-items-center g-4 g-lg-5">
 
             <!-- Image -->
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-lg-6 order-2 order-lg-1">
 
                 <div class="matching-image-wrapper">
 
@@ -137,7 +139,7 @@
 
 
             <!-- Content -->
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-lg-6 order-1 order-lg-2">
 
                 <div class="matching-content">
 
@@ -231,7 +233,7 @@
                     <div class="process-top">
 
                         <div class="process-icon custom-icon-box">
-                            <i class="bi bi-check-lg"></i>
+                            <i [class]="'bi ' + step.icon"></i>
                         </div>
 
                         <span class="process-number">
@@ -321,91 +323,10 @@
         <!-- Talent Cards -->
         <div class="row g-4">
 
-            @for (talent of talents; track talent.name) {
+            @for (talent of talents; track talent._id) {
 
             <div class="col-12 col-md-6 col-lg-4">
-
-                <article class="talent-card">
-
-                    <div class="talent-body">
-
-                        <!-- Profile Header -->
-                        <div class="talent-header">
-
-                            <div class="talent-avatar">
-                                {{ talent.name.charAt(0) }}
-                            </div>
-
-                            <div class="talent-info">
-
-                                <h5 class="talent-name">
-                                    {{ talent.name }}
-                                </h5>
-
-                                <p class="talent-role">
-                                    {{ talent.role }}
-                                </p>
-
-                            </div>
-
-                            <span class="talent-success">
-                                {{ talent.successRate }}
-                            </span>
-
-                        </div>
-
-
-                        <!-- Description -->
-                        <p class="talent-description">
-                            {{ talent.description }}
-                        </p>
-
-
-                        <!-- Skills -->
-                        <div class="talent-skills">
-
-                            @for (skill of talent.skills; track skill) {
-
-                            <span class="talent-skill">
-                                {{ skill }}
-                            </span>
-
-                            }
-
-                        </div>
-
-
-                        <!-- Details -->
-                        <div class="talent-details">
-
-                            <span>
-                                {{ talent.rate }}
-                            </span>
-
-                            <span>
-                                {{ talent.availability }}
-                            </span>
-
-                            <span>
-                                {{ talent.location }}
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- Footer -->
-                    <div class="talent-footer">
-
-                        <button type="button" class="btn btn-primary w-100 talent-button">
-                            View Profile
-                        </button>
-
-                    </div>
-
-                </article>
-
+                <app-talent-card [talent]="talent"></app-talent-card>
             </div>
 
             }

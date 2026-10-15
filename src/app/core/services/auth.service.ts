@@ -12,13 +12,14 @@ import {
 import { AuthResponse } from '../models/user.model';
 import { TokenService } from './token.service';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService extends BaseService {
   // Update this to match your backend port
-  private readonly API_URL = 'http://localhost:5000/api/auth';
+  private readonly API_URL = `${environment.apiGatewayUrl}/auth`;
 
   constructor(
     

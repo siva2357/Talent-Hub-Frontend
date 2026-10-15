@@ -14,11 +14,11 @@
 
 .why-container {
   width: 100%;
-  max-width: 1440px;
+  max-width: 100%;
   margin: 0 auto;
 
-  padding-left: clamp(1rem, 4vw, 4rem);
-  padding-right: clamp(1rem, 4vw, 4rem);
+  padding-left: 0;
+  padding-right: 0;
 }
 
 
@@ -96,21 +96,28 @@
   width: 100%;
   overflow: hidden;
 
-  border-radius: 150px 0 0 150px;
+  border-radius: 1.75rem;
 
   background-color: #f1f3f5;
 
   box-shadow:
-    0 0.5rem 1rem rgba(0, 0, 0, 0.12);
+    0 1rem 2.5rem rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .hero-image {
   display: block;
 
   width: 100%;
-  height: clamp(300px, 40vw, 500px);
+  height: clamp(300px, 38vw, 480px);
 
   object-fit: cover;
+  border-radius: 1.75rem;
+  transition: transform 0.4s ease;
+}
+
+.hero-image-wrapper:hover .hero-image {
+  transform: scale(1.02);
 }
 
 
@@ -172,10 +179,11 @@
 .feature-card:hover {
   transform: translateY(-5px);
 
-  border-color: rgba(13, 110, 253, 0.2);
+  border-color: #0d6efd;
 
   box-shadow:
-    0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+    0 12px 28px rgba(13, 110, 253, 0.16),
+    0 4px 10px rgba(13, 110, 253, 0.08);
 }
 
 
@@ -185,24 +193,27 @@
 
 .feature-image {
   width: 100%;
-  height: 180px;
+  height: 190px;
 
   flex-shrink: 0;
+  overflow: hidden;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
+  background-color: #f8f9fa;
 
-  background-color: rgba(108, 117, 125, 0.1);
-
-  border-bottom: 1px solid rgba(108, 117, 125, 0.15);
-
-  color: #6c757d;
+  border-bottom: 1px solid rgba(108, 117, 125, 0.12);
 }
 
-.feature-image i {
-  font-size: 3rem;
-  opacity: 0.5;
+.feature-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.feature-card:hover .feature-img {
+  transform: scale(1.05);
 }
 
 
@@ -240,49 +251,47 @@
    BOTTOM BENEFITS
 ========================================================= */
 
-.benefits-wrapper {
-  width: 100%;
+.benefit-card {
+  height: 100%;
+  padding: 1.35rem 1.25rem;
 
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
 
   background-color: #fff;
 
   border: 1px solid rgba(108, 117, 125, 0.2);
-  border-radius: 2rem;
+  border-radius: 1.25rem;
 
   box-shadow:
-    0 0.25rem 1rem rgba(0, 0, 0, 0.06);
+    0 0.125rem 0.4rem rgba(0, 0, 0, 0.04);
 
-  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
 }
 
-.benefit-item {
-  min-width: 0;
-
-  padding: 1.5rem;
-
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-
-  border-right: 1px solid rgba(108, 117, 125, 0.15);
+.benefit-card:hover {
+  transform: translateY(-5px);
+  border-color: #0d6efd;
+  box-shadow:
+    0 12px 28px rgba(13, 110, 253, 0.16),
+    0 4px 10px rgba(13, 110, 253, 0.08);
 }
 
-.benefit-item-last {
-  border-right: none;
+.benefit-card:hover .benefit-icon {
+  border-color: #0d6efd;
+  background-color: rgba(13, 110, 253, 0.1);
+  transform: scale(1.05);
 }
-
-
-/* =========================================================
-   BENEFIT ICON
-========================================================= */
 
 .benefit-icon {
-  width: 65px;
-  height: 65px;
+  width: 58px;
+  height: 58px;
 
-  flex: 0 0 65px;
+  flex: 0 0 58px;
 
   display: flex;
   align-items: center;
@@ -291,14 +300,24 @@
   border: 2px solid #b6d4fe;
   border-radius: 50%;
 
-  background-color: rgba(108, 117, 125, 0.12);
+  background-color: rgba(13, 110, 253, 0.06);
 
-  color: #6c757d;
+  color: #0d6efd;
 
-  font-size: 1.5rem;
+  font-size: 1.45rem;
+
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.benefit-card:hover .benefit-icon {
+  transform: scale(1.05);
+  background-color: rgba(13, 110, 253, 0.12);
 }
 
 .benefit-content {
+  flex: 1;
   min-width: 0;
 }
 
@@ -307,8 +326,8 @@
 
   color: #212529;
 
-  font-size: 0.9rem;
-  line-height: 1.4;
+  font-size: 0.95rem;
+  line-height: 1.35;
   font-weight: 700;
 }
 
@@ -317,7 +336,7 @@
 
   color: #6c757d;
 
-  font-size: 0.75rem;
+  font-size: 0.825rem;
   line-height: 1.5;
 }
 
@@ -333,20 +352,9 @@
   }
 
   .hero-image-wrapper {
-    border-radius: 100px 0 0 100px;
+    border-radius: 1.5rem;
   }
 
-  .benefits-wrapper {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .benefit-item:nth-child(2) {
-    border-right: none;
-  }
-
-  .benefit-item:nth-child(-n + 2) {
-    border-bottom: 1px solid rgba(108, 117, 125, 0.15);
-  }
 }
 
 
@@ -378,9 +386,9 @@
   }
 
   .hero-image-wrapper {
-    margin: 0 auto;
+    margin: 1.5rem auto 0;
     max-width: 550px;
-    border-radius: 2rem;
+    border-radius: 1.5rem;
   }
 
   .hero-image {
@@ -396,8 +404,8 @@
 @media (max-width: 767.98px) {
 
   .why-container {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .hero-section,
@@ -453,23 +461,8 @@
     padding: 1.25rem;
   }
 
-  .benefits-wrapper {
-    grid-template-columns: 1fr;
-    border-radius: 1.25rem;
-  }
-
-  .benefit-item {
-    padding: 1.25rem;
-    border-right: none;
-    border-bottom: 1px solid rgba(108, 117, 125, 0.15);
-  }
-
-  .benefit-item:nth-child(2) {
-    border-right: none;
-  }
-
-  .benefit-item:last-child {
-    border-bottom: none;
+  .benefit-card {
+    padding: 1.15rem 1.25rem;
   }
 }
 
@@ -481,8 +474,8 @@
 @media (max-width: 575.98px) {
 
   .why-container {
-    padding-left: 0.875rem;
-    padding-right: 0.875rem;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .hero-section,
@@ -515,16 +508,17 @@
     padding: 1.15rem;
   }
 
-  .benefit-item {
-    align-items: flex-start;
-    padding: 1.15rem;
+  .benefit-card {
+    padding: 1rem 1.15rem;
+    border-radius: 1rem;
+    gap: 0.9rem;
   }
 
   .benefit-icon {
-    width: 50px;
-    height: 50px;
-    flex-basis: 50px;
-    font-size: 1.2rem;
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    font-size: 1.25rem;
   }
 }
 
@@ -536,8 +530,8 @@
 @media (max-width: 375px) {
 
   .why-container {
-    padding-left: 0.65rem;
-    padding-right: 0.65rem;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .hero-title {
@@ -560,11 +554,23 @@
     height: 140px;
   }
 
+  .benefit-card {
+    padding: 0.85rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .benefit-icon {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    font-size: 1.15rem;
+  }
+
   .benefit-title {
-    font-size: 0.85rem;
+    font-size: 0.88rem;
   }
 
   .benefit-description {
-    font-size: 0.72rem;
+    font-size: 0.78rem;
   }
 }
