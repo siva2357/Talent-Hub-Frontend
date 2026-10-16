@@ -12,13 +12,14 @@ import { FormsModule } from '@angular/forms';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from '../../../library/ui/components/chip/chip';
 import { Pagination } from '../../../library/ui/components/pagination/pagination';
+import { LedgerCard } from '../../../library/shared/components/ledger-card/ledger-card';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-financial-summary',
   standalone: true,
-  imports: [CommonModule, StatCard, Table, Badge, Button, FormsModule, InputField, Chip, Pagination],
+  imports: [CommonModule, StatCard, Table, Badge, Button, FormsModule, InputField, Chip, Pagination, LedgerCard],
   templateUrl: './financial-summary.html',
   styleUrl: './financial-summary.css'
 })

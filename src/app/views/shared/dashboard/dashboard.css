@@ -186,39 +186,45 @@ section.row>[class*="col-"]>* {
 }
 
 /* =========================================================
-   CONTROL ITEMS
+   CONTROL ITEMS (CENTERED ICON & TEXT WITH BORDER VIBE)
    ========================================================= */
 
 .control-item {
   width: 100%;
   min-width: 0;
-
-  transition:
-    all 0.2s ease;
-
+  position: relative;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 16px !important;
   cursor: pointer;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
 
-  background-color: rgba(255, 255, 255, 0.8);
-
-  border: 1px solid rgba(168, 85, 247, 0.1) !important;
+.control-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #4a3aff, #2563eb);
+  opacity: 0;
+  transition: opacity 0.28s ease;
 }
 
 .control-item:hover {
   border-color: #4a3aff !important;
-
-  background-color: #fcfbfe;
-
-  transform: translateX(4px);
+  background: #ffffff;
+  transform: translateY(-4px);
+  box-shadow:
+    0 16px 32px -4px rgba(74, 58, 255, 0.16),
+    0 0 0 1px rgba(74, 58, 255, 0.2);
 }
 
-.control-item .ms-3 {
-  min-width: 0;
-  flex: 1;
-}
-
-.control-item .ms-3 span {
-  word-break: break-word;
-  overflow-wrap: anywhere;
+.control-item:hover::before {
+  opacity: 1;
 }
 
 /* =========================================================
@@ -226,16 +232,55 @@ section.row>[class*="col-"]>* {
    ========================================================= */
 
 .control-icon {
-  width: 40px;
-  height: 40px;
-
-  min-width: 40px;
-
-  flex-shrink: 0;
-
-  border-radius: 8px;
-
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+  border-radius: 14px;
   background-color: rgba(74, 58, 255, 0.08);
+  color: #4a3aff;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.control-item:hover .control-icon {
+  background: linear-gradient(135deg, #4a3aff, #2563eb);
+  color: #ffffff;
+  transform: scale(1.08);
+  box-shadow: 0 8px 18px rgba(74, 58, 255, 0.28);
+}
+
+/* =========================================================
+   CONTROL TEXT
+   ========================================================= */
+
+.control-text {
+  width: 100%;
+}
+
+.control-title {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: -0.01em;
+  transition: color 0.2s ease;
+}
+
+.control-item:hover .control-title {
+  color: #4a3aff;
+}
+
+.control-desc {
+  display: block;
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+  line-height: 1.4;
+  word-break: break-word;
 }
 
 /* =========================================================

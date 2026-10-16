@@ -28,7 +28,7 @@ export class Dashboard implements AfterViewInit, OnInit {
   pendingProposals: string | number = 0;
   totalEarnings: string | number = 0;
   activities: any[] = [];
-
+  totalContracts: string | number = 0;
   // Admin Stats
   totalClients: number = 0;
   totalFreelancers: number = 0;
@@ -38,11 +38,49 @@ export class Dashboard implements AfterViewInit, OnInit {
     return [
       { title: 'Total Clients', value: this.totalClients, icon: 'bi-people-fill' },
       { title: 'Total Freelancers', value: this.totalFreelancers, icon: 'bi-person-workspace' },
-      { title: 'Total Contracts', value: this.activeContracts, icon: 'bi-file-earmark-check-fill' },
-      { title: 'Total Payouts', value: '₹' + this.totalCommissions, icon: 'bi-wallet-fill' },
+      { title: 'Total Contracts', value: this.totalContracts, icon: 'bi-file-earmark-check-fill' },
       { title: 'Platform Revenue', value: '₹' + this.totalCommissions, icon: 'bi-graph-up-arrow' }
     ];
   }
+
+  readonly controlPanels = [
+    {
+      title: 'Client Management',
+      description: 'Manage and review client accounts',
+      icon: 'bi-people-fill',
+      routerLink: '/client-management'
+    },
+    {
+      title: 'Freelancer Management',
+      description: 'Manage and review freelancer accounts',
+      icon: 'bi-person-workspace',
+      routerLink: '/freelancer-management'
+    },
+    {
+      title: 'Financial Summary',
+      description: 'Review platform financial activity',
+      icon: 'bi-graph-up',
+      routerLink: '/financial-management'
+    },
+    {
+      title: 'Reports',
+      description: 'Review platform reports and analytics',
+      icon: 'bi-file-earmark-text',
+      routerLink: '/reports'
+    },
+    {
+      title: 'Support Management',
+      description: 'Manage support requests and tickets',
+      icon: 'bi-headset',
+      routerLink: '/support-request'
+    },
+    {
+      title: 'Blog Management',
+      description: 'Manage platform blog content',
+      icon: 'bi-newspaper',
+      routerLink: '/blog-manager'
+    }
+  ];
 
   get clientStats(): StatCardData[] {
     return [
@@ -100,7 +138,7 @@ export class Dashboard implements AfterViewInit, OnInit {
         if (res) {
           this.totalClients = res.totalClients || 0;
           this.totalFreelancers = res.totalFreelancers || 0;
-          this.activeContracts = res.activeContracts || 0;
+          this.totalContracts = res.totalContracts || 0;
           this.totalCommissions = res.totalCommissions || 0;
 
           if (res.chartData) {
@@ -202,16 +240,32 @@ export class Dashboard implements AfterViewInit, OnInit {
     }
 
     if (this.revenueChart) {
+      const revenueData = chartData.revenue || [0, 0, 0, 0];
+      const hasRevenueData = revenueData.some((val: number) => val > 0);
+
       this.charts.push(new Chart(this.revenueChart.nativeElement, {
         type: 'doughnut',
         data: {
-          labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+          labels: hasRevenueData ? ['Q1', 'Q2', 'Q3', 'Q4'] : ['No Revenue'],
           datasets: [{
-            data: chartData.revenue || [0, 0, 0, 0],
-            backgroundColor: ['#4a3aff', '#2563eb', '#60a5fa', '#93c5fd']
+            data: hasRevenueData ? revenueData : [1],
+            backgroundColor: hasRevenueData ? ['#4a3aff', '#2563eb', '#60a5fa', '#93c5fd'] : ['#e5e7eb']
           }]
         },
-        options: { responsive: true, maintainAspectRatio: false }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: (ctx) => {
+                  if (!hasRevenueData) return ' No Revenue';
+                  return ` ${ctx.label}: ₹${ctx.raw ?? ctx.parsed}`;
+                }
+              }
+            }
+          }
+        }
       }));
     }
 
