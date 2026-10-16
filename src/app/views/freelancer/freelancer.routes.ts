@@ -33,6 +33,7 @@ export const FREELANCER_ROUTES: Routes = [
   { path: 'finance-overview', component: FinanceOverview },
   { path: 'portfolio', component: Portfolio },
   { path: 'profile', component: Profile },
+  { path: 'profile/:id', component: Profile },
   { path: 'account-settings', component: AccountSettings },
   { path: 'contact-support', component: ContactSupport },
   { path: 'create-ticket', component: CreateTicket },

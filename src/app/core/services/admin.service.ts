@@ -19,12 +19,20 @@ export class AdminService extends BaseService {
     return this.get<any>(`${this.API_URL}/clients`);
   }
 
+  getClientProfileById(id: string): Observable<any> {
+    return this.get<any>(`${environment.apiGatewayUrl}/profile/client/${id}`);
+  }
+
   updateClientStatus(id: string, status: string): Observable<any> {
     return this.patch<any>(`${this.API_URL}/clients/${id}/status`, { status });
   }
 
   getAllFreelancers(): Observable<any> {
     return this.get<any>(`${this.API_URL}/freelancers`);
+  }
+
+  getFreelancerProfileById(id: string): Observable<any> {
+    return this.get<any>(`${environment.apiGatewayUrl}/profile/freelancer/${id}`);
   }
 
   updateFreelancerStatus(id: string, status: string): Observable<any> {

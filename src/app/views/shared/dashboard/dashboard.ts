@@ -28,7 +28,7 @@ export class Dashboard implements AfterViewInit, OnInit {
   pendingProposals: string | number = 0;
   totalEarnings: string | number = 0;
   activities: any[] = [];
-  totalContracts: string | number = 0;
+  completedContracts: string | number = 0;
   // Admin Stats
   totalClients: number = 0;
   totalFreelancers: number = 0;
@@ -38,7 +38,7 @@ export class Dashboard implements AfterViewInit, OnInit {
     return [
       { title: 'Total Clients', value: this.totalClients, icon: 'bi-people-fill' },
       { title: 'Total Freelancers', value: this.totalFreelancers, icon: 'bi-person-workspace' },
-      { title: 'Total Contracts', value: this.totalContracts, icon: 'bi-file-earmark-check-fill' },
+      { title: 'Total Contracts', value: this.completedContracts, icon: 'bi-file-earmark-check-fill' },
       { title: 'Platform Revenue', value: '₹' + this.totalCommissions, icon: 'bi-graph-up-arrow' }
     ];
   }
@@ -138,7 +138,7 @@ export class Dashboard implements AfterViewInit, OnInit {
         if (res) {
           this.totalClients = res.totalClients || 0;
           this.totalFreelancers = res.totalFreelancers || 0;
-          this.totalContracts = res.totalContracts || 0;
+          this.completedContracts = res.completedContracts || 0;
           this.totalCommissions = res.totalCommissions || 0;
 
           if (res.chartData) {

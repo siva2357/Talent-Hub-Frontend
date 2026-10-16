@@ -76,8 +76,10 @@
     </ng-template>
 
     <ng-template #avatarTpl let-row="row">
-      <div class="rounded-circle bg-dark position-relative overflow-hidden" [style.background-color]="row.avatarColor"
-        style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+      <div class="rounded-circle bg-dark position-relative overflow-hidden cursor-pointer" [style.background-color]="row.avatarColor"
+        (click)="viewFreelancerProfile(row)"
+        style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;"
+        title="View Profile">
         @if (row.freelancer.profilePhoto) {
         <img [src]="row.freelancer.profilePhoto" alt="Avatar" class="w-100 h-100 object-fit-cover">
         } @else {
@@ -88,7 +90,9 @@
     </ng-template>
 
     <ng-template #nameTpl let-row="row">
-      <span class="fw-semibold">{{ row.freelancer.fullName }}</span>
+      <span class="fw-semibold text-primary cursor-pointer" (click)="viewFreelancerProfile(row)" title="View Profile">
+        {{ row.freelancer.fullName }}
+      </span>
     </ng-template>
 
     <ng-template #headlineTpl let-row="row">

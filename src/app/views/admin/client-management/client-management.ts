@@ -1,5 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AdminService } from '../../../core/services/admin.service';
 import { ModalService } from '../../../core/services/ui/modal.service';
 import { Table } from '../../../library/ui/components/table/table';
@@ -11,7 +12,7 @@ import { Chip } from '../../../library/ui/components/chip/chip';
 import { Dropdown, DropdownItem } from '../../../library/ui/components/dropdown/dropdown';
 import { Pagination } from '../../../library/ui/components/pagination/pagination';
 import { TableColumn } from '../../../core/models/ui.model';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, debounceTime } from 'rxjs/operators';
 import { ClientCard } from '../../../library/shared/components/client-card/client-card';
 
@@ -52,7 +53,8 @@ export class ClientManagement implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private adminService: AdminService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -111,13 +113,13 @@ export class ClientManagement implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.columns = [
-        { field: 'id', headerName: 'S.No', cellTemplate: this.indexTpl },
-        { field: 'profile', headerName: 'Profile', cellTemplate: this.profileTpl },
-        { field: 'name', headerName: 'Full Name', cellTemplate: this.fullNameTpl },
-        { field: 'email', headerName: 'Email', cellTemplate: this.emailTpl },
-        { field: 'industry', headerName: 'Industry', cellTemplate: this.industryTpl },
-        { field: 'status', headerName: 'Status', cellTemplate: this.statusTpl },
-        { field: 'actions', headerName: 'Actions', cellTemplate: this.actionsTpl }
+        { field: 'id', headerName: 'S.No', cellTemplate: this.indexTpl, width: 80 },
+        { field: 'profile', headerName: 'Profile', cellTemplate: this.profileTpl, width: 150 },
+        { field: 'name', headerName: 'Full Name', cellTemplate: this.fullNameTpl, width: 200 },
+        { field: 'email', headerName: 'Email', cellTemplate: this.emailTpl, width: 250 },
+        { field: 'industry', headerName: 'Industry', cellTemplate: this.industryTpl, width: 150 },
+        { field: 'status', headerName: 'Status', cellTemplate: this.statusTpl, width: 100 },
+        { field: 'actions', headerName: 'Actions', cellTemplate: this.actionsTpl, width: 100 }
       ];
     });
   }
@@ -249,7 +251,11 @@ export class ClientManagement implements OnInit, AfterViewInit, OnDestroy {
 
   onActionSelected(event: DropdownItem, client: any) {
     if (event.value === 'view') {
-      // Logic for view if any
+      this.router.navigate(['/profile', client.id], {
+        queryParams: {
+          from: 'client-management'
+        }
+      });
     } else {
       this.updateStatus(client.id, event.value);
     }

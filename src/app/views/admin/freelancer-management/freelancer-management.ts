@@ -1,5 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AdminService } from '../../../core/services/admin.service';
 import { ModalService } from '../../../core/services/ui/modal.service';
 import { Table, TableColumn } from '../../../library/ui/components/table/table';
@@ -51,7 +52,8 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private adminService: AdminService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -110,13 +112,13 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.columns = [
-        { field: 'id', headerName: 'S.No', cellTemplate: this.indexTpl },
-        { field: 'profile', headerName: 'Profile', cellTemplate: this.profileTpl },
-        { field: 'name', headerName: 'Full Name', cellTemplate: this.fullNameTpl },
-        { field: 'email', headerName: 'Email', cellTemplate: this.emailTpl },
-        { field: 'title', headerName: 'Job Title', cellTemplate: this.jobTitleTpl },
-        { field: 'status', headerName: 'Status', cellTemplate: this.statusTpl },
-        { field: 'actions', headerName: 'Actions', cellTemplate: this.actionsTpl }
+        { field: 'id', headerName: 'S.No', cellTemplate: this.indexTpl, width: 80 },
+        { field: 'profile', headerName: 'Profile', cellTemplate: this.profileTpl, width: 150 },
+        { field: 'name', headerName: 'Full Name', cellTemplate: this.fullNameTpl, width: 200 },
+        { field: 'email', headerName: 'Email', cellTemplate: this.emailTpl, width: 250 },
+        { field: 'title', headerName: 'Job Title', cellTemplate: this.jobTitleTpl, width: 150 },
+        { field: 'status', headerName: 'Status', cellTemplate: this.statusTpl, width: 100 },
+        { field: 'actions', headerName: 'Actions', cellTemplate: this.actionsTpl, width: 100 }
       ];
     });
   }
@@ -273,7 +275,11 @@ export class FreelancerManagement implements OnInit, AfterViewInit, OnDestroy {
 
   onActionSelected(event: DropdownItem, freelancer: any) {
     if (event.value === 'view') {
-      // Logic for view if any
+      this.router.navigate(['/profile', freelancer.id], {
+        queryParams: {
+          from: 'freelancer-management'
+        }
+      });
     } else if (event.value === 'Approve') {
       this.approveFreelancer(freelancer.id);
     } else {

@@ -267,12 +267,24 @@ export class Applicants implements OnInit, AfterViewInit, OnDestroy {
 
   onDropdownAction(event: DropdownItem, row: any): void {
     if (event.value === 'profile') {
-      this.router.navigate(['/profile']);
+      this.viewFreelancerProfile(row);
     } else if (event.value === 'workflow') {
       this.openRecruitmentWorkflow(row.applicationId);
       document.getElementById('hiddenWorkflowBtn')?.click();
     } else if (event.value === 'offer') {
       this.router.navigate(['/legal-contract-page', row.applicationId]);
+    }
+  }
+
+  viewFreelancerProfile(row: any): void {
+    const freelancerId = row.freelancer?._id || row.freelancerId;
+    if (freelancerId) {
+      this.router.navigate(['/profile', freelancerId], {
+        queryParams: {
+          from: 'applicants',
+          contractId: this.contractId
+        }
+      });
     }
   }
 

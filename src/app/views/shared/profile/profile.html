@@ -15,9 +15,10 @@
 
   <div class="position-relative z-1 mx-auto" style="max-width: 1400px; margin-top: 2rem;">
 
-    <a routerLink="/applicants"
-      class="text-muted text-decoration-none small fw-semibold mb-3 d-inline-block cursor-pointer">&larr; Back to
-      Applicants</a>
+    <button type="button" (click)="goBack()"
+      class="btn btn-link text-muted text-decoration-none small fw-semibold mb-3 p-0 d-inline-flex align-items-center gap-2 cursor-pointer shadow-none">
+      <i class="bi bi-arrow-left"></i> {{ backButtonText }}
+    </button>
 
     @if (isLoading) {
     <div class="d-flex justify-content-center my-5">
@@ -37,42 +38,58 @@
           <div
             class="profile-avatar bg-primary text-white d-flex justify-content-center align-items-center rounded-circle border border-4 border-white shadow-sm overflow-hidden"
             style="width: 120px; height: 120px;">
-            <!-- Using a placeholder gradient pattern for avatar as in image -->
-            <div class="w-100 h-100 d-flex justify-content-center align-items-center"
-              style="background: radial-gradient(circle, #0d6efd 0%, #000000 100%);">
-              <div class="rounded-circle border border-primary border-opacity-50" style="width: 70px; height: 70px;">
+            @if (profileData?.basicInformation?.profilePhoto) {
+              <img [src]="profileData.basicInformation.profilePhoto" alt="Profile" class="w-100 h-100 object-fit-cover">
+            } @else {
+              <div class="w-100 h-100 d-flex justify-content-center align-items-center bg-primary text-white fs-1 fw-bold">
+                {{ getAvatarInitial() }}
               </div>
-            </div>
+            }
           </div>
         </div>
 
         <!-- Basic Details -->
         <div class="flex-grow-1 text-center text-lg-start">
-          <h1 class="fw-bold fs-3 text-dark mb-2">{{ profileData?.basicInformation?.fullName || 'No data available' }}
-          </h1>
+          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start gap-2 mb-2">
+            <h1 class="fw-bold fs-3 text-dark mb-0">{{ profileData?.basicInformation?.fullName || userData?.fullName || 'No data available' }}</h1>
+            @if (userData?.status) {
+              <span class="badge rounded-pill px-3 py-1"
+                [ngClass]="{
+                  'bg-success bg-opacity-10 text-success border border-success border-opacity-25': userData.status === 'active' || userData.status === 'Active',
+                  'bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25': userData.status === 'pending' || userData.status === 'Pending Approval',
+                  'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25': userData.status === 'suspended' || userData.status === 'blocked' || userData.status === 'deactivated'
+                }">
+                {{ userData.status | titlecase }}
+              </span>
+            }
+            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 text-capitalize">
+              {{ role }}
+            </span>
+          </div>
 
           <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3 gap-lg-4 text-muted"
             style="font-size: 0.8rem;">
             <div class="d-flex flex-column gap-2">
               <span class="d-flex align-items-center gap-2"><i class="bi bi-geo-alt text-primary"></i> {{
-                profileData?.location?.city || 'No data available' }}</span>
-              <span class="d-flex align-items-center gap-2"><i class="bi bi-patch-check text-success"></i> Verification
-                Status</span>
+                profileData?.location?.city ? (profileData.location.city + (profileData?.location?.country ? ', ' + profileData.location.country : '')) : 'Location not specified' }}</span>
+              <span class="d-flex align-items-center gap-2">
+                <i class="bi bi-patch-check" [ngClass]="userData?.emailVerified ? 'text-success' : 'text-muted'"></i>
+                {{ userData?.emailVerified ? 'Verified Account' : 'Unverified Account' }}
+              </span>
             </div>
             <div class="d-flex flex-column gap-2">
               <span class="d-flex align-items-center gap-2"><i class="bi bi-envelope text-primary"></i> {{
-                profileData?.basicInformation?.email || 'No data available' }}</span>
-              <span class="d-flex align-items-center gap-2"><i class="bi bi-calendar3 text-primary"></i> Joining
-                Date</span>
+                profileData?.basicInformation?.email || userData?.email || 'No email available' }}</span>
+              <span class="d-flex align-items-center gap-2"><i class="bi bi-calendar3 text-primary"></i>
+                Joined {{ (userData?.createdAt || profileData?.createdAt) ? ((userData?.createdAt || profileData?.createdAt) | date:'mediumDate') : 'Recent' }}
+              </span>
             </div>
             <div class="d-flex flex-column gap-2">
               <span class="d-flex align-items-center gap-2"><i class="bi bi-telephone text-primary"></i> {{
-                profileData?.basicInformation?.phoneNumber || 'No data available' }}</span>
+                profileData?.basicInformation?.phoneNumber || userData?.phoneNumber || 'No phone available' }}</span>
             </div>
           </div>
         </div>
-
-
 
       </div>
     </div>
@@ -217,8 +234,21 @@
           </div>
           <div class="row g-3 mb-3">
             <div class="col-md-4 text-muted fw-semibold" style="font-size: 0.8rem;">Core Skills</div>
-            <div class="col-md-8 text-dark" style="font-size: 0.85rem;">{{ profileData?.professionalDetails?.skills ||
-              'No skills listed' }}</div>
+            <div class="col-md-8 text-dark" style="font-size: 0.85rem;">
+              @if (profileData?.professionalDetails?.skills) {
+                @if (isArray(profileData?.professionalDetails?.skills)) {
+                  <div class="d-flex flex-wrap gap-2">
+                    @for (skill of profileData.professionalDetails.skills; track skill) {
+                      <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1">{{ skill }}</span>
+                    }
+                  </div>
+                } @else {
+                  <span>{{ profileData?.professionalDetails?.skills }}</span>
+                }
+              } @else {
+                <span class="text-muted">No skills listed</span>
+              }
+            </div>
           </div>
           <div class="row g-3 mb-3">
             <div class="col-md-4 text-muted fw-semibold" style="font-size: 0.8rem;">Location</div>
