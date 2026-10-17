@@ -24,14 +24,23 @@ export class BlogDetails implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
+    if (this.route.paramMap) {
+      this.route.paramMap.subscribe(params => {
+        const id = params.get('id');
+        if (id) {
+          this.getBlogDetails(id);
+        } else {
+          this.errorMessage = 'Blog ID not found';
+        }
+      });
+    } else {
+      const id = this.route.snapshot?.paramMap?.get('id');
       if (id) {
         this.getBlogDetails(id);
       } else {
         this.errorMessage = 'Blog ID not found';
       }
-    });
+    }
   }
 
   // =========================================================
@@ -67,6 +76,7 @@ export class BlogDetails implements OnInit {
   // =========================================================
 
   loadRelatedBlogs(currentId: string): void {
+    if (typeof this.blogService?.getAllPublishedBlogs !== 'function') return;
     this.blogService.getAllPublishedBlogs().subscribe({
       next: (response) => {
         if (response?.success && response.blogs) {
@@ -114,6 +124,19 @@ export class BlogDetails implements OnInit {
       .trim();
     if (!text) return '';
     return text.length > 130 ? `${text.substring(0, 130).trim()}...` : text;
+  }
+
+  isVideoFile(url?: string): boolean {
+    if (!url) return false;
+    const lower = url.toLowerCase();
+    return (
+      lower.endsWith('.mp4') ||
+      lower.endsWith('.webm') ||
+      lower.endsWith('.ogg') ||
+      lower.endsWith('.mov') ||
+      lower.includes('video/upload') ||
+      lower.includes('/video/')
+    );
   }
 
   viewRelatedBlog(id: string): void {

@@ -2,10 +2,10 @@
 
     @if (label) {
     <label class="form-label">
-        {{ label }}
+        {{ cleanLabel(label) }}
 
-        @if (required) {
-        <span>*</span>
+        @if (isFieldRequired) {
+        <span class="text-danger ms-1 fw-bold" style="color: #dc2626 !important;" aria-hidden="true">*</span>
         }
     </label>
     }

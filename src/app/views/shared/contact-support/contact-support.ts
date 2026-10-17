@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupportService } from '../../../core/services/support.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { SupportTicket } from '../../../library/shared/components/support-ticket/support-ticket';
 import { StatCard } from '../../../library/shared/components/stat-card/stat-card';
+import { Button } from '../../../library/ui/components/button/button';
 
 @Component({
   selector: 'app-contact-support',
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule, SupportTicket, StatCard],
+  imports: [RouterModule, CommonModule, FormsModule, SupportTicket, StatCard, Button],
   providers: [DatePipe],
   templateUrl: './contact-support.html',
   styleUrl: './contact-support.css'
@@ -30,7 +31,8 @@ export class ContactSupport implements OnInit {
 
   constructor(
     private supportService: SupportService,
-    public authService: AuthService
+    public authService: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -147,5 +149,11 @@ export class ContactSupport implements OnInit {
       'Closed': 'bg-secondary bg-opacity-10 text-secondary border-secondary'
     };
     return map[status] ? `${map[status]} border border-opacity-50` : 'bg-primary bg-opacity-10 text-primary';
+  }
+
+
+
+  navigateToAdd() {
+    this.router.navigate(['/create-ticket']);
   }
 }

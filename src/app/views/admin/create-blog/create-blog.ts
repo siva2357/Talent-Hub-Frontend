@@ -53,12 +53,19 @@ export class CreateBlog implements OnInit {
     private route: ActivatedRoute
   ) {}
 
+  tagsValidator(control: any) {
+    const value = control.value;
+    if (!value || typeof value !== 'string') return { required: true };
+    const tags = value.split(',').map((t: string) => t.trim()).filter(Boolean);
+    return tags.length > 0 ? null : { required: true };
+  }
+
   ngOnInit() {
     this.blogForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(150)]],
       content: ['', [Validators.required]],
       category: ['', [Validators.required]],
-      tags: [''],
+      tags: ['', [Validators.required, this.tagsValidator]],
       status: ['Draft', [Validators.required]]
     });
 
@@ -83,6 +90,33 @@ export class CreateBlog implements OnInit {
       this.isEditMode = true;
       this.loadBlogData(this.blogId);
     }
+  }
+
+  getValidationState(fieldName: string): 'none' | 'success' | 'error' {
+    const control = this.blogForm?.get(fieldName);
+    if (!control || !control.touched) return 'none';
+    return control.invalid ? 'error' : 'none';
+  }
+
+  getErrorMessage(fieldName: string): string {
+    const control = this.blogForm?.get(fieldName);
+    if (!control || !control.touched || !control.errors) return '';
+    if (control.errors['required']) {
+      if (fieldName === 'tags') {
+        return 'At least one tag is required (e.g., UI, Tech, Remote)';
+      }
+      const fieldTitle = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+      return `${fieldTitle} is required`;
+    }
+    if (control.errors['maxlength']) {
+      return `Maximum length exceeded`;
+    }
+    return 'Invalid field';
+  }
+
+  isVideoFile(url: string | null): boolean {
+    if (!url) return false;
+    return /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url);
   }
 
   loadBlogData(id: string) {

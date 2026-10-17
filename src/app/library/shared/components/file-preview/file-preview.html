@@ -2,8 +2,11 @@
 
 <div class="w-100 h-100">
     @if (previewUrl) {
-    <div class="image-gallery-card h-100">
-        <img [src]="previewUrl" alt="Image Preview" style="width: 100%; height: 100%; object-fit: cover; max-height: 216px;">
+    <div class="image-gallery-card h-100 position-relative">
+        <img [src]="previewUrl" alt="Image Preview" style="width: 100%; height: 100%; object-fit: cover;">
+        <button type="button" class="image-gallery-close" (click)="removeClicked.emit()" title="Remove image">
+            <i class="bi bi-x"></i>
+        </button>
     </div>
     } @else {
     <div class="text-muted small p-4 border rounded text-center w-100 h-100 d-flex flex-column justify-content-center align-items-center" style="min-height: 216px; border: 2px dashed #e5e7eb !important; background-color: #f8fafc;">
@@ -39,16 +42,18 @@
 <div class="document-preview">
     @for (file of files; track $index) {
     <div class="file-list-item">
-        <div class="file-icon-box bg-generic">
-            <i class="bi bi-file-earmark"></i>
+        <div class="file-icon-box" [ngClass]="getFileTypeClass(file)">
+            <i [class]="getFileIcon(file)"></i>
         </div>
         <div class="file-info">
             <div class="file-name">
                 {{ file.fileName || file.name || 'Document' }}
             </div>
             <div class="file-meta">
-                {{ file.fileSize || file.size || '' }} &bull; 
-                <a [href]="file.fileUrl || file.url || '#'" target="_blank">View File</a>
+                @if (file.fileSize || file.size) {
+                    <span>{{ file.fileSize || file.size }} &bull; </span>
+                }
+                <a [href]="file.fileUrl || file.url || '#'" target="_blank" rel="noopener noreferrer">View File</a>
             </div>
         </div>
         <div class="file-actions">

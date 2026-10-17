@@ -82,6 +82,84 @@ export class Dashboard implements AfterViewInit, OnInit {
     }
   ];
 
+  readonly clientControlPanels = [
+    {
+      title: 'Post New Contract',
+      description: 'Create and publish a new contract',
+      icon: 'bi-file-earmark-plus-fill',
+      routerLink: '/create-contract'
+    },
+    {
+      title: 'Manage Contracts',
+      description: 'Manage your posted contracts',
+      icon: 'bi-briefcase-fill',
+      routerLink: '/manage-contract'
+    },
+    {
+      title: 'Search Talents',
+      description: 'Find and explore talented professionals',
+      icon: 'bi-search',
+      routerLink: '/search-talent'
+    },
+    {
+      title: 'Financial Summary',
+      description: 'Review spending and contract finances',
+      icon: 'bi-graph-up',
+      routerLink: '/financial-summary'
+    },
+    {
+      title: 'Transaction History',
+      description: 'Review invoices and transaction logs',
+      icon: 'bi-clock-history',
+      routerLink: '/transaction-history'
+    },
+    {
+      title: 'Contact Support',
+      description: 'Get help with your account and contracts',
+      icon: 'bi-headset',
+      routerLink: '/contact-support'
+    }
+  ];
+
+  readonly freelancerControlPanels = [
+    {
+      title: 'Find Contracts',
+      description: 'Browse and apply for new jobs',
+      icon: 'bi-search',
+      routerLink: '/find-contracts'
+    },
+    {
+      title: 'My Contracts',
+      description: 'Manage your active projects',
+      icon: 'bi-briefcase',
+      routerLink: '/my-contracts'
+    },
+    {
+      title: 'Proposal Offers',
+      description: 'Track your sent proposals',
+      icon: 'bi-file-earmark-check',
+      routerLink: '/proposal-offers'
+    },
+    {
+      title: 'Finance Overview',
+      description: 'View earnings and withdrawals',
+      icon: 'bi-currency-dollar',
+      routerLink: '/finance-overview'
+    },
+    {
+      title: 'Portfolio',
+      description: 'Update your professional profile',
+      icon: 'bi-person-workspace',
+      routerLink: '/portfolio'
+    },
+    {
+      title: 'Contact Support',
+      description: 'Get help with your account and contracts',
+      icon: 'bi-headset',
+      routerLink: '/contact-support'
+    }
+  ];
+
   get clientStats(): StatCardData[] {
     return [
       { title: 'Active Contracts', value: this.activeContracts, icon: 'bi-briefcase-fill' },

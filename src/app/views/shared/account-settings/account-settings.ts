@@ -13,6 +13,7 @@ import { FileUpload } from '../../../library/shared/components/file-upload/file-
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
 import { InputOption, InputValidation } from '../../../core/models/ui.model';
 import { MasterDataService } from '../../../core/services/master-data.service';
+import { ModalService } from '../../../core/services/ui/modal.service';
 
 export const passwordMatchValidator = (control: AbstractControl): ValidationErrors | null => {
   const newPassword = control.get('newPassword');
@@ -74,6 +75,7 @@ export class AccountSettings implements OnInit {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private masterDataService = inject(MasterDataService);
+  private modalService = inject(ModalService);
 
   constructor() { }
 
@@ -115,21 +117,7 @@ export class AccountSettings implements OnInit {
       languages: this.fb.array([])
     });
 
-    // Make role-specific fields required
-    const profDetails = this.accountSettingsForm.get('professionalDetails');
-    if (this.role === 'client') {
-      profDetails?.get('companyType')?.setValidators([Validators.required]);
-      profDetails?.get('website')?.setValidators([Validators.required, Validators.pattern('https?://.+')]);
-      profDetails?.get('industry')?.setValidators([Validators.required]);
-      profDetails?.get('companyDescription')?.setValidators([Validators.required]);
-    } else {
-      profDetails?.get('professionalHeadline')?.setValidators([Validators.required]);
-      profDetails?.get('skills')?.setValidators([Validators.required]);
-      profDetails?.get('technologies')?.setValidators([Validators.required]);
-      profDetails?.get('availability')?.setValidators([Validators.required]);
-      profDetails?.get('preferredJobType')?.setValidators([Validators.required]);
-    }
-    profDetails?.updateValueAndValidity();
+    this.setupRoleValidators();
 
     this.changePasswordForm = this.fb.group({
       oldPassword: ['', [Validators.required]],
@@ -148,6 +136,40 @@ export class AccountSettings implements OnInit {
 
   get languages() {
     return this.accountSettingsForm.get('languages') as FormArray;
+  }
+
+  setupRoleValidators() {
+    const profDetails = this.accountSettingsForm?.get('professionalDetails');
+    if (!profDetails) return;
+
+    const clientFields = ['companyType', 'website', 'industry', 'companyDescription'];
+    const freelancerFields = ['professionalHeadline', 'skills', 'technologies', 'availability', 'preferredJobType'];
+
+    if (this.role === 'client') {
+      freelancerFields.forEach(f => {
+        const ctrl = profDetails.get(f);
+        ctrl?.clearValidators();
+        ctrl?.updateValueAndValidity();
+      });
+      profDetails.get('companyType')?.setValidators([Validators.required]);
+      profDetails.get('website')?.setValidators([Validators.required, Validators.pattern('https?://.+')]);
+      profDetails.get('industry')?.setValidators([Validators.required]);
+      profDetails.get('companyDescription')?.setValidators([Validators.required]);
+      clientFields.forEach(f => profDetails.get(f)?.updateValueAndValidity());
+    } else {
+      clientFields.forEach(f => {
+        const ctrl = profDetails.get(f);
+        ctrl?.clearValidators();
+        ctrl?.updateValueAndValidity();
+      });
+      profDetails.get('professionalHeadline')?.setValidators([Validators.required]);
+      profDetails.get('skills')?.setValidators([Validators.required]);
+      profDetails.get('technologies')?.setValidators([Validators.required]);
+      profDetails.get('availability')?.setValidators([Validators.required]);
+      profDetails.get('preferredJobType')?.setValidators([Validators.required]);
+      freelancerFields.forEach(f => profDetails.get(f)?.updateValueAndValidity());
+    }
+    profDetails.updateValueAndValidity();
   }
 
   addSocialLink(platform: string = '', profileUrl: string = '') {
@@ -237,23 +259,32 @@ export class AccountSettings implements OnInit {
         if (res.success) {
           this.userData = res.user;
           this.profileData = res.profile;
-          this.role = this.tokenService.getRole()?.toLowerCase() || '';
+          this.role = this.tokenService.getRole()?.toLowerCase() || res.user?.role?.toLowerCase() || '';
+          this.setupRoleValidators();
+
+          const prof = this.profileData?.professionalDetails || {};
+          const skillsVal = Array.isArray(prof.skills) ? prof.skills.join(', ') : (prof.skills || '');
+          const techVal = Array.isArray(prof.technologies) ? prof.technologies.join(', ') : (prof.technologies || '');
 
           // Patch form
           this.accountSettingsForm.patchValue({
             basicInformation: {
-              profilePhoto: this.profileData.basicInformation?.profilePhoto,
-              fullName: this.profileData.basicInformation?.fullName,
-              email: this.profileData.basicInformation?.email,
-              phoneNumber: this.profileData.basicInformation?.phoneNumber,
-              gender: this.profileData.basicInformation?.gender,
-              shortBio: this.profileData.basicInformation?.shortBio
+              profilePhoto: this.profileData?.basicInformation?.profilePhoto || '',
+              fullName: this.profileData?.basicInformation?.fullName || this.userData?.fullName || '',
+              email: this.profileData?.basicInformation?.email || this.userData?.email || '',
+              phoneNumber: this.profileData?.basicInformation?.phoneNumber || this.userData?.phoneNumber || '',
+              gender: this.profileData?.basicInformation?.gender || '',
+              shortBio: this.profileData?.basicInformation?.shortBio || ''
             },
             professionalDetails: {
-              ...this.profileData.professionalDetails
+              ...prof,
+              skills: skillsVal,
+              technologies: techVal
             },
             location: {
-              ...this.profileData.location
+              city: this.profileData?.location?.city || '',
+              state: this.profileData?.location?.state || '',
+              country: this.profileData?.location?.country || ''
             }
           });
 
@@ -375,33 +406,44 @@ export class AccountSettings implements OnInit {
     let professionalDetailsPayload: any = {};
     if (this.role === 'client') {
       professionalDetailsPayload = {
-        companyType: formValue.professionalDetails.companyType,
-        website: formValue.professionalDetails.website,
-        industry: formValue.professionalDetails.industry,
-        companyDescription: formValue.professionalDetails.companyDescription
+        companyType: formValue.professionalDetails?.companyType || '',
+        website: formValue.professionalDetails?.website || '',
+        industry: formValue.professionalDetails?.industry || '',
+        companyDescription: formValue.professionalDetails?.companyDescription || ''
       };
     } else {
+      const skillsInput = formValue.professionalDetails?.skills;
+      const techInput = formValue.professionalDetails?.technologies;
+
+      const parsedSkills = typeof skillsInput === 'string'
+        ? skillsInput.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0)
+        : (Array.isArray(skillsInput) ? skillsInput : []);
+
+      const parsedTech = typeof techInput === 'string'
+        ? techInput.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0)
+        : (Array.isArray(techInput) ? techInput : []);
+
       professionalDetailsPayload = {
-        professionalHeadline: formValue.professionalDetails.professionalHeadline,
-        skills: formValue.professionalDetails.skills,
-        technologies: formValue.professionalDetails.technologies,
-        availability: formValue.professionalDetails.availability,
-        preferredJobType: formValue.professionalDetails.preferredJobType
+        professionalHeadline: formValue.professionalDetails?.professionalHeadline || '',
+        skills: parsedSkills,
+        technologies: parsedTech,
+        availability: formValue.professionalDetails?.availability || '',
+        preferredJobType: formValue.professionalDetails?.preferredJobType || ''
       };
     }
 
     const profilePayload = {
       basicInformation: {
-        fullName: formValue.basicInformation.fullName,
-        email: formValue.basicInformation.email,
-        phoneNumber: formValue.basicInformation.phoneNumber,
-        gender: formValue.basicInformation.gender,
-        shortBio: formValue.basicInformation.shortBio
+        fullName: formValue.basicInformation?.fullName || '',
+        email: formValue.basicInformation?.email || '',
+        phoneNumber: formValue.basicInformation?.phoneNumber || '',
+        gender: formValue.basicInformation?.gender || '',
+        shortBio: formValue.basicInformation?.shortBio || ''
       },
       professionalDetails: professionalDetailsPayload,
-      location: formValue.location,
-      socialLinks: formValue.socialLinks,
-      languages: formValue.languages
+      location: formValue.location || {},
+      socialLinks: formValue.socialLinks || [],
+      languages: formValue.languages || []
     };
 
     formData.append('basicInformation', JSON.stringify(profilePayload.basicInformation));
@@ -455,15 +497,25 @@ export class AccountSettings implements OnInit {
     });
   }
 
-  deleteAccount() {
-    if (window.confirm("Are you sure you want to permanently delete your account? This action cannot be undone.")) {
+  async deleteAccount() {
+    const confirmed = await this.modalService.confirm({
+      title: 'Permanently Delete Account',
+      message: 'Are you sure you want to permanently delete your account? This action cannot be undone. All your profile data, messages, and contract history will be permanently wiped out.',
+      confirmLabel: 'Permanently Delete',
+      cancelLabel: 'Keep Account',
+      confirmVariant: 'danger',
+      icon: 'bi bi-exclamation-triangle-fill',
+      iconVariant: 'danger'
+    });
+
+    if (confirmed) {
       this.profileService.deleteProfile().subscribe({
         next: (res: any) => {
           if (res.success) {
             this.tokenService.clearAll();
             this.router.navigate(['/login']);
           } else {
-            alert('Failed to delete account');
+            alert(res.message || 'Failed to delete account');
           }
         },
         error: (err: any) => {

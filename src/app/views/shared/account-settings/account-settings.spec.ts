@@ -4,6 +4,7 @@ import { ProfileService } from '../../../core/services/profile.service';
 import { TokenService } from '../../../core/services/token.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { MasterDataService } from '../../../core/services/master-data.service';
+import { ModalService } from '../../../core/services/ui/modal.service';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { provideRouter } from '@angular/router';
@@ -19,6 +20,7 @@ describe('AccountSettings', () => {
   let tokenServiceSpy: jasmine.SpyObj<TokenService>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let masterDataServiceSpy: jasmine.SpyObj<MasterDataService>;
+  let modalServiceSpy: jasmine.SpyObj<ModalService>;
   let router: Router;
 
   const mockProfile = {
@@ -80,6 +82,8 @@ describe('AccountSettings', () => {
     masterDataServiceSpy = jasmine.createSpyObj('MasterDataService', [
       'getAllMasterData'
     ]);
+    modalServiceSpy = jasmine.createSpyObj('ModalService', ['confirm']);
+    modalServiceSpy.confirm.and.returnValue(Promise.resolve(true));
 
     tokenServiceSpy.getRole.and.returnValue(role);
     profileServiceSpy.getMyProfile.and.returnValue(of({
@@ -100,6 +104,7 @@ describe('AccountSettings', () => {
         { provide: TokenService, useValue: tokenServiceSpy },
         { provide: AuthService, useValue: authServiceSpy },
         { provide: MasterDataService, useValue: masterDataServiceSpy },
+        { provide: ModalService, useValue: modalServiceSpy },
         provideHttpClient(),
         provideHttpClientTesting()
       ],
@@ -359,32 +364,35 @@ describe('AccountSettings', () => {
       spyOn(window, 'alert');
     });
 
-    it('should not delete account if confirmation is cancelled', () => {
-      spyOn(window, 'confirm').and.returnValue(false);
+    it('should not delete account if confirmation is cancelled', async () => {
+      modalServiceSpy.confirm.and.returnValue(Promise.resolve(false));
 
-      component.deleteAccount();
+      await component.deleteAccount();
 
+      expect(modalServiceSpy.confirm).toHaveBeenCalled();
       expect(profileServiceSpy.deleteProfile).not.toHaveBeenCalled();
     });
 
-    it('should delete account, clear tokens, and redirect to /login on confirmation', () => {
-      spyOn(window, 'confirm').and.returnValue(true);
+    it('should delete account, clear tokens, and redirect to /login on confirmation', async () => {
+      modalServiceSpy.confirm.and.returnValue(Promise.resolve(true));
       profileServiceSpy.deleteProfile.and.returnValue(of({ success: true }));
 
-      component.deleteAccount();
+      await component.deleteAccount();
 
+      expect(modalServiceSpy.confirm).toHaveBeenCalled();
       expect(profileServiceSpy.deleteProfile).toHaveBeenCalled();
       expect(tokenServiceSpy.clearAll).toHaveBeenCalled();
       expect(router.navigate).toHaveBeenCalledWith(['/login']);
     });
 
-    it('should handle delete account error', () => {
-      spyOn(window, 'confirm').and.returnValue(true);
+    it('should handle delete account error', async () => {
+      modalServiceSpy.confirm.and.returnValue(Promise.resolve(true));
       profileServiceSpy.deleteProfile.and.returnValue(throwError(() => new Error('Error')));
       spyOn(console, 'error');
 
-      component.deleteAccount();
+      await component.deleteAccount();
 
+      expect(modalServiceSpy.confirm).toHaveBeenCalled();
       expect(window.alert).toHaveBeenCalledWith('Error deleting account');
     });
   });

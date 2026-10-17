@@ -273,75 +273,196 @@
 
 .media-panel {
   width: 100%;
-  min-height: 240px;
-
-  padding: 1.5rem;
-
+  height: 260px;
+  min-height: 260px;
+  max-height: 260px;
+  padding: 1rem;
   display: flex;
-
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   justify-content: center;
-
-  background: rgba(248, 249, 250, 0.7);
-
+  background: #ffffff;
   border: 1px solid #edf0f2;
-
   border-radius: 16px;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .media-panel app-file-upload {
+  display: block;
   width: 100%;
+  height: 100%;
+}
+
+:host ::ng-deep .media-panel app-file-upload,
+:host ::ng-deep .media-panel app-file-upload .upload-box {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  padding: 1.25rem 1rem !important;
+  border: 2px dashed #bfdbfe !important;
+  border-radius: 12px !important;
+  background-color: #f8fafc !important;
+  box-sizing: border-box !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+:host ::ng-deep .media-panel app-file-upload .upload-box:hover {
+  border-color: #2563eb !important;
+  background-color: #eff6ff !important;
+}
+
+:host ::ng-deep .media-panel app-file-upload .upload-icon-wrapper {
+  width: 48px !important;
+  height: 48px !important;
+  font-size: 22px !important;
+  margin-bottom: 10px !important;
+}
+
+:host ::ng-deep .media-panel app-file-upload .upload-title {
+  font-size: 14px !important;
+  margin-bottom: 4px !important;
+}
+
+:host ::ng-deep .media-panel app-file-upload .upload-text {
+  font-size: 11px !important;
+  margin-bottom: 0 !important;
 }
 
 .preview-panel {
-  min-height: 240px;
-
+  width: 100%;
+  height: 260px;
+  min-height: 260px;
+  max-height: 260px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid #edf0f2;
+  border-radius: 16px;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .preview-content {
   width: 100%;
-
-  max-height: 300px;
-
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
   overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f172a;
+  box-sizing: border-box;
 }
 
 .preview-content app-file-preview {
   display: block;
-
   width: 100%;
+  height: 100%;
+}
+
+:host ::ng-deep .preview-content app-file-preview .image-gallery {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  grid-template-columns: none !important;
+  gap: 0 !important;
+}
+
+:host ::ng-deep .preview-content app-file-preview .image-gallery-card {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  border-radius: 0 !important;
+  position: relative !important;
+  background: transparent !important;
+}
+
+:host ::ng-deep .preview-content app-file-preview .image-gallery-card img {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+:host ::ng-deep .preview-content app-file-preview .image-gallery-close,
+.preview-close-btn {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 10 !important;
+  width: 32px !important;
+  height: 32px !important;
+  background: rgba(15, 23, 42, 0.75) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(4px) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+:host ::ng-deep .preview-content app-file-preview .image-gallery-close:hover,
+.preview-close-btn:hover {
+  background: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
 }
 
 .empty-preview {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  border: 2px dashed #bfdbfe;
+  border-radius: 12px;
+  background-color: #f8fafc;
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
-
   text-align: center;
-
-  color: #9ca3af;
-
-  opacity: 0.65;
+  color: #64748b;
+  padding: 1.25rem 1rem;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
 }
 
 .empty-preview i {
-  display: block;
-
-  margin-bottom: 0.5rem;
-
-  font-size: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  font-size: 26px;
+  color: #93c5fd;
+  margin-bottom: 10px;
 }
 
 .empty-preview p {
   margin: 0;
-
-  font-size: 0.78rem;
-
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
 }
 
 
@@ -515,13 +636,17 @@ textarea {
   }
 
   .media-panel {
-    min-height: 220px;
-
-    padding: 1.25rem;
+    height: 250px;
+    min-height: 250px;
+    max-height: 250px;
+    padding: 1rem;
   }
 
   .preview-panel {
-    min-height: 220px;
+    height: 250px;
+    min-height: 250px;
+    max-height: 250px;
+    padding: 1rem;
   }
 
 }
@@ -583,15 +708,18 @@ textarea {
   /* Media */
 
   .media-panel {
-    min-height: 200px;
-
-    padding: 1rem;
-
+    height: 240px;
+    min-height: 240px;
+    max-height: 240px;
+    padding: 0.85rem;
     border-radius: 12px;
   }
 
   .preview-panel {
-    min-height: 200px;
+    height: 240px;
+    min-height: 240px;
+    max-height: 240px;
+    padding: 0.85rem;
   }
 
 
@@ -703,15 +831,18 @@ textarea {
   /* Media */
 
   .media-panel {
-    min-height: 180px;
-
-    padding: 0.85rem;
-
+    height: 220px;
+    min-height: 220px;
+    max-height: 220px;
+    padding: 0.75rem;
     border-radius: 11px;
   }
 
   .preview-panel {
-    min-height: 180px;
+    height: 220px;
+    min-height: 220px;
+    max-height: 220px;
+    padding: 0.75rem;
   }
 
   .empty-preview i {
@@ -769,13 +900,17 @@ textarea {
   }
 
   .media-panel {
-    min-height: 165px;
-
-    padding: 0.7rem;
+    height: 200px;
+    min-height: 200px;
+    max-height: 200px;
+    padding: 0.6rem;
   }
 
   .preview-panel {
-    min-height: 165px;
+    height: 200px;
+    min-height: 200px;
+    max-height: 200px;
+    padding: 0.6rem;
   }
 
 }

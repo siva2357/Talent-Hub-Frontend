@@ -38,45 +38,58 @@
 
       <div class="row g-4">
         <div class="col-12 col-md-6">
-          <app-input-field label="Project Title" [value]="portfolioForm.get('title')?.value"
-            (valueChange)="portfolioForm.get('title')?.setValue($event)"
-            (blurred)="portfolioForm.get('title')?.markAsTouched()" placeholder="e.g. Real-time Analytics Dashboard"
-            [required]="true" [validation]="isInvalid('title') ? 'error' : 'none'"
+          <app-input-field
+            label="Project Title"
+            formControlName="title"
+            placeholder="e.g. Real-time Analytics Dashboard"
+            [required]="true"
+            [validation]="getValidationState('title')"
             [errorMessage]="getErrorMessage('title')">
           </app-input-field>
         </div>
         <div class="col-12 col-md-6">
-          <app-input-field label="Project Category / Type" type="select" [options]="projectTypeOptions"
-            [value]="portfolioForm.get('projectType')?.value"
-            (valueChange)="portfolioForm.get('projectType')?.setValue($event)"
-            (blurred)="portfolioForm.get('projectType')?.markAsTouched()" placeholder="Select project category / type"
-            [required]="true" [validation]="isInvalid('projectType') ? 'error' : 'none'"
+          <app-input-field
+            label="Project Category / Type"
+            type="select"
+            [options]="projectTypeOptions"
+            formControlName="projectType"
+            placeholder="Select project category / type"
+            [required]="true"
+            [validation]="getValidationState('projectType')"
             [errorMessage]="getErrorMessage('projectType')">
           </app-input-field>
         </div>
 
         <div class="col-12 col-md-6">
-          <app-input-field label="Your Role / Contribution" [value]="portfolioForm.get('role')?.value"
-            (valueChange)="portfolioForm.get('role')?.setValue($event)"
-            (blurred)="portfolioForm.get('role')?.markAsTouched()" placeholder="e.g. Frontend Lead, Fullstack Architect"
-            [required]="true" [validation]="isInvalid('role') ? 'error' : 'none'"
+          <app-input-field
+            label="Your Role / Contribution"
+            formControlName="role"
+            placeholder="e.g. Frontend Lead, Fullstack Architect"
+            [required]="true"
+            [validation]="getValidationState('role')"
             [errorMessage]="getErrorMessage('role')">
           </app-input-field>
         </div>
         <div class="col-12 col-md-6">
           <div class="row g-2">
             <div class="col-12 col-sm-6">
-              <app-input-field label="Start Date" type="date" [value]="portfolioForm.get('startDate')?.value"
-                (valueChange)="portfolioForm.get('startDate')?.setValue($event)"
-                (blurred)="portfolioForm.get('startDate')?.markAsTouched()" placeholder="">
+              <app-input-field
+                label="Start Date"
+                type="date"
+                formControlName="startDate"
+                [required]="true"
+                [validation]="getValidationState('startDate')"
+                [errorMessage]="getErrorMessage('startDate')">
               </app-input-field>
             </div>
             <div class="col-12 col-sm-6">
-              <app-input-field label="End Date" type="date" [value]="portfolioForm.get('endDate')?.value"
-                (valueChange)="portfolioForm.get('endDate')?.setValue($event)"
-                (blurred)="portfolioForm.get('endDate')?.markAsTouched()" placeholder=""
-                [validation]="isDateRangeInvalid() ? 'error' : 'none'"
-                [errorMessage]="isDateRangeInvalid() ? 'End date cannot precede start date' : ''">
+              <app-input-field
+                label="End Date"
+                type="date"
+                formControlName="endDate"
+                [required]="true"
+                [validation]="getValidationState('endDate')"
+                [errorMessage]="getErrorMessage('endDate')">
               </app-input-field>
             </div>
           </div>
@@ -96,10 +109,12 @@
 
       <div class="row g-4">
         <div class="col-12 col-md-6">
-          <app-input-field label="Technologies Used (comma-separated)" [value]="portfolioForm.get('tags')?.value"
-            (valueChange)="portfolioForm.get('tags')?.setValue($event)"
-            (blurred)="portfolioForm.get('tags')?.markAsTouched()" placeholder="e.g. Angular, TypeScript, Node.js"
-            [required]="true" [validation]="isInvalid('tags') ? 'error' : 'none'"
+          <app-input-field
+            label="Technologies Used (comma-separated)"
+            formControlName="tags"
+            placeholder="e.g. Angular, TypeScript, Node.js"
+            [required]="true"
+            [validation]="getValidationState('tags')"
             [errorMessage]="getErrorMessage('tags')">
           </app-input-field>
           <span class="text-muted mt-1 d-block" style="font-size: 0.7rem;">Add all technologies, frameworks, libraries
@@ -107,9 +122,15 @@
         </div>
 
         <div class="col-12 col-md-6">
-          <app-input-field label="Project URL / Live Demo" [value]="portfolioForm.get('projectUrl')?.value"
-            (valueChange)="portfolioForm.get('projectUrl')?.setValue($event)" placeholder="e.g. https://yourproject.com"
-            icon="bi bi-link-45deg" [showIcon]="true">
+          <app-input-field
+            label="Project URL / Live Demo"
+            formControlName="projectUrl"
+            placeholder="e.g. https://yourproject.com"
+            icon="bi bi-link-45deg"
+            [showIcon]="true"
+            [required]="true"
+            [validation]="getValidationState('projectUrl')"
+            [errorMessage]="getErrorMessage('projectUrl')">
           </app-input-field>
           <span class="text-muted mt-1 d-block" style="font-size: 0.7rem;">Live preview or hosted project URL (if
             available)</span>
@@ -121,49 +142,63 @@
     <div class="mb-5">
       <h2 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-4"><i
           class="bi bi-body-text text-primary"></i> Project Description</h2>
-      <app-input-field label="Description" type="textarea" [value]="portfolioForm.get('description')?.value"
-        (valueChange)="portfolioForm.get('description')?.setValue($event)"
-        (blurred)="portfolioForm.get('description')?.markAsTouched()"
-        placeholder="Describe the scope, challenges solved, and deliverables..." [required]="true"
-        [validation]="isInvalid('description') ? 'error' : 'none'" [errorMessage]="getErrorMessage('description')">
-      </app-input-field>
+      <app-rich-text-editor
+        formControlName="description"
+        label="Description"
+        [required]="true"
+        placeholder="Describe the scope, challenges solved, architecture, and deliverables..."
+        height="220px"
+        [validation]="getValidationState('description')"
+        [errorMessage]="getErrorMessage('description')">
+      </app-rich-text-editor>
     </div>
 
     <!-- Project Showcase Media -->
     <div class="mb-5">
-      <h2 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-4"><i class="bi bi-image text-primary"></i>
-        Project Showcase Media</h2>
+      <h2 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-4">
+        <i class="bi bi-image text-primary"></i>
+        Project Showcase Media
+        <span class="text-danger ms-1 fw-bold" style="color: #dc2626 !important;">*</span>
+      </h2>
       <p class="text-muted mb-3" style="font-size: 0.75rem;">Add images or videos to showcase your project (Max size:
         5MB per file)</p>
 
-      <div class="row g-4">
+      <div class="row g-4 align-items-stretch">
         <!-- Upload Area -->
-        <div class="col-md-6">
-          <app-file-upload [uploadBucket]="UploadBucket.FreelancerData" [uploadSection]="UploadSection.Portfolio"
-            [replaceExisting]="true" title="Drag & drop a file here or click to browse"
-            acceptedFormats="Image (JPG, PNG, WEBP) / Video (MP4, WEBM)" maxSize="5MB"
-            (uploadComplete)="onUploadComplete($event)" (uploadError)="onUploadError($event)">
-          </app-file-upload>
+        <div class="col-md-6 d-flex">
+          <div class="w-100">
+            <app-file-upload [uploadBucket]="UploadBucket.FreelancerData" [uploadSection]="UploadSection.Portfolio"
+              [replaceExisting]="true" title="Drag & drop a file here or click to browse"
+              acceptedFormats="Image (JPG, PNG, WEBP) / Video (MP4, WEBM)" maxSize="5MB"
+              (uploadComplete)="onUploadComplete($event)" (uploadError)="onUploadError($event)">
+            </app-file-upload>
+          </div>
         </div>
 
         <!-- File Previews -->
-        <div class="col-md-6">
+        <div class="col-md-6 d-flex">
 
           @if (previews.length > 0) {
-          <div class="d-flex flex-wrap gap-3">
+          <div class="d-flex flex-wrap gap-3 w-100">
             @for (preview of previews; track $index) {
-            <app-file-preview mode="image" [previewUrl]="preview" (editClicked)="removeFile($index)"></app-file-preview>
+            <app-file-preview mode="image" [previewUrl]="preview" (removeClicked)="removeFile($index)"></app-file-preview>
             }
           </div>
           } @else {
           <div
-            class="d-flex flex-column justify-content-center align-items-center text-muted border rounded-4 bg-light bg-opacity-25">
-            <i class="bi bi-images fs-2 mb-2 opacity-25"></i>
+            class="d-flex flex-column justify-content-center align-items-center text-muted border rounded-4 bg-light bg-opacity-25 w-100 p-4"
+            [class.border-danger]="mediaTouched && previews.length === 0">
+            <i class="bi bi-images fs-2 mb-2 opacity-25" [class.text-danger]="mediaTouched && previews.length === 0"></i>
             <span style="font-size: 0.8rem;">No media selected yet</span>
           </div>
           }
         </div>
       </div>
+      @if (mediaTouched && previews.length === 0) {
+      <span class="text-danger mt-2 d-block" style="font-size: 0.75rem;">
+        <i class="bi bi-exclamation-circle me-1"></i>Project showcase media is required
+      </span>
+      }
     </div>
 
     <!-- Footer Actions: Cancel on Left, Publish on Right -->
@@ -178,7 +213,7 @@
         </div>
 
         <div>
-          <app-button type="submit" variant="primary" [disabled]="isSubmitting || portfolioForm.invalid"
+          <app-button type="submit" variant="primary" [disabled]="isSubmitting"
             [loading]="isSubmitting" [label]="isSubmitting ? 'Publishing...' : 'Publish Portfolio'">
             <i class="bi bi-send me-2" *ngIf="!isSubmitting"></i>
           </app-button>

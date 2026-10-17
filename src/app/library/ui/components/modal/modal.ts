@@ -4,6 +4,8 @@ import {
   Input,
   Output
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Button } from '../button/button';
 
 
 export type ModalVariant =
@@ -27,15 +29,25 @@ export type ModalIconVariant =
 
 export type ModalButtonVariant =
   | 'primary'
+  | 'secondary'
   | 'success'
-  | 'warning'
   | 'danger'
-  | 'secondary';
+  | 'warning'
+  | 'info'
+  | 'light'
+  | 'dark'
+  | 'link'
+  | 'outline-primary'
+  | 'outline-secondary'
+  | 'outline-success'
+  | 'outline-danger'
+  | 'outline-warning';
 
 
 @Component({
   selector: 'app-modal',
   standalone: true,
+  imports: [CommonModule, Button],
   templateUrl: './modal.html',
   styleUrl: './modal.css'
 })
@@ -104,6 +116,9 @@ export class Modal {
 
   @Input() confirmVariant: ModalButtonVariant =
     'primary';
+
+  @Input() cancelVariant: ModalButtonVariant =
+    'outline-secondary';
 
 
   /* =========================================================

@@ -31,10 +31,10 @@
           <p class="text-muted mb-0" style="font-size: 0.85rem;">Track and manage all your support requests in one
             place.</p>
         </div>
-        <button routerLink="/create-ticket"
-          class="btn btn-primary px-4 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm">
-          <i class="bi bi-plus-lg"></i> Create New Ticket
-        </button>
+
+        <app-button variant="outline-primary" label="Create New Ticket" size="sm" (clicked)="navigateToAdd()">
+          <i class="bi bi-plus me-1"></i>
+        </app-button>
       </div>
     </div>
 
@@ -47,7 +47,8 @@
         <app-stat-card [stat]="{ title: 'Open', value: openTickets, icon: 'bi bi-arrow-clockwise' }"></app-stat-card>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
-        <app-stat-card [stat]="{ title: 'Resolved', value: resolvedTickets, icon: 'bi bi-file-earmark-text' }"></app-stat-card>
+        <app-stat-card
+          [stat]="{ title: 'Resolved', value: resolvedTickets, icon: 'bi bi-file-earmark-text' }"></app-stat-card>
       </div>
       <div class="col-12 col-sm-6 col-lg-3">
         <app-stat-card [stat]="{ title: 'Closed', value: closedTickets, icon: 'bi bi-geo-alt' }"></app-stat-card>
@@ -63,11 +64,9 @@
         <i class="bi bi-headset fs-1"></i>
       </div>
       <h2 class="fs-4 fw-bold text-dark mb-2">No Support Tickets Yet</h2>
-      <p class="text-muted mb-4 max-w-md mx-auto">You haven't opened any support tickets. If you need help with your
+      <p class="text-muted mb-4 max-w-md mx-auto fs-6">You haven't opened any support tickets. If you need help with
+        your
         account, billing, or any technical issues, we are here for you.</p>
-      <button routerLink="/create-ticket" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm">
-        <i class="bi bi-plus-lg me-1"></i> Create Your First Ticket
-      </button>
     </div>
     }
 
@@ -122,7 +121,8 @@
                   <i class="bi bi-check2-circle"></i> Mark Resolved
                 </button>
                 }
-                <button type="button" class="btn-close shadow-none" (click)="selectTicket(null)" aria-label="Close"></button>
+                <button type="button" class="btn-close shadow-none" (click)="selectTicket(null)"
+                  aria-label="Close"></button>
               </div>
             </div>
             <div class="d-flex flex-wrap gap-4 text-muted" style="font-size: 0.75rem;">
@@ -234,10 +234,13 @@
       } @else {
       <!-- Placeholder when no ticket is selected -->
       <div class="col-lg-8">
-        <div class="glass-card border-0 rounded-4 h-100 d-flex flex-column justify-content-center align-items-center text-muted p-5 shadow-sm" style="min-height: 400px;">
+        <div
+          class="glass-card border-0 rounded-4 h-100 d-flex flex-column justify-content-center align-items-center text-muted p-5 shadow-sm"
+          style="min-height: 400px;">
           <i class="bi bi-inbox fs-1 mb-3 text-secondary opacity-50"></i>
           <h5 class="fw-bold text-dark">No Ticket Selected</h5>
-          <p class="small text-center max-w-sm">Select a ticket from the list on the left to view its details, history, and to reply.</p>
+          <p class="small text-center max-w-sm">Select a ticket from the list on the left to view its details, history,
+            and to reply.</p>
         </div>
       </div>
       }

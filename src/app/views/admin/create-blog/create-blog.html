@@ -43,7 +43,8 @@
         </h1>
 
         <p class="text-muted mb-0">
-          {{ isEditMode ? 'Update blog article details, media, and categories.' : 'Share your knowledge and insights with the community.' }}
+          {{ isEditMode ? 'Update blog article details, media, and categories.' : 'Share your knowledge and insights
+          with the community.' }}
         </p>
 
       </div>
@@ -79,12 +80,12 @@
         </div>
 
 
-        <div class="row g-4">
+        <div class="row g-4 align-items-stretch">
 
           <!-- Upload -->
-          <div class="col-md-6">
+          <div class="col-md-6 d-flex">
 
-            <div class="media-panel">
+            <div class="media-panel w-100">
 
               <app-file-upload (uploadComplete)="onUploadComplete($event, 'banner')"
                 [uploadBucket]="uploadBucket.AdminCollection" [uploadSection]="uploadSection.BlogMedia"
@@ -97,9 +98,9 @@
 
 
           <!-- Preview -->
-          <div class="col-md-6">
+          <div class="col-md-6 d-flex">
 
-            <div class="media-panel preview-panel">
+            <div class="media-panel preview-panel w-100">
 
               @if (blogBannerUrl) {
 
@@ -140,10 +141,9 @@
 
         <div class="field-wrapper">
 
-          <app-input-field type="text" [value]="blogForm.get('title')?.value || ''"
-            (valueChange)="blogForm.get('title')?.setValue($event)"
-            placeholder="Enter an engaging title for your article..." label="Article Title *" [showIcon]="true"
-            icon="bi bi-fonts">
+          <app-input-field formControlName="title" type="text" placeholder="Enter an engaging title for your article..."
+            label="Article Title" [required]="true" [showIcon]="true" icon="bi bi-fonts"
+            [validation]="getValidationState('title')" [errorMessage]="getErrorMessage('title')">
           </app-input-field>
 
           <div class="character-count">
@@ -160,23 +160,10 @@
       ==================================================== -->
       <section class="form-section">
 
-        <label class="form-label fw-bold text-dark small mb-2">
-
-          <i class="bi bi-text-paragraph text-muted me-2"></i>
-
-          Blog Content
-
-          <span class="text-danger">*</span>
-
-        </label>
-
-
-        <div class="editor-wrapper">
-
-          <app-rich-text-editor formControlName="content" placeholder="Write your blog content here..." height="300px">
-          </app-rich-text-editor>
-
-        </div>
+        <app-rich-text-editor formControlName="content" label="Blog Content" [required]="true"
+          placeholder="Write your blog content here..." height="320px" [validation]="getValidationState('content')"
+          [errorMessage]="getErrorMessage('content')">
+        </app-rich-text-editor>
 
       </section>
 
@@ -191,9 +178,9 @@
           <!-- Category -->
           <div class="col-md-6">
 
-            <app-input-field type="select" [options]="categoryOptions" [value]="blogForm.get('category')?.value || ''"
-              (valueChange)="blogForm.get('category')?.setValue($event)" label="Category *" [showIcon]="true"
-              icon="bi bi-folder">
+            <app-input-field formControlName="category" type="select" [options]="categoryOptions" label="Category"
+              [required]="true" [showIcon]="true" icon="bi bi-folder" [validation]="getValidationState('category')"
+              [errorMessage]="getErrorMessage('category')">
             </app-input-field>
 
           </div>
@@ -202,8 +189,9 @@
           <!-- Tags -->
           <div class="col-md-6">
 
-            <app-input-field type="text" [value]="blogForm.get('tags')?.value || ''"
-              (valueChange)="blogForm.get('tags')?.setValue($event)" placeholder="e.g., UI, Tech, Remote" label="Tags">
+            <app-input-field formControlName="tags" type="text" placeholder="e.g., UI, Tech, Remote" label="Tags"
+              [required]="true" [showIcon]="true" icon="bi bi-tags" [validation]="getValidationState('tags')"
+              [errorMessage]="getErrorMessage('tags')">
             </app-input-field>
 
           </div>
@@ -231,12 +219,12 @@
         </div>
 
 
-        <div class="row g-4">
+        <div class="row g-4 align-items-stretch">
 
           <!-- Upload -->
-          <div class="col-md-6">
+          <div class="col-md-6 d-flex">
 
-            <div class="media-panel">
+            <div class="media-panel w-100">
 
               <app-file-upload (uploadComplete)="onUploadComplete($event, 'featured')"
                 [uploadBucket]="uploadBucket.AdminCollection" [uploadSection]="uploadSection.BlogMedia"
@@ -249,16 +237,25 @@
 
 
           <!-- Preview -->
-          <div class="col-md-6">
+          <div class="col-md-6 d-flex">
 
-            <div class="media-panel preview-panel">
+            <div class="media-panel preview-panel w-100">
 
               @if (featuredMediaUrl) {
 
               <div class="preview-content">
 
+                @if (isVideoFile(featuredMediaUrl)) {
+                <div class="video-preview-wrapper w-100 h-100 position-relative">
+                  <button type="button" class="preview-close-btn" (click)="clearFile('featured')" title="Remove file">
+                    <i class="bi bi-x"></i>
+                  </button>
+                  <video [src]="featuredMediaUrl" controls class="w-100 h-100 object-fit-cover"></video>
+                </div>
+                } @else {
                 <app-file-preview mode="image" [previewUrl]="featuredMediaUrl" (removeClicked)="clearFile('featured')">
                 </app-file-preview>
+                }
 
               </div>
 
@@ -288,7 +285,7 @@
       <!-- ===================================================
            ACTION FOOTER
       ==================================================== -->
-      <footer class="form-actions">
+      <footer class="form-actions mb-5">
 
         <app-button variant="light" label="Cancel" class="cancel-button text-dark" [iconOnly]="false"
           (clicked)="router.navigate(['/blog-manager'])">

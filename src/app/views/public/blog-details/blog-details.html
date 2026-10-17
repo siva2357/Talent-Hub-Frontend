@@ -43,34 +43,43 @@
     ========================== -->
     @else if (blog) {
 
-    <!-- Hero Section -->
-    <section class="blog-details-hero position-relative overflow-hidden">
+    <!-- =========================
+         1. HERO SECTION WITH BANNER IN BACKGROUND
+         Title, Category, Date, Read Time, Tags over banner
+    ========================== -->
+    <section class="blog-details-hero position-relative overflow-hidden mb-4 mb-md-5">
 
         @if (blog.blogBanner || blog.featuredMedia) {
-        <img [src]="blog.blogBanner || blog.featuredMedia" [alt]="blog.title"
-            class="blog-details-hero-bg" loading="lazy">
+        <img [src]="blog.blogBanner || blog.featuredMedia" [alt]="blog.title" class="blog-details-hero-bg"
+            loading="eager" />
         }
 
+        <!-- Clean gradient readability overlay -->
         <div class="hero-overlay"></div>
 
+        <!-- Hero Content Over Banner -->
         <div class="blog-details-hero-content">
 
             @if (blog.category) {
-            <span class="category-badge">
-                <i class="bi bi-bookmark-fill me-1"></i>
-                {{ blog.category }}
-            </span>
+            <div class="mb-3">
+                <span class="category-badge">
+                    <i class="bi bi-bookmark-fill me-1"></i>
+                    {{ blog.category }}
+                </span>
+            </div>
             }
 
-            <h1 class="blog-details-hero-title">
+            <h1 class="blog-details-hero-title mb-3">
                 {{ blog.title }}
             </h1>
 
-            <div class="blog-hero-meta">
+            <div class="blog-hero-meta d-flex flex-wrap align-items-center justify-content-center gap-3">
                 <span class="hero-meta-item">
                     <i class="bi bi-calendar3"></i>
                     {{ formatDate(blog.createdAt) }}
                 </span>
+
+                <span class="meta-dot d-none d-sm-inline">•</span>
 
                 <span class="hero-meta-item">
                     <i class="bi bi-clock"></i>
@@ -79,7 +88,7 @@
             </div>
 
             @if (blog.tags && blog.tags.length) {
-            <div class="blog-hero-tags">
+            <div class="blog-hero-tags mt-3">
                 @for (tag of blog.tags; track tag) {
                 <span class="hero-tag-badge">#{{ tag }}</span>
                 }
@@ -90,12 +99,53 @@
 
     </section>
 
-    <!-- Main Article Body -->
-    <article class="blog-details-body mx-auto">
+
+    <!-- =========================
+        2. ARTICLE BODY CONTENT
+    ========================== -->
+    <article class="blog-details-body mx-auto mb-5">
         <div class="blog-rich-content" [innerHTML]="blog.content"></div>
+
+
+
+
+        <!-- =========================
+         3. FEATURED MAIN MEDIA IMAGE / VIDEO
+         Crisp, uncropped main media showcase
+    ========================== -->
+        @if (blog.featuredMedia && (blog.featuredMedia !== blog.blogBanner || !blog.blogBanner)) {
+        <div class="featured-main-media-showcase mb-4 mb-md-5">
+            <div class="featured-media-card shadow-sm">
+                @if (isVideoFile(blog.featuredMedia)) {
+                <video [src]="blog.featuredMedia" controls class="featured-media-player w-100" playsinline></video>
+                } @else {
+                <img [src]="blog.featuredMedia" [alt]="blog.title + ' Main Media'" class="featured-media-img w-100"
+                    loading="eager" />
+                }
+            </div>
+        </div>
+        }
+
+        <!-- Article Bottom Tags -->
+        @if (blog.tags && blog.tags.length) {
+        <div class="article-footer-tags pt-4 mt-5 border-top d-flex flex-wrap align-items-center gap-2">
+            <span class="text-muted small fw-semibold me-2"><i class="bi bi-tags me-1"></i>Tags:</span>
+            @for (tag of blog.tags; track tag) {
+            <span class="blog-tag-badge footer-tag">#{{ tag }}</span>
+            }
+        </div>
+        }
     </article>
 
-    <!-- Related Articles Section (Live API) -->
+
+
+
+
+
+
+    <!-- =========================
+         4. RELATED ARTICLES
+    ========================== -->
     @if (relatedBlogs.length > 0) {
     <section class="related-section">
 

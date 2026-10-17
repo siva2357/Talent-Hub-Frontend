@@ -168,12 +168,14 @@ textarea.form-control:focus {
    ATTACHMENT AREA
    ========================================================= */
 
-.glass-card .d-flex.gap-3.align-items-start {
-  min-width: 0;
+.attachment-section {
+  width: 100%;
 }
 
-.glass-card .flex-grow-1 {
-  min-width: 0;
+.attachment-icon {
+  width: 36px;
+  height: 36px;
+  font-size: 1.15rem;
 }
 
 .glass-card app-file-upload {
@@ -183,7 +185,11 @@ textarea.form-control:focus {
 
 .glass-card app-file-preview {
   display: block;
-  max-width: 100%;
+  width: 100%;
+}
+
+.attachments-preview-container {
+  width: 100%;
 }
 
 /* =========================================================
@@ -425,37 +431,19 @@ textarea.form-control:focus {
 
   /* Attachment section */
 
-  .glass-card .mb-4.d-flex.gap-3 {
-    gap: 0.75rem !important;
-  }
-
-  .glass-card .mb-4.d-flex.gap-3>.flex-shrink-0 {
-    width: 36px !important;
-    height: 36px !important;
-  }
-
-  .glass-card .mb-4.d-flex.gap-3>.flex-shrink-0 i {
+  .attachment-icon {
+    width: 32px !important;
+    height: 32px !important;
     font-size: 1rem !important;
   }
 
-  .glass-card .mb-4.d-flex.gap-3 .fw-bold {
-    font-size: 0.8rem !important;
+  .attachment-header span {
+    font-size: 0.82rem !important;
   }
 
-  .glass-card .mb-4.d-flex.gap-3 p {
-    font-size: 0.7rem !important;
-    line-height: 1.45;
-  }
-
-  /* Uploaded files */
-
-  .glass-card .mt-3.d-flex.flex-wrap {
-    gap: 0.65rem !important;
-  }
-
-  .glass-card .mt-3.d-flex.flex-wrap>div {
-    width: 100px !important;
-    max-width: calc(50% - 0.35rem);
+  .attachment-header p {
+    font-size: 0.72rem !important;
+    line-height: 1.4;
   }
 
   /* Bottom action area */
@@ -542,14 +530,8 @@ textarea.form-control:focus {
 
   /* Attachment layout */
 
-  .glass-card .mb-4.d-flex.gap-3 {
-    align-items: flex-start !important;
-  }
-
-  /* Upload preview */
-
-  .glass-card .mt-3.d-flex.flex-wrap>div {
-    width: 90px !important;
+  .attachment-section {
+    width: 100%;
   }
 
   /* Submit information */
@@ -616,10 +598,6 @@ textarea.form-control:focus {
     width: 28px;
     height: 28px;
     font-size: 0.8rem;
-  }
-
-  .glass-card .mt-3.d-flex.flex-wrap>div {
-    width: 80px !important;
   }
 }
 

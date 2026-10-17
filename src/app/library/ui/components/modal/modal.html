@@ -56,21 +56,25 @@
 
                     @if (showCancel) {
 
-                    <button type="button" class="btn btn-outline-secondary btn-sm"
-                        [class.flex-fill]="variant === 'icon'" (click)="onCancel()">
-
-                        {{ cancelLabel }}
-
-                    </button>
+                    <app-button
+                        type="button"
+                        [variant]="cancelVariant"
+                        size="sm"
+                        [label]="cancelLabel"
+                        [block]="variant === 'icon'"
+                        (clicked)="onCancel()">
+                    </app-button>
 
                     }
 
-                    <button type="button" class="btn btn-sm" [class]="'btn-' + confirmVariant"
-                        [class.flex-fill]="variant === 'icon'" (click)="onConfirm()">
-
-                        {{ confirmLabel }}
-
-                    </button>
+                    <app-button
+                        type="button"
+                        [variant]="confirmVariant"
+                        size="sm"
+                        [label]="confirmLabel"
+                        [block]="variant === 'icon'"
+                        (clicked)="onConfirm()">
+                    </app-button>
 
                 </div>
 
