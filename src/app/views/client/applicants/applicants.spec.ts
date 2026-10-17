@@ -117,7 +117,13 @@ describe('Applicants', () => {
   });
 
   it('should navigate to profile on dropdown action', () => {
-    component.onDropdownAction({ label: 'View Profile', value: 'profile', icon: '' }, {});
-    expect(router.navigate).toHaveBeenCalledWith(['/profile']);
+    component.contractId = 'contract123';
+    component.onDropdownAction({ label: 'View Profile', value: 'profile', icon: '' }, { freelancer: { _id: 'free123' } });
+    expect(router.navigate).toHaveBeenCalledWith(['/profile', 'free123'], {
+      queryParams: {
+        from: 'applicants',
+        contractId: 'contract123'
+      }
+    });
   });
 });

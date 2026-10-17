@@ -10,11 +10,16 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { DatePipe } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
+import { ModalService } from '../../../core/services/ui/modal.service';
+import { ToastService } from '../../../core/services/ui/toast.service';
+
 describe('BlogManager', () => {
   let component: BlogManager;
   let fixture: ComponentFixture<BlogManager>;
   let blogServiceSpy: jasmine.SpyObj<BlogService>;
   let masterDataServiceSpy: jasmine.SpyObj<MasterDataService>;
+  let modalServiceSpy: jasmine.SpyObj<ModalService>;
+  let toastServiceSpy: jasmine.SpyObj<ToastService>;
   let router: Router;
 
   const mockBlogs = [
@@ -30,6 +35,8 @@ describe('BlogManager', () => {
   beforeEach(async () => {
     blogServiceSpy = jasmine.createSpyObj('BlogService', ['getAllBlogsAdmin', 'deleteBlog']);
     masterDataServiceSpy = jasmine.createSpyObj('MasterDataService', ['getMasterDataByCategory']);
+    modalServiceSpy = jasmine.createSpyObj('ModalService', ['confirm']);
+    toastServiceSpy = jasmine.createSpyObj('ToastService', ['show']);
 
     blogServiceSpy.getAllBlogsAdmin.and.returnValue(of({ success: true, blogs: structuredClone(mockBlogs) }));
     blogServiceSpy.deleteBlog.and.returnValue(of({ success: true }));
@@ -40,6 +47,8 @@ describe('BlogManager', () => {
       providers: [
         { provide: BlogService, useValue: blogServiceSpy },
         { provide: MasterDataService, useValue: masterDataServiceSpy },
+        { provide: ModalService, useValue: modalServiceSpy },
+        { provide: ToastService, useValue: toastServiceSpy },
         DatePipe,
         provideRouter([]),
         provideHttpClient(),
@@ -134,22 +143,25 @@ describe('BlogManager', () => {
     fixture.detectChanges();
     tick();
 
-    spyOn(window, 'confirm').and.returnValue(true);
+    modalServiceSpy.confirm.and.returnValue(Promise.resolve(true));
     component.deleteBlog('b1');
     tick();
 
+    expect(modalServiceSpy.confirm).toHaveBeenCalled();
     expect(blogServiceSpy.deleteBlog).toHaveBeenCalledWith('b1');
     expect(component.rawBlogs$.value.length).toBe(1);
+    expect(toastServiceSpy.show).toHaveBeenCalledWith('Blog deleted successfully', 'success');
   }));
 
   it('should not delete blog if user cancels confirm dialog', fakeAsync(() => {
     fixture.detectChanges();
     tick();
 
-    spyOn(window, 'confirm').and.returnValue(false);
+    modalServiceSpy.confirm.and.returnValue(Promise.resolve(false));
     component.deleteBlog('b1');
     tick();
 
+    expect(modalServiceSpy.confirm).toHaveBeenCalled();
     expect(blogServiceSpy.deleteBlog).not.toHaveBeenCalled();
   }));
 

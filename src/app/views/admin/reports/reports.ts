@@ -3,7 +3,7 @@ import { RouterLink, Router } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../core/services/admin.service';
-import { ReportCard } from '../../shared/report-card/report-card';
+import { ReportCard } from '../../../library/shared/components/report-card/report-card';
 import { Button } from '../../../library/ui/components/button/button';
 import { InputField, InputOption } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from "../../../library/ui/components/chip/chip";

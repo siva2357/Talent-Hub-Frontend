@@ -220,8 +220,22 @@ export class InputField implements ControlValueAccessor {
   }
 
   // =========================================================
-  // Validation
+  // Validation & Label Helpers
   // =========================================================
+
+  cleanLabel(label: string): string {
+    if (!label) return '';
+    return label.replace(/\s*\*+\s*$/, '').trim();
+  }
+
+  hasAsterisk(label: string): boolean {
+    if (!label) return false;
+    return /\*\s*$/.test(label.trim());
+  }
+
+  get isFieldRequired(): boolean {
+    return this.required || this.hasAsterisk(this.label);
+  }
 
   get validationMessage(): string {
     if (this.validation === 'error') {

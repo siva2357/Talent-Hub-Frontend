@@ -24,11 +24,13 @@ import { SubmitFeedback } from './submit-feedback/submit-feedback';
 export const CLIENT_ROUTES: Routes = [
   { path: 'dashboard', component: Dashboard },
   { path: 'manage-contract', component: ManageContract },
+  { path: 'applicants', redirectTo: 'manage-contract', pathMatch: 'full' },
   { path: 'applicants/:id', component: Applicants },
   { path: 'contract-progress/:id', component: ContractProgress },
   { path: 'search-talent', component: SearchTalent },
   { path: 'financial-summary', component: FinancialSummary },
   { path: 'profile', component: Profile },
+  { path: 'profile/:id', component: Profile },
   { path: 'account-settings', component: AccountSettings },
   { path: 'contact-support', component: ContactSupport },
   { path: 'create-ticket', component: CreateTicket },

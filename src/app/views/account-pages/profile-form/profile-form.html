@@ -56,35 +56,35 @@
           <div class="col-md-9">
             <div class="row g-4">
               <div class="col-md-6">
-                <app-input-field label="Full Name *" type="text" placeholder="Enter your full name"
+                <app-input-field label="Full Name" [required]="true" type="text" placeholder="Enter your full name"
                   [value]="profileForm.get('basicInformation.fullName')?.value || ''"
                   (valueChange)="profileForm.get('basicInformation.fullName')?.setValue($event); profileForm.get('basicInformation.fullName')?.markAsTouched()"
                   [validation]="getValidationState('fullName')" [errorMessage]="getErrorMessage('fullName')">
                 </app-input-field>
               </div>
               <div class="col-md-6">
-                <app-input-field label="Email Address *" type="email" placeholder="Enter your email"
+                <app-input-field label="Email Address" [required]="true" type="email" placeholder="Enter your email"
                   [value]="profileForm.get('basicInformation.email')?.value || ''"
                   (valueChange)="profileForm.get('basicInformation.email')?.setValue($event); profileForm.get('basicInformation.email')?.markAsTouched()"
                   [validation]="getValidationState('email')" [errorMessage]="getErrorMessage('email')">
                 </app-input-field>
               </div>
               <div class="col-md-6">
-                <app-input-field label="Phone Number *" type="text" placeholder="Enter phone number"
+                <app-input-field label="Phone Number" [required]="true" type="text" placeholder="Enter phone number"
                   [value]="profileForm.get('basicInformation.phoneNumber')?.value || ''"
                   (valueChange)="profileForm.get('basicInformation.phoneNumber')?.setValue($event); profileForm.get('basicInformation.phoneNumber')?.markAsTouched()"
                   [validation]="getValidationState('phoneNumber')" [errorMessage]="getErrorMessage('phoneNumber')">
                 </app-input-field>
               </div>
               <div class="col-md-6">
-                <app-input-field label="Gender *" type="select" placeholder="Select gender" [options]="genderOptions"
+                <app-input-field label="Gender" [required]="true" type="select" placeholder="Select gender" [options]="genderOptions"
                   [value]="profileForm.get('basicInformation.gender')?.value || ''"
                   (valueChange)="profileForm.get('basicInformation.gender')?.setValue($event); profileForm.get('basicInformation.gender')?.markAsTouched()"
                   [validation]="getValidationState('gender')" [errorMessage]="getErrorMessage('gender')">
                 </app-input-field>
               </div>
               <div class="col-12">
-                <app-input-field label="Short Bio *" type="textarea" placeholder="Tell us a bit about yourself"
+                <app-input-field label="Short Bio" [required]="true" type="textarea" placeholder="Tell us a bit about yourself"
                   [value]="profileForm.get('basicInformation.shortBio')?.value || ''"
                   (valueChange)="profileForm.get('basicInformation.shortBio')?.setValue($event); profileForm.get('basicInformation.shortBio')?.markAsTouched()"
                   [validation]="getValidationState('shortBio')" [errorMessage]="getErrorMessage('shortBio')">
@@ -108,7 +108,7 @@
 
         <div class="row g-4">
           <div class="col-md-4">
-            <app-input-field label="Company Type *" type="select" placeholder="Select company type"
+            <app-input-field label="Company Type" [required]="true" type="select" placeholder="Select company type"
               [options]="companyTypeOptions" [value]="profileForm.get('professionalDetails.companyType')?.value || ''"
               (valueChange)="profileForm.get('professionalDetails.companyType')?.setValue($event); profileForm.get('professionalDetails.companyType')?.markAsTouched()"
               [validation]="getValidationState('companyType', 'professionalDetails')"
@@ -116,7 +116,7 @@
             </app-input-field>
           </div>
           <div class="col-md-4">
-            <app-input-field label="Website *" type="text" placeholder="https://"
+            <app-input-field label="Website" [required]="true" type="text" placeholder="https://"
               [value]="profileForm.get('professionalDetails.website')?.value || ''"
               (valueChange)="profileForm.get('professionalDetails.website')?.setValue($event); profileForm.get('professionalDetails.website')?.markAsTouched()"
               [validation]="getValidationState('website', 'professionalDetails')"
@@ -124,7 +124,7 @@
             </app-input-field>
           </div>
           <div class="col-md-4">
-            <app-input-field label="Industry *" type="select" placeholder="Select industry" [options]="industryOptions"
+            <app-input-field label="Industry" [required]="true" type="select" placeholder="Select industry" [options]="industryOptions"
               [value]="profileForm.get('professionalDetails.industry')?.value || ''"
               (valueChange)="profileForm.get('professionalDetails.industry')?.setValue($event); profileForm.get('professionalDetails.industry')?.markAsTouched()"
               [validation]="getValidationState('industry', 'professionalDetails')"
@@ -132,7 +132,7 @@
             </app-input-field>
           </div>
           <div class="col-12">
-            <app-input-field label="Company Description *" type="textarea" placeholder="Describe your company"
+            <app-input-field label="Company Description" [required]="true" type="textarea" placeholder="Describe your company"
               [value]="profileForm.get('professionalDetails.companyDescription')?.value || ''"
               (valueChange)="profileForm.get('professionalDetails.companyDescription')?.setValue($event); profileForm.get('professionalDetails.companyDescription')?.markAsTouched()"
               [validation]="getValidationState('companyDescription', 'professionalDetails')"
@@ -178,7 +178,7 @@
 
         <div class="row g-4">
           <div class="col-12">
-            <app-input-field label="Professional Headline *" type="text" placeholder="e.g. Senior Frontend Developer"
+            <app-input-field label="Professional Headline" [required]="true" type="text" placeholder="e.g. Senior Frontend Developer"
               [value]="profileForm.get('professionalDetails.professionalHeadline')?.value || ''"
               (valueChange)="profileForm.get('professionalDetails.professionalHeadline')?.setValue($event); profileForm.get('professionalDetails.professionalHeadline')?.markAsTouched()"
               [validation]="getValidationState('professionalHeadline', 'professionalDetails')"
@@ -186,7 +186,7 @@
             </app-input-field>
           </div>
           <div class="col-12">
-            <app-input-field label="Skills (Comma separated) *" type="text" placeholder="Comma separated skills"
+            <app-input-field label="Skills (Comma separated)" [required]="true" type="text" placeholder="Comma separated skills"
               [value]="profileForm.get('professionalDetails.skills')?.value?.join(', ') || ''"
               (valueChange)="updateSkills($event); profileForm.get('professionalDetails.skills')?.markAsTouched()"
               [validation]="getValidationState('skills', 'professionalDetails')"
@@ -194,7 +194,7 @@
             </app-input-field>
           </div>
           <div class="col-12">
-            <app-input-field label="Technologies (Comma separated) *" type="text"
+            <app-input-field label="Technologies (Comma separated)" [required]="true" type="text"
               placeholder="Comma separated technologies"
               [value]="profileForm.get('professionalDetails.technologies')?.value?.join(', ') || ''"
               (valueChange)="updateTechnologies($event); profileForm.get('professionalDetails.technologies')?.markAsTouched()"
@@ -203,7 +203,7 @@
             </app-input-field>
           </div>
           <div class="col-12">
-            <app-input-field label="Availability *" type="select" placeholder="Select availability"
+            <app-input-field label="Availability" [required]="true" type="select" placeholder="Select availability"
               [options]="availabilityOptions" [value]="profileForm.get('professionalDetails.availability')?.value || ''"
               (valueChange)="profileForm.get('professionalDetails.availability')?.setValue($event); profileForm.get('professionalDetails.availability')?.markAsTouched()"
               [validation]="getValidationState('availability', 'professionalDetails')"
@@ -261,13 +261,13 @@
           <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Social Media profile</h4>
           <div class="d-flex align-items-start gap-3 mb-3">
             <div class="flex-grow-1">
-              <app-input-field label="Select media *" type="select" placeholder="Select platform"
+              <app-input-field label="Select media" [required]="true" type="select" placeholder="Select platform"
                 [options]="socialPlatformOptions" [value]="newSocialPlatform"
                 (valueChange)="newSocialPlatform = $event">
               </app-input-field>
             </div>
             <div class="flex-grow-1">
-              <app-input-field label="Platform link *" type="text" placeholder="https://" [value]="newSocialUrl"
+              <app-input-field label="Platform link" [required]="true" type="text" placeholder="https://" [value]="newSocialUrl"
                 (valueChange)="newSocialUrl = $event">
               </app-input-field>
             </div>
@@ -295,12 +295,12 @@
           <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Languages</h4>
           <div class="d-flex align-items-start gap-3 mb-3">
             <div class="flex-grow-1">
-              <app-input-field label="Language *" type="select" placeholder="Select language"
+              <app-input-field label="Language" [required]="true" type="select" placeholder="Select language"
                 [options]="languageOptions" [value]="newLanguage" (valueChange)="newLanguage = $event">
               </app-input-field>
             </div>
             <div class="flex-grow-1">
-              <app-input-field label="Proficiency *" type="select" placeholder="Select proficiency"
+              <app-input-field label="Proficiency" [required]="true" type="select" placeholder="Select proficiency"
                 [options]="languageProficiencyOptions" [value]="newProficiency" (valueChange)="newProficiency = $event">
               </app-input-field>
             </div>

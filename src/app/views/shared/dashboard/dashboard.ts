@@ -28,7 +28,7 @@ export class Dashboard implements AfterViewInit, OnInit {
   pendingProposals: string | number = 0;
   totalEarnings: string | number = 0;
   activities: any[] = [];
-
+  completedContracts: string | number = 0;
   // Admin Stats
   totalClients: number = 0;
   totalFreelancers: number = 0;
@@ -38,11 +38,127 @@ export class Dashboard implements AfterViewInit, OnInit {
     return [
       { title: 'Total Clients', value: this.totalClients, icon: 'bi-people-fill' },
       { title: 'Total Freelancers', value: this.totalFreelancers, icon: 'bi-person-workspace' },
-      { title: 'Total Contracts', value: this.activeContracts, icon: 'bi-file-earmark-check-fill' },
-      { title: 'Total Payouts', value: '₹' + this.totalCommissions, icon: 'bi-wallet-fill' },
+      { title: 'Total Contracts', value: this.completedContracts, icon: 'bi-file-earmark-check-fill' },
       { title: 'Platform Revenue', value: '₹' + this.totalCommissions, icon: 'bi-graph-up-arrow' }
     ];
   }
+
+  readonly controlPanels = [
+    {
+      title: 'Client Management',
+      description: 'Manage and review client accounts',
+      icon: 'bi-people-fill',
+      routerLink: '/client-management'
+    },
+    {
+      title: 'Freelancer Management',
+      description: 'Manage and review freelancer accounts',
+      icon: 'bi-person-workspace',
+      routerLink: '/freelancer-management'
+    },
+    {
+      title: 'Financial Summary',
+      description: 'Review platform financial activity',
+      icon: 'bi-graph-up',
+      routerLink: '/financial-management'
+    },
+    {
+      title: 'Reports',
+      description: 'Review platform reports and analytics',
+      icon: 'bi-file-earmark-text',
+      routerLink: '/reports'
+    },
+    {
+      title: 'Support Management',
+      description: 'Manage support requests and tickets',
+      icon: 'bi-headset',
+      routerLink: '/support-request'
+    },
+    {
+      title: 'Blog Management',
+      description: 'Manage platform blog content',
+      icon: 'bi-newspaper',
+      routerLink: '/blog-manager'
+    }
+  ];
+
+  readonly clientControlPanels = [
+    {
+      title: 'Post New Contract',
+      description: 'Create and publish a new contract',
+      icon: 'bi-file-earmark-plus-fill',
+      routerLink: '/create-contract'
+    },
+    {
+      title: 'Manage Contracts',
+      description: 'Manage your posted contracts',
+      icon: 'bi-briefcase-fill',
+      routerLink: '/manage-contract'
+    },
+    {
+      title: 'Search Talents',
+      description: 'Find and explore talented professionals',
+      icon: 'bi-search',
+      routerLink: '/search-talent'
+    },
+    {
+      title: 'Financial Summary',
+      description: 'Review spending and contract finances',
+      icon: 'bi-graph-up',
+      routerLink: '/financial-summary'
+    },
+    {
+      title: 'Transaction History',
+      description: 'Review invoices and transaction logs',
+      icon: 'bi-clock-history',
+      routerLink: '/transaction-history'
+    },
+    {
+      title: 'Contact Support',
+      description: 'Get help with your account and contracts',
+      icon: 'bi-headset',
+      routerLink: '/contact-support'
+    }
+  ];
+
+  readonly freelancerControlPanels = [
+    {
+      title: 'Find Contracts',
+      description: 'Browse and apply for new jobs',
+      icon: 'bi-search',
+      routerLink: '/find-contracts'
+    },
+    {
+      title: 'My Contracts',
+      description: 'Manage your active projects',
+      icon: 'bi-briefcase',
+      routerLink: '/my-contracts'
+    },
+    {
+      title: 'Proposal Offers',
+      description: 'Track your sent proposals',
+      icon: 'bi-file-earmark-check',
+      routerLink: '/proposal-offers'
+    },
+    {
+      title: 'Finance Overview',
+      description: 'View earnings and withdrawals',
+      icon: 'bi-currency-dollar',
+      routerLink: '/finance-overview'
+    },
+    {
+      title: 'Portfolio',
+      description: 'Update your professional profile',
+      icon: 'bi-person-workspace',
+      routerLink: '/portfolio'
+    },
+    {
+      title: 'Contact Support',
+      description: 'Get help with your account and contracts',
+      icon: 'bi-headset',
+      routerLink: '/contact-support'
+    }
+  ];
 
   get clientStats(): StatCardData[] {
     return [
@@ -100,7 +216,7 @@ export class Dashboard implements AfterViewInit, OnInit {
         if (res) {
           this.totalClients = res.totalClients || 0;
           this.totalFreelancers = res.totalFreelancers || 0;
-          this.activeContracts = res.activeContracts || 0;
+          this.completedContracts = res.completedContracts || 0;
           this.totalCommissions = res.totalCommissions || 0;
 
           if (res.chartData) {
@@ -202,16 +318,32 @@ export class Dashboard implements AfterViewInit, OnInit {
     }
 
     if (this.revenueChart) {
+      const revenueData = chartData.revenue || [0, 0, 0, 0];
+      const hasRevenueData = revenueData.some((val: number) => val > 0);
+
       this.charts.push(new Chart(this.revenueChart.nativeElement, {
         type: 'doughnut',
         data: {
-          labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+          labels: hasRevenueData ? ['Q1', 'Q2', 'Q3', 'Q4'] : ['No Revenue'],
           datasets: [{
-            data: chartData.revenue || [0, 0, 0, 0],
-            backgroundColor: ['#4a3aff', '#2563eb', '#60a5fa', '#93c5fd']
+            data: hasRevenueData ? revenueData : [1],
+            backgroundColor: hasRevenueData ? ['#4a3aff', '#2563eb', '#60a5fa', '#93c5fd'] : ['#e5e7eb']
           }]
         },
-        options: { responsive: true, maintainAspectRatio: false }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: (ctx) => {
+                  if (!hasRevenueData) return ' No Revenue';
+                  return ` ${ctx.label}: ₹${ctx.raw ?? ctx.parsed}`;
+                }
+              }
+            }
+          }
+        }
       }));
     }
 

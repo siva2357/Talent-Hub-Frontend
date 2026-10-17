@@ -9,12 +9,13 @@ import { InputField } from '../../../library/ui/components/input-field/input-fie
 import { Button } from '../../../library/ui/components/button/button';
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
 import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
+import { RichTextEditor } from '../../../library/shared/components/rich-text-editor/rich-text-editor';
 import { InputOption } from '../../../core/models/ui.model';
 
 @Component({
   selector: 'app-create-portfolio',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule, CommonModule, InputField, Button, FilePreview, FileUpload],
+  imports: [RouterModule, ReactiveFormsModule, CommonModule, InputField, Button, FilePreview, FileUpload, RichTextEditor],
   templateUrl: './create-portfolio.html',
   styleUrl: './create-portfolio.css'
 })
@@ -39,18 +40,25 @@ export class CreatePortfolio implements OnInit {
     private route: ActivatedRoute
   ) { }
 
+  tagsValidator(control: any) {
+    const value = control.value;
+    if (!value || typeof value !== 'string') return { required: true };
+    const tags = value.split(',').map((t: string) => t.trim()).filter(Boolean);
+    return tags.length > 0 ? null : { required: true };
+  }
+
   ngOnInit() {
     this.projectTypeOptions = this.projectTypes.map(pt => ({ label: pt, value: pt }));
 
     this.portfolioForm = this.fb.group({
-      title: ['', [Validators.required]],
+      title: ['', [Validators.required, Validators.maxLength(100)]],
       projectType: ['', [Validators.required]],
-      role: ['', [Validators.required]],
-      startDate: [''],
-      endDate: [''],
+      role: ['', [Validators.required, Validators.maxLength(100)]],
+      startDate: ['', [Validators.required]],
+      endDate: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      projectUrl: [''],
-      tags: ['', [Validators.required]]
+      projectUrl: ['', [Validators.required, Validators.pattern(/^(https?:\/\/)?([\w\-]+(\.[\w\-]+)+[^\s]*)?$/)]],
+      tags: ['', [Validators.required, this.tagsValidator]]
     }, { validators: this.dateRangeValidator });
 
     this.route.paramMap.subscribe(params => {
@@ -61,6 +69,8 @@ export class CreatePortfolio implements OnInit {
       }
     });
   }
+
+  mediaTouched = false;
 
   dateRangeValidator(group: FormGroup): { [key: string]: any } | null {
     const start = group.get('startDate')?.value;
@@ -76,12 +86,24 @@ export class CreatePortfolio implements OnInit {
     return !!(control && control.invalid && (control.dirty || control.touched));
   }
 
+  getValidationState(controlName: string): 'none' | 'success' | 'error' {
+    if (controlName === 'endDate' && this.isDateRangeInvalid()) {
+      return 'error';
+    }
+    const control = this.portfolioForm.get(controlName);
+    if (!control || !control.touched) return 'none';
+    return control.invalid ? 'error' : 'none';
+  }
+
   isDateRangeInvalid(): boolean {
     return !!(this.portfolioForm.errors?.['dateRangeInvalid'] && 
              (this.portfolioForm.get('startDate')?.touched || this.portfolioForm.get('endDate')?.touched));
   }
 
   getErrorMessage(controlName: string): string {
+    if (controlName === 'endDate' && this.isDateRangeInvalid()) {
+      return 'End date cannot precede start date';
+    }
     const control = this.portfolioForm.get(controlName);
     if (!control || !control.errors) return '';
     if (control.errors['required']) {
@@ -89,10 +111,19 @@ export class CreatePortfolio implements OnInit {
         case 'title': return 'Project title is required';
         case 'projectType': return 'Project category is required';
         case 'role': return 'Your role or contribution is required';
+        case 'startDate': return 'Start date is required';
+        case 'endDate': return 'End date is required';
+        case 'projectUrl': return 'Project URL is required';
         case 'description': return 'Project description is required';
         case 'tags': return 'Technologies used is required';
         default: return 'This field is required';
       }
+    }
+    if (control.errors['pattern'] && controlName === 'projectUrl') {
+      return 'Please enter a valid URL (e.g. https://yourproject.com)';
+    }
+    if (control.errors['maxlength']) {
+      return 'Maximum character limit exceeded';
     }
     return 'Invalid value';
   }
@@ -122,6 +153,7 @@ export class CreatePortfolio implements OnInit {
 
   onUploadComplete(url: string) {
     this.previews = [url];
+    this.mediaTouched = false;
   }
 
   onUploadError(err: string) {
@@ -130,10 +162,12 @@ export class CreatePortfolio implements OnInit {
 
   removeFile(index: number) {
     this.previews = [];
+    this.mediaTouched = true;
   }
 
   async onSubmit() {
-    if (this.portfolioForm.invalid) {
+    this.mediaTouched = true;
+    if (this.portfolioForm.invalid || this.previews.length === 0) {
       this.portfolioForm.markAllAsTouched();
       return;
     }

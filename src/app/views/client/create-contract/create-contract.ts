@@ -18,6 +18,7 @@ import {
 } from '../../../library/ui/components/input-field/input-field';
 
 import { Button } from '../../../library/ui/components/button/button';
+import { RichTextEditor } from '../../../library/shared/components/rich-text-editor/rich-text-editor';
 
 import { ToastService } from '../../../core/services/ui/toast.service';
 import { ValidationPatterns } from '../../../core/helpers/validation-pattern';
@@ -32,7 +33,8 @@ import { MasterDataService } from '../../../core/services/master-data.service';
     ReactiveFormsModule,
     RouterLink,
     InputField,
-    Button
+    Button,
+    RichTextEditor
   ],
   templateUrl: './create-contract.html',
   styleUrl: './create-contract.css'

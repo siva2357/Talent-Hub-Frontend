@@ -38,9 +38,10 @@
       <div class="row g-4 mb-4">
         <div class="col-md-6">
           <app-input-field
-            label="Contract Title *"
+            label="Contract Title"
             type="text"
             placeholder="Enter a clear contract title"
+            [required]="true"
             [value]="contractForm.get('contractTitle')?.value"
             (valueChange)="contractForm.get('contractTitle')?.setValue($event); contractForm.get('contractTitle')?.markAsTouched(); contractForm.get('contractTitle')?.markAsDirty()"
             (blurred)="contractForm.get('contractTitle')?.markAsTouched()"
@@ -50,9 +51,10 @@
         </div>
         <div class="col-md-6">
           <app-input-field
-            label="Contract Type *"
+            label="Contract Type"
             type="select"
             placeholder="Select contract type"
+            [required]="true"
             [options]="contractTypeOptions"
             [value]="contractForm.get('contractType')?.value"
             (valueChange)="contractForm.get('contractType')?.setValue($event); contractForm.get('contractType')?.markAsTouched(); contractForm.get('contractType')?.markAsDirty()"
@@ -63,9 +65,10 @@
         </div>
         <div class="col-md-6">
           <app-input-field
-            label="Contract Category *"
+            label="Contract Category"
             type="select"
             placeholder="Select category"
+            [required]="true"
             [options]="contractCategoryOptions"
             [value]="contractForm.get('contractCategory')?.value"
             (valueChange)="contractForm.get('contractCategory')?.setValue($event); contractForm.get('contractCategory')?.markAsTouched(); contractForm.get('contractCategory')?.markAsDirty()"
@@ -76,9 +79,10 @@
         </div>
         <div class="col-md-6">
           <app-input-field
-            label="Contract Subject *"
+            label="Contract Subject"
             type="select"
             placeholder="Select subject"
+            [required]="true"
             [options]="contractSubjectOptions"
             [value]="contractForm.get('contractSubject')?.value"
             (valueChange)="contractForm.get('contractSubject')?.setValue($event); contractForm.get('contractSubject')?.markAsTouched(); contractForm.get('contractSubject')?.markAsDirty()"
@@ -90,24 +94,24 @@
       </div>
 
       <div class="mb-4">
-        <app-input-field
-          label="Contract Description *"
-          type="textarea"
+        <app-rich-text-editor
+          formControlName="contractDescription"
+          label="Contract Description"
+          [required]="true"
           placeholder="Describe the work, objectives, deliverables, and any important details..."
-          [value]="contractForm.get('contractDescription')?.value"
-          (valueChange)="contractForm.get('contractDescription')?.setValue($event); contractForm.get('contractDescription')?.markAsTouched(); contractForm.get('contractDescription')?.markAsDirty()"
-          (blurred)="contractForm.get('contractDescription')?.markAsTouched()"
+          height="180px"
           [validation]="(contractForm.get('contractDescription')?.touched || contractForm.get('contractDescription')?.dirty) ? (contractForm.get('contractDescription')?.invalid ? 'error' : 'success') : 'none'"
           errorMessage="Contract Description is required"
-        ></app-input-field>
+        ></app-rich-text-editor>
       </div>
 
       <div class="row g-4 mb-4">
         <div class="col-md-6">
           <app-input-field
-            label="Contract Start Date *"
+            label="Contract Start Date"
             type="date"
             placeholder="Select start date"
+            [required]="true"
             [value]="contractForm.get('contractStartDate')?.value"
             (valueChange)="contractForm.get('contractStartDate')?.setValue($event); contractForm.get('contractStartDate')?.markAsTouched(); contractForm.get('contractStartDate')?.markAsDirty()"
             (blurred)="contractForm.get('contractStartDate')?.markAsTouched()"
@@ -117,9 +121,10 @@
         </div>
         <div class="col-md-6">
           <app-input-field
-            label="Contract End Date *"
+            label="Contract End Date"
             type="date"
             placeholder="Select end date"
+            [required]="true"
             [value]="contractForm.get('contractEndDate')?.value"
             (valueChange)="contractForm.get('contractEndDate')?.setValue($event); contractForm.get('contractEndDate')?.markAsTouched(); contractForm.get('contractEndDate')?.markAsDirty()"
             (blurred)="contractForm.get('contractEndDate')?.markAsTouched()"
@@ -129,9 +134,10 @@
         </div>
         <div class="col-md-6">
           <app-input-field
-            label="Estimated Budget (₹) *"
+            label="Estimated Budget (₹)"
             type="text"
             placeholder="Enter total budget"
+            [required]="true"
             [value]="contractForm.get('estimatedBudget')?.value"
             (valueChange)="contractForm.get('estimatedBudget')?.setValue($event); contractForm.get('estimatedBudget')?.markAsTouched(); contractForm.get('estimatedBudget')?.markAsDirty()"
             (blurred)="contractForm.get('estimatedBudget')?.markAsTouched()"
@@ -160,21 +166,21 @@
         <div class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
           <i class="bi bi-journal-text fs-5"></i>
         </div>
-        <h2 class="fs-5 fw-bold mb-0 text-dark">Terms & Conditions</h2>
+        <h2 class="fs-5 fw-bold mb-0 text-dark">Terms & Conditions <span class="text-danger fw-bold ms-1" style="color: #dc2626 !important;">*</span></h2>
       </div>
 
       <div class="d-flex flex-column gap-3 mb-4 border rounded p-4">
         <div class="form-check">
           <input class="form-check-input border-secondary" type="checkbox" id="c1" formControlName="agreeToTerms1">
-          <label class="form-check-label text-muted" for="c1">I have read and understood all the above Terms & Conditions.</label>
+          <label class="form-check-label text-muted" for="c1">I have read and understood all the above Terms & Conditions. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span></label>
         </div>
         <div class="form-check">
           <input class="form-check-input border-secondary" type="checkbox" id="c2" formControlName="agreeToTerms2">
-          <label class="form-check-label text-muted" for="c2">I agree to comply with Talent Hub's platform policies.</label>
+          <label class="form-check-label text-muted" for="c2">I agree to comply with Talent Hub's platform policies. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span></label>
         </div>
         <div class="form-check">
           <input class="form-check-input border-secondary" type="checkbox" id="c3" formControlName="agreeToTerms3">
-          <label class="form-check-label text-muted" for="c3">I understand that once the contract is created, it becomes the official project agreement on the Talent Hub platform.</label>
+          <label class="form-check-label text-muted" for="c3">I understand that once the contract is created, it becomes the official project agreement on the Talent Hub platform. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span></label>
         </div>
       </div>
     </div>

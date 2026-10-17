@@ -101,7 +101,10 @@ describe('CreatePortfolio', () => {
         title: 'Project Title',
         projectType: 'Web Development',
         role: 'Full Stack Engineer',
+        startDate: '2025-01-01',
+        endDate: '2025-06-01',
         description: 'Comprehensive project description',
+        projectUrl: 'https://example.com',
         tags: 'Angular, Node.js'
       });
 
@@ -114,6 +117,7 @@ describe('CreatePortfolio', () => {
         projectType: 'Web Development',
         role: 'Engineer',
         description: 'Project description',
+        projectUrl: 'https://example.com',
         tags: 'Angular',
         startDate: '2026-06-01',
         endDate: '2026-01-01'
@@ -131,6 +135,9 @@ describe('CreatePortfolio', () => {
       expect(component.getErrorMessage('title')).toBe('Project title is required');
       expect(component.getErrorMessage('projectType')).toBe('Project category is required');
       expect(component.getErrorMessage('role')).toBe('Your role or contribution is required');
+      expect(component.getErrorMessage('startDate')).toBe('Start date is required');
+      expect(component.getErrorMessage('endDate')).toBe('End date is required');
+      expect(component.getErrorMessage('projectUrl')).toBe('Project URL is required');
       expect(component.getErrorMessage('description')).toBe('Project description is required');
       expect(component.getErrorMessage('tags')).toBe('Technologies used is required');
     });
@@ -143,6 +150,28 @@ describe('CreatePortfolio', () => {
       component.portfolioForm.get('startDate')?.markAsTouched();
 
       expect(component.isDateRangeInvalid()).toBeTrue();
+      expect(component.getValidationState('endDate')).toBe('error');
+      expect(component.getErrorMessage('endDate')).toBe('End date cannot precede start date');
+    });
+
+    it('should validate tags and projectUrl patterns correctly', () => {
+      const tagsControl = component.portfolioForm.get('tags');
+      tagsControl?.setValue('   , , ');
+      expect(tagsControl?.valid).toBeFalse();
+
+      tagsControl?.setValue('Angular, TypeScript');
+      expect(tagsControl?.valid).toBeTrue();
+
+      const urlControl = component.portfolioForm.get('projectUrl');
+      urlControl?.setValue('not-a-valid url');
+      urlControl?.markAsTouched();
+      expect(urlControl?.valid).toBeFalse();
+      expect(component.getValidationState('projectUrl')).toBe('error');
+      expect(component.getErrorMessage('projectUrl')).toBe('Please enter a valid URL (e.g. https://yourproject.com)');
+
+      urlControl?.setValue('https://myproject.com');
+      expect(urlControl?.valid).toBeTrue();
+      expect(component.getValidationState('projectUrl')).toBe('none');
     });
   });
 
@@ -175,6 +204,7 @@ describe('CreatePortfolio', () => {
     it('should update preview on successful upload', () => {
       component.onUploadComplete('https://cdn.example.com/new-image.png');
       expect(component.previews).toEqual(['https://cdn.example.com/new-image.png']);
+      expect(component.mediaTouched).toBeFalse();
     });
 
     it('should alert on upload error', () => {
@@ -187,6 +217,7 @@ describe('CreatePortfolio', () => {
       component.previews = ['https://cdn.example.com/image.png'];
       component.removeFile(0);
       expect(component.previews).toEqual([]);
+      expect(component.mediaTouched).toBeTrue();
     });
   });
 
@@ -196,6 +227,7 @@ describe('CreatePortfolio', () => {
       await component.onSubmit();
 
       expect(component.portfolioForm.markAllAsTouched).toHaveBeenCalled();
+      expect(component.mediaTouched).toBeTrue();
       expect(mockPortfolioService.createPortfolio).not.toHaveBeenCalled();
       expect(mockPortfolioService.updatePortfolio).not.toHaveBeenCalled();
     });
@@ -205,6 +237,8 @@ describe('CreatePortfolio', () => {
         title: 'New Creative Portfolio',
         projectType: 'UI/UX Design',
         role: 'Lead Designer',
+        startDate: '2025-01-01',
+        endDate: '2025-06-01',
         description: 'Comprehensive mobile and web prototypes',
         projectUrl: 'https://figma.com/file/123',
         tags: 'Figma, Sketch, Wireframing'
@@ -217,8 +251,8 @@ describe('CreatePortfolio', () => {
         title: 'New Creative Portfolio',
         projectType: 'UI/UX Design',
         role: 'Lead Designer',
-        startDate: undefined,
-        endDate: undefined,
+        startDate: new Date('2025-01-01'),
+        endDate: new Date('2025-06-01'),
         description: 'Comprehensive mobile and web prototypes',
         projectUrl: 'https://figma.com/file/123',
         tags: ['Figma', 'Sketch', 'Wireframing'],
@@ -273,9 +307,13 @@ describe('CreatePortfolio', () => {
         title: 'Project Title',
         projectType: 'Web Development',
         role: 'Engineer',
+        startDate: '2025-01-01',
+        endDate: '2025-06-01',
         description: 'Project description',
+        projectUrl: 'https://example.com',
         tags: 'Angular'
       });
+      component.previews = ['https://example.com/media.png'];
 
       mockPortfolioService.createPortfolio.and.returnValue(throwError(() => new Error('Creation error')));
 

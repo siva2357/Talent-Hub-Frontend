@@ -1,0 +1,26 @@
+<div class="mb-3 w-100 rich-text-editor-container">
+  @if (label) {
+    <label class="form-label fw-semibold text-dark" style="font-size: 0.85rem;">
+      {{ cleanLabel(label) }}
+      @if (isFieldRequired) {
+        <span class="text-danger ms-1 fw-bold" style="color: #dc2626 !important;">*</span>
+      }
+    </label>
+  }
+  <div class="bg-white rounded-3 overflow-hidden border"
+       [class.border-danger]="validation === 'error'"
+       [class.is-invalid]="validation === 'error'">
+    <quill-editor 
+      [(ngModel)]="value" 
+      (ngModelChange)="onValueChange($event)"
+      [placeholder]="placeholder"
+      [disabled]="disabled"
+      [style]="{height: height}">
+    </quill-editor>
+  </div>
+  @if (errorMessage && validation === 'error') {
+    <div class="text-danger mt-1" style="font-size: 0.75rem;">
+      {{ errorMessage }}
+    </div>
+  }
+</div>

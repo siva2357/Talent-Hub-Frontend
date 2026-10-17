@@ -21,7 +21,13 @@ export const routes: Routes = [
     path: 'profile',
     component: Profile,
     canActivate: [AuthGuard, RoleGuard],
-    data: { expectedRoles: ['client', 'freelancer'] }
+    data: { expectedRoles: ['admin', 'client', 'freelancer'] }
+  },
+  {
+    path: 'profile/:id',
+    component: Profile,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { expectedRoles: ['admin', 'client', 'freelancer'] }
   },
   {
     path: 'account-settings',

@@ -12,6 +12,7 @@ import { ViewReport } from './view-report/view-report';
 
 import { MeetPage } from '../shared/meet-page/meet-page';
 import { ChatPage } from '../shared/chat-page/chat-page';
+import { Profile } from '../shared/profile/profile';
 
 
 export const ADMIN_ROUTES: Routes = [
@@ -23,7 +24,11 @@ export const ADMIN_ROUTES: Routes = [
   { path: 'support-request', component: SupportRequest },
   { path: 'blog-manager', component: BlogManager },
   { path: 'create-blog', component: CreateBlog },
+  { path: 'edit-blog/:id', component: CreateBlog },
   { path: 'view-report/:id', component: ViewReport },
   { path: 'meet-page', component: MeetPage },
-  { path: 'chat-page', component: ChatPage }
+  { path: 'chat-page', component: ChatPage },
+  { path: 'profile', component: Profile },
+  { path: 'profile/:id', component: Profile }
 ];
+

@@ -1,12 +1,6 @@
 /* =========================================================
    ACCOUNT SETTINGS / MANAGEMENT PAGE
-   FINAL RESPONSIVE STYLES
-   Desktop + Laptop + Tablet + Mobile
-   ========================================================= */
-
-
-/* =========================================================
-   HOST
+   Streamlined, Responsive & Modern Design System
    ========================================================= */
 
 :host {
@@ -15,20 +9,16 @@
   min-width: 0;
 }
 
-
 /* =========================================================
-   MAIN PAGE
+   PAGE CONTAINER & AMBIENT BACKGROUND
    ========================================================= */
 
 .management-container {
   position: relative;
   width: 100%;
   min-height: 100vh;
-
   overflow-x: hidden;
-
-  font-family: 'Inter', 'Outfit', sans-serif;
-
+  font-family: 'Inter', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: #fcfbfe;
   box-sizing: border-box;
 }
@@ -39,80 +29,44 @@
   box-sizing: border-box;
 }
 
-.management-container img {
-  max-width: 100%;
-}
-
-.management-container input,
-.management-container textarea,
-.management-container select,
-.management-container button {
-  max-width: 100%;
-}
-
-
-/* =========================================================
-   BACKGROUND
-   ========================================================= */
-
-.bg-light-purple {
-  background-color: #f9faff;
-}
-
 .bg-shape {
   position: absolute;
   z-index: 0;
-
   border-radius: 50%;
-
   pointer-events: none;
 }
 
 .top-left {
   top: -150px;
   left: -150px;
-
   width: 500px;
   height: 500px;
-
-  background: radial-gradient(circle,
-      rgba(168, 85, 247, 0.15) 0%,
-      rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.14) 0%, rgba(255, 255, 255, 0) 70%);
 }
 
 .bottom-right {
   right: -200px;
   bottom: -200px;
-
   width: 600px;
   height: 600px;
-
-  background: radial-gradient(circle,
-      rgba(168, 85, 247, 0.15) 0%,
-      rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
 }
 
 .right-shape {
   top: 30%;
   right: -100px;
-
   width: 400px;
   height: 400px;
-
   background: rgba(37, 99, 235, 0.05);
-
   filter: blur(80px);
-
   transform: translateY(-50%);
 }
 
 .concentric-circles {
   position: absolute;
   z-index: 0;
-
   top: 15%;
   left: 0;
-
   pointer-events: none;
 }
 
@@ -120,293 +74,137 @@
   position: absolute;
   top: 50%;
   left: 50%;
-
   border: 1px dashed rgba(168, 85, 247, 0.15);
   border-radius: 50%;
-
   transform: translate(-50%, -50%);
 }
 
-.circle-1 {
-  width: 300px;
-  height: 300px;
-}
-
-.circle-2 {
-  width: 500px;
-  height: 500px;
-}
-
-.circle-3 {
-  width: 700px;
-  height: 700px;
-}
-
+.circle-1 { width: 300px; height: 300px; }
+.circle-2 { width: 500px; height: 500px; }
+.circle-3 { width: 700px; height: 700px; }
 
 /* =========================================================
-   MAIN CONTENT
+   CONTENT WRAPPER & HEADER
    ========================================================= */
 
-.management-container>.position-relative {
+.settings-content-wrapper {
   position: relative;
-
-  width: min(100%, 900px);
-  max-width: 900px;
-
-  margin-right: auto;
-  margin-left: auto;
-
-  min-width: 0;
-
   z-index: 1;
+  max-width: 920px;
+  width: 100%;
+  margin: 1.75rem auto 3rem;
+  min-width: 0;
 }
 
+.back-btn {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: #ffffff;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.back-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  transform: translateX(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
 
 /* =========================================================
-   GLASS CARD
+   GLASS CARD CONTAINER
    ========================================================= */
 
 .glass-card {
   width: 100%;
   min-width: 0;
-
-  background: rgba(255, 255, 255, 0.95);
-
-  border: 1px solid rgba(168, 85, 247, 0.15);
-  border-radius: 24px !important;
-
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(168, 85, 247, 0.16);
+  border-radius: 20px !important;
   box-shadow:
-    0 15px 40px -10px rgba(74, 58, 255, 0.1),
-    0 4px 15px rgba(0, 0, 0, 0.05);
-
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+    0 20px 45px -12px rgba(74, 58, 255, 0.08),
+    0 4px 16px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 
 .cursor-pointer {
   cursor: pointer;
 }
 
-
 /* =========================================================
-   HEADER
+   TABS NAVIGATION
    ========================================================= */
 
-.management-container h1 {
-  line-height: 1.2;
-  overflow-wrap: anywhere;
+.tabs-header {
+  background: rgba(248, 250, 252, 0.75);
+  border-bottom: 1px solid #e2e8f0;
+  width: 100%;
 }
-
-.management-container h1+p {
-  overflow-wrap: anywhere;
-}
-
-.management-container .btn-white {
-  background: #fff;
-}
-
-
-/* =========================================================
-   TABS
-   ========================================================= */
 
 .nav-underline {
   display: flex;
-
   width: 100%;
   min-width: 0;
-
   flex-wrap: wrap;
-
+  gap: 2.25rem !important;
+  justify-content: center;
+  align-items: center;
   margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .nav-underline .nav-item {
-  min-width: 0;
+  flex: 0 0 auto;
 }
 
 .nav-underline .nav-link {
-  color: #6c757d;
-
-  border-bottom: 2px solid transparent;
-
-  transition:
-    color 0.2s ease,
-    border-color 0.2s ease;
-
+  display: block;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.65rem 0.25rem 0.9rem;
+  border-bottom: 2.5px solid transparent;
+  transition: all 0.2s ease;
   white-space: nowrap;
-}
-
-.nav-underline .nav-link.active {
-  color: #4a3aff;
-  border-bottom-color: #4a3aff;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .nav-underline .nav-link:hover:not(.active) {
-  color: #4a3aff;
-  border-bottom-color: rgba(74, 58, 255, 0.2);
+  color: #4f46e5;
+  border-bottom-color: rgba(79, 70, 229, 0.25);
 }
 
+.nav-underline .nav-link.active {
+  color: #4f46e5 !important;
+  border-bottom-color: #4f46e5 !important;
+}
+
+.nav-underline .nav-link.active-danger {
+  color: #dc2626 !important;
+  border-bottom-color: #dc2626 !important;
+}
 
 /* =========================================================
-   FORM ELEMENTS
-   ========================================================= */
-
-.form-control,
-.form-select {
-  width: 100%;
-  max-width: 100%;
-
-  padding: 0.75rem 1rem;
-
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
-
-  background-color: #f9fafb;
-
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: #4a3aff;
-
-  background-color: #fff;
-
-  box-shadow:
-    0 0 0 3px rgba(74, 58, 255, 0.15);
-}
-
-.form-control::placeholder {
-  color: #9ca3af;
-}
-
-.form-check-input:checked {
-  background-color: #4a3aff;
-  border-color: #4a3aff;
-}
-
-.text-primary {
-  color: #4a3aff !important;
-}
-
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
-.btn-primary {
-  background: linear-gradient(135deg,
-      #4a3aff,
-      #2563eb);
-
-  border: none;
-  border-radius: 10px;
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg,
-      #3f31eb,
-      #1d4ed8);
-
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 8px 20px rgba(74, 58, 255, 0.35);
-}
-
-.btn-outline-primary {
-  color: #4a3aff;
-  border-color: #4a3aff;
-  border-radius: 10px;
-}
-
-.btn-outline-primary:hover {
-  color: #fff;
-  background-color: #4a3aff;
-}
-
-
-/* =========================================================
-   GLOBAL FORM SAFETY
-   ========================================================= */
-
-.management-container .row {
-  min-width: 0;
-}
-
-.management-container [class*="col-"] {
-  min-width: 0;
-}
-
-.management-container app-input-field,
-.management-container app-file-upload,
-.management-container app-file-preview {
-  display: block;
-
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-.management-container app-button {
-  max-width: 100%;
-}
-
-.management-container textarea {
-  resize: vertical;
-  max-width: 100%;
-}
-
-.management-container input,
-.management-container select,
-.management-container textarea {
-  overflow-wrap: anywhere;
-}
-
-
-/* =========================================================
-   PROFILE SETTINGS FORM
+   FORM SECTIONS & HEADINGS
    ========================================================= */
 
 .profile-settings-form {
   width: 100%;
-  max-width: 100%;
   min-width: 0;
-
   margin: 0;
-
-  box-sizing: border-box;
-
-  overflow-x: hidden;
 }
-
-.profile-settings-form *,
-.profile-settings-form *::before,
-.profile-settings-form *::after {
-  box-sizing: border-box;
-}
-
-
-/* =========================================================
-   PROFILE SECTIONS
-   ========================================================= */
 
 .profile-section {
   width: 100%;
   min-width: 0;
-
-  margin-bottom: 2.5rem;
-
-  box-sizing: border-box;
+  margin-bottom: 2.25rem;
 }
 
 .profile-section:last-of-type {
@@ -415,45 +213,34 @@
 
 .profile-section-border {
   padding-top: 2rem;
-
-  border-top: 1px solid var(--bs-border-color,
-      #dee2e6);
+  border-top: 1px solid #eef2f6;
 }
 
 .section-heading {
   width: 100%;
-  min-width: 0;
-
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .section-heading h2 {
   margin: 0;
-
-  color: #212529;
-
+  color: #0f172a;
   font-size: 1.05rem;
   font-weight: 700;
-  line-height: 1.4;
-
-  overflow-wrap: anywhere;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
 }
 
-
 /* =========================================================
-   BASIC DETAILS
+   BASIC DETAILS & PHOTO
    ========================================================= */
 
 .basic-details-layout {
   display: grid;
-
   width: 100%;
   min-width: 0;
-
-  grid-template-columns:
-    minmax(180px, 0.28fr) minmax(0, 0.72fr);
-
+  grid-template-columns: minmax(180px, 0.28fr) minmax(0, 0.72fr);
   gap: 2rem;
+  align-items: start;
 }
 
 .profile-photo-column {
@@ -462,14 +249,10 @@
 
 .profile-photo-wrapper {
   display: flex;
-
   width: 100%;
-  min-width: 0;
-
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-
   gap: 0.75rem;
 }
 
@@ -481,19 +264,13 @@
 
 .profile-photo-hint {
   display: block;
-
   width: 100%;
   max-width: 220px;
-
-  color: #6c757d;
-
+  color: #64748b;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.4;
-
   text-align: center;
-
-  overflow-wrap: anywhere;
 }
 
 .basic-fields-column {
@@ -501,28 +278,23 @@
   min-width: 0;
 }
 
-
 /* =========================================================
-   FORM GRID
+   FORM GRIDS
    ========================================================= */
 
 .form-grid {
   display: grid;
-
   width: 100%;
   min-width: 0;
-
   gap: 1.25rem;
 }
 
 .form-grid-2 {
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .form-grid-3 {
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .form-grid-item {
@@ -537,20 +309,31 @@
 .form-field-full {
   width: 100%;
   min-width: 0;
-
   margin-top: 1.25rem;
 }
 
+/* Form safety for embedded components */
+.management-container app-input-field,
+.management-container app-file-upload,
+.management-container app-file-preview {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.management-container app-button {
+  max-width: 100%;
+}
 
 /* =========================================================
-   DYNAMIC SECTIONS
+   DYNAMIC SECTIONS (SOCIAL PROFILES & LANGUAGES)
    ========================================================= */
 
 .dynamic-section {
   width: 100%;
   min-width: 0;
-
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .dynamic-section:last-child {
@@ -559,83 +342,51 @@
 
 .dynamic-section-header {
   display: flex;
-
   width: 100%;
   min-width: 0;
-
   align-items: center;
   justify-content: space-between;
-
   gap: 1rem;
-
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
 }
 
 .dynamic-section-header h4 {
-  min-width: 0;
-
   margin: 0;
-
-  color: #212529;
-
-  font-size: 0.9rem;
+  color: #334155;
+  font-size: 0.925rem;
   font-weight: 600;
   line-height: 1.4;
-
-  overflow-wrap: anywhere;
 }
 
 .dynamic-section-header app-button {
   flex: 0 0 auto;
 }
 
-
-/* =========================================================
-   DYNAMIC LIST
-   ========================================================= */
-
 .dynamic-list {
   display: flex;
-
   width: 100%;
   min-width: 0;
-
   flex-direction: column;
-
   gap: 0.75rem;
 }
 
-
-/* =========================================================
-   SOCIAL / LANGUAGE ROW
-   ========================================================= */
-
 .dynamic-row {
   display: grid;
-
   width: 100%;
   min-width: 0;
-
-  grid-template-columns:
-    minmax(0, 1fr) minmax(0, 2fr) auto;
-
+  grid-template-columns: minmax(140px, 1fr) minmax(200px, 2fr) auto;
   align-items: end;
-
   gap: 1rem;
+  padding: 1rem 1.125rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
 
-  padding: 1rem;
-
-  border: 1px solid var(--bs-border-color,
-      #dee2e6);
-
-  border-radius: 0.75rem;
-
-  background: rgba(248,
-      249,
-      250,
-      0.5);
-
-  box-sizing: border-box;
+.dynamic-row:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
 .dynamic-field {
@@ -643,115 +394,48 @@
   min-width: 0;
 }
 
-.dynamic-field-platform {
-  min-width: 0;
-}
-
-.dynamic-field-link {
-  min-width: 0;
-}
-
 .dynamic-action {
   display: flex;
-
   min-width: 40px;
-
   align-items: flex-end;
   justify-content: center;
-
-  padding-bottom: 0.15rem;
+  padding-bottom: 0.2rem;
 }
 
 .dynamic-action app-button {
   flex: 0 0 auto;
 }
 
-
-/* =========================================================
-   EXISTING BOOTSTRAP FORMARRAY COMPATIBILITY
-   ========================================================= */
-
-.management-container [formArrayName="socialLinks"]>[formGroupName],
-.management-container [formArrayName="languages"]>[formGroupName] {
+.empty-state-card {
   width: 100%;
-  min-width: 0;
+  background: rgba(248, 250, 252, 0.7);
+  border: 1px dashed #cbd5e1 !important;
+  border-radius: 12px;
 }
-
-.management-container [formArrayName="socialLinks"] .flex-grow-1,
-.management-container [formArrayName="languages"] .flex-grow-1 {
-  min-width: 0;
-}
-
-.management-container [formArrayName="socialLinks"] .pt-4,
-.management-container [formArrayName="languages"] .pt-4 {
-  flex-shrink: 0;
-}
-
 
 /* =========================================================
-   EMPTY STATE
-   ========================================================= */
-
-.empty-state {
-  width: 100%;
-
-  margin: 0;
-  padding: 0.75rem 1rem;
-
-  color: #6c757d;
-
-  font-size: 0.875rem;
-  line-height: 1.5;
-
-  text-align: center;
-
-  overflow-wrap: anywhere;
-}
-
-
-/* =========================================================
-   PROFILE ACTIONS
+   ACTION FOOTERS
    ========================================================= */
 
 .profile-actions {
   display: flex;
-
-
   width: 100%;
   min-width: 0;
-
   align-items: center;
   justify-content: space-between;
-
-  gap: 0.75rem;
-
-  padding-top: 1.5rem;
-
-  border-top: 1px solid var(--bs-border-color,
-      #dee2e6);
+  gap: 1rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid #eef2f6;
 }
-
-.profile-actions app-button {
-  flex: 0 0 auto;
-}
-
-
-/* =========================================================
-   ACTION SECTIONS
-   ========================================================= */
 
 .security-actions {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--bs-border-color, #dee2e6);
+  border-top: 1px solid #eef2f6;
   min-width: 0;
-}
-
-.security-actions app-button {
-  max-width: 100%;
 }
 
 .delete-account-actions {
@@ -761,134 +445,28 @@
   min-width: 0;
 }
 
-.delete-account-actions app-button {
-  max-width: 100%;
+.danger-zone-card {
+  border: 1px solid rgba(239, 68, 68, 0.25) !important;
+  background: rgba(254, 242, 242, 0.6) !important;
+  border-radius: 16px;
 }
-
 
 /* =========================================================
-   DELETE ACCOUNT / OTHER CARDS
-   ========================================================= */
-
-.management-container .card {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-.management-container .card-body {
-  width: 100%;
-  min-width: 0;
-}
-
-.management-container .card-body * {
-  max-width: 100%;
-}
-
-
-/* =========================================================
-   LARGE DESKTOP
-   1400px+
-   ========================================================= */
-
-@media (min-width: 1400px) {
-
-  .management-container>.position-relative {
-    width: min(100%, 980px);
-    max-width: 980px;
-  }
-
-  .basic-details-layout {
-    grid-template-columns:
-      minmax(200px, 260px) minmax(0, 1fr);
-
-    gap: 2.5rem;
-  }
-
-  .form-grid {
-    gap: 1.5rem;
-  }
-
-  .dynamic-row {
-    gap: 1.25rem;
-    padding: 1.125rem;
-  }
-
-}
-
-
-/* =========================================================
-   DESKTOP / LAPTOP
-   1200px - 1399px
-   ========================================================= */
-
-@media (max-width: 1399.98px) {
-
-  .management-container>.position-relative {
-    width: min(calc(100% - 2rem),
-        900px);
-  }
-
-}
-
-
-/* =========================================================
-   LAPTOP
-   <= 1199px
-   ========================================================= */
-
-@media (max-width: 1199.98px) {
-
-  .basic-details-layout {
-    grid-template-columns:
-      minmax(160px, 220px) minmax(0, 1fr);
-
-    gap: 1.5rem;
-  }
-
-  .form-grid-3 {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
-
-}
-
-
-/* =========================================================
-   TABLET
-   <= 991px
+   RESPONSIVE: LAPTOPS & TABLETS (<= 991px)
    ========================================================= */
 
 @media (max-width: 991.98px) {
-
-  .management-container {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
+  .settings-content-wrapper {
+    margin-top: 1.25rem;
   }
-
-  .management-container>.position-relative {
-    width: 100%;
-    max-width: 900px;
-
-    margin-top: 1rem !important;
-  }
-
-  .glass-card {
-    border-radius: 20px !important;
-  }
-
-
-  /* Basic profile */
 
   .basic-details-layout {
     grid-template-columns: 1fr;
-
     gap: 1.5rem;
   }
 
   .profile-photo-column {
     display: flex;
-
     justify-content: center;
   }
 
@@ -896,217 +474,76 @@
     max-width: 240px;
   }
 
-
-  /* Form */
-
   .form-grid-3 {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-
-  /* Dynamic rows */
 
   .dynamic-row {
-    grid-template-columns:
-      minmax(0, 1fr) minmax(0, 1.5fr) auto;
+    grid-template-columns: minmax(130px, 1fr) minmax(180px, 1.5fr) auto;
   }
-
-
-  /* Card */
-
-  .glass-card>.p-4,
-  .glass-card>.p-md-5 {
-    padding: 1.5rem !important;
-  }
-
-
-  /* Tabs */
-
-  .nav-underline {
-    gap: 1.5rem !important;
-  }
-
 }
 
-
 /* =========================================================
-   TABLET / LARGE MOBILE
-   <= 767px
+   RESPONSIVE: MOBILE (<= 767px)
    ========================================================= */
 
 @media (max-width: 767.98px) {
-
-  .management-container {
-    padding: 1rem !important;
+  .settings-content-wrapper {
+    margin-top: 0.75rem;
+    margin-bottom: 2rem;
   }
-
-  .management-container>.position-relative {
-    width: 100%;
-    max-width: 100%;
-
-    margin-top: 0.5rem !important;
-  }
-
-
-  /* Background */
 
   .top-left {
-    width: 350px;
-    height: 350px;
-
-    top: -120px;
-    left: -140px;
+    width: 320px;
+    height: 320px;
+    top: -100px;
+    left: -100px;
   }
 
   .bottom-right {
-    width: 400px;
-    height: 400px;
-
-    right: -180px;
-    bottom: -150px;
-  }
-
-  .right-shape {
-    width: 300px;
-    height: 300px;
-
-    right: -140px;
+    width: 380px;
+    height: 380px;
   }
 
   .concentric-circles {
     display: none;
   }
 
-
-  /* Header */
-
-  .management-container .d-flex.align-items-center.mb-4 {
-    min-height: 44px;
-
-    margin-bottom: 1.25rem !important;
-  }
-
-  .management-container h1 {
-    font-size: 1.5rem !important;
-  }
-
-  .management-container h1+p {
-    font-size: 0.78rem !important;
-    line-height: 1.4;
-  }
-
-
-  /* Card */
-
   .glass-card {
-    border-radius: 18px !important;
-
-    box-shadow:
-      0 10px 30px -10px rgba(74,
-        58,
-        255,
-        0.12),
-      0 3px 12px rgba(0,
-        0,
-        0,
-        0.04);
+    border-radius: 16px !important;
   }
 
-
-  /* Tabs */
-
-  .glass-card>.border-bottom {
-    padding-right: 1rem !important;
-    padding-left: 1rem !important;
+  /* Horizontally scrollable tabs on mobile */
+  .tabs-header {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
   }
 
   .nav-underline {
-    display: flex;
-
-    width: 100%;
-
-    gap: 0 !important;
-
     flex-wrap: nowrap;
-
     justify-content: flex-start !important;
-
+    gap: 1.5rem !important;
     overflow-x: auto;
     overflow-y: hidden;
-
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
     scrollbar-width: none;
-    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
   }
 
   .nav-underline::-webkit-scrollbar {
     display: none;
   }
 
-  .nav-underline .nav-item {
-    flex: 0 0 auto;
-  }
-
   .nav-underline .nav-link {
-    padding:
-      0 0.85rem 0.8rem !important;
-
-    font-size: 0.78rem !important;
+    font-size: 0.8rem;
+    padding: 0.65rem 0.85rem 0.75rem;
   }
 
-  .nav-underline .nav-item:first-child .nav-link {
-    padding-left: 0 !important;
+  .glass-card > .p-4,
+  .glass-card > .p-md-5 {
+    padding: 1.25rem !important;
   }
-
-
-  /* Content */
-
-  .glass-card>.p-4,
-  .glass-card>.p-md-5 {
-    padding: 1.15rem !important;
-  }
-
-
-  /* Section headings */
-
-  .section-heading {
-    margin-bottom: 1.25rem;
-  }
-
-  .section-heading h2 {
-    font-size: 1rem;
-  }
-
-  .management-container h2.fs-5 {
-    font-size: 1rem !important;
-    margin-bottom: 1rem !important;
-  }
-
-  .management-container h4.fs-6 {
-    font-size: 0.85rem !important;
-  }
-
-
-  /* Bootstrap rows */
-
-  .management-container .row.g-4 {
-    --bs-gutter-x: 1rem;
-    --bs-gutter-y: 1rem;
-  }
-
-
-  /* Profile */
-
-  .management-container .col-md-3 {
-    width: 100%;
-  }
-
-  .management-container .col-md-3>.d-flex {
-    align-items: center !important;
-  }
-
-
-  /* Sections */
 
   .profile-section {
     margin-bottom: 1.75rem;
@@ -1116,20 +553,10 @@
     padding-top: 1.5rem;
   }
 
-  .management-container .mb-5 {
-    margin-bottom: 2rem !important;
-  }
-
-  .management-container .border-top.pt-5 {
-    padding-top: 1.75rem !important;
-  }
-
-
-  /* New grid */
-
   .form-grid-2,
   .form-grid-3 {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .form-grid-full {
@@ -1140,526 +567,90 @@
     margin-top: 1rem;
   }
 
-
-  /* Dynamic headers */
-
-  .dynamic-section-header {
-    align-items: flex-start;
-  }
-
-  .dynamic-section-header h4 {
-    flex: 1 1 auto;
-  }
-
-  .dynamic-section-header app-button {
-    flex: 0 0 auto;
-  }
-
-
-  /* Dynamic rows */
-
+  /* Dynamic rows stack cleanly on mobile */
   .dynamic-row {
     grid-template-columns: 1fr;
-
     gap: 0.75rem;
-
     padding: 0.875rem;
   }
 
-  .dynamic-field {
-    width: 100%;
-  }
-
   .dynamic-action {
-    min-width: 0;
-
-    align-items: center;
     justify-content: flex-end;
-
     padding: 0;
   }
 
-
-  /* Existing FormArray rows */
-
-  .management-container [formArrayName="socialLinks"]>[formGroupName],
-
-  .management-container [formArrayName="languages"]>[formGroupName] {
-    display: flex !important;
-
-    width: 100%;
-
-    flex-direction: column !important;
-    align-items: stretch !important;
-
-    gap: 0.75rem !important;
-
-    padding: 0.9rem !important;
-  }
-
-  .management-container [formArrayName="socialLinks"] .flex-grow-1,
-
-  .management-container [formArrayName="languages"] .flex-grow-1 {
-    width: 100%;
-
-    flex: none !important;
-  }
-
-  .management-container [formArrayName="socialLinks"] .pt-4,
-
-  .management-container [formArrayName="languages"] .pt-4 {
-    display: flex;
-
-    align-items: center;
-    justify-content: flex-end;
-
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-  }
-
-
-  /* Dynamic section buttons */
-
-  .dynamic-section-header {
-    gap: 0.75rem;
-  }
-
-  .management-container .justify-content-between .align-items-center .mb-3 {
-    gap: 0.75rem;
-  }
-
-
-  /* Actions */
-
-  .profile-actions {
-    flex-direction: row;
-    align-items: center;
-
-    gap: 0.75rem;
-  }
-
-  .profile-actions app-button {
-    width: auto;
-  }
-
-  .security-actions {
-    flex-direction: column-reverse;
-    align-items: stretch;
-    gap: 0.75rem;
-  }
-
-  .security-actions app-button {
-    width: 100%;
-  }
-
-
-  /* Security */
-
-  .management-container .col-md-8.col-lg-6,
-
-  .management-container .col-md-10.col-lg-8 {
-    width: 100%;
-  }
-
-  .management-container .text-center.mb-5 {
-    margin-bottom: 2rem !important;
-  }
-
-
-  /* Delete account */
-
-  .management-container .card-body {
-    padding: 1.15rem !important;
-  }
-
+  .security-actions,
   .delete-account-actions {
     flex-direction: column;
     align-items: stretch;
   }
 
+  .security-actions app-button,
   .delete-account-actions app-button {
     width: 100%;
   }
-
 }
 
-
 /* =========================================================
-   MOBILE
-   <= 575px
+   RESPONSIVE: SMALL MOBILE (<= 480px)
    ========================================================= */
 
-@media (max-width: 575.98px) {
-
-  .management-container {
-    padding: 0.65rem !important;
+@media (max-width: 480px) {
+  .back-btn {
+    width: 38px;
+    height: 38px;
   }
-
-  .management-container>.position-relative {
-    margin-top: 0.25rem !important;
-  }
-
-
-  /* Header */
-
-  .management-container .d-flex.align-items-center.mb-4 {
-    margin-bottom: 1rem !important;
-  }
-
-  .management-container .d-flex.align-items-center.mb-4 button {
-    width: 36px !important;
-    height: 36px !important;
-  }
-
-  .management-container .d-flex.align-items-center.mb-4 button i {
-    font-size: 1rem !important;
-  }
-
-  .management-container h1 {
-    font-size: 1.3rem !important;
-  }
-
-  .management-container h1+p {
-    margin-bottom: 0 !important;
-
-    font-size: 0.72rem !important;
-  }
-
-
-  /* Card */
 
   .glass-card {
-    border-radius: 15px !important;
+    border-radius: 14px !important;
   }
 
-
-  /* Tabs */
-
-  .glass-card>.border-bottom {
-    padding-right: 0.85rem !important;
-    padding-left: 0.85rem !important;
+  .glass-card > .p-4,
+  .glass-card > .p-md-5 {
+    padding: 1rem !important;
   }
 
   .nav-underline .nav-link {
-    padding:
-      0 0.7rem 0.7rem !important;
-
-    font-size: 0.72rem !important;
-  }
-
-  .nav-underline .nav-item:first-child .nav-link {
-    padding-left: 0 !important;
-  }
-
-
-  /* Content */
-
-  .glass-card>.p-4,
-  .glass-card>.p-md-5 {
-    padding: 0.95rem !important;
-  }
-
-
-  /* Section */
-
-  .profile-section {
-    margin-bottom: 1.5rem;
-  }
-
-  .profile-section-border {
-    padding-top: 1.25rem;
-  }
-
-  .section-heading {
-    margin-bottom: 1rem;
-  }
-
-  .section-heading h2 {
-    font-size: 0.95rem;
-  }
-
-
-  /* Grid */
-
-  .form-grid {
-    gap: 1rem;
-  }
-
-
-  /* Profile photo */
-
-  .profile-photo-wrapper {
-    width: 100%;
-    max-width: 220px;
-  }
-
-
-  /* Bootstrap rows */
-
-  .management-container .row.g-4 {
-    --bs-gutter-x: 0.75rem;
-    --bs-gutter-y: 0.8rem;
-  }
-
-
-  /* Location */
-
-  .management-container .col-12.mt-4 {
-    margin-top: 1.25rem !important;
-  }
-
-
-  /* Dynamic sections */
-
-  .dynamic-section {
-    margin-bottom: 1.5rem;
+    font-size: 0.75rem;
+    padding: 0.6rem 0.65rem 0.7rem;
   }
 
   .dynamic-section-header {
     flex-direction: column;
     align-items: stretch;
-
-    gap: 0.75rem;
   }
 
   .dynamic-section-header app-button {
     width: 100%;
   }
 
-  .dynamic-section-header app-button button {
-    width: 100%;
-  }
-
-
-  /* Dynamic rows */
-
-  .dynamic-row {
-    width: 100%;
-
-    padding: 0.75rem;
-
-    border-radius: 0.625rem;
-  }
-
-
-  /* Existing FormArray */
-
-  .management-container [formArrayName="socialLinks"]>[formGroupName],
-
-  .management-container [formArrayName="languages"]>[formGroupName] {
-    border-radius: 12px !important;
-    padding: 0.8rem !important;
-  }
-
-
-  /* Action */
-
-  .dynamic-action {
-    justify-content: flex-end;
-  }
-
   .profile-actions {
-    padding-top: 1.25rem;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    gap: 0.75rem;
   }
 
-
-  /* Security */
-
-  .management-container .form-text {
-    line-height: 1.45;
+  .profile-actions app-button {
+    flex: 0 0 auto !important;
+    width: auto !important;
   }
-
-  .security-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-
-  /* Delete account */
-
-  .management-container .card-body h3 {
-    line-height: 1.35;
-  }
-
-  .management-container .card-body p {
-    font-size: 0.76rem !important;
-  }
-
-
-  /* Spacing */
-
-  .management-container .mb-5 {
-    margin-bottom: 1.5rem !important;
-  }
-
-  .management-container .border-top.pt-5 {
-    padding-top: 1.4rem !important;
-  }
-
 }
-
-
-/* =========================================================
-   VERY SMALL PHONES
-   <= 400px
-   ========================================================= */
-
-@media (max-width: 400px) {
-
-  .management-container {
-    padding: 0.5rem !important;
-  }
-
-  .glass-card>.p-4,
-  .glass-card>.p-md-5 {
-    padding: 0.8rem !important;
-  }
-
-  .management-container h1 {
-    font-size: 1.15rem !important;
-  }
-
-  .management-container h1+p {
-    font-size: 0.68rem !important;
-  }
-
-  .nav-underline .nav-link {
-    padding:
-      0 0.55rem 0.65rem !important;
-
-    font-size: 0.68rem !important;
-  }
-
-  .management-container .justify-content-between .align-items-center .mb-3 {
-    align-items: flex-start !important;
-  }
-
-  .management-container .justify-content-between .align-items-center .mb-3>h4 {
-    font-size: 0.78rem !important;
-  }
-
-  .profile-photo-wrapper {
-    max-width: 190px;
-  }
-
-  .dynamic-row {
-    padding: 0.625rem;
-  }
-
-}
-
-
-/* =========================================================
-   EXTREMELY SMALL PHONES
-   <= 360px
-   ========================================================= */
-
-@media (max-width: 360px) {
-
-  .management-container {
-    padding: 0.35rem !important;
-  }
-
-  .glass-card {
-    border-radius: 12px !important;
-  }
-
-  .glass-card>.p-4,
-  .glass-card>.p-md-5 {
-    padding: 0.7rem !important;
-  }
-
-  .management-container h1 {
-    font-size: 1.05rem !important;
-  }
-
-  .management-container h1+p {
-    font-size: 0.65rem !important;
-  }
-
-  .nav-underline .nav-link {
-    font-size: 0.64rem !important;
-    padding-right: 0.45rem !important;
-    padding-left: 0.45rem !important;
-  }
-
-  .section-heading h2 {
-    font-size: 0.9rem;
-  }
-
-  .dynamic-row {
-    padding: 0.55rem;
-  }
-
-}
-
-
-/* =========================================================
-   TOUCH DEVICES
-   ========================================================= */
-
-@media (hover: none) and (pointer: coarse) {
-
-  .nav-underline .nav-link {
-    display: flex;
-
-    min-height: 42px;
-
-    align-items: center;
-  }
-
-  .cursor-pointer {
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .btn-primary:hover {
-    transform: none;
-  }
-
-}
-
 
 /* =========================================================
    REDUCED MOTION
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-
-  .btn-primary,
-  .form-control,
-  .form-select,
-  .nav-link {
+  .back-btn,
+  .nav-link,
+  .dynamic-row {
     transition: none !important;
   }
 
-  .btn-primary:hover {
+  .back-btn:hover {
     transform: none;
   }
-
-}
-
-
-/* =========================================================
-   PRINT
-   ========================================================= */
-
-@media print {
-
-  .management-container {
-    min-height: auto;
-    background: #fff !important;
-  }
-
-  .bg-shape,
-  .concentric-circles,
-  .right-shape {
-    display: none !important;
-  }
-
-  .glass-card {
-    border: 1px solid #ddd !important;
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-  }
-
 }

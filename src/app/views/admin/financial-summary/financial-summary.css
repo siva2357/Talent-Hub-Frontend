@@ -140,42 +140,32 @@
 
 
 /* =========================================================
-   FILTER SECTION
+   FILTER COMPONENTS
 ========================================================= */
 
-.financial-filter-section {
-  position: relative;
-  overflow: visible;
+:host app-input-field,
+app-input-field {
+  display: block;
+  width: 100%;
 }
 
-.financial-filter-row {
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 2fr) minmax(180px, 1fr) minmax(260px, 1fr);
-
-  gap: 16px;
-
-  align-items: end;
+:host app-button,
+app-button {
+  display: block;
+  width: 100%;
 }
 
-.financial-search-field,
-.financial-status-field,
-.financial-filter-actions {
-  min-width: 0;
+app-input-field ::ng-deep .input-group {
+  flex-wrap: nowrap !important;
 }
 
-.financial-filter-actions {
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 10px;
+app-input-field ::ng-deep .form-control,
+app-input-field ::ng-deep .form-select {
+  width: 100%;
 }
 
-.filter-action-button {
-  min-width: 0;
+app-button ::ng-deep button {
+  width: 100%;
 }
 
 
@@ -247,13 +237,9 @@
 
 .financial-card-grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 18px;
-
-  padding: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  padding: 16px 0;
 }
 
 
@@ -601,28 +587,6 @@
   }
 
 
-  /* Filters */
-
-  .financial-filter-row {
-    grid-template-columns:
-      minmax(0, 1fr) minmax(220px, 0.55fr);
-
-    gap: 14px;
-  }
-
-  .financial-search-field {
-    grid-column: 1 / -1;
-  }
-
-  .financial-status-field {
-    grid-column: 1;
-  }
-
-  .financial-filter-actions {
-    grid-column: 2;
-  }
-
-
   /* Transactions */
 
   .desktop-table-view {
@@ -634,12 +598,9 @@
   }
 
   .financial-card-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 16px;
-
-    padding: 16px;
+    padding: 16px 0;
   }
 
   .financial-card {
@@ -673,38 +634,6 @@
 
   .financial-stats-row {
     row-gap: 12px !important;
-  }
-
-
-  /* Filters */
-
-  .financial-filter-section .card-body {
-    padding: 16px !important;
-  }
-
-  .financial-filter-row {
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: stretch;
-
-    gap: 12px;
-  }
-
-  .financial-search-field,
-  .financial-status-field,
-  .financial-filter-actions {
-    width: 100%;
-  }
-
-  .financial-filter-actions {
-    display: grid;
-
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
-    gap: 10px;
   }
 
 

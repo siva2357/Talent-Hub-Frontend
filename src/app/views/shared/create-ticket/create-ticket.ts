@@ -11,11 +11,12 @@ import { FileUpload } from '../../../library/shared/components/file-upload/file-
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
 import { Button } from '../../../library/ui/components/button/button';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
+import { RichTextEditor } from '../../../library/shared/components/rich-text-editor/rich-text-editor';
 
 @Component({
   selector: 'app-create-ticket',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule, CommonModule, FileUpload, FilePreview, Button, InputField],
+  imports: [RouterModule, ReactiveFormsModule, CommonModule, FileUpload, FilePreview, Button, InputField, RichTextEditor],
   templateUrl: './create-ticket.html',
   styleUrl: './create-ticket.css'
 })
@@ -59,6 +60,25 @@ export class CreateTicket implements OnInit {
     this.ticketForm.patchValue({ category });
   }
 
+  getValidationState(fieldName: string): 'none' | 'success' | 'error' {
+    const control = this.ticketForm?.get(fieldName);
+    if (!control || !control.touched) return 'none';
+    return control.invalid ? 'error' : 'none';
+  }
+
+  getErrorMessage(fieldName: string): string {
+    const control = this.ticketForm?.get(fieldName);
+    if (!control || !control.touched || !control.errors) return '';
+    if (control.errors['required']) {
+      const fieldTitle = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+      return `${fieldTitle} is required`;
+    }
+    if (control.errors['maxlength']) {
+      return `Maximum length exceeded`;
+    }
+    return 'Invalid field';
+  }
+
   onUploadComplete(url: string) {
     if (this.attachments.length < 5) { // max 5 files
       const filename = url.split('/').pop() || 'attachment';
@@ -68,6 +88,13 @@ export class CreateTicket implements OnInit {
 
   removeAttachment(index: number) {
     this.attachments.splice(index, 1);
+  }
+
+  downloadAttachment(file: any) {
+    const url = file?.fileUrl || file?.url;
+    if (url) {
+      window.open(url, '_blank');
+    }
   }
 
   async onSubmit() {

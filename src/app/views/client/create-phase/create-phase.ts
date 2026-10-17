@@ -10,12 +10,13 @@ import { InputField } from '../../../library/ui/components/input-field/input-fie
 import { Button } from '../../../library/ui/components/button/button';
 import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
+import { RichTextEditor } from '../../../library/shared/components/rich-text-editor/rich-text-editor';
 import { ToastService } from '../../../core/services/ui/toast.service';
 
 @Component({
   selector: 'app-create-phase',
   standalone: true,
-  imports: [RouterLink, CommonModule, ReactiveFormsModule, InputField, Button, FileUpload, FilePreview],
+  imports: [RouterLink, CommonModule, ReactiveFormsModule, InputField, Button, FileUpload, FilePreview, RichTextEditor],
   templateUrl: './create-phase.html',
   styleUrl: './create-phase.css'
 })
@@ -58,6 +59,7 @@ export class CreatePhase implements OnInit {
   initForm(): void {
     this.phaseForm = this.fb.group({
       phaseName: ['', [Validators.required, Validators.maxLength(100)]],
+      description: [''],
       deadline: ['', Validators.required],
       budget: [null, [Validators.required, Validators.min(1)]],
       deliverables: this.fb.array([]),
@@ -169,6 +171,7 @@ export class CreatePhase implements OnInit {
     const deadline = phase.deadline ? new Date(phase.deadline).toISOString().split('T')[0] : '';
     this.phaseForm.patchValue({
       phaseName: phase.name,
+      description: phase.description || '',
       deadline: deadline,
       budget: phase.amount
     });
@@ -230,7 +233,7 @@ export class CreatePhase implements OnInit {
 
     const payload = {
       name: formVal.phaseName?.trim(),
-      description: "Phase details setup by client",
+      description: formVal.description?.trim() || "Phase details setup by client",
       amount: Number(formVal.budget),
       deadline: formVal.deadline,
       deliverables: deliverablesList,

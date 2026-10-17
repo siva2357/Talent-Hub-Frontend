@@ -85,3 +85,4 @@ export interface ToastConfig {
   type?: 'success' | 'error' | 'warning' | 'info';
   duration?: number;
 }
+

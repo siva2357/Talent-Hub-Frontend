@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BlogService } from '../../../core/services/blog.service';
@@ -30,6 +30,9 @@ export class CreateBlog implements OnInit {
   uploadSection = UploadSection;
   
   isSubmitting = false;
+  isEditMode = false;
+  blogId: string | null = null;
+  isLoadingBlog = false;
 
   categoryOptions: InputOption[] = [
     { label: 'Select a category', value: '' }
@@ -46,15 +49,23 @@ export class CreateBlog implements OnInit {
     private fileService: FileService,
     private masterDataService: MasterDataService,
     private toastService: ToastService,
-    public router: Router
+    public router: Router,
+    private route: ActivatedRoute
   ) {}
+
+  tagsValidator(control: any) {
+    const value = control.value;
+    if (!value || typeof value !== 'string') return { required: true };
+    const tags = value.split(',').map((t: string) => t.trim()).filter(Boolean);
+    return tags.length > 0 ? null : { required: true };
+  }
 
   ngOnInit() {
     this.blogForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(150)]],
       content: ['', [Validators.required]],
       category: ['', [Validators.required]],
-      tags: [''],
+      tags: ['', [Validators.required, this.tagsValidator]],
       status: ['Draft', [Validators.required]]
     });
 
@@ -72,6 +83,65 @@ export class CreateBlog implements OnInit {
         }
       },
       error: (err) => console.error('Failed to load categories', err)
+    });
+
+    this.blogId = this.route.snapshot.paramMap.get('id');
+    if (this.blogId) {
+      this.isEditMode = true;
+      this.loadBlogData(this.blogId);
+    }
+  }
+
+  getValidationState(fieldName: string): 'none' | 'success' | 'error' {
+    const control = this.blogForm?.get(fieldName);
+    if (!control || !control.touched) return 'none';
+    return control.invalid ? 'error' : 'none';
+  }
+
+  getErrorMessage(fieldName: string): string {
+    const control = this.blogForm?.get(fieldName);
+    if (!control || !control.touched || !control.errors) return '';
+    if (control.errors['required']) {
+      if (fieldName === 'tags') {
+        return 'At least one tag is required (e.g., UI, Tech, Remote)';
+      }
+      const fieldTitle = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+      return `${fieldTitle} is required`;
+    }
+    if (control.errors['maxlength']) {
+      return `Maximum length exceeded`;
+    }
+    return 'Invalid field';
+  }
+
+  isVideoFile(url: string | null): boolean {
+    if (!url) return false;
+    return /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url);
+  }
+
+  loadBlogData(id: string) {
+    this.isLoadingBlog = true;
+    this.blogService.getBlogByIdAdmin(id).subscribe({
+      next: (res) => {
+        if (res.success && res.blog) {
+          const b = res.blog;
+          this.blogForm.patchValue({
+            title: b.title || '',
+            content: b.content || '',
+            category: b.category || '',
+            tags: Array.isArray(b.tags) ? b.tags.join(', ') : (b.tags || ''),
+            status: b.status || 'Draft'
+          });
+          this.featuredMediaUrl = b.featuredMedia || null;
+          this.blogBannerUrl = b.blogBanner || null;
+        }
+        this.isLoadingBlog = false;
+      },
+      error: (err) => {
+        console.error('Error fetching blog details', err);
+        this.toastService.show('Failed to load blog details', 'error');
+        this.isLoadingBlog = false;
+      }
     });
   }
 
@@ -109,7 +179,7 @@ export class CreateBlog implements OnInit {
     
     try {
       const formValue = this.blogForm.value;
-      const tags = formValue.tags ? formValue.tags.split(',').map((t: string) => t.trim()) : [];
+      const tags = formValue.tags ? formValue.tags.split(',').map((t: string) => t.trim()).filter((t: string) => !!t) : [];
       
       const payload = {
         title: formValue.title,
@@ -121,14 +191,22 @@ export class CreateBlog implements OnInit {
         blogBanner: this.blogBannerUrl
       };
 
-      await this.blogService.createBlog(payload).toPromise();
+      if (this.isEditMode && this.blogId) {
+        await this.blogService.updateBlog(this.blogId, payload).toPromise();
+        this.toastService.show('Blog updated successfully!', 'success');
+      } else {
+        await this.blogService.createBlog(payload).toPromise();
+        this.toastService.show('Blog created successfully!', 'success');
+      }
       
-      this.toastService.show('Blog created successfully!', 'success');
       this.router.navigate(['/blog-manager']);
       
     } catch (error) {
-      console.error('Error creating blog', error);
-      this.toastService.show('Failed to create blog. Please try again.', 'error');
+      console.error(this.isEditMode ? 'Error updating blog' : 'Error creating blog', error);
+      this.toastService.show(
+        this.isEditMode ? 'Failed to update blog. Please try again.' : 'Failed to create blog. Please try again.',
+        'error'
+      );
     } finally {
       this.isSubmitting = false;
     }

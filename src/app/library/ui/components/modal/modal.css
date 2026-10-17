@@ -199,13 +199,22 @@
 .modal-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-actions app-button {
+  display: inline-block;
 }
 
 .modal-actions-centered {
   width: 100%;
+  display: flex;
+  gap: 12px;
 }
 
-.modal-actions-centered>button {
+.modal-actions-centered > app-button,
+.modal-actions-centered > button {
   flex: 1 1 0;
+  display: block;
 }

@@ -1,0 +1,116 @@
+<article class="client-card">
+  <!-- Top Accent Bar -->
+  <div class="client-card-accent"></div>
+
+  <!-- Card Header -->
+  <div class="client-card-header">
+    <div class="client-identity">
+      <div class="client-avatar-wrapper">
+        <img [src]="avatarUrl" class="client-avatar" [alt]="displayName + ' Avatar'"
+          (error)="$any($event.target).src = 'https://ui-avatars.com/api/?name=' + displayName + '&background=8b5cf6&color=fff'">
+        <span class="status-indicator" [ngClass]="client?.status?.toLowerCase()"></span>
+      </div>
+
+      <div class="client-name-wrapper">
+        <div class="client-title-row">
+          <h3 class="client-name" [title]="displayName">
+            {{ displayName }}
+          </h3>
+
+          @if (client?.joinedDate) {
+          <span class="client-joined-badge">
+            <i class="bi bi-calendar3"></i>
+            <span>Joined {{ client?.joinedDate | date:'mediumDate' }}</span>
+          </span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Menu -->
+    <div class="dropdown client-action-dropdown">
+      <button class="client-action-button" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+        data-bs-display="static" title="More Actions">
+        <i class="bi bi-three-dots-vertical"></i>
+      </button>
+
+      <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none">
+        <app-dropdown [items]="getActions()" (itemSelected)="onActionSelect($event)" class="d-block">
+        </app-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Body -->
+  <div class="client-card-body mb-3">
+    <!-- Email -->
+    <div class="client-info-item email-item">
+      <div class="client-info-icon">
+        <i class="bi bi-envelope"></i>
+      </div>
+      <div class="client-info-content">
+        <span class="client-info-label">Email</span>
+        <span class="client-info-value client-email">
+          {{ client?.email || 'N/A' }}
+        </span>
+      </div>
+    </div>
+
+
+    <div class="client-info-item">
+      <div class="client-info-icon">
+        <i class="bi bi-telephone"></i>
+      </div>
+      <div class="client-info-content">
+        <span class="client-info-label">Phone</span>
+        <span class="client-info-value">
+          {{ client.phoneNumber || '9876543210' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Industry -->
+    <div class="client-info-item">
+      <div class="client-info-icon">
+        <i class="bi bi-building"></i>
+      </div>
+      <div class="client-info-content">
+        <span class="client-info-label">Industry</span>
+        <div class="client-info-value">
+          <app-badge [label]="client?.industry || 'Unknown'" appearance="subtle" variant="purple" size="small">
+          </app-badge>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="client-info-item">
+      <div class="client-info-icon">
+        <i class="bi bi-activity"></i>
+      </div>
+      <div class="client-info-content">
+        <span class="client-info-label">Status</span>
+        <div class="client-info-value">
+          <app-badge [label]="client?.status || 'Unknown'" appearance="subtle"
+            [variant]="getBadgeVariant(client?.status)" size="small">
+          </app-badge>
+        </div>
+      </div>
+    </div>
+
+    <!-- Projects Count -->
+    <div class="client-info-item">
+      <div class="client-info-icon">
+        <i class="bi bi-folder2-open"></i>
+      </div>
+      <div class="client-info-content">
+        <span class="client-info-label">Projects</span>
+        <span class="client-info-value">
+          {{ client?.projectsCount ?? 0 }} {{ (client?.projectsCount === 1) ? 'Project' : 'Projects' }}
+        </span>
+      </div>
+    </div>
+
+
+  </div>
+</article>

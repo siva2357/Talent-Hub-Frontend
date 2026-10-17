@@ -1,0 +1,100 @@
+@if (transaction) {
+<article class="ledger-card">
+  <!-- Header: Contract Tag & Title -->
+  <div class="ledger-card-header">
+    <div class="ledger-header-meta">
+      <span class="ledger-contract-tag">CONTRACT</span>
+      @if (transaction.date) {
+        <span class="ledger-date">{{ transaction.date }}</span>
+      }
+    </div>
+    <h3 class="ledger-contract-title" [title]="transaction.contractTitle">
+      {{ transaction.contractTitle }}
+    </h3>
+  </div>
+
+  <!-- Participants: Client & Freelancer -->
+  <div class="ledger-participants">
+    <!-- Client -->
+    <div class="ledger-person">
+      <div class="ledger-person-icon client-icon">
+        <i class="bi bi-person"></i>
+      </div>
+      <div class="ledger-person-info">
+        <span class="ledger-label">CLIENT</span>
+        <span class="ledger-person-name" [title]="transaction.clientName">
+          {{ transaction.clientName }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Freelancer -->
+    <div class="ledger-person">
+      <div class="ledger-person-icon freelancer-icon">
+        <i class="bi bi-person-workspace"></i>
+      </div>
+      <div class="ledger-person-info">
+        <span class="ledger-label">FREELANCER</span>
+        <span class="ledger-person-name" [title]="transaction.freelancerName">
+          {{ transaction.freelancerName }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Financial Values Grid -->
+  <div class="ledger-values-grid">
+    <div class="ledger-value-box">
+      <span class="ledger-label">CLIENT PAYMENT</span>
+      <span class="ledger-amount">₹{{ transaction.budget }}</span>
+    </div>
+
+    <div class="ledger-value-box">
+      <span class="ledger-label">FREELANCER PAYOUT</span>
+      <span class="ledger-amount">₹{{ transaction.freelancerPayment }}</span>
+    </div>
+
+    <div class="ledger-value-box">
+      <span class="ledger-label">PLATFORM FEE</span>
+      <div class="mt-1">
+        <app-badge [label]="'₹' + transaction.platformFee" variant="primary" appearance="subtle">
+        </app-badge>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Footer: Status & Actions -->
+  <div class="ledger-card-footer">
+    <div class="ledger-status-wrap">
+      <span class="ledger-label">STATUS</span>
+      <div>
+        @if (transaction.status === 'Completed') {
+          <app-badge label="Completed" variant="success" appearance="subtle"></app-badge>
+        }
+        @else if (transaction.status === 'Pending' || transaction.status === 'Pending Payout') {
+          <app-badge label="Pending" variant="warning" appearance="subtle"></app-badge>
+        }
+        @else if (transaction.status === 'In Progress') {
+          <app-badge label="In Progress" variant="primary" appearance="subtle"></app-badge>
+        }
+        @else {
+          <app-badge [label]="transaction.status" variant="secondary" appearance="subtle"></app-badge>
+        }
+      </div>
+    </div>
+
+    <div class="ledger-action-wrap">
+      @if (transaction.status === 'Pending' && transaction.type === 'Payout') {
+        <app-button variant="outline-primary" size="sm" label="Process Payout" (clicked)="onProcessPayout()">
+        </app-button>
+      }
+      @else if (transaction.status === 'Completed') {
+        <app-badge label="Paid" variant="success" appearance="subtle"></app-badge>
+      }
+      @else {
+        <app-badge [label]="transaction.type || transaction.status" variant="secondary" appearance="subtle"></app-badge>
+      }
+    </div>
+  </div>
+</article>
+}

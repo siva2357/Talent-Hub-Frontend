@@ -12,16 +12,16 @@
     </div>
   </div>
 
-  <div class="position-relative z-1 mx-auto" style="max-width: 900px; margin-top: 2rem;">
+  <div class="settings-content-wrapper">
     <div class="d-flex align-items-center mb-4">
-      <button
-        class="btn btn-white rounded-circle shadow-sm border d-flex justify-content-center align-items-center me-3"
-        style="width: 40px; height: 40px; flex-shrink: 0;" (click)="goBack()">
-        <i class="bi bi-arrow-left fs-5 text-dark"></i>
+      <button type="button" class="back-btn shadow-sm d-flex justify-content-center align-items-center me-3"
+        (click)="goBack()" aria-label="Back to dashboard">
+        <i class="bi bi-arrow-left fs-5"></i>
       </button>
       <div>
         <h1 class="fw-bold fs-3 text-dark mb-1">Account Settings</h1>
-        <p class="text-muted mb-0" style="font-size: 0.85rem;">Manage your account settings and profile.</p>
+        <p class="text-muted mb-0" style="font-size: 0.85rem;">Manage your account credentials, profile details, and
+          security.</p>
       </div>
     </div>
 
@@ -38,23 +38,19 @@
     <div class="glass-card shadow-lg p-0 overflow-hidden mb-5">
 
       <!-- Custom Tabs Navigation -->
-      <div class="border-bottom px-4 pt-3 bg-light bg-opacity-50">
-        <ul class="nav nav-underline gap-4 justify-content-center" style="font-size: 0.85rem;">
+      <div class="tabs-header border-bottom px-3 px-md-4 pt-3">
+        <ul class="nav nav-underline gap-4 justify-content-center">
           <li class="nav-item">
-            <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" [class.active]="activeTab === 'profile'"
-              [class.text-primary]="activeTab === 'profile'" [class.text-muted]="activeTab !== 'profile'"
+            <a class="nav-link cursor-pointer" [class.active]="activeTab === 'profile'"
               (click)="setTab('profile')">Profile Details</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" [class.active]="activeTab === 'security'"
-              [class.text-primary]="activeTab === 'security'" [class.text-muted]="activeTab !== 'security'"
+            <a class="nav-link cursor-pointer" [class.active]="activeTab === 'security'"
               (click)="setTab('security')">Security and Password</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold px-0 pb-3 cursor-pointer" [class.active]="activeTab === 'manage'"
-              [class.text-danger]="activeTab === 'manage'" [class.text-muted]="activeTab !== 'manage'"
-              (click)="setTab('manage')"
-              [style.border-bottom-color]="activeTab === 'manage' ? '#dc3545' : 'transparent'">Manage Account</a>
+            <a class="nav-link cursor-pointer" [class.active]="activeTab === 'manage'"
+              [class.active-danger]="activeTab === 'manage'" (click)="setTab('manage')">Manage Account</a>
           </li>
         </ul>
       </div>
@@ -63,52 +59,42 @@
       <div class="p-4 p-md-5">
 
         <!-- =========================================================
-     PROFILE DETAILS TAB
-     ========================================================= -->
+             PROFILE DETAILS TAB
+             ========================================================= -->
 
         @if (activeTab === 'profile') {
 
         <form class="profile-settings-form" [formGroup]="accountSettingsForm" (ngSubmit)="saveProfileChanges()">
 
-
+          <!-- Basic Details Section -->
           <section class="profile-section" formGroupName="basicInformation">
 
             <div class="section-heading">
-              <h2>Basic Details</h2>
+              <h2><i class="bi bi-person me-2 text-primary"></i>Basic Details</h2>
             </div>
 
             <div class="basic-details-layout">
 
               <!-- Profile Photo -->
               <div class="profile-photo-column">
-
                 <div class="profile-photo-wrapper">
-
                   @if (!accountSettingsForm.get('basicInformation.profilePhoto')?.value) {
-
                   <app-file-upload mode="avatar" (fileSelected)="onFileSelected($event)">
                   </app-file-upload>
-
                   } @else {
-
                   <app-file-preview mode="profile"
                     [previewUrl]="accountSettingsForm.get('basicInformation.profilePhoto')?.value"
                     (editClicked)="onFileRemoved()">
                   </app-file-preview>
-
                   }
-
                   <span class="profile-photo-hint">
                     Max 5MB (JPG, PNG)
                   </span>
-
                 </div>
-
               </div>
 
               <!-- Basic Fields -->
               <div class="basic-fields-column">
-
                 <div class="form-grid form-grid-2">
 
                   <div class="form-grid-item">
@@ -122,14 +108,14 @@
                   </div>
 
                   <div class="form-grid-item">
-                    <app-input-field label="Email Address *" type="email" [disabled]="true"
+                    <app-input-field label="Email Address" type="email" [disabled]="true" [required]="true"
                       [value]="accountSettingsForm.get('basicInformation.email')?.value || ''"
                       (valueChange)="accountSettingsForm.get('basicInformation.email')?.setValue($event)">
                     </app-input-field>
                   </div>
 
                   <div class="form-grid-item">
-                    <app-input-field label="Phone Number *" type="text"
+                    <app-input-field label="Phone Number" type="text"
                       [value]="accountSettingsForm.get('basicInformation.phoneNumber')?.value || ''" (valueChange)="
                 accountSettingsForm.get('basicInformation.phoneNumber')?.setValue($event);
                 accountSettingsForm.get('basicInformation.phoneNumber')?.markAsTouched()
@@ -139,7 +125,7 @@
                   </div>
 
                   <div class="form-grid-item">
-                    <app-input-field label="Gender *" type="select" [options]="genderOptions"
+                    <app-input-field label="Gender" type="select" [options]="genderOptions"
                       [value]="accountSettingsForm.get('basicInformation.gender')?.value || ''" (valueChange)="
                 accountSettingsForm.get('basicInformation.gender')?.setValue($event);
                 accountSettingsForm.get('basicInformation.gender')?.markAsTouched()
@@ -149,14 +135,13 @@
                   </div>
 
                 </div>
-
               </div>
 
             </div>
 
             <!-- Short Bio -->
             <div class="form-field-full">
-              <app-input-field label="Short Bio *" type="textarea"
+              <app-input-field label="Short Bio" type="textarea"
                 [value]="accountSettingsForm.get('basicInformation.shortBio')?.value || ''" (valueChange)="
           accountSettingsForm.get('basicInformation.shortBio')?.setValue($event);
           accountSettingsForm.get('basicInformation.shortBio')?.markAsTouched()
@@ -167,14 +152,15 @@
 
           </section>
 
+          <!-- Professional / Company Information -->
           <section class="profile-section profile-section-border" formGroupName="professionalDetails">
 
             <div class="section-heading">
               <h2>
                 @if (role === 'client') {
-                Company Information
+                <i class="bi bi-building me-2 text-primary"></i>Company Information
                 } @else {
-                Professional Information
+                <i class="bi bi-briefcase me-2 text-primary"></i>Professional Information
                 }
               </h2>
             </div>
@@ -184,7 +170,7 @@
             <div class="form-grid form-grid-3">
 
               <div class="form-grid-item">
-                <app-input-field label="Company Type *" type="select" [options]="companyTypeOptions"
+                <app-input-field label="Company Type" type="select" [options]="companyTypeOptions"
                   [value]="accountSettingsForm.get('professionalDetails.companyType')?.value || ''" (valueChange)="
               accountSettingsForm.get('professionalDetails.companyType')?.setValue($event);
               accountSettingsForm.get('professionalDetails.companyType')?.markAsTouched()
@@ -194,7 +180,7 @@
               </div>
 
               <div class="form-grid-item">
-                <app-input-field label="Website *" type="text" placeholder="https://"
+                <app-input-field label="Website" type="text" placeholder="https://"
                   [value]="accountSettingsForm.get('professionalDetails.website')?.value || ''" (valueChange)="
               accountSettingsForm.get('professionalDetails.website')?.setValue($event);
               accountSettingsForm.get('professionalDetails.website')?.markAsTouched()
@@ -204,7 +190,7 @@
               </div>
 
               <div class="form-grid-item">
-                <app-input-field label="Industry *" type="select" [options]="industryOptions"
+                <app-input-field label="Industry" type="select" [options]="industryOptions"
                   [value]="accountSettingsForm.get('professionalDetails.industry')?.value || ''" (valueChange)="
               accountSettingsForm.get('professionalDetails.industry')?.setValue($event);
               accountSettingsForm.get('professionalDetails.industry')?.markAsTouched()
@@ -214,7 +200,7 @@
               </div>
 
               <div class="form-grid-item form-grid-full">
-                <app-input-field label="Company Description *" type="textarea"
+                <app-input-field label="Company Description" type="textarea"
                   [value]="accountSettingsForm.get('professionalDetails.companyDescription')?.value || ''"
                   (valueChange)="
               accountSettingsForm.get('professionalDetails.companyDescription')?.setValue($event);
@@ -231,7 +217,8 @@
             <div class="form-grid form-grid-2">
 
               <div class="form-grid-item form-grid-full">
-                <app-input-field label="Professional Headline *" type="text"
+                <app-input-field label="Professional Headline" type="text"
+                  placeholder="e.g. Senior Full Stack Engineer & Cloud Architect"
                   [value]="accountSettingsForm.get('professionalDetails.professionalHeadline')?.value || ''"
                   (valueChange)="
               accountSettingsForm.get('professionalDetails.professionalHeadline')?.setValue($event);
@@ -242,27 +229,31 @@
               </div>
 
               <div class="form-grid-item form-grid-full">
-                <app-input-field label="Skills *" type="text"
+                <app-input-field label="Skills" type="text" placeholder="e.g. Angular, TypeScript, Node.js, REST APIs"
                   [value]="accountSettingsForm.get('professionalDetails.skills')?.value || ''" (valueChange)="
               accountSettingsForm.get('professionalDetails.skills')?.setValue($event);
               accountSettingsForm.get('professionalDetails.skills')?.markAsTouched()
             " [required]="true" [validation]="getValidationState('professionalDetails', 'skills')"
                   [errorMessage]="getErrorMessage('professionalDetails', 'skills')">
                 </app-input-field>
+                <div class="form-text text-muted mt-1" style="font-size: 0.725rem;"><i
+                    class="bi bi-info-circle me-1 text-primary"></i>Separate multiple skills with commas</div>
               </div>
 
               <div class="form-grid-item form-grid-full">
-                <app-input-field label="Technologies *" type="text"
+                <app-input-field label="Technologies" type="text" placeholder="e.g. Docker, MongoDB, AWS, Git, Redis"
                   [value]="accountSettingsForm.get('professionalDetails.technologies')?.value || ''" (valueChange)="
               accountSettingsForm.get('professionalDetails.technologies')?.setValue($event);
               accountSettingsForm.get('professionalDetails.technologies')?.markAsTouched()
             " [required]="true" [validation]="getValidationState('professionalDetails', 'technologies')"
                   [errorMessage]="getErrorMessage('professionalDetails', 'technologies')">
                 </app-input-field>
+                <div class="form-text text-muted mt-1" style="font-size: 0.725rem;"><i
+                    class="bi bi-info-circle me-1 text-primary"></i>Separate multiple technologies with commas</div>
               </div>
 
               <div class="form-grid-item">
-                <app-input-field label="Availability *" type="select" [options]="availabilityOptions"
+                <app-input-field label="Availability" type="select" [options]="availabilityOptions"
                   [value]="accountSettingsForm.get('professionalDetails.availability')?.value || ''" (valueChange)="
               accountSettingsForm.get('professionalDetails.availability')?.setValue($event);
               accountSettingsForm.get('professionalDetails.availability')?.markAsTouched()
@@ -272,7 +263,7 @@
               </div>
 
               <div class="form-grid-item">
-                <app-input-field label="Preferred Job Type *" type="select" [options]="preferredJobTypeOptions"
+                <app-input-field label="Preferred Job Type" type="select" [options]="preferredJobTypeOptions"
                   [value]="accountSettingsForm.get('professionalDetails.preferredJobType')?.value || ''" (valueChange)="
               accountSettingsForm.get('professionalDetails.preferredJobType')?.setValue($event);
               accountSettingsForm.get('professionalDetails.preferredJobType')?.markAsTouched()
@@ -287,17 +278,17 @@
 
           </section>
 
-
-          <section class="profile-section">
+          <!-- Location Section -->
+          <section class="profile-section profile-section-border">
 
             <div class="section-heading">
-              <h2>Location</h2>
+              <h2><i class="bi bi-geo-alt me-2 text-primary"></i>Location</h2>
             </div>
 
             <div class="form-grid form-grid-3">
 
               <div class="form-grid-item">
-                <app-input-field label="City *" type="select" [options]="cityOptions"
+                <app-input-field label="City" type="select" [options]="cityOptions"
                   [value]="accountSettingsForm.get('location.city')?.value || ''" (valueChange)="
             accountSettingsForm.get('location.city')?.setValue($event);
             accountSettingsForm.get('location.city')?.markAsTouched()
@@ -307,7 +298,7 @@
               </div>
 
               <div class="form-grid-item">
-                <app-input-field label="State *" type="select" [options]="stateOptions"
+                <app-input-field label="State" type="select" [options]="stateOptions"
                   [value]="accountSettingsForm.get('location.state')?.value || ''" (valueChange)="
             accountSettingsForm.get('location.state')?.setValue($event);
             accountSettingsForm.get('location.state')?.markAsTouched()
@@ -317,7 +308,7 @@
               </div>
 
               <div class="form-grid-item">
-                <app-input-field label="Country *" type="select" [options]="countryOptions"
+                <app-input-field label="Country" type="select" [options]="countryOptions"
                   [value]="accountSettingsForm.get('location.country')?.value || ''" (valueChange)="
             accountSettingsForm.get('location.country')?.setValue($event);
             accountSettingsForm.get('location.country')?.markAsTouched()
@@ -330,26 +321,24 @@
 
           </section>
 
+          <!-- Social Media and Languages Section -->
           <section class="profile-section profile-section-border">
 
             <div class="section-heading">
-              <h2>Social Media and Languages</h2>
+              <h2><i class="bi bi-share me-2 text-primary"></i>Social Media and Languages</h2>
             </div>
 
-
+            <!-- Social Media Profiles -->
             <div class="dynamic-section">
 
               <div class="dynamic-section-header">
-
                 <h4>Social Media Profiles</h4>
 
                 <app-button type="button" variant="outline-primary" size="sm" (clicked)="addSocialLink()">
                   <i class="bi bi-plus-circle me-1"></i>
                   Add Profile
                 </app-button>
-
               </div>
-
 
               <div formArrayName="socialLinks" class="dynamic-list">
 
@@ -357,39 +346,31 @@
 
                 <div [formGroupName]="$index" class="dynamic-row">
 
-                  <div class="dynamic-field dynamic-field-platform">
-
-                    <app-input-field label="Select media *" type="select" [options]="socialMediaPlatformOptions"
+                  <div class="dynamic-field">
+                    <app-input-field label="Select media" type="select" [options]="socialMediaPlatformOptions"
                       [value]="socialCtrl.get('platform')?.value || ''" (valueChange)="
                   socialCtrl.get('platform')?.setValue($event);
                   socialCtrl.get('platform')?.markAsTouched()
                 " [required]="true" [validation]="getArrayValidationState('socialLinks', $index, 'platform')"
                       [errorMessage]="getArrayErrorMessage('socialLinks', $index, 'platform')">
                     </app-input-field>
-
                   </div>
 
-
-                  <div class="dynamic-field dynamic-field-link">
-
-                    <app-input-field label="Platform link *" type="text" placeholder="https://"
+                  <div class="dynamic-field">
+                    <app-input-field label="Platform link" type="text" placeholder="https://"
                       [value]="socialCtrl.get('profileUrl')?.value || ''" (valueChange)="
                   socialCtrl.get('profileUrl')?.setValue($event);
                   socialCtrl.get('profileUrl')?.markAsTouched()
                 " [required]="true" [validation]="getArrayValidationState('socialLinks', $index, 'profileUrl')"
                       [errorMessage]="getArrayErrorMessage('socialLinks', $index, 'profileUrl')">
                     </app-input-field>
-
                   </div>
 
-
                   <div class="dynamic-action">
-
                     <app-button type="button" variant="outline-danger" [iconOnly]="true"
                       (clicked)="removeSocialLink($index)">
                       <i class="bi bi-trash"></i>
                     </app-button>
-
                   </div>
 
                 </div>
@@ -397,35 +378,28 @@
                 }
 
                 @if (socialLinks.controls.length === 0) {
-
-                <p class="empty-state">
-                  No social media profiles added.
-                </p>
-
+                <div class="empty-state-card text-center py-3 px-3">
+                  <i class="bi bi-link-45deg text-muted fs-4 d-block mb-1"></i>
+                  <span class="text-muted small">No social media profiles added. Click "Add Profile" above to connect
+                    your accounts.</span>
+                </div>
                 }
 
               </div>
 
             </div>
 
-
-            <!-- =====================================================
-         LANGUAGES
-         ===================================================== -->
-
+            <!-- Languages -->
             <div class="dynamic-section">
 
               <div class="dynamic-section-header">
-
                 <h4>Languages</h4>
 
                 <app-button type="button" variant="outline-primary" size="sm" (clicked)="addLanguage()">
                   <i class="bi bi-plus-circle me-1"></i>
                   Add Language
                 </app-button>
-
               </div>
-
 
               <div formArrayName="languages" class="dynamic-list">
 
@@ -434,38 +408,30 @@
                 <div [formGroupName]="$index" class="dynamic-row">
 
                   <div class="dynamic-field">
-
-                    <app-input-field label="Select language *" type="select" [options]="languageOptions"
+                    <app-input-field label="Select language" type="select" [options]="languageOptions"
                       [value]="langCtrl.get('language')?.value || ''" (valueChange)="
                   langCtrl.get('language')?.setValue($event);
                   langCtrl.get('language')?.markAsTouched()
                 " [required]="true" [validation]="getArrayValidationState('languages', $index, 'language')"
                       [errorMessage]="getArrayErrorMessage('languages', $index, 'language')">
                     </app-input-field>
-
                   </div>
 
-
                   <div class="dynamic-field">
-
-                    <app-input-field label="Select proficiency *" type="select" [options]="proficiencyOptions"
+                    <app-input-field label="Select proficiency" type="select" [options]="proficiencyOptions"
                       [value]="langCtrl.get('proficiency')?.value || ''" (valueChange)="
                   langCtrl.get('proficiency')?.setValue($event);
                   langCtrl.get('proficiency')?.markAsTouched()
                 " [required]="true" [validation]="getArrayValidationState('languages', $index, 'proficiency')"
                       [errorMessage]="getArrayErrorMessage('languages', $index, 'proficiency')">
                     </app-input-field>
-
                   </div>
 
-
                   <div class="dynamic-action">
-
                     <app-button type="button" variant="outline-danger" [iconOnly]="true"
                       (clicked)="removeLanguage($index)">
                       <i class="bi bi-trash"></i>
                     </app-button>
-
                   </div>
 
                 </div>
@@ -473,11 +439,11 @@
                 }
 
                 @if (languages.controls.length === 0) {
-
-                <p class="empty-state">
-                  No languages added.
-                </p>
-
+                <div class="empty-state-card text-center py-3 px-3">
+                  <i class="bi bi-translate text-muted fs-4 d-block mb-1"></i>
+                  <span class="text-muted small">No languages added. Click "Add Language" above to highlight your
+                    proficiencies.</span>
+                </div>
                 }
 
               </div>
@@ -486,32 +452,39 @@
 
           </section>
 
+          <!-- Profile Form Actions: Side-by-side with Cancel on Left end and Save Changes on Right end -->
           <div class="profile-actions">
-
             <app-button type="button" variant="secondary" (clicked)="loadProfileData()" label="Cancel">
             </app-button>
 
             <app-button type="submit" variant="primary" [loading]="isSaving" label="Save Changes">
             </app-button>
-
           </div>
 
         </form>
 
         }
 
-
-        <!-- SECURITY AND PASSWORD TAB -->
+        <!-- =========================================================
+             SECURITY AND PASSWORD TAB
+             ========================================================= -->
         @if (activeTab === 'security') {
         <div class="row justify-content-center">
-          <div class="col-md-8 col-lg-6">
-            <h2 class="fs-5 fw-bold text-dark mb-4 text-center">Change Password</h2>
-            <p class="text-center text-muted mb-5" style="font-size: 0.85rem;">Ensure your account is using a long,
-              random password to stay secure.</p>
+          <div class="col-md-9 col-lg-7">
+            <div class="text-center mb-4">
+              <div
+                class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle mb-3"
+                style="width: 56px; height: 56px;">
+                <i class="bi bi-shield-lock-fill fs-3"></i>
+              </div>
+              <h2 class="fs-5 fw-bold text-dark mb-1">Change Password</h2>
+              <p class="text-muted mb-0" style="font-size: 0.85rem;">Ensure your account is using a long, random
+                password to stay secure.</p>
+            </div>
 
-            <form [formGroup]="changePasswordForm" (ngSubmit)="updatePassword()" class="d-flex flex-column gap-4">
+            <form [formGroup]="changePasswordForm" (ngSubmit)="updatePassword()" class="d-flex flex-column gap-3">
               <div>
-                <app-input-field label="Current Password *" type="password" placeholder="Enter current password"
+                <app-input-field label="Current Password" type="password" placeholder="Enter current password"
                   [showPasswordToggle]="true" [value]="changePasswordForm.get('oldPassword')?.value || ''"
                   (valueChange)="changePasswordForm.get('oldPassword')?.setValue($event); changePasswordForm.get('oldPassword')?.markAsTouched()"
                   [required]="true" [validation]="getPasswordValidationState('oldPassword')"
@@ -520,18 +493,19 @@
               </div>
 
               <div>
-                <app-input-field label="New Password *" type="password" placeholder="Enter new password"
+                <app-input-field label="New Password" type="password" placeholder="Enter new password"
                   [showPasswordToggle]="true" [value]="changePasswordForm.get('newPassword')?.value || ''"
                   (valueChange)="changePasswordForm.get('newPassword')?.setValue($event); changePasswordForm.get('newPassword')?.markAsTouched()"
                   [required]="true" [validation]="getPasswordValidationState('newPassword')"
                   [errorMessage]="getPasswordErrorMessage('newPassword')">
                 </app-input-field>
-                <div class="form-text mt-2" style="font-size: 0.7rem;"><i class="bi bi-info-circle text-primary"></i>
+                <div class="form-text mt-2" style="font-size: 0.725rem;"><i
+                    class="bi bi-info-circle text-primary me-1"></i>
                   Password must be at least 8 characters long and include a number and a symbol.</div>
               </div>
 
               <div>
-                <app-input-field label="Confirm New Password *" type="password" placeholder="Confirm new password"
+                <app-input-field label="Confirm New Password" type="password" placeholder="Confirm new password"
                   [showPasswordToggle]="true" [value]="changePasswordForm.get('confirmPassword')?.value || ''"
                   (valueChange)="changePasswordForm.get('confirmPassword')?.setValue($event); changePasswordForm.get('confirmPassword')?.markAsTouched()"
                   [required]="true" [validation]="getPasswordValidationState('confirmPassword')"
@@ -548,17 +522,21 @@
         </div>
         }
 
-        <!-- MANAGE ACCOUNT TAB -->
+        <!-- =========================================================
+             MANAGE ACCOUNT TAB
+             ========================================================= -->
         @if (activeTab === 'manage') {
         <div class="row justify-content-center">
           <div class="col-md-10 col-lg-8">
-            <h2 class="fs-5 fw-bold text-dark mb-4">Account Management</h2>
+            <h2 class="fs-5 fw-bold text-dark mb-3"><i class="bi bi-shield-exclamation text-danger me-2"></i>Account
+              Management</h2>
 
-            <div class="card border border-danger border-opacity-25 bg-danger bg-opacity-10 shadow-none">
+            <div class="card danger-zone-card shadow-none">
               <div class="card-body p-4">
-                <h3 class="fs-6 fw-bold text-danger mb-2 d-flex align-items-center gap-2"><i
-                    class="bi bi-exclamation-triangle-fill"></i> Delete Account</h3>
-                <p class="text-muted mb-4" style="font-size: 0.8rem; line-height: 1.5;">
+                <h3 class="fs-6 fw-bold text-danger mb-2 d-flex align-items-center gap-2">
+                  <i class="bi bi-exclamation-triangle-fill"></i> Permanently Delete Account
+                </h3>
+                <p class="text-muted mb-3" style="font-size: 0.825rem; line-height: 1.55;">
                   Once you delete your account, there is no going back. All your data, including profile details,
                   messages, and contract history will be permanently wiped out. Please be certain.
                 </p>
@@ -572,6 +550,7 @@
           </div>
         </div>
         }
+
       </div>
     </div>
     }

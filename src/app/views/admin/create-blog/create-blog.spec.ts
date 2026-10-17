@@ -10,7 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { NO_ERRORS_SCHEMA, Component, forwardRef } from '@angular/core';
+import { NO_ERRORS_SCHEMA, Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { RichTextEditor } from '../../../library/shared/components/rich-text-editor/rich-text-editor';
 
@@ -27,6 +27,13 @@ import { RichTextEditor } from '../../../library/shared/components/rich-text-edi
   ]
 })
 class MockRichTextEditor implements ControlValueAccessor {
+  @Input() label: string = '';
+  @Input() required: boolean = false;
+  @Input() placeholder: string = '';
+  @Input() height: string = '';
+  @Input() validation: string = 'none';
+  @Input() errorMessage: string = '';
+
   writeValue(obj: any): void {}
   registerOnChange(fn: any): void {}
   registerOnTouched(fn: any): void {}
@@ -48,12 +55,14 @@ describe('CreateBlog', () => {
   ];
 
   beforeEach(async () => {
-    blogServiceSpy = jasmine.createSpyObj('BlogService', ['createBlog']);
+    blogServiceSpy = jasmine.createSpyObj('BlogService', ['createBlog', 'getBlogByIdAdmin', 'updateBlog']);
     fileServiceSpy = jasmine.createSpyObj('FileService', ['deleteFile']);
     masterDataServiceSpy = jasmine.createSpyObj('MasterDataService', ['getMasterDataByCategory']);
     toastServiceSpy = jasmine.createSpyObj('ToastService', ['show']);
 
     blogServiceSpy.createBlog.and.returnValue(of({ success: true }));
+    blogServiceSpy.getBlogByIdAdmin.and.returnValue(of({ success: true, blog: null }));
+    blogServiceSpy.updateBlog.and.returnValue(of({ success: true }));
     masterDataServiceSpy.getMasterDataByCategory.and.returnValue(of({ success: true, data: structuredClone(mockCategories) }));
 
     await TestBed.configureTestingModule({
@@ -154,7 +163,8 @@ describe('CreateBlog', () => {
     component.blogForm.patchValue({
       title: 'Draft Post',
       content: 'Draft content...',
-      category: 'tech'
+      category: 'tech',
+      tags: 'draft, tech'
     });
 
     await component.onSubmit(true);
@@ -163,6 +173,31 @@ describe('CreateBlog', () => {
     expect(component.blogForm.value.status).toBe('Draft');
     expect(blogServiceSpy.createBlog).toHaveBeenCalled();
   }));
+
+  it('should validate tags requirement and video file detection', () => {
+    fixture.detectChanges();
+
+    const tagsControl = component.blogForm.get('tags');
+    tagsControl?.setValue('');
+    expect(tagsControl?.valid).toBeFalse();
+
+    tagsControl?.setValue('   , , ');
+    expect(tagsControl?.valid).toBeFalse();
+
+    tagsControl?.setValue('Angular, TypeScript');
+    expect(tagsControl?.valid).toBeTrue();
+
+    tagsControl?.markAsTouched();
+    expect(component.getValidationState('tags')).toBe('none');
+
+    tagsControl?.setValue('');
+    expect(component.getValidationState('tags')).toBe('error');
+    expect(component.getErrorMessage('tags')).toBe('At least one tag is required (e.g., UI, Tech, Remote)');
+
+    expect(component.isVideoFile('https://example.com/video.mp4')).toBeTrue();
+    expect(component.isVideoFile('https://example.com/image.png')).toBeFalse();
+    expect(component.isVideoFile(null)).toBeFalse();
+  });
 
   it('should handle error when submission fails', fakeAsync(async () => {
     fixture.detectChanges();
@@ -173,7 +208,8 @@ describe('CreateBlog', () => {
     component.blogForm.patchValue({
       title: 'Post with Error',
       content: 'Content...',
-      category: 'tech'
+      category: 'tech',
+      tags: 'error, debug'
     });
 
     await component.onSubmit(false);

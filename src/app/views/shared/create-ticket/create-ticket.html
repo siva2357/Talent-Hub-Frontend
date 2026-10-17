@@ -35,67 +35,72 @@
         <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
           <div class="row g-3 mb-4">
             <div class="col-md-8">
-              <app-input-field type="text" [value]="ticketForm.get('subject')?.value || ''"
-                (valueChange)="ticketForm.get('subject')?.setValue($event)" placeholder="Enter a brief summary of your issue"
-                label="Subject *"></app-input-field>
+              <app-input-field
+                formControlName="subject"
+                type="text"
+                placeholder="Enter a brief summary of your issue"
+                label="Subject"
+                [required]="true"
+                [validation]="getValidationState('subject')"
+                [errorMessage]="getErrorMessage('subject')">
+              </app-input-field>
             </div>
             <div class="col-md-4">
-              <app-input-field type="select" [options]="categoryOptions" [value]="ticketForm.get('category')?.value || ''"
-                (valueChange)="ticketForm.get('category')?.setValue($event)" label="Category *"></app-input-field>
+              <app-input-field
+                formControlName="category"
+                type="select"
+                [options]="categoryOptions"
+                placeholder="Select category"
+                label="Category"
+                [required]="true"
+                [validation]="getValidationState('category')"
+                [errorMessage]="getErrorMessage('category')">
+              </app-input-field>
             </div>
           </div>
 
           <div class="mb-4">
-            <label class="form-label fw-semibold text-dark" style="font-size: 0.8rem;">Description <span class="text-danger">*</span></label>
-            <div class="border rounded-3 overflow-hidden">
-              <!-- Rich text toolbar -->
-              <div class="bg-light border-bottom p-2 d-flex flex-wrap gap-2">
-                <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-type-bold"></i></button>
-                <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-type-italic"></i></button>
-                <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-type-underline"></i></button>
-                <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-type-strikethrough"></i></button>
-                <div class="vr mx-1"></div>
-                <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-quote"></i></button>
-                <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-code"></i></button>
-                <div class="vr mx-1"></div>
-                <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-list-ul"></i></button>
-                <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-list-ol"></i></button>
-                <div class="vr mx-1"></div>
-                <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-link-45deg"></i></button>
-                <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-emoji-smile"></i></button>
-                <button type="button" class="btn btn-sm btn-light border-0"><i class="bi bi-image"></i></button>
-              </div>
-              <textarea formControlName="description" class="form-control border-0 shadow-none p-3" rows="6" placeholder="Please describe your issue in detail..." style="font-size: 0.85rem; resize: none;"></textarea>
-              <div class="text-end p-2 bg-white text-muted" style="font-size: 0.7rem;">{{ ticketForm.get('description')?.value?.length || 0 }} / 1000</div>
-            </div>
+            <app-rich-text-editor
+              formControlName="description"
+              label="Description"
+              [required]="true"
+              placeholder="Please describe your issue in detail..."
+              height="200px"
+              [validation]="getValidationState('description')"
+              [errorMessage]="getErrorMessage('description')">
+            </app-rich-text-editor>
           </div>
 
-          <div class="mb-4 d-flex gap-3 align-items-start">
-            <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex justify-content-center align-items-center flex-shrink-0 mt-1" style="width: 40px; height: 40px;">
-              <i class="bi bi-file-earmark-plus fs-5"></i>
+          <div class="mb-4 attachment-section">
+            <div class="attachment-header d-flex align-items-center gap-2 mb-2">
+              <div class="attachment-icon bg-primary bg-opacity-10 text-primary rounded-3 d-flex justify-content-center align-items-center flex-shrink-0">
+                <i class="bi bi-file-earmark-plus"></i>
+              </div>
+              <div>
+                <span class="d-block fw-bold text-dark" style="font-size: 0.85rem;">Attach Files (Optional)</span>
+                <p class="text-muted mb-0" style="font-size: 0.75rem;">Upload screenshots, documents or any files that can help us understand the issue.</p>
+              </div>
             </div>
-            <div class="flex-grow-1">
-              <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.85rem;">Attach Files (Optional)</span>
-              <p class="text-muted mb-2" style="font-size: 0.75rem;">Upload screenshots, documents or any files that can help us understand the issue.</p>
-              
-              @if (attachments.length < 5) {
+
+            @if (attachments.length < 5) {
+              <div class="w-100 mt-2">
                 <app-file-upload (uploadComplete)="onUploadComplete($event)"
                   [uploadBucket]="uploadBucket.ClientData" [uploadSection]="uploadSection.SupportRequest"
                   title="Drop files here or browse" browseText="browse" acceptedFormats="Image or PDF"></app-file-upload>
-              }
-
-              <!-- Uploaded files preview -->
-              @if (attachments.length > 0) {
-              <div class="mt-3 d-flex flex-wrap gap-3">
-                @for (file of attachments; track file.url; let i = $index) {
-                  <div class="position-relative" style="width: 120px;">
-                    <app-file-preview mode="document" [previewUrl]="file.url"
-                      (removeClicked)="removeAttachment(i)"></app-file-preview>
-                  </div>
-                }
               </div>
-              }
-            </div>
+            }
+
+            <!-- Uploaded files preview -->
+            @if (attachments.length > 0) {
+              <div class="mt-3 w-100 attachments-preview-container">
+                <app-file-preview
+                  mode="document"
+                  [files]="attachments"
+                  (downloadClicked)="downloadAttachment($event)"
+                  (removeClicked)="removeAttachment($event)">
+                </app-file-preview>
+              </div>
+            }
           </div>
 
           <div class="d-flex flex-column flex-sm-row justify-content-between align-items-stretch align-items-sm-center gap-3 pt-3 border-top">

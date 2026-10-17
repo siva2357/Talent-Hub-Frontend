@@ -17,3 +17,30 @@ export interface AuthResponse {
   message?: string;
   email?: string; // used for responses like OTP sent
 }
+
+export interface FreelancerCardData {
+  id: string;
+  name: string;
+  email: string;
+  phoneNumber?: string;
+  completedProjects?: number;
+  status: string;
+  joinedDate?: string;
+  title?: string;
+  profileImage?: string;
+  [key: string]: any;
+}
+
+export interface ClientCardData {
+  id: string;
+  name: string;
+  clientName?: string;
+  email: string;
+  phoneNumber?: string;
+  projectsCount?: number;
+  status: string;
+  joinedDate?: string;
+  industry?: string;
+  profileImage?: string;
+  [key: string]: any;
+}

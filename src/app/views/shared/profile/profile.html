@@ -15,18 +15,19 @@
 
   <div class="position-relative z-1 mx-auto" style="max-width: 1400px; margin-top: 2rem;">
 
-    <a routerLink="/applicants"
-      class="text-muted text-decoration-none small fw-semibold mb-3 d-inline-block cursor-pointer">&larr; Back to
-      Applicants</a>
+    <button type="button" (click)="goBack()"
+      class="btn btn-link text-muted text-decoration-none small fw-semibold mb-3 p-0 d-inline-flex align-items-center gap-2 cursor-pointer shadow-none">
+      <i class="bi bi-arrow-left"></i> {{ backButtonText }}
+    </button>
 
     @if (isLoading) {
-    <div class="d-flex justify-content-center my-5">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
+    <div class="d-flex justify-content-center align-items-center my-5 py-5">
+      <app-loader type="spinner" spinnerVariant="track" color="primary"></app-loader>
     </div>
     } @else if (error) {
-    <div class="alert alert-danger text-center">{{ error }}</div>
+    <div class="my-4">
+      <app-alert variant="danger" [message]="error" [closable]="false" [showIcon]="true"></app-alert>
+    </div>
     } @else {
     <!-- Main Profile Header Card -->
     <div class="glass-card border-0 mb-4 p-4">
@@ -37,160 +38,76 @@
           <div
             class="profile-avatar bg-primary text-white d-flex justify-content-center align-items-center rounded-circle border border-4 border-white shadow-sm overflow-hidden"
             style="width: 120px; height: 120px;">
-            <!-- Using a placeholder gradient pattern for avatar as in image -->
-            <div class="w-100 h-100 d-flex justify-content-center align-items-center"
-              style="background: radial-gradient(circle, #0d6efd 0%, #000000 100%);">
-              <div class="rounded-circle border border-primary border-opacity-50" style="width: 70px; height: 70px;">
-              </div>
+            @if (profileData?.basicInformation?.profilePhoto) {
+            <img [src]="profileData.basicInformation.profilePhoto" alt="Profile" class="w-100 h-100 object-fit-cover">
+            } @else {
+            <div
+              class="w-100 h-100 d-flex justify-content-center align-items-center bg-primary text-white fs-1 fw-bold">
+              {{ getAvatarInitial() }}
             </div>
+            }
           </div>
         </div>
 
         <!-- Basic Details -->
         <div class="flex-grow-1 text-center text-lg-start">
-          <h1 class="fw-bold fs-3 text-dark mb-2">{{ profileData?.basicInformation?.fullName || 'No data available' }}
-          </h1>
+          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start gap-2 mb-2">
+            <h1 class="fw-bold fs-3 text-dark mb-0">{{ profileData?.basicInformation?.fullName || userData?.fullName ||
+              'No data available' }}</h1>
+            @if (userData?.status) {
+            <app-badge [label]="userData.status | titlecase" [variant]="getStatusBadgeVariant(userData.status)"
+              appearance="subtle" [rounded]="true"></app-badge>
+            }
+            <app-badge [label]="role | titlecase" variant="primary" appearance="subtle" [rounded]="true"></app-badge>
+          </div>
 
           <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3 gap-lg-4 text-muted"
             style="font-size: 0.8rem;">
             <div class="d-flex flex-column gap-2">
               <span class="d-flex align-items-center gap-2"><i class="bi bi-geo-alt text-primary"></i> {{
-                profileData?.location?.city || 'No data available' }}</span>
-              <span class="d-flex align-items-center gap-2"><i class="bi bi-patch-check text-success"></i> Verification
-                Status</span>
+                profileData?.location?.city ? (profileData.location.city + (profileData?.location?.country ? ', ' +
+                profileData.location.country : '')) : 'Location not specified' }}</span>
+              <span class="d-flex align-items-center gap-2">
+                <i class="bi bi-patch-check" [ngClass]="userData?.emailVerified ? 'text-success' : 'text-muted'"></i>
+                {{ userData?.emailVerified ? 'Verified Account' : 'Unverified Account' }}
+              </span>
             </div>
             <div class="d-flex flex-column gap-2">
               <span class="d-flex align-items-center gap-2"><i class="bi bi-envelope text-primary"></i> {{
-                profileData?.basicInformation?.email || 'No data available' }}</span>
-              <span class="d-flex align-items-center gap-2"><i class="bi bi-calendar3 text-primary"></i> Joining
-                Date</span>
+                profileData?.basicInformation?.email || userData?.email || 'No email available' }}</span>
+              <span class="d-flex align-items-center gap-2"><i class="bi bi-calendar3 text-primary"></i>
+                Joined {{ (userData?.createdAt || profileData?.createdAt) ? ((userData?.createdAt ||
+                profileData?.createdAt) | date:'mediumDate') : 'Recent' }}
+              </span>
             </div>
             <div class="d-flex flex-column gap-2">
               <span class="d-flex align-items-center gap-2"><i class="bi bi-telephone text-primary"></i> {{
-                profileData?.basicInformation?.phoneNumber || 'No data available' }}</span>
+                profileData?.basicInformation?.phoneNumber || userData?.phoneNumber || 'No phone available' }}</span>
             </div>
           </div>
         </div>
-
-
 
       </div>
     </div>
 
     <!-- Metric Cards Row -->
+    @if (role === 'client') {
     <div class="row g-3 mb-4">
-      @if (role === 'client') {
-      <div class="col-md-3">
-        <div class="modern-stat-card h-100">
-          <i class="bi bi-file-earmark-text modern-stat-bg-icon text-purple"></i>
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="modern-stat-icon-wrapper icon-purple flex-shrink-0"><i class="bi bi-file-earmark-text"></i>
-            </div>
-            <div class="z-1">
-              <span class="d-block text-muted small fw-semibold text-uppercase mb-1"
-                style="font-size: 0.7rem; letter-spacing: 0.5px;">Total Contracts</span>
-              <span class="d-block fs-4 fw-bolder text-dark lh-1">{{ profileData?.metrics?.totalContracts || '0'
-                }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="modern-stat-card h-100">
-          <i class="bi bi-check-circle modern-stat-bg-icon text-green"></i>
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="modern-stat-icon-wrapper icon-green flex-shrink-0"><i class="bi bi-check-circle"></i></div>
-            <div class="z-1">
-              <span class="d-block text-muted small fw-semibold text-uppercase mb-1"
-                style="font-size: 0.7rem; letter-spacing: 0.5px;">Completed Contracts</span>
-              <span class="d-block fs-4 fw-bolder text-dark lh-1">{{ profileData?.metrics?.completedContracts || '0'
-                }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="modern-stat-card h-100">
-          <i class="bi bi-activity modern-stat-bg-icon text-blue"></i>
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="modern-stat-icon-wrapper icon-blue flex-shrink-0"><i class="bi bi-activity"></i></div>
-            <div class="z-1">
-              <span class="d-block text-muted small fw-semibold text-uppercase mb-1"
-                style="font-size: 0.7rem; letter-spacing: 0.5px;">Active Contracts</span>
-              <span class="d-block fs-4 fw-bolder text-dark lh-1">{{ profileData?.metrics?.activeContracts || '0'
-                }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="modern-stat-card h-100">
-          <i class="bi bi-wallet2 modern-stat-bg-icon text-orange"></i>
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="modern-stat-icon-wrapper icon-orange flex-shrink-0"><i class="bi bi-wallet2"></i></div>
-            <div class="z-1">
-              <span class="d-block text-muted small fw-semibold text-uppercase mb-1"
-                style="font-size: 0.7rem; letter-spacing: 0.5px;">Total Spent</span>
-              <span class="d-block fs-4 fw-bolder text-dark lh-1">₹{{ profileData?.metrics?.totalSpent || '0' }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      } @else if (role === 'freelancer') {
-      <div class="col-md-3">
-        <div class="modern-stat-card h-100">
-          <i class="bi bi-activity modern-stat-bg-icon text-blue"></i>
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="modern-stat-icon-wrapper icon-blue flex-shrink-0"><i class="bi bi-activity"></i></div>
-            <div class="z-1">
-              <span class="d-block text-muted small fw-semibold text-uppercase mb-1"
-                style="font-size: 0.7rem; letter-spacing: 0.5px;">Active Contracts</span>
-              <span class="d-block fs-4 fw-bolder text-dark lh-1">{{ metrics.active }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="modern-stat-card h-100">
-          <i class="bi bi-check2-square modern-stat-bg-icon text-green"></i>
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="modern-stat-icon-wrapper icon-green flex-shrink-0"><i class="bi bi-check2-square"></i></div>
-            <div class="z-1">
-              <span class="d-block text-muted small fw-semibold text-uppercase mb-1"
-                style="font-size: 0.7rem; letter-spacing: 0.5px;">Completed Contracts</span>
-              <span class="d-block fs-4 fw-bolder text-dark lh-1">{{ metrics.completed }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="modern-stat-card h-100">
-          <i class="bi bi-graph-up-arrow modern-stat-bg-icon text-orange"></i>
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="modern-stat-icon-wrapper icon-orange flex-shrink-0"><i class="bi bi-graph-up-arrow"></i></div>
-            <div class="z-1">
-              <span class="d-block text-muted small fw-semibold text-uppercase mb-1"
-                style="font-size: 0.7rem; letter-spacing: 0.5px;">Job Success</span>
-              <span class="d-block fs-4 fw-bolder text-dark lh-1">{{ metrics.jobSuccess }}%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="modern-stat-card h-100">
-          <i class="bi bi-shield-check modern-stat-bg-icon text-purple"></i>
-          <div class="card-body p-4 d-flex align-items-center gap-3">
-            <div class="modern-stat-icon-wrapper icon-purple flex-shrink-0"><i class="bi bi-shield-check"></i></div>
-            <div class="z-1">
-              <span class="d-block text-muted small fw-semibold text-uppercase mb-1"
-                style="font-size: 0.7rem; letter-spacing: 0.5px;">Hiring Risk</span>
-              <span class="d-block fs-4 fw-bolder text-dark lh-1" [ngClass]="{'text-success': metrics.hiringRisk === 'Low', 'text-warning': metrics.hiringRisk === 'Medium', 'text-danger': metrics.hiringRisk === 'High'}">{{ metrics.hiringRisk }}</span>
-            </div>
-          </div>
-        </div>
+      @for (stat of clientStats; track stat.title) {
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <app-stat-card [stat]="stat"></app-stat-card>
       </div>
       }
     </div>
+    } @else if (role === 'freelancer') {
+    <div class="row g-3 mb-4">
+      @for (stat of freelancerStats; track stat.title) {
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <app-stat-card [stat]="stat"></app-stat-card>
+      </div>
+      }
+    </div>
+    }
 
     <div class="row g-4">
       <!-- Main Left Column -->
@@ -217,8 +134,21 @@
           </div>
           <div class="row g-3 mb-3">
             <div class="col-md-4 text-muted fw-semibold" style="font-size: 0.8rem;">Core Skills</div>
-            <div class="col-md-8 text-dark" style="font-size: 0.85rem;">{{ profileData?.professionalDetails?.skills ||
-              'No skills listed' }}</div>
+            <div class="col-md-8 text-dark" style="font-size: 0.85rem;">
+              @if (profileData?.professionalDetails?.skills) {
+              @if (isArray(profileData?.professionalDetails?.skills)) {
+              <div class="d-flex flex-wrap gap-2">
+                @for (skill of profileData.professionalDetails.skills; track skill) {
+                <app-chip [label]="skill" variant="primary" mode="subtle"></app-chip>
+                }
+              </div>
+              } @else {
+              <span>{{ profileData?.professionalDetails?.skills }}</span>
+              }
+              } @else {
+              <span class="text-muted">No skills listed</span>
+              }
+            </div>
           </div>
           <div class="row g-3 mb-3">
             <div class="col-md-4 text-muted fw-semibold" style="font-size: 0.8rem;">Location</div>
@@ -281,38 +211,126 @@
         <!-- Contract List (Posted / Diary) -->
         <div class="glass-card border-0 mb-4 p-4">
           <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
-            <h2 class="fs-6 fw-bold text-dark mb-0">{{ role === 'client' ? 'Contracts posted' : 'Contract diary' }}</h2>
-            <a href="#" class="text-primary text-decoration-none fw-semibold" style="font-size: 0.8rem;">View All</a>
+            <h2 class="fs-6 fw-bold text-dark mb-0">{{ role === 'client' ? 'Contracts Posted' : 'Contract Diary' }}</h2>
+            <a role="button" [routerLink]="role === 'client' ? '/manage-contract' : '/my-contracts'"
+              (click)="viewAllContracts($event)"
+              class="text-primary text-decoration-none fw-semibold small d-inline-flex align-items-center gap-1 cursor-pointer"
+              style="cursor: pointer;">
+              View All <i class="bi bi-chevron-right" style="font-size: 0.75rem;"></i>
+            </a>
           </div>
 
           <div class="d-flex flex-column gap-3">
-            @for (item of (role === 'client' ? contracts : diaries); track item._id) {
-            <div class="border rounded-3 p-3">
-              <div class="d-flex justify-content-between align-items-start mb-2">
-                <span class="fw-bold text-dark" style="font-size: 0.85rem;">Contract Title : <span class="fw-normal">{{
-                    item.contractTitle || item.title || 'Untitled' }}</span></span>
-                <span
-                  class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-50 px-3 py-1 rounded-pill">{{
-                  item.status || 'Active' }}</span>
+            @if (role === 'client') {
+            @for (item of contracts; track item._id) {
+            <div class="profile-contract-card p-3 rounded-3 border bg-white shadow-sm">
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                <div class="flex-grow-1 min-w-0">
+                  <h3 class="fs-6 fw-bold text-dark mb-1 text-truncate">{{ item.contractTitle || 'Untitled Contract' }}
+                  </h3>
+                  <div class="d-flex flex-wrap align-items-center gap-2">
+                    @if (item.contractSubject) {
+                    <app-badge [label]="item.contractSubject | titlecase" variant="secondary" appearance="subtle"
+                      size="small" icon="bi bi-tag" [rounded]="true">
+                    </app-badge>
+                    }
+                    @if (item.contractType) {
+                    <app-badge [label]="formatContractType(item.contractType)" variant="info" appearance="subtle"
+                      size="small" icon="bi bi-briefcase" [rounded]="true">
+                    </app-badge>
+                    }
+                  </div>
+                </div>
+                <app-badge [label]="item.status || 'Active'" [variant]="getContractBadgeVariant(item.status)"
+                  appearance="subtle" size="small" [rounded]="true"></app-badge>
               </div>
-              <div class="d-flex flex-wrap gap-4 text-muted mb-2" style="font-size: 0.75rem;">
-                <span><span class="fw-semibold text-dark">{{ role === 'client' ? 'Freelancer' : 'Client' }} :</span> {{
-                  item.clientName || item.freelancerName || 'N/A' }}</span>
-                <span><span class="fw-semibold text-dark">Description :</span> {{ item.contractDescription ||
-                  item.description || 'N/A'
-                  }}</span>
-              </div>
-              <div class="d-flex flex-wrap gap-4 text-muted" style="font-size: 0.75rem;">
-                <span><span class="fw-semibold text-dark">Budget :</span> ₹{{ item.estimatedBudget || item.budget || '0'
-                  }}</span>
-                <span><span class="fw-semibold text-dark">End Date :</span> {{ (item.contractEndDate || item.endDate) |
-                  date }}</span>
+
+              @if (item.contractDescription) {
+              <p class="text-muted small mb-3 text-truncate-2" style="font-size: 0.8rem; line-height: 1.5;">
+                {{ item.contractDescription }}
+              </p>
+              }
+
+              <div class="d-flex flex-wrap align-items-center justify-content-between pt-2 border-top gap-2 text-muted"
+                style="font-size: 0.75rem;">
+                <div class="d-flex flex-wrap align-items-center gap-3">
+                  <span class="d-inline-flex align-items-center gap-1 text-dark fw-semibold">
+                    <i class="bi bi-wallet2 text-primary"></i> Budget: ₹{{ (item.estimatedBudget || 0) | number }}
+                  </span>
+                  @if (item.contractStartDate) {
+                  <span class="d-inline-flex align-items-center gap-1">
+                    <i class="bi bi-calendar-event"></i> Start: {{ item.contractStartDate | date:'mediumDate' }}
+                  </span>
+                  }
+                  @if (item.contractEndDate) {
+                  <span class="d-inline-flex align-items-center gap-1">
+                    <i class="bi bi-calendar-check"></i> End: {{ item.contractEndDate | date:'mediumDate' }}
+                  </span>
+                  }
+                </div>
+                @if (item.createdAt) {
+                <span class="d-inline-flex align-items-center gap-1 text-muted" style="font-size: 0.7rem;">
+                  <i class="bi bi-clock-history"></i> Posted {{ item.createdAt | date:'mediumDate' }}
+                </span>
+                }
               </div>
             </div>
             } @empty {
-            <div class="text-center py-3 text-muted" style="font-size: 0.85rem;">
-              No contracts available.
+            <div class="text-center py-4 text-muted">
+              <i class="bi bi-file-earmark-x fs-2 d-block mb-2 text-muted opacity-50"></i>
+              <p class="small mb-0">No contracts posted yet.</p>
             </div>
+            }
+            } @else {
+            @for (item of diaries; track item._id) {
+            <div class="profile-contract-card p-3 rounded-3 border bg-white shadow-sm">
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                <div class="flex-grow-1 min-w-0">
+                  <h3 class="fs-6 fw-bold text-dark mb-1 text-truncate">{{ item.contractTitle || 'Untitled Contract' }}
+                  </h3>
+                  <div class="d-flex flex-wrap align-items-center gap-2">
+                    @if (item.clientName) {
+                    <app-badge [label]="'Client: ' + item.clientName" variant="secondary" appearance="subtle"
+                      size="small" icon="bi bi-person" [rounded]="true">
+                    </app-badge>
+                    }
+                  </div>
+                </div>
+                <app-badge [label]="item.status || 'Active'" [variant]="getContractBadgeVariant(item.status)"
+                  appearance="subtle" size="small" [rounded]="true"></app-badge>
+              </div>
+
+              @if (item.contractDescription) {
+              <p class="text-muted small mb-3 text-truncate-2" style="font-size: 0.8rem; line-height: 1.5;">
+                {{ item.contractDescription }}
+              </p>
+              }
+
+              @if (item.review) {
+              <div class="bg-light p-2 rounded mb-2 border-start border-3 border-primary" style="font-size: 0.75rem;">
+                <span class="text-dark fw-semibold d-block">Client Feedback:</span>
+                <span class="text-muted fst-italic">"{{ item.review }}"</span>
+              </div>
+              }
+
+              <div class="d-flex flex-wrap align-items-center justify-content-between pt-2 border-top gap-2 text-muted"
+                style="font-size: 0.75rem;">
+                <span class="d-inline-flex align-items-center gap-1 text-dark fw-semibold">
+                  <i class="bi bi-wallet2 text-primary"></i> Budget: ₹{{ (item.estimatedBudget || 0) | number }}
+                </span>
+                @if (item.contractEndDate) {
+                <span class="d-inline-flex align-items-center gap-1">
+                  <i class="bi bi-calendar-check"></i> End Date: {{ item.contractEndDate | date:'mediumDate' }}
+                </span>
+                }
+              </div>
+            </div>
+            } @empty {
+            <div class="text-center py-4 text-muted">
+              <i class="bi bi-file-earmark-x fs-2 d-block mb-2 text-muted opacity-50"></i>
+              <p class="small mb-0">No contract diary entries yet.</p>
+            </div>
+            }
             }
           </div>
         </div>
@@ -328,10 +346,6 @@
 
           <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fs-6 fw-bold text-dark mb-0">Account Balance</h2>
-            @if (role === 'client') {
-            <button class="btn btn-primary btn-sm rounded-pill px-3" style="font-size: 0.75rem;"><i
-                class="bi bi-plus"></i> Add Funds</button>
-            }
           </div>
 
           <div class="row g-2">
@@ -430,36 +444,357 @@
     <!-- Freelancer Full Row Elements -->
     @if (role === 'freelancer') {
     <!-- Portfolio Section (Full row) -->
-    <div class="glass-card border-0 mb-4 p-4">
-      <h2 class="fs-6 fw-bold text-dark mb-4 border-bottom pb-3">Portfolio</h2>
+    <div class="glass-card border-0 mb-4 p-3 p-md-4">
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 border-bottom pb-3 mb-4">
+        <div>
+          <h2 class="fs-6 fw-bold text-dark mb-1">Portfolio & Projects</h2>
+          <p class="text-muted small mb-0">Showcase of previous projects, applications, and client deliverables.</p>
+        </div>
+        @if (!isPublicView) {
+        <a routerLink="/portfolio"
+          class="text-primary text-decoration-none fw-semibold small d-inline-flex align-items-center gap-1 cursor-pointer flex-shrink-0"
+          style="cursor: pointer;">
+          Manage Portfolio <i class="bi bi-arrow-right" style="font-size: 0.75rem;"></i>
+        </a>
+        }
+      </div>
 
-      <div class="row g-4">
+      <div class="row g-3 g-md-4">
         @for (item of portfolio; track item._id) {
-        <div class="col-md-6 col-lg-3">
-          <div class="glass-card border-0 h-100 hover-card overflow-hidden">
-            <!-- Show first media image if available, else a placeholder -->
-            <img
-              [src]="item.media?.length ? item.media[0] : 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400&h=250'"
-              class="card-img-top border-bottom" alt="Project" style="height: 140px; object-fit: cover;">
-            <div class="card-body p-3 d-flex flex-column">
-              <h3 class="fs-6 fw-bold text-dark mb-2">{{ item.title || 'Untitled Project' }}</h3>
-              <p class="text-muted mb-3 flex-grow-1 text-truncate-3" style="font-size: 0.7rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="portfolio-item-card h-100 overflow-hidden d-flex flex-column">
+            <!-- Media Image Container with Badges -->
+            <div class="portfolio-img-wrapper position-relative"
+              [class.cursor-pointer]="canViewPortfolioDetails"
+              (click)="canViewPortfolioDetails ? openPortfolioModal(item) : null"
+              [attr.role]="canViewPortfolioDetails ? 'button' : null"
+              [attr.tabindex]="canViewPortfolioDetails ? 0 : null">
+              <img [src]="getPortfolioImageUrl(item)" (error)="handleImageError($event)" class="card-img-top"
+                [alt]="item.title || 'Project preview'">
+              <div class="portfolio-img-overlay"></div>
+
+              <!-- Badges Container - Clean, non-colliding layout -->
+              <div class="position-absolute top-0 start-0 end-0 m-2 d-flex justify-content-between align-items-start pointer-events-none z-2">
+                <div class="d-flex flex-wrap gap-1 pe-2 pointer-events-auto" style="max-width: 65%;">
+                  @if (item.projectType) {
+                  <app-badge [label]="item.projectType" variant="secondary" appearance="subtle" size="small"
+                    [rounded]="true" icon="bi bi-folder2-open"></app-badge>
+                  }
+                  @if (item.role) {
+                  <app-badge [label]="item.role" variant="primary" appearance="solid" size="small" [rounded]="true"
+                    icon="bi bi-person-workspace"></app-badge>
+                  }
+                </div>
+                @if (item.visibility) {
+                <div class="flex-shrink-0 pointer-events-auto">
+                  <app-badge [label]="item.visibility" variant="success" appearance="subtle" size="small"
+                    [rounded]="true" icon="bi bi-globe"></app-badge>
+                </div>
+                }
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="portfolio-content d-flex flex-column flex-grow-1 p-3 p-md-3">
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                <h3 class="fs-6 fw-bold text-dark mb-0 text-truncate" [title]="item.title"
+                  [class.cursor-pointer]="canViewPortfolioDetails"
+                  (click)="canViewPortfolioDetails ? openPortfolioModal(item) : null"
+                  [attr.role]="canViewPortfolioDetails ? 'button' : null"
+                  [attr.tabindex]="canViewPortfolioDetails ? 0 : null">{{ item.title || 'Untitled Project' }}
+                </h3>
+              </div>
+
+              <p class="text-muted small mb-3 flex-grow-1 text-truncate-2"
+                style="font-size: 0.82rem; line-height: 1.55;">
                 {{ item.description || 'No description provided.' }}
               </p>
-              <a [href]="item.projectUrl || '#'" target="_blank" class="btn btn-primary btn-sm w-100 py-1" style="font-size: 0.75rem;">View Details</a>
+
+              <!-- Detailed Metadata Row -->
+              <div class="d-flex flex-wrap align-items-center gap-2 gap-sm-3 py-2 border-top border-bottom mb-3 text-muted"
+                style="font-size: 0.75rem;">
+                @if (item.teamSize) {
+                <span class="d-inline-flex align-items-center gap-1 text-nowrap">
+                  <i class="bi bi-people text-primary"></i> Team: {{ item.teamSize }} {{ item.teamSize === 1 ? 'member' : 'members' }}
+                </span>
+                }
+                @if (item.client) {
+                <span class="d-inline-flex align-items-center gap-1 text-nowrap">
+                  <i class="bi bi-building text-primary"></i> Client: {{ item.client }}
+                </span>
+                }
+                @if (item.createdAt) {
+                <span class="d-inline-flex align-items-center gap-1 text-nowrap">
+                  <i class="bi bi-calendar3 text-primary"></i> {{ item.createdAt | date:'mediumDate' }}
+                </span>
+                }
+              </div>
+
+              <!-- Tags / Skills using app-chip -->
+              @if (item.tags && item.tags.length) {
+              <div class="d-flex flex-wrap gap-1 mb-3">
+                @for (tag of item.tags; track tag) {
+                <app-chip [label]="tag" variant="primary" mode="subtle"></app-chip>
+                }
+              </div>
+              }
+
+              <!-- Action: View Details button (Visible only to client evaluating freelancer) -->
+              @if (canViewPortfolioDetails) {
+              <div class="pt-2 border-top mt-auto">
+                <app-button label="View Details" variant="primary" size="md" [block]="true"
+                  (clicked)="openPortfolioModal(item)">
+                  <i class="bi bi-eye me-1"></i>
+                </app-button>
+              </div>
+              }
             </div>
           </div>
         </div>
         } @empty {
-        <div class="col-12 text-center py-4 text-muted" style="font-size: 0.85rem;">
-          No portfolio items available.
+        <div class="col-12 text-center py-4 text-muted">
+          <i class="bi bi-images fs-2 d-block mb-2 text-muted opacity-50"></i>
+          <p class="small mb-0">No portfolio items available.</p>
         </div>
         }
       </div>
     </div>
+    }
 
+    <!-- Standard Bootstrap Portfolio Details Modal (Large Size, Blog Details Aesthetic) -->
+    @if (selectedPortfolio) {
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true"
+      style="background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(8px); z-index: 1055;"
+      (click)="closePortfolioModal()">
+      <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable portfolio-modal-dialog"
+        (click)="$event.stopPropagation()">
+        <div class="modal-content portfolio-modal-content border-0 shadow-lg bg-white">
+
+          <!-- Modal Header -->
+          <div class="modal-header border-bottom px-3 px-sm-4 py-2 py-sm-3 bg-white d-flex align-items-center justify-content-between gap-2">
+            <div class="d-flex flex-wrap align-items-center gap-2 min-w-0">
+              <span class="portfolio-category-badge text-truncate" style="max-width: 240px;">
+                <i class="bi bi-folder2-open me-1"></i>
+                {{ selectedPortfolio.projectType || 'Project Showcase' }}
+              </span>
+              @if (selectedPortfolio.featured) {
+              <app-badge label="Featured" variant="warning" appearance="solid" size="small" [rounded]="true"
+                icon="bi bi-star-fill"></app-badge>
+              }
+              @if (selectedPortfolio.visibility) {
+              <app-badge [label]="selectedPortfolio.visibility" variant="success" appearance="subtle" size="small"
+                [rounded]="true" icon="bi bi-globe"></app-badge>
+              }
+            </div>
+            <button type="button" class="btn-close shadow-none flex-shrink-0" (click)="closePortfolioModal()"
+              aria-label="Close"></button>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body p-3 p-sm-4 custom-modal-scroll">
+
+            <!-- 1. HERO SECTION (Inspired by Blog Details Hero) -->
+            <section class="portfolio-hero-banner position-relative p-3 p-sm-4 p-md-5 mb-3 mb-md-4">
+              <img [src]="getActivePortfolioMediaUrl()" (error)="handleImageError($event)"
+                [alt]="selectedPortfolio.title" class="portfolio-hero-bg">
+              <div class="portfolio-hero-overlay"></div>
+
+              <div class="portfolio-hero-content">
+                <h1 class="portfolio-hero-title mb-2 mb-sm-3">
+                  {{ selectedPortfolio.title || 'Untitled Project' }}
+                </h1>
+
+                <!-- Meta info items with icons (matching blog-hero-meta) -->
+                <div class="portfolio-hero-meta mb-2 mb-sm-3">
+                  @if (selectedPortfolio.role) {
+                  <span class="portfolio-meta-item">
+                    <i class="bi bi-person-workspace"></i>
+                    <span>{{ selectedPortfolio.role }}</span>
+                  </span>
+                  }
+                  @if (selectedPortfolio.client) {
+                  <span class="portfolio-meta-item">
+                    <i class="bi bi-building"></i>
+                    <span>{{ selectedPortfolio.client }}</span>
+                  </span>
+                  }
+                  @if (selectedPortfolio.teamSize) {
+                  <span class="portfolio-meta-item">
+                    <i class="bi bi-people"></i>
+                    <span>{{ selectedPortfolio.teamSize }} {{ selectedPortfolio.teamSize === 1 ? 'member' : 'members' }}</span>
+                  </span>
+                  }
+                  @if (selectedPortfolio.createdAt) {
+                  <span class="portfolio-meta-item">
+                    <i class="bi bi-calendar3"></i>
+                    <span>{{ selectedPortfolio.createdAt | date:'mediumDate' }}</span>
+                  </span>
+                  }
+                </div>
+
+                <!-- Tags as Hero Tag Badges (matching blog-hero-tags) -->
+                @if (selectedPortfolio.tags && selectedPortfolio.tags.length) {
+                <div class="d-flex flex-wrap gap-1 gap-sm-2 pt-1">
+                  @for (tag of selectedPortfolio.tags; track tag) {
+                  <span class="portfolio-hero-tag-badge">#{{ tag }}</span>
+                  }
+                </div>
+                }
+              </div>
+            </section>
+
+            <!-- 2. TWO-COLUMN CONTENT LAYOUT -->
+            <div class="row g-3 g-md-4">
+
+              <!-- Left Column: Primary Media Showcase & Description -->
+              <div class="col-12 col-lg-8">
+
+                <!-- Primary Media Preview Frame -->
+                <div class="portfolio-showcase-frame mb-3">
+                  <img [src]="getActivePortfolioMediaUrl()" (error)="handleImageError($event)"
+                    class="portfolio-main-preview-img"
+                    [alt]="selectedPortfolio.title || 'Project showcase preview'">
+                </div>
+
+                <!-- Multi-media thumbnails if > 1 -->
+                @if (selectedPortfolio.media && selectedPortfolio.media.length > 1) {
+                <div class="d-flex align-items-center gap-2 mb-3 mb-md-4 overflow-auto pb-2 custom-thumb-scroll">
+                  @for (m of selectedPortfolio.media; track $index) {
+                  <button type="button" class="btn portfolio-thumb-btn"
+                    [class.active]="selectedMediaIndex === $index"
+                    (click)="selectedMediaIndex = $index" [title]="'View media ' + ($index + 1)">
+                    <img [src]="(m && m.url) ? m.url : m" class="w-100 h-100 object-fit-cover" alt="thumbnail">
+                  </button>
+                  }
+                </div>
+                }
+
+                <!-- Project Overview & Details (matching blog-rich-content) -->
+                <div class="p-3 p-md-4 bg-white rounded-3 border mb-3 mb-md-4">
+                  <h3 class="portfolio-section-title mb-3">
+                    <i class="bi bi-card-text"></i> Project Overview & Details
+                  </h3>
+                  <div class="portfolio-rich-description">
+                    {{ selectedPortfolio.description || 'No detailed project description available.' }}
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Right Column: Project Links & Specifications -->
+              <div class="col-12 col-lg-4">
+
+                <!-- Action Links Card (Live Project & GitHub Repo) -->
+                @if (selectedPortfolio.projectUrl || selectedPortfolio.githubUrl) {
+                <div class="portfolio-spec-card p-3 p-md-4 mb-3 mb-md-4">
+                  <h3 class="portfolio-section-title mb-3">
+                    <i class="bi bi-link-45deg"></i> Project Links
+                  </h3>
+                  <div class="d-flex flex-column gap-2">
+                    @if (selectedPortfolio.projectUrl) {
+                    <app-button variant="primary" size="md" [block]="true" label="Visit Live Project"
+                      (clicked)="openExternalUrl(selectedPortfolio.projectUrl)">
+                      <i class="bi bi-box-arrow-up-right me-2"></i>
+                    </app-button>
+                    }
+                    @if (selectedPortfolio.githubUrl) {
+                    <app-button variant="outline-dark" size="md" [block]="true" label="View Repository"
+                      (clicked)="openExternalUrl(selectedPortfolio.githubUrl)">
+                      <i class="bi bi-github me-2"></i>
+                    </app-button>
+                    }
+                  </div>
+                </div>
+                }
+
+                <!-- Project Specifications Card -->
+                <div class="portfolio-spec-card p-3 p-md-4 mb-3 mb-md-4">
+                  <h3 class="portfolio-section-title mb-3">
+                    <i class="bi bi-info-circle"></i> Project Details
+                  </h3>
+
+                  <div class="portfolio-spec-item">
+                    <span class="portfolio-spec-label">
+                      <i class="bi bi-person-workspace text-primary"></i> Role
+                    </span>
+                    <span class="portfolio-spec-value">{{ selectedPortfolio.role || 'Contributor' }}</span>
+                  </div>
+
+                  <div class="portfolio-spec-item">
+                    <span class="portfolio-spec-label">
+                      <i class="bi bi-folder2-open text-primary"></i> Type
+                    </span>
+                    <span class="portfolio-spec-value">{{ selectedPortfolio.projectType || 'General Project' }}</span>
+                  </div>
+
+                  <div class="portfolio-spec-item">
+                    <span class="portfolio-spec-label">
+                      <i class="bi bi-building text-primary"></i> Client
+                    </span>
+                    <span class="portfolio-spec-value">{{ selectedPortfolio.client || 'Direct Client' }}</span>
+                  </div>
+
+                  <div class="portfolio-spec-item">
+                    <span class="portfolio-spec-label">
+                      <i class="bi bi-people text-primary"></i> Team Size
+                    </span>
+                    <span class="portfolio-spec-value">
+                      {{ selectedPortfolio.teamSize ? selectedPortfolio.teamSize + (selectedPortfolio.teamSize === 1 ? ' Member' : ' Members') : 'Solo' }}
+                    </span>
+                  </div>
+
+                  <div class="portfolio-spec-item">
+                    <span class="portfolio-spec-label">
+                      <i class="bi bi-calendar3 text-primary"></i> Date
+                    </span>
+                    <span class="portfolio-spec-value">
+                      {{ (selectedPortfolio.createdAt | date:'mediumDate') || 'N/A' }}
+                    </span>
+                  </div>
+
+                  <div class="portfolio-spec-item">
+                    <span class="portfolio-spec-label">
+                      <i class="bi bi-globe text-primary"></i> Visibility
+                    </span>
+                    <span class="portfolio-spec-value text-capitalize">
+                      {{ selectedPortfolio.visibility || 'Public' }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Technologies & Skills -->
+                @if (selectedPortfolio.tags && selectedPortfolio.tags.length) {
+                <div class="portfolio-spec-card p-3 p-md-4 mb-3 mb-md-4">
+                  <h3 class="portfolio-section-title mb-3">
+                    <i class="bi bi-tags"></i> Technologies & Skills
+                  </h3>
+                  <div class="d-flex flex-wrap gap-2">
+                    @for (tag of selectedPortfolio.tags; track tag) {
+                    <app-chip [label]="tag" variant="primary" mode="subtle"></app-chip>
+                    }
+                  </div>
+                </div>
+                }
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Modal Footer (Clean, close button only) -->
+          <div class="modal-footer border-top px-3 px-sm-4 py-2 py-sm-3 bg-light d-flex justify-content-end align-items-center">
+            <app-button variant="outline-secondary" size="sm" label="Close"
+              (clicked)="closePortfolioModal()">
+            </app-button>
+          </div>
+
+        </div>
+      </div>
+    </div>
     }
 
     }
+
   </div>
 </div>

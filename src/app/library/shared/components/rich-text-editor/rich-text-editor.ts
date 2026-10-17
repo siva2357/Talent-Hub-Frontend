@@ -7,34 +7,8 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/f
   selector: 'app-rich-text-editor',
   standalone: true,
   imports: [CommonModule, FormsModule, QuillModule],
-  template: `
-    <div class="mb-3 w-100 rich-text-editor-container">
-      <label *ngIf="label" class="form-label fw-semibold text-dark">{{ label }}</label>
-      <div class="bg-white rounded-3 overflow-hidden border">
-        <quill-editor 
-          [(ngModel)]="value" 
-          (ngModelChange)="onValueChange($event)"
-          [placeholder]="placeholder"
-          [style]="{height: height}">
-        </quill-editor>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .rich-text-editor-container .ql-toolbar {
-      border: none !important;
-      border-bottom: 1px solid #dee2e6 !important;
-      background-color: #f8f9fa;
-      border-radius: 0.375rem 0.375rem 0 0;
-    }
-    .rich-text-editor-container .ql-container {
-      border: none !important;
-      font-family: inherit;
-    }
-    .rich-text-editor-container .ql-editor {
-      min-height: 200px;
-    }
-  `],
+  templateUrl: './rich-text-editor.html',
+  styleUrl: './rich-text-editor.css',
   encapsulation: ViewEncapsulation.None,
   providers: [
     {
@@ -46,9 +20,13 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/f
 })
 export class RichTextEditor implements ControlValueAccessor {
   @Input() label: string = '';
+  @Input() required: boolean = false;
   @Input() placeholder: string = 'Enter text here...';
   @Input() height: string = '200px';
   @Input() value: string = '';
+  @Input() disabled: boolean = false;
+  @Input() validation: 'none' | 'success' | 'error' = 'none';
+  @Input() errorMessage: string = '';
   
   @Output() valueChange = new EventEmitter<string>();
   
@@ -66,11 +44,31 @@ export class RichTextEditor implements ControlValueAccessor {
   registerOnTouched(fn: any): void {
     this.onTouch = fn;
   }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
   
+  cleanLabel(label: string): string {
+    if (!label) return '';
+    return label.replace(/\s*\*+\s*$/, '').trim();
+  }
+
+  hasAsterisk(label: string): boolean {
+    if (!label) return false;
+    return /\*\s*$/.test(label.trim());
+  }
+
+  get isFieldRequired(): boolean {
+    return this.required || this.hasAsterisk(this.label);
+  }
+
   onValueChange(val: string) {
-    this.value = val;
-    this.valueChange.emit(val);
-    this.onChange(val);
+    const isQuillEmpty = !val || val === '<p><br></p>' || val.trim() === '';
+    const cleanVal = isQuillEmpty ? '' : val;
+    this.value = cleanVal;
+    this.valueChange.emit(cleanVal);
+    this.onChange(cleanVal);
     this.onTouch();
   }
 }

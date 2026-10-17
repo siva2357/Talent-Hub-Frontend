@@ -1,0 +1,116 @@
+<article class="freelancer-card">
+  <!-- Top Accent Bar -->
+  <div class="freelancer-card-accent"></div>
+
+  <!-- Card Header -->
+  <div class="freelancer-card-header">
+    <div class="freelancer-identity">
+      <div class="freelancer-avatar-wrapper">
+        <img [src]="avatarUrl" class="freelancer-avatar" [alt]="displayName + ' Avatar'"
+          (error)="$any($event.target).src = 'https://ui-avatars.com/api/?name=' + displayName + '&background=8b5cf6&color=fff'">
+        <span class="status-indicator" [ngClass]="freelancer?.status?.toLowerCase()?.replace(' ', '-')"></span>
+      </div>
+
+      <div class="freelancer-name-wrapper">
+        <div class="freelancer-title-row">
+          <h3 class="freelancer-name" [title]="displayName">
+            {{ displayName }}
+          </h3>
+
+          @if (freelancer?.joinedDate) {
+          <span class="freelancer-joined-badge">
+            <i class="bi bi-calendar3"></i>
+            <span>Joined {{ freelancer?.joinedDate | date:'mediumDate' }}</span>
+          </span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Menu -->
+    <div class="dropdown freelancer-action-dropdown">
+      <button class="freelancer-action-button" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+        data-bs-display="static" title="More Actions">
+        <i class="bi bi-three-dots-vertical"></i>
+      </button>
+
+      <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none">
+        <app-dropdown [items]="getActions()" (itemSelected)="onActionSelect($event)" class="d-block">
+        </app-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Body -->
+  <div class="freelancer-card-body mb-3">
+    <!-- Email -->
+    <div class="freelancer-info-item email-item">
+      <div class="freelancer-info-icon">
+        <i class="bi bi-envelope"></i>
+      </div>
+      <div class="freelancer-info-content">
+        <span class="freelancer-info-label">Email</span>
+        <span class="freelancer-info-value freelancer-email" [title]="freelancer?.email">
+          {{ freelancer?.email || 'N/A' }}
+        </span>
+      </div>
+    </div>
+
+
+    <div class="freelancer-info-item">
+      <div class="freelancer-info-icon">
+        <i class="bi bi-telephone"></i>
+      </div>
+      <div class="freelancer-info-content">
+        <span class="freelancer-info-label">Phone</span>
+        <span class="freelancer-info-value">
+          {{ freelancer.phoneNumber || '9876543210' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Job Title -->
+    <div class="freelancer-info-item">
+      <div class="freelancer-info-icon">
+        <i class="bi bi-briefcase"></i>
+      </div>
+      <div class="freelancer-info-content">
+        <span class="freelancer-info-label">Job Title</span>
+        <span class="freelancer-info-value" [title]="freelancer?.title">
+          {{ freelancer?.title || 'Not specified' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="freelancer-info-item">
+      <div class="freelancer-info-icon">
+        <i class="bi bi-activity"></i>
+      </div>
+      <div class="freelancer-info-content">
+        <span class="freelancer-info-label">Status</span>
+        <div class="freelancer-info-value">
+          <app-badge [label]="freelancer?.status || 'Unknown'" appearance="subtle"
+            [variant]="getBadgeVariant(freelancer?.status)" size="small">
+          </app-badge>
+        </div>
+      </div>
+    </div>
+
+    <!-- Projects Count -->
+    <div class="freelancer-info-item">
+      <div class="freelancer-info-icon">
+        <i class="bi bi-check2-circle"></i>
+      </div>
+      <div class="freelancer-info-content">
+        <span class="freelancer-info-label">Projects</span>
+        <span class="freelancer-info-value">
+          {{ freelancer?.completedProjects ?? 0 }} {{ (freelancer?.completedProjects === 1) ? 'Completed' : 'Completed'
+          }}
+        </span>
+      </div>
+    </div>
+
+
+  </div>
+</article>
