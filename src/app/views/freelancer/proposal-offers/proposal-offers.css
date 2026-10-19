@@ -48,7 +48,7 @@
 
 .dashboard-container>.position-relative.z-1 {
   width: 100%;
-  padding: 1.5rem !important;
+  padding: 1rem 1.25rem !important;
 }
 
 
@@ -169,21 +169,187 @@
    FILTER CONTAINER
 ========================================================= */
 
-.tab-pane>.bg-white {
+/* =========================================================
+   FILTER CONTAINER & BUTTONS
+========================================================= */
+
+.filter-card {
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  background-color: #ffffff;
+}
+
+.tab-pane > .filter-card {
   width: 100%;
 }
 
-.tab-pane>.bg-white .row {
-  width: 100%;
-}
-
-.tab-pane>.bg-white app-input-field {
+.tab-pane > .filter-card app-input-field {
   display: block;
   width: 100%;
 }
 
-.tab-pane>.bg-white app-button {
-  min-width: 0;
+.filter-card .filter-btn-group {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+.filter-card .filter-btn-group app-button {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+}
+
+/* =========================================================
+   BUDGET & DURATION ROW (Proposals & Offers)
+========================================================= */
+
+.budget-duration-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  border-top: 1px solid #e2e8f0 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  padding: 0.5rem 0 !important;
+  margin: 0.5rem 0 !important;
+  font-size: 0.82rem !important;
+}
+
+.budget-duration-row > div {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding: 0 !important;
+}
+
+.budget-duration-row .budget-col {
+  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.budget-duration-row .duration-col {
+  text-align: right !important;
+  margin-left: auto !important;
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* =========================================================
+   CARD ACCENTS & STATUS PILLS
+========================================================= */
+
+.card-accent-bar {
+  height: 4px;
+  width: 100%;
+  display: block;
+}
+
+.accent-primary {
+  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.accent-success {
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+}
+
+.accent-warning {
+  background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+}
+
+.accent-danger {
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+}
+
+.accent-info {
+  background: linear-gradient(90deg, #06b6d4 0%, #0891b2 100%);
+}
+
+.accent-secondary {
+  background: linear-gradient(90deg, #94a3b8 0%, #64748b 100%);
+}
+
+.status-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.status-pill-success {
+  background-color: #ecfdf5;
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.status-pill-warning {
+  background-color: #fffbeb;
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.status-pill-danger {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.status-pill-primary {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid rgba(37, 99, 235, 0.25);
+}
+
+.status-pill-info {
+  background-color: #f0fdfa;
+  color: #0d9488;
+  border: 1px solid rgba(13, 148, 136, 0.25);
+}
+
+.status-pill-secondary {
+  background-color: #f8fafc;
+  color: #64748b;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.description-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.6rem;
+}
+
+.metrics-box {
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+}
+
+.proposal-card,
+.offer-card {
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.proposal-card:hover,
+.offer-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.04) !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
 }
 
 
@@ -274,14 +440,6 @@
 /* =========================================================
    OFFER ACTIONS
 ========================================================= */
-
-.card-body>.border-top {
-  flex-wrap: wrap;
-}
-
-.card-body>.border-top app-button {
-  min-width: 0;
-}
 
 
 /* =========================================================
@@ -468,14 +626,9 @@
 
 
   /* Apply / Reset */
-
-  .tab-pane>.bg-white .col-lg-3.d-flex {
-    flex-direction: row;
+  .filter-card .filter-btn-group {
+    flex-direction: row !important;
     gap: 0.5rem !important;
-  }
-
-  .tab-pane>.bg-white .col-lg-3.d-flex app-button {
-    width: 50%;
   }
 
 
@@ -618,13 +771,6 @@
 
 
   /* Offer actions */
-  .card-body>.border-top {
-    gap: 0.75rem !important;
-  }
-
-  .card-body>.border-top>div {
-    margin-left: auto !important;
-  }
 
   /* =====================================================
      BACKGROUND DECORATIONS
@@ -686,62 +832,33 @@
   }
 
 
-  /* Filter */
-
-  .tab-pane>.bg-white {
-    padding: 0.8rem !important;
+  /* Filter Card */
+  .filter-card {
+    padding: 1rem !important;
     border-radius: 14px !important;
   }
 
-
-  /* Filter buttons */
-
-  .tab-pane>.bg-white .col-lg-3.d-flex {
-    gap: 0.4rem !important;
+  /* Filter buttons remain side-by-side */
+  .filter-card .d-flex.gap-2 {
+    gap: 0.5rem !important;
   }
 
-
-  /* Proposal */
-
-  .tab-pane .card {
+  /* Proposal & Offer Cards */
+  .proposal-card,
+  .offer-card {
     border-radius: 14px !important;
   }
 
-  .tab-pane .card-body {
-    padding: 0.85rem !important;
+  .proposal-card .card-body,
+  .offer-card .card-body {
+    padding: 1.15rem !important;
   }
 
-
-  /* Proposal metadata */
-
-  .tab-pane .d-flex.align-items-center.gap-4.text-muted {
-    flex-direction: column;
-    align-items: flex-start !important;
-    gap: 0.45rem !important;
-  }
-
-
-  /* Offer */
-
-  .row.g-4 .card-body {
-    padding: 0.85rem !important;
-  }
-
-
-  /* Tech stack */
-
-  .row.g-4 .d-flex.flex-wrap.gap-2 {
-    gap: 0.35rem !important;
-  }
-
-
-  /* Dates */
-
-  .row.g-4 .row.g-2 .p-3 {
-    padding: 0.65rem !important;
+  /* Metrics box */
+  .metrics-box {
+    padding: 0.75rem !important;
   }
 }
-
 
 /* =========================================================
    VERY SMALL MOBILE
@@ -753,47 +870,24 @@
     padding: 0.6rem !important;
   }
 
-
   .dashboard-container h1 {
     font-size: 1.15rem !important;
   }
 
-
   .nav-tabs .nav-link {
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
-    font-size: 0.68rem;
+    padding-left: 0.6rem !important;
+    padding-right: 0.6rem !important;
+    font-size: 0.75rem;
   }
 
-
-  /* Stack Apply / Reset */
-
-  .tab-pane>.bg-white .col-lg-3.d-flex {
-    flex-direction: column;
+  /* Filter Card */
+  .filter-card {
+    padding: 0.85rem !important;
   }
 
-  .tab-pane>.bg-white .col-lg-3.d-flex app-button {
-    width: 100%;
-  }
-
-
-  /* Proposal icon */
-
-  .proposal-card-icon {
-    width: 44px !important;
-    height: 44px !important;
-  }
-
-
-  /* Date boxes */
-
-  .row.g-4 .row.g-2 {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .row.g-4 .row.g-2>.col-6 {
-    width: 100%;
+  .proposal-icon-wrapper {
+    width: 38px !important;
+    height: 38px !important;
   }
 }
 

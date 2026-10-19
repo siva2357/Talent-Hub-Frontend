@@ -99,12 +99,36 @@
 }
 
 /* =========================================================
-   MAIN CONTENT WIDTH
+   CONTAINER & SUCCESS CENTERING
 ========================================================= */
 
-.management-container>.position-relative.z-1 {
+.management-container.success-view-active {
+  min-height: 100vh;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 1.5rem !important;
+}
+
+.success-step-wrapper {
+  max-width: 520px !important;
+  width: 100% !important;
+  margin: auto !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-step-wrapper {
+  max-width: 840px;
+  margin-top: 1.5rem;
   width: 100%;
-  max-width: 800px;
+}
+
+.management-container > .position-relative.z-1 {
+  width: 100%;
 }
 
 /* =========================================================
@@ -113,15 +137,14 @@
 
 .glass-card {
   width: 100%;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(168, 85, 247, 0.15);
   box-shadow:
-    0 15px 40px -10px rgba(74, 58, 255, 0.1),
-    0 4px 15px rgba(0, 0, 0, 0.05);
-  border-radius: 24px !important;
-  overflow: hidden;
+    0 15px 40px -10px rgba(74, 58, 255, 0.08),
+    0 4px 15px rgba(0, 0, 0, 0.03);
+  border-radius: 20px !important;
 }
 
 .cursor-pointer {
@@ -129,34 +152,204 @@
 }
 
 /* =========================================================
-   FORM ELEMENTS
+   SECTION HEADERS & DIVIDERS
 ========================================================= */
 
-.form-control,
-.form-select {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
-  background-color: #f9fafb;
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    box-shadow 0.2s ease;
+.step-header {
+  border-color: rgba(168, 85, 247, 0.12) !important;
 }
 
-.form-control:focus,
-.form-select:focus {
-  border-color: #4a3aff;
+.profile-section-divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, rgba(168, 85, 247, 0.05) 0%, rgba(168, 85, 247, 0.25) 50%, rgba(168, 85, 247, 0.05) 100%);
+  border: none;
+}
+
+.section-icon-badge {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  border-radius: 50%;
+  font-size: 0.95rem;
+}
+
+.social-icon-wrapper {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+.social-item-pill,
+.language-item-pill {
   background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(74, 58, 255, 0.15);
-  outline: none;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.social-item-pill:hover,
+.language-item-pill:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.hover-bg-light:hover {
+  background-color: rgba(243, 244, 246, 0.8);
+}
+
+.transition-all {
+  transition: all 0.2s ease;
 }
 
 /* =========================================================
-   BUTTONS
+   REVIEW PROFILE IMAGE (PROMINENT & ROUNDED)
 ========================================================= */
 
+.review-avatar-img {
+  width: 110px !important;
+  height: 110px !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  border: 3px solid #e0e7ff !important;
+  box-shadow: 0 4px 16px rgba(74, 58, 255, 0.12) !important;
+  display: block;
+}
+
+.review-card {
+  background-color: #ffffff;
+  border: 1px solid rgba(168, 85, 247, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+/* =========================================================
+   STEP 5: DEDICATED CENTERED SUCCESS CARD
+========================================================= */
+
+.success-card {
+  width: 100%;
+  max-width: 520px;
+  border-radius: 24px !important;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 20px 50px -10px rgba(74, 58, 255, 0.12), 0 8px 25px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid rgba(168, 85, 247, 0.2) !important;
+  animation: successFadeIn 0.35s ease-out;
+}
+
+@keyframes successFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.success-logo {
+  height: 60px;
+  object-fit: contain;
+}
+
+.success-icon-badge {
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-icon-pulse {
+  position: absolute;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.15);
+  animation: pulseGreen 2.4s infinite ease-in-out;
+}
+
+@keyframes pulseGreen {
+  0%, 100% {
+    transform: scale(0.94);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+.success-icon-circle {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 4px solid #f0fdf4;
+  position: relative;
+  z-index: 1;
+}
+
+.success-icon-circle i {
+  font-size: 3.2rem;
+  line-height: 1;
+}
+
+.success-shield-badge {
+  bottom: 0px;
+  right: 0px;
+  width: 30px;
+  height: 30px;
+  font-size: 0.9rem;
+  border: 2px solid #ffffff;
+  z-index: 2;
+}
+
+.dashboard-redirect-btn {
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.dashboard-redirect-btn app-button {
+  display: inline-flex !important;
+}
+
+/* =========================================================
+   ACTION BUTTONS (JUSTIFY-BETWEEN LEFT & RIGHT)
+========================================================= */
+
+.step-action-buttons {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-top: 2rem !important;
+  padding-top: 1.25rem !important;
+  border-top: 1px solid rgba(168, 85, 247, 0.15) !important;
+}
+
+.step-action-buttons .btn-spacer {
+  width: 1px;
+  height: 1px;
+  visibility: hidden;
+  flex-shrink: 0;
+}
+
+.step-action-buttons app-button {
+  display: inline-block;
+}
+
+/* Ensure buttons stretch nicely without breaking */
 .btn-primary {
   background: linear-gradient(135deg, #4a3aff, #2563eb);
   border: none;
@@ -187,31 +380,11 @@
   color: #4a3aff !important;
 }
 
-/* =========================================================
-   STEPPER
-========================================================= */
-
-.step-circle {
-  transition: all 0.3s ease;
-}
-
-.step-active {
-  border-color: #4a3aff !important;
-}
-
-.step-dot-active {
-  background-color: #4a3aff !important;
-}
-
-/* =========================================================
-   REVIEW CONTENT
-========================================================= */
-
+/* Text wrapping protection */
 .glass-card .text-truncate {
   max-width: 100%;
 }
 
-/* Long URLs / descriptions should never break layout */
 .glass-card a,
 .glass-card span {
   overflow-wrap: anywhere;
@@ -219,380 +392,146 @@
 }
 
 /* =========================================================
-   LARGE TABLETS / SMALL DESKTOP
-   <= 992px
+   MEDIA QUERY: TABLETS (<= 992px)
 ========================================================= */
 
 @media (max-width: 992px) {
-
-  .management-container {
-    min-height: 100dvh;
-  }
-
-  .management-container>.position-relative.z-1 {
-    max-width: 760px !important;
-    margin-top: 1.5rem !important;
+  .management-container > .position-relative.z-1 {
+    max-width: 740px !important;
+    margin-top: 1.25rem !important;
   }
 
   .glass-card {
-    border-radius: 20px !important;
-  }
-
-  .top-left {
-    width: 400px;
-    height: 400px;
-    top: -120px;
-    left: -120px;
-  }
-
-  .bottom-right {
-    width: 450px;
-    height: 450px;
-    bottom: -150px;
-    right: -150px;
-  }
-
-  .right-shape {
-    width: 300px;
-    height: 300px;
-    filter: blur(65px);
-  }
-
-  .circle-1 {
-    width: 250px;
-    height: 250px;
-  }
-
-  .circle-2 {
-    width: 400px;
-    height: 400px;
-  }
-
-  .circle-3 {
-    width: 550px;
-    height: 550px;
-  }
-}
-
-/* =========================================================
-   TABLET
-   <= 768px
-========================================================= */
-
-@media (max-width: 768px) {
-
-  .management-container {
-    padding: 1rem !important;
-  }
-
-  .management-container>.position-relative.z-1 {
-    max-width: 100% !important;
-    margin-top: 1rem !important;
-  }
-
-  /* Header */
-  .management-container h2 {
-    font-size: 1.5rem !important;
-  }
-
-  .management-container h3 {
-    font-size: 1rem !important;
-  }
-
-  .management-container h4 {
-    font-size: 0.85rem !important;
-  }
-
-  /* Stepper */
-  .management-container .mb-5.px-3 {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    margin-bottom: 1.5rem !important;
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-
-  /* Card */
-  .glass-card {
-    padding: 1.25rem !important;
-    margin-bottom: 1.5rem !important;
     border-radius: 18px !important;
+    padding: 1.5rem !important;
   }
 
-  /* Reduce Bootstrap row gaps */
-  .glass-card .row.g-4 {
-    --bs-gutter-y: 1rem;
-    --bs-gutter-x: 1rem;
-  }
-
-  /* Profile photo + form */
-  .glass-card .col-md-3,
-  .glass-card .col-md-9 {
-    width: 100%;
-  }
-
-  .glass-card .col-md-3 {
-    display: flex;
-    justify-content: center;
-  }
-
-  /* Social media / language add rows */
-  .glass-card .d-flex.align-items-start.gap-3 {
-    flex-wrap: wrap;
-  }
-
-  .glass-card .d-flex.align-items-start.gap-3>.flex-grow-1 {
-    flex: 1 1 calc(50% - 0.5rem);
-    min-width: 200px;
-  }
-
-  /* Add button */
-  .glass-card .d-flex.align-items-start.gap-3>div[style*="margin-top"] {
-    margin-top: 1.85rem !important;
-  }
-
-  /* Review avatar/content */
-  .glass-card .d-flex.gap-4.align-items-start {
-    gap: 1rem !important;
-  }
-
-  /* Background decorations */
   .top-left {
-    width: 350px;
-    height: 350px;
+    width: 380px;
+    height: 380px;
     top: -100px;
-    left: -120px;
-  }
-
-  .bottom-right {
-    width: 400px;
-    height: 400px;
-    bottom: -150px;
-    right: -150px;
-  }
-
-  .right-shape {
-    width: 250px;
-    height: 250px;
-    right: -100px;
-    filter: blur(55px);
-  }
-
-  .circle-1 {
-    width: 220px;
-    height: 220px;
-  }
-
-  .circle-2 {
-    width: 350px;
-    height: 350px;
-  }
-
-  .circle-3 {
-    width: 480px;
-    height: 480px;
-  }
-
-  /* Success screen */
-  .glass-card .py-5 {
-    padding-top: 2.5rem !important;
-    padding-bottom: 2.5rem !important;
-  }
-}
-
-/* =========================================================
-   MOBILE
-   <= 576px
-========================================================= */
-
-@media (max-width: 576px) {
-
-  .management-container {
-    padding: 0.75rem !important;
-  }
-
-  .management-container>.position-relative.z-1 {
-    margin-top: 0.5rem !important;
-  }
-
-  /* Main heading */
-  .management-container h2 {
-    font-size: 1.3rem !important;
-    line-height: 1.3;
-  }
-
-  .management-container h2+p {
-    font-size: 0.75rem !important;
-    margin-bottom: 1.5rem !important;
-  }
-
-  /* Card */
-  .glass-card {
-    padding: 1rem !important;
-    border-radius: 16px !important;
-    box-shadow:
-      0 10px 30px -10px rgba(74, 58, 255, 0.1),
-      0 3px 12px rgba(0, 0, 0, 0.04);
-  }
-
-  /* Form spacing */
-  .glass-card .row.g-4 {
-    --bs-gutter-y: 0.85rem;
-    --bs-gutter-x: 0.75rem;
-  }
-
-  /* Make all desktop columns full width */
-  .glass-card .col-md-3,
-  .glass-card .col-md-4,
-  .glass-card .col-md-6,
-  .glass-card .col-md-9 {
-    width: 100%;
-  }
-
-  /* Profile image */
-  .glass-card .col-md-3 {
-    margin-bottom: 0.5rem;
-  }
-
-  /* Social / language fields */
-  .glass-card .d-flex.align-items-start.gap-3 {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0.75rem !important;
-    width: 100%;
-  }
-
-  .glass-card .d-flex.align-items-start.gap-3>.flex-grow-1 {
-    width: 100%;
-    min-width: 0;
-    flex: none;
-  }
-
-  /* Remove inline 30px margin on Add button */
-  .glass-card .d-flex.align-items-start.gap-3>div[style*="margin-top"] {
-    width: 100%;
-    margin-top: 0 !important;
-  }
-
-  .glass-card .d-flex.align-items-start.gap-3 app-button {
-    width: 100%;
-  }
-
-  /* Added social / language items */
-  .glass-card .d-flex.align-items-center.gap-3.p-2 {
-    gap: 0.6rem !important;
-    padding: 0.65rem !important;
-    min-width: 0;
-  }
-
-  .glass-card .d-flex.align-items-center.gap-3.p-2 span {
-    min-width: 0;
-    flex: 1;
-  }
-
-  /* Review sections */
-  .glass-card .border.rounded-4.p-4 {
-    padding: 1rem !important;
-    border-radius: 14px !important;
-  }
-
-  /* Review header */
-  .glass-card .justify-content-between.align-items-center {
-    gap: 0.75rem;
-  }
-
-  /* Review basic information */
-  .glass-card .d-flex.gap-4.align-items-start {
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 1rem !important;
-  }
-
-  .glass-card .d-flex.gap-4.align-items-start>.row {
-    width: 100%;
-  }
-
-  /* Review data */
-  .glass-card .row.g-3 {
-    --bs-gutter-y: 0.75rem;
-    --bs-gutter-x: 0.75rem;
-  }
-
-  /* Buttons */
-  .glass-card .border-top {
-    padding-top: 1rem !important;
-  }
-
-  .glass-card .border-top>* {
-    max-width: 48%;
-  }
-
-  /* Prevent button overflow */
-  .glass-card app-button {
-    max-width: 100%;
-  }
-
-  /* Success */
-  .glass-card .py-5 {
-    padding-top: 2rem !important;
-    padding-bottom: 2rem !important;
-  }
-
-  .glass-card img[alt="Talent Hub"] {
-    height: 55px !important;
-    margin-bottom: 2rem !important;
-  }
-
-  .glass-card h3.fs-4 {
-    font-size: 1.25rem !important;
-    line-height: 1.4;
-  }
-
-  .glass-card p[style*="max-width"] {
-    font-size: 0.82rem !important;
-    margin-bottom: 2rem !important;
-    padding: 0 0.5rem;
-  }
-
-  /* Success icon */
-  .glass-card div[style*="width: 100px"] {
-    width: 82px !important;
-    height: 82px !important;
-  }
-
-  .glass-card div[style*="width: 100px"] i {
-    font-size: 2.8rem !important;
-  }
-
-  /* Dashboard button */
-  .glass-card app-button.px-5 {
-    width: 100%;
-    max-width: 280px;
-  }
-
-  /* Decorative elements */
-  .top-left {
-    width: 250px;
-    height: 250px;
-    top: -80px;
     left: -100px;
   }
 
   .bottom-right {
-    width: 300px;
-    height: 300px;
-    bottom: -120px;
-    right: -120px;
+    width: 420px;
+    height: 420px;
+    bottom: -140px;
+    right: -140px;
+  }
+}
+
+/* =========================================================
+   MEDIA QUERY: PHONES & SMALL SCREENS (<= 768px)
+========================================================= */
+
+@media (max-width: 768px) {
+  .management-container {
+    padding: 0.75rem !important;
   }
 
-  .right-shape {
-    width: 180px;
-    height: 180px;
+  .management-container > .position-relative.z-1 {
+    max-width: 100% !important;
+    margin-top: 0.75rem !important;
+  }
+
+  .management-container h2 {
+    font-size: 1.4rem !important;
+  }
+
+  .glass-card {
+    padding: 1.25rem !important;
+    border-radius: 16px !important;
+  }
+
+  .profile-upload-container {
+    margin-bottom: 0.75rem;
+  }
+
+  .step-action-buttons {
+    margin-top: 1.5rem !important;
+    padding-top: 1rem !important;
+  }
+}
+
+/* =========================================================
+   MEDIA QUERY: COMPACT MOBILE (<= 576px)
+========================================================= */
+
+@media (max-width: 576px) {
+  .management-container {
+    padding: 0.5rem !important;
+  }
+
+  .management-container h2 {
+    font-size: 1.25rem !important;
+  }
+
+  .glass-card {
+    padding: 1rem !important;
+    border-radius: 14px !important;
+  }
+
+  /* Make sure buttons always justify-between on mobile too */
+  .step-action-buttons {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    gap: 0.5rem !important;
+  }
+
+  .step-action-buttons app-button {
+    flex: 0 0 auto;
+  }
+
+  /* Review avatar in mobile is centered & not tiny */
+  .review-avatar-img {
+    width: 96px !important;
+    height: 96px !important;
+    margin: 0 auto 0.5rem auto !important;
+  }
+
+  .review-card {
+    padding: 1rem !important;
+    border-radius: 14px !important;
+  }
+
+  /* Success Screen on mobile */
+  .glass-card img[alt="Talent Hub"] {
+    height: 50px !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .glass-card h3.fs-4 {
+    font-size: 1.2rem !important;
+  }
+
+  .glass-card div[style*="width: 90px"] {
+    width: 76px !important;
+    height: 76px !important;
+  }
+
+  .glass-card div[style*="width: 90px"] i {
+    font-size: 2.6rem !important;
+  }
+
+  /* Background glow adjustments on small screens */
+  .top-left {
+    width: 240px;
+    height: 240px;
+    top: -60px;
+    left: -60px;
+  }
+
+  .bottom-right {
+    width: 260px;
+    height: 260px;
+    bottom: -80px;
     right: -80px;
-    filter: blur(45px);
   }
 
-  /* Circles */
   .circle-1 {
     width: 160px;
     height: 160px;
@@ -607,108 +546,17 @@
     width: 360px;
     height: 360px;
   }
-
-  .concentric-circles {
-    top: 25%;
-  }
 }
 
 /* =========================================================
-   VERY SMALL MOBILE
-   <= 400px
-========================================================= */
-
-@media (max-width: 400px) {
-
-  .management-container {
-    padding: 0.5rem !important;
-  }
-
-  .glass-card {
-    padding: 0.85rem !important;
-    border-radius: 14px !important;
-  }
-
-  .management-container h2 {
-    font-size: 1.15rem !important;
-  }
-
-  .glass-card h3 {
-    font-size: 0.95rem !important;
-  }
-
-  .glass-card h4 {
-    font-size: 0.8rem !important;
-  }
-
-  /* Bottom navigation */
-  .glass-card .border-top {
-    flex-direction: column !important;
-    gap: 0.75rem !important;
-  }
-
-  .glass-card .border-top>* {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .glass-card .border-top app-button {
-    width: 100%;
-  }
-
-  /* Review edit buttons */
-  .glass-card .justify-content-between.align-items-center {
-    align-items: flex-start !important;
-  }
-
-  /* Smaller profile image */
-  .glass-card img.rounded-circle {
-    width: 68px !important;
-    height: 68px !important;
-  }
-
-  /* Success */
-  .glass-card div[style*="width: 100px"] {
-    width: 75px !important;
-    height: 75px !important;
-  }
-
-  .glass-card div[style*="width: 100px"] i {
-    font-size: 2.4rem !important;
-  }
-}
-
-/* =========================================================
-   TOUCH DEVICES
-========================================================= */
-
-@media (hover: none) and (pointer: coarse) {
-
-  .btn-primary:hover {
-    transform: none;
-    box-shadow: none;
-  }
-
-  .btn-outline-primary:hover {
-    background-color: transparent;
-    color: #4a3aff;
-  }
-
-  .cursor-pointer {
-    cursor: default;
-  }
-}
-
-/* =========================================================
-   ACCESSIBILITY / REDUCED MOTION
+   ACCESSIBILITY & REDUCED MOTION
 ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-
-  .step-circle,
-  .form-control,
-  .form-select,
-  .btn-primary {
+  .btn-primary,
+  .btn-outline-primary,
+  .social-item-pill,
+  .language-item-pill {
     transition: none !important;
   }
 }

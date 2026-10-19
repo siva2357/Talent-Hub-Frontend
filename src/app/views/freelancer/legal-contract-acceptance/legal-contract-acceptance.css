@@ -3,8 +3,6 @@
   --primary-color: #0d6efd;
 }
 
-
-
 .text-purple { color: #6f42c1; }
 .bg-purple-soft { background-color: rgba(111, 66, 193, 0.1); }
 .text-warning-dark { color: #d39e00; }
@@ -17,16 +15,12 @@
   font-family: 'Brush Script MT', 'Bradley Hand', 'Lucida Handwriting', cursive !important;
 }
 
-.form-check-input:checked {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-}
-
 .dashboard-container {
   font-family: 'Inter', 'Outfit', sans-serif;
   background-color: #fcfbfe;
   position: relative;
   min-height: 100vh;
+  overflow-x: hidden; /* Prevent background decorations from causing horizontal scroll */
 }
 
 /* Background decorations */
@@ -40,11 +34,87 @@
 .circle-2 { width: 500px; height: 500px; }
 .circle-3 { width: 700px; height: 700px; }
 
+@media (max-width: 768px) {
+  .bg-shape.top-left { width: 250px; height: 250px; top: -100px; left: -100px; }
+  .bg-shape.bottom-right { width: 300px; height: 300px; bottom: -100px; right: -100px; }
+  .bg-shape.right-shape { display: none; }
+  .concentric-circles { display: none; }
+}
+
 /* Premium Card (Glassmorphism) */
 .glass-card {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(168, 85, 247, 0.15);
-  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.08), 0 4px 15px rgba(0, 0, 0, 0.04);
   border-radius: 20px !important;
+}
+
+@media (max-width: 576px) {
+  .glass-card {
+    border-radius: 14px !important;
+  }
+}
+
+/* Checkpoints (Clean without card structure) */
+.consent-row {
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.15s ease;
+  line-height: 1.45;
+}
+
+.consent-row:hover {
+  opacity: 0.88;
+}
+
+.consent-input {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  margin-top: 3px !important;
+  margin-left: 0 !important;
+  float: none !important;
+  flex-shrink: 0 !important;
+  cursor: pointer !important;
+  border-color: #2563eb !important;
+}
+
+.consent-input:checked {
+  background-color: #2563eb !important;
+  border-color: #2563eb !important;
+}
+
+.consent-text {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #1e293b;
+  cursor: pointer;
+  flex: 1;
+}
+
+/* Action Buttons Container: Left and Right End with justify-between on All Devices */
+.action-buttons {
+  width: 100%;
+}
+
+.action-buttons app-button {
+  display: inline-block;
+}
+
+@media (max-width: 576px) {
+  .action-buttons ::ng-deep .btn {
+    padding: 0 10px !important;
+    font-size: 0.78rem !important;
+    height: 38px !important;
+    letter-spacing: -0.2px;
+  }
+}
+
+@media (max-width: 360px) {
+  .action-buttons ::ng-deep .btn {
+    padding: 0 6px !important;
+    font-size: 0.72rem !important;
+    height: 36px !important;
+  }
 }

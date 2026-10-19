@@ -1,4 +1,4 @@
-<div class="management-container p-3 p-md-4 position-relative">
+<div class="management-container p-3 p-md-4 position-relative" [class.success-view-active]="currentStep === 5">
   <!-- Decorative background wrapper to prevent overflow -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -12,550 +12,650 @@
     </div>
   </div>
 
-  <div class="mx-auto position-relative z-1" style="max-width: 800px; margin-top: 2rem;">
+  <div class="position-relative z-1 w-100"
+    [ngClass]="currentStep === 5 ? 'success-step-wrapper' : 'form-step-wrapper mx-auto'">
 
-    @if (currentStep < 5) { <h2 class="fs-3 fw-bold text-dark mb-1">
-      @if (role === 'client') { Client Profile } @else { Freelancer Profile }
+    @if (currentStep < 5) { <div class="text-center text-sm-start mb-4">
+      <h2 class="fs-3 fw-bold text-dark mb-1">
+        @if (role === 'client') { Client Profile } @else { Freelancer Profile }
       </h2>
-      <p class="text-muted mb-5" style="font-size: 0.85rem;">Complete your profile to access your account.</p>
+      <p class="text-muted mb-0" style="font-size: 0.85rem;">Complete your profile to access your account.</p>
+  </div>
 
-      <!-- Stepper Navigation -->
-      <div class="mb-5 px-3">
-        <app-timeline mode="default" [steps]="timelineSteps"
-          (stepClicked)="onTimelineStepClicked($event)"></app-timeline>
+  <!-- Stepper Navigation -->
+  <div class="mb-4 mb-md-5 px-0 px-md-2">
+    <app-timeline mode="default" [steps]="timelineSteps" (stepClicked)="onTimelineStepClicked($event)"></app-timeline>
+  </div>
+
+  <!-- Stepper Form Content -->
+  <form class="glass-card position-relative z-1 p-3 p-sm-4 p-md-5 mb-5" [formGroup]="profileForm">
+
+    <!-- ========================================== -->
+    <!-- STEP 1: Basic Information                 -->
+    <!-- ========================================== -->
+    @if (currentStep === 1) {
+    <div class="step-header mb-4 pb-2 border-bottom">
+      <h3 class="fs-5 fw-bold text-dark mb-1">Basic Information</h3>
+      <p class="text-muted mb-0" style="font-size: 0.8rem;">Let's start with your fundamental personal details</p>
+    </div>
+
+    <div class="row g-4 align-items-start" formGroupName="basicInformation">
+      <div class="col-12 col-md-4 col-lg-3 text-center">
+        <div class="d-flex flex-column align-items-center gap-2">
+          <div class="position-relative profile-upload-container">
+            @if (profileForm.get('basicInformation.profilePhoto')?.value) {
+            <app-file-preview mode="profile" [previewUrl]="profileForm.get('basicInformation.profilePhoto')?.value"
+              (editClicked)="onEditPhoto()"></app-file-preview>
+            } @else {
+            <app-file-upload mode="avatar"
+              [uploadBucket]="role === 'client' ? UploadBucket.ClientData : UploadBucket.FreelancerData"
+              [uploadSection]="UploadSection.ProfilePhoto" [replaceExisting]="true" [previewUrl]="previewUrl"
+              (fileSelected)="onPhotoSelected($event)" (uploadComplete)="onUploadComplete($event)"
+              (uploadError)="onUploadError($event)">
+            </app-file-upload>
+            }
+          </div>
+          <span class="text-muted small mt-1" style="font-size: 0.75rem;">Profile Photo</span>
+        </div>
       </div>
-      }
 
-      <!-- Stepper Form Content -->
-      <form class="glass-card position-relative z-1 p-4 p-md-5 mb-5" [formGroup]="profileForm">
-
-        <!-- STEP 1: Basic Information -->
-        @if (currentStep === 1) {
-        <h3 class="fs-6 fw-bold text-dark mb-1">Basic information</h3>
-        <p class="text-muted mb-4" style="font-size: 0.75rem;">Let's start with your basic details</p>
-
-        <div class="row g-4" formGroupName="basicInformation">
-          <div class="col-md-3">
-            <div class="d-flex flex-column align-items-center gap-3 mt-2">
-              <div class="position-relative">
-                @if (profileForm.get('basicInformation.profilePhoto')?.value) {
-                <app-file-preview mode="profile" [previewUrl]="profileForm.get('basicInformation.profilePhoto')?.value"
-                  (editClicked)="onEditPhoto()"></app-file-preview>
-                } @else {
-                <app-file-upload mode="avatar"
-                  [uploadBucket]="role === 'client' ? UploadBucket.ClientData : UploadBucket.FreelancerData"
-                  [uploadSection]="UploadSection.ProfilePhoto" [replaceExisting]="true" [previewUrl]="previewUrl"
-                  (fileSelected)="onPhotoSelected($event)" (uploadComplete)="onUploadComplete($event)"
-                  (uploadError)="onUploadError($event)">
-                </app-file-upload>
-                }
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-9">
-            <div class="row g-4">
-              <div class="col-md-6">
-                <app-input-field label="Full Name" [required]="true" type="text" placeholder="Enter your full name"
-                  [value]="profileForm.get('basicInformation.fullName')?.value || ''"
-                  (valueChange)="profileForm.get('basicInformation.fullName')?.setValue($event); profileForm.get('basicInformation.fullName')?.markAsTouched()"
-                  [validation]="getValidationState('fullName')" [errorMessage]="getErrorMessage('fullName')">
-                </app-input-field>
-              </div>
-              <div class="col-md-6">
-                <app-input-field label="Email Address" [required]="true" type="email" placeholder="Enter your email"
-                  [value]="profileForm.get('basicInformation.email')?.value || ''"
-                  (valueChange)="profileForm.get('basicInformation.email')?.setValue($event); profileForm.get('basicInformation.email')?.markAsTouched()"
-                  [validation]="getValidationState('email')" [errorMessage]="getErrorMessage('email')">
-                </app-input-field>
-              </div>
-              <div class="col-md-6">
-                <app-input-field label="Phone Number" [required]="true" type="text" placeholder="Enter phone number"
-                  [value]="profileForm.get('basicInformation.phoneNumber')?.value || ''"
-                  (valueChange)="profileForm.get('basicInformation.phoneNumber')?.setValue($event); profileForm.get('basicInformation.phoneNumber')?.markAsTouched()"
-                  [validation]="getValidationState('phoneNumber')" [errorMessage]="getErrorMessage('phoneNumber')">
-                </app-input-field>
-              </div>
-              <div class="col-md-6">
-                <app-input-field label="Gender" [required]="true" type="select" placeholder="Select gender" [options]="genderOptions"
-                  [value]="profileForm.get('basicInformation.gender')?.value || ''"
-                  (valueChange)="profileForm.get('basicInformation.gender')?.setValue($event); profileForm.get('basicInformation.gender')?.markAsTouched()"
-                  [validation]="getValidationState('gender')" [errorMessage]="getErrorMessage('gender')">
-                </app-input-field>
-              </div>
-              <div class="col-12">
-                <app-input-field label="Short Bio" [required]="true" type="textarea" placeholder="Tell us a bit about yourself"
-                  [value]="profileForm.get('basicInformation.shortBio')?.value || ''"
-                  (valueChange)="profileForm.get('basicInformation.shortBio')?.setValue($event); profileForm.get('basicInformation.shortBio')?.markAsTouched()"
-                  [validation]="getValidationState('shortBio')" [errorMessage]="getErrorMessage('shortBio')">
-                </app-input-field>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="d-flex justify-content-end mt-4 pt-3 border-top">
-          <app-button type="button" variant="primary" class="px-4" (clicked)="nextStep()" label="Next"></app-button>
-        </div>
-        }
-
-        <!-- STEP 2: Professional / Company Information -->
-        @if (currentStep === 2) {
-
-        @if (role === 'client') {
-        <h3 class="fs-6 fw-bold text-dark mb-1">Company Information</h3>
-        <p class="text-muted mb-4" style="font-size: 0.75rem;">Tell us about your company details</p>
-
-        <div class="row g-4">
-          <div class="col-md-4">
-            <app-input-field label="Company Type" [required]="true" type="select" placeholder="Select company type"
-              [options]="companyTypeOptions" [value]="profileForm.get('professionalDetails.companyType')?.value || ''"
-              (valueChange)="profileForm.get('professionalDetails.companyType')?.setValue($event); profileForm.get('professionalDetails.companyType')?.markAsTouched()"
-              [validation]="getValidationState('companyType', 'professionalDetails')"
-              [errorMessage]="getErrorMessage('companyType', 'professionalDetails')">
+      <div class="col-12 col-md-8 col-lg-9">
+        <div class="row g-3 g-md-4">
+          <div class="col-12 col-sm-6">
+            <app-input-field label="Full Name" [required]="true" type="text" placeholder="Enter your full name"
+              [value]="profileForm.get('basicInformation.fullName')?.value || ''"
+              (valueChange)="profileForm.get('basicInformation.fullName')?.setValue($event); profileForm.get('basicInformation.fullName')?.markAsTouched()"
+              [validation]="getValidationState('fullName')" [errorMessage]="getErrorMessage('fullName')">
             </app-input-field>
           </div>
-          <div class="col-md-4">
-            <app-input-field label="Website" [required]="true" type="text" placeholder="https://"
-              [value]="profileForm.get('professionalDetails.website')?.value || ''"
-              (valueChange)="profileForm.get('professionalDetails.website')?.setValue($event); profileForm.get('professionalDetails.website')?.markAsTouched()"
-              [validation]="getValidationState('website', 'professionalDetails')"
-              [errorMessage]="getErrorMessage('website', 'professionalDetails')">
+          <div class="col-12 col-sm-6">
+            <app-input-field label="Email Address" [required]="true" type="email" placeholder="Enter your email"
+              [value]="profileForm.get('basicInformation.email')?.value || ''"
+              (valueChange)="profileForm.get('basicInformation.email')?.setValue($event); profileForm.get('basicInformation.email')?.markAsTouched()"
+              [validation]="getValidationState('email')" [errorMessage]="getErrorMessage('email')">
             </app-input-field>
           </div>
-          <div class="col-md-4">
-            <app-input-field label="Industry" [required]="true" type="select" placeholder="Select industry" [options]="industryOptions"
-              [value]="profileForm.get('professionalDetails.industry')?.value || ''"
-              (valueChange)="profileForm.get('professionalDetails.industry')?.setValue($event); profileForm.get('professionalDetails.industry')?.markAsTouched()"
-              [validation]="getValidationState('industry', 'professionalDetails')"
-              [errorMessage]="getErrorMessage('industry', 'professionalDetails')">
+          <div class="col-12 col-sm-6">
+            <app-input-field label="Phone Number" [required]="true" type="text" placeholder="Enter phone number"
+              [value]="profileForm.get('basicInformation.phoneNumber')?.value || ''"
+              (valueChange)="profileForm.get('basicInformation.phoneNumber')?.setValue($event); profileForm.get('basicInformation.phoneNumber')?.markAsTouched()"
+              [validation]="getValidationState('phoneNumber')" [errorMessage]="getErrorMessage('phoneNumber')">
+            </app-input-field>
+          </div>
+          <div class="col-12 col-sm-6">
+            <app-input-field label="Gender" [required]="true" type="select" placeholder="Select gender"
+              [options]="genderOptions" [value]="profileForm.get('basicInformation.gender')?.value || ''"
+              (valueChange)="profileForm.get('basicInformation.gender')?.setValue($event); profileForm.get('basicInformation.gender')?.markAsTouched()"
+              [validation]="getValidationState('gender')" [errorMessage]="getErrorMessage('gender')">
             </app-input-field>
           </div>
           <div class="col-12">
-            <app-input-field label="Company Description" [required]="true" type="textarea" placeholder="Describe your company"
-              [value]="profileForm.get('professionalDetails.companyDescription')?.value || ''"
-              (valueChange)="profileForm.get('professionalDetails.companyDescription')?.setValue($event); profileForm.get('professionalDetails.companyDescription')?.markAsTouched()"
-              [validation]="getValidationState('companyDescription', 'professionalDetails')"
-              [errorMessage]="getErrorMessage('companyDescription', 'professionalDetails')">
+            <app-input-field label="Short Bio" [required]="true" type="textarea"
+              placeholder="Tell us a bit about yourself"
+              [value]="profileForm.get('basicInformation.shortBio')?.value || ''"
+              (valueChange)="profileForm.get('basicInformation.shortBio')?.setValue($event); profileForm.get('basicInformation.shortBio')?.markAsTouched()"
+              [validation]="getValidationState('shortBio')" [errorMessage]="getErrorMessage('shortBio')">
             </app-input-field>
           </div>
         </div>
+      </div>
+    </div>
 
-        <!-- Location -->
-        <div class="form-section" formGroupName="location">
+    <div class="step-action-buttons d-flex justify-content-between align-items-center w-100 mt-4 pt-3 border-top">
+      <div class="btn-spacer"></div>
+      <app-button type="button" variant="primary" class="px-4" (clicked)="nextStep()" label="Next"></app-button>
+    </div>
+    }
 
-          <h5 class="section-title">Location</h5>
+    <!-- ========================================== -->
+    <!-- STEP 2: Professional / Company Details    -->
+    <!-- ========================================== -->
+    @if (currentStep === 2) {
+    @if (role === 'client') {
+    <div class="step-header mb-4 pb-2 border-bottom">
+      <h3 class="fs-5 fw-bold text-dark mb-1">Company Information</h3>
+      <p class="text-muted mb-0" style="font-size: 0.8rem;">Tell us about your organization and business domain</p>
+    </div>
 
-          <div class="row g-3">
+    <div class="row g-3 g-md-4">
+      <div class="col-12 col-md-4">
+        <app-input-field label="Company Type" [required]="true" type="select" placeholder="Select company type"
+          [options]="companyTypeOptions" [value]="profileForm.get('professionalDetails.companyType')?.value || ''"
+          (valueChange)="profileForm.get('professionalDetails.companyType')?.setValue($event); profileForm.get('professionalDetails.companyType')?.markAsTouched()"
+          [validation]="getValidationState('companyType', 'professionalDetails')"
+          [errorMessage]="getErrorMessage('companyType', 'professionalDetails')">
+        </app-input-field>
+      </div>
+      <div class="col-12 col-md-4">
+        <app-input-field label="Website" [required]="true" type="text" placeholder="https://"
+          [value]="profileForm.get('professionalDetails.website')?.value || ''"
+          (valueChange)="profileForm.get('professionalDetails.website')?.setValue($event); profileForm.get('professionalDetails.website')?.markAsTouched()"
+          [validation]="getValidationState('website', 'professionalDetails')"
+          [errorMessage]="getErrorMessage('website', 'professionalDetails')">
+        </app-input-field>
+      </div>
+      <div class="col-12 col-md-4">
+        <app-input-field label="Industry" [required]="true" type="select" placeholder="Select industry"
+          [options]="industryOptions" [value]="profileForm.get('professionalDetails.industry')?.value || ''"
+          (valueChange)="profileForm.get('professionalDetails.industry')?.setValue($event); profileForm.get('professionalDetails.industry')?.markAsTouched()"
+          [validation]="getValidationState('industry', 'professionalDetails')"
+          [errorMessage]="getErrorMessage('industry', 'professionalDetails')">
+        </app-input-field>
+      </div>
+      <div class="col-12">
+        <app-input-field label="Company Description" [required]="true" type="textarea"
+          placeholder="Describe your company"
+          [value]="profileForm.get('professionalDetails.companyDescription')?.value || ''"
+          (valueChange)="profileForm.get('professionalDetails.companyDescription')?.setValue($event); profileForm.get('professionalDetails.companyDescription')?.markAsTouched()"
+          [validation]="getValidationState('companyDescription', 'professionalDetails')"
+          [errorMessage]="getErrorMessage('companyDescription', 'professionalDetails')">
+        </app-input-field>
+      </div>
+    </div>
 
-            <!-- Country -->
-            <div class="col-md-12">
-              <app-input-field label="Country" type="select" placeholder="Select country" formControlName="country"
-                [options]="countryOptions">
-              </app-input-field>
-            </div>
+    <!-- Clear Section Spacing Divider -->
+    <div class="profile-section-divider my-4 pt-2"></div>
 
-            <!-- State -->
-            <div class="col-md-12">
-              <app-input-field label="State" type="select" placeholder="Select state" formControlName="state"
-                [options]="stateOptions">
-              </app-input-field>
-            </div>
-
-            <!-- City -->
-            <div class="col-md-12">
-              <app-input-field label="City" type="select" placeholder="Select city" formControlName="city"
-                [options]="cityOptions">
-              </app-input-field>
-            </div>
-
-          </div>
-
+    <!-- Location Section -->
+    <div class="form-section location-section" formGroupName="location">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div
+          class="section-icon-badge rounded-circle d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary">
+          <i class="bi bi-geo-alt"></i>
         </div>
-        } @else {
-        <h3 class="fs-6 fw-bold text-dark mb-1">Professional Information</h3>
-        <p class="text-muted mb-4" style="font-size: 0.75rem;">Tell us about your Professional details</p>
-
-        <div class="row g-4">
-          <div class="col-12">
-            <app-input-field label="Professional Headline" [required]="true" type="text" placeholder="e.g. Senior Frontend Developer"
-              [value]="profileForm.get('professionalDetails.professionalHeadline')?.value || ''"
-              (valueChange)="profileForm.get('professionalDetails.professionalHeadline')?.setValue($event); profileForm.get('professionalDetails.professionalHeadline')?.markAsTouched()"
-              [validation]="getValidationState('professionalHeadline', 'professionalDetails')"
-              [errorMessage]="getErrorMessage('professionalHeadline', 'professionalDetails')">
-            </app-input-field>
-          </div>
-          <div class="col-12">
-            <app-input-field label="Skills (Comma separated)" [required]="true" type="text" placeholder="Comma separated skills"
-              [value]="profileForm.get('professionalDetails.skills')?.value?.join(', ') || ''"
-              (valueChange)="updateSkills($event); profileForm.get('professionalDetails.skills')?.markAsTouched()"
-              [validation]="getValidationState('skills', 'professionalDetails')"
-              [errorMessage]="getErrorMessage('skills', 'professionalDetails')">
-            </app-input-field>
-          </div>
-          <div class="col-12">
-            <app-input-field label="Technologies (Comma separated)" [required]="true" type="text"
-              placeholder="Comma separated technologies"
-              [value]="profileForm.get('professionalDetails.technologies')?.value?.join(', ') || ''"
-              (valueChange)="updateTechnologies($event); profileForm.get('professionalDetails.technologies')?.markAsTouched()"
-              [validation]="getValidationState('technologies', 'professionalDetails')"
-              [errorMessage]="getErrorMessage('technologies', 'professionalDetails')">
-            </app-input-field>
-          </div>
-          <div class="col-12">
-            <app-input-field label="Availability" [required]="true" type="select" placeholder="Select availability"
-              [options]="availabilityOptions" [value]="profileForm.get('professionalDetails.availability')?.value || ''"
-              (valueChange)="profileForm.get('professionalDetails.availability')?.setValue($event); profileForm.get('professionalDetails.availability')?.markAsTouched()"
-              [validation]="getValidationState('availability', 'professionalDetails')"
-              [errorMessage]="getErrorMessage('availability', 'professionalDetails')">
-            </app-input-field>
-          </div>
-        </div>
-
-        <!-- Location -->
-        <div class="form-section" formGroupName="location">
-
-          <h5 class="section-title">Location</h5>
-
-          <div class="row g-3">
-
-            <!-- Country -->
-            <div class="col-md-12">
-              <app-input-field label="Country" type="select" placeholder="Select country" formControlName="country"
-                [options]="countryOptions">
-              </app-input-field>
-            </div>
-
-            <!-- State -->
-            <div class="col-md-12">
-              <app-input-field label="State" type="select" placeholder="Select state" formControlName="state"
-                [options]="stateOptions">
-              </app-input-field>
-            </div>
-
-            <!-- City -->
-            <div class="col-md-12">
-              <app-input-field label="City" type="select" placeholder="Select city" formControlName="city"
-                [options]="cityOptions">
-              </app-input-field>
-            </div>
-
-          </div>
-
-        </div>
-        }
-
-        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
-          <app-button type="button" variant="outline-primary" class="px-4" (clicked)="prevStep()"
-            label="Back"></app-button>
-          <app-button type="button" variant="primary" class="px-4" (clicked)="nextStep()" label="Next"></app-button>
-        </div>
-        }
-
-        <!-- STEP 3: Social Media and Languages -->
-        @if (currentStep === 3) {
-        <h3 class="fs-6 fw-bold text-dark mb-1">Social media and languages</h3>
-        <p class="text-muted mb-4" style="font-size: 0.75rem;">Tell us about your social profile and languages</p>
-
-        <div class="mb-4">
-          <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Social Media profile</h4>
-          <div class="d-flex align-items-start gap-3 mb-3">
-            <div class="flex-grow-1">
-              <app-input-field label="Select media" [required]="true" type="select" placeholder="Select platform"
-                [options]="socialPlatformOptions" [value]="newSocialPlatform"
-                (valueChange)="newSocialPlatform = $event">
-              </app-input-field>
-            </div>
-            <div class="flex-grow-1">
-              <app-input-field label="Platform link" [required]="true" type="text" placeholder="https://" [value]="newSocialUrl"
-                (valueChange)="newSocialUrl = $event">
-              </app-input-field>
-            </div>
-            <div style="margin-top: 30px;">
-              <app-button type="button" variant="primary" class="px-4" (clicked)="addSocial()" label="Add"></app-button>
-            </div>
-          </div>
-
-          <div class="d-flex flex-column gap-2 mb-4" formArrayName="socialLinks">
-            @for (social of socialLinks.controls; track $index) {
-            <div class="d-flex align-items-center gap-3 p-2 border rounded-3 bg-light bg-opacity-50">
-              <div
-                class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center"
-                style="width: 32px; height: 32px;"><i class="bi bi-link"></i></div>
-              <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">{{ social.value.platform }}: {{
-                social.value.profileUrl }}</span>
-              <app-button type="button" variant="link" class="text-danger p-0 border-0 text-decoration-none"
-                (clicked)="removeSocial($index)" label=""><i class="bi bi-x-circle"></i></app-button>
-            </div>
-            }
-          </div>
-        </div>
-
         <div>
-          <h4 class="fw-semibold text-dark mb-3" style="font-size: 0.8rem;">Languages</h4>
-          <div class="d-flex align-items-start gap-3 mb-3">
-            <div class="flex-grow-1">
-              <app-input-field label="Language" [required]="true" type="select" placeholder="Select language"
-                [options]="languageOptions" [value]="newLanguage" (valueChange)="newLanguage = $event">
-              </app-input-field>
-            </div>
-            <div class="flex-grow-1">
-              <app-input-field label="Proficiency" [required]="true" type="select" placeholder="Select proficiency"
-                [options]="languageProficiencyOptions" [value]="newProficiency" (valueChange)="newProficiency = $event">
-              </app-input-field>
-            </div>
-            <div style="margin-top: 30px;">
-              <app-button type="button" variant="primary" class="px-4" (clicked)="addLanguage()"
-                label="Add"></app-button>
-            </div>
+          <h4 class="fs-6 fw-bold text-dark mb-0">Company Location</h4>
+          <span class="text-muted" style="font-size: 0.75rem;">Your business headquarters address</span>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-12 col-md-4">
+          <app-input-field label="Country" type="select" placeholder="Select country" formControlName="country"
+            [options]="countryOptions">
+          </app-input-field>
+        </div>
+        <div class="col-12 col-md-4">
+          <app-input-field label="State" type="select" placeholder="Select state" formControlName="state"
+            [options]="stateOptions">
+          </app-input-field>
+        </div>
+        <div class="col-12 col-md-4">
+          <app-input-field label="City" type="select" placeholder="Select city" formControlName="city"
+            [options]="cityOptions">
+          </app-input-field>
+        </div>
+      </div>
+    </div>
+    } @else {
+    <div class="step-header mb-4 pb-2 border-bottom">
+      <h3 class="fs-5 fw-bold text-dark mb-1">Professional Information</h3>
+      <p class="text-muted mb-0" style="font-size: 0.8rem;">Highlight your expertise, skills, and work availability</p>
+    </div>
+
+    <div class="row g-3 g-md-4">
+      <div class="col-12">
+        <app-input-field label="Professional Headline" [required]="true" type="text"
+          placeholder="e.g. Senior Frontend Developer"
+          [value]="profileForm.get('professionalDetails.professionalHeadline')?.value || ''"
+          (valueChange)="profileForm.get('professionalDetails.professionalHeadline')?.setValue($event); profileForm.get('professionalDetails.professionalHeadline')?.markAsTouched()"
+          [validation]="getValidationState('professionalHeadline', 'professionalDetails')"
+          [errorMessage]="getErrorMessage('professionalHeadline', 'professionalDetails')">
+        </app-input-field>
+      </div>
+      <div class="col-12">
+        <app-input-field label="Skills (Comma separated)" [required]="true" type="text"
+          placeholder="e.g. Angular, TypeScript, UI/UX"
+          [value]="profileForm.get('professionalDetails.skills')?.value?.join(', ') || ''"
+          (valueChange)="updateSkills($event); profileForm.get('professionalDetails.skills')?.markAsTouched()"
+          [validation]="getValidationState('skills', 'professionalDetails')"
+          [errorMessage]="getErrorMessage('skills', 'professionalDetails')">
+        </app-input-field>
+      </div>
+      <div class="col-12">
+        <app-input-field label="Technologies (Comma separated)" [required]="true" type="text"
+          placeholder="e.g. Node.js, Express, MongoDB, Bootstrap"
+          [value]="profileForm.get('professionalDetails.technologies')?.value?.join(', ') || ''"
+          (valueChange)="updateTechnologies($event); profileForm.get('professionalDetails.technologies')?.markAsTouched()"
+          [validation]="getValidationState('technologies', 'professionalDetails')"
+          [errorMessage]="getErrorMessage('technologies', 'professionalDetails')">
+        </app-input-field>
+      </div>
+      <div class="col-12 col-md-6">
+        <app-input-field label="Availability" [required]="true" type="select" placeholder="Select availability"
+          [options]="availabilityOptions" [value]="profileForm.get('professionalDetails.availability')?.value || ''"
+          (valueChange)="profileForm.get('professionalDetails.availability')?.setValue($event); profileForm.get('professionalDetails.availability')?.markAsTouched()"
+          [validation]="getValidationState('availability', 'professionalDetails')"
+          [errorMessage]="getErrorMessage('availability', 'professionalDetails')">
+        </app-input-field>
+      </div>
+    </div>
+
+    <!-- Clear Section Spacing Divider -->
+    <div class="profile-section-divider my-4 pt-2"></div>
+
+    <!-- Location Section -->
+    <div class="form-section location-section" formGroupName="location">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div
+          class="section-icon-badge rounded-circle d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary">
+          <i class="bi bi-geo-alt"></i>
+        </div>
+        <div>
+          <h4 class="fs-6 fw-bold text-dark mb-0">Location</h4>
+          <span class="text-muted" style="font-size: 0.75rem;">Where you reside or operate from</span>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-12 col-md-4">
+          <app-input-field label="Country" type="select" placeholder="Select country" formControlName="country"
+            [options]="countryOptions">
+          </app-input-field>
+        </div>
+        <div class="col-12 col-md-4">
+          <app-input-field label="State" type="select" placeholder="Select state" formControlName="state"
+            [options]="stateOptions">
+          </app-input-field>
+        </div>
+        <div class="col-12 col-md-4">
+          <app-input-field label="City" type="select" placeholder="Select city" formControlName="city"
+            [options]="cityOptions">
+          </app-input-field>
+        </div>
+      </div>
+    </div>
+    }
+
+    <div class="step-action-buttons d-flex justify-content-between align-items-center w-100 mt-4 pt-3 border-top">
+      <app-button type="button" variant="outline-primary" class="px-4" (clicked)="prevStep()" label="Back"></app-button>
+      <app-button type="button" variant="primary" class="px-4" (clicked)="nextStep()" label="Next"></app-button>
+    </div>
+    }
+
+    <!-- ========================================== -->
+    <!-- STEP 3: Social Media and Languages        -->
+    <!-- ========================================== -->
+    @if (currentStep === 3) {
+    <div class="step-header mb-4 pb-2 border-bottom">
+      <h3 class="fs-5 fw-bold text-dark mb-1">Social Media & Languages</h3>
+      <p class="text-muted mb-0" style="font-size: 0.8rem;">Add your online portfolio links and language proficiencies
+      </p>
+    </div>
+
+    <!-- Social Media Section -->
+    <div class="profile-section mb-4">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div
+          class="section-icon-badge rounded-circle d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary">
+          <i class="bi bi-share"></i>
+        </div>
+        <div>
+          <h4 class="fs-6 fw-bold text-dark mb-0">Social Media Profiles</h4>
+          <span class="text-muted" style="font-size: 0.75rem;">Connect your GitHub, LinkedIn, Portfolio, and more</span>
+        </div>
+      </div>
+
+      <div class="row g-3 align-items-end mb-3">
+        <div class="col-12 col-sm-5">
+          <app-input-field label="Select Media Platform" [required]="true" type="select" placeholder="Select platform"
+            [options]="socialPlatformOptions" [value]="newSocialPlatform" (valueChange)="newSocialPlatform = $event">
+          </app-input-field>
+        </div>
+        <div class="col-12 col-sm-5">
+          <app-input-field label="Platform Link" [required]="true" type="text" placeholder="https://"
+            [value]="newSocialUrl" (valueChange)="newSocialUrl = $event">
+          </app-input-field>
+        </div>
+        <div class="col-12 col-sm-2">
+          <app-button type="button" variant="primary" class="w-100 d-block" (clicked)="addSocial()"
+            label="Add"></app-button>
+        </div>
+      </div>
+
+      <!-- Added Social Media Pills -->
+      <div class="d-flex flex-column gap-2 mb-3" formArrayName="socialLinks">
+        @for (social of socialLinks.controls; track $index) {
+        <div class="d-flex align-items-center gap-3 p-2.5 border rounded-3 bg-light bg-opacity-50 social-item-pill">
+          <div class="social-icon-wrapper rounded-circle d-flex justify-content-center align-items-center flex-shrink-0"
+            [ngClass]="getSocialColorClass(social.value.platform)">
+            <i [class]="getSocialIcon(social.value.platform)"></i>
+          </div>
+          <div class="d-flex flex-column flex-grow-1 min-w-0">
+            <span class="fw-semibold text-dark text-truncate" style="font-size: 0.8rem;">{{
+              getSocialPlatformName(social.value.platform) }}</span>
+            <span class="text-muted text-truncate" style="font-size: 0.72rem;">{{ social.value.profileUrl }}</span>
+          </div>
+          <app-button type="button" variant="link" class="text-danger p-0 border-0 text-decoration-none flex-shrink-0"
+            (clicked)="removeSocial($index)" label=""><i class="bi bi-x-circle fs-6"></i></app-button>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Clear Section Spacing Divider -->
+    <div class="profile-section-divider my-4 pt-2"></div>
+
+    <!-- Languages Section -->
+    <div class="profile-section mb-4">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div
+          class="section-icon-badge rounded-circle d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary">
+          <i class="bi bi-translate"></i>
+        </div>
+        <div>
+          <h4 class="fs-6 fw-bold text-dark mb-0">Languages</h4>
+          <span class="text-muted" style="font-size: 0.75rem;">Languages you are proficient in</span>
+        </div>
+      </div>
+
+      <div class="row g-3 align-items-end mb-3">
+        <div class="col-12 col-sm-5">
+          <app-input-field label="Language" [required]="true" type="select" placeholder="Select language"
+            [options]="languageOptions" [value]="newLanguage" (valueChange)="newLanguage = $event">
+          </app-input-field>
+        </div>
+        <div class="col-12 col-sm-5">
+          <app-input-field label="Proficiency" [required]="true" type="select" placeholder="Select proficiency"
+            [options]="languageProficiencyOptions" [value]="newProficiency" (valueChange)="newProficiency = $event">
+          </app-input-field>
+        </div>
+        <div class="col-12 col-sm-2">
+          <app-button type="button" variant="primary" class="w-100 d-block" (clicked)="addLanguage()"
+            label="Add"></app-button>
+        </div>
+      </div>
+
+      <!-- Added Languages Pills -->
+      <div class="d-flex flex-column gap-2" formArrayName="languages">
+        @for (lang of languages.controls; track $index) {
+        <div class="d-flex align-items-center gap-3 p-2.5 border rounded-3 bg-light bg-opacity-50 language-item-pill">
+          <div
+            class="social-icon-wrapper rounded-circle d-flex justify-content-center align-items-center flex-shrink-0 bg-info bg-opacity-10 text-info">
+            <i class="bi bi-globe"></i>
+          </div>
+          <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">
+            {{ lang.value.language }} &mdash; <span class="badge bg-light text-secondary border fw-medium ms-1"
+              style="font-size: 0.75rem;">{{ lang.value.proficiency }}</span>
+          </span>
+          <app-button type="button" variant="link" class="text-danger p-0 border-0 text-decoration-none flex-shrink-0"
+            (clicked)="removeLanguage($index)" label=""><i class="bi bi-x-circle fs-6"></i></app-button>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="step-action-buttons d-flex justify-content-between align-items-center w-100 mt-4 pt-3 border-top">
+      <app-button type="button" variant="outline-primary" class="px-4" (clicked)="prevStep()" label="Back"></app-button>
+      <app-button type="button" variant="primary" class="px-4" (clicked)="nextStep()" label="Next"></app-button>
+    </div>
+    }
+
+    <!-- ========================================== -->
+    <!-- STEP 4: Review                             -->
+    <!-- ========================================== -->
+    @if (currentStep === 4) {
+    <div class="step-header mb-4 pb-2 border-bottom">
+      <h3 class="fs-5 fw-bold text-dark mb-1">Review Your Profile</h3>
+      <p class="text-muted mb-0" style="font-size: 0.8rem;">Please review all details before submitting</p>
+    </div>
+
+    <div class="d-flex flex-column gap-4 mb-4">
+
+      <!-- Card 1: Basic Info Review -->
+      <div class="review-card border rounded-4 p-3 p-sm-4 bg-light bg-opacity-50">
+        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-person-circle text-primary fs-5"></i>
+            <h4 class="fw-bold text-dark mb-0 fs-6">Basic Information</h4>
+          </div>
+          <app-button variant="link" class="p-0 text-primary fw-semibold text-decoration-none"
+            (clicked)="currentStep = 1" label="Edit"></app-button>
+        </div>
+
+        <div
+          class="review-basic-wrapper d-flex flex-column flex-sm-row gap-3 gap-sm-4 align-items-center align-items-sm-start">
+          <div class="text-center flex-shrink-0">
+            <img
+              [src]="profileForm.get('basicInformation.profilePhoto')?.value || 'https://i.pravatar.cc/150?u=a042581f4e29026704a'"
+              class="review-avatar-img rounded-circle object-fit-cover shadow-sm" alt="Profile Avatar">
           </div>
 
-          <div class="d-flex flex-column gap-2" formArrayName="languages">
-            @for (lang of languages.controls; track $index) {
-            <div class="d-flex align-items-center gap-3 p-2 border rounded-3 bg-light bg-opacity-50">
-              <span class="fw-semibold text-dark flex-grow-1" style="font-size: 0.8rem;">{{ lang.value.language }} -
-                <span class="text-muted fw-normal">{{ lang.value.proficiency }}</span></span>
-              <app-button type="button" variant="link" class="text-danger p-0 border-0 text-decoration-none"
-                (clicked)="removeLanguage($index)" label=""><i class="bi bi-x-circle"></i></app-button>
+          <div class="row g-3 flex-grow-1 w-100">
+            <div class="col-12 col-sm-6">
+              <span class="d-block text-muted" style="font-size: 0.7rem;">Full Name</span>
+              <span class="fw-semibold text-dark" style="font-size: 0.85rem;">{{
+                profileForm.value.basicInformation?.fullName || 'Not provided' }}</span>
+            </div>
+            <div class="col-12 col-sm-6">
+              <span class="d-block text-muted" style="font-size: 0.7rem;">Email Address</span>
+              <span class="fw-semibold text-dark text-break" style="font-size: 0.85rem;">{{
+                profileForm.value.basicInformation?.email || 'Not provided' }}</span>
+            </div>
+            <div class="col-12 col-sm-6">
+              <span class="d-block text-muted" style="font-size: 0.7rem;">Phone Number</span>
+              <span class="fw-semibold text-dark" style="font-size: 0.85rem;">{{
+                profileForm.value.basicInformation?.phoneNumber || 'Not provided' }}</span>
+            </div>
+            <div class="col-12 col-sm-6">
+              <span class="d-block text-muted" style="font-size: 0.7rem;">Gender</span>
+              <span class="fw-semibold text-dark text-capitalize" style="font-size: 0.85rem;">{{
+                profileForm.value.basicInformation?.gender || 'Not provided' }}</span>
+            </div>
+            <div class="col-12">
+              <span class="d-block text-muted" style="font-size: 0.7rem;">Short Bio</span>
+              <span class="fw-semibold text-dark" style="font-size: 0.85rem; line-height: 1.5;">{{
+                profileForm.value.basicInformation?.shortBio || 'Not provided' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Professional / Company Info Review -->
+      <div class="review-card border rounded-4 p-3 p-sm-4 bg-light bg-opacity-50">
+        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-briefcase text-primary fs-5"></i>
+            <h4 class="fw-bold text-dark mb-0 fs-6">
+              @if (role === 'client') { Company Information } @else { Professional Information }
+            </h4>
+          </div>
+          <app-button variant="link" class="p-0 text-primary fw-semibold text-decoration-none"
+            (clicked)="currentStep = 2" label="Edit"></app-button>
+        </div>
+
+        <div class="row g-3">
+          @if (role === 'client') {
+          <div class="col-12 col-sm-4">
+            <span class="d-block text-muted" style="font-size: 0.7rem;">Company Type</span>
+            <span class="fw-semibold text-dark text-capitalize" style="font-size: 0.85rem;">{{
+              profileForm.value.professionalDetails?.companyType || 'Not provided' }}</span>
+          </div>
+          <div class="col-12 col-sm-4">
+            <span class="d-block text-muted" style="font-size: 0.7rem;">Website</span>
+            <a [href]="profileForm.value.professionalDetails?.website" target="_blank"
+              class="fw-semibold text-primary text-break text-decoration-none" style="font-size: 0.85rem;">{{
+              profileForm.value.professionalDetails?.website || 'Not provided' }}</a>
+          </div>
+          <div class="col-12 col-sm-4">
+            <span class="d-block text-muted" style="font-size: 0.7rem;">Industry</span>
+            <span class="fw-semibold text-dark text-capitalize" style="font-size: 0.85rem;">{{
+              profileForm.value.professionalDetails?.industry || 'Not provided' }}</span>
+          </div>
+          <div class="col-12">
+            <span class="d-block text-muted" style="font-size: 0.7rem;">Location</span>
+            <span class="fw-semibold text-dark" style="font-size: 0.85rem;">
+              <i class="bi bi-geo-alt me-1 text-primary"></i>
+              {{ profileForm.value.location?.city || '' }}, {{ profileForm.value.location?.state || '' }}, {{
+              profileForm.value.location?.country || '' }}
+            </span>
+          </div>
+          <div class="col-12">
+            <span class="d-block text-muted" style="font-size: 0.7rem;">Company Description</span>
+            <span class="fw-semibold text-dark" style="font-size: 0.85rem; line-height: 1.5;">{{
+              profileForm.value.professionalDetails?.companyDescription || 'Not provided' }}</span>
+          </div>
+          } @else {
+          <div class="col-12">
+            <span class="d-block text-muted" style="font-size: 0.7rem;">Professional Headline</span>
+            <span class="fw-semibold text-dark" style="font-size: 0.85rem;">{{
+              profileForm.value.professionalDetails?.professionalHeadline || 'Not provided' }}</span>
+          </div>
+          <div class="col-12">
+            <span class="d-block text-muted" style="font-size: 0.7rem;">Skills</span>
+            <div class="d-flex gap-2 flex-wrap mt-1">
+              @for (skill of profileForm.value.professionalDetails?.skills; track $index) {
+              <span
+                class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2.5 py-1 fw-semibold"
+                style="font-size: 0.75rem;">{{ skill }}</span>
+              }
+            </div>
+          </div>
+          <div class="col-12">
+            <span class="d-block text-muted" style="font-size: 0.7rem;">Technologies</span>
+            <div class="d-flex gap-2 flex-wrap mt-1">
+              @for (tech of profileForm.value.professionalDetails?.technologies; track $index) {
+              <span
+                class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded px-2.5 py-1 fw-semibold"
+                style="font-size: 0.75rem;">{{ tech }}</span>
+              }
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <span class="d-block text-muted" style="font-size: 0.7rem;">Availability</span>
+            <span class="fw-semibold text-dark text-capitalize" style="font-size: 0.85rem;">{{
+              profileForm.value.professionalDetails?.availability || 'Not provided' }}</span>
+          </div>
+          <div class="col-12 col-sm-6">
+            <span class="d-block text-muted" style="font-size: 0.7rem;">Location</span>
+            <span class="fw-semibold text-dark" style="font-size: 0.85rem;">
+              <i class="bi bi-geo-alt me-1 text-primary"></i>
+              {{ profileForm.value.location?.city || '' }}, {{ profileForm.value.location?.state || '' }}, {{
+              profileForm.value.location?.country || '' }}
+            </span>
+          </div>
+          }
+        </div>
+      </div>
+
+      <!-- Card 3: Social Media and Languages Review -->
+      <div class="review-card border rounded-4 p-3 p-sm-4 bg-light bg-opacity-50">
+        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-share text-primary fs-5"></i>
+            <h4 class="fw-bold text-dark mb-0 fs-6">Social Media & Languages</h4>
+          </div>
+          <app-button variant="link" class="p-0 text-primary fw-semibold text-decoration-none"
+            (clicked)="currentStep = 3" label="Edit"></app-button>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-12 col-md-6">
+            <span class="d-block text-muted mb-2" style="font-size: 0.75rem; font-weight: 600;">Social Profiles</span>
+            @if (!profileForm.value.socialLinks || profileForm.value.socialLinks.length === 0) {
+            <span class="text-muted small fst-italic">No social links added</span>
+            } @else {
+            <div class="d-flex flex-column gap-2">
+              @for (social of profileForm.value.socialLinks; track $index) {
+              <a [href]="social.profileUrl" target="_blank"
+                class="d-flex align-items-center gap-2 text-decoration-none p-1.5 rounded hover-bg-light transition-all">
+                <div
+                  class="social-icon-wrapper rounded-circle d-flex justify-content-center align-items-center flex-shrink-0"
+                  [ngClass]="getSocialColorClass(social.platform)">
+                  <i [class]="getSocialIcon(social.platform)" style="font-size: 0.85rem;"></i>
+                </div>
+                <div class="d-flex flex-column min-w-0">
+                  <span class="fw-semibold text-dark text-truncate" style="font-size: 0.8rem;">{{
+                    getSocialPlatformName(social.platform) }}</span>
+                  <span class="text-muted text-truncate" style="font-size: 0.72rem;">{{ social.profileUrl }}</span>
+                </div>
+              </a>
+              }
             </div>
             }
           </div>
-        </div>
 
-        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
-          <app-button type="button" variant="outline-primary" class="px-4" (clicked)="prevStep()"
-            label="Back"></app-button>
-          <app-button type="button" variant="primary" class="px-4" (clicked)="nextStep()" label="Next"></app-button>
-        </div>
-        }
-
-        <!-- STEP 4: Review -->
-        @if (currentStep === 4) {
-        <h3 class="fs-6 fw-bold text-dark mb-1">Review your profile</h3>
-        <p class="text-muted mb-4" style="font-size: 0.75rem;">Please review all details before submitting.</p>
-
-        <div class="d-flex flex-column gap-4 mb-4">
-
-          <!-- Basic Info Review -->
-          <div class="border rounded-4 p-4 bg-light bg-opacity-50">
-            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-              <h4 class="fw-bold text-dark mb-0 fs-6">Basic Information</h4>
-              <app-button variant="link" class="p-0 text-primary fw-semibold text-decoration-none"
-                (clicked)="currentStep = 1" label="Edit"></app-button>
-            </div>
-
-            <div class="d-flex gap-4 align-items-start">
-              <img
-                [src]="profileForm.get('basicInformation.profilePhoto')?.value || 'https://i.pravatar.cc/150?u=a042581f4e29026704a'"
-                class="rounded-circle object-fit-cover border border-4 border-white shadow-sm flex-shrink-0" width="80"
-                height="80" alt="Avatar">
-
-              <div class="row g-3 flex-grow-1">
-                <div class="col-md-6">
-                  <span class="d-block text-muted" style="font-size: 0.7rem;">Full Name</span>
-                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">{{
-                    profileForm.value.basicInformation?.fullName || 'Not provided' }}</span>
-                </div>
-                <div class="col-md-6">
-                  <span class="d-block text-muted" style="font-size: 0.7rem;">Email Address</span>
-                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">{{
-                    profileForm.value.basicInformation?.email || 'Not provided' }}</span>
-                </div>
-                <div class="col-md-6">
-                  <span class="d-block text-muted" style="font-size: 0.7rem;">Phone Number</span>
-                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">{{
-                    profileForm.value.basicInformation?.phoneNumber || 'Not provided' }}</span>
-                </div>
-                <div class="col-md-6">
-                  <span class="d-block text-muted" style="font-size: 0.7rem;">Gender</span>
-                  <span class="fw-semibold text-dark" style="font-size: 0.8rem;">{{
-                    profileForm.value.basicInformation?.gender || 'Not provided' }}</span>
-                </div>
-                <div class="col-12">
-                  <span class="d-block text-muted" style="font-size: 0.7rem;">Short Bio</span>
-                  <span class="fw-semibold text-dark" style="font-size: 0.8rem; line-height: 1.5;">{{
-                    profileForm.value.basicInformation?.shortBio || 'Not provided' }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Professional / Company Info Review -->
-          <div class="border rounded-4 p-4 bg-light bg-opacity-50">
-            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-              <h4 class="fw-bold text-dark mb-0 fs-6">
-                @if (role === 'client') { Company Information } @else { Professional Information }
-              </h4>
-              <app-button variant="link" class="p-0 text-primary fw-semibold text-decoration-none"
-                (clicked)="currentStep = 2" label="Edit"></app-button>
-            </div>
-
-            <div class="row g-3">
-              @if (role === 'client') {
-              <div class="col-md-4">
-                <span class="d-block text-muted" style="font-size: 0.7rem;">Company Type</span>
-                <span class="fw-semibold text-dark" style="font-size: 0.8rem;">{{
-                  profileForm.value.professionalDetails?.companyType || 'Not provided' }}</span>
-              </div>
-              <div class="col-md-4">
-                <span class="d-block text-muted" style="font-size: 0.7rem;">Website</span>
-                <span class="fw-semibold text-primary" style="font-size: 0.8rem;">{{
-                  profileForm.value.professionalDetails?.website || 'Not provided' }}</span>
-              </div>
-              <div class="col-md-4">
-                <span class="d-block text-muted" style="font-size: 0.7rem;">Industry</span>
-                <span class="fw-semibold text-dark" style="font-size: 0.8rem;">{{
-                  profileForm.value.professionalDetails?.industry || 'Not provided' }}</span>
-              </div>
-              <div class="col-md-12">
-                <span class="d-block text-muted" style="font-size: 0.7rem;">Location</span>
-                <span class="fw-semibold text-dark" style="font-size: 0.8rem;">{{ profileForm.value.location?.city || ''
-                  }}, {{ profileForm.value.location?.state || '' }}, {{ profileForm.value.location?.country || ''
-                  }}</span>
-              </div>
-              <div class="col-12">
-                <span class="d-block text-muted" style="font-size: 0.7rem;">Company Description</span>
-                <span class="fw-semibold text-dark" style="font-size: 0.8rem; line-height: 1.5;">{{
-                  profileForm.value.professionalDetails?.companyDescription || 'Not provided' }}</span>
-              </div>
-              } @else {
-              <div class="col-12">
-                <span class="d-block text-muted" style="font-size: 0.7rem;">Professional Headline</span>
-                <span class="fw-semibold text-dark" style="font-size: 0.8rem;">{{
-                  profileForm.value.professionalDetails?.professionalHeadline || 'Not provided' }}</span>
-              </div>
-              <div class="col-12">
-                <span class="d-block text-muted" style="font-size: 0.7rem;">Skills</span>
-                <div class="d-flex gap-2 flex-wrap mt-1">
-                  @for (skill of profileForm.value.professionalDetails?.skills; track $index) {
-                  <span
-                    class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded px-2 py-1 fw-semibold"
-                    style="font-size: 0.7rem;">{{ skill }}</span>
-                  }
-                </div>
-              </div>
-              <div class="col-12">
-                <span class="d-block text-muted" style="font-size: 0.7rem;">Technologies</span>
-                <div class="d-flex gap-2 flex-wrap mt-1">
-                  @for (tech of profileForm.value.professionalDetails?.technologies; track $index) {
-                  <span
-                    class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded px-2 py-1 fw-semibold"
-                    style="font-size: 0.7rem;">{{ tech }}</span>
-                  }
-                </div>
-              </div>
-              <div class="col-md-6">
-                <span class="d-block text-muted" style="font-size: 0.7rem;">Availability</span>
-                <span class="fw-semibold text-dark" style="font-size: 0.8rem;">{{
-                  profileForm.value.professionalDetails?.availability || 'Not provided' }}</span>
-              </div>
-              <div class="col-md-6">
-                <span class="d-block text-muted" style="font-size: 0.7rem;">Preferred Job Type</span>
-                <span class="fw-semibold text-dark" style="font-size: 0.8rem;">{{
-                  profileForm.value.professionalDetails?.preferredJobType || 'Not provided' }}</span>
+          <div class="col-12 col-md-6">
+            <span class="d-block text-muted mb-2" style="font-size: 0.75rem; font-weight: 600;">Languages</span>
+            @if (!profileForm.value.languages || profileForm.value.languages.length === 0) {
+            <span class="text-muted small fst-italic">No languages added</span>
+            } @else {
+            <div class="d-flex flex-column gap-2">
+              @for (lang of profileForm.value.languages; track $index) {
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-globe text-primary"></i>
+                <span class="fw-semibold text-dark" style="font-size: 0.8rem;">
+                  {{ lang.language }} &mdash; <span class="badge bg-light text-secondary border fw-medium ms-1"
+                    style="font-size: 0.72rem;">{{ lang.proficiency }}</span>
+                </span>
               </div>
               }
             </div>
-
-          </div>
-
-          <!-- Social Media and Languages Review -->
-          <div class="border rounded-4 p-4 bg-light bg-opacity-50">
-            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-              <h4 class="fw-bold text-dark mb-0 fs-6">Social Media & Languages</h4>
-              <app-button variant="link" class="p-0 text-primary fw-semibold text-decoration-none"
-                (clicked)="currentStep = 3" label="Edit"></app-button>
-            </div>
-
-            <div class="row g-4">
-              <div class="col-md-6">
-                <span class="d-block text-muted mb-2" style="font-size: 0.7rem;">Social Profiles</span>
-                <div class="d-flex flex-column gap-2">
-                  @for (social of profileForm.value.socialLinks; track $index) {
-                  <a [href]="social.profileUrl" target="_blank"
-                    class="d-flex align-items-center gap-2 text-decoration-none group">
-                    <div
-                      class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex justify-content-center align-items-center"
-                      style="width: 24px; height: 24px;"><i class="bi bi-link" style="font-size: 0.7rem;"></i></div>
-                    <span class="fw-semibold text-dark text-truncate" style="font-size: 0.75rem;">{{ social.platform }}:
-                      {{ social.profileUrl }}</span>
-                  </a>
-                  }
-                </div>
-              </div>
-              <div class="col-md-6">
-                <span class="d-block text-muted mb-2" style="font-size: 0.7rem;">Languages</span>
-                <div class="d-flex flex-column gap-2">
-                  @for (lang of profileForm.value.languages; track $index) {
-                  <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-globe text-primary"></i>
-                    <span class="fw-semibold text-dark" style="font-size: 0.75rem;">{{ lang.language }} - <span
-                        class="text-muted fw-normal">{{ lang.proficiency }}</span></span>
-                  </div>
-                  }
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
-          <app-button type="button" variant="outline-primary" class="px-4" (clicked)="prevStep()"
-            label="Back"></app-button>
-          <app-button type="button" variant="success" class="px-4 text-white" (clicked)="submitProfile()"
-            [loading]="isLoading" [disabled]="isLoading" label="">
-            @if (isLoading) {
-            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             }
-            {{ isLoading ? 'Submitting...' : 'Submit Profile' }}
-          </app-button>
-        </div>
-        @if (errorMessage) {
-        <div class="alert alert-danger py-2 small mt-3">
-          {{ errorMessage }}
-        </div>
-        }
-        }
-
-        <!-- STEP 5: Success Screen -->
-        @if (currentStep === 5) {
-        <div class="d-flex flex-column align-items-center justify-content-center text-center py-5">
-          <!-- Logo -->
-          <img src="/logo 2.png" alt="Talent Hub" class="mb-5 mx-auto" style="height: 70px; object-fit: contain;" />
-
-          <!-- Success Icon -->
-          <div
-            class="mx-auto bg-white d-flex align-items-center justify-content-center position-relative shadow-sm mb-4"
-            style="width: 100px; height: 100px; border-radius: 50%; border: 6px solid #f9faff;">
-            <i class="bi bi-check-circle-fill text-success" style="font-size: 3.5rem;"></i>
-            <div
-              class="position-absolute bg-white text-success rounded-circle shadow-sm d-flex align-items-center justify-content-center"
-              style="bottom: 5px; right: 5px; width: 32px; height: 32px; font-size: 0.9rem; border: 3px solid #f9faff;">
-              <i class="bi bi-shield-check-fill"></i>
-            </div>
           </div>
-
-          <h3 class="fs-4 fw-bold text-dark mb-3">Profile Submitted Successfully!</h3>
-
-          <p class="text-muted mb-5 mx-auto" style="font-size: 0.95rem; max-width: 450px; line-height: 1.6;">
-            Your profile is now live on Talent Hub.<br>
-            You can now explore opportunities and connect with amazing @if (role === 'client') { Freelancers } @else {
-            Clients }.
-          </p>
-
-          <app-button type="button" variant="primary"
-            class="px-5 py-3 mx-auto rounded-3 d-flex align-items-center justify-content-center"
-            (clicked)="goToDashboard()" label="">
-            <span class="fw-bold" style="font-size: 1rem;">Go to Dashboard</span> <i class="bi bi-arrow-right ms-2"
-              style="font-size: 1rem;"></i>
-          </app-button>
         </div>
+      </div>
+
+    </div>
+
+    <div class="step-action-buttons d-flex justify-content-between align-items-center w-100 mt-4 pt-3 border-top">
+      <app-button type="button" variant="outline-primary" class="px-4" (clicked)="prevStep()" label="Back"></app-button>
+      <app-button type="button" variant="success" class="px-4 text-white" (clicked)="submitProfile()"
+        [loading]="isLoading" [disabled]="isLoading" label="">
+        @if (isLoading) {
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
         }
+        {{ isLoading ? 'Submitting...' : 'Submit Profile' }}
+      </app-button>
+    </div>
+    @if (errorMessage) {
+    <div class="alert alert-danger py-2 small mt-3">
+      {{ errorMessage }}
+    </div>
+    }
+    }
 
-      </form>
+  </form>
+  }
 
+  <!-- ========================================== -->
+  <!-- STEP 5: Success Screen (Dedicated Centered)-->
+  <!-- ========================================== -->
+  @if (currentStep === 5) {
+  <div class="glass-card success-card position-relative z-1 p-4 p-sm-5 text-center shadow-lg mx-auto">
+    <!-- Logo -->
+    <img src="/logo 2.png" alt="Talent Hub" class="success-logo mb-4 mx-auto d-block" />
 
+    <!-- Centered Animated Success Icon -->
+    <div class="success-icon-badge mb-4 mx-auto position-relative">
+      <div class="success-icon-pulse"></div>
+      <div class="success-icon-circle shadow-sm d-flex align-items-center justify-content-center">
+        <i class="bi bi-check-circle-fill text-success"></i>
+      </div>
+      <div
+        class="success-shield-badge position-absolute bg-white text-success rounded-circle shadow-sm d-flex align-items-center justify-content-center">
+        <i class="bi bi-shield-check-fill"></i>
+      </div>
+    </div>
+
+    <h3 class="fs-4 fw-bold text-dark mb-2 text-center">Profile Submitted Successfully!</h3>
+
+    <p class="text-muted mb-4 mx-auto text-center success-message" style="max-width: 420px; line-height: 1.6;">
+      Your profile is now live on Talent Hub.<br>
+      You can now explore opportunities and connect with amazing @if (role === 'client') { Freelancers } @else { Clients
+      }.
+    </p>
+
+    <div class="d-flex justify-content-center align-items-center w-100 mt-2">
+      <app-button type="button" variant="primary" class="dashboard-redirect-btn rounded-3" (clicked)="goToDashboard()"
+        label="">
+        <span class="fw-semibold px-2" style="font-size: 0.95rem;">Go to Dashboard</span>
+        <i class="bi bi-arrow-right ms-1"></i>
+      </app-button>
+    </div>
   </div>
+  }
+
+</div>
 
 </div>

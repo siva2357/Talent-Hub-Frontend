@@ -49,7 +49,16 @@ export class FinancialSummary implements OnInit, AfterViewInit {
     private router: Router
   ) { }
 
+  get totalDistributionAmount(): number {
+    return (Number(this.stats.totalSpent) || 0) +
+           (Number(this.stats.escrowBalance) || 0) +
+           (Number(this.stats.platformFees) || 0) +
+           (Number(this.stats.pendingPayments) || 0);
+  }
+
   ngOnInit(): void {
+    this.updateStatCards();
+    this.initDefaultDistribution();
     this.loadData();
   }
 
@@ -63,7 +72,48 @@ export class FinancialSummary implements OnInit, AfterViewInit {
         { field: 'status', headerName: 'Status', cellTemplate: this.statusTpl },
         { field: 'action', headerName: 'Action', cellTemplate: this.actionTpl }
       ];
+      this.generateDistributionChart();
     });
+  }
+
+  initDefaultDistribution(): void {
+    const labels = ['Total Spent', 'Escrow Balance', 'Platform Fees', 'Pending Fund'];
+    const colors = ['#198754', '#ffc107', '#0d6efd', '#dc3545'];
+    this.distributionChart = labels.map((label, i) => ({
+      label,
+      amount: 0,
+      color: colors[i]
+    }));
+  }
+
+  updateStatCards(): void {
+    const totalSpent = Number(this.stats.totalSpent) || 0;
+    const escrowBalance = Number(this.stats.escrowBalance) || 0;
+    const platformFees = Number(this.stats.platformFees) || 0;
+    const pendingPayments = Number(this.stats.pendingPayments) || 0;
+
+    this.statCards = [
+      {
+        title: 'TOTAL SPENT',
+        value: `₹${totalSpent.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        icon: 'bi-graph-up-arrow'
+      },
+      {
+        title: 'ESCROW BALANCE',
+        value: `₹${escrowBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        icon: 'bi-shield-check'
+      },
+      {
+        title: 'PLATFORM FEES',
+        value: `₹${platformFees.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        icon: 'bi-percent'
+      },
+      {
+        title: 'UNFUNDED CONTRACTS',
+        value: `₹${pendingPayments.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        icon: 'bi-credit-card'
+      }
+    ];
   }
 
   loadData(): void {
@@ -71,39 +121,26 @@ export class FinancialSummary implements OnInit, AfterViewInit {
 
     this.transactionService.getFinanceStats().subscribe({
       next: (res: any) => {
-        if (res.success && res.stats) {
-          this.stats.totalSpent = res.stats.totalSpent || 0;
-          this.stats.escrowBalance = res.stats.upcomingPayments || 0;
-          this.stats.platformFees = res.stats.platformFeesPaid || 0;
-          this.stats.pendingPayments = res.stats.pendingPayments || 0;
-
-          this.statCards = [
-            {
-              title: 'TOTAL SPENT',
-              value: `₹${(this.stats.totalSpent).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-              icon: 'bi-graph-up-arrow'
-            },
-            {
-              title: 'ESCROW BALANCE',
-              value: `₹${(this.stats.escrowBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-              icon: 'bi-shield-check'
-            },
-            {
-              title: 'PLATFORM FEES',
-              value: `₹${(this.stats.platformFees).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-              icon: 'bi-percent'
-            },
-            {
-              title: 'UNFUNDED CONTRACTS',
-              value: `₹${(this.stats.pendingPayments).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-              icon: 'bi-credit-card'
-            }
-          ];
-
-          this.generateDistributionChart();
+        if (res && res.success && res.stats) {
+          this.stats.totalSpent = Number(res.stats.totalSpent) || 0;
+          this.stats.escrowBalance = Number(res.stats.escrowBalance ?? res.stats.upcomingPayments) || 0;
+          this.stats.platformFees = Number(res.stats.platformFeesPaid) || 0;
+          this.stats.pendingPayments = Number(res.stats.pendingPayments) || 0;
+        } else {
+          this.stats.totalSpent = 0;
+          this.stats.escrowBalance = 0;
+          this.stats.platformFees = 0;
+          this.stats.pendingPayments = 0;
         }
+        this.updateStatCards();
+        this.generateDistributionChart();
       },
-      error: (err: any) => console.error("Error fetching stats", err)
+      error: (err: any) => {
+        console.error("Error fetching stats", err);
+        this.stats.escrowBalance = 0;
+        this.updateStatCards();
+        this.generateDistributionChart();
+      }
     });
 
     this.transactionService.getInvoices().subscribe({
@@ -121,30 +158,36 @@ export class FinancialSummary implements OnInit, AfterViewInit {
   }
 
   generateDistributionChart(): void {
-    const spentAmount = this.stats.totalSpent || 0;
-    const escrowAmount = this.stats.escrowBalance || 0;
-    const feesAmount = this.stats.platformFees || 0;
-    const pendingAmount = this.stats.pendingPayments || 0;
+    const spentAmount = Number(this.stats.totalSpent) || 0;
+    const escrowAmount = Number(this.stats.escrowBalance) || 0;
+    const feesAmount = Number(this.stats.platformFees) || 0;
+    const pendingAmount = Number(this.stats.pendingPayments) || 0;
 
-    const data = [spentAmount, escrowAmount, feesAmount, pendingAmount];
+    const rawData = [spentAmount, escrowAmount, feesAmount, pendingAmount];
     const labels = ['Total Spent', 'Escrow Balance', 'Platform Fees', 'Pending Fund'];
     const colors = ['#198754', '#ffc107', '#0d6efd', '#dc3545'];
 
-    this.distributionChart = [];
-    labels.forEach((label, i) => {
-      this.distributionChart.push({
-        label,
-        amount: data[i],
-        color: colors[i]
-      });
-    });
+    this.distributionChart = labels.map((label, i) => ({
+      label,
+      amount: rawData[i],
+      color: colors[i]
+    }));
+
+    const totalSum = rawData.reduce((acc, val) => acc + val, 0);
+    const isAllZero = totalSum === 0;
+
+    // If there is no data (all zeros), provide equal slices so doughnut ring is visually rendered
+    // with its 4 respective categories and values
+    const chartData = isAllZero ? [1, 1, 1, 1] : rawData;
 
     setTimeout(() => {
       const ctx = document.getElementById('financialChart') as HTMLCanvasElement;
       if (!ctx) return;
 
       if (this.chartInstance) {
-        this.chartInstance.data.datasets[0].data = data;
+        this.chartInstance.data.labels = labels;
+        this.chartInstance.data.datasets[0].data = chartData;
+        this.chartInstance.data.datasets[0].backgroundColor = colors;
         this.chartInstance.update();
       } else {
         this.chartInstance = new Chart(ctx, {
@@ -152,31 +195,27 @@ export class FinancialSummary implements OnInit, AfterViewInit {
           data: {
             labels: labels,
             datasets: [{
-              data: data,
+              data: chartData,
               backgroundColor: colors,
-              borderWidth: 0,
+              borderWidth: 2,
+              borderColor: '#ffffff',
               hoverOffset: 4
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '65%',
+            cutout: '68%',
             plugins: {
               legend: {
                 display: false
               },
               tooltip: {
                 callbacks: {
-                  label: function (context: any) {
-                    let label = context.label || '';
-                    if (label) {
-                      label += ': ';
-                    }
-                    if (context.parsed !== null) {
-                      label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed);
-                    }
-                    return label;
+                  label: (context: any) => {
+                    const label = context.label || '';
+                    const actualAmount = isAllZero ? 0 : (rawData[context.dataIndex] ?? 0);
+                    return `${label}: ₹${Number(actualAmount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                   }
                 }
               }

@@ -76,18 +76,18 @@
             <div class="basic-details-layout">
 
               <!-- Profile Photo -->
-              <div class="profile-photo-column">
-                <div class="profile-photo-wrapper">
+              <div class="profile-photo-column d-flex justify-content-center align-items-center w-100">
+                <div class="profile-photo-wrapper d-flex flex-column align-items-center justify-content-center mx-auto text-center">
                   @if (!accountSettingsForm.get('basicInformation.profilePhoto')?.value) {
-                  <app-file-upload mode="avatar" (fileSelected)="onFileSelected($event)">
+                  <app-file-upload mode="avatar" class="d-flex justify-content-center align-items-center w-100 mx-auto" (fileSelected)="onFileSelected($event)">
                   </app-file-upload>
                   } @else {
-                  <app-file-preview mode="profile"
+                  <app-file-preview mode="profile" class="d-flex justify-content-center align-items-center w-100 mx-auto"
                     [previewUrl]="accountSettingsForm.get('basicInformation.profilePhoto')?.value"
                     (editClicked)="onFileRemoved()">
                   </app-file-preview>
                   }
-                  <span class="profile-photo-hint">
+                  <span class="profile-photo-hint text-center mx-auto">
                     Max 5MB (JPG, PNG)
                   </span>
                 </div>

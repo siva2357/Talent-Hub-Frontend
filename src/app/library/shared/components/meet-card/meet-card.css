@@ -78,6 +78,11 @@
 .meet-schedule-box {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
 }
 
 .schedule-icon {
@@ -92,6 +97,7 @@
   width: 1px;
   height: 24px;
   background: #cbd5e1;
+  flex-shrink: 0;
 }
 
 
@@ -101,13 +107,65 @@
 }
 
 @media (max-width: 575.98px) {
+  .meet-card .card-body {
+    padding: 14px !important;
+    gap: 8px !important;
+  }
+
   .meet-schedule-box {
-    flex-direction: column;
-    align-items: flex-start !important;
-    gap: 0.5rem;
+    padding: 8px 10px !important;
+    gap: 6px !important;
+  }
+
+  .schedule-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+  }
+
+  .meet-schedule-label {
+    font-size: 0.6rem;
+  }
+
+  .meet-schedule-box .small {
+    font-size: 0.75rem;
   }
 
   .schedule-divider {
-    display: none;
+    height: 20px;
+    margin-left: 4px !important;
+    margin-right: 4px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .meet-card .card-body {
+    padding: 12px !important;
+    gap: 6px !important;
+  }
+
+  .meet-schedule-box {
+    padding: 6px 8px !important;
+    gap: 4px !important;
+  }
+
+  .schedule-icon {
+    width: 22px;
+    height: 22px;
+    font-size: 0.7rem;
+  }
+
+  .meet-schedule-label {
+    font-size: 0.58rem;
+  }
+
+  .meet-schedule-box .small {
+    font-size: 0.72rem;
+  }
+
+  .schedule-divider {
+    margin-left: 3px !important;
+    margin-right: 3px !important;
+    height: 18px;
   }
 }

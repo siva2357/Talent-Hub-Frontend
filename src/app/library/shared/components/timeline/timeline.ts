@@ -6,7 +6,8 @@ import {
 } from '@angular/core';
 
 import {
-  TitleCasePipe
+  TitleCasePipe,
+  NgClass
 } from '@angular/common';
 
 import {
@@ -24,7 +25,7 @@ export type {
 @Component({
   selector: 'app-timeline',
   standalone: true,
-  imports: [TitleCasePipe],
+  imports: [TitleCasePipe, NgClass],
   templateUrl: './timeline.html',
   styleUrl: './timeline.css'
 })

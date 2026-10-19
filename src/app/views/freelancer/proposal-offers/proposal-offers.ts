@@ -22,7 +22,7 @@ import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
   styleUrl: './proposal-offers.css'
 })
 export class ProposalOffers implements OnInit {
-  activeTab: 'proposals' | 'offers' = 'proposals';
+  activeTab: 'proposals' | 'offers' | 'accepted' | 'rejected' = 'proposals';
 
   rawApplications$ = new BehaviorSubject<AppliedContract[]>([]);
   applications: AppliedContract[] = [];
@@ -34,6 +34,48 @@ export class ProposalOffers implements OnInit {
 
   isLoading = true;
   isLoadingOffers = true;
+
+  get pendingOffersCount(): number {
+    return (this.rawOffers$.value || []).filter(o => {
+      const s = o.status?.toLowerCase();
+      return s === 'pending' || s === 'sent';
+    }).length;
+  }
+
+  get acceptedOffersCount(): number {
+    return (this.rawOffers$.value || []).filter(o => {
+      const s = o.status?.toLowerCase();
+      return s === 'accepted' || s === 'hired';
+    }).length;
+  }
+
+  get rejectedOffersCount(): number {
+    return (this.rawOffers$.value || []).filter(o => {
+      const s = o.status?.toLowerCase();
+      return s === 'declined' || s === 'rejected';
+    }).length;
+  }
+
+  get currentPendingOffers(): any[] {
+    return this.offers.filter(o => {
+      const s = o.status?.toLowerCase();
+      return s === 'pending' || s === 'sent';
+    });
+  }
+
+  get currentAcceptedOffers(): any[] {
+    return this.offers.filter(o => {
+      const s = o.status?.toLowerCase();
+      return s === 'accepted' || s === 'hired';
+    });
+  }
+
+  get currentRejectedOffers(): any[] {
+    return this.offers.filter(o => {
+      const s = o.status?.toLowerCase();
+      return s === 'declined' || s === 'rejected';
+    });
+  }
 
   // Filter States - Proposals
   searchQueryProposals = '';
@@ -380,13 +422,33 @@ export class ProposalOffers implements OnInit {
     this.offerService.declineOffer(offerId).subscribe({
       next: (res) => {
         if (res.success) {
-          const offer = this.offers.find(o => o.id === offerId);
-          if (offer) {
-            offer.status = 'Declined';
-          }
+          const allOffers = this.rawOffers$.value.map(o => {
+            if (o.id === offerId) {
+              return { ...o, status: 'Declined' };
+            }
+            return o;
+          });
+          this.rawOffers$.next(allOffers);
         }
       },
       error: (err) => console.error('Error declining offer:', err)
     });
+  }
+
+  formatContractType(type?: string): string {
+    if (!type) return 'Fixed Price';
+    return type
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, char => char.toUpperCase());
+  }
+
+  formatBudget(budget: any): string {
+    if (!budget) return 'N/A';
+    if (typeof budget === 'number') {
+      return `₹${budget.toLocaleString('en-IN')}`;
+    }
+    const num = String(budget).replace(/[^0-9]/g, '');
+    if (!num) return String(budget);
+    return `₹${Number(num).toLocaleString('en-IN')}`;
   }
 }

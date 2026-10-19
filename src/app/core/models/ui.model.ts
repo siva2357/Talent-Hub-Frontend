@@ -50,6 +50,10 @@ export interface TimelineStep {
   description?: string;
   status: TimelineStatus;
   icon?: string;
+  customClass?: string;
+  id?: number;
+  key?: string;
+  date?: string | null;
 }
 
 export interface StatCardData {

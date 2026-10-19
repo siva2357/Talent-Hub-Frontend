@@ -91,6 +91,33 @@ export class LegalContractAcceptance implements OnInit {
     this.uploadedSignatureUrl = url;
   }
 
+  onUploadError(errorMsg: string): void {
+    this.isUploading = false;
+    this.signatureFile = null;
+    this.signaturePreview = null;
+    this.uploadedSignatureUrl = '';
+    alert(errorMsg || 'Failed to upload signature. Please try again.');
+  }
+
+  removeSignature(): void {
+    this.signatureFile = null;
+    this.signaturePreview = null;
+    this.uploadedSignatureUrl = '';
+    this.isUploading = false;
+  }
+
+  navigateToOffer(): void {
+    this.router.navigate(['/view-contract-offer', this.offerId]);
+  }
+
+  cancel(): void {
+    this.router.navigate(['/view-contract-offer', this.offerId]);
+  }
+
+  openPlatformPolicies(): void {
+    window.open('/terms', '_blank');
+  }
+
   acceptContract(): void {
     if (this.isUploading) {
       alert('Please wait for your signature to finish uploading.');

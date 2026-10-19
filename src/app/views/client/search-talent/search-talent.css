@@ -125,6 +125,8 @@
 .main-content {
   width: 100%;
   max-width: 1400px;
+  margin-left: 0;
+  margin-right: auto;
 }
 
 
@@ -134,18 +136,31 @@
 
 .page-header {
   margin-bottom: 24px;
+  width: 100% !important;
+  text-align: left !important;
+  display: block !important;
 }
 
 .page-heading {
   min-width: 0;
+  width: 100% !important;
+  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
 }
 
 .page-heading h1 {
   line-height: 1.25;
+  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
 }
 
 .page-heading p {
   line-height: 1.5;
+  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
 }
 
 .filter-toggle {
@@ -440,11 +455,29 @@
   /* Header */
 
   .page-header {
-    flex-direction: column;
-
-    align-items: stretch;
-
+    display: block !important;
+    text-align: left !important;
     margin-bottom: 20px;
+    width: 100% !important;
+  }
+
+  .page-heading {
+    text-align: left !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+  }
+
+  .page-heading h1 {
+    text-align: left !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+  }
+
+  .page-heading p {
+    text-align: left !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
   }
 
   .filter-toggle {
@@ -484,8 +517,7 @@
   }
 
   .manual-filter-grid {
-    grid-template-columns: 1fr;
-
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
   }
 
@@ -498,6 +530,13 @@
     gap: 16px;
   }
 
+}
+
+@media (max-width: 767.98px) {
+  .manual-filter-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }
 
 
@@ -515,15 +554,31 @@
   /* Header */
 
   .page-header {
-    gap: 14px;
+    display: block !important;
+    text-align: left !important;
+    margin-bottom: 16px;
+    width: 100% !important;
+  }
+
+  .page-heading {
+    text-align: left !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
   }
 
   .page-heading h1 {
     font-size: 1.4rem !important;
+    text-align: left !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
   }
 
   .page-heading p {
     font-size: 0.78rem;
+    text-align: left !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
   }
 
 
@@ -596,10 +651,20 @@
   /* Manual actions */
 
   .filter-actions {
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
   }
 
   .filter-actions app-button {
+    flex: 1 1 0;
+    min-width: 0;
+    display: block;
+  }
+
+  .filter-actions app-button ::ng-deep .btn {
     width: 100%;
   }
 
@@ -678,6 +743,13 @@
 
   .page-heading h1 {
     font-size: 1.25rem !important;
+    text-align: left !important;
+    margin-left: 0 !important;
+  }
+
+  .page-heading p {
+    text-align: left !important;
+    margin-left: 0 !important;
   }
 
 }

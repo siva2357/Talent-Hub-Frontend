@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OfferService } from '../../../core/services/offer.service';
 import { ApplicationService } from '../../../core/services/application.service';
 import { FileService } from '../../../core/services/file.service';
 import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
-import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Button } from '../../../library/ui/components/button/button';
 import { FileUpload } from '../../../library/shared/components/file-upload/file-upload';
 import { FilePreview } from '../../../library/shared/components/file-preview/file-preview';
+import { RichTextEditor } from '../../../library/shared/components/rich-text-editor/rich-text-editor';
 
 @Component({
   selector: 'app-legal-contract-page',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, InputField, Button, FileUpload, FilePreview],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, Button, FileUpload, FilePreview, RichTextEditor],
   templateUrl: './legal-contract-page.html',
   styleUrl: './legal-contract-page.css'
 })
@@ -84,7 +85,16 @@ export class LegalContractPage implements OnInit {
     }
   }
 
+  get isOfferAlreadySent(): boolean {
+    const status = this.applicationData?.offerStatus || this.applicationData?.offer?.offerStatus;
+    return !!status && status.toLowerCase() !== 'none';
+  }
+
   onSubmit(): void {
+    if (this.isOfferAlreadySent) {
+      return;
+    }
+
     if (this.offerForm.valid && this.applicationId) {
       this.isSubmitting = true;
       const formData = this.offerForm.value;
@@ -111,5 +121,43 @@ export class LegalContractPage implements OnInit {
         this.offerForm.get(key)?.markAsTouched();
       });
     }
+  }
+
+  formatContractType(type?: string): string {
+    if (!type) return 'Fixed Price';
+    return type
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, char => char.toUpperCase());
+  }
+
+  getFreelancerInitials(): string {
+    const name = this.applicationData?.freelancerId?.registrationDetails?.fullName;
+    if (!name) return 'FL';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
+  }
+
+  getContractDuration(): string {
+    const start = this.applicationData?.contractId?.contractStartDate;
+    const end = this.applicationData?.contractId?.contractEndDate;
+    if (start && end) {
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      if (diffDays >= 30) {
+        const months = Math.round(diffDays / 30);
+        return `${months} month${months > 1 ? 's' : ''} (${diffDays} days)`;
+      }
+      if (diffDays >= 7) {
+        const weeks = Math.round(diffDays / 7);
+        return `${weeks} week${weeks > 1 ? 's' : ''} (${diffDays} days)`;
+      }
+      return `${diffDays} days`;
+    }
+    return this.applicationData?.contractId?.duration || 'Timeline specified in contract';
   }
 }
