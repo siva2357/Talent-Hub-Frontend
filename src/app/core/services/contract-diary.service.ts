@@ -60,4 +60,12 @@ export class ContractDiaryService extends BaseService {
   getDiaryById(id: string): Observable<any> {
     return this.get(`${this.apiUrl}/${id}`);
   }
+
+  // Download Contract Worksheet PDF
+  downloadContractWorksheet(contractId: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/worksheet/${contractId}/download`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob'
+    });
+  }
 }

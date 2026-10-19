@@ -271,9 +271,12 @@
                 </div>
 
                 <!-- Footer Action Button -->
-                <div class="pt-2 border-top d-flex justify-content-end">
+                <div class="pt-2 border-top d-flex justify-content-end gap-2 flex-wrap">
                   <app-button variant="outline-success" size="sm" label="View Feedback" icon="bi bi-star"
                     [routerLink]="['/feedback-reports', contract._id]">
+                  </app-button>
+                  <app-button variant="outline-primary" size="sm" label="View Contract Worksheet" icon="bi bi-file-earmark-text"
+                    (clicked)="downloadContractWorksheet(contract._id)">
                   </app-button>
                 </div>
               </div>
@@ -342,10 +345,12 @@
   </ng-template>
 
   <ng-template #actionsTemplate let-row="row">
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center gap-2">
       @if (row.status === 'completed' || row.status === 'closed') {
       <app-button variant="outline-success" [size]="'sm'" label="View Feedback" icon="bi bi-star"
         [routerLink]="['/feedback-reports', row._id]"></app-button>
+      <app-button variant="outline-primary" [size]="'sm'" label="View Contract Worksheet" icon="bi bi-file-earmark-text"
+        (clicked)="downloadContractWorksheet(row._id)"></app-button>
       } @else {
       <app-button variant="outline-primary" [size]="'sm'" label="Contract Diary" icon="bi bi-journal-text"
         [routerLink]="['/contract-diary', row._id]"></app-button>

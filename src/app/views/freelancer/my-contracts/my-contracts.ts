@@ -87,7 +87,7 @@ export class MyContracts implements OnInit, AfterViewInit {
         { field: 'duration', headerName: 'DURATION', cellTemplate: this.durationTemplate, width: 150 },
         { field: 'budget', headerName: 'BUDGET', cellTemplate: this.budgetTemplate, width: 120 },
         { field: 'status', headerName: 'STATUS', cellTemplate: this.statusTemplate, width: 120 },
-        { field: 'actions', headerName: 'ACTIONS', cellTemplate: this.actionsTemplate, width: 100 }
+        { field: 'actions', headerName: 'ACTIONS', cellTemplate: this.actionsTemplate, width: 280 }
       ];
     });
   }
@@ -240,7 +240,8 @@ export class MyContracts implements OnInit, AfterViewInit {
   getFreelancerCardActions(contract: any): ContractCardAction[] {
     if (contract.status === 'completed' || contract.status === 'closed') {
       return [
-        { label: 'View Feedback', value: 'feedback', icon: 'bi bi-star' }
+        { label: 'View Feedback', value: 'feedback', icon: 'bi bi-star' },
+        { label: 'View Contract Worksheet', value: 'worksheet', icon: 'bi bi-file-earmark-text' }
       ];
     }
     return [
@@ -253,6 +254,26 @@ export class MyContracts implements OnInit, AfterViewInit {
       this.router.navigate(['/feedback-reports', event.contract._id]);
     } else if (event.action === 'diary') {
       this.router.navigate(['/contract-diary', event.contract._id]);
+    } else if (event.action === 'worksheet') {
+      this.downloadContractWorksheet(event.contract._id);
     }
+  }
+
+  downloadContractWorksheet(contractId: string): void {
+    this.contractService.downloadContractWorksheet(contractId).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Contract_Worksheet_${contractId}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      },
+      error: (err) => {
+        console.error('Error downloading contract worksheet:', err);
+      }
+    });
   }
 }

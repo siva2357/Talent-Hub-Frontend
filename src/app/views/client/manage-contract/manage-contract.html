@@ -182,15 +182,24 @@
 
 
 <ng-template #actionsTemplate let-row="row">
-  <div class="dropdown">
-    <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown"
-      aria-expanded="false" data-bs-display="static">
-      <i class="bi bi-three-dots-vertical"></i>
+  <div class="d-flex align-items-center justify-content-center gap-2">
+    @if (row.status?.toLowerCase() === 'completed') {
+    <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2 d-inline-flex align-items-center gap-1"
+      style="font-size: 0.75rem; white-space: nowrap;" title="Download Contract Worksheet" (click)="downloadContractWorksheet(row._id)">
+      <i class="bi bi-file-earmark-text"></i>
+      <span>Worksheet</span>
     </button>
-    <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none" style="min-width: auto;">
-      <app-dropdown [items]="getDropdownItems(row)" (itemSelected)="onDropdownAction($event, row)" class="d-block"
-        style="position: relative;">
-      </app-dropdown>
+    }
+    <div class="dropdown">
+      <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown"
+        aria-expanded="false" data-bs-display="static">
+        <i class="bi bi-three-dots-vertical"></i>
+      </button>
+      <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none" style="min-width: auto;">
+        <app-dropdown [items]="getDropdownItems(row)" (itemSelected)="onDropdownAction($event, row)" class="d-block"
+          style="position: relative;">
+        </app-dropdown>
+      </div>
     </div>
   </div>
 </ng-template>

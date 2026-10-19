@@ -73,7 +73,7 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
     { field: 'funded', headerName: 'Funds Status' },
     { field: 'status', headerName: 'Status' },
     { field: 'feedbackStatus', headerName: 'Feedback Status' },
-    { field: 'actions', headerName: 'Actions' }
+    { field: 'actions', headerName: 'Actions', width: 140 }
   ];
 
   constructor(
@@ -164,6 +164,10 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
       { label: 'Edit', value: 'edit', icon: 'bi bi-pencil' }
     ];
 
+    if (row.status?.toLowerCase() === 'completed') {
+      items.push({ label: 'Download Contract Worksheet', value: 'worksheet', icon: 'bi bi-file-earmark-text' });
+    }
+
     if (row.status?.toLowerCase() === 'completed' && !(row as any).feedbackSubmitted) {
       items.push({ label: 'Submit Feedback', value: 'feedback', icon: 'bi bi-star' });
     }
@@ -193,6 +197,9 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
         break;
       case 'feedback':
         this.router.navigate(['/submit-feedback', row._id]);
+        break;
+      case 'worksheet':
+        this.downloadContractWorksheet(row._id);
         break;
       case 'delete':
         this.deleteContract(row._id);
@@ -247,6 +254,11 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
 
         break;
 
+      case 'worksheet':
+
+        this.downloadContractWorksheet(contract._id);
+
+        break;
 
       case 'delete':
 
@@ -280,6 +292,14 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
       }
 
     ];
+
+    if (contract.status?.toLowerCase() === 'completed') {
+      actions.push({
+        label: 'Download Contract Worksheet',
+        value: 'worksheet',
+        icon: 'bi bi-file-earmark-text'
+      });
+    }
 
 
     // Feedback only after completion
@@ -485,5 +505,23 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
 
     const rzp = new window.Razorpay(options);
     rzp.open();
+  }
+
+  downloadContractWorksheet(contractId: string): void {
+    this.contractService.downloadContractWorksheet(contractId).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Contract_Worksheet_${contractId}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      },
+      error: (err) => {
+        console.error('Error downloading contract worksheet:', err);
+      }
+    });
   }
 }
