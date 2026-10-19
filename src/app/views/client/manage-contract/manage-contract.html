@@ -12,7 +12,7 @@
   </div>
 
   <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="position-relative z-1 mx-auto" style="max-width: 1400px;">
+  <div class="position-relative z-1" style="max-width: 1400px;">
     <!-- Header -->
     <header class="mb-4 d-flex justify-content-between align-items-center">
       <div>
@@ -27,33 +27,33 @@
         <div class="row g-3 align-items-center mb-3">
 
           <!-- Search -->
-          <div class="col-12 col-md-5 filter-control">
+          <div class="col-12 col-md-12 col-lg-4 filter-control">
             <app-input-field label="" placeholder="Search by Ticket ....." icon="bi bi-search" [showIcon]="true"
               [value]="searchQuery" (valueChange)="searchQuery = $event">
             </app-input-field>
           </div>
 
           <!-- Category -->
-          <div class="col-12 col-sm-6 col-md-2 filter-control">
-            <app-input-field label="" placeholder="" type="select" [options]="categoryOptions"
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3 filter-control">
+            <app-input-field label="" placeholder="All Categories" type="select" [options]="categoryOptions"
               [value]="selectedCategory" (valueChange)="selectedCategory = $event">
             </app-input-field>
           </div>
 
           <!-- Status -->
-          <div class="col-12 col-sm-6 col-md-2 filter-control">
-            <app-input-field label="" placeholder="" type="select" [options]="statusOptions" [value]="selectedStatus"
-              (valueChange)="selectedStatus = $event">
+          <div class="col-12 col-sm-6 col-md-4 col-lg-2 filter-control">
+            <app-input-field label="" placeholder="All Statuses" type="select" [options]="statusOptions"
+              [value]="selectedStatus" (valueChange)="selectedStatus = $event">
             </app-input-field>
           </div>
 
           <!-- Actions -->
-          <div class="col-12 col-md-3 filter-actions">
+          <div class="col-12 col-md-4 col-lg-3 filter-actions mt-3">
 
-            <app-button label="Apply" variant="primary" [block]="true" (clicked)="applyFilters()">
+            <app-button label="Apply" variant="primary" size="md" [block]="true" (clicked)="applyFilters()">
             </app-button>
 
-            <app-button label="Reset" variant="outline-primary" [block]="true" (clicked)="resetFilters()">
+            <app-button label="Reset" variant="outline-primary" size="md" [block]="true" (clicked)="resetFilters()">
             </app-button>
 
           </div>

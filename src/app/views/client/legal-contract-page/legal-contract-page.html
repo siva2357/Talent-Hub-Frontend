@@ -1,4 +1,4 @@
-<form [formGroup]="offerForm" (ngSubmit)="onSubmit()" class="dashboard-container position-relative p-4">
+<form [formGroup]="offerForm" (ngSubmit)="onSubmit()" class="dashboard-container position-relative py-3 px-2 py-sm-4 px-sm-3 p-md-4">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -12,63 +12,102 @@
   </div>
 
   <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
-    <!-- Top Navigation & Stepper -->
-    <div class="d-flex justify-content-between align-items-start mb-4">
+  <div class="position-relative z-1 px-1 px-sm-2 mx-auto" style="max-width: 960px;">
+    <!-- Top Navigation -->
+    <div class="d-flex justify-content-between align-items-start mb-3 mb-md-4">
       <div>
-        <a routerLink="/applicants/{{ contractId }}"
-          class="text-primary text-decoration-none fw-semibold small d-flex align-items-center gap-1 mb-3 cursor-pointer">
+        <a [routerLink]="contractId ? ['/applicants', contractId] : ['/manage-contract']"
+          class="text-primary text-decoration-none fw-semibold small d-inline-flex align-items-center gap-1 mb-2 mb-sm-3 cursor-pointer">
           <i class="bi bi-arrow-left"></i> back to applicants
         </a>
-        <h1 class="fw-bold fs-3 mb-1 text-dark">Legal Contract Agreement</h1>
+        <h1 class="fw-bold fs-4 fs-sm-3 mb-1 text-dark text-break">Legal Contract Agreement</h1>
         <p class="text-muted small mb-0">Review the terms below and send a legally binding offer to your freelancer.</p>
       </div>
-
-      <!-- Stepper Removed -->
     </div>
 
-    <div class="row g-4 mb-5 pb-5">
-      <!-- Left Column (Form Fields) -->
-      <div class="col-lg-8 mx-auto">
+    <div class="row g-4 mb-4 mb-md-5 pb-3 pb-md-4">
+      <!-- Main Column (Form Fields) -->
+      <div class="col-12 mx-auto">
 
         <!-- Contract Summary Card -->
-        <div class="glass-card rounded-3 mb-5 p-4 bg-white border shadow-sm">
-          <h3 class="fs-6 fw-bold text-dark mb-4 d-flex align-items-center gap-2">
-            <i class="bi bi-file-earmark-text text-primary"></i> Contract Summary
-          </h3>
+        <div class="glass-card rounded-3 mb-4 mb-md-5 p-3 p-sm-4 bg-white border shadow-sm">
+          <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+            <h3 class="fs-6 fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+              <i class="bi bi-file-earmark-text text-primary"></i> Contract Summary
+            </h3>
+            <span class="badge bg-primary bg-opacity-10 text-primary px-2 py-1 rounded text-capitalize" style="font-size: 0.75rem;">
+              {{ formatContractType(applicationData?.contractId?.contractType) }}
+            </span>
+          </div>
 
-          <div class="d-flex flex-column gap-3">
-            <!-- Contract Title -->
-            <div class="p-3 border rounded-3 bg-light d-flex  gap-3">
-              <div class="d-flex align-items-center gap-2">
-                <span class="text-muted" style="font-size: 0.75rem;">Contract Subject:</span>
-                <span class="fw-bold text-dark" style="font-size: 0.85rem;">{{
-                  applicationData?.contractId?.contractSubject || 'Backend' }}</span>
-              </div>
-              <div class="d-flex align-items-center gap-2">
-                <span class="text-muted" style="font-size: 0.75rem;">Contract Title:</span>
-                <span class="fw-bold text-dark" style="font-size: 0.85rem;">{{
-                  applicationData?.contractId?.contractTitle || 'Contract Title' }}</span>
-                <span class="badge bg-primary bg-opacity-10 text-primary rounded px-2 text-capitalize ms-2"
-                  style="font-size: 0.65rem;">{{ applicationData?.contractId?.contractType || 'Hourly' }}</span>
+          <!-- Contract Title & Values Grid -->
+          <div class="row g-2 g-sm-3 mb-3">
+            <div class="col-12 col-sm-6 col-md-4">
+              <div class="p-3 border rounded-3 bg-light h-100">
+                <span class="text-muted d-block mb-1" style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;">Contract Title</span>
+                <span class="fw-bold text-dark text-break d-block fs-6">{{ applicationData?.contractId?.contractTitle || 'Contract Title' }}</span>
               </div>
             </div>
 
-            <!-- Freelancer Info -->
-            <div class="d-flex align-items-center gap-3 p-3 border rounded-3 bg-light">
-              <div class="rounded-circle bg-dark flex-shrink-0" style="width: 48px; height: 48px;"></div>
-              <div>
-                <h4 class="fw-bold text-dark mb-0 fs-6">{{ applicationData?.freelancerId?.registrationDetails?.fullName
-                  || 'John Smith' }}</h4>
-                <span class="text-muted d-block mb-1" style="font-size: 0.7rem;">{{
-                  applicationData?.freelancerId?.headline || 'Freelancer' }}</span>
-                <div class="d-flex align-items-center gap-2">
-                  <span class="text-muted" style="font-size: 0.65rem;">{{
-                    applicationData?.freelancerId?.registrationDetails?.email || 'email@example.com' }}</span>
-                  <span class="badge bg-warning text-dark px-1 rounded d-flex align-items-center gap-1"
-                    style="font-size: 0.65rem;"><i class="bi bi-star-fill text-dark" style="font-size: 0.5rem;"></i> {{
-                    applicationData?.freelancerId?.rating || '4.9' }}</span>
-                </div>
+            <div class="col-12 col-sm-6 col-md-4">
+              <div class="p-3 border rounded-3 bg-light h-100">
+                <span class="text-muted d-block mb-1" style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;">Contract Subject</span>
+                <span class="fw-bold text-dark text-break d-block fs-6 text-capitalize">{{ applicationData?.contractId?.contractSubject || 'General' }}</span>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4">
+              <div class="p-3 border rounded-3 bg-light h-100">
+                <span class="text-muted d-block mb-1" style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;">Contract Type</span>
+                <span class="fw-bold text-dark text-break d-block fs-6">{{ formatContractType(applicationData?.contractId?.contractType) }}</span>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4">
+              <div class="p-3 border rounded-3 bg-light h-100">
+                <span class="text-muted d-block mb-1" style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;">Allocated Budget</span>
+                <span class="fw-bold text-success text-break d-block fs-6">₹{{ (applicationData?.contractId?.estimatedBudget || 0) | number }}</span>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4">
+              <div class="p-3 border rounded-3 bg-light h-100">
+                <span class="text-muted d-block mb-1" style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;">Contract Duration</span>
+                <span class="fw-bold text-dark text-break d-block" style="font-size: 0.9rem;">{{ getContractDuration() }}</span>
+                @if (applicationData?.contractId?.contractStartDate && applicationData?.contractId?.contractEndDate) {
+                  <span class="text-muted d-block mt-1" style="font-size: 0.7rem;">
+                    {{ applicationData?.contractId?.contractStartDate | date:'mediumDate' }} &ndash; {{ applicationData?.contractId?.contractEndDate | date:'mediumDate' }}
+                  </span>
+                }
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4">
+              <div class="p-3 border rounded-3 bg-light h-100">
+                <span class="text-muted d-block mb-1" style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;">Application Status</span>
+                <span class="badge bg-success bg-opacity-10 text-success px-2 py-1 rounded text-capitalize" style="font-size: 0.75rem;">
+                  {{ applicationData?.applicationStatus || applicationData?.contractId?.status || 'Active' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Freelancer Info -->
+          <div class="p-3 border rounded-3 bg-light d-flex align-items-center gap-3">
+            <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold flex-shrink-0 shadow-sm"
+                 style="width: 48px; height: 48px; background: linear-gradient(135deg, #2563eb, #7c3aed); font-size: 1rem;">
+              {{ getFreelancerInitials() }}
+            </div>
+            <div class="flex-grow-1 min-w-0">
+              <h4 class="fw-bold text-dark mb-0 fs-6 text-truncate">
+                {{ applicationData?.freelancerId?.registrationDetails?.fullName || 'Freelancer Name' }}
+              </h4>
+              <span class="text-muted d-block text-truncate text-capitalize" style="font-size: 0.75rem;">
+                {{ applicationData?.freelancerId?.headline || applicationData?.freelancerId?.role || 'Freelancer' }}
+              </span>
+              <div class="text-muted text-break mt-1" style="font-size: 0.72rem;">
+                <i class="bi bi-envelope me-1 text-secondary"></i>{{
+                  applicationData?.freelancerId?.registrationDetails?.email || 'email@example.com' }}
               </div>
             </div>
           </div>
@@ -76,142 +115,114 @@
         </div>
 
         <!-- 1. Scope of Work -->
-        <div class="mb-5">
+        <div class="mb-4 mb-md-5">
           <div class="d-flex align-items-center gap-2 mb-1">
-            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
               style="width: 24px; height: 24px; font-size: 0.75rem;">1</div>
-            <h2 class="fs-6 fw-bold mb-0 text-dark">Scope of Work</h2>
+            <h2 class="fs-6 fw-bold mb-0 text-dark">Scope of Work <span class="text-danger fw-bold ms-1" style="color: #dc2626 !important;">*</span></h2>
           </div>
           <p class="text-muted small mb-3">Define the exact deliverables, responsibilities and expectations.</p>
 
-          <div class="border rounded-3 p-2 bg-white">
-
-            <app-input-field type="textarea" label="" [value]="offerForm.get('scopeOfWork')?.value"
-              (valueChange)="offerForm.get('scopeOfWork')?.setValue($event)"
-              placeholder="Describe the scope of work in detail. Be clear about deliverables, milestones and responsibilities...">
-            </app-input-field>
-            <div class="text-end text-muted mt-2" style="font-size: 0.65rem;">0 / 2500</div>
-          </div>
+          <app-rich-text-editor
+            formControlName="scopeOfWork"
+            [required]="true"
+            placeholder="Describe the scope of work in detail. Be clear about deliverables, milestones and responsibilities..."
+            height="180px"
+            [validation]="(offerForm.get('scopeOfWork')?.touched || offerForm.get('scopeOfWork')?.dirty) ? (offerForm.get('scopeOfWork')?.invalid ? 'error' : 'success') : 'none'"
+            errorMessage="Scope of work is required"
+          ></app-rich-text-editor>
         </div>
 
         <!-- 2. Additional Terms & Conditions -->
-        <div class="mb-5">
+        <div class="mb-4 mb-md-5">
           <div class="d-flex align-items-center gap-2 mb-1">
-            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
               style="width: 24px; height: 24px; font-size: 0.75rem;">2</div>
             <h2 class="fs-6 fw-bold mb-0 text-dark">Additional Terms & Conditions <span
                 class="text-muted fw-normal fs-6">(Optional)</span></h2>
           </div>
           <p class="text-muted small mb-3">Add any legal clauses, NDA, IP ownership, confidentiality or other terms.</p>
 
-          <div class="border rounded-3 p-2 bg-white">
-
-            <app-input-field type="textarea" label="" [value]="offerForm.get('additionalTerms')?.value"
-              (valueChange)="offerForm.get('additionalTerms')?.setValue($event)"
-              placeholder="Add additional legal terms, conditions or clauses here...">
-            </app-input-field>
-            <div class="text-end text-muted mt-2" style="font-size: 0.65rem;">0 / 2000</div>
-          </div>
+          <app-rich-text-editor
+            formControlName="additionalTerms"
+            [required]="false"
+            placeholder="Add additional legal terms, conditions or clauses here..."
+            height="180px"
+          ></app-rich-text-editor>
         </div>
 
-        <!-- 3. Contract Budget & Duration -->
-        <div class="mb-5">
+        <!-- 3. Digital Signature -->
+        <div class="mb-4 mb-md-5">
           <div class="d-flex align-items-center gap-2 mb-1">
-            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
               style="width: 24px; height: 24px; font-size: 0.75rem;">3</div>
-            <h2 class="fs-6 fw-bold mb-0 text-dark">Contract Budget & Duration</h2>
-          </div>
-          <p class="text-muted small mb-3">Overview of the allocated budget and project timeline.</p>
-
-          <div class="border rounded-3 p-4 bg-white d-flex flex-column gap-3">
-            <div class="d-flex justify-content-between align-items-center border-bottom pb-3">
-              <span class="text-muted fw-semibold" style="font-size: 0.8rem;">Allocated Budget</span>
-              <span class="fw-bold text-success fs-5">₹{{ applicationData?.contractId?.estimatedBudget || '0' }}</span>
-            </div>
-            <div class="d-flex justify-content-between align-items-center border-bottom pb-3">
-              <span class="text-muted fw-semibold" style="font-size: 0.8rem;">Contract Duration</span>
-              <span class="fw-bold text-dark" style="font-size: 0.8rem;">{{ applicationData?.contractId?.duration ||
-                'Timeline' }}</span>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-muted fw-semibold" style="font-size: 0.8rem;">Budget Type</span>
-              <span class="fw-bold text-dark text-capitalize" style="font-size: 0.8rem;">{{
-                applicationData?.contractId?.contractType || 'Fixed Price' }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 4. Digital Signature -->
-        <div class="mb-5">
-          <div class="d-flex align-items-center gap-2 mb-1">
-            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
-              style="width: 24px; height: 24px; font-size: 0.75rem;">4</div>
             <h2 class="fs-6 fw-bold mb-0 text-dark">Digital Signature <span class="text-danger fw-bold ms-1" style="color: #dc2626 !important;">*</span></h2>
           </div>
           <p class="text-muted small mb-3">Upload your digital signature. This will be used on the official contract.
           </p>
 
-          <div class="row g-4 align-items-stretch">
-            <div class="col-md-6">
+          <div class="row g-3 g-md-4 align-items-stretch">
+            <div class="col-12 col-md-6">
               <app-file-upload class="d-block h-100" title="Drag & drop your signature here" browseText="Browse Files"
                 acceptedFormats="PNG, JPG, WEBP (Max. 5MB)" [uploadBucket]="UploadBucket.ClientData"
                 [uploadSection]="UploadSection.DigitalSignature" (uploadComplete)="onUploadComplete($event)">
               </app-file-upload>
             </div>
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
               <app-file-preview class="d-block h-100" mode="image" [previewUrl]="signaturePreview">
               </app-file-preview>
             </div>
           </div>
         </div>
 
-        <!-- 5. Legal Confirmation -->
+        <!-- 4. Legal Confirmation -->
         <div class="mb-4">
           <div class="d-flex align-items-center gap-2 mb-1">
-            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
-              style="width: 24px; height: 24px; font-size: 0.75rem;">5</div>
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+              style="width: 24px; height: 24px; font-size: 0.75rem;">4</div>
             <h2 class="fs-6 fw-bold mb-0 text-dark">Legal Confirmation <span class="text-danger fw-bold ms-1" style="color: #dc2626 !important;">*</span></h2>
           </div>
           <p class="text-muted small mb-3">Please read and confirm the points below.</p>
 
-          <div class="d-flex flex-column gap-2" style="font-size: 0.75rem;">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" formControlName="confirmAccuracy" id="check1">
-              <label class="form-check-label text-dark" for="check1">I confirm that the project details, scope of work,
-                and payment terms are accurate and complete. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span></label>
+          <div class="d-flex flex-column gap-2 gap-sm-3">
+            <div class="legal-check-item">
+              <input class="form-check-input mt-0 flex-shrink-0" type="checkbox" formControlName="confirmAccuracy" id="check1">
+              <label class="form-check-label text-dark" for="check1">
+                I confirm that the project details, scope of work, and payment terms are accurate and complete. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span>
+              </label>
             </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" formControlName="confirmSignatureAuth" id="check2">
-              <label class="form-check-label text-dark" for="check2">I own the uploaded digital signature and authorize
-                its use on this contract. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span></label>
+            <div class="legal-check-item">
+              <input class="form-check-input mt-0 flex-shrink-0" type="checkbox" formControlName="confirmSignatureAuth" id="check2">
+              <label class="form-check-label text-dark" for="check2">
+                I own the uploaded digital signature and authorize its use on this contract. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span>
+              </label>
             </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" formControlName="confirmLegallyBinding" id="check3">
-              <label class="form-check-label text-dark" for="check3">I understand that this contract will be legally
-                binding once accepted by the freelancer. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span></label>
+            <div class="legal-check-item">
+              <input class="form-check-input mt-0 flex-shrink-0" type="checkbox" formControlName="confirmLegallyBinding" id="check3">
+              <label class="form-check-label text-dark" for="check3">
+                I understand that this contract will be legally binding once accepted by the freelancer. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span>
+              </label>
             </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" formControlName="confirmTermsPrivacy" id="check4">
-              <label class="form-check-label text-dark" for="check4">I agree to the platform's <a href="#"
-                  class="text-primary text-decoration-none">Terms of Service</a> and <a href="#"
-                  class="text-primary text-decoration-none">Privacy Policy</a>. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span></label>
+            <div class="legal-check-item">
+              <input class="form-check-input mt-0 flex-shrink-0" type="checkbox" formControlName="confirmTermsPrivacy" id="check4">
+              <label class="form-check-label text-dark" for="check4">
+                I agree to the platform's <a href="#" class="text-primary text-decoration-none">Terms of Service</a> and <a href="#" class="text-primary text-decoration-none">Privacy Policy</a>. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span>
+              </label>
             </div>
           </div>
         </div>
 
         <!-- Action Buttons at the bottom of the form -->
-        <div class="d-flex justify-content-between align-items-center pt-4 border-top mt-5">
-          <app-button variant="secondary" size="md" routerLink="/applicants">
+        <div class="legal-action-bar d-flex justify-content-between align-items-center gap-2 pt-4 border-top mt-4 mt-md-5">
+          <app-button variant="secondary" size="md" [routerLink]="contractId ? ['/applicants', contractId] : ['/manage-contract']" class="legal-btn">
             Cancel
           </app-button>
-          <app-button variant="primary" size="md" type="submit" [disabled]="isSubmitting" [loading]="isSubmitting">
-            <span class="text-white">Generate & Send Legal Offer</span>
+          <app-button variant="primary" size="md" type="submit" [disabled]="isSubmitting || isOfferAlreadySent" [loading]="isSubmitting" class="legal-btn">
+            <span class="text-white text-nowrap">{{ isOfferAlreadySent ? 'Offer Already Sent' : 'Generate Offer' }}</span>
           </app-button>
         </div>
 
       </div>
-
-      <!-- Right Column Removed -->
     </div>
   </div>
 

@@ -1,6 +1,10 @@
 :host {
   --bg-color: #fafbfc;
   --primary-color: #0d6efd;
+  display: block;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 .management-container {
@@ -26,6 +30,9 @@
   background-color: #fcfbfe;
   min-height: 100vh;
   position: relative;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 /* Background decorations */
@@ -91,6 +98,8 @@
   box-shadow: 0 15px 40px -10px rgba(74, 58, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.05);
   border-radius: 20px !important;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  max-width: 100%;
 }
 
 .glass-card:hover {
@@ -591,6 +600,111 @@
 .portfolio-section-title i {
   color: #0d6efd;
   font-size: 1.1rem;
+}
+
+/* =========================================================
+   RESPONSIVE ENHANCEMENTS & MOBILE SAFEGUARDS
+========================================================= */
+
+.min-w-0 {
+  min-width: 0 !important;
+}
+
+.social-link-card {
+  background: #ffffff;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.social-link-card:hover {
+  border-color: #cbd5e1 !important;
+  background-color: #f8fafc;
+}
+
+.social-icon-wrapper {
+  transition: transform 0.2s ease;
+}
+
+.social-link-card:hover .social-icon-wrapper {
+  transform: scale(1.08);
+}
+
+.social-profile-link {
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+.balance-stat-box {
+  min-width: 0;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.balance-stat-box:hover {
+  background-color: #f8fafc;
+}
+
+@media (max-width: 767.98px) {
+  .dashboard-container {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    padding-top: 1rem !important;
+  }
+
+  .dashboard-container > .position-relative.z-1 {
+    margin-top: 1rem !important;
+  }
+
+  .glass-card {
+    border-radius: 16px !important;
+  }
+
+  .profile-avatar {
+    width: 96px !important;
+    height: 96px !important;
+  }
+
+  .bg-shape {
+    opacity: 0.6;
+  }
+
+  .top-left {
+    width: 240px;
+    height: 240px;
+    top: -60px;
+    left: -60px;
+  }
+
+  .bottom-right {
+    width: 240px;
+    height: 240px;
+    bottom: -60px;
+    right: -60px;
+  }
+
+  .right-shape,
+  .concentric-circles {
+    display: none !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .glass-card {
+    border-radius: 14px !important;
+  }
+
+  .balance-stat-box {
+    padding: 0.4rem 0.2rem !important;
+  }
+
+  .balance-stat-box span:first-child {
+    font-size: 0.6rem !important;
+  }
+
+  .balance-stat-box span:last-child {
+    font-size: 0.75rem !important;
+  }
 }
 
 

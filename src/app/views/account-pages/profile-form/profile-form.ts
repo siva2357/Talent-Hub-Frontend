@@ -337,6 +337,39 @@ export class ProfileForm implements OnInit {
     });
   }
 
+  getSocialIcon(platform: string): string {
+    if (!platform) return 'bi bi-link-45deg';
+    const p = platform.toLowerCase();
+    if (p.includes('linkedin')) return 'bi bi-linkedin';
+    if (p.includes('github')) return 'bi bi-github';
+    if (p.includes('twitter') || p.includes('x')) return 'bi bi-twitter-x';
+    if (p.includes('dribbble')) return 'bi bi-dribbble';
+    if (p.includes('behance')) return 'bi bi-behance';
+    if (p.includes('portfolio') || p.includes('website') || p.includes('globe') || p.includes('web')) return 'bi bi-globe2';
+    if (p.includes('instagram')) return 'bi bi-instagram';
+    if (p.includes('facebook')) return 'bi bi-facebook';
+    if (p.includes('youtube')) return 'bi bi-youtube';
+    return 'bi bi-link-45deg';
+  }
+
+  getSocialPlatformName(platform: string): string {
+    if (!platform) return '';
+    const match = this.socialPlatformOptions.find(opt => opt.value === platform || opt.label?.toLowerCase() === platform.toLowerCase());
+    return match ? match.label : (platform.charAt(0).toUpperCase() + platform.slice(1));
+  }
+
+  getSocialColorClass(platform: string): string {
+    if (!platform) return 'bg-primary bg-opacity-10 text-primary';
+    const p = platform.toLowerCase();
+    if (p.includes('linkedin')) return 'bg-primary bg-opacity-10 text-primary';
+    if (p.includes('github')) return 'bg-dark bg-opacity-10 text-dark';
+    if (p.includes('twitter') || p.includes('x')) return 'bg-dark bg-opacity-10 text-dark';
+    if (p.includes('dribbble')) return 'bg-danger bg-opacity-10 text-danger';
+    if (p.includes('behance')) return 'bg-primary bg-opacity-10 text-primary';
+    if (p.includes('portfolio') || p.includes('website')) return 'bg-info bg-opacity-10 text-info';
+    return 'bg-primary bg-opacity-10 text-primary';
+  }
+
   goToDashboard(): void {
     this.router.navigate(['/dashboard']);
   }

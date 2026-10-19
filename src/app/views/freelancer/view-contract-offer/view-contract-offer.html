@@ -1,4 +1,4 @@
-<div class="dashboard-container position-relative p-4">
+<div class="dashboard-container position-relative py-3 py-md-4 px-2 px-sm-3 px-md-4">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -11,167 +11,378 @@
     </div>
   </div>
 
-  <!-- Main Content Wrapper (Glassmorphism) -->
-  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
-  <!-- Breadcrumb / Back -->
-  <a routerLink="/proposal-offers" class="text-decoration-none text-muted fw-semibold d-flex align-items-center gap-2 mb-4" style="font-size: 0.85rem;">
-    <i class="bi bi-arrow-left"></i> Back to Offers
-  </a>
+  <!-- Main Content Wrapper -->
+  <div class="position-relative z-1 mx-auto" style="max-width: 1400px;">
+    <!-- Breadcrumb / Back Link -->
+    <a routerLink="/proposal-offers"
+      class="text-decoration-none text-muted fw-semibold d-inline-flex align-items-center gap-2 mb-3 mb-md-4 hover-text-primary"
+      style="font-size: 0.85rem;">
+      <i class="bi bi-arrow-left"></i> Back to Offers
+    </a>
 
-  @if (isLoading) {
+    <!-- Loading State -->
+    @if (isLoading) {
     <div class="text-center py-5">
       <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading offer details...</span>
       </div>
+      <p class="text-muted small mt-2">Loading contract offer details...</p>
     </div>
-  } @else if (offer) {
-  <div class="row g-4">
-    <!-- Left Column: Details & Actions -->
-    <div class="col-lg-7">
-      
-      <!-- Header -->
-      <div class="d-flex justify-content-between align-items-start mb-4">
-        <div class="d-flex gap-3 align-items-center">
-          <div class="rounded-3 bg-purple-soft text-purple d-flex align-items-center justify-content-center flex-shrink-0" style="width: 56px; height: 56px;">
-            <i class="bi bi-shield-check fs-3"></i>
-          </div>
-          <div>
-            <h1 class="fw-bold fs-4 mb-1 text-dark">Legal Contract Offer</h1>
-            <p class="text-muted small mb-0">Review the contract details carefully before accepting.</p>
-          </div>
-        </div>
-        <div class="text-end">
-          <span class="text-muted d-block fw-semibold mb-1" style="font-size: 0.7rem;">Offer Expires in</span>
-          <span class="fw-bold text-warning-dark" style="font-size: 0.9rem;">04d : 14h : 23m : 18s</span>
-        </div>
-      </div>
+    }
 
-      <!-- Alert -->
-      <div class="alert alert-primary bg-primary bg-opacity-10 border border-primary border-opacity-25 d-flex gap-3 align-items-center p-3 rounded-3 mb-4">
-        <i class="bi bi-info-circle text-primary fs-5"></i>
+    <!-- Error State -->
+    @else if (errorMessage || !offer) {
+    <div class="card border rounded-4 shadow-sm bg-white p-4 p-md-5 text-center my-4 mx-auto" style="max-width: 550px;">
+      <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mx-auto mb-3"
+        style="width: 56px; height: 56px;">
+        <i class="bi bi-exclamation-triangle text-warning fs-3"></i>
+      </div>
+      <h2 class="fs-5 fw-bold text-dark mb-2">Offer Not Available</h2>
+      <p class="text-muted small mb-4">{{ errorMessage || 'Could not load contract offer details. Please return to offers.' }}</p>
+      <div>
+        <app-button variant="primary" label="Back to Proposals & Offers" routerLink="/proposal-offers"></app-button>
+      </div>
+    </div>
+    }
+
+    <!-- Main Content when Offer is Loaded -->
+    @else {
+    <!-- Page Header (Responsive Flex) -->
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+      <div class="d-flex gap-3 align-items-center">
+        <div class="rounded-3 bg-purple-soft text-purple d-flex align-items-center justify-content-center flex-shrink-0"
+          style="width: 50px; height: 50px;">
+          <i class="bi bi-shield-check fs-3"></i>
+        </div>
         <div>
-          <strong class="text-dark d-block" style="font-size: 0.85rem;">{{ offer.clientId?.registrationDetails?.fullName }} has sent you a legal contract offer.</strong>
-          <span class="text-muted" style="font-size: 0.75rem;">Please review all the details and accept if they match your expectations.</span>
+          <h1 class="fw-bold fs-4 mb-0 text-dark">Legal Contract Offer</h1>
+          <p class="text-muted small mb-0">Review contract details and terms before signing.</p>
         </div>
       </div>
 
-      <!-- Contract Summary Grid -->
-      <h2 class="fs-6 fw-bold text-dark mb-3">Contract Summary</h2>
-      <div class="row g-3 mb-4">
-        @for(stat of stats; track stat.title) {
-        <div class="col-md-4 col-sm-6">
-          <app-stat-card [stat]="stat"></app-stat-card>
-        </div>
-        }
+      <!-- Expiry Countdown Pill (Dynamic Real-time Counting) -->
+      <div class="bg-warning bg-opacity-10 border border-warning border-opacity-25 rounded-3 px-3 py-2 text-start text-sm-end">
+        <span class="text-muted d-block fw-semibold" style="font-size: 0.7rem;">Offer Expires in</span>
+        <span class="fw-bold text-warning-dark d-inline-flex align-items-center gap-1" style="font-size: 0.9rem; font-variant-numeric: tabular-nums;">
+          <i class="bi bi-clock-history"></i> {{ countdownText }}
+        </span>
       </div>
+    </div>
 
-      <!-- Scope & Payment Schedule -->
-      <div class="row g-4 mb-4">
-        <!-- Scope -->
-        <div class="col-md-6">
-          <div class="p-4 border rounded-3 bg-white h-100">
-            <h3 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-3"><i class="bi bi-journal-text text-primary"></i> Scope of Work (Summary)</h3>
-            <p class="text-muted" style="font-size: 0.75rem; line-height: 1.6; white-space: pre-wrap;">{{ offer.scopeOfWork || 'No scope of work provided.' }}</p>
-          </div>
-        </div>
-        <!-- Additional Terms -->
-        <div class="col-md-6">
-          <div class="p-4 border rounded-3 bg-white h-100">
-            <h3 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-3"><i class="bi bi-shield-exclamation text-warning-dark"></i> Additional Terms</h3>
-            <p class="text-muted" style="font-size: 0.75rem; line-height: 1.6; white-space: pre-wrap;">{{ offer.additionalTerms || 'No additional terms specified.' }}</p>
-          </div>
-        </div>
-      </div>
+    <!-- Mobile View Tabs: Small Compact Width with Gap (Not Full Width) -->
+    <div class="d-inline-flex d-lg-none mobile-view-nav gap-2 mb-3">
+      <button type="button" class="btn btn-sm"
+        [ngClass]="activeMobileTab === 'details' ? 'btn-primary shadow-sm' : 'btn-light border text-muted'"
+        (click)="activeMobileTab = 'details'">
+        <i class="bi bi-card-text me-1"></i> Contract Details
+      </button>
+      <button type="button" class="btn btn-sm"
+        [ngClass]="activeMobileTab === 'preview' ? 'btn-primary shadow-sm' : 'btn-light border text-muted'"
+        (click)="activeMobileTab = 'preview'">
+        <i class="bi bi-file-earmark-text me-1"></i> Contract Preview
+      </button>
+    </div>
 
-      <!-- Legal Clauses & Signature -->
-      <div class="row g-4 mb-4">
-        <!-- Legal Clauses -->
-        <div class="col-md-6">
-          <div class="p-4 border rounded-3 bg-white h-100">
-            <h3 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-3"><i class="bi bi-shield-lock text-purple"></i> Legal Clauses</h3>
-            <ul class="list-unstyled d-flex flex-column gap-2 mb-3" style="font-size: 0.75rem;">
-              <li class="d-flex gap-2 text-muted"><i class="bi bi-check2 text-success"></i> Confidentiality Agreement</li>
-              <li class="d-flex gap-2 text-muted"><i class="bi bi-check2 text-success"></i> Intellectual Property Rights</li>
-              <li class="d-flex gap-2 text-muted"><i class="bi bi-check2 text-success"></i> Payment Terms & Conditions</li>
-              <li class="d-flex gap-2 text-muted"><i class="bi bi-check2 text-success"></i> Termination & Refund Policy</li>
-            </ul>
-            <a href="#" class="text-primary text-decoration-none fw-semibold" style="font-size: 0.75rem;">View Complete Agreement <i class="bi bi-arrow-right"></i></a>
+    <div class="row g-4 align-items-start">
+      <!-- ========================================================
+           LEFT COLUMN: DETAILS & ACTIONS
+      ========================================================= -->
+      <div class="col-lg-7" [class.d-none]="activeMobileTab !== 'details' && !isLoading" [class.d-lg-block]="true">
+
+        <!-- Informational Banner -->
+        <div class="alert alert-primary bg-primary bg-opacity-10 border border-primary border-opacity-25 d-flex gap-3 align-items-center p-3 rounded-3 mb-4">
+          <i class="bi bi-info-circle text-primary fs-5 flex-shrink-0"></i>
+          <div>
+            <strong class="text-dark d-block" style="font-size: 0.85rem;">
+              {{ offer.clientId?.registrationDetails?.fullName || 'Client' }} has sent you a legal contract offer.
+            </strong>
+            <span class="text-muted" style="font-size: 0.75rem;">
+              Please review all terms, budget, and scope of work below.
+            </span>
           </div>
         </div>
-        <!-- Client Signature -->
-        <div class="col-md-6">
-          <div class="p-4 border rounded-3 bg-white h-100 position-relative">
-            <h3 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-3"><i class="bi bi-pen text-primary"></i> Client Signature</h3>
-            
-            @if(offer.clientSignature) {
-            <span class="badge bg-success bg-opacity-10 text-success position-absolute top-0 end-0 mt-4 me-4 rounded-pill">Signed</span>
-            <div class="border rounded bg-light bg-opacity-50 p-3 mb-2 d-flex justify-content-center align-items-center" style="height: 80px;">
-              <img [src]="offer.clientSignature" alt="Client Signature" style="max-height: 100%; max-width: 100%;">
+
+        <!-- ========================================================
+             CONTRACT SUMMARY: SINGLE UNIFIED SECTION (No divided cards)
+        ========================================================= -->
+        <div class="card border rounded-4 bg-white shadow-sm overflow-hidden mb-4">
+          <!-- Section Header -->
+          <div class="d-flex justify-content-between align-items-center px-3 px-sm-4 py-3 bg-light bg-opacity-50 border-bottom">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-file-earmark-text text-primary fs-5"></i>
+              <h2 class="fs-6 fw-bold text-dark mb-0">Contract Summary</h2>
             </div>
-            } @else {
-            <span class="badge bg-warning bg-opacity-10 text-warning-dark position-absolute top-0 end-0 mt-4 me-4 rounded-pill">Pending</span>
-            <div class="border rounded bg-light bg-opacity-50 p-3 mb-2 d-flex justify-content-center align-items-center" style="height: 80px;">
-              <span class="text-muted fst-italic" style="font-size: 0.8rem;">Digital Signature</span>
-            </div>
-            }
-            
-            <div class="d-flex align-items-center gap-2 text-muted" style="font-size: 0.7rem;">
-              <i class="bi bi-calendar-check"></i>
-              <div>
-                <span class="d-block fw-semibold">Sent On</span>
-                <span>{{ offer.createdAt | date:'MMM d, yyyy' }}</span>
+            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.75rem;">
+              {{ offer.offerStatus | titlecase }}
+            </span>
+          </div>
+
+          <!-- Single Unified Content Grid (3x3 on MD/LG, 2-col on SM, 1-col on XS) -->
+          <div class="p-3 p-sm-4">
+            <div class="row g-3">
+              <!-- 1. Client -->
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="summary-item d-flex align-items-center gap-3 p-2 rounded-3">
+                  <div class="summary-icon bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="bi bi-person-badge fs-5"></i>
+                  </div>
+                  <div class="min-w-0 flex-grow-1">
+                    <span class="summary-label text-muted d-block text-uppercase fw-semibold">Client</span>
+                    <span class="summary-value fw-bold text-dark text-truncate d-block">{{ offer.clientId?.registrationDetails?.fullName || 'N/A' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. Contractor -->
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="summary-item d-flex align-items-center gap-3 p-2 rounded-3">
+                  <div class="summary-icon bg-secondary bg-opacity-10 text-secondary d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="bi bi-person-workspace fs-5"></i>
+                  </div>
+                  <div class="min-w-0 flex-grow-1">
+                    <span class="summary-label text-muted d-block text-uppercase fw-semibold">Contractor</span>
+                    <span class="summary-value fw-bold text-dark text-truncate d-block">{{ offer.freelancerId?.registrationDetails?.fullName || 'N/A' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Contract Title -->
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="summary-item d-flex align-items-center gap-3 p-2 rounded-3">
+                  <div class="summary-icon bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="bi bi-briefcase fs-5"></i>
+                  </div>
+                  <div class="min-w-0 flex-grow-1">
+                    <span class="summary-label text-muted d-block text-uppercase fw-semibold">Contract Title</span>
+                    <span class="summary-value fw-bold text-dark text-truncate d-block">{{ offer.contractId?.contractTitle || 'N/A' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4. Budget -->
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="summary-item d-flex align-items-center gap-3 p-2 rounded-3">
+                  <div class="summary-icon bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="bi bi-currency-rupee fs-5"></i>
+                  </div>
+                  <div class="min-w-0 flex-grow-1">
+                    <span class="summary-label text-muted d-block text-uppercase fw-semibold">Budget</span>
+                    <span class="summary-value fw-bold text-success text-truncate d-block">{{ formatBudget(offer.contractId?.estimatedBudget) }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 5. Contract Type -->
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="summary-item d-flex align-items-center gap-3 p-2 rounded-3">
+                  <div class="summary-icon bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="bi bi-cash-stack fs-5"></i>
+                  </div>
+                  <div class="min-w-0 flex-grow-1">
+                    <span class="summary-label text-muted d-block text-uppercase fw-semibold">Contract Type</span>
+                    <span class="summary-value fw-bold text-dark text-truncate d-block">{{ formatContractType(offer.contractId?.contractType) }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 6. Category -->
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="summary-item d-flex align-items-center gap-3 p-2 rounded-3">
+                  <div class="summary-icon bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="bi bi-folder2-open fs-5"></i>
+                  </div>
+                  <div class="min-w-0 flex-grow-1">
+                    <span class="summary-label text-muted d-block text-uppercase fw-semibold">Category</span>
+                    <span class="summary-value fw-bold text-dark text-truncate d-block">{{ offer.contractId?.contractSubject | titlecase }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 7. Offer Date -->
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="summary-item d-flex align-items-center gap-3 p-2 rounded-3">
+                  <div class="summary-icon d-flex align-items-center justify-content-center flex-shrink-0" style="background-color: rgba(111, 66, 193, 0.1); color: #6f42c1;">
+                    <i class="bi bi-calendar-check fs-5"></i>
+                  </div>
+                  <div class="min-w-0 flex-grow-1">
+                    <span class="summary-label text-muted d-block text-uppercase fw-semibold">Offer Date</span>
+                    <span class="summary-value fw-bold text-dark text-truncate d-block">{{ offer.createdAt | date:'MMM d, yyyy' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 8. Start Date -->
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="summary-item d-flex align-items-center gap-3 p-2 rounded-3">
+                  <div class="summary-icon bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="bi bi-calendar-event fs-5"></i>
+                  </div>
+                  <div class="min-w-0 flex-grow-1">
+                    <span class="summary-label text-muted d-block text-uppercase fw-semibold">Start Date</span>
+                    <span class="summary-value fw-bold text-dark text-truncate d-block">{{ offer.contractId?.contractStartDate | date:'MMM d, yyyy' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 9. End Date -->
+              <div class="col-12 col-sm-6 col-md-4">
+                <div class="summary-item d-flex align-items-center gap-3 p-2 rounded-3">
+                  <div class="summary-icon bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="bi bi-calendar-x fs-5"></i>
+                  </div>
+                  <div class="min-w-0 flex-grow-1">
+                    <span class="summary-label text-muted d-block text-uppercase fw-semibold">End Date</span>
+                    <span class="summary-value fw-bold text-dark text-truncate d-block">{{ offer.contractId?.contractEndDate | date:'MMM d, yyyy' }}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Action Buttons -->
-      <div class="d-flex flex-wrap align-items-center justify-content-end gap-3 pt-4 border-top mt-4">
-        <app-button variant="outline-danger" size="md" icon="bi bi-x-lg" label="Decline Offer" [block]="false"></app-button>
-        <app-button variant="primary" size="md" icon="bi bi-arrow-right" label="Accept & Continue" [routerLink]="['/legal-contract-acceptance', offerId]" [block]="false"></app-button>
-      </div>
-      <p class="text-center text-muted mt-3 mb-0" style="font-size: 0.7rem;"><i class="bi bi-lock-fill"></i> By accepting this offer, you agree to all the terms and conditions outlined in the contract.</p>
-
-    </div>
-
-    <!-- Right Column: Contract Preview PDF -->
-    <div class="col-lg-5">
-      <div class="glass-card rounded-4 h-100 bg-white overflow-hidden d-flex flex-column border border-light">
-        <!-- PDF Header -->
-        <div class="d-flex justify-content-between align-items-center p-3 border-bottom bg-light bg-opacity-50">
-          <h2 class="fs-6 fw-bold mb-0 d-flex align-items-center gap-2 text-dark"><i class="bi bi-file-earmark-text text-primary"></i> Contract Preview</h2>
-          <span class="badge border border-success text-success bg-white rounded-pill px-3 py-1 d-flex align-items-center gap-1"><i class="bi bi-shield-check"></i> Verified</span>
-        </div>
-        
-        <!-- PDF Toolbar -->
-        <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom bg-white">
-          <div class="d-flex gap-3">
-            <i class="bi bi-images text-muted cursor-pointer hover-text-primary"></i>
-            <i class="bi bi-download text-muted cursor-pointer hover-text-primary"></i>
-          </div>
-          <div class="d-flex align-items-center gap-3 text-muted" style="font-size: 0.85rem;">
-            <span>1 / 10</span>
-            <div class="d-flex align-items-center gap-2 border-start border-end px-3">
-              <i class="bi bi-dash cursor-pointer hover-text-primary"></i>
-              <span class="fw-semibold">100%</span>
-              <i class="bi bi-plus cursor-pointer hover-text-primary"></i>
+        <!-- Scope & Additional Terms (2 Cards) -->
+        <div class="row g-3 mb-4">
+          <!-- Scope of Work -->
+          <div class="col-12 col-md-6">
+            <div class="p-3 p-sm-4 border rounded-3 bg-white h-100 shadow-sm">
+              <h3 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-journal-text text-primary"></i> Scope of Work
+              </h3>
+              <div class="rich-text-content" [innerHTML]="offer.scopeOfWork || 'No scope of work provided.'"></div>
             </div>
-            <i class="bi bi-box-arrow-up text-muted cursor-pointer hover-text-primary"></i>
+          </div>
+          <!-- Additional Terms -->
+          <div class="col-12 col-md-6">
+            <div class="p-3 p-sm-4 border rounded-3 bg-white h-100 shadow-sm">
+              <h3 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-shield-exclamation text-warning-dark"></i> Additional Terms
+              </h3>
+              <div class="rich-text-content" [innerHTML]="offer.additionalTerms || 'No additional terms specified.'"></div>
+            </div>
           </div>
         </div>
-        <!-- PDF Content Area -->
-        <div class="flex-grow-1 bg-light p-0 overflow-hidden" style="min-height: 600px; position: relative;">
-          <!-- Show loading overlay until iframe loads (optional, but good UX) -->
-          <div class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center bg-light" style="z-index: 1;" *ngIf="!offer">
-            <div class="spinner-border text-primary" role="status"></div>
+
+        <!-- Legal Clauses & Client Signature (2 Cards) -->
+        <div class="row g-3 mb-4">
+          <!-- Legal Clauses -->
+          <div class="col-12 col-md-6">
+            <div class="p-3 p-sm-4 border rounded-3 bg-white h-100 shadow-sm">
+              <h3 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-3">
+                <i class="bi bi-shield-lock text-purple"></i> Legal Clauses
+              </h3>
+              <ul class="list-unstyled d-flex flex-column gap-2 mb-3" style="font-size: 0.75rem;">
+                <li class="d-flex gap-2 text-muted"><i class="bi bi-check2 text-success"></i> Confidentiality Agreement</li>
+                <li class="d-flex gap-2 text-muted"><i class="bi bi-check2 text-success"></i> Intellectual Property Rights</li>
+                <li class="d-flex gap-2 text-muted"><i class="bi bi-check2 text-success"></i> Payment Terms & Conditions</li>
+                <li class="d-flex gap-2 text-muted"><i class="bi bi-check2 text-success"></i> Termination & Refund Policy</li>
+              </ul>
+              <span class="text-primary fw-semibold" style="font-size: 0.75rem;">
+                Governing Law: {{ offer.governingLaw || 'Indian Law' }}
+              </span>
+            </div>
           </div>
-          <iframe *ngIf="safePdfUrl" [src]="safePdfUrl" width="100%" height="100%" style="border: none; position: relative; z-index: 2;"></iframe>
+          <!-- Client Signature -->
+          <div class="col-12 col-md-6">
+            <div class="p-3 p-sm-4 border rounded-3 bg-white h-100 position-relative shadow-sm">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3 class="fs-6 fw-bold text-dark d-flex align-items-center gap-2 mb-0">
+                  <i class="bi bi-pen text-primary"></i> Client Signature
+                </h3>
+                @if (offer.clientSignature) {
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1">Signed</span>
+                } @else {
+                <span class="badge bg-warning bg-opacity-10 text-warning-dark rounded-pill px-2 py-1">Pending</span>
+                }
+              </div>
+
+              @if (offer.clientSignature) {
+              <div class="border rounded bg-light bg-opacity-50 p-2 mb-2 d-flex justify-content-center align-items-center"
+                style="height: 80px;">
+                <img [src]="offer.clientSignature" alt="Client Signature" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+              </div>
+              } @else {
+              <div class="border rounded bg-light bg-opacity-50 p-3 mb-2 d-flex justify-content-center align-items-center"
+                style="height: 80px;">
+                <span class="text-muted fst-italic" style="font-size: 0.8rem;">Digital Signature</span>
+              </div>
+              }
+
+              <div class="d-flex align-items-center gap-2 text-muted" style="font-size: 0.7rem;">
+                <i class="bi bi-calendar-check"></i>
+                <div>
+                  <span class="d-block fw-semibold">Sent On</span>
+                  <span>{{ offer.createdAt | date:'MMM d, yyyy' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons (Responsive) -->
+        <div class="p-3 p-sm-4 border rounded-3 bg-white shadow-sm mb-4">
+          @if (offer.offerStatus === 'sent') {
+          <div class="d-flex justify-content-between align-items-center gap-2 w-100">
+            <app-button variant="outline-danger" size="md" icon="bi bi-x-lg" label="Decline Offer"
+              [disabled]="isDeclining" (clicked)="declineOffer()"></app-button>
+            <app-button variant="primary" size="md" icon="bi bi-arrow-right" label="Accept & Continue"
+              [routerLink]="['/legal-contract-acceptance', offerId]"></app-button>
+          </div>
+          <p class="text-center text-muted mt-2 mb-0" style="font-size: 0.7rem;">
+            <i class="bi bi-lock-fill"></i> By accepting this offer, you agree to all terms outlined in the contract.
+          </p>
+          } @else if (offer.offerStatus === 'accepted') {
+          <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-2 text-success">
+              <i class="bi bi-check-circle-fill fs-5"></i>
+              <span class="fw-bold small">This contract offer was accepted on {{ offer.signedAt | date:'MMM d, yyyy' }}. Work is active!</span>
+            </div>
+            <app-button variant="primary" size="sm" label="View Contracts" routerLink="/proposal-offers"></app-button>
+          </div>
+          } @else if (offer.offerStatus === 'declined') {
+          <div class="d-flex align-items-center gap-2 text-danger">
+            <i class="bi bi-x-circle-fill fs-5"></i>
+            <span class="fw-bold small">This contract offer was declined.</span>
+          </div>
+          }
+        </div>
+
+      </div>
+
+      <!-- ========================================================
+           RIGHT COLUMN: CONTRACT PREVIEW PDF
+      ========================================================= -->
+      <div class="col-lg-5 pdf-preview-sticky" [class.d-none]="activeMobileTab !== 'preview' && !isLoading" [class.d-lg-block]="true">
+        <div class="glass-card bg-white overflow-hidden d-flex flex-column border">
+          <!-- PDF Card Header -->
+          <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom bg-light bg-opacity-50">
+            <div class="d-flex align-items-center gap-2">
+              <h2 class="fs-6 fw-bold mb-0 text-dark d-flex align-items-center gap-2">
+                <i class="bi bi-file-earmark-text text-primary"></i> Contract Preview
+              </h2>
+              <span class="badge border border-success text-success bg-white rounded-pill px-2 py-1 d-inline-flex align-items-center gap-1"
+                style="font-size: 0.7rem;">
+                <i class="bi bi-shield-check"></i> Verified
+              </span>
+            </div>
+
+            <!-- PDF Controls: Fullscreen only -->
+            <a [href]="rawPdfUrl" target="_blank"
+              class="btn btn-sm btn-light border d-inline-flex align-items-center gap-1 px-2.5 py-1 text-dark"
+              title="Open in Full Screen" style="font-size: 0.75rem;">
+              <i class="bi bi-box-arrow-up-right"></i>
+              <span>Fullscreen</span>
+            </a>
+          </div>
+
+          <!-- PDF Iframe Container -->
+          <div class="pdf-container">
+            <iframe *ngIf="safePdfUrl" [src]="safePdfUrl"
+              class="w-100 h-100 border-0"
+              title="Legal Contract Document Preview"></iframe>
+          </div>
         </div>
       </div>
     </div>
+    }
   </div>
-  }
-</div>
-
 </div>

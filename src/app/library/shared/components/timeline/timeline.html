@@ -10,6 +10,7 @@
             [class.active]="step.status === 'active'" [class.disabled]="step.status === 'disabled'"
             [class.error]="step.status === 'error'" [class.skipped]="step.status === 'skipped'"
             [class.upcoming]="step.status === 'upcoming'" [class.clickable]="isStepClickable(step)"
+            [ngClass]="step.customClass || ''"
             (click)="onStepClick($index)">
 
             <!-- STATUS LABEL -->
@@ -53,7 +54,11 @@
 
                     @else if (mode === 'numbered') {
 
+                    @if (step.icon) {
+                    <i [class]="step.icon"></i>
+                    } @else {
                     {{ $index + 1 }}
+                    }
 
                     }
 

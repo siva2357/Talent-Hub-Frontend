@@ -41,8 +41,8 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
   statusFilter$ = new BehaviorSubject<string>('all');
   private subscription: Subscription = new Subscription();
 
-  categoryOptions = [{ label: 'Select All', value: 'all' }];
-  statusOptions = [{ label: 'Select All', value: 'all' }];
+  categoryOptions = [{ label: 'All Categories', value: 'all' }];
+  statusOptions = [{ label: 'All Statuses', value: 'all' }];
 
   dropdownTop: number = 0;
   dropdownLeft: number = 0;
@@ -96,10 +96,10 @@ export class ManageContract implements OnInit, AfterViewInit, OnDestroy {
       next: (res) => {
         if (res.success && res.data) {
           if (res.data['ContractCategories']) {
-            this.categoryOptions = [{ label: 'Select All', value: 'all' }, ...res.data['ContractCategories'].map((o: any) => ({ label: o.value, value: o.key }))];
+            this.categoryOptions = [{ label: 'All Categories', value: 'all' }, ...res.data['ContractCategories'].map((o: any) => ({ label: o.value, value: o.key }))];
           }
           if (res.data['ContractStatus']) {
-            this.statusOptions = [{ label: 'Select All', value: 'all' }, ...res.data['ContractStatus'].map((o: any) => ({ label: o.value, value: o.key }))];
+            this.statusOptions = [{ label: 'All Statuses', value: 'all' }, ...res.data['ContractStatus'].map((o: any) => ({ label: o.value, value: o.key }))];
           }
         }
       },

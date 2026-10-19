@@ -280,6 +280,36 @@ export class Profile implements OnInit {
     return type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   }
 
+  getSocialIcon(platform?: string): string {
+    if (!platform) return 'bi bi-link-45deg';
+    const p = platform.toLowerCase();
+    if (p.includes('linkedin')) return 'bi bi-linkedin';
+    if (p.includes('github')) return 'bi bi-github';
+    if (p.includes('twitter') || p.includes('x')) return 'bi bi-twitter-x';
+    if (p.includes('facebook')) return 'bi bi-facebook';
+    if (p.includes('instagram')) return 'bi bi-instagram';
+    if (p.includes('youtube')) return 'bi bi-youtube';
+    if (p.includes('dribbble')) return 'bi bi-dribbble';
+    if (p.includes('behance')) return 'bi bi-behance';
+    return 'bi bi-globe';
+  }
+
+  getSocialColorClass(platform?: string): string {
+    if (!platform) return 'bg-primary bg-opacity-10 text-primary';
+    const p = platform.toLowerCase();
+    if (p.includes('linkedin')) return 'bg-primary bg-opacity-10 text-primary';
+    if (p.includes('github')) return 'bg-dark bg-opacity-10 text-dark';
+    if (p.includes('twitter') || p.includes('x')) return 'bg-dark bg-opacity-10 text-dark';
+    if (p.includes('instagram')) return 'bg-danger bg-opacity-10 text-danger';
+    if (p.includes('youtube')) return 'bg-danger bg-opacity-10 text-danger';
+    return 'bg-primary bg-opacity-10 text-primary';
+  }
+
+  getSocialPlatformName(platform?: string): string {
+    if (!platform) return 'Social Profile';
+    return platform.charAt(0).toUpperCase() + platform.slice(1);
+  }
+
   viewAllContracts(event?: Event): void {
     if (event) {
       event.preventDefault();

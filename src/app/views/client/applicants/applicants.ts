@@ -246,20 +246,37 @@ export class Applicants implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getAvailabilityString(availability: any): string {
+    let text = '';
     if (Array.isArray(availability)) {
-      return availability.length > 0 ? availability[0] : 'Not specified';
+      text = availability.length > 0 ? availability[0] : 'Not specified';
+    } else {
+      text = availability || 'Not specified';
     }
-    return availability || 'Not specified';
+    return text ? text.replace(/_/g, ' ') : 'Not specified';
   }
 
   getDropdownItems(row: any): DropdownItem[] {
-    const items = [
+    const items: DropdownItem[] = [
       { label: 'View Profile', value: 'profile', icon: 'bi bi-eye' },
       { label: 'Recruitment Workflow', value: 'workflow', icon: 'bi bi-diagram-3' }
     ];
 
     if (row.applicationStatus && row.applicationStatus.toLowerCase() === 'hired') {
-      items.push({ label: 'Send Offer', value: 'offer', icon: 'bi bi-check-circle' });
+      const isOfferSent = row.offerStatus && row.offerStatus.toLowerCase() !== 'none';
+      if (isOfferSent) {
+        items.push({ 
+          label: 'Offer Sent', 
+          value: 'offer-sent', 
+          icon: 'bi bi-check2-all',
+          disabled: true 
+        });
+      } else {
+        items.push({ 
+          label: 'Send Offer', 
+          value: 'offer', 
+          icon: 'bi bi-check-circle' 
+        });
+      }
     }
 
     return items;
@@ -269,9 +286,13 @@ export class Applicants implements OnInit, AfterViewInit, OnDestroy {
     if (event.value === 'profile') {
       this.viewFreelancerProfile(row);
     } else if (event.value === 'workflow') {
-      this.openRecruitmentWorkflow(row.applicationId);
+      this.openRecruitmentWorkflow(row);
       document.getElementById('hiddenWorkflowBtn')?.click();
     } else if (event.value === 'offer') {
+      const isOfferSent = row.offerStatus && row.offerStatus.toLowerCase() !== 'none';
+      if (isOfferSent) {
+        return;
+      }
       this.router.navigate(['/legal-contract-page', row.applicationId]);
     }
   }
@@ -288,7 +309,15 @@ export class Applicants implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  openRecruitmentWorkflow(applicantId: string): void {
-    this.selectedApplicantId = applicantId;
+  selectedApplicant: any = null;
+
+  openRecruitmentWorkflow(applicant: any): void {
+    if (typeof applicant === 'string') {
+      this.selectedApplicantId = applicant;
+      this.selectedApplicant = this.applicants.find(a => a.applicationId === applicant) || null;
+    } else {
+      this.selectedApplicantId = applicant?.applicationId || '';
+      this.selectedApplicant = applicant;
+    }
   }
 }
