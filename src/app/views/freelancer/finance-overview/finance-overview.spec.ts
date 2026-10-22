@@ -106,7 +106,7 @@ describe('FinanceOverview', () => {
       expect(component.stats.pendingWithdrawal).toBe(2000);
       expect(component.stats.availableBalance).toBe(8452.5);
 
-      expect(component.statCardsData.length).toBe(6);
+      expect(component.statCardsData.length).toBe(4);
       expect(component.loading).toBeFalse();
     });
 

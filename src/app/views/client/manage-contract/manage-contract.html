@@ -182,15 +182,18 @@
 
 
 <ng-template #actionsTemplate let-row="row">
-  <div class="dropdown">
-    <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown"
-      aria-expanded="false" data-bs-display="static">
-      <i class="bi bi-three-dots-vertical"></i>
-    </button>
-    <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none" style="min-width: auto;">
-      <app-dropdown [items]="getDropdownItems(row)" (itemSelected)="onDropdownAction($event, row)" class="d-block"
-        style="position: relative;">
-      </app-dropdown>
+  <div class="d-flex align-items-center justify-content-center gap-2">
+
+    <div class="dropdown">
+      <button class="btn btn-link text-dark p-0 text-decoration-none" type="button" data-bs-toggle="dropdown"
+        aria-expanded="false" data-bs-display="static">
+        <i class="bi bi-three-dots-vertical"></i>
+      </button>
+      <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none" style="min-width: auto;">
+        <app-dropdown [items]="getDropdownItems(row)" (itemSelected)="onDropdownAction($event, row)" class="d-block"
+          style="position: relative;">
+        </app-dropdown>
+      </div>
     </div>
   </div>
 </ng-template>

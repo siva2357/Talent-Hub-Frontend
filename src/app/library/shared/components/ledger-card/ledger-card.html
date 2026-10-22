@@ -5,7 +5,7 @@
     <div class="ledger-header-meta">
       <span class="ledger-contract-tag">CONTRACT</span>
       @if (transaction.date) {
-        <span class="ledger-date">{{ transaction.date }}</span>
+      <span class="ledger-date">{{ transaction.date }}</span>
       }
     </div>
     <h3 class="ledger-contract-title" [title]="transaction.contractTitle">
@@ -69,30 +69,30 @@
       <span class="ledger-label">STATUS</span>
       <div>
         @if (transaction.status === 'Completed') {
-          <app-badge label="Completed" variant="success" appearance="subtle"></app-badge>
+        <app-badge label="Completed" variant="success" appearance="subtle"></app-badge>
         }
         @else if (transaction.status === 'Pending' || transaction.status === 'Pending Payout') {
-          <app-badge label="Pending" variant="warning" appearance="subtle"></app-badge>
+        <app-badge label="Pending" variant="warning" appearance="subtle"></app-badge>
         }
         @else if (transaction.status === 'In Progress') {
-          <app-badge label="In Progress" variant="primary" appearance="subtle"></app-badge>
+        <app-badge label="In Progress" variant="primary" appearance="subtle"></app-badge>
         }
         @else {
-          <app-badge [label]="transaction.status" variant="secondary" appearance="subtle"></app-badge>
+        <app-badge [label]="transaction.status" variant="secondary" appearance="subtle"></app-badge>
         }
       </div>
     </div>
 
     <div class="ledger-action-wrap">
       @if (transaction.status === 'Pending' && transaction.type === 'Payout') {
-        <app-button variant="outline-primary" size="sm" label="Process Payout" (clicked)="onProcessPayout()">
-        </app-button>
+      <app-button variant="outline-primary" size="sm" label="Process Payout" (clicked)="onProcessPayout()">
+      </app-button>
       }
       @else if (transaction.status === 'Completed') {
-        <app-badge label="Paid" variant="success" appearance="subtle"></app-badge>
+      <app-badge label="Paid" variant="success" appearance="subtle"></app-badge>
       }
       @else {
-        <app-badge [label]="transaction.type || transaction.status" variant="secondary" appearance="subtle"></app-badge>
+      <app-badge [label]="transaction.type || transaction.status" variant="secondary" appearance="subtle"></app-badge>
       }
     </div>
   </div>

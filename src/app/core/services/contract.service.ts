@@ -74,10 +74,10 @@ export class ContractService extends BaseService {
     return this.get(`${this.apiUrl}/my-contracts/applicants?contractId=${contractId}`);
   }
 
-
-
-
-
-
-
+  downloadContractWorksheet(contractId: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${contractId}/worksheet/download`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob'
+    });
+  }
 }

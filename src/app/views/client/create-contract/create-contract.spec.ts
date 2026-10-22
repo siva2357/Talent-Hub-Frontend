@@ -112,11 +112,6 @@ describe('CreateContract', () => {
   });
 
   it('should call updateContract when editContractId is set', () => {
-    // Form is already valid from the mock loaded data, but agreeToTerms need to be checked in mock
-    component.contractForm.get('agreeToTerms1')?.setValue(true);
-    component.contractForm.get('agreeToTerms2')?.setValue(true);
-    component.contractForm.get('agreeToTerms3')?.setValue(true);
-    
     expect(component.contractForm.valid).toBeTrue();
     
     component.submitContract();
@@ -139,9 +134,6 @@ describe('CreateContract', () => {
       estimatedBudget: 50000,
       currency: 'INR'
     });
-    component.contractForm.get('agreeToTerms1')?.setValue(true);
-    component.contractForm.get('agreeToTerms2')?.setValue(true);
-    component.contractForm.get('agreeToTerms3')?.setValue(true);
     
     component.submitContract();
     

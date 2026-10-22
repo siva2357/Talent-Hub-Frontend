@@ -118,7 +118,7 @@ export class FinancialSummary implements OnInit, AfterViewInit, OnDestroy {
         { field: 'freelancerName', headerName: 'Freelancer', cellTemplate: this.freelancerTpl,width: 150 },
         { field: 'budget', headerName: 'Client Payment', cellTemplate: this.clientPaymentTpl,width: 150 },
         { field: 'freelancerPayment', headerName: 'Freelancer Payout', cellTemplate: this.freelancerPayoutTpl,width: 150 },
-        { field: 'platformFee', headerName: 'Platform Fee', cellTemplate: this.platformFeeTpl,width: 150 },
+        { field: 'platformFee', headerName: 'Platform Fee', cellTemplate: this.platformFeeTpl, width: 180 },
         { field: 'status', headerName: 'Status', cellTemplate: this.statusTpl,width: 150 },
         { field: 'actions', headerName: 'Actions', cellTemplate: this.actionsTpl, width: 180 }
       ];

@@ -156,5 +156,38 @@ export class ContractPhaseDetails implements OnInit {
       }
     });
   }
+
+  get phaseProgress() {
+    if (!this.phase) return 0;
+    const statusMap: Record<string, number> = {
+      'created': 10,
+      'in-progress': 40,
+      'submitted': 70,
+      'under-review': 75,
+      'revision-requested': 60,
+      'changes-requested': 60,
+      'approved': 100,
+      'completed': 100
+    };
+    return statusMap[this.phase.status?.toLowerCase()] || 0;
+  }
+
+  getStatusBadgeVariant(status: string): 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' {
+    switch (status?.toLowerCase()) {
+      case 'approved':
+      case 'completed':
+        return 'success';
+      case 'submitted':
+      case 'under-review':
+        return 'info';
+      case 'in-progress':
+        return 'primary';
+      case 'revision-requested':
+      case 'changes-requested':
+        return 'warning';
+      default:
+        return 'secondary';
+    }
+  }
 }
 

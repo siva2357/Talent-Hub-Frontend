@@ -19,41 +19,57 @@ describe('MyContracts', () => {
       _id: 'c-1',
       contractTitle: 'Frontend Angular Overhaul',
       clientName: 'Tech Innovators Inc',
+      clientEmail: 'tech@innovators.com',
       contractCategory: 'web-dev',
+      contractSubject: 'web-dev',
+      contractType: 'fixed_price',
       status: 'in progress',
-      startDate: '2026-01-01',
-      endDate: '2026-06-01',
-      budget: 3500
+      contractStartDate: '2026-01-01',
+      contractEndDate: '2026-06-01',
+      estimatedBudget: 3500,
+      createdAt: '2026-01-01'
     },
     {
       _id: 'c-2',
       contractTitle: 'Mobile App Wireframing',
       clientName: 'Studio Blue',
+      clientEmail: 'blue@studio.com',
       contractCategory: 'design',
+      contractSubject: 'design',
+      contractType: 'fixed_price',
       status: 'open',
-      startDate: '2026-02-01',
-      endDate: '2026-02-15',
-      budget: 1200
+      contractStartDate: '2026-02-01',
+      contractEndDate: '2026-02-15',
+      estimatedBudget: 1200,
+      createdAt: '2026-01-15'
     },
     {
       _id: 'c-3',
       contractTitle: 'API Gateway Microservices',
       clientName: 'Cloud Solutions',
+      clientEmail: 'support@cloud.com',
       contractCategory: 'backend',
+      contractSubject: 'backend',
+      contractType: 'hourly_rate',
       status: 'completed',
-      startDate: '2025-06-01',
-      endDate: '2025-12-01',
-      budget: 5000
+      contractStartDate: '2025-06-01',
+      contractEndDate: '2025-12-01',
+      estimatedBudget: 5000,
+      createdAt: '2025-05-15'
     },
     {
       _id: 'c-4',
       contractTitle: 'Legacy Code Migration',
       clientName: 'Enterprise Corp',
+      clientEmail: 'info@enterprise.com',
       contractCategory: 'backend',
+      contractSubject: 'backend',
+      contractType: 'fixed_price',
       status: 'closed',
-      startDate: '2025-01-01',
-      endDate: '2025-04-01',
-      budget: 4000
+      contractStartDate: '2025-01-01',
+      contractEndDate: '2025-04-01',
+      estimatedBudget: 4000,
+      createdAt: '2024-12-20'
     }
   ];
 
@@ -127,13 +143,18 @@ describe('MyContracts', () => {
       component.ngAfterViewInit();
       tick();
 
-      expect(component.columns.length).toBe(6);
-      expect(component.columns[0].field).toBe('contractTitle');
-      expect(component.columns[1].field).toBe('clientName');
-      expect(component.columns[2].field).toBe('duration');
-      expect(component.columns[3].field).toBe('budget');
-      expect(component.columns[4].field).toBe('status');
-      expect(component.columns[5].field).toBe('actions');
+      expect(component.columns.length).toBe(11);
+      expect(component.columns[0].field).toBe('sno');
+      expect(component.columns[1].field).toBe('contractTitle');
+      expect(component.columns[2].field).toBe('contractSubject');
+      expect(component.columns[3].field).toBe('clientName');
+      expect(component.columns[4].field).toBe('contractType');
+      expect(component.columns[5].field).toBe('estimatedBudget');
+      expect(component.columns[6].field).toBe('contractStartDate');
+      expect(component.columns[7].field).toBe('contractEndDate');
+      expect(component.columns[8].field).toBe('createdAt');
+      expect(component.columns[9].field).toBe('status');
+      expect(component.columns[10].field).toBe('actions');
     }));
   });
 
@@ -252,16 +273,43 @@ describe('MyContracts', () => {
     });
   });
 
+  describe('Contract Type Formatting', () => {
+    it('should format contract type correctly', () => {
+      expect(component.formatContractType('')).toBe('Fixed Price');
+      expect(component.formatContractType('fixed_price')).toBe('Fixed Price');
+      expect(component.formatContractType('hourly_rate')).toBe('Hourly Rate');
+    });
+  });
+
   describe('Actions & Navigation', () => {
-    it('should return dropdown items for table row', () => {
+    it('should return dropdown items for active contracts', () => {
       const items = component.getDropdownItems(mockContractsData[0]);
-      expect(items.length).toBe(1);
-      expect(items[0].value).toBe('view');
+      expect(items.length).toBe(2);
+      expect(items[0].value).toBe('diary');
+      expect(items[1].value).toBe('view');
     });
 
-    it('should navigate to contract details when view action is triggered', () => {
+    it('should return dropdown items for completed contracts', () => {
+      const items = component.getDropdownItems(mockContractsData[2]);
+      expect(items.length).toBe(3);
+      expect(items[0].value).toBe('feedback');
+      expect(items[1].value).toBe('worksheet');
+      expect(items[2].value).toBe('diary');
+    });
+
+    it('should navigate on dropdown actions', () => {
       component.onDropdownAction({ label: 'View Details', value: 'view' }, mockContractsData[0]);
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/contract-details', 'c-1']);
+
+      component.onDropdownAction({ label: 'Contract Diary', value: 'diary' }, mockContractsData[0]);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/contract-diary', 'c-1']);
+
+      component.onDropdownAction({ label: 'View Feedback', value: 'feedback' }, mockContractsData[2]);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/feedback-reports', 'c-3']);
+
+      spyOn(component, 'downloadContractWorksheet');
+      component.onDropdownAction({ label: 'Download Worksheet', value: 'worksheet' }, mockContractsData[2]);
+      expect(component.downloadContractWorksheet).toHaveBeenCalledWith('c-3');
     });
 
     it('should return feedback card action for completed/closed contract', () => {

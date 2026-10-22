@@ -1,4 +1,4 @@
-<div class="dashboard-container position-relative p-4">
+<div class="dashboard-container position-relative min-vh-100 p-2 p-sm-3 p-md-4">
   <!-- Decorative background wrapper -->
   <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
     <div class="bg-shape top-left"></div>
@@ -12,193 +12,179 @@
   </div>
 
   <!-- Main Content Wrapper (Glassmorphism) -->
-  <form [formGroup]="contractForm" (ngSubmit)="submitContract()" class="position-relative z-1 p-4 mx-auto"
-    style="max-width: 1000px;">
+  <div class="position-relative z-1 mx-auto" style="max-width: 1000px;">
+    <form [formGroup]="contractForm" (ngSubmit)="submitContract()"
+      class="glass-card bg-white p-3 p-sm-4 p-md-5 rounded-4 shadow-sm border">
 
-    <!-- Header -->
-    <div class="d-flex align-items-start gap-3 mb-4">
-      <button type="button" routerLink="/manage-contract" class="btn btn-link text-dark p-0 mt-1">
-        <i class="bi bi-arrow-left fs-5"></i>
-      </button>
-      <div>
-        <h1 class="fw-bold fs-4 mb-1 text-dark">{{ editContractId ? 'Edit Contract' : 'Create New Contract' }}</h1>
-        <p class="text-muted small mb-0">{{ editContractId ? 'Update the details below to edit your contract' : 'Fill in the details below to create a new contract' }}</p>
-      </div>
-    </div>
-
-    <!-- Basic Details -->
-    <div class="mb-5">
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <div class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
-          <i class="bi bi-file-earmark-text fs-5"></i>
-        </div>
-        <h2 class="fs-5 fw-bold mb-0 text-dark">Basic Details</h2>
-      </div>
-
-      <div class="row g-4 mb-4">
-        <div class="col-md-6">
-          <app-input-field
-            label="Contract Title"
-            type="text"
-            placeholder="Enter a clear contract title"
-            [required]="true"
-            [value]="contractForm.get('contractTitle')?.value"
-            (valueChange)="contractForm.get('contractTitle')?.setValue($event); contractForm.get('contractTitle')?.markAsTouched(); contractForm.get('contractTitle')?.markAsDirty()"
-            (blurred)="contractForm.get('contractTitle')?.markAsTouched()"
-            [validation]="(contractForm.get('contractTitle')?.touched || contractForm.get('contractTitle')?.dirty) ? (contractForm.get('contractTitle')?.invalid ? 'error' : 'success') : 'none'"
-            errorMessage="Contract Title is required (min 5 chars, valid format)"
-          ></app-input-field>
-        </div>
-        <div class="col-md-6">
-          <app-input-field
-            label="Contract Type"
-            type="select"
-            placeholder="Select contract type"
-            [required]="true"
-            [options]="contractTypeOptions"
-            [value]="contractForm.get('contractType')?.value"
-            (valueChange)="contractForm.get('contractType')?.setValue($event); contractForm.get('contractType')?.markAsTouched(); contractForm.get('contractType')?.markAsDirty()"
-            (blurred)="contractForm.get('contractType')?.markAsTouched()"
-            [validation]="(contractForm.get('contractType')?.touched || contractForm.get('contractType')?.dirty) ? (contractForm.get('contractType')?.invalid ? 'error' : 'success') : 'none'"
-            errorMessage="Contract Type is required"
-          ></app-input-field>
-        </div>
-        <div class="col-md-6">
-          <app-input-field
-            label="Contract Category"
-            type="select"
-            placeholder="Select category"
-            [required]="true"
-            [options]="contractCategoryOptions"
-            [value]="contractForm.get('contractCategory')?.value"
-            (valueChange)="contractForm.get('contractCategory')?.setValue($event); contractForm.get('contractCategory')?.markAsTouched(); contractForm.get('contractCategory')?.markAsDirty()"
-            (blurred)="contractForm.get('contractCategory')?.markAsTouched()"
-            [validation]="(contractForm.get('contractCategory')?.touched || contractForm.get('contractCategory')?.dirty) ? (contractForm.get('contractCategory')?.invalid ? 'error' : 'success') : 'none'"
-            errorMessage="Contract Category is required"
-          ></app-input-field>
-        </div>
-        <div class="col-md-6">
-          <app-input-field
-            label="Contract Subject"
-            type="select"
-            placeholder="Select subject"
-            [required]="true"
-            [options]="contractSubjectOptions"
-            [value]="contractForm.get('contractSubject')?.value"
-            (valueChange)="contractForm.get('contractSubject')?.setValue($event); contractForm.get('contractSubject')?.markAsTouched(); contractForm.get('contractSubject')?.markAsDirty()"
-            (blurred)="contractForm.get('contractSubject')?.markAsTouched()"
-            [validation]="(contractForm.get('contractSubject')?.touched || contractForm.get('contractSubject')?.dirty) ? (contractForm.get('contractSubject')?.invalid ? 'error' : 'success') : 'none'"
-            errorMessage="Contract Subject is required"
-          ></app-input-field>
+      <!-- Header -->
+      <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom border-light">
+        <a routerLink="/manage-contract"
+          class="btn btn-sm btn-white border shadow-sm rounded-circle p-2 d-inline-flex align-items-center justify-content-center header-back-btn text-dark text-decoration-none"
+          title="Back to Contracts" style="width: 36px; height: 36px;">
+          <i class="bi bi-arrow-left fs-6"></i>
+        </a>
+        <div class="min-w-0">
+          <h1 class="fw-bold fs-4 mb-0 text-dark text-truncate">{{ editContractId ? 'Edit Contract' : 'Create New Contract' }}</h1>
+          <p class="text-muted small mb-0">{{ editContractId ? 'Update the details below to edit your contract' : 'Fill in the details below to create a new contract' }}</p>
         </div>
       </div>
 
+      <!-- Basic Details -->
       <div class="mb-4">
-        <app-rich-text-editor
-          formControlName="contractDescription"
-          label="Contract Description"
-          [required]="true"
-          placeholder="Describe the work, objectives, deliverables, and any important details..."
-          height="180px"
-          [validation]="(contractForm.get('contractDescription')?.touched || contractForm.get('contractDescription')?.dirty) ? (contractForm.get('contractDescription')?.invalid ? 'error' : 'success') : 'none'"
-          errorMessage="Contract Description is required"
-        ></app-rich-text-editor>
-      </div>
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <div class="rounded-3 bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center"
+            style="width: 36px; height: 36px;">
+            <i class="bi bi-file-earmark-text fs-5"></i>
+          </div>
+          <h2 class="fs-5 fw-bold mb-0 text-dark">Contract Details</h2>
+        </div>
 
-      <div class="row g-4 mb-4">
-        <div class="col-md-6">
-          <app-input-field
-            label="Contract Start Date"
-            type="date"
-            placeholder="Select start date"
+        <div class="row g-3 g-md-4 mb-4">
+          <div class="col-12 col-md-6">
+            <app-input-field
+              label="Contract Title"
+              type="text"
+              placeholder="Enter a clear contract title"
+              [required]="true"
+              [value]="contractForm.get('contractTitle')?.value"
+              (valueChange)="contractForm.get('contractTitle')?.setValue($event); contractForm.get('contractTitle')?.markAsTouched(); contractForm.get('contractTitle')?.markAsDirty()"
+              (blurred)="contractForm.get('contractTitle')?.markAsTouched()"
+              [validation]="(contractForm.get('contractTitle')?.touched || contractForm.get('contractTitle')?.dirty) ? (contractForm.get('contractTitle')?.invalid ? 'error' : 'success') : 'none'"
+              errorMessage="Contract Title is required (min 5 chars, valid format)"
+            ></app-input-field>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <app-input-field
+              label="Contract Type"
+              type="select"
+              placeholder="Select contract type"
+              [required]="true"
+              [options]="contractTypeOptions"
+              [value]="contractForm.get('contractType')?.value"
+              (valueChange)="contractForm.get('contractType')?.setValue($event); contractForm.get('contractType')?.markAsTouched(); contractForm.get('contractType')?.markAsDirty()"
+              (blurred)="contractForm.get('contractType')?.markAsTouched()"
+              [validation]="(contractForm.get('contractType')?.touched || contractForm.get('contractType')?.dirty) ? (contractForm.get('contractType')?.invalid ? 'error' : 'success') : 'none'"
+              errorMessage="Contract Type is required"
+            ></app-input-field>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <app-input-field
+              label="Contract Category"
+              type="select"
+              placeholder="Select category"
+              [options]="contractCategoryOptions"
+              [value]="contractForm.get('contractCategory')?.value"
+              (valueChange)="contractForm.get('contractCategory')?.setValue($event); contractForm.get('contractCategory')?.markAsTouched(); contractForm.get('contractCategory')?.markAsDirty()"
+              (blurred)="contractForm.get('contractCategory')?.markAsTouched()"
+              [validation]="(contractForm.get('contractCategory')?.touched || contractForm.get('contractCategory')?.dirty) ? (contractForm.get('contractCategory')?.invalid ? 'error' : 'success') : 'none'"
+            ></app-input-field>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <app-input-field
+              label="Contract Subject"
+              type="select"
+              placeholder="Select subject"
+              [required]="true"
+              [options]="contractSubjectOptions"
+              [value]="contractForm.get('contractSubject')?.value"
+              (valueChange)="contractForm.get('contractSubject')?.setValue($event); contractForm.get('contractSubject')?.markAsTouched(); contractForm.get('contractSubject')?.markAsDirty()"
+              (blurred)="contractForm.get('contractSubject')?.markAsTouched()"
+              [validation]="(contractForm.get('contractSubject')?.touched || contractForm.get('contractSubject')?.dirty) ? (contractForm.get('contractSubject')?.invalid ? 'error' : 'success') : 'none'"
+              errorMessage="Contract Subject is required"
+            ></app-input-field>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <app-rich-text-editor
+            formControlName="contractDescription"
+            label="Contract Description"
             [required]="true"
-            [value]="contractForm.get('contractStartDate')?.value"
-            (valueChange)="contractForm.get('contractStartDate')?.setValue($event); contractForm.get('contractStartDate')?.markAsTouched(); contractForm.get('contractStartDate')?.markAsDirty()"
-            (blurred)="contractForm.get('contractStartDate')?.markAsTouched()"
-            [validation]="(contractForm.get('contractStartDate')?.touched || contractForm.get('contractStartDate')?.dirty) ? (contractForm.get('contractStartDate')?.invalid ? 'error' : 'success') : 'none'"
-            errorMessage="Start Date is required"
-          ></app-input-field>
+            placeholder="Describe the work, objectives, deliverables, and any important details..."
+            height="180px"
+            [validation]="(contractForm.get('contractDescription')?.touched || contractForm.get('contractDescription')?.dirty) ? (contractForm.get('contractDescription')?.invalid ? 'error' : 'success') : 'none'"
+            errorMessage="Contract Description is required"
+          ></app-rich-text-editor>
         </div>
-        <div class="col-md-6">
-          <app-input-field
-            label="Contract End Date"
-            type="date"
-            placeholder="Select end date"
-            [required]="true"
-            [value]="contractForm.get('contractEndDate')?.value"
-            (valueChange)="contractForm.get('contractEndDate')?.setValue($event); contractForm.get('contractEndDate')?.markAsTouched(); contractForm.get('contractEndDate')?.markAsDirty()"
-            (blurred)="contractForm.get('contractEndDate')?.markAsTouched()"
-            [validation]="(contractForm.get('contractEndDate')?.touched || contractForm.get('contractEndDate')?.dirty) ? (contractForm.get('contractEndDate')?.invalid ? 'error' : 'success') : 'none'"
-            errorMessage="End Date is required"
-          ></app-input-field>
-        </div>
-        <div class="col-md-6">
-          <app-input-field
-            label="Estimated Budget (₹)"
-            type="text"
-            placeholder="Enter total budget"
-            [required]="true"
-            [value]="contractForm.get('estimatedBudget')?.value"
-            (valueChange)="contractForm.get('estimatedBudget')?.setValue($event); contractForm.get('estimatedBudget')?.markAsTouched(); contractForm.get('estimatedBudget')?.markAsDirty()"
-            (blurred)="contractForm.get('estimatedBudget')?.markAsTouched()"
-            [validation]="(contractForm.get('estimatedBudget')?.touched || contractForm.get('estimatedBudget')?.dirty) ? (contractForm.get('estimatedBudget')?.invalid ? 'error' : 'success') : 'none'"
-            errorMessage="Budget is required (min 30000, max 75000, numbers only)"
-          ></app-input-field>
-        </div>
-        <div class="col-md-6">
-          <app-input-field
-            label="Contract Status"
-            type="select"
-            placeholder="Select status"
-            [options]="contractStatusOptions"
-            [value]="contractForm.get('status')?.value"
-            (valueChange)="contractForm.get('status')?.setValue($event); contractForm.get('status')?.markAsTouched(); contractForm.get('status')?.markAsDirty()"
-            (blurred)="contractForm.get('status')?.markAsTouched()"
-            [validation]="(contractForm.get('status')?.touched || contractForm.get('status')?.dirty) ? (contractForm.get('status')?.invalid ? 'error' : 'success') : 'none'"
-          ></app-input-field>
+
+        <div class="row g-3 g-md-4 mb-4">
+          <div class="col-12 col-sm-6 col-md-6">
+            <app-input-field
+              label="Contract Start Date"
+              type="date"
+              placeholder="Select start date"
+              [required]="true"
+              [value]="contractForm.get('contractStartDate')?.value"
+              (valueChange)="contractForm.get('contractStartDate')?.setValue($event); contractForm.get('contractStartDate')?.markAsTouched(); contractForm.get('contractStartDate')?.markAsDirty()"
+              (blurred)="contractForm.get('contractStartDate')?.markAsTouched()"
+              [validation]="(contractForm.get('contractStartDate')?.touched || contractForm.get('contractStartDate')?.dirty) ? (contractForm.get('contractStartDate')?.invalid ? 'error' : 'success') : 'none'"
+              errorMessage="Start Date is required"
+            ></app-input-field>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-6">
+            <app-input-field
+              label="Contract End Date"
+              type="date"
+              placeholder="Select end date"
+              [required]="true"
+              [value]="contractForm.get('contractEndDate')?.value"
+              (valueChange)="contractForm.get('contractEndDate')?.setValue($event); contractForm.get('contractEndDate')?.markAsTouched(); contractForm.get('contractEndDate')?.markAsDirty()"
+              (blurred)="contractForm.get('contractEndDate')?.markAsTouched()"
+              [validation]="(contractForm.get('contractEndDate')?.touched || contractForm.get('contractEndDate')?.dirty) ? (contractForm.get('contractEndDate')?.invalid ? 'error' : 'success') : 'none'"
+              errorMessage="End Date is required"
+            ></app-input-field>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-6">
+            <app-input-field
+              label="Estimated Budget (₹)"
+              type="text"
+              placeholder="Enter total budget"
+              [required]="true"
+              [value]="contractForm.get('estimatedBudget')?.value"
+              (valueChange)="contractForm.get('estimatedBudget')?.setValue($event); contractForm.get('estimatedBudget')?.markAsTouched(); contractForm.get('estimatedBudget')?.markAsDirty()"
+              (blurred)="contractForm.get('estimatedBudget')?.markAsTouched()"
+              [validation]="(contractForm.get('estimatedBudget')?.touched || contractForm.get('estimatedBudget')?.dirty) ? (contractForm.get('estimatedBudget')?.invalid ? 'error' : 'success') : 'none'"
+              errorMessage="Budget is required (min 30000, max 75000, numbers only)"
+            ></app-input-field>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-6">
+            <app-input-field
+              label="Contract Status"
+              type="select"
+              placeholder="Select status"
+              [options]="contractStatusOptions"
+              [value]="contractForm.get('status')?.value"
+              (valueChange)="contractForm.get('status')?.setValue($event); contractForm.get('status')?.markAsTouched(); contractForm.get('status')?.markAsDirty()"
+              (blurred)="contractForm.get('status')?.markAsTouched()"
+              [validation]="(contractForm.get('status')?.touched || contractForm.get('status')?.dirty) ? (contractForm.get('status')?.invalid ? 'error' : 'success') : 'none'"
+            ></app-input-field>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Terms & Conditions -->
-    <div class="mb-5">
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <div class="rounded bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center">
-          <i class="bi bi-journal-text fs-5"></i>
-        </div>
-        <h2 class="fs-5 fw-bold mb-0 text-dark">Terms & Conditions <span class="text-danger fw-bold ms-1" style="color: #dc2626 !important;">*</span></h2>
+      <!-- Action Buttons (Responsive in 1 row side-by-side with justify-content-between) -->
+      <div class="d-flex justify-content-between align-items-center gap-3 pt-4 border-top mt-4">
+        <app-button
+          label="Cancel"
+          variant="secondary"
+          appearance="ghost"
+          routerLink="/manage-contract">
+        </app-button>
+        <app-button
+          [label]="editContractId ? 'Update Contract' : 'Create Contract'"
+          variant="primary"
+          type="submit"
+          [loading]="isSubmitting"
+          [disabled]="isSubmitting">
+        </app-button>
       </div>
 
-      <div class="d-flex flex-column gap-3 mb-4 border rounded p-4">
-        <div class="form-check">
-          <input class="form-check-input border-secondary" type="checkbox" id="c1" formControlName="agreeToTerms1">
-          <label class="form-check-label text-muted" for="c1">I have read and understood all the above Terms & Conditions. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span></label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input border-secondary" type="checkbox" id="c2" formControlName="agreeToTerms2">
-          <label class="form-check-label text-muted" for="c2">I agree to comply with Talent Hub's platform policies. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span></label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input border-secondary" type="checkbox" id="c3" formControlName="agreeToTerms3">
-          <label class="form-check-label text-muted" for="c3">I understand that once the contract is created, it becomes the official project agreement on the Talent Hub platform. <span class="text-danger fw-bold" style="color: #dc2626 !important;">*</span></label>
-        </div>
-      </div>
-    </div>
-
-    <div class="d-flex justify-content-between pt-4 border-top">
-      <app-button
-        label="Cancel"
-        variant="secondary"
-        routerLink="/manage-contract">
-      </app-button>
-      <app-button
-        [label]="editContractId ? 'Update Contract' : 'Create Contract'"
-        variant="primary"
-        type="submit"
-        [loading]="isSubmitting"
-        [disabled]="isSubmitting">
-      </app-button>
-    </div>
-
-  </form>
+    </form>
+  </div>
 </div>

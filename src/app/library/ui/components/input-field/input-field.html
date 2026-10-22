@@ -30,7 +30,7 @@
         <input [type]="type === 'password' && isPasswordVisible ? 'text' : type" class="form-control"
             [class.is-invalid]="validation === 'error'" [placeholder]="placeholder" [value]="value"
             [disabled]="disabled" [readonly]="readonly" [required]="required" (input)="onValueChange($event)"
-            (blur)="onBlur()">
+            (change)="onValueChange($event)" (blur)="onBlur()">
 
         @if (type === 'password' && showPasswordToggle) {
         <span class="input-group-text" (click)="togglePasswordVisibility()" style="cursor: pointer;">
@@ -51,14 +51,14 @@
 
     <textarea class="form-control rounded-3" [class.is-invalid]="validation === 'error'" [placeholder]="placeholder"
         [value]="value" [disabled]="disabled" [readonly]="readonly" [required]="required"
-        (input)="onValueChange($event)" (blur)="onBlur()">
+        (input)="onValueChange($event)" (change)="onValueChange($event)" (blur)="onBlur()">
     </textarea>
 
     }
 
     @if (type === 'select') {
 
-    <select class="form-select rounded-3" [class.is-invalid]="validation === 'error'" [disabled]="disabled"
+    <select [value]="value || ''" class="form-select rounded-3" [class.is-invalid]="validation === 'error'" [disabled]="disabled"
         [required]="required" (change)="onSelectChange($event)" (blur)="onBlur()">
 
         @if (placeholder) {

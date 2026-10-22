@@ -12,7 +12,6 @@
   </div>
 
   <!-- Main Content Wrapper (Glassmorphism) -->
-  <!-- Main Content Wrapper (Glassmorphism) -->
   <div class="position-relative z-1 p-3 p-md-4 mx-auto w-100" style="max-width: 1400px;">
 
     <div class="d-flex justify-content-between align-items-start mb-4">
@@ -23,10 +22,10 @@
 
     </div>
 
-    <!-- Top Metric Cards (Responsive Grid: 1 col on mobile, 2 on tablet, 3 on desktop) -->
+    <!-- Top Metric Cards (Responsive Grid: 1 col on mobile, 2 on tablet, 4 on desktop) -->
     <div class="row g-3 mb-4">
       @for (stat of statCardsData; track stat.title) {
-      <div class="col-12 col-sm-6 col-lg-4">
+      <div class="col-12 col-sm-6 col-lg-3">
         <app-stat-card [stat]="stat"></app-stat-card>
       </div>
       }
@@ -47,7 +46,7 @@
       <div class="d-flex flex-column gap-3">
         @for (row of contractEarnings; track row._id || row.contractId || $index) {
         <div class="finance-mobile-card border rounded-3 p-3 bg-white shadow-sm">
-          <!-- Card Header: Title + Status + Action -->
+          <!-- Card Header: Title + Status (Dropdown removed as requested) -->
           <div class="d-flex align-items-start justify-content-between gap-2 mb-3">
             <div class="min-w-0">
               <h3 class="fs-6 fw-bold text-dark mb-1 text-truncate">{{ row.title || row.contractTitle }}</h3>
@@ -62,23 +61,10 @@
               </div>
             </div>
 
-            <div class="d-flex align-items-center gap-2 flex-shrink-0">
+            <div class="d-flex align-items-center flex-shrink-0">
               <app-badge appearance="subtle" [label]="(row.status | titlecase) || ''"
                 [variant]="(row.status?.toLowerCase() === 'completed') ? 'success' : ((row.status?.toLowerCase() === 'ongoing' || row.status?.toLowerCase() === 'in-progress' || row.status?.toLowerCase() === 'active') ? 'primary' : 'warning')">
               </app-badge>
-
-              <div class="dropdown">
-                <button class="btn btn-sm btn-light border rounded-circle d-flex align-items-center justify-content-center"
-                  type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"
-                  style="width: 32px; height: 32px;">
-                  <i class="bi bi-three-dots-vertical text-muted"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none" style="min-width: auto;">
-                  <app-dropdown [items]="getDropdownItems(row)" (itemSelected)="handleAction($event, row)" class="d-block"
-                    style="position: relative;">
-                  </app-dropdown>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -86,7 +72,8 @@
           <div class="row g-2 pt-2 border-top">
             <div class="col-6">
               <div class="p-2 rounded-2 bg-light bg-opacity-75">
-                <span class="d-block text-muted text-uppercase fw-semibold" style="font-size: 10px;">Contract Budget</span>
+                <span class="d-block text-muted text-uppercase fw-semibold" style="font-size: 10px;">Contract
+                  Budget</span>
                 <span class="d-block fw-bold text-dark" style="font-size: 13px;">
                   {{ (row.budget || row.amount || 0) | currency:'INR' }}
                 </span>
@@ -94,9 +81,10 @@
             </div>
             <div class="col-6">
               <div class="p-2 rounded-2 bg-light bg-opacity-75">
-                <span class="d-block text-muted text-uppercase fw-semibold" style="font-size: 10px;">Earned Amount</span>
+                <span class="d-block text-muted text-uppercase fw-semibold" style="font-size: 10px;">Earned
+                  Amount</span>
                 <span class="d-block fw-bold text-dark" style="font-size: 13px;">
-                  {{ (row.budget || row.earned || 0) | currency:'INR' }}
+                  {{ (row.earned !== undefined ? row.earned : (row.budget || 0)) | currency:'INR' }}
                 </span>
               </div>
             </div>
@@ -110,9 +98,11 @@
             </div>
             <div class="col-6">
               <div class="p-2 rounded-2 bg-light bg-opacity-75">
-                <span class="d-block text-muted text-uppercase fw-semibold" style="font-size: 10px;">Received Amount</span>
+                <span class="d-block text-muted text-uppercase fw-semibold" style="font-size: 10px;">Received
+                  Amount</span>
                 <span class="d-block fw-bold text-primary" style="font-size: 13px;">
-                  {{ ((row.budget || row.earned || 0) - (row.platformFeesDeducted || 0)) | currency:'INR' }}
+                  {{ (row.receivedAmount !== undefined ? row.receivedAmount : ((row.earned || row.budget || 0) -
+                  (row.platformFeesDeducted || 0))) | currency:'INR' }}
                 </span>
               </div>
             </div>
@@ -128,20 +118,30 @@
             </div>
 
             @if (row.status?.toLowerCase() === 'completed') {
-              @if ((row.pendingWithdrawnAmount || 0) > 0) {
-                <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25" style="font-size: 11px;">
-                  <i class="bi bi-hourglass-split me-1"></i>Pending Withdrawal
-                </span>
-              } @else if (((row.receivedAmount || 0) - (row.grossWithdrawnAmount || row.withdrawnAmount || 0)) > 0) {
-                <button class="btn btn-sm btn-outline-success rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-1"
-                  (click)="withdraw(row)" style="font-size: 12px;">
-                  <i class="bi bi-cash-coin"></i> Withdraw
-                </button>
-              } @else {
-                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25" style="font-size: 11px;">
-                  <i class="bi bi-check2-circle me-1"></i>Withdrawn
-                </span>
-              }
+            @if ((row.pendingWithdrawnAmount || 0) > 0) {
+            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25"
+              style="font-size: 11px;">
+              <i class="bi bi-hourglass-split me-1"></i>Pending Withdrawal
+            </span>
+            } @else if (((row.receivedAmount || 0) - (row.grossWithdrawnAmount || row.withdrawnAmount || 0)) > 0) {
+            <button
+              class="btn btn-sm btn-outline-success rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-1"
+              (click)="withdraw(row)" style="font-size: 12px;">
+              <i class="bi bi-cash-coin"></i> Withdraw
+            </button>
+            } @else {
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25"
+                style="font-size: 11px;">
+                <i class="bi bi-check2-circle me-1"></i>Withdrawn
+              </span>
+              <button
+                class="btn btn-sm btn-light border rounded-pill px-2 py-1 text-muted d-inline-flex align-items-center gap-1"
+                (click)="downloadInvoice(row.contractId || row._id)" style="font-size: 11px;" title="Download Invoice">
+                <i class="bi bi-download"></i> Invoice
+              </button>
+            </div>
+            }
             }
           </div>
         </div>
@@ -181,7 +181,8 @@
     </ng-template>
 
     <ng-template #earnedTpl let-row="row">
-      <span class="fw-bold text-dark">{{ (row.budget || row.earned || 0) | currency:'INR' }}</span>
+      <span class="fw-bold text-dark">{{ (row.earned !== undefined ? row.earned : (row.budget || 0)) | currency:'INR'
+        }}</span>
     </ng-template>
 
     <ng-template #feeTpl let-row="row">
@@ -189,7 +190,8 @@
     </ng-template>
 
     <ng-template #receivedTpl let-row="row">
-      <span class="fw-bold text-primary">{{ ((row.budget || row.earned || 0) - (row.platformFeesDeducted || 0)) |
+      <span class="fw-bold text-primary">{{ (row.receivedAmount !== undefined ? row.receivedAmount : ((row.earned ||
+        row.budget || 0) - (row.platformFeesDeducted || 0))) |
         currency:'INR' }}</span>
     </ng-template>
 
@@ -219,105 +221,118 @@
 <!-- Withdraw Request Modal -->
 @if (selectedContractForWithdrawal) {
 <div class="modal fade show d-block" tabindex="-1"
-  style="background-color: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 1050;">
-  <div class="modal-dialog modal-dialog-centered modal-md">
+  style="background-color: rgba(15, 23, 42, 0.7); backdrop-filter: blur(6px); z-index: 1055;">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
     <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-      <!-- Gradient Header -->
-      <div class="modal-header border-bottom-0 pb-4 pt-4 px-4"
-        style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+      <!-- Modal Header -->
+      <div class="modal-header border-bottom py-3 px-4 bg-light bg-opacity-75 d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-3">
-          <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-            style="width: 48px; height: 48px;">
-            <i class="bi bi-bank2 text-primary fs-4"></i>
+          <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+            style="width: 42px; height: 42px;">
+            <i class="bi bi-wallet2 fs-5"></i>
           </div>
           <div>
-            <h5 class="modal-title fw-bold fs-5 text-dark mb-0">Withdrawal Request</h5>
-            <span class="text-muted small">Transfer funds to your bank account</span>
+            <h5 class="modal-title fw-bold fs-6 text-dark mb-0">Withdrawal Request</h5>
+            <span class="text-muted small" style="font-size: 12px;">Transfer contract earnings to your bank</span>
           </div>
         </div>
-        <button type="button" class="btn-close bg-white rounded-circle shadow-sm p-2" (click)="closeWithdrawModal()"
-          aria-label="Close" style="opacity: 1; top: -10px; position: relative;"></button>
+        <button type="button" class="btn-close shadow-none" (click)="closeWithdrawModal()" aria-label="Close"></button>
       </div>
 
       <div class="modal-body p-4 bg-white">
-        <!-- Info Alert -->
-        <div
-          class="alert alert-primary border-0 bg-primary bg-opacity-10 d-flex gap-3 align-items-start rounded-4 mb-4 p-3 shadow-sm">
-          <i class="bi bi-info-circle-fill text-primary fs-5 flex-shrink-0 mt-1"></i>
-          <div class="text-primary-emphasis" style="font-size: 0.85rem; line-height: 1.5;">
-            Your request will be sent to the admin for approval. Approved transfers typically take
-            <strong class="fw-bold">2-4 hours</strong> to reflect in your bank account.
+        <!-- Contract & Payout Summary Card -->
+        <div class="rounded-3 p-3 mb-3 border bg-light bg-opacity-50">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted small">Contract</span>
+            <span class="fw-semibold text-dark text-truncate text-end ms-2" style="max-width: 240px; font-size: 13px;"
+              [title]="selectedContractForWithdrawal?.title || selectedContractForWithdrawal?.contractTitle">
+              {{ selectedContractForWithdrawal?.title || selectedContractForWithdrawal?.contractTitle }}
+            </span>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted small">Available to Withdraw</span>
+            <span class="fw-bold text-dark" style="font-size: 13.5px;">{{ withdrawalAmount | currency:'INR' }}</span>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted small d-inline-flex align-items-center gap-1">
+              Platform Service Fee
+              <span class="badge bg-light text-secondary border fw-normal" style="font-size: 10px;">7.5%</span>
+            </span>
+            <span class="fw-semibold text-danger" style="font-size: 13px;">-{{ platformFee | currency:'INR' }}</span>
+          </div>
+
+          <div class="pt-2 border-top d-flex justify-content-between align-items-center mt-2">
+            <div>
+              <span class="d-block fw-bold text-dark" style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px;">Net Payable to Bank</span>
+              <span class="text-muted" style="font-size: 11px;">Deposited directly to your account</span>
+            </div>
+            <span class="fs-4 fw-bold text-success" style="letter-spacing: -0.5px;">{{ netAmount | currency:'INR' }}</span>
           </div>
         </div>
 
-        <!-- Balance Summary Card -->
-        <div class="mb-4 bg-white rounded-4 p-4 border border-light shadow-sm position-relative overflow-hidden">
-          <!-- decorative element -->
-          <div class="position-absolute bg-light rounded-circle"
-            style="width: 100px; height: 100px; top: -20px; right: -20px; opacity: 0.5;"></div>
+        <!-- Bank Details Section -->
+        <div class="mb-2">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="fw-semibold text-dark small d-flex align-items-center gap-2">
+              <i class="bi bi-bank text-primary"></i> Receiving Bank Details
+            </span>
+            <span class="text-muted" style="font-size: 11px;">
+              <i class="bi bi-shield-check text-success me-1"></i>Secure
+            </span>
+          </div>
 
-          <div class="position-relative z-1">
-            <div class="d-flex justify-content-between mb-3 align-items-center">
-              <span class="text-muted small fw-semibold text-uppercase tracking-wide">Available Balance</span>
-              <span class="fw-bold text-dark fs-5">{{ withdrawalAmount | currency:'INR' }}</span>
-            </div>
-            <div class="d-flex justify-content-between mb-3 align-items-center">
-              <span class="text-muted small fw-semibold text-uppercase tracking-wide">Platform Fee <span
-                  class="badge bg-light text-secondary border border-secondary border-opacity-25 ms-1">7.5%</span></span>
-              <span class="text-danger fw-bold">-{{ platformFee | currency:'INR' }}</span>
+          <div class="d-flex flex-column gap-3">
+            <div>
+              <label for="bankName" class="form-label text-muted small mb-1 fw-medium">Bank Name <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-building"></i></span>
+                <input type="text" class="form-control border-start-0" id="bankName" [(ngModel)]="withdrawForm.bankName"
+                  placeholder="e.g. HDFC Bank, State Bank of India, ICICI" style="font-size: 13px;">
+              </div>
             </div>
 
-            <div
-              class="bg-light rounded-3 p-3 mt-3 d-flex justify-content-between align-items-center border border-light">
-              <span class="fw-bold text-dark" style="font-size: 0.95rem;">Net Amount</span>
-              <span class="fs-3 fw-bold text-success" style="letter-spacing: -0.5px;">{{ netAmount | currency:'INR'
-                }}</span>
+            <div>
+              <label for="accountNumber" class="form-label text-muted small mb-1 fw-medium">Account Number <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-hash"></i></span>
+                <input type="text" class="form-control border-start-0 font-monospace" id="accountNumber"
+                  [(ngModel)]="withdrawForm.accountNumber" placeholder="Enter bank account number" style="font-size: 13px;">
+              </div>
+            </div>
+
+            <div>
+              <label for="ifscCode" class="form-label text-muted small mb-1 fw-medium">IFSC Code <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-upc-scan"></i></span>
+                <input type="text" class="form-control border-start-0 text-uppercase font-monospace fw-semibold" id="ifscCode"
+                  [(ngModel)]="withdrawForm.ifscCode" placeholder="e.g. HDFC0001234" maxlength="11" style="font-size: 13px;">
+              </div>
+              <div class="form-text text-muted small mt-1" style="font-size: 11px;">11-character alphanumeric code found on cheque book or passbook.</div>
             </div>
           </div>
         </div>
 
-        <h6 class="fw-bold mb-3 fs-6 text-dark d-flex align-items-center gap-2"><i
-            class="bi bi-credit-card-2-front text-primary"></i> Bank Account Details</h6>
-
-        <!-- Form Inputs -->
-        <div class="row g-3">
-          <div class="col-12">
-            <div class="form-floating">
-              <input type="text" class="form-control bg-light border-0 shadow-none fw-semibold text-dark" id="bankName"
-                [(ngModel)]="withdrawForm.bankName" placeholder="e.g., HDFC Bank">
-              <label for="bankName" class="text-muted">Bank Name</label>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="form-floating">
-              <input type="text" class="form-control bg-light border-0 shadow-none fw-semibold text-dark"
-                id="accountNumber" [(ngModel)]="withdrawForm.accountNumber" placeholder="Account Number">
-              <label for="accountNumber" class="text-muted">Account Number</label>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="form-floating">
-              <input type="text" class="form-control bg-light border-0 shadow-none fw-bold text-dark text-uppercase"
-                id="ifscCode" [(ngModel)]="withdrawForm.ifscCode" placeholder="IFSC Code">
-              <label for="ifscCode" class="text-muted">IFSC Code</label>
-            </div>
-          </div>
+        <!-- Processing note -->
+        <div class="d-flex align-items-center gap-2 p-2 px-3 rounded-2 bg-light border text-muted mt-3 mb-1" style="font-size: 11.5px;">
+          <i class="bi bi-info-circle-fill text-primary flex-shrink-0"></i>
+          <span>Transfers are approved by admin and typically reflected in <strong>2–4 hours</strong>.</span>
         </div>
       </div>
 
-      <div class="modal-footer border-top-0 pt-2 pb-4 px-4 bg-white d-flex justify-content-between">
-        <button type="button" class="btn btn-light fw-semibold px-4 rounded-pill hover-bg-light text-secondary"
+      <!-- Modal Footer -->
+      <div class="modal-footer border-top px-4 py-3 bg-light bg-opacity-50 d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-sm btn-light border px-4 rounded-pill fw-semibold text-secondary"
           (click)="closeWithdrawModal()">Cancel</button>
-        <button type="button"
-          class="btn btn-primary fw-semibold px-4 rounded-pill d-flex align-items-center gap-2 shadow"
+        <button type="button" class="btn btn-sm btn-primary rounded-pill px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2 shadow-sm"
           (click)="submitWithdrawRequest()"
-          [disabled]="isWithdrawing || !withdrawForm.bankName || !withdrawForm.accountNumber || !withdrawForm.ifscCode"
-          style="transition: all 0.2s;">
+          [disabled]="isWithdrawing || !withdrawForm.bankName || !withdrawForm.accountNumber || !withdrawForm.ifscCode">
           @if (isWithdrawing) {
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Processing...
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Processing...
           } @else {
-          <i class="bi bi-arrow-right-circle-fill fs-6"></i> Submit Request
+            <i class="bi bi-arrow-right-circle-fill"></i> Submit Request
           }
         </button>
       </div>

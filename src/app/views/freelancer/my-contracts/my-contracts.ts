@@ -7,6 +7,7 @@ import { Button } from '../../../library/ui/components/button/button';
 import { Badge } from '../../../library/ui/components/badge/badge';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from '../../../library/ui/components/chip/chip';
+import { Dropdown } from '../../../library/ui/components/dropdown/dropdown';
 import { ContractCard, ContractCardAction } from '../../../library/shared/components/contract-card/contract-card';
 import { TableColumn, DropdownItem } from '../../../core/models/ui.model';
 import { MasterDataService } from '../../../core/services/master-data.service';
@@ -15,7 +16,7 @@ import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 @Component({
   selector: 'app-my-contracts',
   standalone: true,
-  imports: [RouterModule, CommonModule, Table, Button, Badge, InputField, Chip],
+  imports: [RouterModule, CommonModule, Table, Button, Badge, InputField, Chip, Dropdown],
   templateUrl: './my-contracts.html',
   styleUrl: './my-contracts.css'
 })
@@ -29,7 +30,19 @@ export class MyContracts implements OnInit, AfterViewInit {
   activeContracts: any[] = [];
   completedContracts: any[] = [];
 
-  columns: TableColumn[] = [];
+  columns: TableColumn[] = [
+    { field: 'sno', headerName: 'S.NO', width: 70 },
+    { field: 'contractTitle', headerName: 'CONTRACT TITLE', width: 220, flexGrow: 1 },
+    { field: 'contractSubject', headerName: 'SUBJECT', width: 140 },
+    { field: 'clientName', headerName: 'CLIENT', width: 180 },
+    { field: 'contractType', headerName: 'CONTRACT TYPE', width: 140 },
+    { field: 'estimatedBudget', headerName: 'BUDGET', width: 120 },
+    { field: 'contractStartDate', headerName: 'START DATE', width: 130 },
+    { field: 'contractEndDate', headerName: 'END DATE', width: 130 },
+    { field: 'createdAt', headerName: 'CREATED ON', width: 130 },
+    { field: 'status', headerName: 'STATUS', width: 130 },
+    { field: 'actions', headerName: 'ACTIONS', width: 90 }
+  ];
 
   // Filter States - Active
   searchQueryActive = '';
@@ -49,10 +62,15 @@ export class MyContracts implements OnInit, AfterViewInit {
 
   private subscriptions = new Subscription();
 
+  @ViewChild('snoTemplate', { static: true }) snoTemplate!: TemplateRef<any>;
   @ViewChild('titleTemplate', { static: true }) titleTemplate!: TemplateRef<any>;
+  @ViewChild('subjectTemplate', { static: true }) subjectTemplate!: TemplateRef<any>;
   @ViewChild('clientTemplate', { static: true }) clientTemplate!: TemplateRef<any>;
-  @ViewChild('durationTemplate', { static: true }) durationTemplate!: TemplateRef<any>;
+  @ViewChild('typeTemplate', { static: true }) typeTemplate!: TemplateRef<any>;
   @ViewChild('budgetTemplate', { static: true }) budgetTemplate!: TemplateRef<any>;
+  @ViewChild('startDateTemplate', { static: true }) startDateTemplate!: TemplateRef<any>;
+  @ViewChild('endDateTemplate', { static: true }) endDateTemplate!: TemplateRef<any>;
+  @ViewChild('createdAtTemplate', { static: true }) createdAtTemplate!: TemplateRef<any>;
   @ViewChild('statusTemplate', { static: true }) statusTemplate!: TemplateRef<any>;
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
 
@@ -82,12 +100,17 @@ export class MyContracts implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.columns = [
-        { field: 'contractTitle', headerName: 'CONTRACT', cellTemplate: this.titleTemplate, flexGrow: 1, width: 250 },
-        { field: 'clientName', headerName: 'CLIENT', cellTemplate: this.clientTemplate, width: 200 },
-        { field: 'duration', headerName: 'DURATION', cellTemplate: this.durationTemplate, width: 150 },
-        { field: 'budget', headerName: 'BUDGET', cellTemplate: this.budgetTemplate, width: 120 },
-        { field: 'status', headerName: 'STATUS', cellTemplate: this.statusTemplate, width: 120 },
-        { field: 'actions', headerName: 'ACTIONS', cellTemplate: this.actionsTemplate, width: 100 }
+        { field: 'sno', headerName: 'S.NO', cellTemplate: this.snoTemplate, width: 70 },
+        { field: 'contractTitle', headerName: 'CONTRACT TITLE', cellTemplate: this.titleTemplate, width: 220, },
+        { field: 'contractSubject', headerName: 'SUBJECT', cellTemplate: this.subjectTemplate, width: 140 },
+        { field: 'clientName', headerName: 'CLIENT', cellTemplate: this.clientTemplate, width: 180 },
+        { field: 'contractType', headerName: 'CONTRACT TYPE', cellTemplate: this.typeTemplate, width: 140 },
+        { field: 'estimatedBudget', headerName: 'BUDGET', cellTemplate: this.budgetTemplate, width: 120 },
+        { field: 'contractStartDate', headerName: 'START DATE', cellTemplate: this.startDateTemplate, width: 130 },
+        { field: 'contractEndDate', headerName: 'END DATE', cellTemplate: this.endDateTemplate, width: 130 },
+        { field: 'createdAt', headerName: 'CREATED ON', cellTemplate: this.createdAtTemplate, width: 130 },
+        { field: 'status', headerName: 'STATUS', cellTemplate: this.statusTemplate, width: 130 },
+        { field: 'actions', headerName: 'ACTIONS', cellTemplate: this.actionsTemplate, width: 90 }
       ];
     });
   }
@@ -211,6 +234,13 @@ export class MyContracts implements OnInit, AfterViewInit {
   }
 
 
+  formatContractType(type: string): string {
+    if (!type) return 'Fixed Price';
+    return type
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, char => char.toUpperCase());
+  }
+
   getDuration(startDate: string, endDate: string): string {
     if (!startDate || !endDate) return 'N/A';
     const start = new Date(startDate);
@@ -226,21 +256,35 @@ export class MyContracts implements OnInit, AfterViewInit {
   }
 
   getDropdownItems(row: any): DropdownItem[] {
-    return [
-      { label: 'View Details', value: 'view', icon: 'bi bi-eye' }
-    ];
+    const items: DropdownItem[] = [];
+    if (row.status === 'completed' || row.status === 'closed') {
+      items.push({ label: 'View Feedback', value: 'feedback', icon: 'bi bi-star' });
+      items.push({ label: 'Download Worksheet', value: 'worksheet', icon: 'bi bi-file-earmark-text' });
+      items.push({ label: 'Contract Diary', value: 'diary', icon: 'bi bi-journal-text' });
+    } else {
+      items.push({ label: 'Contract Diary', value: 'diary', icon: 'bi bi-journal-text' });
+      items.push({ label: 'View Details', value: 'view', icon: 'bi bi-eye' });
+    }
+    return items;
   }
 
   onDropdownAction(item: DropdownItem, row: any): void {
     if (item.value === 'view') {
       this.router.navigate(['/contract-details', row._id]);
+    } else if (item.value === 'diary') {
+      this.router.navigate(['/contract-diary', row._id]);
+    } else if (item.value === 'feedback') {
+      this.router.navigate(['/feedback-reports', row._id]);
+    } else if (item.value === 'worksheet') {
+      this.downloadContractWorksheet(row._id);
     }
   }
 
   getFreelancerCardActions(contract: any): ContractCardAction[] {
     if (contract.status === 'completed' || contract.status === 'closed') {
       return [
-        { label: 'View Feedback', value: 'feedback', icon: 'bi bi-star' }
+        { label: 'View Feedback', value: 'feedback', icon: 'bi bi-star' },
+        { label: 'View Contract Worksheet', value: 'worksheet', icon: 'bi bi-file-earmark-text' }
       ];
     }
     return [
@@ -253,6 +297,26 @@ export class MyContracts implements OnInit, AfterViewInit {
       this.router.navigate(['/feedback-reports', event.contract._id]);
     } else if (event.action === 'diary') {
       this.router.navigate(['/contract-diary', event.contract._id]);
+    } else if (event.action === 'worksheet') {
+      this.downloadContractWorksheet(event.contract._id);
     }
+  }
+
+  downloadContractWorksheet(contractId: string): void {
+    this.contractService.downloadContractWorksheet(contractId).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Contract_Worksheet_${contractId}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      },
+      error: (err) => {
+        console.error('Error downloading contract worksheet:', err);
+      }
+    });
   }
 }

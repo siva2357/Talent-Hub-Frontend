@@ -187,16 +187,12 @@
     </div>
 
     <!-- Footer Actions -->
-    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-4 pt-3 border-top">
-      <div class="action-btn-wrapper">
-        <app-button label="Cancel" variant="secondary" appearance="ghost" (clicked)="resetForm()">
-        </app-button>
-      </div>
+    <div class="d-flex align-items-center justify-content-between gap-3 mt-4 pt-3 border-top">
+      <app-button label="Cancel" variant="secondary" appearance="ghost" (clicked)="resetForm()">
+      </app-button>
 
-      <div class="action-btn-wrapper ms-auto">
-        <app-button [label]="isEditMode ? 'Save Changes' : 'Create Phase'" variant="primary" (clicked)="createPhase()">
-        </app-button>
-      </div>
+      <app-button [label]="isEditMode ? 'Save Changes' : 'Create Phase'" variant="primary" (clicked)="createPhase()">
+      </app-button>
     </div>
   </div>
 

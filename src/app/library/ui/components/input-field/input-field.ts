@@ -3,7 +3,9 @@ import {
   EventEmitter,
   forwardRef,
   Input,
-  Output
+  OnChanges,
+  Output,
+  SimpleChanges
 } from '@angular/core';
 
 import {
@@ -36,7 +38,13 @@ export type {
     }
   ]
 })
-export class InputField implements ControlValueAccessor {
+export class InputField implements ControlValueAccessor, OnChanges {
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['value'] && changes['value'].currentValue !== undefined) {
+      this.value = changes['value'].currentValue ?? '';
+    }
+  }
 
   @Input() label: string = 'Email address';
 

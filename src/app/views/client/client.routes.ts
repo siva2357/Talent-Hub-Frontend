@@ -35,6 +35,7 @@ export const CLIENT_ROUTES: Routes = [
   { path: 'contact-support', component: ContactSupport },
   { path: 'create-ticket', component: CreateTicket },
   { path: 'create-contract', component: CreateContract },
+  { path: 'create-contract/:id', component: CreateContract },
   { path: 'legal-contract-page/:applicationId', component: LegalContractPage },
   { path: 'create-phase/:id', component: CreatePhase },
   { path: 'phase-details/:id', component: PhaseDetails },
