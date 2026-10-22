@@ -114,168 +114,166 @@
     </div>
 
 
-        <!-- =====================================================
+    <!-- =====================================================
          TABLE TEMPLATES
     ====================================================== -->
 
-        <ng-template #indexTpl let-row="row" let-index="index">
-          <span class="ps-4 fw-semibold text-muted">
-            {{ index + 1 }}
-          </span>
-        </ng-template>
+    <ng-template #indexTpl let-row="row" let-index="index">
+      <span class="ps-4 fw-semibold text-muted">
+        {{ index + 1 }}
+      </span>
+    </ng-template>
 
 
-        <ng-template #contractTpl let-row="row">
-          <span class="d-block fw-bold text-dark">
-            {{ row.contractTitle }}
-          </span>
-        </ng-template>
+    <ng-template #contractTpl let-row="row">
+      <span class="d-block fw-bold text-dark">
+        {{ row.contractTitle }}
+      </span>
+    </ng-template>
 
 
-        <ng-template #clientTpl let-row="row">
-          <span class="d-block text-dark fw-semibold financial-table-text">
-            {{ row.clientName }}
-          </span>
-        </ng-template>
+    <ng-template #clientTpl let-row="row">
+      <span class="d-block text-dark fw-semibold financial-table-text">
+        {{ row.clientName }}
+      </span>
+    </ng-template>
 
 
-        <ng-template #freelancerTpl let-row="row">
-          <span class="d-block text-dark fw-semibold financial-table-text">
-            {{ row.freelancerName }}
-          </span>
-        </ng-template>
+    <ng-template #freelancerTpl let-row="row">
+      <span class="d-block text-dark fw-semibold financial-table-text">
+        {{ row.freelancerName }}
+      </span>
+    </ng-template>
 
 
-        <ng-template #clientPaymentTpl let-row="row">
-          <span class="text-muted fw-semibold">
-            ₹{{ row.budget }}
-          </span>
-        </ng-template>
+    <ng-template #clientPaymentTpl let-row="row">
+      <span class="text-muted fw-semibold">
+        ₹{{ row.budget }}
+      </span>
+    </ng-template>
 
 
-        <ng-template #freelancerPayoutTpl let-row="row">
-          <span class="text-muted fw-semibold">
-            ₹{{ row.freelancerPayment }}
-          </span>
-        </ng-template>
+    <ng-template #freelancerPayoutTpl let-row="row">
+      <span class="text-muted fw-semibold">
+        ₹{{ row.freelancerPayment }}
+      </span>
+    </ng-template>
 
 
-        <ng-template #platformFeeTpl let-row="row">
+    <ng-template #platformFeeTpl let-row="row">
 
-          <app-badge [label]="'₹' + row.platformFee" variant="primary" appearance="subtle">
-          </app-badge>
+      <app-badge [label]="'₹' + row.platformFee" variant="primary" appearance="subtle">
+      </app-badge>
 
-        </ng-template>
-
-
-        <ng-template #statusTpl let-row="row">
-          <div class="d-flex align-items-center gap-2">
-            @if (row.status === 'Completed') {
-              <app-badge label="Completed" variant="success" appearance="subtle">
-              </app-badge>
-            }
-            @else if (row.status === 'Pending' || row.status === 'Pending Payout') {
-              <app-badge label="Pending" variant="warning" appearance="subtle">
-              </app-badge>
-            }
-            @else if (row.status === 'In Progress') {
-              <app-badge label="In Progress" variant="primary" appearance="subtle">
-              </app-badge>
-            }
-            @else {
-              <app-badge [label]="row.status || 'Active'" variant="secondary" appearance="subtle">
-              </app-badge>
-            }
-          </div>
-        </ng-template>
+    </ng-template>
 
 
-        <ng-template #actionsTpl let-row="row">
-
-          <div class="d-flex align-items-center gap-2">
-
-            @if (row.status === 'Pending' && row.type === 'Payout') {
-
-            <app-button variant="outline-primary" size="sm" label="Process Payout"
-              (clicked)="openPayoutModal(row.id, row.freelancerPayment)">
-            </app-button>
-
-            }
-
-            @else if (row.status === 'Completed') {
-
-            <app-badge label="Paid" variant="success" appearance="subtle">
-            </app-badge>
-
-            }
-
-            @else {
-
-            <app-badge [label]="row.status" variant="secondary" appearance="subtle">
-            </app-badge>
-
-            }
-
-          </div>
-
-        </ng-template>
+    <ng-template #statusTpl let-row="row">
+      <div class="d-flex align-items-center gap-2">
+        @if (row.status === 'Completed') {
+        <app-badge label="Completed" variant="success" appearance="subtle">
+        </app-badge>
+        }
+        @else if (row.status === 'Pending' || row.status === 'Pending Payout') {
+        <app-badge label="Pending" variant="warning" appearance="subtle">
+        </app-badge>
+        }
+        @else if (row.status === 'In Progress') {
+        <app-badge label="In Progress" variant="primary" appearance="subtle">
+        </app-badge>
+        }
+        @else {
+        <app-badge [label]="row.status || 'Active'" variant="secondary" appearance="subtle">
+        </app-badge>
+        }
+      </div>
+    </ng-template>
 
 
-        <!-- =====================================================
+    <ng-template #actionsTpl let-row="row">
+
+      <div class="d-flex align-items-center gap-2">
+
+        @if (row.status === 'Pending' && row.type === 'Payout') {
+
+        <app-button variant="outline-primary" size="sm" label="Process Payout"
+          (clicked)="openPayoutModal(row.id, row.freelancerPayment)">
+        </app-button>
+
+        }
+
+        @else if (row.status === 'Completed') {
+
+        <app-badge label="Paid" variant="success" appearance="subtle">
+        </app-badge>
+
+        }
+
+        @else {
+
+        <app-badge [label]="row.status" variant="secondary" appearance="subtle">
+        </app-badge>
+
+        }
+
+      </div>
+
+    </ng-template>
+
+
+    <!-- =====================================================
          RESPONSIVE TRANSACTION CARDS
          < 1200px
     ====================================================== -->
 
-        <div class="responsive-financial-list">
+    <div class="responsive-financial-list">
 
-          @if (paginatedTransactions$ | async; as transactions) {
+      @if (paginatedTransactions$ | async; as transactions) {
 
-          @if (transactions.length > 0) {
+      @if (transactions.length > 0) {
 
-          <div class="financial-card-grid">
-            @for (transaction of transactions; track transaction.id) {
-              <app-ledger-card 
-                [transaction]="transaction"
-                (payout)="openPayoutModal($event.id, $event.amount)">
-              </app-ledger-card>
-            }
-          </div>
+      <div class="financial-card-grid">
+        @for (transaction of transactions; track transaction.id) {
+        <app-ledger-card [transaction]="transaction" (payout)="openPayoutModal($event.id, $event.amount)">
+        </app-ledger-card>
+        }
+      </div>
 
 
-          <!-- Responsive Pagination -->
+      <!-- Responsive Pagination -->
 
-          <div class="responsive-pagination">
+      <div class="responsive-pagination">
 
-            <app-pagination [totalItems]="(transactions$ | async)?.length || 0" [pageSize]="(pageSize$ | async)!"
-              [currentPage]="(currentPage$ | async)!" (pageChange)="currentPage$.next($event)"
-              (pageSizeChange)="onPageSizeChange($event)">
-            </app-pagination>
+        <app-pagination [totalItems]="(transactions$ | async)?.length || 0" [pageSize]="(pageSize$ | async)!"
+          [currentPage]="(currentPage$ | async)!" (pageChange)="currentPage$.next($event)"
+          (pageSizeChange)="onPageSizeChange($event)">
+        </app-pagination>
 
-          </div>
+      </div>
 
-          }
+      }
 
-          @else {
+      @else {
 
-          <div class="financial-empty-state">
+      <div class="financial-empty-state">
 
-            <div class="empty-icon">
-              <i class="bi bi-receipt"></i>
-            </div>
-
-            <h4>No transactions found</h4>
-
-            <p>
-              No transactions match the current search or filter criteria.
-            </p>
-
-          </div>
-
-          }
-
-          }
-
+        <div class="empty-icon">
+          <i class="bi bi-receipt"></i>
         </div>
+
+        <h4>No transactions found</h4>
+
+        <p>
+          No transactions match the current search or filter criteria.
+        </p>
+
+      </div>
+
+      }
+
+      }
+
+    </div>
 
     <!-- Desktop Pagination -->
     <div class="desktop-table-view">

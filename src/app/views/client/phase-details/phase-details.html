@@ -13,32 +13,63 @@
 
   <!-- Main Content Wrapper (Glassmorphism) -->
   <div class="position-relative z-1 p-2 p-sm-3 p-md-4 mx-auto w-100" style="max-width: 1400px;">
-    <!-- Top Navigation & Actions -->
-    <div class="d-flex align-items-center gap-2 gap-sm-3 mb-4 min-w-0">
+
+    <!-- Top Navigation -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
       <a [routerLink]="['/contract-progress', contractId]"
-        class="btn btn-sm btn-light border rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 header-back-btn"
-        title="Back to Phases" aria-label="Back">
-        <i class="bi bi-arrow-left fs-6"></i>
+        class="btn btn-sm btn-white border shadow-sm rounded-pill px-3 py-2 d-inline-flex align-items-center gap-2 header-back-btn text-dark text-decoration-none"
+        title="Back to Phases">
+        <i class="bi bi-arrow-left"></i>
+        <span class="small fw-semibold">Back to Phases</span>
       </a>
-      <span class="text-muted small">Back to Phases</span>
+      @if (phase?.status) {
+      <div class="d-none d-sm-block">
+        <span class="text-muted small me-2">Progress:</span>
+        <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold">{{ phaseProgress }}%</span>
+      </div>
+      }
     </div>
 
+    @if (isLoading) {
+    <div class="glass-card rounded-4 p-5 text-center bg-white shadow-sm my-4">
+      <div class="spinner-border text-primary mb-3" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="text-muted small mb-0">Loading phase details...</p>
+    </div>
+    } @else if (error) {
+    <div class="alert alert-danger rounded-3 shadow-sm d-flex align-items-center gap-2 my-4" role="alert">
+      <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+      <div>{{ error }}</div>
+    </div>
+    } @else {
+
     <!-- Header Card -->
-    <div class="glass-card rounded-3 mb-4 p-3 p-md-4 bg-white">
-      <div class="d-flex align-items-center gap-3 mb-4 min-w-0">
-        <div class="rounded-circle border d-flex align-items-center justify-content-center bg-light flex-shrink-0"
-          style="width: 44px; height: 44px;">
-          <i class="bi bi-file-earmark-text text-muted fs-5"></i>
+    <div class="glass-card rounded-4 mb-4 p-3 p-md-4 bg-white shadow-sm border">
+      <!-- Title & Status Header Row -->
+      <div
+        class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 mb-4 pb-3 border-bottom border-light">
+        <div class="d-flex align-items-center gap-3 min-w-0">
+          <div
+            class="rounded-3 d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary flex-shrink-0"
+            style="width: 48px; height: 48px;">
+            <i class="bi bi-layers-fill fs-4"></i>
+          </div>
+          <div class="min-w-0">
+            <h1 class="fw-bold fs-4 mb-1 text-dark text-truncate">
+              {{ phase?.name }}
+            </h1>
+            <p class="text-muted small mb-0">Phase Review & Contract Deliverable Management</p>
+          </div>
         </div>
-        <div class="min-w-0">
-          <h1 class="fw-bold fs-4 mb-1 text-dark text-truncate">
-            {{ phase?.name }} 
-          </h1>
-          <p class="text-muted small mb-0 text-truncate">{{ phase?.description || 'Phase details & review' }}</p>
-        </div>
+        @if (phase?.status) {
+        <app-badge [label]="phase.status | titlecase" [variant]="getStatusBadgeVariant(phase.status)"
+          appearance="subtle" [rounded]="true" size="normal" class="text-capitalize flex-shrink-0">
+        </app-badge>
+        }
       </div>
 
-      <!-- Quick Stats Row (Responsive grid: 1 col on mobile, 2 on tablet, 4 on desktop) -->
+      <!-- Quick Stats Row (Responsive grid) -->
       <div class="row g-3">
         @for (stat of phaseStats; track stat.title) {
         <div class="col-12 col-sm-6 col-lg-3">
@@ -48,112 +79,165 @@
       </div>
     </div>
 
+    <!-- Phase Specifications Card -->
+    <div class="glass-card rounded-4 mb-4 p-3 p-md-4 bg-white shadow-sm border">
+      <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom border-light">
+        <i class="bi bi-file-earmark-text text-primary fs-5"></i>
+        <h2 class="fs-6 fw-bold text-dark mb-0">Phase Specifications & Requirements</h2>
+      </div>
 
-
-  <div class="row g-4">
-    <!-- Main Column (Overview Content) -->
-    <div class="col-12">
-      
-      <div class="row g-4 mb-4">
-        <!-- Phase Description -->
-        <div class="col-12">
-          <div class="glass-card rounded-3 h-100 p-4 bg-white">
-            <h3 class="fs-6 fw-bold mb-3 text-dark">Phase Description</h3>
-            <p class="text-muted small mb-4" style="line-height: 1.6;">
-              {{ phase?.description || 'No description provided.' }}
-            </p>
-
-            @if (phase?.deliverables?.length) {
-              <h3 class="fs-6 fw-bold mb-2 text-dark">Deliverables</h3>
-              <ul class="list-unstyled small text-dark mb-4" style="line-height: 1.8;">
-                @for (del of phase.deliverables; track $index) {
-                  <li><i class="bi bi-check-circle-fill text-success me-2"></i> {{ del }}</li>
-                }
-              </ul>
-            }
-
-            @if (phase?.acceptanceCriteria?.length) {
-              <h3 class="fs-6 fw-bold mb-2 text-dark">Acceptance Criteria</h3>
-              <ul class="list-unstyled small text-dark mb-4" style="line-height: 1.8;">
-                @for (criteria of phase.acceptanceCriteria; track $index) {
-                  <li><i class="bi bi-asterisk text-primary me-2" style="font-size: 0.7rem;"></i> {{ criteria }}</li>
-                }
-              </ul>
-            }
-
-            @if (phase?.clientAttachments?.length) {
-              <h3 class="fs-6 fw-bold mb-2 text-dark">Attachments</h3>
-              <div class="row mb-4">
-                <div class="col-12 col-md-6 col-lg-4">
-                  <app-file-preview mode="document" [files]="phase.clientAttachments"></app-file-preview>
-                </div>
-              </div>
-            }
-          </div>
+      <!-- Scope Description -->
+      <div class="mb-4">
+        <h6 class="text-uppercase fw-semibold text-muted mb-2" style="font-size: 0.72rem; letter-spacing: 0.5px;">Scope
+          & Description</h6>
+        <div class="text-secondary small p-3 bg-light rounded-3 border border-light" style="line-height: 1.7;"
+          [innerHTML]="phase?.description || 'No description provided.'">
         </div>
       </div>
 
-      <!-- Latest Submission & Review -->
-      @if (latestRevision) {
-        <div class="glass-card rounded-3 mb-4 p-4 bg-white">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="fs-6 fw-bold text-dark mb-0 d-flex align-items-center gap-2">
-              Latest Submission 
-              <span class="text-muted fw-normal" style="font-size: 0.7rem;">Submitted on {{ latestRevision?.submittedAt | date:'medium' }}</span>
-            </h3>
-            <app-badge [label]="latestRevision?.status ? (latestRevision?.status | titlecase) : 'Pending'" variant="success"></app-badge>
+      <div class="row g-4">
+        <!-- Deliverables -->
+        @if (phase?.deliverables?.length) {
+        <div class="col-12 col-lg-6">
+          <div class="p-3 bg-light rounded-3 border border-light h-100">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <i class="bi bi-check2-circle text-success fs-5"></i>
+              <h3 class="fs-6 fw-bold text-dark mb-0">Deliverables</h3>
+            </div>
+            <div class="d-flex flex-column gap-2">
+              @for (del of phase.deliverables; track $index) {
+              <div class="d-flex align-items-start gap-2 p-2 px-3 rounded-2 bg-white border border-light shadow-sm">
+                <i class="bi bi-check-circle-fill text-success flex-shrink-0 mt-1" style="font-size: 0.85rem;"></i>
+                <span class="small text-dark">{{ del }}</span>
+              </div>
+              }
+            </div>
           </div>
-          <p class="text-dark small mb-4">{{ latestRevision?.freelancerNote || 'No notes provided by the freelancer.' }}</p>
-          
-          @if (latestRevision?.attachments && latestRevision?.attachments?.length > 0) {
-            <h4 class="fw-bold text-dark mb-3" style="font-size: 0.75rem;">Attachments ({{ latestRevision?.attachments?.length }})</h4>
-            <div class="row mb-4">
-              <div class="col-12 col-md-6 col-lg-4">
-                <app-file-preview mode="document" [files]="latestRevision?.attachments"></app-file-preview>
-              </div>
-            </div>
-          }
-
-          <!-- Review Form for Client -->
-          @if (phase?.status === 'submitted' || phase?.status === 'under-review') {
-            <div class="bg-light rounded-3 p-4 mt-4 border">
-              <h4 class="fw-bold text-dark mb-3 fs-6">Review Submission</h4>
-              
-              <div class="mb-3">
-                <app-input-field 
-                  type="textarea"
-                  label="Feedback / Comments"
-                  placeholder="Enter your feedback or reason for requesting changes..."
-                  [value]="clientFeedback"
-                  (valueChange)="clientFeedback = $event">
-                </app-input-field>
-              </div>
-              
-              <div class="d-flex gap-3 mt-4">
-                <app-button 
-                  variant="primary" 
-                  [disabled]="isReviewing"
-                  (clicked)="onReviewPhase('approve')"
-                  [label]="isReviewing ? 'Approving...' : 'Approve Phase & Release Payment'">
-                  <i class="bi bi-check-circle me-1"></i>
-                </app-button>
-                <app-button 
-                  variant="outline-danger" 
-                  [disabled]="isReviewing || !clientFeedback.trim()"
-                  (clicked)="onReviewPhase('request-changes')"
-                  label="Request Changes">
-                  <i class="bi bi-arrow-counterclockwise me-1"></i>
-                </app-button>
-              </div>
-              <p class="text-muted mt-3 mb-0" style="font-size: 0.7rem;">Note: You must provide feedback to request changes.</p>
-            </div>
-          }
         </div>
-      }
+        }
 
+        <!-- Acceptance Criteria -->
+        @if (phase?.acceptanceCriteria?.length) {
+        <div class="col-12 col-lg-6">
+          <div class="p-3 bg-light rounded-3 border border-light h-100">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <i class="bi bi-clipboard2-check text-primary fs-5"></i>
+              <h3 class="fs-6 fw-bold text-dark mb-0">Acceptance Criteria</h3>
+            </div>
+            <div class="d-flex flex-column gap-2">
+              @for (criteria of phase.acceptanceCriteria; track $index) {
+              <div class="d-flex align-items-start gap-2 p-2 px-3 rounded-2 bg-white border border-light shadow-sm">
+                <i class="bi bi-patch-check-fill text-primary flex-shrink-0 mt-1" style="font-size: 0.85rem;"></i>
+                <span class="small text-dark">{{ criteria }}</span>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+
+      <!-- Attachments -->
+      @if (phase?.clientAttachments?.length) {
+      <div class="mt-4 pt-3 border-top border-light">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <i class="bi bi-paperclip text-muted fs-5"></i>
+          <h3 class="fs-6 fw-bold text-dark mb-0">Reference Attachments</h3>
+        </div>
+        <div class="row g-3">
+          <div class="col-12 col-md-6 col-lg-4">
+            <app-file-preview mode="document" [files]="phase.clientAttachments"></app-file-preview>
+          </div>
+        </div>
+      </div>
+      }
     </div>
 
-  </div>
-</div>
+    <!-- Latest Submission & Review -->
+    @if (latestRevision) {
+    <div class="glass-card rounded-4 mb-4 p-3 p-md-4 bg-white shadow-sm border">
+      <div
+        class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3 pb-3 border-bottom border-light">
+        <div>
+          <h3 class="fs-6 fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+            <i class="bi bi-cloud-arrow-up-fill text-primary"></i>
+            Latest Submission
+          </h3>
+          <span class="text-muted small">
+            Submitted on {{ latestRevision?.submittedAt | date:'medium' }}
+          </span>
+        </div>
+        <app-badge [label]="latestRevision?.status ? (latestRevision?.status | titlecase) : 'Pending'"
+          [variant]="getStatusBadgeVariant(latestRevision?.status || 'pending')" appearance="subtle" [rounded]="true">
+        </app-badge>
+      </div>
 
+      <!-- Freelancer Notes -->
+      <div class="p-3 bg-light rounded-3 border border-light mb-4">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <i class="bi bi-chat-left-quote text-muted"></i>
+          <span class="small fw-semibold text-dark">Freelancer Notes</span>
+        </div>
+        <p class="text-secondary small mb-0" style="line-height: 1.6;">
+          {{ latestRevision?.freelancerNote || 'No notes provided by the freelancer.' }}
+        </p>
+      </div>
+
+      <!-- Delivered Attachments -->
+      @if (latestRevision?.attachments && latestRevision?.attachments?.length > 0) {
+      <div class="mb-4">
+        <h4 class="fw-bold text-dark mb-3 small d-flex align-items-center gap-2">
+          <i class="bi bi-files text-primary"></i>
+          Delivered Attachments ({{ latestRevision?.attachments?.length }})
+        </h4>
+        <div class="row g-3">
+          <div class="col-12 col-md-6 col-lg-4">
+            <app-file-preview mode="document" [files]="latestRevision?.attachments"></app-file-preview>
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- Review Form for Client -->
+      @if (phase?.status === 'submitted' || phase?.status === 'under-review') {
+      <div class="bg-primary bg-opacity-10 rounded-3 p-3 p-md-4 mt-4 border border-primary border-opacity-25">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <i class="bi bi-shield-check text-primary fs-5"></i>
+          <h4 class="fw-bold text-dark mb-0 fs-6">Review & Release Payment</h4>
+        </div>
+
+        <div class="mb-3">
+          <app-input-field type="textarea" label="Feedback / Comments"
+            placeholder="Enter your feedback or reason for requesting changes..." [value]="clientFeedback"
+            (valueChange)="clientFeedback = $event">
+          </app-input-field>
+        </div>
+
+        <div class="review-actions-container d-flex justify-content-between align-items-center gap-2 gap-sm-3 mt-4">
+          <app-button variant="primary" [disabled]="isReviewing" (clicked)="onReviewPhase('approve')">
+            @if (isReviewing) {
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+            <span>Approving...</span>
+            } @else {
+            <i class="bi bi-check-circle me-1"></i>
+            <span>Approve Phase</span>
+            }
+          </app-button>
+          <app-button variant="outline-danger" [disabled]="isReviewing || !clientFeedback.trim()"
+            (clicked)="onReviewPhase('request-changes')">
+            <i class="bi bi-arrow-counterclockwise me-1"></i>
+            <span>Request Changes</span>
+          </app-button>
+        </div>
+        <p class="text-muted mt-2 mb-0" style="font-size: 0.72rem;">
+          <i class="bi bi-info-circle me-1"></i> Note: You must provide feedback to request changes.
+        </p>
+      </div>
+      }
+    </div>
+    }
+
+    }
+
+  </div>
 </div>

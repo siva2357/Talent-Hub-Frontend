@@ -84,7 +84,7 @@ export class FinanceOverview implements OnInit, AfterViewInit {
           let tPendingWithdrawal = 0;
 
           res.report.forEach((contract: any) => {
-            tEarned += (contract.budget || contract.earned || 0); // "total earned equals total contract budget"
+            tEarned += (contract.earned !== undefined ? contract.earned : (contract.budget || 0));
             tWithdrawn += (contract.netWithdrawnAmount || 0);
             tPlatformFees += (contract.platformFeesDeducted || 0);
             tPendingWithdrawal += (contract.pendingWithdrawnAmount || 0);
@@ -104,8 +104,6 @@ export class FinanceOverview implements OnInit, AfterViewInit {
           const formatCurrency = (val: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(val);
 
           this.statCardsData = [
-            { title: 'TOTAL EARNED', value: formatCurrency(tEarned), icon: 'bi bi-wallet2' },
-            { title: 'PLATFORM FEES', value: formatCurrency(tPlatformFees), icon: 'bi bi-tag' },
             { title: 'TOTAL RECEIVED', value: formatCurrency(tReceived), icon: 'bi bi-box-arrow-in-down' },
             { title: 'WITHDRAWN AMOUNT', value: formatCurrency(tWithdrawn), icon: 'bi bi-bank' },
             { title: 'PENDING WITHDRAWAL', value: formatCurrency(tPendingWithdrawal), icon: 'bi bi-clock-history' },

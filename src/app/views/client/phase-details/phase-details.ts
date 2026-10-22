@@ -139,5 +139,23 @@ export class PhaseDetails implements OnInit {
       }
     });
   }
+
+  getStatusBadgeVariant(status: string): 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' {
+    switch (status?.toLowerCase()) {
+      case 'approved':
+      case 'completed':
+        return 'success';
+      case 'submitted':
+      case 'under-review':
+        return 'info';
+      case 'in-progress':
+        return 'primary';
+      case 'revision-requested':
+      case 'changes-requested':
+        return 'warning';
+      default:
+        return 'secondary';
+    }
+  }
 }
 

@@ -100,7 +100,8 @@ describe('ViewContractOffer', () => {
           }
         }
       };
-      const testComp = new ViewContractOffer(emptyRoute as any, mockOfferService, sanitizer);
+      const mockRouter = { navigate: jasmine.createSpy('navigate') };
+      const testComp = new ViewContractOffer(emptyRoute as any, mockRouter as any, mockOfferService, sanitizer);
       testComp.ngOnInit();
 
       expect(testComp.offerId).toBe('');
@@ -109,63 +110,26 @@ describe('ViewContractOffer', () => {
     });
   });
 
-  describe('Stats Getter', () => {
-    it('should return empty stats array when offer is null', () => {
-      component.offer = null;
-      expect(component.stats).toEqual([]);
+  describe('Formatting & Helper Methods', () => {
+    it('should format budget correctly', () => {
+      expect(component.formatBudget(null)).toBe('N/A');
+      expect(component.formatBudget(35000)).toContain('35,000');
+      expect(component.formatBudget('35000')).toContain('35,000');
+      expect(component.formatBudget('invalid')).toBe('invalid');
     });
 
-    it('should map and format all 9 stat cards correctly when offer is loaded', () => {
-      const stats = component.stats;
-      expect(stats.length).toBe(9);
-
-      expect(stats[0].title).toBe('Client');
-      expect(stats[0].value).toBe('Alice Walker');
-
-      expect(stats[1].title).toBe('Contractor');
-      expect(stats[1].value).toBe('Bob Smith');
-
-      expect(stats[2].title).toBe('Contract Title');
-      expect(stats[2].value).toBe('Senior Angular Specialist');
-
-      expect(stats[3].title).toBe('Contract Type');
-      expect(stats[3].value).toBe('Fixed Price');
-
-      expect(stats[4].title).toBe('Budget');
-      expect(stats[4].value).toBe('₹35000');
-
-      expect(stats[5].title).toBe('Category');
-      expect(stats[5].value).toBe('Frontend Development');
-
-      expect(stats[6].title).toBe('Offer Date');
-      expect(stats[6].value).toBe('Mar 1, 2026');
-
-      expect(stats[7].title).toBe('Start Date');
-      expect(stats[7].value).toBe('Apr 1, 2026');
-
-      expect(stats[8].title).toBe('End Date');
-      expect(stats[8].value).toBe('Sep 1, 2026');
+    it('should format contract type correctly', () => {
+      expect(component.formatContractType('')).toBe('Fixed Price');
+      expect(component.formatContractType('fixed_price')).toBe('Fixed Price');
+      expect(component.formatContractType('hourly_rate')).toBe('Hourly Rate');
     });
 
-    it('should fallback to default values and "N/A" for missing offer fields', () => {
-      component.offer = {
-        clientId: null,
-        freelancerId: null,
-        contractId: null,
-        createdAt: null
-      };
+    it('should handle declineOffer properly', () => {
+      spyOn(window, 'confirm').and.returnValue(true);
+      mockOfferService.declineOffer = jasmine.createSpy('declineOffer').and.returnValue(of({ success: true }));
 
-      const stats = component.stats;
-      expect(stats.length).toBe(9);
-      expect(stats[0].value).toBe('N/A');
-      expect(stats[1].value).toBe('N/A');
-      expect(stats[2].value).toBe('N/A');
-      expect(stats[3].value).toBe('Fixed Price');
-      expect(stats[4].value).toBe('₹N/A');
-      expect(stats[5].value).toBe('N/A');
-      expect(stats[6].value).toBe('N/A');
-      expect(stats[7].value).toBe('N/A');
-      expect(stats[8].value).toBe('N/A');
+      component.declineOffer();
+      expect(mockOfferService.declineOffer).toHaveBeenCalledWith('offer-888');
     });
   });
 });
