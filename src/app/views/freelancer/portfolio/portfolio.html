@@ -30,7 +30,7 @@
 
     <!-- Desktop View: Table (>= 992px) -->
     <div class="d-none d-lg-block">
-      <app-table [data]="portfolios" [columns]="columns" [loading]="isLoading"
+      <app-table [data]="paginatedPortfolios" [columns]="columns" [loading]="isLoading"
         emptyMessage="You haven't added any projects to your portfolio yet."></app-table>
     </div>
 
@@ -48,7 +48,7 @@
       </div>
       } @else {
       <div class="row g-3">
-        @for (row of portfolios; track row._id || $index) {
+        @for (row of paginatedPortfolios; track row._id || $index) {
         <div class="col-12 col-md-6">
           <div class="portfolio-mobile-card border rounded-3 bg-white p-3 shadow-sm h-100 d-flex flex-column">
 
@@ -74,12 +74,16 @@
 
               <!-- 3-Dots Action Dropdown -->
               <div class="dropdown flex-shrink-0">
-                <button
-                  class="btn btn-sm btn-light border rounded-circle d-flex align-items-center justify-content-center"
-                  type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static"
-                  style="width: 32px; height: 32px;">
+                <app-button
+                  variant="light"
+                  size="sm"
+                  [iconOnly]="true"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  data-bs-display="static"
+                  class="portfolio-dropdown-btn">
                   <i class="bi bi-three-dots-vertical text-muted"></i>
-                </button>
+                </app-button>
                 <div class="dropdown-menu dropdown-menu-end p-0 border-0 bg-transparent shadow-none"
                   style="min-width: auto;">
                   <app-dropdown [items]="getDropdownItems(row)" (itemSelected)="onDropdownAction($event, row)"
@@ -139,11 +143,24 @@
       }
     </div>
 
+    <!-- Reusable Pagination Component -->
+    @if (!isLoading && portfolios && portfolios.length > 0) {
+    <div class="portfolio-pagination mt-4">
+      <app-pagination
+        [currentPage]="currentPage"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        [totalItems]="portfolios.length"
+        (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)">
+      </app-pagination>
+    </div>
+    }
 
   </div>
 
   <ng-template #snoTemplate let-row="row">
-    <span class="fw-bold text-dark">{{ portfolios.indexOf(row) + 1 }}</span>
+    <span class="fw-bold text-dark">{{ getSerialNumber(row) }}</span>
   </ng-template>
 
   <ng-template #mediaTemplate let-row="row">

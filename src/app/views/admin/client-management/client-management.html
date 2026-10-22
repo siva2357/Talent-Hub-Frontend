@@ -174,7 +174,7 @@
 
       <div class="client-card-grid">
 
-        @for (client of clients; track client.id) {
+        @for (client of (paginatedClients$ | async); track client.id) {
 
         <app-client-card
           [client]="client"
@@ -185,6 +185,14 @@
 
         }
 
+      </div>
+
+      <!-- Responsive Pagination -->
+      <div class="responsive-pagination mt-3">
+        <app-pagination [totalItems]="clients.length" [pageSize]="(pageSize$ | async)!"
+          [currentPage]="(currentPage$ | async)!" (pageChange)="currentPage$.next($event)"
+          (pageSizeChange)="onPageSizeChange($event)">
+        </app-pagination>
       </div>
 
       }

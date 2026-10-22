@@ -111,6 +111,7 @@ export class BlogManager
   localSearchQuery = '';
   localSelectedCategory = 'All Categories';
 
+  blogs$!: Observable<any[]>;
   paginatedBlogs$!: Observable<any[]>;
 
   totalItems = 0;
@@ -182,79 +183,41 @@ export class BlogManager
     // RxJS filter + pagination pipeline
     // -------------------------------------------------------
 
-    this.paginatedBlogs$ = combineLatest([
+    this.blogs$ = combineLatest([
       this.rawBlogs$,
-
-      this.searchQuery$.pipe(
-        debounceTime(300)
-      ),
-
-      this.selectedCategory$,
-      this.currentPage$,
-      this.pageSize$
-
+      this.searchQuery$.pipe(debounceTime(300)),
+      this.selectedCategory$
     ]).pipe(
+      map(([rawBlogs, search, category]) => {
+        let filtered = [...rawBlogs];
 
-      map(
-        ([
-          rawBlogs,
-          search,
-          category,
-          page,
-          size
-        ]) => {
-
-          let filtered = [...rawBlogs];
-
-          // Search
-          if (search) {
-
-            const q = search.toLowerCase();
-
-            filtered = filtered.filter((blog) =>
-              (blog.title &&
-                blog.title
-                  .toLowerCase()
-                  .includes(q)) ||
-
-              (blog.content &&
-                blog.content
-                  .toLowerCase()
-                  .includes(q))
-            );
-          }
-
-          // Category
-          if (
-            category &&
-            category !== 'All Categories'
-          ) {
-
-            filtered = filtered.filter(
-              (blog) =>
-                blog.category === category
-            );
-          }
-
-          // Total
-          this.totalItems = filtered.length;
-
-          // Active filters
-          this.updateActiveFilters(
-            search,
-            category
-          );
-
-          // Pagination
-          const start =
-            (page - 1) * size;
-
-          return filtered.slice(
-            start,
-            start + size
+        if (search) {
+          const q = search.toLowerCase();
+          filtered = filtered.filter((blog) =>
+            (blog.title && blog.title.toLowerCase().includes(q)) ||
+            (blog.content && blog.content.toLowerCase().includes(q))
           );
         }
-      )
+
+        if (category && category !== 'All Categories') {
+          filtered = filtered.filter((blog) => blog.category === category);
+        }
+
+        this.totalItems = filtered.length;
+        this.updateActiveFilters(search, category);
+        return filtered;
+      })
+    );
+
+    this.paginatedBlogs$ = combineLatest([
+      this.blogs$,
+      this.currentPage$,
+      this.pageSize$
+    ]).pipe(
+      map(([filtered, page, size]) => {
+        const start = (page - 1) * size;
+        return filtered.slice(start, start + size);
+      })
     );
 
     // Fetch blogs

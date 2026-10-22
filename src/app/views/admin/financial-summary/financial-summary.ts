@@ -8,6 +8,8 @@ import { StatCard, StatCardData } from '../../../library/shared/components/stat-
 import { Table, TableColumn } from '../../../library/ui/components/table/table';
 import { Badge } from '../../../library/ui/components/badge/badge';
 import { Button } from '../../../library/ui/components/button/button';
+import { Dropdown } from '../../../library/ui/components/dropdown/dropdown';
+import { DropdownItem } from '../../../core/models/ui.model';
 import { FormsModule } from '@angular/forms';
 import { InputField } from '../../../library/ui/components/input-field/input-field';
 import { Chip } from '../../../library/ui/components/chip/chip';
@@ -15,11 +17,12 @@ import { Pagination } from '../../../library/ui/components/pagination/pagination
 import { LedgerCard } from '../../../library/shared/components/ledger-card/ledger-card';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, debounceTime } from 'rxjs/operators';
+import { ModalService } from '../../../core/services/ui/modal.service';
 
 @Component({
   selector: 'app-financial-summary',
   standalone: true,
-  imports: [CommonModule, StatCard, Table, Badge, Button, FormsModule, InputField, Chip, Pagination, LedgerCard],
+  imports: [CommonModule, StatCard, Table, Badge, Button, Dropdown, FormsModule, InputField, Chip, Pagination, LedgerCard],
   templateUrl: './financial-summary.html',
   styleUrl: './financial-summary.css'
 })
@@ -28,7 +31,10 @@ export class FinancialSummary implements OnInit, AfterViewInit, OnDestroy {
   isProcessing = false;
   selectedTransactionId: string | null = null;
   selectedTransactionAmount: number | null = null;
-  
+
+  isDetailsModalOpen = false;
+  selectedTransaction: any = null;
+
   stats: any = {
     totalVolume: 0,
     platformCommissions: 0,
@@ -36,6 +42,7 @@ export class FinancialSummary implements OnInit, AfterViewInit, OnDestroy {
     growthPercent: 0
   };
   private http = inject(HttpClient);
+  private modalService = inject(ModalService);
 
   statCards: StatCardData[] = [];
   columns: TableColumn[] = [];
@@ -53,10 +60,10 @@ export class FinancialSummary implements OnInit, AfterViewInit, OnDestroy {
   rawTransactions$ = new BehaviorSubject<any[]>([]);
   searchQuery$ = new BehaviorSubject<string>('');
   selectedStatus$ = new BehaviorSubject<string>('All Statuses');
-  
+
   tempSearchQuery = '';
   tempSelectedStatus = 'All Statuses';
-  
+
   currentPage$ = new BehaviorSubject<number>(1);
   pageSize$ = new BehaviorSubject<number>(10);
 
@@ -77,7 +84,7 @@ export class FinancialSummary implements OnInit, AfterViewInit, OnDestroy {
 
         if (search) {
           const q = search.toLowerCase();
-          filtered = filtered.filter(t => 
+          filtered = filtered.filter(t =>
             (t.clientName && t.clientName.toLowerCase().includes(q)) ||
             (t.freelancerName && t.freelancerName.toLowerCase().includes(q)) ||
             (t.contractTitle && t.contractTitle.toLowerCase().includes(q))
@@ -112,20 +119,20 @@ export class FinancialSummary implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.columns = [
-        { field: 'id', headerName: 'S.No', cellTemplate: this.indexTpl,width: 80 },
-        { field: 'contractTitle', headerName: 'Contract Title', cellTemplate: this.contractTpl,width: 150 },
-        { field: 'clientName', headerName: 'Client', cellTemplate: this.clientTpl,width: 150 },
-        { field: 'freelancerName', headerName: 'Freelancer', cellTemplate: this.freelancerTpl,width: 150 },
-        { field: 'budget', headerName: 'Client Payment', cellTemplate: this.clientPaymentTpl,width: 150 },
-        { field: 'freelancerPayment', headerName: 'Freelancer Payout', cellTemplate: this.freelancerPayoutTpl,width: 150 },
+        { field: 'id', headerName: 'S.No', cellTemplate: this.indexTpl, width: 80 },
+        { field: 'contractTitle', headerName: 'Contract Title', cellTemplate: this.contractTpl, width: 150 },
+        { field: 'clientName', headerName: 'Client', cellTemplate: this.clientTpl, width: 150 },
+        { field: 'freelancerName', headerName: 'Freelancer', cellTemplate: this.freelancerTpl, width: 150 },
+        { field: 'budget', headerName: 'Client Payment', cellTemplate: this.clientPaymentTpl, width: 150 },
+        { field: 'freelancerPayment', headerName: 'Freelancer Payout', cellTemplate: this.freelancerPayoutTpl, width: 150 },
         { field: 'platformFee', headerName: 'Platform Fee', cellTemplate: this.platformFeeTpl, width: 180 },
-        { field: 'status', headerName: 'Status', cellTemplate: this.statusTpl,width: 150 },
-        { field: 'actions', headerName: 'Actions', cellTemplate: this.actionsTpl, width: 180 }
+        { field: 'status', headerName: 'Status', cellTemplate: this.statusTpl, width: 150 },
+        { field: 'actions', headerName: 'Actions', cellTemplate: this.actionsTpl, width: 100 }
       ];
     });
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -218,27 +225,74 @@ export class FinancialSummary implements OnInit, AfterViewInit, OnDestroy {
     this.isProcessing = false;
   }
 
-  confirmPayout() {
+  async confirmPayout() {
     if (!this.selectedTransactionId) return;
 
-    // Optional confirmation alert, though the modal serves as confirmation itself.
-    if (!confirm('Are you sure you want to process this payout?')) return;
+    const txId = this.selectedTransactionId;
+    const amount = this.selectedTransactionAmount;
+    this.closePayoutModal();
+
+    const confirmed = await this.modalService.confirm({
+      title: 'Confirm Payout',
+      message: `Are you sure you want to process this payout of ₹${(amount || 0).toLocaleString('en-IN')} for transaction ${txId}? The funds will be transferred via RazorpayX.`,
+      confirmLabel: 'Process Payout',
+      cancelLabel: 'Cancel',
+      confirmVariant: 'primary',
+      icon: 'bi bi-cash-stack',
+      iconVariant: 'primary'
+    });
+
+    if (!confirmed) return;
 
     this.isProcessing = true;
-
-    this.http.post(`${environment.apiGatewayUrl}/admin/payout/${this.selectedTransactionId}`, {}, { headers: this.getAuthHeaders() }).subscribe({
+    this.http.post(`${environment.apiGatewayUrl}/admin/payout/${txId}`, {}, { headers: this.getAuthHeaders() }).subscribe({
       next: () => {
         this.isProcessing = false;
-        this.closePayoutModal();
-        this.fetchTransactions(); // Refresh list
-        this.fetchStats(); // Refresh stats cards
-        alert(`Successfully processed payout for transaction ${this.selectedTransactionId} via RazorpayX!`);
+        this.fetchTransactions();
+        this.fetchStats();
       },
       error: (err) => {
         this.isProcessing = false;
-        alert('Failed to process payout. Check console for details.');
-        console.error(err);
+        console.error('Failed to process payout', err);
       }
     });
+  }
+
+  getActionItems(row: any): DropdownItem[] {
+    const items: DropdownItem[] = [];
+
+    if (row.status === 'Pending' && row.type === 'Payout') {
+      items.push({
+        label: 'Process Payout',
+        value: 'process_payout',
+        icon: 'bi bi-cash-stack text-primary'
+      });
+    }
+
+    items.push({
+      label: 'View Details',
+      value: 'view_details',
+      icon: 'bi bi-eye text-primary'
+    });
+
+    return items;
+  }
+
+  onActionSelected(item: DropdownItem, row: any): void {
+    if (item.value === 'process_payout') {
+      this.openPayoutModal(row.id, row.freelancerPayment);
+    } else if (item.value === 'view_details') {
+      this.openDetailsModal(row);
+    }
+  }
+
+  openDetailsModal(row: any) {
+    this.selectedTransaction = row;
+    this.isDetailsModalOpen = true;
+  }
+
+  closeDetailsModal() {
+    this.isDetailsModalOpen = false;
+    this.selectedTransaction = null;
   }
 }

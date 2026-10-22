@@ -85,7 +85,7 @@
             @if (attachments.length < 5) {
               <div class="w-100 mt-2">
                 <app-file-upload (uploadComplete)="onUploadComplete($event)"
-                  [uploadBucket]="uploadBucket.ClientData" [uploadSection]="uploadSection.SupportRequest"
+                  [uploadBucket]="targetBucket" [uploadSection]="uploadSection.SupportRequest"
                   title="Drop files here or browse" browseText="browse" acceptedFormats="Image or PDF"></app-file-upload>
               </div>
             }

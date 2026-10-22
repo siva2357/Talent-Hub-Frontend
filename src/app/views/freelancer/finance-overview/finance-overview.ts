@@ -98,7 +98,7 @@ export class FinanceOverview implements OnInit, AfterViewInit {
             totalReceived: tReceived,
             withdrawnAmount: tWithdrawn,
             pendingWithdrawal: tPendingWithdrawal,
-            availableBalance: tReceived - tWithdrawn - tPendingWithdrawal // net received - net withdrawn
+            availableBalance: Math.max(0, Math.round((tReceived - tWithdrawn - tPendingWithdrawal) * 100) / 100)
           };
 
           const formatCurrency = (val: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(val);
@@ -134,7 +134,9 @@ export class FinanceOverview implements OnInit, AfterViewInit {
   withdraw(contract: any): void {
     if (!contract || (!contract.contractId && !contract._id)) return;
 
-    const available = (contract.receivedAmount || 0) - (contract.grossWithdrawnAmount || contract.withdrawnAmount || 0);
+    const available = (contract.balance !== undefined && contract.balance !== null)
+      ? contract.balance
+      : ((contract.receivedAmount || 0) - (contract.grossWithdrawnAmount || contract.withdrawnAmount || 0));
     if (available <= 0) {
       alert('No funds available to withdraw for this contract.');
       return;
@@ -218,10 +220,10 @@ export class FinanceOverview implements OnInit, AfterViewInit {
     const items: DropdownItem[] = [];
 
     if (row.status?.toLowerCase() === 'completed') {
-      const pending = row.pendingWithdrawnAmount || 0;
+      const pending = row.grossPendingWithdrawnAmount || row.pendingWithdrawnAmount || 0;
       const received = row.receivedAmount || 0;
       const grossWithdrawn = row.grossWithdrawnAmount || row.withdrawnAmount || 0;
-      const available = received - grossWithdrawn;
+      const available = (row.balance !== undefined && row.balance !== null) ? row.balance : (received - grossWithdrawn);
 
       let hasWithdrawnSuccessfully = false;
 

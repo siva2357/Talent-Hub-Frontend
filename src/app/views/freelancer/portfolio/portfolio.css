@@ -128,6 +128,25 @@
 }
 
 /* =========================================================
+   PAGINATION
+========================================================= */
+
+.portfolio-pagination {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0.85rem 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+@media (max-width: 575.98px) {
+  .portfolio-pagination {
+    padding: 0.65rem 0.85rem;
+    border-radius: 8px;
+  }
+}
+
+/* =========================================================
    BACKGROUND DECORATIONS
 ========================================================= */
 
@@ -204,6 +223,28 @@
 /* =========================================================
    DROPDOWN
 ========================================================= */
+
+.portfolio-dropdown-btn {
+  display: inline-flex;
+}
+
+:host ::ng-deep .portfolio-dropdown-btn .btn {
+  border-radius: 50% !important;
+  border: 1px solid #e5e7eb !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  background-color: #f9fafb !important;
+  transition: all 0.2s ease;
+}
+
+:host ::ng-deep .portfolio-dropdown-btn .btn:hover {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
 
 :host ::ng-deep app-dropdown .dropdown-menu {
   position: static !important;

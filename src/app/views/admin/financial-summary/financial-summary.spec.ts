@@ -5,11 +5,13 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { environment } from '../../../../environments/environment';
+import { ModalService } from '../../../core/services/ui/modal.service';
 
 describe('FinancialSummary', () => {
   let component: FinancialSummary;
   let fixture: ComponentFixture<FinancialSummary>;
   let httpTesting: HttpTestingController;
+  let modalServiceSpy: jasmine.SpyObj<ModalService>;
 
   const mockStats = {
     totalVolume: 500000,
@@ -32,13 +34,15 @@ describe('FinancialSummary', () => {
 
   beforeEach(async () => {
     localStorage.setItem('token', 'dummy-token');
+    modalServiceSpy = jasmine.createSpyObj('ModalService', ['confirm']);
 
     await TestBed.configureTestingModule({
       imports: [FinancialSummary],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: ModalService, useValue: modalServiceSpy }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
@@ -148,11 +152,11 @@ describe('FinancialSummary', () => {
     handleInitialRequests();
     tick();
 
-    spyOn(window, 'confirm').and.returnValue(true);
-    spyOn(window, 'alert');
+    modalServiceSpy.confirm.and.returnValue(Promise.resolve(true));
 
     component.openPayoutModal('tx-1', 9000);
     component.confirmPayout();
+    tick();
 
     const payoutReq = httpTesting.expectOne(`${environment.apiGatewayUrl}/admin/payout/tx-1`);
     expect(payoutReq.request.method).toBe('POST');
@@ -167,7 +171,7 @@ describe('FinancialSummary', () => {
 
     expect(component.isProcessing).toBeFalse();
     expect(component.isPayoutModalOpen).toBeFalse();
-    expect(window.alert).toHaveBeenCalled();
+    expect(modalServiceSpy.confirm).toHaveBeenCalled();
   }));
 
   it('should not process payout if user cancels confirmation', fakeAsync(() => {
@@ -175,10 +179,12 @@ describe('FinancialSummary', () => {
     handleInitialRequests();
     tick();
 
-    spyOn(window, 'confirm').and.returnValue(false);
+    modalServiceSpy.confirm.and.returnValue(Promise.resolve(false));
     component.openPayoutModal('tx-1', 9000);
     component.confirmPayout();
+    tick();
 
     httpTesting.expectNone(`${environment.apiGatewayUrl}/admin/payout/tx-1`);
+    expect(modalServiceSpy.confirm).toHaveBeenCalled();
   }));
 });

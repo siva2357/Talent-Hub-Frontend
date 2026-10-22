@@ -213,7 +213,7 @@
 
           <div class="freelancer-card-grid">
 
-            @for (freelancer of freelancers; track freelancer.id) {
+            @for (freelancer of (paginatedFreelancers$ | async); track freelancer.id) {
 
             <app-freelancer-card
               [freelancer]="freelancer"
@@ -224,6 +224,14 @@
 
             }
 
+          </div>
+
+          <!-- Responsive Pagination -->
+          <div class="responsive-pagination mt-3">
+            <app-pagination [totalItems]="freelancers.length" [pageSize]="(pageSize$ | async)!"
+              [currentPage]="(currentPage$ | async)!" (pageChange)="currentPage$.next($event)"
+              (pageSizeChange)="onPageSizeChange($event)">
+            </app-pagination>
           </div>
 
           }

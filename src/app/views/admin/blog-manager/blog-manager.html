@@ -272,12 +272,14 @@
     <!-- ===================================================
          PAGINATION
     ==================================================== -->
-    @if (totalItems > 0) {
+    @if (blogs$ | async; as list) {
+    @if (list.length > 0) {
     <div class="blog-pagination mt-4">
       <app-pagination [currentPage]="(currentPage$ | async) || 1" [pageSize]="(pageSize$ | async) || 10"
-        [totalItems]="totalItems" (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
+        [totalItems]="list.length" (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)">
       </app-pagination>
     </div>
+    }
     }
 
   </div>

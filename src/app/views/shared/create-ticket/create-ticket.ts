@@ -3,7 +3,6 @@ import { RouterModule, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SupportService } from '../../../core/services/support.service';
-import { FileService } from '../../../core/services/file.service';
 import { UploadBucket, UploadSection } from '../../../core/enums/upload.enum';
 import { AuthService } from '../../../core/services/auth.service';
 import { TokenService } from '../../../core/services/token.service';
@@ -22,11 +21,16 @@ import { RichTextEditor } from '../../../library/shared/components/rich-text-edi
 })
 export class CreateTicket implements OnInit {
   ticketForm!: FormGroup;
-  attachments: {name: string, url: string}[] = [];
+  attachments: { name: string, url: string }[] = [];
   isSubmitting = false;
 
   uploadBucket = UploadBucket;
   uploadSection = UploadSection;
+
+  get targetBucket(): UploadBucket {
+    const role = this.tokenService.getRole()?.toLowerCase();
+    return role === 'freelancer' ? UploadBucket.FreelancerData : UploadBucket.ClientData;
+  }
 
   categoryOptions = [
     { label: 'General Support', value: 'General Support' },
@@ -42,11 +46,10 @@ export class CreateTicket implements OnInit {
   constructor(
     private fb: FormBuilder,
     private supportService: SupportService,
-    private fileService: FileService,
     private authService: AuthService,
     private tokenService: TokenService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.ticketForm = this.fb.group({
@@ -104,7 +107,7 @@ export class CreateTicket implements OnInit {
     }
 
     this.isSubmitting = true;
-    
+
     try {
       const formValue = this.ticketForm.value;
       const payload = {
@@ -116,7 +119,7 @@ export class CreateTicket implements OnInit {
 
       await this.supportService.createTicket(payload).toPromise();
       this.router.navigate(['/contact-support']);
-      
+
     } catch (error) {
       console.error('Error creating ticket', error);
       alert('Failed to create ticket. Please try again.');

@@ -118,12 +118,12 @@
             </div>
 
             @if (row.status?.toLowerCase() === 'completed') {
-            @if ((row.pendingWithdrawnAmount || 0) > 0) {
+            @if ((row.grossPendingWithdrawnAmount || row.pendingWithdrawnAmount || 0) > 0) {
             <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25"
               style="font-size: 11px;">
               <i class="bi bi-hourglass-split me-1"></i>Pending Withdrawal
             </span>
-            } @else if (((row.receivedAmount || 0) - (row.grossWithdrawnAmount || row.withdrawnAmount || 0)) > 0) {
+            } @else if (((row.balance !== undefined && row.balance !== null) ? row.balance : ((row.receivedAmount || 0) - (row.grossWithdrawnAmount || row.withdrawnAmount || 0))) > 0) {
             <button
               class="btn btn-sm btn-outline-success rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-1"
               (click)="withdraw(row)" style="font-size: 12px;">

@@ -14,6 +14,7 @@
   width: 100%;
   position: relative;
   overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .bg-light-purple {
@@ -72,6 +73,8 @@
   z-index: 0;
   top: 15%;
   left: 0;
+  overflow: hidden;
+  max-width: 100vw;
 }
 
 .circle {
@@ -99,8 +102,17 @@
 }
 
 /* =========================================================
-   CONTAINER & SUCCESS CENTERING
+   CONTAINER & STEP WRAPPER
 ========================================================= */
+
+.form-step-wrapper {
+  max-width: 880px;
+  margin-top: 1.5rem;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100%;
+  box-sizing: border-box;
+}
 
 .management-container.success-view-active {
   min-height: 100vh;
@@ -121,14 +133,25 @@
   align-items: center;
 }
 
-.form-step-wrapper {
-  max-width: 840px;
-  margin-top: 1.5rem;
-  width: 100%;
+/* Header typography */
+.form-page-title {
+  letter-spacing: -0.02em;
 }
 
-.management-container > .position-relative.z-1 {
+.form-page-subtitle {
+  font-size: 0.875rem;
+}
+
+/* Stepper Box - Smooth scroll protection */
+.timeline-stepper-box {
   width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.timeline-stepper-box::-webkit-scrollbar {
+  display: none;
 }
 
 /* =========================================================
@@ -140,11 +163,12 @@
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.16);
   box-shadow:
     0 15px 40px -10px rgba(74, 58, 255, 0.08),
     0 4px 15px rgba(0, 0, 0, 0.03);
   border-radius: 20px !important;
+  box-sizing: border-box;
 }
 
 .cursor-pointer {
@@ -152,27 +176,72 @@
 }
 
 /* =========================================================
-   SECTION HEADERS & DIVIDERS
+   STEP HEADER & SECTION DIVIDERS
 ========================================================= */
 
 .step-header {
-  border-color: rgba(168, 85, 247, 0.12) !important;
+  border-color: rgba(168, 85, 247, 0.15) !important;
 }
 
 .profile-section-divider {
   height: 1px;
   width: 100%;
-  background: linear-gradient(90deg, rgba(168, 85, 247, 0.05) 0%, rgba(168, 85, 247, 0.25) 50%, rgba(168, 85, 247, 0.05) 100%);
+  background: linear-gradient(90deg,
+      rgba(168, 85, 247, 0.02) 0%,
+      rgba(168, 85, 247, 0.28) 50%,
+      rgba(168, 85, 247, 0.02) 100%);
   border: none;
 }
 
 .section-icon-badge {
-  width: 34px;
-  height: 34px;
-  min-width: 34px;
-  min-height: 34px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
   border-radius: 50%;
-  font-size: 0.95rem;
+  font-size: 1rem;
+}
+
+/* =========================================================
+   PROFILE AVATAR UPLOAD (STEP 1)
+========================================================= */
+
+.profile-upload-container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.profile-upload-container:hover {
+  transform: scale(1.02);
+}
+
+/* =========================================================
+   STEP 3: ADD ROW & SOCIAL / LANGUAGE PILLS
+========================================================= */
+
+.add-item-row {
+  width: 100%;
+}
+
+.add-btn-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.add-btn-wrapper app-button,
+.add-btn-wrapper .btn {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 42px !important;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 8px;
 }
 
 .social-icon-wrapper {
@@ -194,12 +263,25 @@
   border-radius: 12px;
   padding: 0.65rem 0.85rem;
   transition: all 0.2s ease;
+  min-height: 48px;
+  box-sizing: border-box;
 }
 
 .social-item-pill:hover,
 .language-item-pill:hover {
   border-color: #cbd5e1;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  background-color: #fafbfd;
+}
+
+.btn-remove-pill {
+  transition: transform 0.15s ease, color 0.15s ease;
+  line-height: 1;
+}
+
+.btn-remove-pill:hover {
+  color: #dc2626 !important;
+  transform: scale(1.15);
 }
 
 .hover-bg-light:hover {
@@ -211,12 +293,24 @@
 }
 
 /* =========================================================
-   REVIEW PROFILE IMAGE (PROMINENT & ROUNDED)
+   STEP 4: REVIEW PROFILE SECTION
 ========================================================= */
 
+.review-card {
+  background-color: #ffffff;
+  border: 1px solid rgba(168, 85, 247, 0.14) !important;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.2s ease;
+}
+
+.review-card:hover {
+  border-color: rgba(168, 85, 247, 0.28) !important;
+}
+
 .review-avatar-img {
-  width: 110px !important;
-  height: 110px !important;
+  width: 104px !important;
+  height: 104px !important;
   object-fit: cover !important;
   border-radius: 50% !important;
   border: 3px solid #e0e7ff !important;
@@ -224,11 +318,101 @@
   display: block;
 }
 
-.review-card {
-  background-color: #ffffff;
-  border: 1px solid rgba(168, 85, 247, 0.12);
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+.review-field-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #64748b !important;
+  margin-bottom: 2px;
+}
+
+.review-field-value {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #1e293b;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.review-bio-text {
+  line-height: 1.55;
+  white-space: pre-line;
+}
+
+.review-section-subtitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #475569 !important;
+}
+
+.review-badge {
+  font-size: 0.75rem;
+  white-space: normal;
+  line-height: 1.35;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.btn-edit-step {
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-edit-step:hover {
+  color: #1d4ed8 !important;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   STEP ACTION BUTTONS (LEFT & RIGHT)
+========================================================= */
+
+.step-action-buttons {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-top: 1.75rem !important;
+  padding-top: 1.25rem !important;
+  border-top: 1px solid rgba(168, 85, 247, 0.15) !important;
+  gap: 0.75rem !important;
+}
+
+.step-action-buttons .btn-spacer {
+  width: 1px;
+  height: 1px;
+  visibility: hidden;
+  flex-shrink: 0;
+}
+
+.step-action-buttons app-button {
+  display: inline-flex !important;
+  flex: 0 0 auto;
+}
+
+.step-action-buttons app-button button,
+.step-action-buttons .btn {
+  min-width: 110px !important;
+  height: 42px !important;
+  padding: 0 22px !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.action-btn-next app-button button,
+.action-btn-submit app-button button {
+  box-shadow: 0 4px 14px rgba(74, 58, 255, 0.22);
 }
 
 /* =========================================================
@@ -257,13 +441,14 @@
 }
 
 .success-logo {
-  height: 60px;
+  height: 56px;
+  max-width: 220px;
   object-fit: contain;
 }
 
 .success-icon-badge {
-  width: 96px;
-  height: 96px;
+  width: 90px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -271,8 +456,8 @@
 
 .success-icon-pulse {
   position: absolute;
-  width: 108px;
-  height: 108px;
+  width: 102px;
+  height: 102px;
   border-radius: 50%;
   background: rgba(34, 197, 94, 0.15);
   animation: pulseGreen 2.4s infinite ease-in-out;
@@ -290,8 +475,8 @@
 }
 
 .success-icon-circle {
-  width: 88px;
-  height: 88px;
+  width: 82px;
+  height: 82px;
   border-radius: 50%;
   background-color: #ffffff;
   border: 4px solid #f0fdf4;
@@ -300,18 +485,27 @@
 }
 
 .success-icon-circle i {
-  font-size: 3.2rem;
+  font-size: 3rem;
   line-height: 1;
 }
 
 .success-shield-badge {
   bottom: 0px;
   right: 0px;
-  width: 30px;
-  height: 30px;
-  font-size: 0.9rem;
+  width: 28px;
+  height: 28px;
+  font-size: 0.85rem;
   border: 2px solid #ffffff;
   z-index: 2;
+}
+
+.success-heading {
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;
+}
+
+.success-message {
+  font-size: 0.875rem;
 }
 
 .dashboard-redirect-btn {
@@ -320,73 +514,25 @@
   align-items: center !important;
 }
 
-.dashboard-redirect-btn app-button {
-  display: inline-flex !important;
+.dashboard-redirect-btn app-button button {
+  min-width: 180px !important;
+  height: 44px !important;
+  padding: 0 24px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(74, 58, 255, 0.25) !important;
 }
 
 /* =========================================================
-   ACTION BUTTONS (JUSTIFY-BETWEEN LEFT & RIGHT)
+   TEXT OVERFLOW AND WRAPPING GUARDS
 ========================================================= */
 
-.step-action-buttons {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  width: 100% !important;
-  margin-top: 2rem !important;
-  padding-top: 1.25rem !important;
-  border-top: 1px solid rgba(168, 85, 247, 0.15) !important;
-}
-
-.step-action-buttons .btn-spacer {
-  width: 1px;
-  height: 1px;
-  visibility: hidden;
-  flex-shrink: 0;
-}
-
-.step-action-buttons app-button {
-  display: inline-block;
-}
-
-/* Ensure buttons stretch nicely without breaking */
-.btn-primary {
-  background: linear-gradient(135deg, #4a3aff, #2563eb);
-  border: none;
-  border-radius: 10px;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(74, 58, 255, 0.35);
-  background: linear-gradient(135deg, #3f31eb, #1d4ed8);
-}
-
-.btn-outline-primary {
-  color: #4a3aff;
-  border-color: #4a3aff;
-  border-radius: 10px;
-}
-
-.btn-outline-primary:hover {
-  background-color: #4a3aff;
-  color: #ffffff;
-}
-
-.text-primary {
-  color: #4a3aff !important;
-}
-
-/* Text wrapping protection */
 .glass-card .text-truncate {
   max-width: 100%;
 }
 
 .glass-card a,
-.glass-card span {
+.glass-card span,
+.glass-card p {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
@@ -396,14 +542,14 @@
 ========================================================= */
 
 @media (max-width: 992px) {
-  .management-container > .position-relative.z-1 {
-    max-width: 740px !important;
+  .form-step-wrapper {
+    max-width: 760px !important;
     margin-top: 1.25rem !important;
   }
 
   .glass-card {
     border-radius: 18px !important;
-    padding: 1.5rem !important;
+    padding: 1.75rem !important;
   }
 
   .top-left {
@@ -422,35 +568,52 @@
 }
 
 /* =========================================================
-   MEDIA QUERY: PHONES & SMALL SCREENS (<= 768px)
+   MEDIA QUERY: PHONES & SMALL TABLETS (<= 768px)
 ========================================================= */
 
 @media (max-width: 768px) {
   .management-container {
-    padding: 0.75rem !important;
+    padding: 1rem 0.75rem !important;
   }
 
-  .management-container > .position-relative.z-1 {
+  .form-step-wrapper {
     max-width: 100% !important;
     margin-top: 0.75rem !important;
   }
 
-  .management-container h2 {
-    font-size: 1.4rem !important;
+  .form-page-title {
+    font-size: 1.35rem !important;
+  }
+
+  .form-page-subtitle {
+    font-size: 0.8rem !important;
   }
 
   .glass-card {
-    padding: 1.25rem !important;
+    padding: 1.35rem 1rem !important;
     border-radius: 16px !important;
   }
 
   .profile-upload-container {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
 
   .step-action-buttons {
     margin-top: 1.5rem !important;
     padding-top: 1rem !important;
+  }
+
+  .step-action-buttons app-button button,
+  .step-action-buttons .btn {
+    min-width: 100px !important;
+    height: 40px !important;
+    padding: 0 18px !important;
+    font-size: 0.825rem !important;
+  }
+
+  .review-avatar-img {
+    width: 88px !important;
+    height: 88px !important;
   }
 }
 
@@ -460,19 +623,29 @@
 
 @media (max-width: 576px) {
   .management-container {
-    padding: 0.5rem !important;
+    padding: 0.75rem 0.5rem !important;
   }
 
-  .management-container h2 {
+  .form-page-title {
     font-size: 1.25rem !important;
   }
 
   .glass-card {
-    padding: 1rem !important;
+    padding: 1.15rem 0.85rem !important;
     border-radius: 14px !important;
   }
 
-  /* Make sure buttons always justify-between on mobile too */
+  /* Full width Add Button on mobile */
+  .add-btn-wrapper {
+    margin-top: 0.25rem;
+  }
+
+  .add-btn-wrapper app-button,
+  .add-btn-wrapper .btn {
+    width: 100% !important;
+  }
+
+  /* Action buttons clean alignment */
   .step-action-buttons {
     display: flex !important;
     flex-direction: row !important;
@@ -483,53 +656,80 @@
   }
 
   .step-action-buttons app-button {
-    flex: 0 0 auto;
+    flex: 0 1 auto;
   }
 
-  /* Review avatar in mobile is centered & not tiny */
+  .step-action-buttons app-button button,
+  .step-action-buttons .btn {
+    min-width: 95px !important;
+    height: 38px !important;
+    padding: 0 14px !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* Review card avatar centered on mobile */
   .review-avatar-img {
-    width: 96px !important;
-    height: 96px !important;
-    margin: 0 auto 0.5rem auto !important;
+    width: 82px !important;
+    height: 82px !important;
+    margin: 0 auto 0.25rem auto !important;
   }
 
   .review-card {
-    padding: 1rem !important;
+    padding: 0.9rem !important;
     border-radius: 14px !important;
   }
 
   /* Success Screen on mobile */
-  .glass-card img[alt="Talent Hub"] {
-    height: 50px !important;
-    margin-bottom: 1.5rem !important;
+  .success-logo {
+    height: 46px !important;
+    margin-bottom: 1rem !important;
   }
 
-  .glass-card h3.fs-4 {
+  .success-heading {
     font-size: 1.2rem !important;
   }
 
-  .glass-card div[style*="width: 90px"] {
+  .success-message {
+    font-size: 0.825rem !important;
+  }
+
+  .success-icon-badge {
     width: 76px !important;
     height: 76px !important;
   }
 
-  .glass-card div[style*="width: 90px"] i {
-    font-size: 2.6rem !important;
+  .success-icon-pulse {
+    width: 86px !important;
+    height: 86px !important;
   }
 
-  /* Background glow adjustments on small screens */
+  .success-icon-circle {
+    width: 68px !important;
+    height: 68px !important;
+  }
+
+  .success-icon-circle i {
+    font-size: 2.4rem !important;
+  }
+
+  .dashboard-redirect-btn app-button button {
+    width: 100% !important;
+    min-width: 160px !important;
+  }
+
+  /* Subtle background glows */
   .top-left {
-    width: 240px;
-    height: 240px;
-    top: -60px;
-    left: -60px;
+    width: 220px;
+    height: 220px;
+    top: -50px;
+    left: -50px;
   }
 
   .bottom-right {
-    width: 260px;
-    height: 260px;
-    bottom: -80px;
-    right: -80px;
+    width: 240px;
+    height: 240px;
+    bottom: -60px;
+    right: -60px;
   }
 
   .circle-1 {
@@ -549,6 +749,33 @@
 }
 
 /* =========================================================
+   MEDIA QUERY: ULTRA COMPACT (<= 380px)
+========================================================= */
+
+@media (max-width: 380px) {
+  .management-container {
+    padding: 0.5rem 0.35rem !important;
+  }
+
+  .glass-card {
+    padding: 1rem 0.65rem !important;
+  }
+
+  .step-action-buttons app-button button,
+  .step-action-buttons .btn {
+    min-width: 85px !important;
+    height: 36px !important;
+    padding: 0 10px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .social-item-pill,
+  .language-item-pill {
+    padding: 0.5rem 0.65rem;
+  }
+}
+
+/* =========================================================
    ACCESSIBILITY & REDUCED MOTION
 ========================================================= */
 
@@ -556,7 +783,10 @@
   .btn-primary,
   .btn-outline-primary,
   .social-item-pill,
-  .language-item-pill {
+  .language-item-pill,
+  .success-icon-pulse,
+  .success-card {
     transition: none !important;
+    animation: none !important;
   }
 }

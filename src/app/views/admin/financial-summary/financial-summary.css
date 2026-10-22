@@ -810,3 +810,10 @@ app-button ::ng-deep button {
   }
 
 }
+
+/* Fix nested app-dropdown alignment inside bootstrap dropdown wrapper */
+:host ::ng-deep app-dropdown .dropdown-menu {
+  position: static !important;
+  display: block !important;
+  margin-top: 0 !important;
+}
