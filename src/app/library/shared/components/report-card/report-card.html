@@ -11,8 +11,8 @@
           [ngClass]="'icon-box-' + categoryVariant">
           <i [class]="categoryIcon"></i>
         </div>
-        <app-badge [label]="report.category || report.type || 'General'" [variant]="categoryVariant"
-          appearance="subtle" [rounded]="true">
+        <app-badge [label]="report.category || report.type || 'General'" [variant]="categoryVariant" appearance="subtle"
+          [rounded]="true">
         </app-badge>
       </div>
 
@@ -33,7 +33,8 @@
     </div>
 
     <!-- Footer: File info + Action buttons -->
-    <div class="report-footer d-flex align-items-center justify-content-between pt-3 mt-auto border-top border-light-subtle">
+    <div
+      class="report-footer d-flex align-items-center justify-content-between pt-3 mt-auto border-top border-light-subtle">
       <div class="report-file-pill d-inline-flex align-items-center gap-1 px-2 py-1 rounded-2 text-muted small">
         <i class="bi bi-file-earmark-excel text-success fs-6"></i>
         <span class="fw-semibold text-secondary">{{ report.size || report.fileSize || '120 KB' }}</span>
@@ -43,10 +44,7 @@
         <app-button variant="outline-primary" size="sm" label="View"
           [route]="'/view-report/' + (report._id || report.id)">
         </app-button>
-        <app-button variant="primary" size="sm" label="Download"
-          [loading]="isDownloading" (clicked)="downloadReport()">
-          <i class="bi bi-download me-1"></i>
-        </app-button>
+
       </div>
     </div>
   </div>

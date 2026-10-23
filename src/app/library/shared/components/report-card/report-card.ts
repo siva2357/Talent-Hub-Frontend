@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { AdminService } from '../../../../core/services/admin.service';
-import { ToastService } from '../../../../core/services/ui/toast.service';
+
 import { Button } from '../../../ui/components/button/button';
 import { Badge } from '../../../ui/components/badge/badge';
 
@@ -17,10 +16,7 @@ export class ReportCard {
   @Input() report: any;
   isDownloading = false;
 
-  constructor(
-    private adminService: AdminService,
-    private toastService: ToastService
-  ) { }
+  constructor() { }
 
   get categoryVariant(): 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'purple' {
     const cat = (this.report?.category || this.report?.type || '').toLowerCase();
@@ -40,31 +36,5 @@ export class ReportCard {
     return 'bi bi-file-earmark-bar-graph';
   }
 
-  downloadReport() {
-    const id = this.report?._id || this.report?.id;
-    if (!id) return;
 
-    this.isDownloading = true;
-    this.adminService.downloadReportFile(id).subscribe({
-      next: (blob: Blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        const filename = (this.report?.title || 'report').replace(/[^a-z0-9]/gi, '_').toLowerCase();
-        a.download = `${filename}.xlsx`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-
-        this.toastService.show('Report downloaded successfully!', 'success');
-        this.isDownloading = false;
-      },
-      error: (err) => {
-        console.error('Download error:', err);
-        this.toastService.show('Failed to download report.', 'error');
-        this.isDownloading = false;
-      }
-    });
-  }
 }

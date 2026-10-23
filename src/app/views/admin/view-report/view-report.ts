@@ -106,15 +106,17 @@ export class ViewReport implements OnInit {
 
 
   downloadReport() {
-    if (!this.report || !this.report.id) return;
+    const id = this.report?._id || this.report?.id;
+    if (!id) return;
 
     this.isDownloading = true;
-    this.adminService.downloadReportFile(this.report.id, this.periodControl).subscribe({
+    this.adminService.downloadReportFile(id).subscribe({
       next: (blob: Blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${this.report.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.xlsx`;
+        const filename = (this.report?.title || 'report').replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        a.download = `${filename}.xlsx`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -123,14 +125,13 @@ export class ViewReport implements OnInit {
         this.toastService.show('Report downloaded successfully!', 'success');
         this.isDownloading = false;
       },
-      error: (err: any) => {
+      error: (err) => {
         console.error('Download error:', err);
         this.toastService.show('Failed to download report.', 'error');
         this.isDownloading = false;
       }
     });
   }
-
   setupTableColumns() {
     if (!this.data || !this.data.tableHeaders) return;
     this.tableColumns = this.data.tableHeaders.map((header: any) => {
