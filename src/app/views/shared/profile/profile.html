@@ -52,7 +52,8 @@
         <!-- Basic Details -->
         <div class="flex-grow-1 text-center text-lg-start min-w-0 w-100">
           <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start gap-2 mb-2">
-            <h1 class="fw-bold fs-4 fs-sm-3 text-dark mb-0 text-break">{{ profileData?.basicInformation?.fullName || userData?.fullName ||
+            <h1 class="fw-bold fs-4 fs-sm-3 text-dark mb-0 text-break">{{ profileData?.basicInformation?.fullName ||
+              userData?.fullName ||
               'No data available' }}</h1>
             @if (userData?.status) {
             <app-badge [label]="userData.status | titlecase" [variant]="getStatusBadgeVariant(userData.status)"
@@ -64,34 +65,44 @@
           <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3 gap-lg-4 text-muted"
             style="font-size: 0.8rem;">
             <div class="d-flex flex-column gap-2 text-center text-lg-start">
-              <span class="d-inline-flex align-items-center justify-content-center justify-content-lg-start gap-2 text-break">
+              <span
+                class="d-inline-flex align-items-center justify-content-center justify-content-lg-start gap-2 text-break">
                 <i class="bi bi-geo-alt text-primary flex-shrink-0"></i>
-                <span class="text-truncate" style="max-width: 220px;" [title]="profileData?.location?.city ? (profileData.location.city + (profileData?.location?.country ? ', ' + profileData.location.country : '')) : 'Location not specified'">
-                  {{ profileData?.location?.city ? (profileData.location.city + (profileData?.location?.country ? ', ' + profileData.location.country : '')) : 'Location not specified' }}
+                <span class="text-truncate" style="max-width: 220px;"
+                  [title]="profileData?.location?.city ? (profileData.location.city + (profileData?.location?.country ? ', ' + profileData.location.country : '')) : 'Location not specified'">
+                  {{ profileData?.location?.city ? (profileData.location.city + (profileData?.location?.country ? ', ' +
+                  profileData.location.country : '')) : 'Location not specified' }}
                 </span>
               </span>
-              <span class="d-inline-flex align-items-center justify-content-center justify-content-lg-start gap-2 text-break">
-                <i class="bi bi-patch-check flex-shrink-0" [ngClass]="userData?.emailVerified ? 'text-success' : 'text-muted'"></i>
+              <span
+                class="d-inline-flex align-items-center justify-content-center justify-content-lg-start gap-2 text-break">
+                <i class="bi bi-patch-check flex-shrink-0"
+                  [ngClass]="userData?.emailVerified ? 'text-success' : 'text-muted'"></i>
                 <span>{{ userData?.emailVerified ? 'Verified Account' : 'Unverified Account' }}</span>
               </span>
             </div>
             <div class="d-flex flex-column gap-2 text-center text-lg-start">
-              <span class="d-inline-flex align-items-center justify-content-center justify-content-lg-start gap-2 text-break min-w-0">
+              <span
+                class="d-inline-flex align-items-center justify-content-center justify-content-lg-start gap-2 text-break min-w-0">
                 <i class="bi bi-envelope text-primary flex-shrink-0"></i>
-                <span class="text-truncate" style="max-width: 220px;" [title]="profileData?.basicInformation?.email || userData?.email">
+                <span class="text-truncate" style="max-width: 220px;"
+                  [title]="profileData?.basicInformation?.email || userData?.email">
                   {{ profileData?.basicInformation?.email || userData?.email || 'No email available' }}
                 </span>
               </span>
-              <span class="d-inline-flex align-items-center justify-content-center justify-content-lg-start gap-2 text-break">
+              <span
+                class="d-inline-flex align-items-center justify-content-center justify-content-lg-start gap-2 text-break">
                 <i class="bi bi-calendar3 text-primary flex-shrink-0"></i>
                 <span>Joined {{ (userData?.createdAt || profileData?.createdAt) ? ((userData?.createdAt ||
                   profileData?.createdAt) | date:'mediumDate') : 'Recent' }}</span>
               </span>
             </div>
             <div class="d-flex flex-column gap-2 text-center text-lg-start">
-              <span class="d-inline-flex align-items-center justify-content-center justify-content-lg-start gap-2 text-break">
+              <span
+                class="d-inline-flex align-items-center justify-content-center justify-content-lg-start gap-2 text-break">
                 <i class="bi bi-telephone text-primary flex-shrink-0"></i>
-                <span>{{ profileData?.basicInformation?.phoneNumber || userData?.phoneNumber || 'No phone available' }}</span>
+                <span>{{ profileData?.basicInformation?.phoneNumber || userData?.phoneNumber || 'No phone available'
+                  }}</span>
               </span>
             </div>
           </div>
@@ -162,7 +173,8 @@
           </div>
           <div class="row g-2 g-sm-3 mb-3">
             <div class="col-12 col-md-4 text-muted fw-semibold" style="font-size: 0.8rem;">Location</div>
-            <div class="col-12 col-md-8 text-dark text-break" style="font-size: 0.85rem;">{{ profileData?.location?.city || 'City' }}, {{
+            <div class="col-12 col-md-8 text-dark text-break" style="font-size: 0.85rem;">{{ profileData?.location?.city
+              || 'City' }}, {{
               profileData?.location?.state || 'State' }}, {{ profileData?.location?.country || 'Country' }}</div>
           </div>
           <div class="row g-2 g-sm-3 mb-3">
@@ -172,7 +184,8 @@
           </div>
           <div class="row g-2 g-sm-3">
             <div class="col-12 col-md-4 text-muted fw-semibold" style="font-size: 0.8rem;">Hourly Rate</div>
-            <div class="col-12 col-md-8 text-dark text-break" style="font-size: 0.85rem;">{{ profileData?.professionalDetails?.hourlyRate
+            <div class="col-12 col-md-8 text-dark text-break" style="font-size: 0.85rem;">{{
+              profileData?.professionalDetails?.hourlyRate
               || 'No rate listed' }}</div>
           </div>
           }
@@ -196,17 +209,20 @@
           </div>
           <div class="row g-2 g-sm-3 mb-3">
             <div class="col-12 col-md-4 text-muted fw-semibold" style="font-size: 0.8rem;">Company Type</div>
-            <div class="col-12 col-md-8 text-dark text-break" style="font-size: 0.85rem;">{{ profileData?.professionalDetails?.companyType
+            <div class="col-12 col-md-8 text-dark text-break" style="font-size: 0.85rem;">{{
+              profileData?.professionalDetails?.companyType
               || 'No company type' }}</div>
           </div>
           <div class="row g-2 g-sm-3 mb-3">
             <div class="col-12 col-md-4 text-muted fw-semibold" style="font-size: 0.8rem;">Industry</div>
-            <div class="col-12 col-md-8 text-dark text-break" style="font-size: 0.85rem;">{{ profileData?.professionalDetails?.industry ||
+            <div class="col-12 col-md-8 text-dark text-break" style="font-size: 0.85rem;">{{
+              profileData?.professionalDetails?.industry ||
               'No industry listed' }}</div>
           </div>
           <div class="row g-2 g-sm-3 mb-3">
             <div class="col-12 col-md-4 text-muted fw-semibold" style="font-size: 0.8rem;">Company Size</div>
-            <div class="col-12 col-md-8 text-dark text-break" style="font-size: 0.85rem;">{{ profileData?.professionalDetails?.companySize
+            <div class="col-12 col-md-8 text-dark text-break" style="font-size: 0.85rem;">{{
+              profileData?.professionalDetails?.companySize
               || 'No company size listed' }}</div>
           </div>
           <div class="row g-2 g-sm-3">
@@ -367,44 +383,56 @@
             @if (role === 'client') {
             <div class="col-4">
               <div class="border rounded-3 p-2 text-center h-100 balance-stat-box">
-                <span class="d-block text-muted mb-1 text-truncate" style="font-size: 0.65rem;" title="Total Funded">Total Funded</span>
-                <span class="fw-bold text-dark d-block lh-1 text-truncate" style="font-size: 0.78rem;" [title]="'₹' + (profileData?.metrics?.totalFunded || '0')">₹{{
+                <span class="d-block text-muted mb-1 text-truncate" style="font-size: 0.65rem;"
+                  title="Total Funded">Total Funded</span>
+                <span class="fw-bold text-dark d-block lh-1 text-truncate" style="font-size: 0.78rem;"
+                  [title]="'₹' + (profileData?.metrics?.totalFunded || '0')">₹{{
                   profileData?.metrics?.totalFunded || '0' }}</span>
               </div>
             </div>
             <div class="col-4">
               <div class="border rounded-3 p-2 text-center h-100 balance-stat-box">
-                <span class="d-block text-muted mb-1 text-truncate" style="font-size: 0.65rem;" title="Total Spent">Total Spent</span>
-                <span class="fw-bold text-dark d-block lh-1 text-truncate" style="font-size: 0.78rem;" [title]="'₹' + (profileData?.metrics?.totalSpent || '0')">₹{{
+                <span class="d-block text-muted mb-1 text-truncate" style="font-size: 0.65rem;"
+                  title="Total Spent">Total Spent</span>
+                <span class="fw-bold text-dark d-block lh-1 text-truncate" style="font-size: 0.78rem;"
+                  [title]="'₹' + (profileData?.metrics?.totalSpent || '0')">₹{{
                   profileData?.metrics?.totalSpent || '0' }}</span>
               </div>
             </div>
             <div class="col-4">
               <div class="border rounded-3 p-2 text-center h-100 bg-light balance-stat-box">
-                <span class="d-block text-muted mb-1 text-truncate" style="font-size: 0.65rem;" title="Available Balance">Available Balance</span>
-                <span class="fw-bold text-primary d-block lh-1 text-truncate" style="font-size: 0.78rem;" [title]="'₹' + (profileData?.metrics?.availableBalance || '0')">₹{{
+                <span class="d-block text-muted mb-1 text-truncate" style="font-size: 0.65rem;"
+                  title="Available Balance">Available Balance</span>
+                <span class="fw-bold text-primary d-block lh-1 text-truncate" style="font-size: 0.78rem;"
+                  [title]="'₹' + (profileData?.metrics?.availableBalance || '0')">₹{{
                   profileData?.metrics?.availableBalance || '0' }}</span>
               </div>
             </div>
             } @else if (role === 'freelancer') {
             <div class="col-4">
               <div class="border rounded-3 p-2 text-center h-100 balance-stat-box">
-                <span class="d-block text-muted mb-1 text-truncate" style="font-size: 0.65rem;" title="Total Earnings">Total Earnings</span>
-                <span class="fw-bold text-dark d-block lh-1 text-truncate" style="font-size: 0.78rem;" [title]="'₹' + (profileData?.metrics?.totalEarnings || '0')">₹{{
+                <span class="d-block text-muted mb-1 text-truncate" style="font-size: 0.65rem;"
+                  title="Total Earnings">Total Earnings</span>
+                <span class="fw-bold text-dark d-block lh-1 text-truncate" style="font-size: 0.78rem;"
+                  [title]="'₹' + (profileData?.metrics?.totalEarnings || '0')">₹{{
                   profileData?.metrics?.totalEarnings || '0' }}</span>
               </div>
             </div>
             <div class="col-4">
               <div class="border rounded-3 p-2 text-center h-100 balance-stat-box">
-                <span class="d-block text-muted mb-1 text-truncate" style="font-size: 0.65rem;" title="Local Withdrawals">Local Withdrawals</span>
-                <span class="fw-bold text-dark d-block lh-1 text-truncate" style="font-size: 0.78rem;" [title]="'₹' + (profileData?.metrics?.localWithdrawals || '0')">₹{{
+                <span class="d-block text-muted mb-1 text-truncate" style="font-size: 0.65rem;"
+                  title="Local Withdrawals">Local Withdrawals</span>
+                <span class="fw-bold text-dark d-block lh-1 text-truncate" style="font-size: 0.78rem;"
+                  [title]="'₹' + (profileData?.metrics?.localWithdrawals || '0')">₹{{
                   profileData?.metrics?.localWithdrawals || '0' }}</span>
               </div>
             </div>
             <div class="col-4">
               <div class="border rounded-3 p-2 text-center h-100 bg-light balance-stat-box">
-                <span class="d-block text-muted mb-1 text-truncate" style="font-size: 0.65rem;" title="Available Balance">Available Balance</span>
-                <span class="fw-bold text-primary d-block lh-1 text-truncate" style="font-size: 0.78rem;" [title]="'₹' + (profileData?.metrics?.availableBalance || '0')">₹{{
+                <span class="d-block text-muted mb-1 text-truncate" style="font-size: 0.65rem;"
+                  title="Available Balance">Available Balance</span>
+                <span class="fw-bold text-primary d-block lh-1 text-truncate" style="font-size: 0.78rem;"
+                  [title]="'₹' + (profileData?.metrics?.availableBalance || '0')">₹{{
                   profileData?.metrics?.availableBalance || '0' }}</span>
               </div>
             </div>
@@ -419,8 +447,10 @@
           <div class="d-flex flex-column gap-3">
             @for (lang of profileData?.languages; track lang._id) {
             <div class="d-flex justify-content-between align-items-center min-w-0">
-              <span class="text-dark fw-semibold text-truncate me-2" style="font-size: 0.8rem;">{{ lang.language }}</span>
-              <span class="text-muted text-nowrap flex-shrink-0" style="font-size: 0.75rem;">{{ lang.proficiency }}</span>
+              <span class="text-dark fw-semibold text-truncate me-2" style="font-size: 0.8rem;">{{ lang.language
+                }}</span>
+              <span class="text-muted text-nowrap flex-shrink-0" style="font-size: 0.75rem;">{{ lang.proficiency
+                }}</span>
             </div>
             } @empty {
             <div class="text-center py-2 text-muted" style="font-size: 0.8rem;">
@@ -434,19 +464,19 @@
         <div class="glass-card border-0 mb-4 p-3 p-sm-4">
           <h2 class="fs-6 fw-bold text-dark mb-3 mb-sm-4 border-bottom pb-3">Social Media Links</h2>
           @for (social of profileData?.socialLinks; track social._id) {
-          <div class="social-link-card border rounded-3 p-2 p-sm-3 d-flex align-items-center gap-2 gap-sm-3 mb-3 min-w-0">
+          <div
+            class="social-link-card border rounded-3 p-2 p-sm-3 d-flex align-items-center gap-2 gap-sm-3 mb-3 min-w-0">
             <div
               class="social-icon-wrapper rounded-circle d-flex justify-content-center align-items-center flex-shrink-0"
-              [ngClass]="getSocialColorClass(social.platform)"
-              style="width: 40px; height: 40px;">
+              [ngClass]="getSocialColorClass(social.platform)" style="width: 40px; height: 40px;">
               <i [class]="getSocialIcon(social.platform)" style="font-size: 1.1rem;"></i>
             </div>
             <div class="min-w-0 flex-grow-1 overflow-hidden">
-              <span class="d-block fw-bold text-dark text-truncate text-capitalize" style="font-size: 0.82rem;">{{ getSocialPlatformName(social.platform) }}</span>
+              <span class="d-block fw-bold text-dark text-truncate text-capitalize" style="font-size: 0.82rem;">{{
+                getSocialPlatformName(social.platform) }}</span>
               <a [href]="social.profileUrl" target="_blank"
                 class="text-muted text-decoration-none d-block text-truncate social-profile-link"
-                style="font-size: 0.72rem;"
-                [title]="social.profileUrl">{{ social.profileUrl }}</a>
+                style="font-size: 0.72rem;" [title]="social.profileUrl">{{ social.profileUrl }}</a>
             </div>
           </div>
           } @empty {
@@ -464,7 +494,8 @@
     @if (role === 'freelancer') {
     <!-- Portfolio Section (Full row) -->
     <div class="glass-card border-0 mb-4 p-3 p-md-4">
-      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 border-bottom pb-3 mb-4">
+      <div
+        class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 border-bottom pb-3 mb-4">
         <div>
           <h2 class="fs-6 fw-bold text-dark mb-1">Portfolio & Projects</h2>
           <p class="text-muted small mb-0">Showcase of previous projects, applications, and client deliverables.</p>
@@ -483,8 +514,7 @@
         <div class="col-12 col-md-6 col-lg-4">
           <div class="portfolio-item-card h-100 overflow-hidden d-flex flex-column">
             <!-- Media Image Container with Badges -->
-            <div class="portfolio-img-wrapper position-relative"
-              [class.cursor-pointer]="canViewPortfolioDetails"
+            <div class="portfolio-img-wrapper position-relative" [class.cursor-pointer]="canViewPortfolioDetails"
               (click)="canViewPortfolioDetails ? openPortfolioModal(item) : null"
               [attr.role]="canViewPortfolioDetails ? 'button' : null"
               [attr.tabindex]="canViewPortfolioDetails ? 0 : null">
@@ -493,7 +523,8 @@
               <div class="portfolio-img-overlay"></div>
 
               <!-- Badges Container - Clean, non-colliding layout -->
-              <div class="position-absolute top-0 start-0 end-0 m-2 d-flex justify-content-between align-items-start pointer-events-none z-2">
+              <div
+                class="position-absolute top-0 start-0 end-0 m-2 d-flex justify-content-between align-items-start pointer-events-none z-2">
                 <div class="d-flex flex-wrap gap-1 pe-2 pointer-events-auto" style="max-width: 65%;">
                   @if (item.projectType) {
                   <app-badge [label]="item.projectType" variant="secondary" appearance="subtle" size="small"
@@ -525,16 +556,19 @@
               </div>
 
               <p class="text-muted small mb-3 flex-grow-1 text-truncate-2"
-                style="font-size: 0.82rem; line-height: 1.55;">
-                {{ item.description || 'No description provided.' }}
+                style="font-size: 0.82rem; line-height: 1.55;"
+                [innerHTML]="item.description || 'No description provided.'">
+
               </p>
 
               <!-- Detailed Metadata Row -->
-              <div class="d-flex flex-wrap align-items-center gap-2 gap-sm-3 py-2 border-top border-bottom mb-3 text-muted"
+              <div
+                class="d-flex flex-wrap align-items-center gap-2 gap-sm-3 py-2 border-top border-bottom mb-3 text-muted"
                 style="font-size: 0.75rem;">
                 @if (item.teamSize) {
                 <span class="d-inline-flex align-items-center gap-1 text-nowrap">
-                  <i class="bi bi-people text-primary"></i> Team: {{ item.teamSize }} {{ item.teamSize === 1 ? 'member' : 'members' }}
+                  <i class="bi bi-people text-primary"></i> Team: {{ item.teamSize }} {{ item.teamSize === 1 ? 'member'
+                  : 'members' }}
                 </span>
                 }
                 @if (item.client) {
@@ -590,7 +624,8 @@
         <div class="modal-content portfolio-modal-content border-0 shadow-lg bg-white">
 
           <!-- Modal Header -->
-          <div class="modal-header border-bottom px-3 px-sm-4 py-2 py-sm-3 bg-white d-flex align-items-center justify-content-between gap-2">
+          <div
+            class="modal-header border-bottom px-3 px-sm-4 py-2 py-sm-3 bg-white d-flex align-items-center justify-content-between gap-2">
             <div class="d-flex flex-wrap align-items-center gap-2 min-w-0">
               <span class="portfolio-category-badge text-truncate" style="max-width: 240px;">
                 <i class="bi bi-folder2-open me-1"></i>
@@ -640,7 +675,8 @@
                   @if (selectedPortfolio.teamSize) {
                   <span class="portfolio-meta-item">
                     <i class="bi bi-people"></i>
-                    <span>{{ selectedPortfolio.teamSize }} {{ selectedPortfolio.teamSize === 1 ? 'member' : 'members' }}</span>
+                    <span>{{ selectedPortfolio.teamSize }} {{ selectedPortfolio.teamSize === 1 ? 'member' : 'members'
+                      }}</span>
                   </span>
                   }
                   @if (selectedPortfolio.createdAt) {
@@ -671,16 +707,14 @@
                 <!-- Primary Media Preview Frame -->
                 <div class="portfolio-showcase-frame mb-3">
                   <img [src]="getActivePortfolioMediaUrl()" (error)="handleImageError($event)"
-                    class="portfolio-main-preview-img"
-                    [alt]="selectedPortfolio.title || 'Project showcase preview'">
+                    class="portfolio-main-preview-img" [alt]="selectedPortfolio.title || 'Project showcase preview'">
                 </div>
 
                 <!-- Multi-media thumbnails if > 1 -->
                 @if (selectedPortfolio.media && selectedPortfolio.media.length > 1) {
                 <div class="d-flex align-items-center gap-2 mb-3 mb-md-4 overflow-auto pb-2 custom-thumb-scroll">
                   @for (m of selectedPortfolio.media; track $index) {
-                  <button type="button" class="btn portfolio-thumb-btn"
-                    [class.active]="selectedMediaIndex === $index"
+                  <button type="button" class="btn portfolio-thumb-btn" [class.active]="selectedMediaIndex === $index"
                     (click)="selectedMediaIndex = $index" [title]="'View media ' + ($index + 1)">
                     <img [src]="(m && m.url) ? m.url : m" class="w-100 h-100 object-fit-cover" alt="thumbnail">
                   </button>
@@ -693,8 +727,9 @@
                   <h3 class="portfolio-section-title mb-3">
                     <i class="bi bi-card-text"></i> Project Overview & Details
                   </h3>
-                  <div class="portfolio-rich-description">
-                    {{ selectedPortfolio.description || 'No detailed project description available.' }}
+                  <div class="portfolio-rich-description"
+                    [innerHTML]=" selectedPortfolio.description || 'No detailed project description available.'">
+
                   </div>
                 </div>
 
@@ -758,7 +793,8 @@
                       <i class="bi bi-people text-primary"></i> Team Size
                     </span>
                     <span class="portfolio-spec-value">
-                      {{ selectedPortfolio.teamSize ? selectedPortfolio.teamSize + (selectedPortfolio.teamSize === 1 ? ' Member' : ' Members') : 'Solo' }}
+                      {{ selectedPortfolio.teamSize ? selectedPortfolio.teamSize + (selectedPortfolio.teamSize === 1 ? '
+                      Member' : ' Members') : 'Solo' }}
                     </span>
                   </div>
 
@@ -802,9 +838,9 @@
           </div>
 
           <!-- Modal Footer (Clean, close button only) -->
-          <div class="modal-footer border-top px-3 px-sm-4 py-2 py-sm-3 bg-light d-flex justify-content-end align-items-center">
-            <app-button variant="outline-secondary" size="sm" label="Close"
-              (clicked)="closePortfolioModal()">
+          <div
+            class="modal-footer border-top px-3 px-sm-4 py-2 py-sm-3 bg-light d-flex justify-content-end align-items-center">
+            <app-button variant="outline-secondary" size="sm" label="Close" (clicked)="closePortfolioModal()">
             </app-button>
           </div>
 
