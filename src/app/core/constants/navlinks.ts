@@ -2,8 +2,8 @@ import { NavLink } from '../models/sidebar.interface';
 
 export const NAV_LINKS: NavLink[] = [
   // Shared
-  { label: 'Dashboard', path: '/dashboard', icon: 'bi bi-grid-1x2', roles: ['admin', 'client', 'freelancer'] },
-  { label: 'UI Components', path: '/ui-components', icon: 'bi bi-palette', roles: ['admin', 'client', 'freelancer'] },
+  { label: 'Dashboard', path: '/dashboard', icon: 'bi bi-grid-1x2', roles: ['admin', 'client', 'freelancer', 'job-seeker'] },
+  { label: 'UI Components', path: '/ui-components', icon: 'bi bi-palette', roles: ['admin', 'client', 'freelancer', 'job-seeker'] },
   
   // Admin only
   { label: 'Client Management', path: '/client-management', icon: 'bi bi-people', roles: ['admin'] },
@@ -24,6 +24,14 @@ export const NAV_LINKS: NavLink[] = [
   { label: 'My Contracts', path: '/my-contracts', icon: 'bi bi-briefcase', roles: ['freelancer'] },
   { label: 'Finance Overview', path: '/finance-overview', icon: 'bi bi-currency-dollar', roles: ['freelancer'] },
   { label: 'Portfolio', path: '/portfolio', icon: 'bi bi-person-workspace', roles: ['freelancer'] },
+
+  // Job Seeker only (External Workforce Portal / Worksphere Gateway)
+  { label: 'Find Jobs', path: '/find-jobs', icon: 'bi bi-search', roles: ['job-seeker'] },
+  { label: 'My Applications', path: '/my-applications', icon: 'bi bi-file-earmark-text', roles: ['job-seeker'] },
+  { label: 'My Assessments', path: '/my-assessments', icon: 'bi bi-clipboard-check', roles: ['job-seeker'] },
+  { label: 'My Interviews', path: '/my-interviews', icon: 'bi bi-camera-video', roles: ['job-seeker'] },
+  { label: 'My Offers', path: '/my-offers', icon: 'bi bi-award', roles: ['job-seeker'] },
+  { label: 'Saved Jobs', path: '/saved-jobs', icon: 'bi bi-bookmark', roles: ['job-seeker'] },
 
   // Client & Freelancer Shared
   { label: 'Meet Page', path: '/meet-page', icon: 'bi bi-camera-video', roles: ['client', 'freelancer'] },

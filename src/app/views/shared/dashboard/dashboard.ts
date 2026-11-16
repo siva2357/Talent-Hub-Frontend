@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, PLATFORM_ID, Inject, OnInit } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import Chart from 'chart.js/auto';
 import { TokenService } from '../../../core/services/token.service';
 import { AdminService } from '../../../core/services/admin.service';
@@ -10,7 +11,7 @@ import { StatCard, StatCardData } from '../../../library/shared/components/stat-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, StatCard],
+  imports: [CommonModule, RouterLink, StatCard],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
@@ -26,6 +27,46 @@ export class Dashboard implements AfterViewInit, OnInit {
   pendingProposals: string | number = 0;
   totalEarnings: string | number = 0;
   activities: any[] = [];
+
+  // Job Seeker Static Data (Worksphere Gateway)
+  totalApplications: number = 12;
+  pendingAssessments: number = 3;
+  upcomingInterviews: number = 2;
+  jobOffersReceived: number = 1;
+  jobSeekerActivities: any[] = [
+    {
+      id: 1,
+      title: 'Technical Assessment Assigned',
+      company: 'TechNova Solutions (via Worksphere)',
+      description: 'Senior Full Stack Engineer — Complete coding challenge before Nov 22',
+      status: 'assessment',
+      time: '2 hours ago'
+    },
+    {
+      id: 2,
+      title: 'Interview Scheduled',
+      company: 'CloudScale Systems (via Worksphere)',
+      description: 'System Design Round with Engineering Lead on Nov 19 at 3:00 PM',
+      status: 'interview',
+      time: 'Yesterday'
+    },
+    {
+      id: 3,
+      title: 'Offer Letter Received',
+      company: 'FinEdge Corp (via Worksphere)',
+      description: 'Frontend Architect — Review and accept offer in My Offers',
+      status: 'offer',
+      time: '2 days ago'
+    },
+    {
+      id: 4,
+      title: 'Application Shortlisted',
+      company: 'Aether AI Labs (via Worksphere)',
+      description: 'Your profile matched 94% with Product Engineer requirements',
+      status: 'shortlisted',
+      time: '4 days ago'
+    }
+  ];
 
   // Admin Stats
   totalClients: number = 0;
@@ -57,6 +98,15 @@ export class Dashboard implements AfterViewInit, OnInit {
       { title: 'Total Earnings', value: this.totalEarnings, icon: 'bi-cash-stack' },
       { title: 'Available Balance', value: this.vaultBalance, icon: 'bi-wallet2' },
       { title: 'Pending Proposals', value: this.pendingProposals, icon: 'bi-file-earmark-check' }
+    ];
+  }
+
+  get jobSeekerStats(): StatCardData[] {
+    return [
+      { title: 'Applications Sent', value: this.totalApplications, icon: 'bi-file-earmark-text' },
+      { title: 'Pending Assessments', value: this.pendingAssessments, icon: 'bi-clipboard-check' },
+      { title: 'Upcoming Interviews', value: this.upcomingInterviews, icon: 'bi-camera-video' },
+      { title: 'Job Offers', value: this.jobOffersReceived, icon: 'bi-award' }
     ];
   }
 

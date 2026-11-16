@@ -517,6 +517,154 @@
     </section>
     }
 
+    @else if (role === 'job-seeker') {
+    <!-- Header Section -->
+    <header class="mb-4 d-flex justify-content-between align-items-start">
+      <div>
+        <h1 class="fw-bold fs-4 mb-1">Welcome back, Job Seeker</h1>
+        <p class="text-muted small mb-0">Explore external company job postings from Worksphere, track applications,
+          assessments, and interviews.</p>
+      </div>
+      <span
+        class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill">
+        <i class="bi bi-buildings me-1"></i> Worksphere Ecosystem Gateway
+      </span>
+    </header>
+
+    <!-- Top Stats Row -->
+    <section class="row g-3 mb-5">
+      @for (stat of jobSeekerStats; track stat.title) {
+      <div class="col-12 col-sm-6 col-lg-3 flex-grow-1">
+        <app-stat-card [stat]="stat"></app-stat-card>
+      </div>
+      }
+    </section>
+
+    <!-- Bottom Section (Feed & Quick Links) -->
+    <section class="row g-4">
+      <!-- Application & Pipeline Feed -->
+      <div class="col-12 col-lg-8">
+        <div class="glass-card feed-card border-0 h-100 p-4">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <h2 class="fs-5 fw-bold mb-0">Hiring Pipeline Activity</h2>
+              <a routerLink="/my-applications" class="view-all text-decoration-none fw-semibold">View All</a>
+            </div>
+            <p class="text-muted small mb-4">Real-time updates from external company workforce portals connected via
+              Worksphere.</p>
+
+            <div class="feed-list d-flex flex-column">
+              @for (activity of jobSeekerActivities; track activity.id) {
+              <div class="feed-item d-flex align-items-center py-3 border-bottom border-light">
+                <div class="feed-avatar flex-shrink-0" [ngClass]="{
+                  'bg-success text-white': activity.status === 'offer',
+                  'bg-primary text-white': activity.status === 'interview',
+                  'bg-warning text-dark': activity.status === 'assessment',
+                  'bg-info text-white': activity.status === 'shortlisted'
+                }">
+                  <i class="bi" [ngClass]="{
+                    'bi-award': activity.status === 'offer',
+                    'bi-camera-video': activity.status === 'interview',
+                    'bi-clipboard-check': activity.status === 'assessment',
+                    'bi-check2-circle': activity.status === 'shortlisted'
+                  }"></i>
+                </div>
+                <div class="feed-details flex-grow-1 ms-3">
+                  <p class="mb-0 small text-dark">
+                    <strong class="fw-bold">{{ activity.title }}</strong>
+                    <span class="text-primary fw-semibold ms-1">• {{ activity.company }}</span>
+                  </p>
+                  <span class="text-muted" style="font-size: 0.75rem;">{{ activity.description }}</span>
+                </div>
+                <span class="badge badge-recent ms-3">{{ activity.time }}</span>
+              </div>
+              } @empty {
+              <div class="py-4 text-center text-muted">
+                <p class="mb-0 small">No recent job application activity</p>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-12 col-lg-4">
+        <div class="glass-card control-panel-card border-0 h-100 p-4">
+          <div class="card-body p-4">
+            <h2 class="fs-5 fw-bold mb-4">Job Seeker Portal</h2>
+            <div class="control-list d-flex flex-column gap-3">
+
+              <div routerLink="/find-jobs"
+                class="control-item rounded-3 p-3 d-flex align-items-center text-decoration-none">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-search"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">Find Jobs</span>
+                  <span class="d-block text-muted" style="font-size: 0.70rem;">Browse direct Worksphere company
+                    openings</span>
+                </div>
+              </div>
+
+              <div routerLink="/my-applications"
+                class="control-item rounded-3 p-3 d-flex align-items-center text-decoration-none">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-file-earmark-text"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">My Applications</span>
+                  <span class="d-block text-muted" style="font-size: 0.70rem;">Track status across external
+                    portals</span>
+                </div>
+              </div>
+
+              <div routerLink="/my-assessments"
+                class="control-item rounded-3 p-3 d-flex align-items-center text-decoration-none">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-clipboard-check"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">My Assessments</span>
+                  <span class="d-block text-muted" style="font-size: 0.70rem;">Complete technical & screening
+                    tests</span>
+                </div>
+              </div>
+
+              <div routerLink="/my-interviews"
+                class="control-item rounded-3 p-3 d-flex align-items-center text-decoration-none">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-camera-video"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">My Interviews</span>
+                  <span class="d-block text-muted" style="font-size: 0.70rem;">View upcoming interview schedules</span>
+                </div>
+              </div>
+
+              <div routerLink="/my-offers"
+                class="control-item rounded-3 p-3 d-flex align-items-center text-decoration-none">
+                <div
+                  class="control-icon d-flex align-items-center justify-content-center text-primary fs-5 flex-shrink-0">
+                  <i class="bi bi-award"></i>
+                </div>
+                <div class="ms-3">
+                  <span class="d-block small fw-bold text-primary">My Offers</span>
+                  <span class="d-block text-muted" style="font-size: 0.70rem;">Review & accept company offer
+                    letters</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    }
   </div>
 
 </div>

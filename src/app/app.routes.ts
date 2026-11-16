@@ -11,6 +11,7 @@ import { ContactSupport } from './views/shared/contact-support/contact-support';
 
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
+import { JobSeeker } from './views/job-seeker/job-seeker';
 
 export const routes: Routes = [
   {
@@ -26,19 +27,19 @@ export const routes: Routes = [
     path: 'profile',
     component: Profile,
     canActivate: [AuthGuard, RoleGuard],
-    data: { expectedRoles: ['client', 'freelancer'] }
+    data: { expectedRoles: ['client', 'freelancer', 'job-seeker'] }
   },
   {
     path: 'account-settings',
     component: AccountSettings,
     canActivate: [AuthGuard, RoleGuard],
-    data: { expectedRoles: ['client', 'freelancer'] }
+    data: { expectedRoles: ['client', 'freelancer', 'job-seeker'] }
   },
   {
     path: 'contact-support',
     component: ContactSupport,
     canActivate: [AuthGuard, RoleGuard],
-    data: { expectedRoles: ['client', 'freelancer'] }
+    data: { expectedRoles: ['client', 'freelancer', 'job-seeker'] }
   },
   {
     path: '',
@@ -68,6 +69,14 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: { expectedRoles: ['freelancer'] },
     loadChildren: () => import('./views/freelancer/freelancer.routes').then(m => m.FREELANCER_ROUTES)
+  },
+  {
+    path: '',
+    component: JobSeeker,
+    canMatch: [RoleGuard],
+    canActivate: [AuthGuard],
+    data: { expectedRoles: ['job-seeker'] },
+    loadChildren: () => import('./views/job-seeker/job-seeker.routes').then(m => m.JOB_SEEKER_ROUTES)
   },
   { path: '**', redirectTo: '' }
 ];
