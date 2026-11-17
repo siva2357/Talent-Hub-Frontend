@@ -1,1 +1,242 @@
-<p>job-details-page works!</p>
+<div class="dashboard-container position-relative p-4">
+  <!-- Decorative background wrapper -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper -->
+  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
+    <!-- Back Navigation -->
+    <div class="mb-3">
+      <a routerLink="/find-jobs"
+        class="text-decoration-none text-muted cursor-pointer d-inline-flex align-items-center gap-2 hover-text-primary"
+        style="font-size: 0.85rem; font-weight: 500;">
+        <i class="bi bi-arrow-left"></i> Back to Find Jobs
+      </a>
+    </div>
+
+    @if (actionMessage) {
+      <div class="alert alert-info border-0 shadow-sm rounded-4 d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-info-circle-fill text-primary fs-5"></i>
+          <span class="small fw-semibold">{{ actionMessage }}</span>
+        </div>
+        <button type="button" class="btn-close" (click)="actionMessage = null"></button>
+      </div>
+    }
+
+    @if (job) {
+    <!-- Header Card -->
+    <div class="glass-card rounded-4 bg-white mb-4 overflow-hidden border border-light">
+      <div class="card-body p-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3">
+          <div class="d-flex gap-3 align-items-center">
+            <div
+              class="rounded-4 text-white d-flex align-items-center justify-content-center flex-shrink-0 fw-bold fs-3 shadow-sm overflow-hidden"
+              style="width: 64px; height: 64px; background: linear-gradient(135deg, #4a3aff 0%, #2563eb 100%);">
+              @if (job.companyLogo) {
+                <img [src]="job.companyLogo" [alt]="job.companyName" class="w-100 h-100" style="object-fit: cover;">
+              } @else {
+                {{ job.companyName.charAt(0) }}
+              }
+            </div>
+            <div>
+              <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                <span class="badge bg-light text-secondary border font-monospace" style="font-size: 0.7rem;">{{ job.jobCode }}</span>
+                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill" style="font-size: 0.7rem;">
+                  <i class="bi bi-shield-check me-1"></i>{{ job.portalSource }}
+                </span>
+              </div>
+              <h1 class="fw-bold fs-4 mb-1 text-dark">{{ job.jobTitle }}</h1>
+              <p class="text-muted small mb-2">
+                <strong class="text-dark">{{ job.companyName }}</strong> • <i class="bi bi-geo-alt text-primary"></i> {{ job.location }}
+              </p>
+              <div class="d-flex flex-wrap align-items-center gap-2">
+                <app-badge [label]="job.employmentType" variant="primary" appearance="subtle" [rounded]="true"></app-badge>
+                <app-badge [label]="job.workMode" variant="info" appearance="subtle" [rounded]="true"></app-badge>
+                <app-badge [label]="job.industry" variant="purple" appearance="subtle" [rounded]="true"></app-badge>
+                <span class="text-muted d-flex align-items-center gap-1 ms-2" style="font-size: 0.75rem;">
+                  <i class="bi bi-clock"></i> Posted {{ job.postedDate | date:'mediumDate' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-center gap-2">
+            @if (job.matchPercentage) {
+              <app-badge [label]="job.matchPercentage + '% Profile Match'" variant="success" appearance="subtle" [rounded]="true"></app-badge>
+            }
+            <app-button [variant]="isSaved ? 'light' : 'outline-secondary'" [iconOnly]="true" size="md"
+              (clicked)="toggleSave()">
+              <i class="bi fs-5" [class.text-primary]="isSaved" [class.bi-bookmark-fill]="isSaved"
+                [class.bi-bookmark]="!isSaved"></i>
+            </app-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Left Main Content -->
+      <div class="col-lg-8">
+
+        <!-- Role Highlights & Compensation -->
+        <div class="glass-card rounded-4 bg-white mb-4">
+          <div class="card-body p-4">
+            <h2 class="fs-6 fw-bold mb-4 text-dark">Role Overview & Compensation</h2>
+            <div class="row g-3">
+              @for (stat of jobStats; track stat.title) {
+              <div class="col-md-4">
+                <app-stat-card [stat]="stat"></app-stat-card>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Job Description & Responsibilities -->
+        <div class="glass-card rounded-4 bg-white mb-4">
+          <div class="card-body p-4">
+            <h2 class="fs-6 fw-bold mb-3 text-dark">About the Role</h2>
+            <p class="text-muted mb-4" style="font-size: 0.85rem; line-height: 1.7;">
+              {{ job.jobDescription }}
+            </p>
+
+            <h3 class="fs-6 fw-bold mb-3 text-dark">Key Responsibilities</h3>
+            <ul class="text-muted mb-4 ps-3" style="font-size: 0.85rem; line-height: 1.8;">
+              @for (item of job.responsibilities; track item) {
+                <li class="mb-1">{{ item }}</li>
+              }
+            </ul>
+
+            <h3 class="fs-6 fw-bold mb-3 text-dark">Qualifications & Requirements</h3>
+            <ul class="text-muted mb-4 ps-3" style="font-size: 0.85rem; line-height: 1.8;">
+              @for (req of job.requirements; track req) {
+                <li class="mb-1">{{ req }}</li>
+              }
+            </ul>
+
+            <h3 class="fs-6 fw-bold mb-3 text-dark">Required Tech Stack & Skills</h3>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+              @for (skill of job.skills; track skill) {
+                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-3" style="font-size: 0.78rem;">
+                  {{ skill }}
+                </span>
+              }
+            </div>
+
+            <h3 class="fs-6 fw-bold mb-3 text-dark">Perks & Benefits</h3>
+            <div class="row g-2">
+              @for (benefit of job.benefits; track benefit) {
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3 bg-light border d-flex align-items-start gap-2 h-100">
+                    <i class="bi bi-check-circle-fill text-success mt-1"></i>
+                    <span class="text-dark" style="font-size: 0.8rem;">{{ benefit }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Sidebar -->
+      <div class="col-lg-4">
+        <div class="d-flex flex-column gap-4">
+
+          <!-- Application Action Card -->
+          @if (isApplied) {
+          <div class="card border border-success border-opacity-25 rounded-4 bg-success bg-opacity-10 shadow-sm p-3">
+            <div class="d-flex gap-2 align-items-center">
+              <i class="bi bi-check-circle-fill text-success fs-5"></i>
+              <span class="text-success fw-semibold" style="font-size: 0.85rem;">
+                Application synced with {{ job.companyName }}'s Worksphere portal.
+              </span>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-4 bg-white text-center p-4">
+            <h3 class="fs-5 fw-bold text-dark mb-2">Application Submitted</h3>
+            <p class="text-muted mb-4" style="font-size: 0.8rem; line-height: 1.5;">
+              Your profile and resume have been shared with the hiring team. Track assessments and interview invites in your portal.
+            </p>
+            <div class="d-flex flex-column gap-2">
+              <app-button variant="outline-primary" [block]="true" class="w-100 d-block" routerLink="/my-applications" label="Track Application">
+              </app-button>
+              <app-button variant="danger" [block]="true" class="w-100 d-block" (clicked)="withdrawApplication()"
+                [loading]="isApplying" [label]="isApplying ? 'Withdrawing...' : 'Withdraw Application'">
+              </app-button>
+            </div>
+          </div>
+          } @else {
+          <div class="glass-card rounded-4 bg-white text-center p-4">
+            <h3 class="fs-5 fw-bold text-dark mb-2">Apply via Worksphere Gateway</h3>
+            <p class="text-muted mb-4" style="font-size: 0.8rem; line-height: 1.5;">
+              Your Talent-Hub Job Seeker profile and verified resume will be sent directly to <strong>{{ job.companyName }}</strong>.
+            </p>
+            <app-button variant="primary" [block]="true" class="w-100 d-block" (clicked)="applyForJob()"
+              [loading]="isApplying" [label]="isApplying ? 'Submitting...' : 'Apply Now'">
+            </app-button>
+          </div>
+          }
+
+          <!-- Worksphere Hiring Pipeline Stages -->
+          <div class="glass-card rounded-4 bg-white p-4">
+            <h3 class="fs-6 fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+              <i class="bi bi-diagram-2 text-primary"></i> Hiring Pipeline Stages
+            </h3>
+            <div class="d-flex flex-column gap-3">
+              @for (stage of job.hiringStages; track stage; let idx = $index) {
+                <div class="d-flex align-items-center gap-3">
+                  <div class="rounded-circle bg-primary bg-opacity-10 text-primary fw-bold d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="width: 28px; height: 28px; font-size: 0.75rem;">
+                    {{ idx + 1 }}
+                  </div>
+                  <span class="text-dark" style="font-size: 0.8rem;">{{ stage }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- About the Company -->
+          <div class="glass-card rounded-4 bg-white p-4">
+            <h3 class="fs-6 fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+              <i class="bi bi-building text-primary"></i> About the Company
+            </h3>
+            <p class="text-muted mb-3" style="font-size: 0.8rem; line-height: 1.6;">
+              {{ job.companyOverview.about }}
+            </p>
+            <div class="d-flex flex-column gap-2 pt-2 border-top" style="font-size: 0.8rem;">
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Industry</span>
+                <span class="text-dark fw-semibold">{{ job.industry }}</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Company Size</span>
+                <span class="text-dark fw-semibold">{{ job.companyOverview.size }}</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Headquarters</span>
+                <span class="text-dark fw-semibold">{{ job.companyOverview.headquarters }}</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Portal</span>
+                <span class="text-primary fw-semibold">{{ job.portalSource }}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,126 @@
+@if (job) {
+
+<div class="job-card">
+
+    <!-- HEADER -->
+    <div class="job-card-header">
+
+        <div class="d-flex align-items-start gap-3 min-w-0 flex-grow-1">
+            <!-- COMPANY AVATAR / LOGO -->
+            <div class="company-avatar flex-shrink-0">
+                @if (job.companyLogo) {
+                    <img [src]="job.companyLogo" [alt]="job.companyName">
+                } @else {
+                    <span>{{ job.companyName.charAt(0) }}</span>
+                }
+            </div>
+
+            <div class="job-card-title">
+                <h6>{{ job.jobTitle }}</h6>
+                <p class="company-subtitle mb-2">
+                    <i class="bi bi-buildings text-primary me-1"></i>
+                    <span class="fw-semibold text-dark">{{ job.companyName }}</span>
+                    <span class="text-muted ms-1">• {{ job.location }}</span>
+                </p>
+
+                <div class="job-tags">
+                    <app-badge [label]="job.employmentType" variant="primary" appearance="subtle"></app-badge>
+                    <app-badge [label]="job.workMode" variant="info" appearance="subtle"></app-badge>
+                    @if (job.department) {
+                        <app-badge [label]="job.department" variant="secondary" appearance="subtle"></app-badge>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- APPLICATION STATUS & AI MATCH BADGE -->
+        <div class="d-flex flex-column align-items-end gap-2 flex-shrink-0">
+            <app-badge [label]="job.hasApplied ? 'Applied' : 'Open'"
+                [variant]="job.hasApplied ? 'success' : 'purple'" appearance="subtle" [rounded]="true">
+            </app-badge>
+
+            @if (job.matchPercentage !== undefined) {
+                <app-badge
+                    [label]="job.matchPercentage + '% Match (' + job.matchCategory + ')'"
+                    [variant]="job.matchCategory === 'High' ? 'success' : (job.matchCategory === 'Average' ? 'warning' : 'danger')"
+                    appearance="subtle"
+                    [rounded]="true">
+                </app-badge>
+            }
+        </div>
+
+    </div>
+
+    <!-- DESCRIPTION -->
+    @if (job.jobDescription) {
+        <p class="job-description">
+            {{ job.jobDescription }}
+        </p>
+    }
+
+    <!-- PACKAGE / EXPERIENCE -->
+    <div class="job-details">
+
+        <div class="job-detail-item">
+            <span class="job-detail-label">CTC / PACKAGE</span>
+            <span class="job-detail-value">{{ job.salaryRange }}</span>
+        </div>
+
+        <div class="job-detail-divider"></div>
+
+        <div class="job-detail-item">
+            <span class="job-detail-label">EXPERIENCE</span>
+            <span class="job-detail-value">{{ job.experienceRange }}</span>
+        </div>
+
+    </div>
+
+    <!-- SKILLS -->
+    @if (job.skills && job.skills.length > 0) {
+        <div class="job-section">
+            <span class="job-section-label">KEY SKILLS</span>
+            <div class="job-tags">
+                @for (skill of job.skills.slice(0, 4); track skill) {
+                    <span class="job-info-tag">{{ skill }}</span>
+                }
+                @if (job.skills.length > 4) {
+                    <span class="job-info-tag text-primary">+{{ job.skills.length - 4 }} more</span>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- DATES & PORTAL SOURCE -->
+    <div class="job-dates">
+        <div class="job-date">
+            <span>Posted On</span>
+            <strong>{{ formattedPostedDate }}</strong>
+        </div>
+
+        <div class="job-date">
+            <span>Apply Before</span>
+            <strong>{{ formattedDeadline }}</strong>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="job-card-footer">
+        <div class="d-flex align-items-center gap-2">
+            <!-- SAVE -->
+            <app-button variant="light" size="md" [iconOnly]="true" (clicked)="onSave()" class="rounded-circle">
+                <i class="bi fs-5" [class.text-primary]="job.hasSaved" [class.bi-bookmark-fill]="job.hasSaved" [class.bi-bookmark]="!job.hasSaved"></i>
+            </app-button>
+            <span class="portal-tag">
+                <i class="bi bi-shield-check text-primary me-1"></i>{{ job.portalSource || 'Worksphere Portal' }}
+            </span>
+        </div>
+
+        <!-- VIEW DETAILS -->
+        <app-button variant="info" size="md" (clicked)="onViewDetails()">
+            View Details
+        </app-button>
+    </div>
+
+</div>
+
+}

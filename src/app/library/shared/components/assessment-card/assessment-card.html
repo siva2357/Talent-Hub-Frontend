@@ -1,0 +1,164 @@
+@if (assessment) {
+
+<div class="assessment-card">
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+    <div class="assessment-card-header">
+
+        <div class="d-flex align-items-start gap-3 min-w-0 flex-grow-1">
+            <!-- COMPANY LOGO -->
+            <div class="company-avatar flex-shrink-0">
+                @if (assessment.companyLogo) {
+                    <img [src]="assessment.companyLogo" [alt]="assessment.companyName">
+                } @else {
+                    <span>{{ assessment.companyName.charAt(0) }}</span>
+                }
+            </div>
+
+            <div class="assessment-card-title">
+                <h6>{{ assessment.assessmentTitle }}</h6>
+                <p class="company-subtitle mb-2">
+                    <span class="fw-semibold text-dark">{{ assessment.companyName }}</span>
+                    <span class="text-muted ms-1">• {{ assessment.jobTitle }}</span>
+                </p>
+
+                <div class="assessment-tags">
+                    <app-badge [label]="assessment.assessmentType" variant="primary" appearance="subtle"></app-badge>
+                    <app-badge [label]="assessment.jobCode" variant="secondary" appearance="subtle"></app-badge>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATUS BADGE -->
+        <div class="d-flex flex-column align-items-end gap-2 flex-shrink-0">
+            <app-badge [label]="assessment.status"
+                [variant]="getStatusVariant(assessment.status)" appearance="subtle" [rounded]="true">
+            </app-badge>
+
+            @if (assessment.score) {
+                <app-badge [label]="'Score: ' + assessment.score" variant="success" appearance="subtle" [rounded]="true">
+                </app-badge>
+            }
+        </div>
+
+    </div>
+
+    <!-- =========================================
+         DESCRIPTION
+         ========================================= -->
+    @if (assessment.description) {
+        <p class="assessment-description">
+            {{ assessment.description }}
+        </p>
+    }
+
+    <!-- =========================================
+         DURATION / QUESTIONS / PASSING SCORE
+         ========================================= -->
+    <div class="assessment-details">
+
+        <div class="assessment-detail">
+            <div class="assessment-detail-icon">
+                <i class="bi bi-stopwatch"></i>
+            </div>
+            <div>
+                <span class="assessment-detail-label">DURATION</span>
+                <strong>{{ assessment.durationMinutes }} Mins</strong>
+            </div>
+        </div>
+
+        <div class="assessment-detail-divider"></div>
+
+        <div class="assessment-detail">
+            <div class="assessment-detail-icon">
+                <i class="bi bi-list-check"></i>
+            </div>
+            <div>
+                <span class="assessment-detail-label">QUESTIONS</span>
+                <strong>{{ assessment.totalQuestions }} Tasks</strong>
+            </div>
+        </div>
+
+        <div class="assessment-detail-divider"></div>
+
+        <div class="assessment-detail">
+            <div class="assessment-detail-icon">
+                <i class="bi bi-award"></i>
+            </div>
+            <div>
+                <span class="assessment-detail-label">PASSING</span>
+                <strong>{{ assessment.passingScore }}</strong>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- =========================================
+         SKILLS TESTED
+         ========================================= -->
+    @if (assessment.skillsTested && assessment.skillsTested.length > 0) {
+        <div class="assessment-section">
+            <span class="assessment-section-label">SKILLS EVALUATED</span>
+            <div class="assessment-tags">
+                @for (skill of assessment.skillsTested; track skill) {
+                    <span class="assessment-info-tag">{{ skill }}</span>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- =========================================
+         ASSIGNED / DUE DATES
+         ========================================= -->
+    <div class="assessment-dates">
+        <div class="assessment-date">
+            <span>Assigned On</span>
+            <strong>{{ formattedAssignedDate }}</strong>
+        </div>
+
+        <div class="assessment-date">
+            <span>Due Before</span>
+            <strong [class.text-danger]="assessment.status === 'Expired'">{{ formattedDueDate }}</strong>
+        </div>
+    </div>
+
+    <!-- =========================================
+         EXTERNAL PORTAL LINK
+         ========================================= -->
+    @if (assessment.assessmentLink) {
+        <div class="assessment-link-section">
+            <div class="assessment-link-content w-100">
+                <span class="assessment-link-label">
+                    <i class="bi bi-box-arrow-up-right text-primary"></i>
+                    {{ assessment.portalSource }}
+                </span>
+                <span class="assessment-link" style="max-width: 100%;">{{ assessment.assessmentLink }}</span>
+            </div>
+        </div>
+    }
+
+    <!-- =========================================
+         FOOTER
+         ========================================= -->
+    <div class="assessment-card-footer">
+        <span class="portal-tag">
+            <i class="bi bi-shield-check text-primary me-1"></i>{{ assessment.assessmentCode }}
+        </span>
+
+        <div class="d-flex align-items-center gap-2">
+            @if (assessment.status === 'Pending' || assessment.status === 'In Progress') {
+                <app-button variant="outline-success" label="Mark Completed" size="sm" icon="bi bi-check2-circle" (clicked)="onMarkCompleted()"></app-button>
+                <app-button variant="info" label="Start Assessment" size="sm" icon="bi bi-box-arrow-up-right" (clicked)="onStartAssessment()"></app-button>
+            } @else if (assessment.status === 'Completed') {
+                <app-button variant="outline-primary" label="View Portal Result" size="sm" icon="bi bi-box-arrow-up-right" (clicked)="onStartAssessment()"></app-button>
+            } @else {
+                <app-badge label="Deadline Passed" variant="danger" appearance="subtle"></app-badge>
+            }
+        </div>
+    </div>
+
+</div>
+
+}

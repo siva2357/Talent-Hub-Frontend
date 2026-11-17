@@ -1,1 +1,139 @@
-<p>my-assessments-page works!</p>
+<div class="dashboard-container position-relative p-4">
+  <!-- Decorative background wrapper -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none; z-index: 0;">
+    <div class="bg-shape top-left"></div>
+    <div class="bg-shape bottom-right"></div>
+    <div class="bg-shape right-shape"></div>
+    <div class="concentric-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper -->
+  <div class="position-relative z-1 p-4 mx-auto" style="max-width: 1400px;">
+
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <h1 class="fw-bold fs-3 mb-0 text-dark">My Assessments</h1>
+          <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-1" style="font-size: 0.75rem;">
+            <i class="bi bi-clipboard-check me-1"></i> Worksphere Screening Hub
+          </span>
+        </div>
+        <p class="text-muted small mb-0">Complete assigned technical coding tests, system design challenges, and screening assessments hosted on external partner portals.</p>
+      </div>
+    </div>
+
+    @if (actionMessage) {
+    <div class="alert alert-info border-0 shadow-sm rounded-4 d-flex align-items-center justify-content-between mb-4">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-check-circle-fill text-primary fs-5"></i>
+        <span class="small fw-semibold text-dark">{{ actionMessage }}</span>
+      </div>
+      <button type="button" class="btn-close" (click)="actionMessage = null"></button>
+    </div>
+    }
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs border-bottom border-secondary border-opacity-25 mb-4" style="font-size: 0.85rem;">
+      <li class="nav-item">
+        <a class="nav-link px-3 py-2 d-flex align-items-center gap-2 cursor-pointer"
+          [ngClass]="activeTab === 'pending' ? 'active fw-bold text-primary border-0 border-bottom border-2 border-primary bg-transparent' : 'text-muted border-0 bg-transparent fw-semibold hover-text-primary'"
+          (click)="setTab('pending')">
+          <i class="bi bi-hourglass-split"></i> Pending & In Progress
+          <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill ms-1">{{ pendingAssessments.length }}</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link px-3 py-2 d-flex align-items-center gap-2 cursor-pointer"
+          [ngClass]="activeTab === 'completed' ? 'active fw-bold text-primary border-0 border-bottom border-2 border-primary bg-transparent' : 'text-muted border-0 bg-transparent fw-semibold hover-text-primary'"
+          (click)="setTab('completed')">
+          <i class="bi bi-check2-all"></i> Completed Assessments
+          <span class="badge bg-secondary bg-opacity-25 text-secondary rounded-pill ms-1">{{ completedAssessments.length }}</span>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Filters -->
+    <div class="glass-card rounded-3 mb-4">
+      <div class="card-body p-4">
+        <div class="row g-3 align-items-center mb-3">
+          <div class="col-lg-5">
+            <app-input-field label="" icon="bi bi-search" [showIcon]="true" [(value)]="searchQuery"
+              placeholder="Search by assessment title, company, or job role...">
+            </app-input-field>
+          </div>
+          <div class="col-lg-4">
+            <app-input-field label="" type="select" [(value)]="selectedType" [options]="typeOptions"
+              placeholder="All Assessment Types">
+            </app-input-field>
+          </div>
+          <div class="col-lg-3 d-flex gap-2">
+            <app-button label="Apply" variant="primary" [size]="'md'" [block]="true"
+              (clicked)="applyFilters()" class="flex-grow-1 w-100"></app-button>
+            <app-button label="Reset" variant="secondary" [size]="'md'" [block]="true"
+              (clicked)="resetFilters()" class="flex-grow-1 w-100"></app-button>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center flex-wrap gap-2 mt-3">
+          <span class="text-dark small fw-semibold me-2">Active Filters :</span>
+          @for (filter of activeFilters; track filter) {
+          <app-chip [label]="filter" [showClose]="true" (removed)="removeFilter(filter)">
+          </app-chip>
+          }
+          @if (activeFilters.length === 0) {
+          <span class="text-muted small">None</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Assessment Cards Grid -->
+    <div class="row g-4 mb-4">
+      @if (isLoading) {
+      <div class="col-12 text-center py-5">
+        <app-loader type="spinner" spinnerVariant="thick" color="primary"></app-loader>
+      </div>
+      } @else {
+        @if (activeTab === 'pending') {
+          @if (pendingAssessments.length === 0) {
+          <div class="col-12 text-center py-5">
+            <p class="text-muted">No pending assessments at this time.</p>
+          </div>
+          } @else {
+            @for (item of pendingAssessments; track item._id) {
+            <div class="col-12 col-md-6 col-lg-4">
+              <app-assessment-card
+                [assessment]="item"
+                (startAssessment)="onStartAssessment($event)"
+                (markCompleted)="onMarkCompleted($event)">
+              </app-assessment-card>
+            </div>
+            }
+          }
+        } @else {
+          @if (completedAssessments.length === 0) {
+          <div class="col-12 text-center py-5">
+            <p class="text-muted">No completed assessments found.</p>
+          </div>
+          } @else {
+            @for (item of completedAssessments; track item._id) {
+            <div class="col-12 col-md-6 col-lg-4">
+              <app-assessment-card
+                [assessment]="item"
+                (startAssessment)="onStartAssessment($event)"
+                (markCompleted)="onMarkCompleted($event)">
+              </app-assessment-card>
+            </div>
+            }
+          }
+        }
+      }
+    </div>
+
+  </div>
+</div>

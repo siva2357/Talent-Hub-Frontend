@@ -1,0 +1,115 @@
+@if (offer) {
+
+<div class="offer-card" [class.opacity-75]="offer.status === 'Declined'">
+
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+    <div class="offer-card-header">
+
+        <div class="d-flex align-items-start gap-3 min-w-0 flex-grow-1">
+            <!-- COMPANY LOGO -->
+            <div class="company-avatar flex-shrink-0">
+                @if (offer.companyLogo) {
+                    <img [src]="offer.companyLogo" [alt]="offer.companyName">
+                } @else {
+                    <span>{{ offer.companyName.charAt(0) }}</span>
+                }
+            </div>
+
+            <div class="offer-card-title">
+                <h6>{{ offer.jobTitle }}</h6>
+                <p class="company-subtitle mb-2">
+                    <i class="bi bi-buildings text-primary me-1"></i>
+                    <span class="fw-semibold text-dark">{{ offer.companyName }}</span>
+                    <span class="text-muted ms-1">• {{ offer.location }}</span>
+                </p>
+
+                <div class="offer-tags">
+                    <app-badge [label]="offer.employmentType" variant="primary" appearance="subtle"></app-badge>
+                    <app-badge [label]="offer.workMode" variant="info" appearance="subtle"></app-badge>
+                    <app-badge [label]="offer.department" variant="secondary" appearance="subtle"></app-badge>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATUS BADGE -->
+        <div class="d-flex flex-column align-items-end gap-2 flex-shrink-0">
+            <app-badge [label]="offer.status"
+                [variant]="getStatusVariant(offer.status)" appearance="subtle" [rounded]="true">
+            </app-badge>
+        </div>
+
+    </div>
+
+    <!-- =========================================
+         COMPENSATION HIGHLIGHT BOX
+         ========================================= -->
+    <div class="offer-compensation">
+        <div class="offer-comp-item">
+            <span class="offer-comp-label">ANNUAL CTC OFFERED</span>
+            <span class="offer-comp-value text-primary">{{ offer.annualCtc }}</span>
+            <span class="offer-comp-sub">Fixed: {{ offer.fixedPay }}</span>
+        </div>
+
+        <div class="offer-comp-divider"></div>
+
+        <div class="offer-comp-item">
+            <span class="offer-comp-label">JOINING BONUS / VARIABLE</span>
+            <span class="offer-comp-value">{{ offer.variableBonus }}</span>
+            <span class="offer-comp-sub">{{ offer.probationPeriod }} Probation</span>
+        </div>
+    </div>
+
+    <!-- =========================================
+         PERKS & BENEFITS
+         ========================================= -->
+    @if (offer.benefits && offer.benefits.length > 0) {
+        <div class="offer-section">
+            <span class="offer-section-label">INCLUDED PERKS & BENEFITS</span>
+            <div class="offer-tags">
+                @for (benefit of offer.benefits.slice(0, 3); track benefit) {
+                    <span class="offer-info-tag">
+                        <i class="bi bi-check2-circle text-success me-1"></i>{{ benefit }}
+                    </span>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- =========================================
+         JOINING DATE & OFFER EXPIRY
+         ========================================= -->
+    <div class="offer-dates">
+        <div class="offer-date">
+            <span>Joining Date</span>
+            <strong>{{ formattedJoiningDate }}</strong>
+        </div>
+
+        <div class="offer-date">
+            <span>Accept Before</span>
+            <strong [class.text-danger]="offer.status === 'Pending'">{{ formattedExpiryDate }}</strong>
+        </div>
+    </div>
+
+    <!-- =========================================
+         FOOTER ACTIONS
+         ========================================= -->
+    <div class="offer-card-footer">
+        <span class="portal-tag">
+            <i class="bi bi-file-earmark-check text-primary me-1"></i>{{ offer.offerCode }}
+        </span>
+
+        <div class="d-flex align-items-center gap-2">
+            <app-button variant="light" label="View Letter" size="sm" icon="bi bi-eye" (clicked)="onViewOffer()"></app-button>
+
+            @if (offer.status === 'Pending') {
+                <app-button variant="outline-danger" label="Decline" size="sm" (clicked)="onDeclineOffer()"></app-button>
+                <app-button variant="success" label="Accept Offer" size="sm" icon="bi bi-check2-circle" (clicked)="onAcceptOffer()"></app-button>
+            }
+        </div>
+    </div>
+
+</div>
+
+}

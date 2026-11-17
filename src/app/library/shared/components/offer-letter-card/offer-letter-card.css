@@ -1,0 +1,247 @@
+/* =========================================
+   OFFER LETTER CARD
+   ========================================= */
+
+.offer-card {
+    width: 100%;
+    max-width: 520px;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    padding: 24px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+
+    font-family: 'Inter', sans-serif;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.offer-card:hover {
+    transform: translateY(-3px);
+    border-color: #cbd5e1;
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+}
+
+/* =========================================
+   HEADER & COMPANY LOGO
+   ========================================= */
+
+.offer-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.company-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #4a3aff 0%, #2563eb 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
+
+.company-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.offer-card-title {
+    min-width: 0;
+    flex: 1;
+}
+
+.offer-card-title h6 {
+    margin: 0 0 4px;
+    color: #111827;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.company-subtitle {
+    font-size: 12.5px;
+    line-height: 1.4;
+}
+
+.offer-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* =========================================
+   COMPENSATION BOX
+   ========================================= */
+
+.offer-compensation {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 18px;
+    padding: 15px 16px;
+    border: 1px solid #f1f5f9;
+    border-radius: 14px;
+    background: #f8fafc;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+}
+
+.offer-comp-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 10px;
+}
+
+.offer-comp-item:first-child {
+    padding-left: 4px;
+}
+
+.offer-comp-item:last-child {
+    padding-right: 4px;
+}
+
+.offer-comp-divider {
+    width: 1px;
+    background: #e2e8f0;
+}
+
+.offer-comp-label {
+    color: #94a3b8;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+}
+
+.offer-comp-value {
+    color: #111827;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.offer-comp-sub {
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* =========================================
+   BENEFITS SECTION
+   ========================================= */
+
+.offer-section {
+    margin-bottom: 18px;
+}
+
+.offer-section-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.offer-info-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.03);
+}
+
+/* =========================================
+   DATES
+   ========================================= */
+
+.offer-dates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+    margin-top: auto;
+}
+
+.offer-date {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 14px;
+    border: 1px solid #eef2f7;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.offer-date span {
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.offer-date strong {
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* =========================================
+   FOOTER
+   ========================================= */
+
+.offer-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 1px solid #eef2f7;
+    flex-wrap: wrap;
+}
+
+.portal-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    background: #f8fafc;
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1px solid #e2e8f0;
+}
+
+@media (max-width: 480px) {
+    .offer-card {
+        padding: 18px;
+    }
+
+    .offer-card-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+

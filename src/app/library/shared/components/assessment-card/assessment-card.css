@@ -1,0 +1,323 @@
+/* =========================================
+   ASSESSMENT CARD
+   ========================================= */
+
+.assessment-card {
+    width: 100%;
+    max-width: 520px;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    padding: 24px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+
+    font-family: 'Inter', sans-serif;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.assessment-card:hover {
+    transform: translateY(-3px);
+    border-color: #cbd5e1;
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+}
+
+/* =========================================
+   HEADER & COMPANY LOGO
+   ========================================= */
+
+.assessment-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.company-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #4a3aff 0%, #2563eb 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
+
+.company-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.assessment-card-title {
+    min-width: 0;
+    flex: 1;
+}
+
+.assessment-card-title h6 {
+    margin: 0 0 4px;
+    color: #111827;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.company-subtitle {
+    font-size: 12.5px;
+    line-height: 1.4;
+}
+
+.assessment-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* =========================================
+   DESCRIPTION
+   ========================================= */
+
+.assessment-description {
+    margin: 0 0 18px;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+/* =========================================
+   METRICS (DURATION / QUESTIONS / PASSING)
+   ========================================= */
+
+.assessment-details {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 18px;
+    padding: 14px;
+    border: 1px solid #dfe4ea;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.assessment-detail {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.assessment-detail-icon {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #2563eb;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+.assessment-detail > div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.assessment-detail-label {
+    color: #94a3b8;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+}
+
+.assessment-detail strong {
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.assessment-detail-divider {
+    width: 1px;
+    margin: 0 12px;
+    background: #e2e8f0;
+}
+
+/* =========================================
+   SKILLS SECTION
+   ========================================= */
+
+.assessment-section {
+    margin-bottom: 18px;
+}
+
+.assessment-section-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.assessment-info-tag {
+    display: inline-flex;
+    padding: 5px 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.03);
+}
+
+/* =========================================
+   DATES
+   ========================================= */
+
+.assessment-dates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.assessment-date {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 14px;
+    border: 1px solid #eef2f7;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.assessment-date span {
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.assessment-date strong {
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* =========================================
+   EXTERNAL ASSESSMENT LINK
+   ========================================= */
+
+.assessment-link-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding: 12px 14px;
+    border: 1px solid #dfe4ea;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.assessment-link-content {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.assessment-link-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.assessment-link {
+    display: block;
+    max-width: 220px;
+    overflow: hidden;
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* =========================================
+   FOOTER
+   ========================================= */
+
+.assessment-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 16px;
+    margin-top: auto;
+    border-top: 1px solid #eef2f7;
+}
+
+.portal-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    background: #f8fafc;
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1px solid #e2e8f0;
+}
+
+@media (max-width: 480px) {
+    .assessment-card {
+        padding: 18px;
+    }
+
+    .assessment-details {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .assessment-detail-divider {
+        width: 100%;
+        height: 1px;
+        margin: 0;
+    }
+
+    .assessment-link-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .assessment-card-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
